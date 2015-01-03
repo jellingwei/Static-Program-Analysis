@@ -1,0 +1,110 @@
+1 - Pattern a
+assign a;
+Select a pattern a(_, _"ho"_)
+2
+5000
+2 - Pattern a
+assign a;
+Select a pattern a(_, _"he + he + haha + hoho"_)
+3
+5000
+3 - Pattern a
+assign a;
+Select a pattern a(_, " ha + ha ")
+1
+5000
+4 - Pattern a
+assign a;
+Select a pattern a(_, "lol + 2")
+none
+5000
+5 - Pattern a
+assign a;
+Select a pattern a("lol", _)
+none
+5000
+6 - Pattern a
+assign a;
+Select a pattern a("LoL", _)
+4
+5000
+7 - Pattern a
+assign a;
+Select a pattern a(_, _)
+1, 2, 3, 4, 8, 9
+5000
+8 - Pattern a
+assign a;
+Select a pattern a("hehe", _"hoho"_)
+none
+5000
+9 - Pattern a
+assign a;
+Select a pattern a("LoL", _"1 + lol + 2"_)
+4
+5000
+10 - Pattern w
+while w;
+Select w pattern w("lol", _)
+none
+5000
+11 - Pattern w
+while w;
+Select w pattern w("ho", _)
+7
+5000
+12 - Pattern a
+assign a;
+Select a pattern a(_, _"does + not + exist"_)
+none
+5000
+13 - Pattern w
+while w;
+Select w pattern w("heha", _)
+none
+5000
+14 - Uses
+assign a;
+Select a such that Uses(a, "hehe")
+none
+5000
+15 - Uses
+assign a;
+Select a such that Uses(a, "he")
+3
+5000
+16 - Uses
+while w;
+Select w such that Uses(w, "LoL")
+5, 6
+5000
+17 - Modifies
+assign a;
+Select a such that Modifies(a, "hehehahahoho")
+3, 8
+5000
+18 - Modifies
+assign a;
+Select a such that Modifies(a, "hehe")
+none
+5000
+19 - Modifies
+while w;
+Select w such that Modifies(w, "lol")
+none
+5000
+20 - Modifies
+while w;
+Select w such that Modifies(w, "hehehahahoho")
+5, 6, 7
+5000
+21 - Uses constant
+assign a;
+Select a such that Uses(a, "1")
+none
+5000
+22 - Uses
+assign a;
+Select a such that Uses(a, "haha")
+3, 9
+5000

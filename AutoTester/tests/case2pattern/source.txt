@@ -1,0 +1,11 @@
+procedure Test {
+	haha = ha + ha;															\\1
+	hoho = ho + ho + 0;													\\2
+	hehehahahoho = he + he + haha + hoho;				\\3
+	LoL = 1 + lol + 2;													\\4
+	while haha {																\\5
+		while LoL {																\\6
+			while ho {															\\7
+				hehehahahoho = 1 + 2 + 3 + 4; }}}			\\8
+	haha = haha + haha;													\\9
+}

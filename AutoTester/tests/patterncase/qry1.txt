@@ -1,0 +1,5 @@
+1 - Pattern
+assign a;
+Select a pattern a(_, _"y + x"_)
+1
+5000

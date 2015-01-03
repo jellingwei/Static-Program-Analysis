@@ -1,0 +1,30 @@
+procedure Test {
+	asdasdasd = 777;																\\1
+	lalala = asdasdasd + mamama + 555;							\\2
+	kakaka = 174 + lalala;													\\3
+	while lalala {																	\\4
+		asdasdasd = kakaka + 241 + mamama ;						\\5
+		while asdasdasd {															\\6
+			lalala = lalala + 174; 											\\7
+		}
+	}		
+	mamama = 999 + lalala;													\\8
+	kakaka = 174 + asdasdasd;												\\9
+	while mamama {																	\\10
+		asdasdasd = asdasdasd + 999;									\\11
+		kakaka = 174 + asdasdasd + mamama; 						\\12
+	}
+	while asdasdasd {																\\13
+		asdasdasd = asdasdasd + 69 + lalala;					\\14
+		mamama = mamama + lalala;											\\15
+		while kakaka {																\\16
+			lalala = lalala + 241 ;											\\17
+			while lalala {															\\18
+				lalala = lalala + asdasdasd; }						\\19
+			}
+		}
+	while kakaka {																	\\20
+		kakaka = mamama + asdasdasd;									\\21
+		mamama = 69 + asdasdasd; 											\\22
+	}
+}

@@ -1,0 +1,310 @@
+1 - Select stmts
+stmt s;
+Select s
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+2 - Select whiles
+while w;
+Select w
+1, 3, 8, 10, 11, 12, 13, 15
+5000
+3 - Select assignments
+assign a;
+Select a
+2, 4, 5, 6, 7, 9, 14, 16
+5000
+4 - Select var
+variable v;
+Select v
+x, y, z
+5000
+5 - Select constants
+constant c;
+Select c
+1, 2
+5000
+6 - Select progline
+prog_line l;
+Select l
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
+5000
+7 - Follows
+stmt s;
+Select s such that Follows(s, 4)
+none
+5000
+8 - Follows
+stmt s;
+Select s such that Follows(5, s)
+none
+5000
+9 - Follows
+stmt s;
+Select s such that Follows*(s, 4)
+none
+5000
+10 - Follows
+stmt s;
+Select s such that Follows*(1, s)
+10
+5000
+11 - Parent
+stmt s;
+Select s such that Parent(s, 5)
+3
+5000
+12 - Parent
+stmt s;
+Select s such that Parent(4, s)
+none
+5000
+13 - Parent
+stmt s;
+Select s such that Parent*(4, s)
+none
+5000
+14 - Parent
+stmt s;
+Select s such that Parent*(s, 12)
+10, 11
+5000
+15 - Modifies
+stmt s;
+Select s such that Modifies(s, "x")
+1, 3, 4, 6
+5000
+16 - Modifies
+variable v;
+Select v such that Modifies(10, v)
+y, z
+5000
+17 - Uses
+stmt s;
+Select s such that Uses(s, "y")
+1, 2, 3, 5, 10
+5000
+18 - Uses
+variable v;
+Select v such that Uses(1, v)
+x, y, z
+5000
+19 - Follows
+prog_line l;
+Select l such that Follows(l, 2)
+none
+5000
+20 - Follows
+prog_line l;
+Select l such that Follows(l, 6)
+3
+5000
+21 - Follows
+assign a;
+Select a such that Follows(a, 7)
+6
+5000
+22 - Follows
+while w;
+Select w such that Follows(w, 15)
+11
+5000
+23 - Follows
+prog_line l;
+Select l such that Follows(15, l)
+none
+5000
+24 - Follows
+while w;
+Select w such that Follows(3, w)
+none
+5000
+25 - Follows
+assign a;
+Select a such that Follows(12, a)
+none
+5000
+26 - Follows
+stmt s;
+Select s such that Follows(10, s)
+none
+5000
+27 - Follows
+stmt s;
+Select s such that Follows(s, 1)
+none
+5000
+28 - Follows*
+assign a;
+Select a such that Follows*(a, 5)
+4
+5000
+29 - Follows*
+assign a;
+Select a such that Follows*(a, 7)
+2, 6
+5000
+30 - Follows*
+while w;
+Select w such that Follows*(w, 8)
+3
+5000
+31 - Follows*
+prog_line l;
+Select l such that Follows*(l, 16)
+none
+5000
+32 - Follows*
+assign a;
+Select a such that Follows*(1, a)
+none
+5000
+33 - Follows
+prog_line l;
+Select l such that Follows*(15, l)
+none
+5000
+34 - Follows*
+while w;
+Select w such that Follows*(10, w)
+none
+5000
+35 - Modifiesw
+variable v;
+Select v such that Modifies(3, v)
+x, y
+5000
+36 - Modifies
+variable v;
+Select v such that Modifies(10, v)
+y, z
+5000
+37 - Modifies
+variable v;
+Select v such that Modifies(11, v)
+y
+5000
+38 - Modifies
+while w;
+Select w such that Modifies(w, "z")
+1, 8, 10, 15
+5000
+39 - Modifies
+stmt s;
+Select s such that Modifies(s, "x")
+1, 3, 4, 6
+5000
+40 - Modifies
+prog_line l;
+Select l such that Modifies(l, "z")
+1, 2, 8, 9, 10, 15, 16
+5000
+41 - Modifies
+assign a;
+Select a such that Modifies(a, "y")
+5, 7, 14
+5000
+42 - Parent
+stmt s;
+Select s such that Parent(s, 12)
+11
+5000
+43 - Parent 
+assign a;
+Select a such that Parent(a, 15)
+none
+5000
+44 - Parent
+prog_line l;
+Select l such that Parent(l, 9)
+8
+5000
+45 - Parent 
+while w;
+Select w such that Parent(w, 13)
+12
+5000
+46 - Parent
+stmt s;
+Select s such that Parent(5, s)
+none
+5000
+47 - Parent
+assign a;
+Select a such that Parent(12, a)
+none
+5000
+48 - Parent
+prog_line l;
+Select l such that Parent(1, l)
+2, 3, 6, 7, 8
+5000
+49 - Parent
+while w;
+Select w such that Parent(1, w)
+3, 8
+5000
+50 - Parent*
+stmt s;
+Select s such that Parent*(s, 4)
+1, 3
+5000
+51 - Parent*
+while w;
+Select w such that Parent*(w, 13)
+10, 11, 12
+5000
+52 - Parent*
+prog_line l;
+Select l such that Parent*(l, 9)
+1, 8
+5000
+53 - Parent*
+stmt s;
+Select s such that Parent*(11, s)
+12, 13, 14
+5000
+54 - Parent*
+assign a;
+Select a such that Parent*(10, a)
+14, 16
+5000
+55 - Parent*
+prog_line l;
+Select l such that Parent*(3, l)
+4, 5
+5000
+56 - Parent*
+while w;
+Select w such that Parent*(11, w)
+12, 13
+5000
+57 - Uses
+variable v;
+Select v such that Uses(11, v)
+x, z
+5000
+58 - Uses
+variable v;
+Select v such that Uses(1, v)
+x, y, z
+5000
+59 - Uses
+stmt s;
+Select s such that Uses(s, "x")
+1, 2, 3, 4, 7, 8, 10, 11, 12, 13, 15
+5000
+60 - Uses
+assign a;
+Select a such that Uses(a, "x")
+2, 4, 7
+5000
+61 - Uses
+while w;
+Select w such that Uses(w, "x")
+1, 3, 8, 10, 11, 12, 13, 15
+5000
+62 - Uses
+prog_line l;
+Select l such that Uses(l, "x")
+1, 2, 3, 4, 7, 8, 10, 11, 12, 13, 15
+5000
