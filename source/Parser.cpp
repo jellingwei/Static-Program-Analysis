@@ -16,6 +16,7 @@
 #include "ConstantTable.h"
 #include "TNode.h"
 #include "SourceParser.h"
+#include "ExpressionParser.h"
 
 using std::string;
 using std::vector;
@@ -241,7 +242,7 @@ namespace Parser {
 	 * Parses an expression. 
 	 * @param exprRoot the root of the expression, if the expr consists of only a variable, this should be the assignNode itself,
 	 *                 otherwise, the first plusNode
-	 * Assumptions: LHS = RHS => [LHS] and [=] took up 2 tokens in the buffer
+	 * Assumptions: LHS = RHS => [LHS] and [=] took up 2 tokens in the buffer, and has already been parsed
 	 *              The expression only consists of factors and '+'
 	 */
 	bool parseExpr(TNode* exprRoot) {
@@ -249,7 +250,14 @@ namespace Parser {
 		const int alreadyParsed = 2;
 		int bufferSize = buffer.size() - alreadyParsed;
 
-		vector<TNode*>* listOfNodes = new vector<TNode*>();
+		ExpressionParser exprParser;
+		exprParser.updateBuffer(bufferIter, bufferSize);
+		exprParser.updateStmtNum(stmtNum);
+		TNode* top = exprParser.parse();
+
+		exprRoot->addChild(top);
+
+		/*vector<TNode*>* listOfNodes = new vector<TNode*>();
 		for (int i = 0; i < bufferSize; i++) {  
 			string res = parseFactorConstantAndOperator(listOfNodes);
 
@@ -280,6 +288,7 @@ namespace Parser {
 				pkb.createLink(Child, parentNode, listOfNodes->at(1));
 			} 
 		}
+		*/
 
 		return res;
 	}

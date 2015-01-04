@@ -14,6 +14,7 @@
     <ClCompile Include="..\source\AST.cpp" />
     <ClCompile Include="..\source\ConstantTable.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
+    <ClCompile Include="..\source\ExpressionParser.cpp" />
     <ClCompile Include="..\source\FollowsTable.cpp" />
     <ClCompile Include="..\source\ModifiesTable.cpp" />
     <ClCompile Include="..\source\ParentTable.cpp" />
@@ -33,6 +34,7 @@
   <ItemGroup>
     <ClInclude Include="..\source\AST.h" />
     <ClInclude Include="..\source\ConstantTable.h" />
+    <ClInclude Include="..\source\ExpressionParser.h" />
     <ClInclude Include="..\source\FollowsTable.h" />
     <ClInclude Include="..\source\InputQueryParser.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
