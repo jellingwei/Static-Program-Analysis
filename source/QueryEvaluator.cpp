@@ -1164,10 +1164,10 @@ namespace QueryEvaluator {
 			string comparingPairName1 = synonymNamesPair[i].first;
 			string comparingPairName2 = synonymNamesPair[1].second;
 
-			if (newestPairName1 != comparingPairName1 && newestPairName1 != comparingPairName1) {
+			if (newestPairName1 != comparingPairName1 && newestPairName1 != comparingPairName2) {
 				continue;
 			}
-			if (newestPairName2 != comparingPairName2 && newestPairName2 != comparingPairName2) {
+			if (newestPairName2 != comparingPairName1 && newestPairName2 != comparingPairName2) {
 				continue;
 			}
 
