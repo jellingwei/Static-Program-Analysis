@@ -21,20 +21,14 @@ void PKBTest::tearDown()
 
 void PKBTest::testPKB()
 {
+
 	// Test Parser
 	Parser::initParser("test/i_src.txt");
 	bool parse = Parser::parseProgram();
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parsed source file", parse, true);
 
 	PKB pkb = PKB::getInstance();
-	ModifiesTable* modifiesTable = pkb.modifiesTable;
-	UsesTable* usesTable = pkb.usesTable;
-	FollowsTable* followsTable = pkb.followsTable;
-	ParentTable* parentTable = pkb.parentTable;
-	VarTable* varTable = pkb.varTable;
-	ConstantTable* constantTable = pkb.constantTable;
-
-
+	
 	// ConstantTable
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of constants", 3, pkb.getConstantTableSize());
 
@@ -57,6 +51,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(1, 2)", false, pkb.isParent(1,2));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(0, 1)", false, pkb.isParent(0,1));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(9999, 10000)", false, pkb.isParent(9999,10000));
+
 	// Follows
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(1, 2)", true, pkb.isFollows(1,2));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(3, 5)", true, pkb.isFollows(3,5));
@@ -73,6 +68,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(7, s)", 11, pkb.getStmtFollowedFrom(7).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9, s)", 0, (int)pkb.getStmtFollowedFrom(9).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9999, 10000)", false, pkb.isFollows(9999,10000));
+
 	// Uses
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(2, 'd')", true, pkb.isUses(2, pkb.getVarIndex("d")));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(2, 'f')", true, pkb.isUses(2, pkb.getVarIndex("f")));
@@ -83,6 +79,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'c')", 8, pkb.getUsesStmtNum(pkb.getVarIndex("c")).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'f')", 4, (int)pkb.getUsesStmtNum(pkb.getVarIndex("f")).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
+
 	// Modifies
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(1, 'a')", true, pkb.isModifies(1, pkb.getVarIndex("a")));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(7, 'f')", true, pkb.isModifies(7, pkb.getVarIndex("f")));
@@ -122,7 +119,6 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows pairs size", 7, (int)allFollows.first.size());
 	allFollows = pkb.getAllFollowsPairs(true);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows* pairs size", 22, (int)allFollows.first.size());
-
 
 	// All pairs for parent
 	pair<vector<int>, vector<int>> allParent = pkb.getAllParentPairs(false);
