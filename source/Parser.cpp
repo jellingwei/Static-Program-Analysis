@@ -63,7 +63,7 @@ namespace Parser {
 
 		string line;
 		getline(inputFile, line);
-		
+
 		// drop everything after 2 backslash
 		int pos;
 		if ((pos = line.find("\\")) != string::npos) {
@@ -81,25 +81,23 @@ namespace Parser {
 		currentParsedLine = line;
 
 		// remove blocks of multiple whitespace
-		string multipleSpaces = "[\\s+]";
+		string multipleSpaces = "[\\s]+";
 		std::tr1::regex separatorRegex(multipleSpaces);
 		std::tr1::sregex_token_iterator reg_end;
 
 		std::tr1::sregex_token_iterator rs(line.begin(), line.end(), separatorRegex, -1);
 
 		// tokenise words and operators
-		string operators = "([\\w\\d]+|[+=;{}(\\\\)])";
+		string operators = "([\\w\\d]+|[+=;{}])";
 		std::regex operRegex(operators);
 
 		for (; rs != reg_end; ++rs) {
 			std::smatch match;
 			string res(rs->str());
-			
 			while (std::regex_search(res, match, operRegex)) {
 				if (match.empty()) {
 					break;
 				}
-
 				buffer.push_back(match[0]);
 				res = match.suffix().str();
 			} 
@@ -205,7 +203,7 @@ namespace Parser {
 	}
 
 	string matchOperator(string token) {
-		std::regex operRegex("[;+=]");
+		std::regex operRegex("[;\\+-*=]");
 		return (std::regex_match(token, operRegex)) ? token: "";
 	}
 
@@ -251,11 +249,18 @@ namespace Parser {
 		int bufferSize = buffer.size() - alreadyParsed;
 
 		ExpressionParser exprParser;
-		exprParser.updateBuffer(bufferIter, bufferSize);
+		exprParser.updateBuffer(buffer); 
 		exprParser.updateStmtNum(stmtNum);
+
+		for (int i = 0; i < buffer.size() ; i++) {
+			cout << buffer[i] << "  ";
+		}
+		cout << endl;
+
 		TNode* top = exprParser.parse();
 
-		exprRoot->addChild(top);
+
+		PKB::getInstance().createLink(Child, exprRoot, top);
 
 		/*vector<TNode*>* listOfNodes = new vector<TNode*>();
 		for (int i = 0; i < bufferSize; i++) {  
@@ -289,6 +294,11 @@ namespace Parser {
 			} 
 		}
 		*/
+
+		cout << "drop curline" << endl;
+		//parseLine(); // drop the current line, which is the assignment statement
+		while ((bufferIter++)->compare(";") != 0) {
+		}
 
 		return res;
 	}
@@ -366,14 +376,8 @@ namespace Parser {
 
 		pkb.createLink(Child, node, LHSNode);
 
-		TNode* RHSNode;
-		bool assignExprContainsPlus = currentParsedLine.find("+") != string::npos;
-		if (assignExprContainsPlus) {
-			RHSNode = pkb.createTNode(Plus, stmtNum, -2);
-			pkb.createLink(Child, node, RHSNode);
-		} else {
-			RHSNode = node;  // pass the assignNode directly to parseExpr, which will attach the variable/constant to it
-		}
+		TNode* RHSNode = node;  // pass the assignNode directly to parseExpr, which will attach the variable/constant to it
+
 		
 		pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
 		PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
@@ -407,7 +411,6 @@ namespace Parser {
 			
 			callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "assign");
 			res = parseAssign(firstToken);
-
 			if (stmtListParent.size() > 0) {
 				int parent = stmtListParent[stmtListParent.size() - 1];
 				callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
@@ -434,7 +437,7 @@ namespace Parser {
 		bool isEndOfStmtList = nextToken.compare("}") == 0;
 		while (!isEndOfStmtList) {
 			res = matchStmt(nextToken);
-			if (!res) return false;
+			if (!res) {return false; }
 			
 			nextToken = parseToken();			
 			
@@ -459,6 +462,7 @@ namespace Parser {
 		ASTParent.push_back(PKB::getInstance().getRoot());
 
 		res = parseStmtList();
+
 		if (!res) return false;
 
 		return true;
@@ -469,6 +473,7 @@ namespace Parser {
 
 		nodeQueue.push_back(root);
 		while (!nodeQueue.empty()) {
+			
 			cout << nodeQueue.front()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getStmtNumber() << endl;
 			cout << " is a variable node: " << (nodeQueue.front()->getNodeType() == Variable) << endl;
 			bool isConstant = (nodeQueue.front()->getNodeType() == Constant);
@@ -476,11 +481,15 @@ namespace Parser {
 			bool isAssign = (nodeQueue.front()->getNodeType() == Assign);
 
 			cout << " isConstant: " << isConstant << " isPlus: " << isPlus << " isAssign: " << isAssign <<  endl;
-			cout << "  and parent of it is " << nodeQueue.front()->getParent()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getStmtNumber() << endl;
+			cout << "  and parent of it is " << nodeQueue.front()->getParent()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getParent()->getStmtNumber() << endl;
 			vector<TNode*>* children = nodeQueue.front()->getChildren();
-			for (int i =0; i < (int)children->size(); ++i) {
-				TNode* node = children->at(i);
-				nodeQueue.push_back(node);
+			if (nodeQueue.front()->hasChild()) {
+				cout << "has child" << endl;
+				cout << " has " << (int)children->size() << " children" << endl;
+				for (int i =0; i < (int)children->size(); ++i) {
+					TNode* node = children->at(i);
+					nodeQueue.push_back(node);
+				}
 			}
 			nodeQueue.erase(nodeQueue.begin());
 		}
@@ -492,7 +501,8 @@ namespace Parser {
 		// matchProcedure call is neccessary
 		bool res = parseProcedure();
 		assert(res); // do not evaluate queries if parser has failed
-		
+		//cout << "parser has completed the parse" << endl;
+		//traverseAndPrintTree(PKB::getInstance().getRoot());
 		return res;
 	}
 	
