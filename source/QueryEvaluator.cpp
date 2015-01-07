@@ -1145,63 +1145,71 @@ namespace QueryEvaluator {
 	}
 
 	/**
-	* Helper method to filter the twinned paired dependent values
+	* Helper method to filter twinned (two synonyms) paired values
 	*/
 	void filterTwinDependentValues() {
-		if (synonymValuesPair.size() != 2 || synonymNamesPair.size() != 2) {
+		unsigned int pairsSize = synonymValuesPair.size();
+		unsigned int newestIndex = pairsSize - 1;
+
+		if (pairsSize < 2) {
 			return;
 		}
 
-		string firstPairName1 = synonymNamesPair[0].first;
-		string firstPairName2 = synonymNamesPair[0].second;
-		string secondPairName1 = synonymNamesPair[1].first;
-		string secondPairName2 = synonymNamesPair[1].second;
+		string newestPairName1 = synonymNamesPair[newestIndex].first;
+		string newestPairName2 = synonymNamesPair[newestIndex].second;
+		vector<int> newestPairValues1 = synonymValuesPair[newestIndex].first;
+		vector<int> newestPairValues2 = synonymValuesPair[newestIndex].second;
 
-		if (firstPairName1 != secondPairName1 && firstPairName1 != secondPairName2) {
-			return;
-		}
-		if (firstPairName2 != secondPairName1 && firstPairName2 != secondPairName2) {
-			return;
-		}
+		for (unsigned int i = 0; i < newestIndex; i++) {
+			string comparingPairName1 = synonymNamesPair[i].first;
+			string comparingPairName2 = synonymNamesPair[1].second;
 
-		vector<int> firstPairValues1 = synonymValuesPair[0].first;
-		vector<int> firstPairValues2 = synonymValuesPair[0].second;
-		vector<int> secondPairValues1;
-		vector<int> secondPairValues2;
-		vector<int> acceptedValues1;
-		vector<int> acceptedValues2;
+			if (newestPairName1 != comparingPairName1 && newestPairName1 != comparingPairName2) {
+				continue;
+			}
+			if (newestPairName2 != comparingPairName1 && newestPairName2 != comparingPairName2) {
+				continue;
+			}
 
-		if (secondPairName1 == firstPairName1) {
-			secondPairValues1 = synonymValuesPair[1].first;
-			secondPairValues2 = synonymValuesPair[1].second;
-		} else {
-			secondPairValues1 = synonymValuesPair[1].second;
-			secondPairValues2 = synonymValuesPair[1].first;
-		}
+			//If it reaches here, it means that there are twinned paired values
+			vector<int> comparingPairValues1;
+			vector<int> comparingPairValues2;
+			vector<int> acceptedValues1;
+			vector<int> acceptedValues2;
 
-		for (unsigned int i = 0; i < secondPairValues1.size(); i++)
-		{
-			for (unsigned int j = 0; j < firstPairValues1.size(); j++)
+			if (newestPairName1 == comparingPairName1) {
+				comparingPairValues1 = synonymValuesPair[i].first;
+				comparingPairValues2 = synonymValuesPair[i].second;
+			} else {
+				comparingPairValues1 = synonymValuesPair[i].second;
+				comparingPairValues2 = synonymValuesPair[i].first;
+			}
+
+			//Compare the newest values with the existing values
+			for (unsigned int j = 0; j < newestPairValues1.size(); j++)
 			{
-				if (secondPairValues1[i] == firstPairValues1[j] && secondPairValues2[i] == firstPairValues2[j])
+				for (unsigned int k = 0; k < comparingPairValues1.size(); k++)
 				{
-					acceptedValues1.push_back(secondPairValues1[i]);
-					acceptedValues2.push_back(secondPairValues2[i]);
+					if (newestPairValues1[j] == comparingPairValues1[k] && newestPairValues2[j] == comparingPairValues2[k])
+					{
+						acceptedValues1.push_back(newestPairValues1[j]);
+						acceptedValues2.push_back(newestPairValues2[j]);
+					}
 				}
 			}
+
+			Synonym synonym1 = findSynonymWithName(newestPairName1);
+			set<int> synonym1Values = synonym1.getValues();
+			set<int> filteredSynonym1Values = intersectWithCurrentValues(acceptedValues1, synonym1Values);
+			Synonym newSynonym1(synonym1.getType(), synonym1.getName(), filteredSynonym1Values);
+			swapOldSynonymWithNewSynonym(newSynonym1);
+
+			Synonym synonym2 = findSynonymWithName(newestPairName2);
+			set<int> synonym2Values = synonym2.getValues();
+			set<int> filteredSynonym2Values = intersectWithCurrentValues(acceptedValues2, synonym2Values);
+			Synonym newSynonym2(synonym2.getType(), synonym2.getName(), filteredSynonym2Values);
+			swapOldSynonymWithNewSynonym(newSynonym2);
 		}
-
-		Synonym synonym1 = findSynonymWithName(firstPairName1);
-		set<int> synonym1Values = synonym1.getValues();
-		set<int> filteredSynonym1Values = intersectWithCurrentValues(acceptedValues1, synonym1Values);
-		Synonym newSynonym1(synonym1.getType(), synonym1.getName(), filteredSynonym1Values);
-		swapOldSynonymWithNewSynonym(newSynonym1);
-
-		Synonym synonym2 = findSynonymWithName(firstPairName2);
-		set<int> synonym2Values = synonym2.getValues();
-		set<int> filteredSynonym2Values = intersectWithCurrentValues(acceptedValues2, synonym2Values);
-		Synonym newSynonym2(synonym2.getType(), synonym2.getName(), filteredSynonym2Values);
-		swapOldSynonymWithNewSynonym(newSynonym2);
 	}
 
 	/**
