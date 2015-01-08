@@ -20,12 +20,16 @@ class ExpressionParser {
 		int stmtNum;
 		string token; // current token
 
+		// @TODO: rename
 		TNode* operator_add_token(TNode* left);
+		TNode* operator_multiply_token(TNode* left);
+		TNode* operator_subtract_token(TNode* left);
 
 		unordered_map<string, int> makeOperatorMap() {
 			unordered_map<string, int> operMap;
 			operMap["+"] = 10;
 			operMap["*"] = 20;
+			operMap["-"] = 10;
 			return operMap;
 		};
 
@@ -33,7 +37,7 @@ class ExpressionParser {
 
 	public:
 		ExpressionParser();
-		void updateBuffer(vector<string>, int skip = 2);
+		void updateBuffer(vector<string>, int skip);
 		void updateStmtNum(int);
 		TNode* parse(int bindingLevel = 0);
 };

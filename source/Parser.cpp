@@ -249,7 +249,7 @@ namespace Parser {
 		int bufferSize = buffer.size() - alreadyParsed;
 
 		ExpressionParser exprParser;
-		exprParser.updateBuffer(buffer); 
+		exprParser.updateBuffer(buffer, alreadyParsed); 
 		exprParser.updateStmtNum(stmtNum);
 
 		for (int i = 0; i < buffer.size() ; i++) {

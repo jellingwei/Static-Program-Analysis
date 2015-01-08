@@ -94,6 +94,32 @@ TNode* ExpressionParser::operator_add_token(TNode* left) {
 	return top;
 }
 
+
+TNode* ExpressionParser::operator_multiply_token(TNode* left) {
+	TNode* right = parse(operPrecedence["*"]);
+	PKB pkb = PKB::getInstance();
+	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
+
+	pkb.createLink(Child, top, left);
+	pkb.createLink(Child, top, right);
+
+	return top;
+}
+
+TNode* ExpressionParser::operator_subtract_token(TNode* left) {
+	TNode* right = parse(operPrecedence["-"]);
+	PKB pkb = PKB::getInstance();
+	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
+
+	pkb.createLink(Child, top, left);
+	pkb.createLink(Child, top, right);
+
+	return top;
+}
+
+/**
+ * Method to parse and return a tree. 
+ */
 TNode* ExpressionParser::parse(int bindingLevel) {
 	PKB pkb = PKB::getInstance();
 
@@ -106,12 +132,14 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 	TNode* leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum));
 
 	
-	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") != 0)) {
+	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") == 0)) {
 		prevToken = token;
 
 		token = *(bufferIter ++);
 		if (prevToken.compare("+") == 0) {
 			leftNode = operator_add_token(leftNode);
+		} else if (prevToken.compare("*") == 0) {
+			leftNode = operator_multiply_token(leftNode);
 		}
 	}
 
