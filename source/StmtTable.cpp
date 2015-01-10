@@ -12,25 +12,32 @@
 using namespace std;
 
 /*
-**Currently, parser to call method to insert stmtNumber read and its type("assign" or "while")
+**Currently, parser to call method to insert stmtNumber read and its type("assign", "while" or "if")
 */
 bool StmtTable::insertStmt(int stmtNum, string type) {
 	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
-	} else if(!(type=="while" || type=="assign")) {
+	} else if(!(type=="while" || type=="assign" || type=="if")) {
 		throw exception("StmtTable error: Invalid statement type");
 	}
 
 	int toCheck = stmtNumMap.count(stmtNum);
 	
-	if(toCheck == 0) { //not such entry for given stmtNum
+	if(toCheck == 0) { //no such entry for given stmtNum
 		pair<int, string> stmtNum_Type (stmtNum, type);
 		stmtNumMap.insert(stmtNum_Type);
+
 		string whileType = "while";
 		string assignType = "assign";
-		if(whileType.compare(type) == 0) whileStmt.push_back(stmtNum);
-		else if(assignType.compare(type) == 0) assignStmt.push_back(stmtNum);
+		
+		if(whileType.compare(type) == 0) {
+			whileStmt.push_back(stmtNum);
+		}
+		else if(assignType.compare(type) == 0) {
+			assignStmt.push_back(stmtNum);
+		}
 	//	else throw exception("No such statement type");
+		
 		return true;
 	} else {
 		return false;
@@ -55,7 +62,7 @@ string StmtTable::getType(int stmtNum) {
 }
 
 /*
-**For Query processor to find all stmt of type("assign" or "while")
+**For Query processor to find all stmt of type("assign", "while" or "if")
 */
 vector<int> StmtTable::getStmtNumForType(string type) {
 
@@ -63,24 +70,27 @@ vector<int> StmtTable::getStmtNumForType(string type) {
 	string assignType = "assign";
 	string stmtType = "stmt";
 	string progLineType = "prog_line";
+	string ifType = "if";
 
-	if(!(type==whileType || type==assignType || type==stmtType || type==progLineType)) {
+	if(!(type==whileType || type==assignType || type==stmtType || type==progLineType || type==ifType)) {
 		throw exception("StmtTable error: Invalid statement type");
 	}
 
 	if(whileType.compare(type) == 0) {
 		sort(whileStmt.begin(), whileStmt.end());
 		return whileStmt;
+
 	} else if(assignType.compare(type) == 0) {
 		sort(assignStmt.begin(), assignStmt.end());
 		return assignStmt;
-	} else if (stmtType.compare(type) || progLineType.compare(type)) {
+
+	} else if (stmtType.compare(type) == 0 || progLineType.compare(type) == 0) {
 		vector<int> result;
 		for (unordered_map<int, string>::iterator iter = stmtNumMap.begin(); iter != stmtNumMap.end(); ++iter) {
 			result.push_back((*iter).first);
 		}
 
-		sort(result.begin(), result.end());
+		// sort(result.begin(), result.end()); // TODO: is there a need to sort?
 		return result;
 	} 
 }
