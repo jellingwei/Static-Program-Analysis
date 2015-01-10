@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <regex>
+#include <exception>
 
 #include "PKB.h"
 #include "AST.h"
@@ -56,7 +57,7 @@ namespace Parser {
 	 */
 	bool parseLine() {
 		if (!inputFile.is_open()) {
-			throw new exception("Parse failure: Parser not initialised before parsing functions were called");
+			throw new logic_error("Parse failure: Parser not initialised before parsing functions were called");
 		}
 	
 		buffer.clear();
@@ -207,39 +208,10 @@ namespace Parser {
 		return (std::regex_match(token, operRegex)) ? token: "";
 	}
 
-	string parseFactorConstantAndOperator(vector<TNode*>* listOfNodes) {
-		string nextToken = parseToken();
-		string res = matchName(nextToken);
-	
-		bool isName = !res.empty();
-		if (isName) {
-			callPkb("VarTable", std::to_string(static_cast<long long>(stmtNum)), res);
-			callPkb("Uses", std::to_string(static_cast<long long>(stmtNum)), res);
-
-			listOfNodes->push_back(PKB::getInstance().createTNode(Variable, 
-								   stmtNum, PKB::getInstance().getVarIndex(res)));
-		} else { 
-			res = matchInteger(nextToken);
-
-			bool isConstant = !res.empty();
-			if (isConstant) {
-				callPkb("ConstantTable", std::to_string(static_cast<long long>(stmtNum)), res);
-
-				listOfNodes->push_back(PKB::getInstance().createTNode(Constant, 
-									   stmtNum, atoi(res.c_str())));
-			} else {  
-				// not a number either, therefore is an operator
-				res = matchOperator(nextToken);
-			}
-		}
-
-		return res;
-	}
 
 	/**
 	 * Parses an expression. 
-	 * @param exprRoot the root of the expression, if the expr consists of only a variable, this should be the assignNode itself,
-	 *                 otherwise, the first plusNode
+	 * @param exprRoot the root of the expression, this should be the assignNode itself.
 	 * Assumptions: LHS = RHS => [LHS] and [=] took up 2 tokens in the buffer, and has already been parsed
 	 *              The expression only consists of factors and '+'
 	 */
@@ -262,39 +234,6 @@ namespace Parser {
 
 		PKB::getInstance().createLink(Child, exprRoot, top);
 
-		/*vector<TNode*>* listOfNodes = new vector<TNode*>();
-		for (int i = 0; i < bufferSize; i++) {  
-			string res = parseFactorConstantAndOperator(listOfNodes);
-
-			if (res.empty()) {
-				return false;
-			} else if (match(res, ";")) {
-				break;
-			}
-		}
-
-		// add the expression to the AST
-		PKB pkb = PKB::getInstance();
-
-		TNode* parentNode = exprRoot;
-		
-		if (!listOfNodes->empty()) {
-			for (int i = listOfNodes->size() - 1; i >= 2; --i) {
-				TNode* nextParentNode = pkb.createTNode(Plus, stmtNum, -2);
-				
-				pkb.createLink(Child, parentNode, nextParentNode);
-				pkb.createLink(Child, parentNode, listOfNodes->at(i)); 
-					
-				parentNode = nextParentNode;
-			}
-
-			pkb.createLink(Child, parentNode, listOfNodes->at(0));
-			if (listOfNodes->size() > 1) {
-				pkb.createLink(Child, parentNode, listOfNodes->at(1));
-			} 
-		}
-		*/
-
 		cout << "drop curline" << endl;
 		//parseLine(); // drop the current line, which is the assignment statement
 		while ((bufferIter++)->compare(";") != 0) {
@@ -309,6 +248,59 @@ namespace Parser {
 	}
 
 	bool parseStmtList();
+
+	bool parseIf(string token) {
+		// match if
+		bool res = match(token, "if"); 
+		if (!res) return false;
+
+		// match variable
+		string varName = parseName();
+
+		if (varName.size() == 0) return false;
+		callPkb("VarTable", std::to_string(static_cast<long long>(stmtNum)), varName);
+
+		res = parse("{");
+		if (!res) return false;
+
+
+		// AST interactions
+		AST* ast = PKB::getInstance().ast;
+		PKB pkb = PKB::getInstance();
+
+		TNode* node = pkb.createTNode(If, stmtNum, -1);
+		TNode* LHSNode = pkb.createTNode(Variable, stmtNum, 
+			pkb.getVarIndex(varName));
+		// control variable as first child
+		pkb.createLink(Child, node, LHSNode); 
+		TNode* stmtlistNode = pkb.createTNode(StmtLst, stmtNum, -1);
+		// stmtList node as second child
+		pkb.createLink(Child, node, stmtlistNode); 
+
+		pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+		PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+
+		// Follows from prev stmt in the stmt list
+		TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
+		if (prevStmtInStmtList != NULL) {
+			pkb.setFollows(prevStmtInStmtList, node);
+		}
+
+		// Set Parent
+		pkb.setParent(currentASTParent(), node);
+
+		int ifStmtNum = stmtNum;
+		ASTParent.push_back(stmtlistNode);
+		// parse inner stmt list
+		parseStmtList();
+		
+		// remove the if node from ASTParent
+		ASTParent.erase(ASTParent.end() - 1); 
+		
+		callPkb("Uses", std::to_string(static_cast<long long>(ifStmtNum)), varName);
+		
+		return res;
+	}
 
 	bool parseWhile(string token) {
 		bool res = match(token, "while"); 
@@ -338,19 +330,22 @@ namespace Parser {
 		pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
 		PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
 
+		// Follows from prev stmt in the stmt list
 		TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
 		if (prevStmtInStmtList != NULL) {
 			pkb.setFollows(prevStmtInStmtList, node);
 		}
 
-		
+		// Set Parent
 		pkb.setParent(currentASTParent(), node);
 
 		int whileStmtNum = stmtNum;
 		ASTParent.push_back(stmtlistNode);
+		// parse inner stmt list
 		parseStmtList();
 		
-		ASTParent.erase(ASTParent.end() - 1); // remove the while node from ASTParent
+		// remove the while node from ASTParent
+		ASTParent.erase(ASTParent.end() - 1); 
 		
 		callPkb("Uses", std::to_string(static_cast<long long>(whileStmtNum)), varName);
 		
@@ -400,8 +395,6 @@ namespace Parser {
 
 	/**
 	 * Matches a statement.
-	 * Assumptions: stmt can only be assignment or while
-	 * @TODO rewrite in cs3202
 	 */
 	bool matchStmt(string firstToken) {
 		bool res = true;
@@ -415,11 +408,21 @@ namespace Parser {
 				int parent = stmtListParent[stmtListParent.size() - 1];
 				callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
 			}
-		} else {
+		} else if (firstToken == "while") {
 			stmtNum += 1;
 
 			callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "while");
 			res = parseWhile(firstToken);
+
+			if (stmtListParent.size() > 0) {
+				int parent = stmtListParent[stmtListParent.size() - 1];
+				callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
+			}
+		} else if (firstToken == "if") {
+			stmtNum += 1;
+
+			callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "if");
+			res = parseIf(firstToken);
 
 			if (stmtListParent.size() > 0) {
 				int parent = stmtListParent[stmtListParent.size() - 1];

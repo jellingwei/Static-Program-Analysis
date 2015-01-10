@@ -132,7 +132,7 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 	TNode* leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum));
 
 	
-	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") == 0)) {
+	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") != 0)) {
 		prevToken = token;
 
 		token = *(bufferIter ++);
