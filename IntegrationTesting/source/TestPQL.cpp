@@ -30,7 +30,7 @@ void PQLTest::tearDown()
 void PQLTest::testPQL()
 {
 	// Select
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all a", 8, (int)evaluate("assign a; Select a").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all a", 9, (int)evaluate("assign a; Select a").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all s", 11, (int)evaluate("stmt s; Select s").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all v", 6, (int)evaluate("variable v; Select v").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all w", 3, (int)evaluate("while w; Select w").size());

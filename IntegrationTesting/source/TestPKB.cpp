@@ -97,7 +97,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'a + f'_)", 6, pkb.patternMatchAssign("_\"a + f\"_").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'d + e'_)", 0, (int)pkb.patternMatchAssign("_\"d + e\"_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'1'_)", 1, pkb.patternMatchAssign("_\"1\"_").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 8, (int)pkb.patternMatchAssign("_").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 9, (int)pkb.patternMatchAssign("_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'a + f')", 6, (int)pkb.patternMatchAssign("a + f").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '3')", 11, pkb.patternMatchAssign("3").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'd')", 0, (int)pkb.patternMatchAssign("d").size());
