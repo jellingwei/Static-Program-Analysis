@@ -116,9 +116,9 @@ void PKBTest::testPKB()
 
 	// All pairs for Follows
 	pair<vector<int>, vector<int>> allFollows = pkb.getAllFollowsPairs(false);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows pairs size", 7, (int)allFollows.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows pairs size", 8, (int)allFollows.first.size());
 	allFollows = pkb.getAllFollowsPairs(true);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows* pairs size", 22, (int)allFollows.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows* pairs size", 29, (int)allFollows.first.size());
 
 	// All pairs for parent
 	pair<vector<int>, vector<int>> allParent = pkb.getAllParentPairs(false);
