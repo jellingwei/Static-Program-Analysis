@@ -73,6 +73,7 @@ public:
 	string getType(int);
 	vector<int> getStmtNumForType(string);
 	bool isAssign(int);
+	bool isWhile(int);
 	int getStmtTableSize();
 
 	// Parent Table methods

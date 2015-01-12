@@ -457,7 +457,7 @@ vector<int> AST::patternMatchWhile(string LHS) {
 
 	vector<int> result;
 	for (auto stmt = candidateList.begin(); stmt != candidateList.end(); ++stmt) {
-		bool isWhile = !PKB::getInstance().isAssign(*stmt); // stmt are either while or assign
+		bool isWhile = PKB::getInstance().isWhile(*stmt); 
 		if (isWhile) {
 			TNode* stmtNode = PKB::getInstance().nodeTable.at(*stmt);
 

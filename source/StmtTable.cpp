@@ -100,11 +100,16 @@ bool StmtTable::isAssign(int stmtNo) {
 		throw exception("StmtTable error: Negative statment number");
 	}
 
-	if(stmtNumMap.at(stmtNo)!="assign"){
-		return false;
-	} else {
-		return true;
+	return stmtNumMap.at(stmtNo) == "assign";
+}
+
+bool StmtTable::isWhile(int stmtNo) {
+	if(stmtNo <= 0) {
+		throw exception("StmtTable error: Negative statment number");
 	}
+
+	return stmtNumMap.at(stmtNo) == "while";
+	
 }
 
 /*

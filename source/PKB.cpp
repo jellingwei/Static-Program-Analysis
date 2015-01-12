@@ -121,6 +121,9 @@ vector<int> PKB::getStmtNumForType(string type) {
 bool PKB::isAssign(int stmtNum) {
 	return stmtTable->isAssign(stmtNum);
 }
+bool PKB::isWhile(int stmtNum) {
+	return stmtTable->isWhile(stmtNum);
+}
 int PKB::getStmtTableSize() {
 	return stmtTable->getSize();
 }
