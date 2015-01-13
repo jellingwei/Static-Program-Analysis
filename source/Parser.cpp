@@ -89,7 +89,7 @@ namespace Parser {
 		std::tr1::sregex_token_iterator rs(line.begin(), line.end(), separatorRegex, -1);
 
 		// tokenise words and operators
-		string operators = "([\\w\\d]+|[+=;{}])";
+		string operators = "([\\w\\d]+|[+=;{}\(\)])";
 		std::regex operRegex(operators);
 
 		for (; rs != reg_end; ++rs) {
@@ -218,26 +218,16 @@ namespace Parser {
 	bool parseExpr(TNode* exprRoot) {
 		bool res = true;
 		const int alreadyParsed = 2;
-		int bufferSize = buffer.size() - alreadyParsed;
+		//int bufferSize = buffer.size() - alreadyParsed;
 
 		ExpressionParser exprParser;
 		exprParser.updateBuffer(buffer, alreadyParsed); 
 		exprParser.updateStmtNum(stmtNum);
 
-		for (int i = 0; i < buffer.size() ; i++) {
-			cout << buffer[i] << "  ";
-		}
-		cout << endl;
-
 		TNode* top = exprParser.parse();
-
-
 		PKB::getInstance().createLink(Child, exprRoot, top);
 
-		cout << "drop curline" << endl;
-		//parseLine(); // drop the current line, which is the assignment statement
-		while ((bufferIter++)->compare(";") != 0) {
-		}
+		while ((bufferIter++)->compare(";") != 0) {}
 
 		return res;
 	}

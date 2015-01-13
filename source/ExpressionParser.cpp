@@ -20,8 +20,6 @@ ExpressionParser::ExpressionParser() {
 
 void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) {
 	buffer = newBuffer;
-	cout << "size of buffer = " << buffer.size() << endl;
-	cout << "skip " << skip << endl;
 	bufferIter = buffer.begin() + skip; // 
 
 	token = *(bufferIter++);
@@ -83,7 +81,7 @@ int ExpressionParser::getOperatorPrecedence(string token) {
 	}
 }
 
-TNode* ExpressionParser::operator_add_token(TNode* left) {
+TNode* ExpressionParser::operatorAdd(TNode* left) {
 	TNode* right = parse(operPrecedence["+"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
@@ -95,7 +93,7 @@ TNode* ExpressionParser::operator_add_token(TNode* left) {
 }
 
 
-TNode* ExpressionParser::operator_multiply_token(TNode* left) {
+TNode* ExpressionParser::operatorMultiply(TNode* left) {
 	TNode* right = parse(operPrecedence["*"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
@@ -106,7 +104,7 @@ TNode* ExpressionParser::operator_multiply_token(TNode* left) {
 	return top;
 }
 
-TNode* ExpressionParser::operator_subtract_token(TNode* left) {
+TNode* ExpressionParser::operatorSubtract(TNode* left) {
 	TNode* right = parse(operPrecedence["-"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
@@ -127,9 +125,14 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 
 	token = *(bufferIter ++);
 
-
-	bool isVariable = matchInteger(prevToken).empty();
-	TNode* leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum));
+	TNode* leftNode;
+	if (prevToken.compare("(") == 0) {
+		leftNode = parse();
+	} else {
+		// prevToken is either variable or constant now
+		bool isVariable = matchInteger(prevToken).empty();
+		leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum));
+	}
 
 	
 	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") != 0)) {
@@ -137,9 +140,11 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 
 		token = *(bufferIter ++);
 		if (prevToken.compare("+") == 0) {
-			leftNode = operator_add_token(leftNode);
+			leftNode = operatorAdd(leftNode);
 		} else if (prevToken.compare("*") == 0) {
-			leftNode = operator_multiply_token(leftNode);
+			leftNode = operatorMultiply(leftNode);
+		} else if (prevToken.compare("-") == 0) {
+			leftNode = operatorSubtract(leftNode);
 		}
 	}
 
