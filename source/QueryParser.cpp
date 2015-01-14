@@ -24,16 +24,18 @@
 #include "Synonym.h"
 #include "QueryTree.h"
 
+using std::string;
+using std::vector;
 
 namespace QueryParser{
 
 	ifstream inputFile;
-	std::vector<string> buffer;
-	std::vector<string>::iterator bufferIter;
-	std::string currentParsedLine;
+	vector<string> buffer;
+	vector<string>::iterator bufferIter;
+	string currentParsedLine;
 
-	std::string designEntities[] = {"stmt","assign","while","variable","constant","prog_line"};
-	std::string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*"};
+	string designEntities[] = {"stmt","assign","while","variable","constant","prog_line"};
+	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*"};
 	QueryTree* myQueryTree;
 	unordered_map<string, string> synonymsMap; //key: synonyms
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
@@ -54,19 +56,19 @@ namespace QueryParser{
 		}
 
 		// remove blocks of multiple whitespace
-		std::string multipleSpaces = "[\\s]";
+		string multipleSpaces = "[\\s]";
 		std::tr1::regex separatorRegex(multipleSpaces);
 		std::tr1::sregex_token_iterator reg_end;
 
 		std::tr1::sregex_token_iterator rs(query.begin(), query.end(), separatorRegex, -1);
 
 		// tokenise words and operators
-		std::string operators = "([\\w\\d\\*]+|[_+;,(\\)\"])";
+		string operators = "([\\w\\d\\*]+|[_+;,(\\)\"])";
 		std::regex operRegex(operators);
 
 		for (; rs != reg_end; ++rs) {
 			std::smatch match;
-			std::string res(rs->str());
+			string res(rs->str());
 			
 			while (std::regex_search(res, match, operRegex)) {
 				if (match.empty()) {
@@ -90,10 +92,10 @@ namespace QueryParser{
 	/**
 	 * Returns the next token
 	 */
-	std::string parseToken(){
+	string parseToken(){
 
 		if (buffer.size() && bufferIter != buffer.end()) {
-			std::string currToken= (*(bufferIter ++));
+			string currToken= (*(bufferIter ++));
 
 			//cout<<"*******print parse token *****"<<endl;
 			//cout<<currToken<<endl;
@@ -117,7 +119,7 @@ namespace QueryParser{
 	/**************************************************************/
 	/**   Supporting Functions - To read the buffer of queries   **/
 	/**************************************************************/
-	std::string peekInToTheNextToken(){
+	string peekInToTheNextToken(){
 		return (*(bufferIter));
 	}
 
@@ -126,7 +128,7 @@ namespace QueryParser{
 	 * If steps = 0 , it returns the currToken
 	 * If steps = 1, it returns the previous token
 	 */
-	std::string peekBackwards(int steps){
+	string peekBackwards(int steps){
 		return (*(bufferIter-1-steps));
 	}
 
@@ -174,7 +176,7 @@ namespace QueryParser{
 	/**
 	 * Matches if the given token follows the naming convention for NAME, as per the given grammar
 	 */
-	bool matchName(std::string token){
+	bool matchName(string token){
 		std::regex nameRegex("[A-Za-z][\\w]*");
 
 		return std::regex_match(token, nameRegex) ? true : false;
@@ -183,12 +185,12 @@ namespace QueryParser{
 	/**
 	 * Matches if the given token follows the naming convention for INTEGER, as per the given grammar
 	 */
-	bool matchInteger(std::string token){
+	bool matchInteger(string token){
 		std::regex intRegex("\\d+");
 		return (std::regex_match(token,intRegex)) ? true : false;
 	}
 
-	bool matchFactor(std::string token){
+	bool matchFactor(string token){
 
 		if(!(matchInteger(token) || matchName(token))){
 			#ifdef DEBUG
@@ -200,13 +202,13 @@ namespace QueryParser{
 	/**
 	 *  Checks if it's a factor 
 	 **/
-	bool isFactor(std::string token){
+	bool isFactor(string token){
 		return (matchInteger(token) || matchName(token));
 	}
 	/**
 	 *Matches if the given token follows the naming convention of Synonym and IDENT
 	 */
-	bool matchSynonymAndIdent(std::string token, bool comma){
+	bool matchSynonymAndIdent(string token, bool comma){
 		std::regex synonymRegex("");
 
 		if (comma){
@@ -225,14 +227,14 @@ namespace QueryParser{
 	/**
 	 *Matches if the given token follows the naming convention of entity reference
 	 */
-	bool matchUnderscore(std::string token){
+	bool matchUnderscore(string token){
 		return (token.compare("_") == 0);
 	}
 
 	/**
 	 *Matches if the given token follows the naming convention of stmt reference
 	 */
-	bool matchStmtRef(std::string token){
+	bool matchStmtRef(string token){
 		if(matchSynonymAndIdent(token,false)){
 			return true;
 		}
@@ -252,7 +254,7 @@ namespace QueryParser{
 	/**
 	 *Matches if the given token follows the naming convention of entity reference
 	 */
-	bool matchEntRef(std::string token){
+	bool matchEntRef(string token){
 		if(matchSynonymAndIdent(token, false))
 			return true;
 		else if(matchUnderscore(token))
@@ -267,7 +269,7 @@ namespace QueryParser{
 		return false;
 	}
 
-	bool matchDesignEntity(std::string token){
+	bool matchDesignEntity(string token){
 		for(int i=0; i<(sizeof(designEntities)/sizeof(*designEntities)); i++){
 			if(designEntities[i].compare(token) == 0)
 				return true;
@@ -286,30 +288,30 @@ namespace QueryParser{
 	/**
 	 * Parses the next token and check if it is equal to the given target
 	 */
-	bool parse(std::string target){
-		std::string nextToken = parseToken();
+	bool parse(string target){
+		string nextToken = parseToken();
 		return nextToken.compare(target) == 0;
 	}
 	bool parseApostrophe(){
-		std::string nextToken = parseToken();
+		string nextToken = parseToken();
 		std::regex synonymRegex("[\"]");
 		return std::regex_match(nextToken,synonymRegex) ? true : false;
 	}
 	bool parseDesignEntity(){
-		std::string nextToken = parseToken();
+		string nextToken = parseToken();
 		return matchDesignEntity(nextToken);
 	}
 	bool parseSynonymns(){
-		std::string nextToken = parseToken();
+		string nextToken = parseToken();
 		return matchSynonymAndIdent(nextToken, false);
 	}
 	bool parseStmtRef(){
-		std::string nextToken = parseToken();
+		string nextToken = parseToken();
 		return matchStmtRef(nextToken);
 	}
 	string parseEntRef(){
-		std::string nextToken = "";
-		std::string returnToken = "";
+		string nextToken = "";
+		string returnToken = "";
 
 		if(parseApostrophe()){
 			nextToken = peekBackwards(0);
@@ -324,7 +326,7 @@ namespace QueryParser{
 		return matchEntRef(nextToken) ? returnToken: "";
 	}
 	bool parseFactor(){
-		std::string nextToken = parseToken();
+		string nextToken = parseToken();
 		return matchFactor(nextToken);
 	}
 	bool parseExpressionSpec(bool whilePatternExp){
@@ -442,7 +444,7 @@ namespace QueryParser{
 	bool parseSuchThatClause(){
 
 		std::regex apostrophe("[\"]");
-		std::string DE_type, nextToken;
+		string DE_type, nextToken;
 		QNODE_TYPE nodeType;
 
 		bool res = parse("such");
@@ -480,7 +482,7 @@ namespace QueryParser{
 					#endif
 					return false;} 
 
-				std::string entRef_value="";
+				string entRef_value="";
 				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
 					entRef_value = parseEntRef();
 					if (entRef_value.compare("")==0){return false;} 
@@ -515,7 +517,7 @@ namespace QueryParser{
 
 
 				/* Synonym s2 */
-				std::string name2;
+				string name2;
 				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
 
 					name2 = entRef_value;
@@ -552,7 +554,7 @@ namespace QueryParser{
 				Synonym s2(DE_type,name2);
 
 				/* Synonym s1 */
-				std::string name1="";
+				string name1="";
 				if(!std::regex_match(peekBackwards(1),apostrophe)){
 					name1 = peekBackwards(3);
 				}else{
@@ -589,7 +591,7 @@ namespace QueryParser{
 	}
 	bool parsePatternClause(){
 		bool whilePatternExp = false;
-		std::string DE_type;
+		string DE_type;
 
 		bool res = parse("pattern");
 		if (!res){
@@ -630,7 +632,7 @@ namespace QueryParser{
 
 			return false;} 
 
-		std::string pattern_variable = parseEntRef();
+		string pattern_variable = parseEntRef();
 		if (pattern_variable.compare("")==0){
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: invalid entRef arg1"<<endl;
@@ -676,7 +678,7 @@ namespace QueryParser{
 
 		//Build Query Tree
 		int i = 1;
-		std::string pattern_patterns = "";
+		string pattern_patterns = "";
 		while(peekBackwards(i).compare(",")!=0){
 			i++;
 		}
@@ -731,7 +733,7 @@ namespace QueryParser{
 
 		bool res;
 		int i=0; //number of times in the while loop
-		std::string nextToken, peekToken;
+		string nextToken, peekToken;
 
 		do{
 			res = parseDesignEntity();
