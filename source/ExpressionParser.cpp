@@ -15,9 +15,14 @@ using namespace std;
 
 ExpressionParser::ExpressionParser() {
 	operPrecedence = makeOperatorMap();
+	this->stmtNum = 0;
 }
 
-
+/**
+ * Before calling parse, call this function
+ * @param newBuffer should be a vector containing the tokenized right side of expression. 
+ *        e.g. For "a = x + y;" , a vector containing [x, +, y, ;] should be passed in
+ */
 void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) {
 	buffer = newBuffer;
 	bufferIter = buffer.begin() + skip; // 
@@ -25,11 +30,14 @@ void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) {
 	token = *(bufferIter++);
 }
 
+/**
+ * Updates the stmtNum of the expression. If the expression parser is used to parse the query, there is no need to call this.
+ */
 void ExpressionParser::updateStmtNum(int stmtNum) {
 	this->stmtNum = stmtNum;
 }
 
-//@TODO: code duplication between here and Parser. Might not need to bother though
+//@Todo code duplication between here and Parser. Might not need to bother though
 string matchInteger(string token) {
 	std::regex intRegex("\\d+");
 	return (std::regex_match(token,intRegex)) ? token : "";
@@ -115,8 +123,11 @@ TNode* ExpressionParser::operatorSubtract(TNode* left) {
 	return top;
 }
 
+
 /**
- * Method to parse and return a tree. 
+ * Method to parse and return a tree.
+ * @sa ::updateBuffer
+ * @sa ::updateStmtNum
  */
 TNode* ExpressionParser::parse(int bindingLevel) {
 	PKB pkb = PKB::getInstance();

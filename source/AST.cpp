@@ -451,10 +451,10 @@ vector<int> AST::patternMatchWhile(string LHS) {
 		return emptyVector;
 	}
 	
+	// Get statements using the variable
+	vector<int> candidateList = PKB::getInstance().getUsesStmtNum(varIndex);
 
-	vector<int> candidateList;
-	candidateList = PKB::getInstance().getUsesStmtNum(varIndex);
-
+	// Filter non-while statements from these statements
 	vector<int> result;
 	for (auto stmt = candidateList.begin(); stmt != candidateList.end(); ++stmt) {
 		bool isWhile = PKB::getInstance().isWhile(*stmt); 
