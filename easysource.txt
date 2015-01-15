@@ -1,7 +1,0 @@
-procedure ABC {
-  i = 1;               \\ 1
-  x=2;               \\    2
-   y = x + i +x;    
-  y  =  y + x  ;\\4
-  longvariablename=5;\\5
-}

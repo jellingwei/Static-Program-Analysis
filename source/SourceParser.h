@@ -1,8 +1,9 @@
 #include <vector>
 #include <assert.h>
+using std::string;
 
 namespace Parser {
-	bool initParser(std::string);
+	bool initParser(string);
 	bool parseProgram();
 	
 }

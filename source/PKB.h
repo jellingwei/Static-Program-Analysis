@@ -25,6 +25,7 @@ class StmtTable;
 
 class PKB {
 public:
+	// @Todo make all tables private so that PKB is a real facade
 	VarTable* varTable; 
 	StmtTable* stmtTable;
 	ConstantTable* constantTable;

@@ -132,7 +132,7 @@ bool is_number(const std::string& s)
 /**
  * Pattern matching for assign statements.
  * @return a vector of statement numbers which are assign stmts, and uses the input RHS as its right substree.
- * @param RHS, to match the expression query with a suitable subtree.
+ * @param RHS to match the expression query with a suitable subtree.
  */
 vector<int> AST::patternMatchAssign(string RHS) {
 
@@ -433,7 +433,7 @@ vector<int> AST::patternMatchAssign(string RHS) {
 /**
  * Pattern matching for while statements.
  * @return a vector of statement numbers which are while loops, and uses the input LHS as its control variable.
- * @param LHS, the name of the variable that acts as the control variable for the while statements we are interested in.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
  */
 vector<int> AST::patternMatchWhile(string LHS) {
 	// strip leading and trailing space
@@ -478,7 +478,7 @@ vector<int> AST::patternMatchWhile(string LHS) {
 
 /**
  * Obtain the index of control variable of a while loop. 
- * @param stmtNum, the statement number of the while loop
+ * @param stmtNum the statement number of the while loop
  * @return -1 if 1. an invalid statement number is provided.
  *     2. the statement indicated by the stmtNum is not a While statement
  *     3. the AST is poorly formed and the while loop's node is in an invalid state
