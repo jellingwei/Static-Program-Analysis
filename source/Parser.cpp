@@ -467,23 +467,36 @@ namespace Parser {
 		nodeQueue.push_back(root);
 		while (!nodeQueue.empty()) {
 			
-			cout << nodeQueue.front()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getStmtNumber() << endl;
-			cout << " is a variable node: " << (nodeQueue.front()->getNodeType() == Variable) << endl;
+			
 			bool isConstant = (nodeQueue.front()->getNodeType() == Constant);
+			bool isVariable = (nodeQueue.front()->getNodeType() == Variable);
 			bool isPlus = (nodeQueue.front()->getNodeType() == Plus);
 			bool isAssign = (nodeQueue.front()->getNodeType() == Assign);
 
-			cout << " isConstant: " << isConstant << " isPlus: " << isPlus << " isAssign: " << isAssign <<  endl;
-			cout << "  and parent of it is " << nodeQueue.front()->getParent()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getParent()->getStmtNumber() << endl;
+			cout << *(nodeQueue.front()) << endl;
+			cout << " isConstant: " << isConstant << " isVariable:" << isVariable << " isPlus: " << isPlus << " isAssign: " << isAssign <<  endl;
+			cout << "  parent: " << nodeQueue.front()->getParent()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getParent()->getStmtNumber() << endl;
+
+			
 			vector<TNode*>* children = nodeQueue.front()->getChildren();
 			if (nodeQueue.front()->hasChild()) {
-				cout << "has child" << endl;
-				cout << " has " << (int)children->size() << " children" << endl;
+				cout << " has child" << endl;
+				cout << "  has " << (int)children->size() << " children" << endl;
 				for (int i =0; i < (int)children->size(); ++i) {
 					TNode* node = children->at(i);
-					nodeQueue.push_back(node);
+					if (node->getNodeType() != Plus) 
+					{
+						nodeQueue.push_back(node);
+					}
 				}
 			}
+
+			if (isAssign) 
+			{
+				// print out the expression
+				cout << "assignment expression is " << *(children->at(1)) << endl;
+			}
+
 			nodeQueue.erase(nodeQueue.begin());
 		}
 
@@ -495,7 +508,7 @@ namespace Parser {
 		bool res = parseProcedure();
 		assert(res); // do not evaluate queries if parser has failed
 		//cout << "parser has completed the parse" << endl;
-		//traverseAndPrintTree(PKB::getInstance().getRoot());
+		traverseAndPrintTree(PKB::getInstance().getRoot());
 		return res;
 	}
 	

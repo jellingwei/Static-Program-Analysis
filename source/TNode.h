@@ -50,4 +50,7 @@ private:
 	vector<TNode*> _children;
 	TNode* _leftSibling;
 	TNode* _rightSibling;
+
+	friend std::ostream& operator<<(std::ostream&, const TNode&);
+
 };

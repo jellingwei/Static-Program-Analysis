@@ -2,7 +2,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+
 #include "TNode.h"
+
+
+
 
 TNode::TNode() {}
 
@@ -87,4 +92,58 @@ TNode* TNode::getRightSibling() {
 
 void TNode::setParent(TNode* parent) {
 	_parent = parent;
+}
+
+
+std::ostream& operator<<(std::ostream &strm, const TNode &node) {
+	TNODE_TYPE expr[] = {Plus, Variable, Constant}; // @Todo add times, subtract, etc
+
+	auto res = find(begin(expr), end(expr), node._nodeType);
+	
+	if (res != end(expr)) 
+	{
+
+		if (node._nodeType == Variable || node._nodeType == Constant) 
+		{
+			string type = node._nodeType == Variable ? "v" : "c";
+			string value = to_string(static_cast<long long>(node._nodeValueIdx));
+			return strm << type << value;
+		}
+
+		string oper;
+		switch (node._nodeType) 
+		{
+			case (Plus):
+				oper = "+";
+				break;
+			default:
+				break;
+		}
+		
+		TNode* leftChild = node._children[0];
+		TNode* rightChild = node._children[1];
+		return strm << "(" << *leftChild <<  " " << *rightChild << " " << oper << ")";
+	}
+	else 
+	{
+		string type;
+		switch (node._nodeType) 
+		{
+		case (While):
+			type = "while";
+			break;
+		case (If):
+			type = "if";
+			break;
+		case (Assign):
+			type = "assign";
+			break;
+		default:
+			break;
+
+		}
+		return strm << node._stmtNumber << ": " << type;
+
+	}
+
 }

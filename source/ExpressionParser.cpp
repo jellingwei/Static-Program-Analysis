@@ -19,9 +19,9 @@ ExpressionParser::ExpressionParser() {
 }
 
 /**
- * Before calling parse, call this function
- * @param newBuffer should be a vector containing the tokenized right side of expression. 
- *        e.g. For "a = x + y;" , a vector containing [x, +, y, ;] should be passed in
+ * Before calling parse, call this function to initialise the buffer in the expression parser
+ * @param newBuffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
+ * @param skip		optional. The number of tokens to skip in the newBuffer. Use if the buffer contains garbage in front.
  */
 void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) {
 	buffer = newBuffer;
@@ -59,7 +59,7 @@ int parseVariable(string value, int stmtNum) {
 	int varIndx = pkb.getVarIndex(value);
 
 	// update pkb 
-	// @TODO 
+	// @TODO this should not be done here
 	pkb.setUses(stmtNum, varIndx);
 
 	while (pkb.getParent(stmtNum).size()) {
@@ -125,7 +125,8 @@ TNode* ExpressionParser::operatorSubtract(TNode* left) {
 
 
 /**
- * Method to parse and return a tree.
+ * Method to parse an expression. Returns a tree.
+ * @param bindingLevel leave empty for normal usage. Used internally during parsing.
  * @sa ::updateBuffer
  * @sa ::updateStmtNum
  */
@@ -139,6 +140,7 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 	TNode* leftNode;
 	if (prevToken.compare("(") == 0) {
 		leftNode = parse();
+		// @Todo, for validation: verify ')'
 	} else {
 		// prevToken is either variable or constant now
 		bool isVariable = matchInteger(prevToken).empty();
