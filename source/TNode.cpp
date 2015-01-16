@@ -99,10 +99,10 @@ std::ostream& operator<<(std::ostream &strm, const TNode &node) {
 	TNODE_TYPE expr[] = {Plus, Variable, Constant}; // @Todo add times, subtract, etc
 
 	auto res = find(begin(expr), end(expr), node._nodeType);
-	
-	if (res != end(expr)) 
-	{
+	bool nodeIsInExpr = (res != end(expr));
 
+	if (nodeIsInExpr) 
+	{
 		if (node._nodeType == Variable || node._nodeType == Constant) 
 		{
 			string type = node._nodeType == Variable ? "v" : "c";
@@ -122,7 +122,7 @@ std::ostream& operator<<(std::ostream &strm, const TNode &node) {
 		
 		TNode* leftChild = node._children[0];
 		TNode* rightChild = node._children[1];
-		return strm << "(" << *leftChild <<  " " << *rightChild << " " << oper << ")";
+		return strm << *leftChild <<  " " << *rightChild << " " << oper;
 	}
 	else 
 	{
@@ -142,7 +142,7 @@ std::ostream& operator<<(std::ostream &strm, const TNode &node) {
 			break;
 
 		}
-		return strm << node._stmtNumber << ": " << type;
+		return strm << "#" << node._stmtNumber << ": " << type;
 
 	}
 

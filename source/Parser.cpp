@@ -213,26 +213,6 @@ namespace Parser {
 			return token.compare(target) == 0;
 		}
 
-		/**
-		 * Matches if the given token follows the naming convention for NAME, as per the given grammar
-		 */
-		string matchName(string token) {
-			regex nameRegex("[A-Za-z][\\w]*");
-			return regex_match(token, nameRegex) ? token : "";
-		}
-
-		/**
-		 * Matches if the given token follows the naming convention for INTEGER, as per the given grammar
-		 */
-		string matchInteger(string token) {
-			regex intRegex("\\d+");
-			return (regex_match(token,intRegex)) ? token : "";
-		}
-
-		string matchOperator(string token) {
-			regex operRegex("[;\\+-*=]");
-			return (regex_match(token, operRegex)) ? token: "";
-		}
 
 
 		/**
@@ -538,6 +518,34 @@ namespace Parser {
 			}
 
 		}
+	}
+
+	
+	/**
+	 * Matches names
+	 * @return true if the given token follows the naming convention for NAME, as per the given grammar
+	 */
+	string matchName(string token) {
+		regex nameRegex("[A-Za-z][\\w]*");
+		return regex_match(token, nameRegex) ? token : "";
+	}
+
+	/**
+	 * Matches integers
+	 *  @return true if the given token follows the naming convention for INTEGER, as per SIMPLE grammar
+	 */
+	string matchInteger(string token) {
+		regex intRegex("\\d+");
+		return (regex_match(token,intRegex)) ? token : "";
+	}
+
+	/**
+	 * Matches operators
+	 * @return true if the given token is an operator
+	 */
+	string matchOperator(string token) {
+		regex operRegex("[;\\+-*=]");
+		return (regex_match(token, operRegex)) ? token: "";
 	}
 
 	/**

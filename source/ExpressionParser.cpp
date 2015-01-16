@@ -31,7 +31,7 @@ void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) {
 }
 
 /**
- * Updates the stmtNum of the expression. If the expression parser is used to parse the query, there is no need to call this.
+ * Updates the stmtNum of the expression. For parsing queries, there is no need to call this.
  */
 void ExpressionParser::updateStmtNum(int stmtNum) {
 	this->stmtNum = stmtNum;
@@ -126,9 +126,9 @@ TNode* ExpressionParser::operatorSubtract(TNode* left) {
 
 /**
  * Method to parse an expression. Returns a tree.
- * @param bindingLevel leave empty for normal usage. Used internally during parsing.
- * @sa ::updateBuffer
- * @sa ::updateStmtNum
+ * @param bindingLevel Leave empty for normal usage. Used internally during parsing.
+ * @sa ExpressionParser::updateBuffer
+ * @sa ExpressionParser::updateStmtNum
  */
 TNode* ExpressionParser::parse(int bindingLevel) {
 	PKB pkb = PKB::getInstance();
