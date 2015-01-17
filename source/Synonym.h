@@ -18,13 +18,13 @@ public:
 	Synonym(string type, string name, vector<string> values);
 	Synonym(string type, string name, vector<int> values);
 	Synonym(string type, string name, set<int> values);
-	void setValues(set<int> values);
 	string getType();
 	string getName();
-	set<int> getValues();
+	vector<int> getValues();
+	set<int> getValuesSet();
 
 private:
 	string _type;  //Type of synonym (Can use "string" or "boolean")
 	string _name;  //Name of synonym (Name of constant if type is "string" e.g. "v") (also store "true" or "false")
-	set<int> _values;  //Values or index that this synonym takes (empty if type is "string" or "boolean")
+	vector<int> _values;  //Values or index that this synonym takes (empty if type is "string" or "boolean")
 };

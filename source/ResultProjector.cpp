@@ -13,9 +13,9 @@ namespace ResultProjector {
 	void projectResultToList(vector<Synonym> resultVector, list<string>& resultList) {
 		for (unsigned int i = 0; i < resultVector.size(); i++) {
 			string synonymType = resultVector[i].getType();
-			set<int> resultSet = resultVector[i].getValues();
+			vector<int> resultSet = resultVector[i].getValues();
 
-			for (set<int>::iterator itr = resultSet.begin(); itr != resultSet.end(); ++itr) {
+			for (vector<int>::iterator itr = resultSet.begin(); itr != resultSet.end(); ++itr) {
 				string value = convertValueToString(*itr, synonymType);
 				resultList.push_back(value);
 			}
