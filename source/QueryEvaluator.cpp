@@ -188,11 +188,17 @@ namespace QueryEvaluator {
 		} else if (arg1Type == "String") {
 			//arg1 is the line number, find the variables that are modified
 			vector<int> stmts = pkb.getModVarForStmt(stoi(arg1.getName()));
+			if (stmts.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg2Type, arg2.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			//arg2 is the variable that is modified, find the statements
 			vector<int> stmts = pkb.getModStmtNum(pkb.getVarIndex(arg2.getName()));
+			if (stmts.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
@@ -200,13 +206,13 @@ namespace QueryEvaluator {
 			pair<vector<int>, vector<int>> filteredModifiesPair = 
 				filterPairWithSynonymType(allModifiesPair, arg1Type, arg2Type);
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredModifiesPair.first);
-			Synonym RHS(arg1Type, arg1.getName(), filteredModifiesPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
-
 			if (filteredModifiesPair.first.size() == 0 || filteredModifiesPair.second.size() == 0) {
 				return false;
 			}
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredModifiesPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredModifiesPair.second);
+			addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -231,11 +237,17 @@ namespace QueryEvaluator {
 		} else if (arg1Type == "String") {
 			//arg1 is the line number, find the variable that is used
 			vector<int> vars = pkb.getUsesVarForStmt(stoi(arg1.getName()));
+			if (vars.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg2Type, arg2.getName(), vars);
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			//arg2 is the variable that is used, find the statements that uses it
 			vector<int> stmts = pkb.getUsesStmtNum(pkb.getVarIndex(arg2.getName()));
+			if (stmts.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
@@ -243,13 +255,13 @@ namespace QueryEvaluator {
 			pair<vector<int>, vector<int>> filteredUsesPair = 
 				filterPairWithSynonymType(allUsesPair, arg1Type, arg2Type);
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredUsesPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredUsesPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
-
 			if (filteredUsesPair.first.size() == 0 || filteredUsesPair.second.size() == 0) {
 				return false;
 			}
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredUsesPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredUsesPair.second);
+			addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -272,10 +284,16 @@ namespace QueryEvaluator {
 			return pkb.isParent(stoi(arg1.getName()), stoi(arg2.getName()));
 		} else if (arg1Type == "String") {
 			vector<int> stmts = pkb.getChild(stoi(arg1.getName()));
+			if (stmts.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg2Type, arg2.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			vector<int> stmts = pkb.getParent(stoi(arg2.getName()));
+			if (stmts.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
@@ -283,13 +301,13 @@ namespace QueryEvaluator {
 			pair<vector<int>, vector<int>> filteredParentsPair = 
 				filterPairWithSynonymType(allParentsPair, arg1Type, arg2Type);
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredParentsPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredParentsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
-
 			if (filteredParentsPair.first.size() == 0 || filteredParentsPair.second.size() == 0) {
 				return false;
 			}
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredParentsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredParentsPair.second);
+			addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -312,10 +330,16 @@ namespace QueryEvaluator {
 			return pkb.isParent(stoi(arg1.getName()), stoi(arg2.getName()));
 		} else if (arg1Type == "String") {
 			vector<int> stmts = pkb.getChild(stoi(arg1.getName()));
+			if (stmts.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg2Type, arg2.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			vector<int> stmts = pkb.getParent(stoi(arg2.getName()));
+			if (stmts.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
@@ -323,13 +347,13 @@ namespace QueryEvaluator {
 			pair<vector<int>, vector<int>> filteredParentsPair = 
 				filterPairWithSynonymType(allParentsPair, arg1Type, arg2Type);
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredParentsPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredParentsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
-
 			if (filteredParentsPair.first.size() == 0 || filteredParentsPair.second.size() == 0) {
 				return false;
 			}
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredParentsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredParentsPair.second);
+			addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -353,11 +377,17 @@ namespace QueryEvaluator {
 		} else if (arg1Type == "String") {
 			// Given stmtNum1, get stmtNum2 such that Follows(stmt1, stmt2) is satisfied
 			vector<int> stmt = pkb.getStmtFollowedFrom(stoi(arg1.getName()));
+			if (stmt.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			// Given stmtNum2, get stmtNum1 such that Follows(stmt1, stmt2) is satisfied
 			vector<int> stmt = pkb.getStmtFollowedTo(stoi(arg2.getName()));
+			if (stmt.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg1Type, arg1.getName(), stmt);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
@@ -365,14 +395,13 @@ namespace QueryEvaluator {
 			pair<vector<int>, vector<int>> filteredFollowsPair = 
 				filterPairWithSynonymType(allFollowsPair, arg1Type, arg2Type);
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredFollowsPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredFollowsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
-
 			if (filteredFollowsPair.first.size() == 0 || filteredFollowsPair.second.size() == 0) {
 				return false;
 			}
-			return true;
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredFollowsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredFollowsPair.second);
+			addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -392,11 +421,17 @@ namespace QueryEvaluator {
 		} else if (arg1Type == "String") {
 			// Given stmtNum1, get stmtNum2 such that Follows(stmt1, stmt2) is satisfied
 			vector<int> stmt = pkb.getStmtFollowedFrom(stoi(arg1.getName()));
+			if (stmt.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			// Given stmtNum2, get stmtNum1 such that Follows(stmt1, stmt2) is satisfied
 			vector<int> stmt = pkb.getStmtFollowedTo(stoi(arg2.getName()));
+			if (stmt.size() == 0) {
+				return false;
+			}
 			Synonym synonym(arg1Type, arg1.getName(), stmt);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
@@ -404,14 +439,13 @@ namespace QueryEvaluator {
 			pair<vector<int>, vector<int>> filteredFollowsPair = 
 				filterPairWithSynonymType(allFollowsPair, arg1Type, arg2Type);
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredFollowsPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredFollowsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
-
 			if (filteredFollowsPair.first.size() == 0 || filteredFollowsPair.second.size() == 0) {
 				return false;
 			}
-			return true;
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredFollowsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredFollowsPair.second);
+			addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -659,6 +693,8 @@ namespace QueryEvaluator {
 			}
 			return true;
 		} else if (arg1Type == "_") {
+			Synonym synonym(arg0.getType(), arg0.getName(), isMatchStmts);
+			addAndProcessIntermediateSynonym(synonym);
 			return true;
 		} else {
 			//LHS is a constant
@@ -818,10 +854,13 @@ namespace QueryEvaluator {
 			return;
 		} else if (LHS.getType() == "_") {
 			addAndProcessIntermediateSynonym(RHS);
+			return;
 		} else if (RHS.getType() == "_") {
 			addAndProcessIntermediateSynonym(LHS);
+			return;
 		}
 
+		//If it reaches here, it is two proper synonyms that require handling
 		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
 		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
 
