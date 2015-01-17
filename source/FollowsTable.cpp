@@ -38,7 +38,7 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
  * Given stmt2 as input, returns a vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied.
  * If there is no answer, return an empty vector
  */
-vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2) {
+vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
 	vector<int> result;
 
 	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) {
@@ -51,9 +51,15 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2) {
 		return vector<int>();
 	}
 
-	if (node2->getLeftSibling() != NULL) {
+	while (node2->getLeftSibling() != NULL) {
 		int possibleStmt1 = node2->getLeftSibling()->getStmtNumber();
 		result.push_back(possibleStmt1);
+
+		if (transitiveClosure) {
+			node2 = node2->getLeftSibling();
+		} else {
+			break;
+		}
 	}
 	
 	return result;
@@ -63,7 +69,7 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2) {
  * Given stmt1 as input, returns a vector of int of possible stmt2 such that Follows(stmt1, stmt2) is satisfied.
  * If there is no answer, returns an empty vector
  */
-vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1) {
+vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosure) {
 	vector<int> result;
 	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
 		return vector<int>();
@@ -75,30 +81,58 @@ vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1) {
 		return vector<int>();
 	}
 	
-	if (node1->hasRightSibling()) {
+	while (node1->hasRightSibling()) {
 		int possibleStmt2 = node1->getRightSibling()->getStmtNumber();
 		result.push_back(possibleStmt2);
+
+		if (transitiveClosure) {
+			node1 = node1->getRightSibling();
+		} else {
+			break;
+		}
 	}
 	
 	return result;
 }
 
-bool FollowsTable::isFollows(int stmtNum1, int stmtNum2) {
+bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) {
 	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
 		return false;
 	}
 
 	TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
 
-	if (node1 && node1->hasRightSibling()) {
+	if (!transitiveClosure) 
+	{
+		if (!node1 || !node1->hasRightSibling()) {
+			return false;
+		}
+
 		int possibleStmt2 = node1->getRightSibling()->getStmtNumber();
 
-		if (possibleStmt2 == stmtNum2) {
-			return true;
-		}
-	}
+		return possibleStmt2 == stmtNum2;
 
-	return false;
+	} else 
+	{
+		 
+		TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
+		// First, check that they are in the first stmt list
+		if (node1->getParent()->getStmtNumber() != node2->getParent()->getStmtNumber()) 
+		{
+			// If the stmts are not in the same stmtlist, just return false
+			return false;
+		}
+
+		while (node1->hasRightSibling()) {
+			node1 = node1->getRightSibling();
+
+			if (node1->getStmtNumber() == node2->getStmtNumber()) {
+				return true;
+			}
+		}
+		return false;
+		
+	}
 }
 
 

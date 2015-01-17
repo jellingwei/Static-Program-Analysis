@@ -12,10 +12,10 @@ class ParentTable {
 public:
 	bool setParent(TNode* stmtNum1, TNode* stmtNum2);
 	
-	vector<int> getParent(int stmtNum2);
-	vector<int> getChild(int stmtNum1);
+	vector<int> getParent(int stmtNum2, bool transitiveClosure);
+	vector<int> getChild(int stmtNum1, bool transitiveClosure);
 
-	bool isParent(int stmtNum1, int stmtNum2);
+	bool isParent(int stmtNum1, int stmtNum2, bool transitiveClosure);
 
 	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure);
 

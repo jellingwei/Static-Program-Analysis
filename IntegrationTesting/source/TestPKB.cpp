@@ -21,7 +21,7 @@ void PKBTest::tearDown()
 
 void PKBTest::testPKB()
 {
-
+	cout << "start" << endl;
 	// Test Parser
 	Parser::initParser("test/i_src.txt");
 	bool parse = Parser::parseProgram();
@@ -30,6 +30,7 @@ void PKBTest::testPKB()
 	PKB pkb = PKB::getInstance();
 	
 	// ConstantTable
+	cout << "constanttable" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of constants", 3, pkb.getConstantTableSize());
 
 	// VarTable
@@ -39,12 +40,15 @@ void PKBTest::testPKB()
 
 	// Test Design Extractor
 	// Parent
+	cout << "Parent" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, 4)", 3, pkb.getParent(4).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, 8)", 7, pkb.getParent(8).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, 11)", 0, (int)pkb.getParent(11).size());
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(8, s)", 9, pkb.getChild(8).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(7, s)", 8, pkb.getChild(7).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(5, s)", 0, (int)pkb.getChild(5).size());
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(7, 9)", false, pkb.isParent(7,9));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(8, 9)", true, pkb.isParent(8,9));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(1, 2)", false, pkb.isParent(1,2));
@@ -52,7 +56,24 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(0, 1)", false, pkb.isParent(0,1));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(9999, 10000)", false, pkb.isParent(9999,10000));
 
+	//Parent*
+	cout << "Parent*" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, 4)", 3, pkb.getParent(4, true).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, 9)", 2, (int)pkb.getParent(9, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, 10)", 1, (int)pkb.getParent(10, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, 11)", 0, (int)pkb.getParent(11, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, 13)", 1, (int)pkb.getParent(13, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, 14)", 2, (int)pkb.getParent(14, true).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(7, s)", 3, (int)pkb.getChild(7, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(8, s)", 1, (int)pkb.getChild(8, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(9, s)", 0, (int)pkb.getChild(9, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, s)", 2, (int)pkb.getChild(12, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(13, s)", 1, (int)pkb.getChild(13, true).size());
+	
+
 	// Follows
+	cout << "Follows" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(1, 2)", true, pkb.isFollows(1,2));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(3, 5)", true, pkb.isFollows(3,5));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(7, 8)", false, pkb.isFollows(7,8));
