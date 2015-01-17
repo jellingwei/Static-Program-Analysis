@@ -25,10 +25,10 @@ bool ParentTable::setParent(TNode* stmt1, TNode* stmt2) {
 	ast->createLink(Child, stmt1, stmt2);
 
 	pair<int, TNode*> stmtNumToNodePair1(stmt1->getStmtNumber(), stmt1);
-	PKB::getInstance().nodeTable.insert(stmtNumToNodePair1);
+	//PKB::getInstance().nodeTable.insert(stmtNumToNodePair1);
 
 	pair<int, TNode*> stmtNumToNodePair2(stmt2->getStmtNumber(), stmt2);
-	PKB::getInstance().nodeTable.insert(stmtNumToNodePair2);
+	//PKB::getInstance().nodeTable.insert(stmtNumToNodePair2);
 	
 	return true;
 }
@@ -201,6 +201,10 @@ bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) {
 	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) {
 		return false;
 	}
+	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
+		return false;
+	}
+
 	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
 
 	if (!transitiveClosure) 
@@ -219,13 +223,19 @@ bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) {
 	else 
 	{
 		TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
-		while (node2->getParent() != NULL) {
-			node2 = node2->getParent();
+		if (!node1 || !node2) {
+			return false;
+		}
 
+		// @Todo change after ast changes, right now root of ast is a node that has gone out of scope
+		//		 hence the need to check for stmt 0
+		while (node2 != NULL && node2->getStmtNumber() != 0) { 
 			if (node2->getStmtNumber() == node1->getStmtNumber()) 
 			{
 				return true;
 			}
+
+			node2 = node2->getParent();
 		}
 		return false;
 	}

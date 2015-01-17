@@ -70,6 +70,14 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(9, s)", 0, (int)pkb.getChild(9, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, s)", 2, (int)pkb.getChild(12, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(13, s)", 1, (int)pkb.getChild(13, true).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(0, 1)", false, pkb.isParent(0,1, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(1, 2)", false, pkb.isParent(1,2, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(3, 4)", true, pkb.isParent(3,4, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(7, 8)", true, pkb.isParent(7,8, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(7, 9)", true, pkb.isParent(7,9, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, 13)", true, pkb.isParent(12, 13, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, 14)", true, pkb.isParent(12, 14, true));
 	
 
 	// Follows

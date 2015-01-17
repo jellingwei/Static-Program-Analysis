@@ -26,10 +26,10 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
 	
 
 	pair<int, TNode*> stmtNumToNodePair1(stmt1->getStmtNumber(), stmt1);
-	PKB::getInstance().nodeTable.insert(stmtNumToNodePair1);
+	//PKB::getInstance().nodeTable.insert(stmtNumToNodePair1);
 
 	pair<int, TNode*> stmtNumToNodePair2(stmt2->getStmtNumber(), stmt2);
-	PKB::getInstance().nodeTable.insert(stmtNumToNodePair2);
+	//PKB::getInstance().nodeTable.insert(stmtNumToNodePair2);
 
 	return true;
 }
