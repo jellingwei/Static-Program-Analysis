@@ -262,9 +262,9 @@ namespace QueryParser{
 		else if(matchSynonymAndIdent(token, true))
 			return true;
 	
-	#ifdef DEBUG
-		cout<<"QueryParser error : at matchEntRef"<<endl;
-	#endif
+		#ifdef DEBUG
+			cout<<"QueryParser error : at matchEntRef"<<endl;
+		#endif
 
 		return false;
 	}
@@ -344,7 +344,8 @@ namespace QueryParser{
 					cout<<"QueryParser in parsePatternClause: expression starting have to be _ or \", or error in expression"<<endl;
 				#endif
 
-				return false;}
+				return false;
+			}
 			if(whilePatternExp){
 				
 				#ifdef DEBUG
@@ -378,7 +379,8 @@ namespace QueryParser{
 					cout<<"QueryParser in parsePatternClause: parseExpressionSpec while pattern arg2 invalid"<<endl;
 				#endif
 
-				return false;}
+				return false;
+			}
 
 			if(underscorePresent){
 				res = parseApostrophe();
@@ -386,7 +388,8 @@ namespace QueryParser{
 					#ifdef DEBUG
 						cout<<"QueryParser in parsePatternClause: parseExpressionSpec \" is missing "<<endl;
 					#endif
-					return false;}
+					return false;
+				}
 			}
 
 
@@ -399,14 +402,16 @@ namespace QueryParser{
 						#ifdef DEBUG
 							cout<<"QueryParser in parsePatternClause: parseExpressionSpec factor missing"<<endl;
 						#endif
-						return false;}
+						return false;
+					}
 
 					res = parse("+");
 					if(!res && peekBackwards(0).compare("\"")!=0){
 						#ifdef DEBUG
 							cout<<"QueryParser in parsePatternClause: parseExpressionSpec invalid expression"<<endl;
 						#endif
-						return false;}
+						return false;
+					}
 
 				}while( res );
 			}else{
@@ -415,7 +420,8 @@ namespace QueryParser{
 					#ifdef DEBUG
 						cout<<"QueryParser in parsePatternClause: parseExpressionSpec \" is missing "<<endl;
 					#endif
-				return false;}
+					return false;
+				}
 			}
 
 			//check the _ in pattern arg2
@@ -513,6 +519,7 @@ namespace QueryParser{
 					#ifdef DEBUG
 						cout<<"QueryParser parseSuchThatClause() error: unable to find the DE"<<endl;
 					#endif
+					return false;
 				}
 
 
@@ -532,6 +539,7 @@ namespace QueryParser{
 						#ifdef DEBUG
 							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
 						#endif
+						return false;
 					}
 
 				}else{
@@ -547,10 +555,10 @@ namespace QueryParser{
 						#ifdef DEBUG
 							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
 						#endif
+						return false;
 					}
 				}
-				//cout<<"######synonymn 2 built, arg1:"<<DE_type<<endl;
-				//cout<<"######synonymn 2 built, arg2:"<<name2<<endl;
+				//create synonym s2
 				Synonym s2(DE_type,name2);
 
 				/* Synonym s1 */
@@ -571,9 +579,10 @@ namespace QueryParser{
 					#ifdef DEBUG
 						cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
 					#endif
+					return false;
 				}
-				//cout<<"######synonymn 1 built, arg1:"<<DE_type<<endl;
-				//cout<<"######synonymn 1 built, arg2:"<<name1<<endl;
+				
+				//create synonym s1
 				Synonym s1(DE_type,name1);
 
 				QNode* childNode = myQueryTree->createQNode(nodeType, Synonym(), s1, s2);
@@ -608,6 +617,7 @@ namespace QueryParser{
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: invalid synonym used"<<endl;
 			#endif
+			return false;
 		}
 
 		if(DE_type.compare("assign")!= 0 && DE_type.compare("while") != 0){
@@ -640,7 +650,6 @@ namespace QueryParser{
 
 			return false;} 
 
-		//cout<<"parseEntRef done"<<endl;
 
 		//Build Query Tree
 		std::regex apostrophe("[\"]");
@@ -654,6 +663,7 @@ namespace QueryParser{
 			#ifdef DEBUG
 				cout<<"QueryParser in parsePatternClause: building query tree error"<<endl;
 			#endif
+			return false;
 		}
 
 		res = parse(",");
@@ -673,7 +683,6 @@ namespace QueryParser{
 
 			return false;} 
 
-		//cout<<"parseExpressionSpec done"<<endl;
 
 
 		//Build Query Tree
@@ -710,8 +719,13 @@ namespace QueryParser{
 
 			res = parseSuchThatClause();
 			if (!res){return false;}
-		}else{
+		}else if(peekInToTheNextToken().compare("pattern")==0){
 			res = parsePatternClause();
+		}else{
+			#ifdef DEBUG
+				cout<<"QueryParser parseOptionalClauses error "<<endl;
+			#endif
+			return false;
 		}
 
 		return res;
@@ -845,16 +859,18 @@ namespace QueryParser{
 		bool res = initQueryTreeAndSymbolsTable();
 		if (!res){return false;}
 
+		//does syntax chacks
 		res = parseQuerySelectClause();
 
 
 		//if there's an error in parsing the queries, return an empty query tree
 		if(!res){
 			#ifdef DEBUG
-				cout<<"Error in parsing query. Empty query tree and synonymsMap is parsed."<<endl;
+				cout<<"Error in parsing query. Empty query tree and synonymsMap is passed."<<endl;
 			#endif
 			initQueryTreeAndSymbolsTable();
 		}
+
 
 		//queryTreeTesting();
 		//cout<<endl;
@@ -866,4 +882,5 @@ namespace QueryParser{
 	QueryTree* getQueryTree(){
 		return myQueryTree;
 	}
+
 }
