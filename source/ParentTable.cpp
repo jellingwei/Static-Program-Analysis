@@ -16,6 +16,7 @@ using namespace std;
 using namespace stdext;
 
 
+
 bool ParentTable::setParent(TNode* stmt1, TNode* stmt2) {
 	if (stmt1 == NULL || stmt2 == NULL) {
 		throw exception("ParentTable invalid parameters provided");
@@ -23,12 +24,6 @@ bool ParentTable::setParent(TNode* stmt1, TNode* stmt2) {
 
 	AST* ast = PKB::getInstance().ast;
 	ast->createLink(Child, stmt1, stmt2);
-
-	pair<int, TNode*> stmtNumToNodePair1(stmt1->getStmtNumber(), stmt1);
-	//PKB::getInstance().nodeTable.insert(stmtNumToNodePair1);
-
-	pair<int, TNode*> stmtNumToNodePair2(stmt2->getStmtNumber(), stmt2);
-	//PKB::getInstance().nodeTable.insert(stmtNumToNodePair2);
 	
 	return true;
 }
@@ -79,6 +74,66 @@ vector<int> ParentTable::getParent(int stmtNum2, bool transitiveClosure)
 		}
 	}
 	
+	return result;
+}
+
+/**
+ * Returns the transitive Closure of getChild. 
+ */
+vector<int> getChildDfs(TNode* node1, TNode* node2) 
+{
+	vector<int> result;
+	using std::stack;
+
+	// initialise stack
+	stack<TNode*> nodeStack;
+	nodeStack.push(node1);
+	if (node2 != NULL) 
+	{
+		nodeStack.push(node2);
+	}
+
+	while (!nodeStack.empty()) 
+	{
+		node1 = nodeStack.top(); nodeStack.pop();
+
+		if (!node1->hasChild()) 
+		{
+			continue;
+		}
+
+		// iterate through children of the node, and add stmtList nodes to stack if is If or is While
+		vector<TNode*>* children = node1->getChildren();
+		for (size_t i = 0 ; i < children->size(); i++ ) 
+		{
+			TNode* child = children->at(i);
+			int possibleStmt2 = child->getStmtNumber();
+
+			if (child->getNodeType() == If) 
+			{
+				TNode* ifStmtLst1 = child->getChildren()->at(1);
+				assert(ifStmtLst1->getNodeType() == StmtLst);
+				nodeStack.push(ifStmtLst1);
+
+				if (child->getChildren()->size() > 2) {
+					TNode* ifStmtLst2 = child->getChildren()->at(2);
+					assert(ifStmtLst2->getNodeType() == StmtLst);
+					nodeStack.push(ifStmtLst2);
+				}
+
+			} 
+			else 
+			if (child->getNodeType() == While) 
+			{
+				TNode* whileStmtLst = child->getChildren()->at(1);
+				assert(whileStmtLst->getNodeType() == StmtLst);
+				nodeStack.push(whileStmtLst);
+			}
+
+			result.push_back(possibleStmt2);
+		}
+	}
+		
 	return result;
 }
 
@@ -137,63 +192,14 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure) {
 				result.push_back(possibleStmt2);
 			}
 		}
+		return result;
 
 	} else 
 	{
-		using std::stack;
-
-		stack<TNode*> nodeStack;
-		nodeStack.push(node1);
-		if (node2 != NULL) 
-		{
-			nodeStack.push(node2);
-		}
-
-		while (!nodeStack.empty()) 
-		{
-			node1 = nodeStack.top(); nodeStack.pop();
-
-			if (!node1->hasChild()) 
-			{
-				continue;
-			}
-
-			vector<TNode*>* children = node1->getChildren();
-			for (size_t i = 0 ; i < children->size(); i++ ) 
-			{
-				TNode* child = children->at(i);
-				int possibleStmt2 = child->getStmtNumber();
-
-				if (child->getNodeType() == If) 
-				{
-					TNode* ifStmtLst1 = child->getChildren()->at(1);
-					assert(ifStmtLst1->getNodeType() == StmtLst);
-					nodeStack.push(ifStmtLst1);
-
-					if (child->getChildren()->size() > 2) {
-						TNode* ifStmtLst2 = child->getChildren()->at(2);
-						assert(ifStmtLst2->getNodeType() == StmtLst);
-						nodeStack.push(ifStmtLst2);
-					}
-
-				} 
-				else 
-				if (child->getNodeType() == While) 
-				{
-					TNode* whileStmtLst = child->getChildren()->at(1);
-
-					assert(whileStmtLst->getNodeType() == StmtLst);
-
-					nodeStack.push(whileStmtLst);
-				}
-
-				result.push_back(possibleStmt2);
-			}
-		}
-		
+		return getChildDfs(node1, node2);
 	}
 	
-	return result;
+	
 }
 
 
