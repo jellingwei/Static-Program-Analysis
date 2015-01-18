@@ -290,19 +290,30 @@ namespace Parser {
 			// parse inner stmt list
 			parseStmtList();
 
+			// remove the stmtList node from ASTParent
+			ASTParent.erase(ASTParent.end() - 1); 
+
 			// parse optional "else"
 			string nextToken = peekToken();
 			bool optionalElse = match(nextToken, "else");
 			if (optionalElse) {
+				res = parse("else");
+				
+				TNode* stmtlist2Node = pkb.createTNode(StmtLst, ifStmtNum, -1);
+				// 2nd stmtList node as third child
+				pkb.createLink(Child, node, stmtlist2Node); 
+				ASTParent.push_back(stmtlist2Node);
+
+
 				res = parse("{");
 				if (!res) return false;
+				
 				parseStmtList();
+
+				// remove the stmtList node from ASTParent
+				ASTParent.erase(ASTParent.end() - 1);
 			}
 
-		
-			// remove the if node from ASTParent
-			ASTParent.erase(ASTParent.end() - 1); 
-		
 			callPkb("Uses", std::to_string(static_cast<long long>(ifStmtNum)), varName);
 		
 			return res;
@@ -388,7 +399,6 @@ namespace Parser {
 			if (prevStmtInStmtList) {
 				PKB::getInstance().setFollows(prevStmtInStmtList, node);
 			}
-
 			PKB::getInstance().setParent(currentASTParent(), node);
 		
 			res = parseExpr(RHSNode);
