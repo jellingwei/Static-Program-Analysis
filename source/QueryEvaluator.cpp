@@ -327,23 +327,23 @@ namespace QueryEvaluator {
 		string arg2Type = arg2.getType();
 
 		if (arg1Type == "String" && arg2Type == "String") {
-			return pkb.isParent(stoi(arg1.getName()), stoi(arg2.getName()));
+			return pkb.isParent(stoi(arg1.getName()), stoi(arg2.getName()), true);  //True for transitive closure
 		} else if (arg1Type == "String") {
-			vector<int> stmts = pkb.getChild(stoi(arg1.getName()));
+			vector<int> stmts = pkb.getChild(stoi(arg1.getName()), true);  //True for transitive closure
 			if (stmts.size() == 0) {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
-			vector<int> stmts = pkb.getParent(stoi(arg2.getName()));
+			vector<int> stmts = pkb.getParent(stoi(arg2.getName()), true);  //True for transitive closure
 			if (stmts.size() == 0) {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
-			pair<vector<int>, vector<int>> allParentsPair = pkb.getAllParentPairs(false);  //false for non transitive closure
+			pair<vector<int>, vector<int>> allParentsPair = pkb.getAllParentPairs(true);  //True for transitive closure
 			pair<vector<int>, vector<int>> filteredParentsPair = 
 				filterPairWithSynonymType(allParentsPair, arg1Type, arg2Type);
 
@@ -417,10 +417,10 @@ namespace QueryEvaluator {
 		string arg2Type = arg2.getType();
 
 		if (arg1Type == "String" && arg2Type == "String") {
-			return pkb.isFollows(stoi(arg1.getName()), stoi(arg2.getName()));
+			return pkb.isFollows(stoi(arg1.getName()), stoi(arg2.getName()), true);
 		} else if (arg1Type == "String") {
 			// Given stmtNum1, get stmtNum2 such that Follows(stmt1, stmt2) is satisfied
-			vector<int> stmt = pkb.getStmtFollowedFrom(stoi(arg1.getName()));
+			vector<int> stmt = pkb.getStmtFollowedFrom(stoi(arg1.getName()), true);
 			if (stmt.size() == 0) {
 				return false;
 			}
@@ -428,14 +428,14 @@ namespace QueryEvaluator {
 			addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			// Given stmtNum2, get stmtNum1 such that Follows(stmt1, stmt2) is satisfied
-			vector<int> stmt = pkb.getStmtFollowedTo(stoi(arg2.getName()));
+			vector<int> stmt = pkb.getStmtFollowedTo(stoi(arg2.getName()), true);
 			if (stmt.size() == 0) {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmt);
 			addAndProcessIntermediateSynonym(synonym);
 		} else {
-			pair<vector<int>, vector<int>> allFollowsPair = pkb.getAllFollowsPairs(false);  //false for non transitive closure
+			pair<vector<int>, vector<int>> allFollowsPair = pkb.getAllFollowsPairs(true);  //True for transitive closure
 			pair<vector<int>, vector<int>> filteredFollowsPair = 
 				filterPairWithSynonymType(allFollowsPair, arg1Type, arg2Type);
 
@@ -734,13 +734,28 @@ namespace QueryEvaluator {
 		if (arg1.getType() == "String") {
 			vector<int> stmts = pkb.patternMatchWhile(arg1.getName());
 			Synonym synonym(arg0.getType(), arg0.getName(), stmts);
+			if (stmts.size() == 0) {
+				return false;
+			}
 			addAndProcessIntermediateSynonym(synonym);
 			return true;
 		} else if (arg1Type == "_") {
 			return true;  //Do nothing because pattern w(_, _) is always true if there are while statements
 		} else {
 			//LHS is a variable synonym
-			//TODO
+			vector<int> arg0Values = findSynonymWithName(arg0.getName()).getValues();
+			if (arg0Values.size() == 0) {
+				return false;
+			}
+
+			vector<int> vars;
+			for (unsigned int i = 0; i < arg0Values.size(); i++) {
+				int var = pkb.getControlVariable(arg0Values[i]);
+				vars.push_back(var);
+			}
+			Synonym LHS(arg0.getType(), arg0.getName(), arg0Values);
+			Synonym RHS(arg1.getType(), arg1.getName(), vars);
+			addAndProcessIntermediateSynonyms(LHS, RHS);
 			return true;
 		}
 	}

@@ -258,6 +258,10 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(a,v) pattern a(v, _)", 1, (int)evaluate("assign a; variable v; Select a such that Uses(a,v) pattern a(v,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(a,v) pattern a(v, _)", 6, (int)evaluate("assign a; variable v; Select v such that Modifies(a,v) pattern a(v,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(a,v) pattern a(v, _)", 10, (int)evaluate("assign a; variable v; Select a such that Modifies(a,v) pattern a(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(w,v) pattern w(v, _)", 3, (int)evaluate("while w; variable v; Select v such that Uses(w,v) pattern w(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(w,v) pattern w(v, _)", 3, (int)evaluate("while w; variable v; Select w such that Uses(w,v) pattern w(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(w,v) pattern w(v, _)", 0, (int)evaluate("while w; variable v; Select v such that Modifies(w,v) pattern w(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(w,v) pattern w(v, _)", 0, (int)evaluate("while w; variable v; Select w such that Modifies(w,v) pattern w(v,_)").size());
 }
 
 list<string> evaluate(string query)
