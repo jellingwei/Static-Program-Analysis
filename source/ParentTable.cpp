@@ -259,12 +259,32 @@ void generateTransitiveParentPairs(vector<int> parentList, TNode* curNode, vecto
 			result2->push_back(curNodeChildren->at(i)->getStmtNumber());
 		}
 
-		if (curNodeChildren->at(i)->getNodeType() == While && curNodeChildren->at(i)->getChildren()->at(1)->hasChild()) {
+		if (curNodeChildren->at(i)->getNodeType() == While && curNodeChildren->at(i)->getChildren()->at(1)->hasChild()) 
+		{
 			parentList.push_back(curNodeChildren->at(i)->getStmtNumber());
 
 			generateTransitiveParentPairs(parentList, curNodeChildren->at(i)->getChildren()->at(1), result1, result2);
 
 			parentList.erase(parentList.end() - 1);
+		} 
+		else if (curNodeChildren->at(i)->getNodeType() == If) 
+		{
+			if (curNodeChildren->at(i)->getChildren()->at(1)->hasChild()) 
+			{
+				parentList.push_back(curNodeChildren->at(i)->getStmtNumber());
+
+				generateTransitiveParentPairs(parentList, curNodeChildren->at(i)->getChildren()->at(1), result1, result2);
+
+				parentList.erase(parentList.end() - 1);
+			} 
+			if (curNodeChildren->at(i)->getChildren()->size() > 2 && curNodeChildren->at(i)->getChildren()->at(2)->hasChild()) 
+			{
+				parentList.push_back(curNodeChildren->at(i)->getStmtNumber());
+
+				generateTransitiveParentPairs(parentList, curNodeChildren->at(i)->getChildren()->at(2), result1, result2);
+
+				parentList.erase(parentList.end() - 1);
+			}
 		}
 	}
 

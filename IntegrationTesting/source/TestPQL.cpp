@@ -176,7 +176,8 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(w, <s>)", 4, (int)evaluate("stmt s; while w; Select s such that Parent*(w, s)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(w1, <w2>)", 1, (int)evaluate("while w1, w2; Select w2 such that Parent*(w1, w2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, <v>)", 0, (int)evaluate("variable v; stmt s; Select v such that Parent*(s, v)").size()); 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<l>, s)", 3, (int)evaluate("prog_line l; stmt s; Select l such that Parent*(l, s)").size()); 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<l>, s)", 5, (int)evaluate("prog_line l; stmt s; Select l such that Parent*(l, s)").size()); 
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<s>, w)", (string)"7", evaluate("while w; stmt s; Select s such that Parent*(s, w)").front()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<a>, w)", 0, (int)evaluate("assign a; while w; Select a such that Parent*(a, w)").size()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Parent*(w1, w2)", 15, (int)evaluate("while w1, w2; stmt s; Select s such that Parent*(w1, w2)").size());

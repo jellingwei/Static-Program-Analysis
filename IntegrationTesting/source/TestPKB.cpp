@@ -156,6 +156,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(11, v)", (string)"a", pkb.getVarName(pkb.getModVarForStmt(11).front()));
 
 	// Pattern
+	cout << "Pattern" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'f'_)", 3, (int)pkb.patternMatchAssign("_\"f\"_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'a+f'_)", 6, pkb.patternMatchAssign("_\"a+f\"_").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'a + f'_)", 6, pkb.patternMatchAssign("_\"a + f\"_").front());
@@ -167,6 +168,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'd')", 0, (int)pkb.patternMatchAssign("d").size());
 
 	// Pattern for while
+	cout << "Pattern for while" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', _)", 1, (int)pkb.patternMatchWhile("b").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', _)", 7, pkb.patternMatchWhile("b").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('c', _)", 8, pkb.patternMatchWhile("  c  ").front());
@@ -188,5 +190,5 @@ void PKBTest::testPKB()
 	pair<vector<int>, vector<int>> allParent = pkb.getAllParentPairs(false);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent pairs size", 4, (int)allParent.first.size());
 	allParent = pkb.getAllParentPairs(true);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent* pairs size", 5, (int)allParent.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent* pairs size", 10, (int)allParent.first.size());
 }
