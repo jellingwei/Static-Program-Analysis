@@ -136,15 +136,31 @@ bool PKB::setParent(TNode* stmtNum1, TNode* stmtNum2) {
 vector<int> PKB::getParent(int stmtNum2, bool transitiveClosure) {
 	return parentTable->getParent(stmtNum2, transitiveClosure);
 }
+vector<int> PKB::getParentS(int stmtNum2) {
+	bool transitiveClosure = true;
+	return parentTable->getParent(stmtNum2, transitiveClosure);
+}
 vector<int> PKB::getChild(int stmtNum1, bool transitiveClosure) {
+	return parentTable->getChild(stmtNum1, transitiveClosure);
+}
+vector<int> PKB::getChildS(int stmtNum1) {
+	bool transitiveClosure = true;
 	return parentTable->getChild(stmtNum1, transitiveClosure);
 }
 
 bool PKB::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) {
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
+bool PKB::isParentS(int stmtNum1, int stmtNum2) {
+	bool transitiveClosure = true;
+	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
+}
 
 pair<vector<int>, vector<int>> PKB::getAllParentPairs(bool transitiveClosure) {
+	return parentTable->getAllParentPairs(transitiveClosure);
+}
+pair<vector<int>, vector<int>> PKB::getAllParentPairsS() {
+	bool transitiveClosure = true;
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
 
@@ -155,10 +171,22 @@ bool PKB::setFollows(TNode* stmt1, TNode* stmt2) {
 vector<int> PKB::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
+vector<int> PKB::getStmtFollowedToS(int stmtNum2) {
+	bool transitiveClosure = true;
+	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
+}
 vector<int> PKB::getStmtFollowedFrom(int stmtNum1 , bool transitiveClosure) {
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
+vector<int> PKB::getStmtFollowedFromS(int stmtNum1) {
+	bool transitiveClosure = true;
+	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
+}
 bool PKB::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) {
+	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
+}
+bool PKB::isFollowsS(int stmtNum1, int stmtNum2) {
+	bool transitiveClosure = true;
 	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
 }
 pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure) {
