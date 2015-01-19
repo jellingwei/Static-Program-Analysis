@@ -13,17 +13,24 @@ using namespace std;
 #include "PKB.h"
 #include "SourceParser.h"
 
-ExpressionParser::ExpressionParser() {
+ExpressionParser::ExpressionParser() 
+{
 	operPrecedence = makeOperatorMap();
 	this->stmtNum = 0;
 }
 
+ExpressionParser::ExpressionParser() 
+{
+	operPrecedence = makeOperatorMap();
+	this->stmtNum = 0;
+}
 /**
  * Before calling parse, call this function to initialise the buffer in the expression parser
  * @param newBuffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
  * @param skip		optional. The number of tokens to skip in the newBuffer. Use if the buffer contains garbage in front.
  */
-void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) {
+void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) 
+{
 	buffer = newBuffer;
 	bufferIter = buffer.begin() + skip; // 
 
@@ -33,17 +40,20 @@ void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) {
 /**
  * Updates the stmtNum of the expression. For parsing queries, there is no need to call this.
  */
-void ExpressionParser::updateStmtNum(int stmtNum) {
+void ExpressionParser::updateStmtNum(int stmtNum) 
+{
 	this->stmtNum = stmtNum;
 }
 
 //@Todo code duplication between here and Parser. Might not need to bother though
-string matchInteger(string token) {
+string matchInteger(string token) 
+{
 	std::regex intRegex("\\d+");
 	return (std::regex_match(token,intRegex)) ? token : "";
 }
 
-int parseConstant(string value, int stmtNum) {
+int parseConstant(string value, int stmtNum) 
+{
 	PKB pkb = PKB::getInstance();
 	int constant = atoi(value.c_str());
 	
@@ -52,7 +62,8 @@ int parseConstant(string value, int stmtNum) {
 	return constant;
 }
 
-int parseVariable(string value, int stmtNum) {
+int parseVariable(string value, int stmtNum) 
+{
 	PKB pkb = PKB::getInstance();
 	
 	pkb.insertVar(value, stmtNum);
@@ -62,9 +73,11 @@ int parseVariable(string value, int stmtNum) {
 	// @TODO this should not be done here
 	pkb.setUses(stmtNum, varIndx);
 
-	while (pkb.getParent(stmtNum).size()) {
+	while (pkb.getParent(stmtNum).size()) 
+	{
 		stmtNum = pkb.getParent(stmtNum).at(0);
-		if (stmtNum > 0) {
+		if (stmtNum > 0) 
+		{
 			pkb.setUses(stmtNum, varIndx);	
 		}
 	}
@@ -72,24 +85,29 @@ int parseVariable(string value, int stmtNum) {
 	return varIndx;
 }
 
-int parseConstantOrVariable(string value, int stmtNum) {
+int parseConstantOrVariable(string value, int stmtNum) 
+{
 	string constant = matchInteger(value);
-	if (constant.empty()) { 
+	if (constant.empty()) 
+	{ 
 		return parseVariable(value, stmtNum);
 	} else {
 		return parseConstant(value, stmtNum);
 	}
 }
 
-int ExpressionParser::getOperatorPrecedence(string token) {
-	if (operPrecedence.count(token)) {
+int ExpressionParser::getOperatorPrecedence(string token) 
+{
+	if (operPrecedence.count(token)) 
+	{
 		return operPrecedence[token];
 	} else {
 		return 0;
 	}
 }
 
-TNode* ExpressionParser::operatorAdd(TNode* left) {
+TNode* ExpressionParser::operatorAdd(TNode* left) 
+{
 	TNode* right = parse(operPrecedence["+"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
@@ -101,7 +119,8 @@ TNode* ExpressionParser::operatorAdd(TNode* left) {
 }
 
 
-TNode* ExpressionParser::operatorMultiply(TNode* left) {
+TNode* ExpressionParser::operatorMultiply(TNode* left) 
+{
 	TNode* right = parse(operPrecedence["*"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
@@ -112,7 +131,8 @@ TNode* ExpressionParser::operatorMultiply(TNode* left) {
 	return top;
 }
 
-TNode* ExpressionParser::operatorSubtract(TNode* left) {
+TNode* ExpressionParser::operatorSubtract(TNode* left) 
+{
 	TNode* right = parse(operPrecedence["-"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
@@ -130,7 +150,8 @@ TNode* ExpressionParser::operatorSubtract(TNode* left) {
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
  */
-TNode* ExpressionParser::parse(int bindingLevel) {
+TNode* ExpressionParser::parse(int bindingLevel) 
+{
 	PKB pkb = PKB::getInstance();
 
 	string prevToken = token;
@@ -138,7 +159,8 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 	token = *(bufferIter ++);
 
 	TNode* leftNode;
-	if (prevToken.compare("(") == 0) {
+	if (prevToken.compare("(") == 0) 
+	{
 		leftNode = parse();
 		// @Todo, for validation: verify ')'
 	} else {
@@ -148,15 +170,19 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 	}
 
 	
-	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") != 0)) {
+	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") != 0)) 
+	{
 		prevToken = token;
 
 		token = *(bufferIter ++);
-		if (prevToken.compare("+") == 0) {
+		if (prevToken.compare("+") == 0) 
+		{
 			leftNode = operatorAdd(leftNode);
-		} else if (prevToken.compare("*") == 0) {
+		} else if (prevToken.compare("*") == 0) 
+		{
 			leftNode = operatorMultiply(leftNode);
-		} else if (prevToken.compare("-") == 0) {
+		} else if (prevToken.compare("-") == 0) 
+		{
 			leftNode = operatorSubtract(leftNode);
 		}
 	}

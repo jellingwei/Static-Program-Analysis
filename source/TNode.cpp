@@ -9,14 +9,19 @@
 
 
 
-TNode::TNode() {}
+TNode::TNode() 
+{}
 
-TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value) {
-	/*if(stmtNo <= 0) {
+TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value) 
+{
+	/*if(stmtNo <= 0) 
+	{
 		throw exception("TNode error: Negative statment number");
-	} else if(value <= 0) {
+	} else if(value <= 0) 
+	{
 		throw exception("TNode error: Negative value");
-	} else if(ast_node_type!=Procedure || ast_node_type!=Assign || ast_node_type!=Plus || ast_node_type!=Variable || ast_node_type!=StmtLst || ast_node_type!=While || ast_node_type!=Constant) {
+	} else if(ast_node_type!=Procedure || ast_node_type!=Assign || ast_node_type!=Plus || ast_node_type!=Variable || ast_node_type!=StmtLst || ast_node_type!=While || ast_node_type!=Constant) 
+	{
 		throw exception("TNode error: Invalid TNode_Type");
 	}*/
 
@@ -26,7 +31,8 @@ TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value) {
 	_leftSibling = _rightSibling = NULL;
 }
 
-TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value, TNode* parent) {
+TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value, TNode* parent) 
+{
 
 	_nodeType = ast_node_type;
 	_stmtNumber = stmtNo;
@@ -35,67 +41,82 @@ TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value, TNode* parent) {
 	_leftSibling = _rightSibling = NULL;
 }
 
-int TNode::getStmtNumber() {
+int TNode::getStmtNumber() 
+{
 	return _stmtNumber;
 }
 
-int TNode::getNodeValueIdx() {
+int TNode::getNodeValueIdx() 
+{
 	return _nodeValueIdx;
 }
 
-TNODE_TYPE TNode::getNodeType() {
+TNODE_TYPE TNode::getNodeType() 
+{
 	return _nodeType;
 }
 
-TNode* TNode::getParent() {
+TNode* TNode::getParent() 
+{
 	return _parent;
 }
 
-void TNode::addChild(TNode* node) {
+void TNode::addChild(TNode* node) 
+{
 	_children.push_back(node);
 }
 
-bool TNode::hasChild() {
+bool TNode::hasChild() 
+{
 	if(_children.size() < 1) return false;
 	else return true;
 }
 
-vector<TNode*>* TNode::getChildren() {
+vector<TNode*>* TNode::getChildren() 
+{
 	return &_children;
 }
 
-void TNode::addLeftSibling(TNode* node) {
+void TNode::addLeftSibling(TNode* node) 
+{
 	_leftSibling = node;	
 }
 
-void TNode::addRightSibling(TNode* node) {
+void TNode::addRightSibling(TNode* node) 
+{
 	_rightSibling = node;
 }
 
-bool TNode::hasLeftSibling() {
+bool TNode::hasLeftSibling() 
+{
 	if(_leftSibling != NULL) return true;
 	else return false;
 }
 
-bool TNode::hasRightSibling() {
+bool TNode::hasRightSibling() 
+{
 	if(_rightSibling != NULL) return true;
 	else return false;
 }
 
-TNode* TNode::getLeftSibling() {
+TNode* TNode::getLeftSibling() 
+{
 	return _leftSibling;
 }
 
-TNode* TNode::getRightSibling() {
+TNode* TNode::getRightSibling() 
+{
 	return _rightSibling;
 }
 
-void TNode::setParent(TNode* parent) {
+void TNode::setParent(TNode* parent) 
+{
 	_parent = parent;
 }
 
 
-std::ostream& operator<<(std::ostream &strm, const TNode &node) {
+std::ostream& operator<<(std::ostream &strm, const TNode &node) 
+{
 	TNODE_TYPE expr[] = {Plus, Variable, Constant}; // @Todo add times, subtract, etc
 
 	auto res = find(begin(expr), end(expr), node._nodeType);

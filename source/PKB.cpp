@@ -11,7 +11,8 @@ using namespace std;
 #include "TNode.h"
 
 
-PKB::PKB() {
+PKB::PKB() 
+{
 	varTable = new VarTable();
 	stmtTable = new StmtTable();
 	constantTable = new ConstantTable();
@@ -22,208 +23,266 @@ PKB::PKB() {
 	ast = new AST();
 }
 
-TNode* PKB::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
+TNode* PKB::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) 
+{
 	return ast->createTNode(ast_node_type, stmtNo, idx);
 }
-TNode* PKB::getRoot() {
+TNode* PKB::getRoot() 
+{
 	return ast->getRoot();
 }
-bool PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
+bool PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) 
+{
 	return ast->createLink(link, fromNode, toNode);
 }
 		
-int PKB::getChildrenSize(TNode* parent) {
+int PKB::getChildrenSize(TNode* parent) 
+{
 	return ast->getChildrenSize(parent);
 }
-vector<TNode*>* PKB::getChildrenNode(TNode* parent) {
+vector<TNode*>* PKB::getChildrenNode(TNode* parent) 
+{
 	return ast->getChildrenNode(parent);
 }
-bool PKB::isChildNode(TNode* parent, TNode* child) {
+bool PKB::isChildNode(TNode* parent, TNode* child) 
+{
 	return ast->isChildNode(parent, child);
 }
 
-bool PKB::isExists(TNode* node) {
+bool PKB::isExists(TNode* node) 
+{
 	return ast->isExists(node);
 }
-TNode* PKB::getLastImpt() {
+TNode* PKB::getLastImpt() 
+{
 	return ast->getLastImpt();
 }
-int PKB::getASTSize() {
+int PKB::getASTSize() 
+{
 	return ast->getSize();
 }
 
-vector<int> PKB::patternMatchAssign(string RHS) {
+vector<int> PKB::patternMatchAssign(string RHS) 
+{
 	return ast->patternMatchAssign(RHS);
 }
 
-vector<int> PKB::patternMatchWhile(string LHS) {
+vector<int> PKB::patternMatchWhile(string LHS) 
+{
 	return ast->patternMatchWhile(LHS);
 }
 
-int PKB::getControlVariable(int stmtNum) {
+int PKB::getControlVariable(int stmtNum) 
+{
 	return ast->getControlVariable(stmtNum);
 }
 
 // VarTable
 
-int PKB::insertVar(string varName, int stmtNum) {
+int PKB::insertVar(string varName, int stmtNum) 
+{
 	return varTable->insertVar(varName, stmtNum);
 }
-int PKB::getVarTableSize() {
+int PKB::getVarTableSize() 
+{
 	return varTable->getSize();
 }
-string PKB::getVarName(int index) {
+string PKB::getVarName(int index) 
+{
 	return varTable->getVarName(index);
 }
-int PKB::getVarIndex(string varName) {
+int PKB::getVarIndex(string varName) 
+{
 	return varTable->getVarIndex(varName);
 }
-int PKB::getStmtNum(string varName) {
+int PKB::getStmtNum(string varName) 
+{
 	return varTable->getStmtNum(varName);
 }
-vector<int> PKB::getAllVarIndex() {
+vector<int> PKB::getAllVarIndex() 
+{
 	return varTable->getAllVarIndex();
 }
 
 //Constant
-bool PKB::insertConstant(int constant, int stmtNum) {
+bool PKB::insertConstant(int constant, int stmtNum) 
+{
 	return constantTable->insertConstant(constant, stmtNum);
 }
-int PKB::getConstantTableSize() {
+int PKB::getConstantTableSize() 
+{
 	return constantTable->getSize();
 }
-int PKB::getConstant(int index) {
+int PKB::getConstant(int index) 
+{
 	return constantTable->getConstant(index);
 }
-int PKB::getConstantIndex(int constant) {
+int PKB::getConstantIndex(int constant) 
+{
 	return constantTable->getConstantIndex(constant);
 }
-vector<int> PKB::getStmtNum(int constant) {
+vector<int> PKB::getStmtNum(int constant) 
+{
 	return constantTable->getStmtNum(constant);
 }
-bool PKB::isConstant(int number) {
+bool PKB::isConstant(int number) 
+{
 	return constantTable->isConstant(number);
 }
-vector<int> PKB::getAllConstant() {
+vector<int> PKB::getAllConstant() 
+{
 	return constantTable->getAllConstant();
 }
 
 // StmtTable
-bool PKB::insertStmt(int stmtNum, string type) {
+bool PKB::insertStmt(int stmtNum, string type) 
+{
 	return stmtTable->insertStmt(stmtNum, type);
 }
-string PKB::getType(int stmtNum) {
+string PKB::getType(int stmtNum) 
+{
 	return stmtTable->getType(stmtNum);
 }
-vector<int> PKB::getStmtNumForType(string type) {
+vector<int> PKB::getStmtNumForType(string type) 
+{
 	return stmtTable->getStmtNumForType(type);
 }
-bool PKB::isAssign(int stmtNum) {
+bool PKB::isAssign(int stmtNum) 
+{
 	return stmtTable->isAssign(stmtNum);
 }
-bool PKB::isWhile(int stmtNum) {
+bool PKB::isWhile(int stmtNum) 
+{
 	return stmtTable->isWhile(stmtNum);
 }
-int PKB::getStmtTableSize() {
+int PKB::getStmtTableSize() 
+{
 	return stmtTable->getSize();
 }
 
 // Parent
-bool PKB::setParent(TNode* stmtNum1, TNode* stmtNum2) {
+bool PKB::setParent(TNode* stmtNum1, TNode* stmtNum2) 
+{
 	return parentTable->setParent(stmtNum1, stmtNum2);
 }
 	
-vector<int> PKB::getParent(int stmtNum2, bool transitiveClosure) {
+vector<int> PKB::getParent(int stmtNum2, bool transitiveClosure) 
+{
 	return parentTable->getParent(stmtNum2, transitiveClosure);
 }
-vector<int> PKB::getParentS(int stmtNum2) {
+vector<int> PKB::getParentS(int stmtNum2) 
+{
 	bool transitiveClosure = true;
 	return parentTable->getParent(stmtNum2, transitiveClosure);
 }
-vector<int> PKB::getChild(int stmtNum1, bool transitiveClosure) {
+vector<int> PKB::getChild(int stmtNum1, bool transitiveClosure) 
+{
 	return parentTable->getChild(stmtNum1, transitiveClosure);
 }
-vector<int> PKB::getChildS(int stmtNum1) {
+vector<int> PKB::getChildS(int stmtNum1) 
+{
 	bool transitiveClosure = true;
 	return parentTable->getChild(stmtNum1, transitiveClosure);
 }
 
-bool PKB::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) {
+bool PKB::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) 
+{
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
-bool PKB::isParentS(int stmtNum1, int stmtNum2) {
+bool PKB::isParentS(int stmtNum1, int stmtNum2) 
+{
 	bool transitiveClosure = true;
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
 
-pair<vector<int>, vector<int>> PKB::getAllParentPairs(bool transitiveClosure) {
+pair<vector<int>, vector<int>> PKB::getAllParentPairs(bool transitiveClosure) 
+{
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
-pair<vector<int>, vector<int>> PKB::getAllParentPairsS() {
+pair<vector<int>, vector<int>> PKB::getAllParentPairsS() 
+{
 	bool transitiveClosure = true;
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
 
 
-bool PKB::setFollows(TNode* stmt1, TNode* stmt2) {
+bool PKB::setFollows(TNode* stmt1, TNode* stmt2) 
+{
 	return followsTable->setFollows(stmt1, stmt2);
 }	
-vector<int> PKB::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
+vector<int> PKB::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) 
+{
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
-vector<int> PKB::getStmtFollowedToS(int stmtNum2) {
+vector<int> PKB::getStmtFollowedToS(int stmtNum2) 
+{
 	bool transitiveClosure = true;
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
-vector<int> PKB::getStmtFollowedFrom(int stmtNum1 , bool transitiveClosure) {
+vector<int> PKB::getStmtFollowedFrom(int stmtNum1 , bool transitiveClosure) 
+{
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
-vector<int> PKB::getStmtFollowedFromS(int stmtNum1) {
+vector<int> PKB::getStmtFollowedFromS(int stmtNum1) 
+{
 	bool transitiveClosure = true;
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
-bool PKB::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) {
+bool PKB::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) 
+{
 	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
 }
-bool PKB::isFollowsS(int stmtNum1, int stmtNum2) {
+bool PKB::isFollowsS(int stmtNum1, int stmtNum2) 
+{
 	bool transitiveClosure = true;
 	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
 }
-pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure) {
+pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure) 
+{
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
 // ModifiesTable methods
-bool PKB::setModifies(int stmtNum, int varIndex) {
+bool PKB::setModifies(int stmtNum, int varIndex) 
+{
 	return modifiesTable->setModifies(stmtNum, varIndex);
 }
-bool PKB::isModifies(int stmtNum, int varIndex) {
+bool PKB::isModifies(int stmtNum, int varIndex) 
+{
 	return modifiesTable->isModifies(stmtNum, varIndex);
 }
-vector<int> PKB::getModStmtNum(int varIndex) {
+vector<int> PKB::getModStmtNum(int varIndex) 
+{
 	return modifiesTable->getModStmtNum(varIndex);
 }
-vector<int> PKB::getModVarForStmt(int stmtNum) {
+vector<int> PKB::getModVarForStmt(int stmtNum) 
+{
 	return modifiesTable->getModVarForStmt(stmtNum);
 }
-pair<vector<int>, vector<int>> PKB::getAllModPair() {
+pair<vector<int>, vector<int>> PKB::getAllModPair() 
+{
 	return modifiesTable->getAllModPair();
 }
 
 // UsesTable methods
-bool PKB::setUses(int stmtNum, int varIndex) {
+bool PKB::setUses(int stmtNum, int varIndex) 
+{
 	return usesTable->setUses(stmtNum, varIndex);
 }
-bool PKB::isUses(int stmtNum, int varIndex) {
+bool PKB::isUses(int stmtNum, int varIndex) 
+{
 	return usesTable->isUses(stmtNum, varIndex);
 }
-vector<int> PKB::getUsesStmtNum(int varIndex) {
+vector<int> PKB::getUsesStmtNum(int varIndex) 
+{
 	return usesTable->getUsesStmtNum(varIndex);
 }
-vector<int> PKB::getUsesVarForStmt(int stmtNum) {
+vector<int> PKB::getUsesVarForStmt(int stmtNum) 
+{
 	return usesTable->getUsesVarForStmt(stmtNum);
 }
-pair<vector<int>, vector<int>> PKB::getAllUsesPair() {
+pair<vector<int>, vector<int>> PKB::getAllUsesPair() 
+{
 	return usesTable->getAllUsesPair();
 }
 
@@ -231,7 +290,8 @@ pair<vector<int>, vector<int>> PKB::getAllUsesPair() {
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
 */
-PKB& PKB::getInstance() {
+PKB& PKB::getInstance() 
+{
 	static PKB instance;
 	return instance;
 }
