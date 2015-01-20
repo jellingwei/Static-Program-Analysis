@@ -18,11 +18,12 @@
 #include <fstream>
 #include <sstream>
 #include <regex>
-   
+
 #include "QueryParser.h"
 #include "InputQueryParser.h"
 #include "Synonym.h"
 #include "QueryTree.h"
+#include "QueryValidator.h"
 
 using std::string;
 using std::vector;
@@ -39,7 +40,8 @@ namespace QueryParser{
 	QueryTree* myQueryTree;
 	unordered_map<string, string> synonymsMap; //key: synonyms
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
-
+	QueryValidator* myQueryV;
+	
 	/**
 	 * Initialise the parser with a filename
 	 */
@@ -585,6 +587,14 @@ namespace QueryParser{
 				//create synonym s1
 				Synonym s1(DE_type,name1);
 
+				/*res = myQueryV->validateSuchThatQueries(nodeType, s1, s2);
+				if(!res){
+					#ifdef DEBUG
+						cout<<"QueryParser in validateSuchThatQueries: returns error"<<endl;
+					#endif
+					return false;
+				}*/
+
 				QNode* childNode = myQueryTree->createQNode(nodeType, Synonym(), s1, s2);
 				res = myQueryTree->linkNode(myQueryTree->getSuchThatNode(), childNode);
 
@@ -856,6 +866,7 @@ namespace QueryParser{
 
 		//testingQueryParser();
 
+		myQueryV = new QueryValidator();
 		bool res = initQueryTreeAndSymbolsTable();
 		if (!res){return false;}
 
@@ -882,5 +893,4 @@ namespace QueryParser{
 	QueryTree* getQueryTree(){
 		return myQueryTree;
 	}
-
 }
