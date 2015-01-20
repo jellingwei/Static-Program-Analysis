@@ -1,7 +1,7 @@
 @echo off
 
-set src=case4\s.txt
-set qry=case4\q.txt
+set src=case0\test_src.txt
+set qry=case0\test_qry.txt
 set out=out.xml
 
 set /p params="Enter AutoTester Additional Args: " %=%
