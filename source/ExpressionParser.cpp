@@ -6,24 +6,20 @@
 #include <cstring>
 #include <regex>
 
-using namespace std;
-
 #include "ExpressionParser.h"
 #include "TNode.h"
 #include "PKB.h"
 #include "SourceParser.h"
 
-ExpressionParser::ExpressionParser() 
-{
-	operPrecedence = makeOperatorMap();
-	this->stmtNum = 0;
-}
+using namespace std;
 
 ExpressionParser::ExpressionParser() 
 {
 	operPrecedence = makeOperatorMap();
 	this->stmtNum = 0;
 }
+
+
 /**
  * Before calling parse, call this function to initialise the buffer in the expression parser
  * @param newBuffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
@@ -145,7 +141,7 @@ TNode* ExpressionParser::operatorSubtract(TNode* left)
 
 
 /**
- * Method to parse an expression. Returns a tree.
+ * Method to parse an expression. Returns the root of a tree.
  * @param bindingLevel Leave empty for normal usage. Used internally during parsing.
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
