@@ -79,17 +79,25 @@ public:
 
 	// Parent Table methods
 	bool setParent(TNode* stmtNum1, TNode* stmtNum2);
-	vector<int> getParent(int stmtNum2);
-	vector<int> getChild(int stmtNum1);
-	bool isParent(int stmtNum1, int stmtNum2);
-	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure);
+	vector<int> getParent(int stmtNum2, bool transitiveClosure = false);
+	vector<int> getParentS(int stmtNum2);
+	vector<int> getChild(int stmtNum1, bool transitiveClosure = false);
+	vector<int> getChildS(int stmtNum1);
+	bool isParent(int stmtNum1, int stmtNum2, bool transitiveClosure = false);
+	bool isParentS(int stmtNum1, int stmtNum2);
+	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure = false);
+	pair<vector<int>, vector<int>> getAllParentPairsS();
 
 	// Follow Table methods
 	bool setFollows(TNode* stmt1, TNode* stmt2);
-	vector<int> getStmtFollowedTo(int stmtNum2);
-	vector<int> getStmtFollowedFrom(int stmtNum1);
-	bool isFollows(int stmtNum1, int stmtNum2);
-	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure);
+	vector<int> getStmtFollowedTo(int stmtNum2, bool transitiveClosure = false);
+	vector<int> getStmtFollowedToS(int stmtNum2);
+	vector<int> getStmtFollowedFrom(int stmtNum1, bool transitiveClosure = false);
+	vector<int> getStmtFollowedFromS(int stmtNum1);
+	bool isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure = false);
+	bool isFollowsS(int stmtNum1, int stmtNum2);
+	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure = false);
+	pair<vector<int>, vector<int>> getAllFollowsPairsS();
 
 	// ModifiesTable methods
 	bool setModifies(int stmtNum, int varIndex);

@@ -28,7 +28,7 @@ Synonym::Synonym(string type, string name, vector<string> values)
 	
 	for (unsigned int i = 0; i < values.size(); i++)
 	{
-		_values.insert(std::stoi(values[i]));
+		_values.push_back(std::stoi(values[i]));
 	}
 }
 
@@ -36,23 +36,18 @@ Synonym::Synonym(string type, string name, vector<int> values)
 {
 	_type = type;
 	_name = name;
-	
-	for (unsigned int i = 0; i < values.size(); i++)
-	{
-		_values.insert(values[i]);
-	}
+	_values = values;
 }
 
 Synonym::Synonym(string type, string name, set<int> values)
 {
 	_type = type;
 	_name = name;
-	_values = values;
-}
-
-void Synonym::setValues(set<int> values)
-{
-	_values = values;
+	
+	for (set<int>::iterator itr = values.begin(); itr != values.end(); ++itr)
+	{
+		_values.push_back(*itr);
+	}
 }
 
 string Synonym::getType()
@@ -60,12 +55,23 @@ string Synonym::getType()
 	return _type;
 }
 
-set<int> Synonym::getValues()
+string Synonym::getName()
+{
+	return _name;
+}
+
+vector<int> Synonym::getValues()
 {
 	return _values;
 }
 
-string Synonym::getName()
+set<int> Synonym::getValuesSet()
 {
-	return _name;
+	set<int> returnValues;
+	
+	for (unsigned int i = 0; i < _values.size(); i++)
+	{
+		returnValues.insert(_values[i]);
+	}
+	return returnValues;
 }
