@@ -39,7 +39,8 @@ class ExpressionParser {
 
 	public:
 		ExpressionParser();
-		void updateBuffer(vector<string>, int skip);
+		void updateBuffer(vector<string>, int skip = 0);
 		void updateStmtNum(int);
 		TNode* parse(int bindingLevel = 0);
+		TNode* parseExpression(vector<string>);
 };
