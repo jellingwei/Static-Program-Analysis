@@ -13,6 +13,7 @@ unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ConstantTableTest"
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("UsesTableTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ModifiesTableTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ParserTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ExpressionParserTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryPreprocessorTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryTreeTest").makeTest());
