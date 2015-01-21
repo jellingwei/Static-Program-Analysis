@@ -11,8 +11,4 @@ using std::pair;
 
 namespace QueryEvaluator {
 	vector<Synonym> processQueryTree(QueryTree* queryTree);
-
-	//Public helper functions
-	set<int> intersectWithCurrentValues(vector<int> newValues, set<int> oldValues);
-	bool isValueExist(set<int> setToSearch, int value);  //Returns true if the value exists in the set
 }

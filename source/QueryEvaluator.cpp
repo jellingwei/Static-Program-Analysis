@@ -20,6 +20,7 @@ using std::pair;
 
 #include "QueryEvaluator.h"
 #include "PKB.h"
+#include "IntermediateValuesHandler.h"
 #include "AbstractWrapper.h"
 
 namespace QueryEvaluator {
@@ -54,19 +55,6 @@ namespace QueryEvaluator {
 	Synonym findSynonymWithName(string wantedSynonymName);
 	pair<vector<int>, vector<int>> filterPairWithSynonymType(pair<vector<int>, vector<int>> allPairs, string arg1Type, string arg2Type);
 
-	//New structures for the new query evaluator
-	vector<vector<int>> allIntermediateValues;
-	vector<string> allIntermediateNames;
-	unordered_map<string, string> synonymMap;
-
-	void addAndProcessIntermediateSynonym(Synonym synonym);
-	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
-	void joinWithExistingValues(Synonym synonym);
-	void joinWithExistingValues(Synonym LHS, Synonym RHS);
-	void intersectWithExistingValues(int synonymIndex, vector<int> probeValues);
-	void intersectWithExistingValues(int indexLHS, vector<int> LHSValues, int indexRHS, vector<int> RHSValues);
-	void intersectAndJoinWithExistingValues(int existingIndex, Synonym probe, Synonym newValues);
-	set<int> getIntermediateValues(int synonymIndex);
 
 	PKB pkb = PKB::getInstance();  //Get the instance of the PKB singleton
 
@@ -75,11 +63,7 @@ namespace QueryEvaluator {
 	* Returns an empty vector if the Such That or Pattern clauses are invalid
 	*/
 	vector<Synonym> processQueryTree(QueryTree* qTreeRoot) {
-		allIntermediateValues.clear();
-		allIntermediateNames.clear();
-		synonymMap = qTreeRoot->getSynonymsMap();
-
-		//initializeSynonymVectorUsingMap(qTreeRoot->getSynonymsMap());
+		IntermediateValuesHandler::initialize(qTreeRoot->getSynonymsMap());
 		vector<Synonym> synonymResult;
 
 		bool isValidSuchThat = processSuchThatNode(qTreeRoot->getSuchThatNode());
@@ -110,7 +94,7 @@ namespace QueryEvaluator {
 		for (int i = 0; i < numberOfSynonyms; i++) {
 			Synonym wantedSynonym = resultChildNode->getArg1();
 			string wantedSynonymName = wantedSynonym.getName();
-			Synonym s = findSynonymWithName(wantedSynonymName);
+			Synonym s = IntermediateValuesHandler::getSynonymWithName(wantedSynonymName);
 			if (s.getName() == "-1") {
 				break;  //It should never come here
 			}
@@ -192,7 +176,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			//arg2 is the variable that is modified, find the statements
 			vector<int> stmts = pkb.getModStmtNum(pkb.getVarIndex(arg2.getName()));
@@ -200,7 +184,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
 			pair<vector<int>, vector<int>> allModifiesPair = pkb.getAllModPair();
 			pair<vector<int>, vector<int>> filteredModifiesPair = 
@@ -212,7 +196,7 @@ namespace QueryEvaluator {
 
 			Synonym LHS(arg1Type, arg1.getName(), filteredModifiesPair.first);
 			Synonym RHS(arg2Type, arg2.getName(), filteredModifiesPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -241,7 +225,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), vars);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			//arg2 is the variable that is used, find the statements that uses it
 			vector<int> stmts = pkb.getUsesStmtNum(pkb.getVarIndex(arg2.getName()));
@@ -249,7 +233,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
 			pair<vector<int>, vector<int>> allUsesPair = pkb.getAllUsesPair();
 			pair<vector<int>, vector<int>> filteredUsesPair = 
@@ -261,7 +245,7 @@ namespace QueryEvaluator {
 
 			Synonym LHS(arg1Type, arg1.getName(), filteredUsesPair.first);
 			Synonym RHS(arg2Type, arg2.getName(), filteredUsesPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -288,14 +272,14 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			vector<int> stmts = pkb.getParent(stoi(arg2.getName()));
 			if (stmts.size() == 0) {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
 			pair<vector<int>, vector<int>> allParentsPair = pkb.getAllParentPairs(false);  //false for non transitive closure
 			pair<vector<int>, vector<int>> filteredParentsPair = 
@@ -307,7 +291,7 @@ namespace QueryEvaluator {
 
 			Synonym LHS(arg1Type, arg1.getName(), filteredParentsPair.first);
 			Synonym RHS(arg2Type, arg2.getName(), filteredParentsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -334,14 +318,14 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			vector<int> stmts = pkb.getParent(stoi(arg2.getName()), true);  //True for transitive closure
 			if (stmts.size() == 0) {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
 			pair<vector<int>, vector<int>> allParentsPair = pkb.getAllParentPairs(true);  //True for transitive closure
 			pair<vector<int>, vector<int>> filteredParentsPair = 
@@ -353,7 +337,7 @@ namespace QueryEvaluator {
 
 			Synonym LHS(arg1Type, arg1.getName(), filteredParentsPair.first);
 			Synonym RHS(arg2Type, arg2.getName(), filteredParentsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -381,7 +365,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			// Given stmtNum2, get stmtNum1 such that Follows(stmt1, stmt2) is satisfied
 			vector<int> stmt = pkb.getStmtFollowedTo(stoi(arg2.getName()));
@@ -389,7 +373,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmt);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
 			pair<vector<int>, vector<int>> allFollowsPair = pkb.getAllFollowsPairs(false);  //false for non transitive closure
 			pair<vector<int>, vector<int>> filteredFollowsPair = 
@@ -401,7 +385,7 @@ namespace QueryEvaluator {
 
 			Synonym LHS(arg1Type, arg1.getName(), filteredFollowsPair.first);
 			Synonym RHS(arg2Type, arg2.getName(), filteredFollowsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -425,7 +409,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == "String") {
 			// Given stmtNum2, get stmtNum1 such that Follows(stmt1, stmt2) is satisfied
 			vector<int> stmt = pkb.getStmtFollowedTo(stoi(arg2.getName()), true);
@@ -433,7 +417,7 @@ namespace QueryEvaluator {
 				return false;
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmt);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
 			pair<vector<int>, vector<int>> allFollowsPair = pkb.getAllFollowsPairs(true);  //True for transitive closure
 			pair<vector<int>, vector<int>> filteredFollowsPair = 
@@ -445,7 +429,7 @@ namespace QueryEvaluator {
 
 			Synonym LHS(arg1Type, arg1.getName(), filteredFollowsPair.first);
 			Synonym RHS(arg2Type, arg2.getName(), filteredFollowsPair.second);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
@@ -686,7 +670,7 @@ namespace QueryEvaluator {
 			}
 			Synonym LHS(arg0.getType(), arg0.getName(), isMatchStmts);
 			Synonym RHS(arg1Type, arg1.getName(), LHSVariables);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 
 			if (isMatchStmts.size() == 0) {
 				return false;
@@ -694,7 +678,7 @@ namespace QueryEvaluator {
 			return true;
 		} else if (arg1Type == "_") {
 			Synonym synonym(arg0.getType(), arg0.getName(), isMatchStmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 			return true;
 		} else {
 			//LHS is a constant
@@ -711,7 +695,7 @@ namespace QueryEvaluator {
 				}
 			}
 			Synonym synonym(arg0.getType(), arg0.getName(), matchingStmts);
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 			return true;
 		}
 	}
@@ -737,13 +721,13 @@ namespace QueryEvaluator {
 			if (stmts.size() == 0) {
 				return false;
 			}
-			addAndProcessIntermediateSynonym(synonym);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 			return true;
 		} else if (arg1Type == "_") {
 			return true;  //Do nothing because pattern w(_, _) is always true if there are while statements
 		} else {
 			//LHS is a variable synonym
-			vector<int> arg0Values = findSynonymWithName(arg0.getName()).getValues();
+			vector<int> arg0Values = IntermediateValuesHandler::getSynonymWithName(arg0.getName()).getValues();
 			if (arg0Values.size() == 0) {
 				return false;
 			}
@@ -755,7 +739,7 @@ namespace QueryEvaluator {
 			}
 			Synonym LHS(arg0.getType(), arg0.getName(), arg0Values);
 			Synonym RHS(arg1.getType(), arg1.getName(), vars);
-			addAndProcessIntermediateSynonyms(LHS, RHS);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 			return true;
 		}
 	}
@@ -812,261 +796,6 @@ namespace QueryEvaluator {
 		return true;
 	}
 
-	int findIntermediateSynonymIndex(string synonymName) {
-		for (unsigned int i = 0; i < allIntermediateNames.size(); i++) {
-			if (synonymName == allIntermediateNames[i]) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	void addAndProcessIntermediateSynonym(Synonym synonym) {
-		if (synonym.getType() == "_") {
-			return;
-		}
-
-		string name = synonym.getName();
-		int synonymIndex = findIntermediateSynonymIndex(name);
-
-		if (synonymIndex == -1) {
-			//If this synonym is not yet in the table,
-			//get all the default values, intersect and join
-
-			string type = synonym.getType();
-			vector<int> allValues;
-			set<int> intermediateValues = synonym.getValuesSet();
-			set<int> finalValues;
-
-			//Get the default values
-			if (type == "variable") {
-				allValues = pkb.getAllVarIndex();
-			} else if (type == "constant") {
-				allValues = pkb.getAllConstant();
-			} else {
-				allValues = pkb.getStmtNumForType(type);
-			}
-
-			//Intersection
-			for (unsigned int i = 0; i < allValues.size(); i++) {
-				if (isValueExist(intermediateValues, allValues[i])) {
-					finalValues.insert(allValues[i]);
-				}
-			}
-
-			//Join
-			Synonym newSynonym(type, name, finalValues);
-			joinWithExistingValues(newSynonym);
-		} else {
-			//This synonym is already in the table
-			//Just do intersection with the existing intermediate values
-			intersectWithExistingValues(synonymIndex, synonym.getValues());
-		}
-	}
-
-	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) {
-		if (LHS.getType() == "_" && RHS.getType() == "_") {
-			return;
-		} else if (LHS.getType() == "_") {
-			addAndProcessIntermediateSynonym(RHS);
-			return;
-		} else if (RHS.getType() == "_") {
-			addAndProcessIntermediateSynonym(LHS);
-			return;
-		}
-
-		//If it reaches here, it is two proper synonyms that require handling
-		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
-		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
-
-		if (indexLHS == -1 && indexRHS == -1) {
-			//Both LHS and RHS are not in the table
-			//Cartesian product the two values with the current table
-			joinWithExistingValues(LHS, RHS);
-		} else if (indexLHS == -1) {
-			//LHS is not in the table while RHS is
-			//Use RHS to intersect with the table values then join with the LHS
-			intersectAndJoinWithExistingValues(indexRHS, RHS, LHS);
-		} else if (indexRHS == -1) {
-			//RHS is not in the table while LHS is
-			//Use LHS to intersect with the table values then join with the RHS
-			intersectAndJoinWithExistingValues(indexLHS, LHS, RHS);
-		} else {
-			//Both LHS and RHS are in the table
-			//Use both the values to intersect with the table
-			intersectWithExistingValues(indexLHS, LHS.getValues(), indexRHS, RHS.getValues());
-		}
-	}
-
-
-	/**
-	* Helper method to do a cartesian product of the intermediate synonym values with other values
-	*/
-	void joinWithExistingValues(Synonym synonym) {
-		vector<int> synonymValues = synonym.getValues();
-		vector<vector<int>> acceptedValues;
-
-		allIntermediateNames.push_back(synonym.getName());
-
-		if (allIntermediateValues.size() == 0) {
-			for (vector<int>::iterator itr = synonymValues.begin(); itr != synonymValues.end(); ++itr) {
-				vector<int> newRow;
-				newRow.push_back(*itr);
-				acceptedValues.push_back(newRow);
-			}
-		} else {
-			for (vector<int>::iterator itr = synonymValues.begin(); itr != synonymValues.end(); ++itr) {
-				for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
-					vector<int> newRow(allIntermediateValues[i]);
-					newRow.push_back(*itr);
-					acceptedValues.push_back(newRow);
-				}
-			}
-		}
-
-		swap(allIntermediateValues, acceptedValues);
-	}
-
-	/**
-	* Helper method to do a cartesian product of the intermediate synonym values with other values
-	* Overloaded method which takes in two arguments instead of one
-	*/
-	void joinWithExistingValues(Synonym LHS, Synonym RHS) {
-		vector<int> valuesLHS = LHS.getValues();
-		vector<int> valuesRHS = RHS.getValues();
-		vector<vector<int>> acceptedValues;
-
-		allIntermediateNames.push_back(LHS.getName());
-		allIntermediateNames.push_back(RHS.getName());
-
-		if (allIntermediateValues.size() == 0) {
-			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-				vector<int> newRow;
-				newRow.push_back(valuesLHS[i]);
-				newRow.push_back(valuesRHS[i]);
-				acceptedValues.push_back(newRow);
-			}
-		} else {
-			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-				for (unsigned int j = 0; j < allIntermediateValues.size(); j++) {
-					vector<int> newRow(allIntermediateValues[j]);
-					newRow.push_back(valuesLHS[i]);
-					newRow.push_back(valuesRHS[i]);
-					acceptedValues.push_back(newRow);
-				}
-			}
-		}
-		swap(allIntermediateValues, acceptedValues);
-	}
-
-	/**
-	* Helper method to do a set intersection of the intermediate values in the table
-	*/
-	void intersectWithExistingValues(int synonymIndex, vector<int> probeValues) {
-		vector<vector<int>> acceptedValues;
-		set<int> probeValuesSet;
-
-		for (unsigned int i = 0; i < probeValues.size(); i++) {
-			probeValuesSet.insert(probeValues[i]);
-		}
-
-		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
-			if (isValueExist(probeValuesSet, (allIntermediateValues[i])[synonymIndex])) {
-				acceptedValues.push_back(allIntermediateValues[i]);
-			}
-		}
-		swap(allIntermediateValues, acceptedValues);
-	}
-
-	/**
-	* Helper method to do a set intersection of the intermediate values in the table
-	* Overloaded method which takes in two pairs of arguments instead of one pair
-	*/
-	void intersectWithExistingValues(int indexLHS, vector<int> LHSValues, int indexRHS, vector<int> RHSValues) {
-		vector<vector<int>> acceptedValues;
-
-		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
-			for (unsigned int j = 0; j < LHSValues.size(); j++) {
-				if (allIntermediateValues[i][indexLHS] == LHSValues[j] && allIntermediateValues[i][indexRHS] == RHSValues[j]) {
-					acceptedValues.push_back(allIntermediateValues[i]);
-				}
-			}
-		}
-		swap(allIntermediateValues, acceptedValues);
-	}
-
-	void intersectAndJoinWithExistingValues(int existingIndex, Synonym probe, Synonym newValues) {
-		vector<vector<int>> acceptedValues;
-		vector<int> probeValues = probe.getValues();
-
-		allIntermediateNames.push_back(newValues.getName());
-
-		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
-			for (unsigned int j = 0; j < probeValues.size(); j++) {
-				if (probeValues[j] == allIntermediateValues[i][existingIndex]) {
-					vector<int> newRow(allIntermediateValues[i]);
-					newRow.push_back(probeValues[j]);
-					acceptedValues.push_back(newRow);
-				} else if (probeValues[j] > allIntermediateValues[i][existingIndex]) {
-					break;  //Stop looping the inner probe values if it exceeds the outer value
-				}
-			}
-		}
-
-		swap(allIntermediateValues, acceptedValues);
-	}
-
-	/**
-	* Helper method to get the synonym with its final values
-	* Gets the default values if this synonym is not in the intermediate values
-	* Otherwise, performs set intersection with the intermediate values
-	* Returns a new synonym with the final values
-	*/
-	Synonym findSynonymWithName(string wantedName) {
-		unordered_map<string, string>::iterator itr = synonymMap.find(wantedName);
-
-		string name = itr->first;
-		string type = itr->second;		
-		int synonymIndex = findIntermediateSynonymIndex(name);
-
-		if (synonymIndex == -1) {
-			vector<int> synonymValues;
-			if (type == "variable") {
-				synonymValues = pkb.getAllVarIndex();
-			} else if (type == "constant") {
-				synonymValues = pkb.getAllConstant();
-			} else {
-				synonymValues = pkb.getStmtNumForType(type);
-			}
-
-			Synonym synonym(type, name, synonymValues);
-			return synonym;
-		} else {
-			set<int> intermediateValues = getIntermediateValues(synonymIndex);
-			Synonym synonym(type, name, intermediateValues);
-			return synonym;
-		}
-	}
-
-	set<int> getIntermediateValues(int synonymIndex) {
-		set<int> intermediateValues;
-		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
-			intermediateValues.insert(allIntermediateValues[i][synonymIndex]);
-		}
-		return intermediateValues;
-	}
-
-	/**
-	* Helper method to check if a particular value is contained in the set
-	*/
-	inline bool isValueExist(set<int> setToSearch, int value) {
-		int count = setToSearch.count(value);
-
-		if (count >= 1) {
-			return true;
-		}
-		return false;
-	}
 
 	/**
 	* Helper method to filter the paired synonym values

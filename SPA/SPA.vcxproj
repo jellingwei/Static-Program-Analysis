@@ -16,6 +16,7 @@
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\ExpressionParser.cpp" />
     <ClCompile Include="..\source\FollowsTable.cpp" />
+    <ClCompile Include="..\source\IntermediateValuesHandler.cpp" />
     <ClCompile Include="..\source\ModifiesTable.cpp" />
     <ClCompile Include="..\source\ParentTable.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="..\source\ExpressionParser.h" />
     <ClInclude Include="..\source\FollowsTable.h" />
     <ClInclude Include="..\source\InputQueryParser.h" />
+    <ClInclude Include="..\source\IntermediateValuesHandler.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
     <ClInclude Include="..\source\ParentTable.h" />
     <ClInclude Include="..\source\PKB.h" />
