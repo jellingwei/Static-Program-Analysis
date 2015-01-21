@@ -23,7 +23,7 @@ ExpressionParser::ExpressionParser()
 /**
  * Before calling parse, call this function to initialise the buffer in the expression parser
  * @param newBuffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
- * @param skip		optional. The number of tokens to skip in the newBuffer. Use if the buffer contains garbage in front.
+ * @param skip		optional. The number of tokens to skip in the newBuffer. Use if the buffer contains other tokens in front.
  */
 void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) 
 {
@@ -146,7 +146,7 @@ TNode* ExpressionParser::operatorSubtract(TNode* left)
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
  */
-TNode* ExpressionParser::parse(int bindingLevel) 
+TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 {
 	PKB pkb = PKB::getInstance();
 
@@ -184,4 +184,15 @@ TNode* ExpressionParser::parse(int bindingLevel)
 	}
 
 	return leftNode;
+}
+
+/**
+ * Method to parse an expression. Returns the root of a tree.
+ * @param buffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
+ * @sa ExpressionParser::updateBuffer
+ * @sa ExpressionParser::updateStmtNum
+ */
+TNode* ExpressionParser::parseExpression(vector<string> buffer) {
+	updateBuffer(buffer);
+	return parse();
 }
