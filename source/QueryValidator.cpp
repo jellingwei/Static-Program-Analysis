@@ -14,10 +14,10 @@ QueryValidator::~QueryValidator() {
 * Method to validate the arguments of all such that clause
 * Returns true if the arguments are valid, false otherwise
 */
-bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2){
-	
-	switch (type) {
-
+bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
+{	
+	switch (type) 
+	{
 		case Modifies:
 		case Uses:
 			return validateModifiesOrUsesArgs(arg1, arg2);
@@ -36,7 +36,8 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
  * Method to validate the arguments of modifies or uses clause
  * Returns true if the arguments are valid, false otherwise
  */
-bool QueryValidator::validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2){
+bool QueryValidator::validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2)
+{
 	//arg1 must be a statement(but not constant) and cannot have "_"
 	//arg2 must be a character, variable or "_"
 	string arg1Type = arg1.getType();
@@ -63,7 +64,8 @@ bool QueryValidator::validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2){
  * Method to validate the arguments of parent or follows clause
  * Returns true if the arguments are valid, false otherwise
  */
-bool QueryValidator::validateParentArgs(Synonym arg1, Synonym arg2){
+bool QueryValidator::validateParentArgs(Synonym arg1, Synonym arg2)
+{
 	//arg1 and arg2 must be numbers(but not assign, constants), number synonyms or "_"
 	string arg1Type = arg1.getType();
 	string arg2Type = arg2.getType();
@@ -85,7 +87,8 @@ bool QueryValidator::validateParentArgs(Synonym arg1, Synonym arg2){
  * Method to validate the arguments of parent or follows clause
  * Returns true if the arguments are valid, false otherwise
  */
-bool QueryValidator::validateFollowsArgs(Synonym arg1, Synonym arg2){
+bool QueryValidator::validateFollowsArgs(Synonym arg1, Synonym arg2)
+{
 	//arg1 and arg2 must be numbers(but not constants), number synonyms or "_"
 	string arg1Type = arg1.getType();
 	string arg2Type = arg2.getType();
