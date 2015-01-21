@@ -206,21 +206,22 @@ namespace IntermediateValuesHandler {
 		swap(allIntermediateValues, acceptedValues);
 	}
 
-	void intersectAndJoinWithExistingValues(int existingIndex, Synonym probe, Synonym newValues) {
+	void intersectAndJoinWithExistingValues(int existingIndex, Synonym probe, Synonym newSynonym) {
 		vector<vector<int>> acceptedValues;
 		vector<int> probeValues = probe.getValues();
+		vector<int> newValues = newSynonym.getValues();
 
-		allIntermediateNames.push_back(newValues.getName());
+		allIntermediateNames.push_back(newSynonym.getName());
 
 		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
 			for (unsigned int j = 0; j < probeValues.size(); j++) {
 				if (probeValues[j] == allIntermediateValues[i][existingIndex]) {
 					vector<int> newRow(allIntermediateValues[i]);
-					newRow.push_back(probeValues[j]);
+					newRow.push_back(newValues[j]);
 					acceptedValues.push_back(newRow);
-				} else if (probeValues[j] > allIntermediateValues[i][existingIndex]) {
+				} /*else if (probeValues[j] > allIntermediateValues[i][existingIndex]) {
 					break;  //Stop looping the inner probe values if it exceeds the outer value
-				}
+				}*/
 			}
 		}
 

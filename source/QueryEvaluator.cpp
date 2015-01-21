@@ -660,21 +660,22 @@ namespace QueryEvaluator {
 		string arg1Type = arg1.getType();
 		vector<int> isMatchStmts = pkb.patternMatchAssign(arg2.getName());
 
+		if (isMatchStmts.size() == 0) {
+				return false;
+		}
+
 		if (arg1Type == "variable") {
 			//If LHS is a variable synonym, use the return statements to probe the ModifiesTable
-			vector<int> LHSVariables;
+			vector<int> vars;
 
 			for (vector<int>::iterator itr = isMatchStmts.begin(); itr != isMatchStmts.end(); ++itr) {
-				vector<int> vars = pkb.getModVarForStmt(*itr);  //Get the LHS of the assign statement
-				LHSVariables.push_back(vars[0]);  //Variable for assignment stmts must be in index 0
+				vector<int> var = pkb.getModVarForStmt(*itr);  //Get the LHS of the assign statement
+				vars.push_back(var[0]);  //Variable for assignment stmts must be in index 0
 			}
-			Synonym LHS(arg0.getType(), arg0.getName(), isMatchStmts);
-			Synonym RHS(arg1Type, arg1.getName(), LHSVariables);
-			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 
-			if (isMatchStmts.size() == 0) {
-				return false;
-			}
+			Synonym LHS(arg0.getType(), arg0.getName(), isMatchStmts);
+			Synonym RHS(arg1Type, arg1.getName(), vars);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 			return true;
 		} else if (arg1Type == "_") {
 			Synonym synonym(arg0.getType(), arg0.getName(), isMatchStmts);
