@@ -107,6 +107,43 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 	}
 
 }
+
+bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
+{
+	string patternType = arg0.getType();
+
+	if(patternType == "assign")
+	{
+		return validateAssignPattern(arg0, arg1, arg2);
+	}
+	else if(patternType == "while")
+	{
+		return validateWhilePattern(arg0, arg1, arg2);
+	}
+
+	return true;
+}
+bool QueryValidator::validateAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2)
+{
+	string arg1Type = arg1.getType();
+	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_") {
+			return false;
+	}
+	return true;
+}
+bool QueryValidator::validateWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2)
+{
+	string arg1Type = arg1.getType();
+	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_") {
+		return false;  //arg1 can only be a constant string or a variable synonym or "_"
+	}
+
+	if (arg2.getName() != "_") {
+		return false;  //arg2 must be "_"
+	}
+
+	return true;
+}
 /**
  * Method to validate the arguments of modifies or uses clause
  * Returns true if the arguments are valid, false otherwise

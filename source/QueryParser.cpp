@@ -813,6 +813,17 @@ namespace QueryParser
 		//Build Query Tree
 		Synonym pattern_var(DE_type, pattern_variable);
 		Synonym pattern_pattern("String", pattern_patterns);
+
+		res = myQueryV->validatePatternQueries(pattern_arg0, pattern_var, pattern_pattern);
+		if(!res)
+		{
+			#ifdef DEBUG
+				cout<<"QueryParser in validatePatternQueries: returns error"<<endl;
+			#endif
+			return false;
+		}
+
+
 		QNode* patternQueryNode = myQueryTree->createQNode(Pattern,pattern_arg0, pattern_var, pattern_pattern);
 		myQueryTree->linkNode(myQueryTree->getPatternNode(), patternQueryNode);
 
