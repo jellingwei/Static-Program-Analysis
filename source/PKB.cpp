@@ -14,6 +14,7 @@ using namespace std;
 PKB::PKB() 
 {
 	varTable = new VarTable();
+	procTable = new ProcTable();
 	stmtTable = new StmtTable();
 	constantTable = new ConstantTable();
 	modifiesTable = new ModifiesTable();
@@ -102,6 +103,26 @@ int PKB::getStmtNum(string varName)
 vector<int> PKB::getAllVarIndex() 
 {
 	return varTable->getAllVarIndex();
+}
+
+
+// ProcTable
+
+int PKB::insertProc(string procName) 
+{
+	return procTable->insertProc(procName);
+}
+int PKB::getProcTableSize() 
+{
+	return procTable->getProcTableSize();;
+}
+string PKB::getProcName(int index) 
+{
+	return procTable->getProcName(index);
+}
+int PKB::getProcIndex(string procName) 
+{
+	return procTable->getProcIndex(procName);
 }
 
 //Constant

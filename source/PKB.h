@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "VarTable.h"
+#include "ProcTable.h"
 #include "StmtTable.h"
 #include "ModifiesTable.h"
 #include "UsesTable.h"
@@ -27,6 +28,7 @@ class PKB {
 public:
 	// @Todo make all tables private so that PKB is a real facade
 	VarTable* varTable; 
+	ProcTable* procTable;
 	StmtTable* stmtTable;
 	ConstantTable* constantTable;
 	ModifiesTable* modifiesTable;
@@ -59,6 +61,12 @@ public:
 	int getVarIndex(string varName);
 	int getStmtNum(string varName);
 	vector<int> getAllVarIndex();
+
+	// ProcTable methods
+	int insertProc(string procName);
+	int getProcTableSize();
+	string getProcName(int index);
+	int getProcIndex(string varName);
 
 	// ConstantTable methods
 	bool insertConstant(int constant, int stmtNum);
