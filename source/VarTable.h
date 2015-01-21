@@ -11,7 +11,7 @@ using namespace std;
 class VarTable {
 public:
 	int insertVar(string varName, int stmtNum);
-	int getSize();
+	int getVarTableSize();
 	string getVarName(int index);
 	int getVarIndex(string varName);
 	int getStmtNum(string varName);
