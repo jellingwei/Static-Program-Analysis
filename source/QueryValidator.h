@@ -1,12 +1,21 @@
 #pragma once
 
+//testing table-driven approach
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
+#include <iterator>
+#include <unordered_map>
+
+#include "QNode.h"
 #include "Synonym.h"
 
 class QueryValidator {
 public:
 	 QueryValidator();
 	 ~ QueryValidator();
-	//void initTable();
+	void initTable();
 	bool validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2);
 	bool validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2);
 
@@ -17,6 +26,6 @@ protected:
 
 	bool validateAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2);//Validates the inputs for assign pattern queries
 	bool validateWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2);//Validates the inputs for while pattern queries
-	//unordered_map<QNODE_TYPE, vector<string>> relationshipArg1Map; //maps the relationship to its type of argument 1
-	//unordered_map<QNODE_TYPE, vector<string>> relationshipArg2Map; //maps the relationship to its type of argument 2
+	std::tr1::unordered_map<QNODE_TYPE, vector<string>> relationshipArg1Map; //maps the relationship to its type of argument 1
+	std::tr1::unordered_map<QNODE_TYPE, vector<string>> relationshipArg2Map; //maps the relationship to its type of argument 2
 };

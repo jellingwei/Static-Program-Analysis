@@ -984,7 +984,7 @@ namespace QueryParser
 		//testingQueryParser();
 
 		myQueryV = new QueryValidator();
-		//myQueryV->initTable(); //propagate relationships data onto table
+		myQueryV->initTable(); //propagate relationships data onto table
 
 		bool res = initQueryTreeAndSymbolsTable();
 		if (!res){return false;}
