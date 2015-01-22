@@ -13,9 +13,10 @@ using namespace std;
 #include "PKB.h"
 
 AST::AST() {
-	TNode* nullNode = createTNode(Procedure, 0, 0);
-	_rootNode = createTNode(StmtLst, 0, 0);
-	createLink(Child, nullNode, _rootNode);
+	//*TNode* nullNode = createTNode(Procedure, 0, 0);
+	//*_rootNode = createTNode(StmtLst, 0, 0);
+	//*createLink(Child, nullNode, _rootNode);
+	_rootNode = createTNode(Program, 0, 0);
 
 }
 
@@ -27,12 +28,12 @@ TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 
 	if(stmtNo < 0) {
 		throw exception("AST error: Negative statment number");
-	} else if(!(ast_node_type==0 || ast_node_type==1 || ast_node_type==2 || ast_node_type==3 || ast_node_type==4 || ast_node_type==5 || ast_node_type==6 || ast_node_type==7)) {
+	} else if(!(ast_node_type==0 || ast_node_type==1 || ast_node_type==2 || ast_node_type==3 || ast_node_type==4 || ast_node_type==5 || ast_node_type==6 || ast_node_type==7 || ast_node_type==8 || ast_node_type==9 || ast_node_type==10)) {
 		throw exception("AST error: Invalid TNode_Type");
 	}
 
 	TNode* temp = new TNode(ast_node_type, stmtNo, idx);
-	if (ast_node_type == Assign || ast_node_type == StmtLst || ast_node_type == While) _lastImpt = temp;
+	//if (ast_node_type == Assign || ast_node_type == StmtLst || ast_node_type == While) _lastImpt = temp;
 	allNodes.push_back(temp);
 	return temp;
 }
