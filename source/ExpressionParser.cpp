@@ -197,7 +197,13 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 	if (prevToken.compare("(") == 0) 
 	{
 		leftNode = parse();
-		// @Todo, for validation: verify ')'
+		
+		if (token != ")") {
+			throw logic_error("expressionParser: ) expected but not found");
+		}
+
+		prevToken = token;
+		token = *(bufferIter ++);
 	} else {
 		// prevToken is either variable or constant now
 		bool isVariable = matchInteger(prevToken).empty();
@@ -219,6 +225,7 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 		prevToken = token;
 
 		token = *(bufferIter ++);
+		
 		if (prevToken.compare("+") == 0) 
 		{
 			leftNode = operatorAdd(leftNode);
