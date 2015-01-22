@@ -13,8 +13,11 @@ using namespace stdext;
 
 
 /**
-* Returns the index of the variable.
-*/
+ * If procName is not in the ProcTable, inserts it into the ProcTable
+ * and return its index. Otherwise, return its INDEX
+ * and the table remains unchanged.
+ * @exception if procName is empty.
+ */
 int ProcTable::insertProc(string procName) 
 {
 
@@ -39,24 +42,28 @@ int ProcTable::insertProc(string procName)
 }
 
 /**
-* Returns the size of the procTable.
-*/
+ * Return the total number of procedures in the the ProcTable.
+ */
 int ProcTable::getProcTableSize() 
 {
 	return procMap.size();
 }
 
 /**
-* Returns the name of a variable in varTable using the index as the key.
-*/
+ * Return the name of the procedure in the ProcTable with the given index.
+ * If index is out of range, return an empty string.
+ */
 string ProcTable::getProcName(int index) 
 {
 	return (procMap.size() > 0) ? procMap.at(index) : "";
 }
 
 /**
-* Returns the index of a variable in varTable using the variable name as the key.
-*/
+ * If procName is in the ProcTable, return its index. Otherwise, return -1 to
+ * indicate there is no such procedure in the the ProcTable. If procName is empty or null, -1 is
+ * returned.
+ * @exception if procName is empty
+ */
 int ProcTable::getProcIndex(string procName) 
 {
 	if (procName.empty()) 
