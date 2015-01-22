@@ -68,11 +68,21 @@ void QueryValidator::initTable()
 */
 bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
 {	
+	vector<string> listArg1;
+	vector<string> listArg2;
 
-	vector<string> listArg1 = relationshipArg1Map.at(type);
-	vector<string> listArg2 = relationshipArg2Map.at(type);
+	try {
+		//if enumQNODE_TYPE is not found it throws, out of range exception
+		listArg1 = relationshipArg1Map.at(type);
+		listArg2 = relationshipArg2Map.at(type); 
+	}
+	catch (const std::out_of_range& oor) {
+		throw exception("QueryValidator error: Out of Range");
+	}
+
 	string arg1Type = arg1.getType();
 	string arg2Type = arg2.getType();
+	
 	if (arg1Type == "String") 
 	{
 		char arg1Value = arg1.getName()[0];  //Get the value of arg1

@@ -8,6 +8,9 @@
 #include <iterator>
 #include <unordered_map>
 
+//catch std::out_of_range exception
+#include <stdexcept> 
+
 #include "QNode.h"
 #include "Synonym.h"
 
