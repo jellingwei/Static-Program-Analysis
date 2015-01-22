@@ -46,20 +46,20 @@ void QueryValidator::initTable()
 	//ParentS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(ParentS), list4));
 
-	/*vector<string> list1 = {"stmt","assign","while","prog_line","string-int"};  
-	relationshipArg1Map.insert(make_pair("Modifies", list1));
-	vector<string> list2 = {"variable","string-char","_"};
-	relationshipArg2Map.insert(make_pair("Modifies", list2));
+	//Follows argument 1
+	string list5array[] = { "stmt", "assign", "while", "prog_line", "string-int", "_" };
+	vector<string> list5; list5.insert(list5.begin(), list5array, list5array + 6);
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Follows), list5));
 
-	vector<string> list3 = {"stmt","assign","while","prog_line","string-int"};  
-	relationshipArg1Map.insert(make_pair("Uses", list3));
-	vector<string> list4 = {"variable","string-char","_"};
-	relationshipArg2Map.insert(make_pair("Uses", list4));*/
+	//Follows argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Follows), list5));
 
-	/*relationshipArg1Map = {
-		{ { "Modifies" }, { "stmt", "assign", "while", "prog_line", "string-int" } },
-		{ { "Uses" }, { "stmt", "assign", "while", "prog_line", "string-int" } },
-	};*/
+	//FollowsS argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
+
+	//FollowsS argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
+
 }
 
 /**
@@ -68,78 +68,80 @@ void QueryValidator::initTable()
 */
 bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
 {	
-	//testing code to move towards table-driven method
-	if(type == QNODE_TYPE(Modifies) || type==QNODE_TYPE(Uses) || type==QNODE_TYPE(Parent) || type==QNODE_TYPE(ParentS)){
-		vector<string> listArg1 = relationshipArg1Map.at(type);
-		vector<string> listArg2 = relationshipArg2Map.at(type);
-		string arg1Type = arg1.getType();
-		string arg2Type = arg2.getType();
-		if (arg1Type == "String") 
-		{
-			char arg1Value = arg1.getName()[0];  //Get the value of arg1
-			if (isdigit(arg1Value)) 
-			{
-				arg1Type = "string-int";
-			}
-			else if (isalpha(arg1Value)) 
-			{
-				arg1Type = "string-char";
-			}
-			else
-			{
-				arg1Type = "string-mix";	
-			}
-		}
-		if (arg2Type == "String") 
-		{
-			char arg2Value = arg2.getName()[0];  //Get the value of arg2
-			if (isdigit(arg2Value)) 
-			{
-				arg2Type = "string-int";
-			}
-			else if (isalpha(arg2Value)) 
-			{
-				arg2Type = "string-char";
-			}
-			else
-			{
-				arg2Type = "string-mix";	
-			}
-		}
 
-		auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
-		auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
-		if(result1 == std::end(listArg1)) // not inside list of type of argument 1
-			return false;
-		if(result2 == std::end(listArg2)) // not inside list of type of argument 2
-			return false;
-		
-		//Since the two are constant strings, they must be digits by the checks above
-		if ((arg1Type == "string-int" && arg2Type == "string-int") &&
-			(stoi(arg1.getName()) >= stoi(arg2.getName())) )
+	vector<string> listArg1 = relationshipArg1Map.at(type);
+	vector<string> listArg2 = relationshipArg2Map.at(type);
+	string arg1Type = arg1.getType();
+	string arg2Type = arg2.getType();
+	if (arg1Type == "String") 
+	{
+		char arg1Value = arg1.getName()[0];  //Get the value of arg1
+		if (isdigit(arg1Value)) 
 		{
-			return false;  //arg1 must be smaller than arg2 or else it is false
-		}	
-		if(arg1Type!="string-int" && arg2Type!="string-int" && arg1.getName() == arg2.getName())
-			return false; //arg1 and arg2 cannot have the same names if they are synoyms
-	
+			arg1Type = "string-int";
+		}
+		else if (isalpha(arg1Value)) 
+		{
+			arg1Type = "string-char";
+		}
+		else
+		{
+			arg1Type = "string-mix";	
+		}
+	}
+	if (arg2Type == "String") 
+	{
+		char arg2Value = arg2.getName()[0];  //Get the value of arg2
+		if (isdigit(arg2Value)) 
+		{
+			arg2Type = "string-int";
+		}
+		else if (isalpha(arg2Value)) 
+		{
+			arg2Type = "string-char";
+		}
+		else
+		{
+			arg2Type = "string-mix";	
+		}
 	}
 
+	auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
+	auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
+	if(result1 == std::end(listArg1)) // not inside list of type of argument 1
+		return false;
+	if(result2 == std::end(listArg2)) // not inside list of type of argument 2
+		return false;
+	
+	//Since the two are constant strings, they must be digits by the checks above
+	if ((arg1Type == "string-int" && arg2Type == "string-int") &&
+		(stoi(arg1.getName()) >= stoi(arg2.getName())) )
+	{
+		return false;  //arg1 must be smaller than arg2 or else it is false
+	}	
+	if(arg1Type!="string-int" && arg2Type!="string-int" && arg1.getName() == arg2.getName())
+		return false; //arg1 and arg2 cannot have the same names if they are synoyms
+	
+	
+
+	/*
 	switch (type) 
 	{
-		//case Modifies:
-		//case Uses:
-		//	return validateModifiesOrUsesArgs(arg1, arg2);
-		//case Parent:
-		//case ParentS:
-		//	return validateParentArgs(arg1, arg2);
+		case Modifies:
+		case Uses:
+			return validateModifiesOrUsesArgs(arg1, arg2);
+		case Parent:
+		case ParentS:
+			return validateParentArgs(arg1, arg2);
 		case Follows:
 		case FollowsS:
 			return validateFollowsArgs(arg1, arg2);
 		default:
 			return true;
 
-	}
+	}*/
+
+	return true;
 
 }
 
@@ -179,10 +181,12 @@ bool QueryValidator::validateWhilePattern(Synonym arg0, Synonym arg1, Synonym ar
 
 	return true;
 }
-/**
- * Method to validate the arguments of modifies or uses clause
- * Returns true if the arguments are valid, false otherwise
- */
+
+
+
+/*
+ // Method to validate the arguments of modifies or uses clause
+ // Returns true if the arguments are valid, false otherwise
 bool QueryValidator::validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2)
 {
 	//arg1 must be a statement(but not constant) and cannot have "_"
@@ -228,10 +232,9 @@ bool QueryValidator::validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2)
 	return true;  //All the types are valid
 }
 
-/**
- * Method to validate the arguments of parent or follows clause
- * Returns true if the arguments are valid, false otherwise
- */
+
+// Method to validate the arguments of parent or follows clause
+// Returns true if the arguments are valid, false otherwise
 bool QueryValidator::validateParentArgs(Synonym arg1, Synonym arg2)
 {
 	//arg1 and arg2 must be numbers(but not assign, constants), number synonyms or "_"
@@ -282,10 +285,10 @@ bool QueryValidator::validateParentArgs(Synonym arg1, Synonym arg2)
 	return true;  //All the types are valid
 }
 
-/**
- * Method to validate the arguments of parent or follows clause
- * Returns true if the arguments are valid, false otherwise
- */
+
+// Method to validate the arguments of parent or follows clause
+// Returns true if the arguments are valid, false otherwise
+//
 bool QueryValidator::validateFollowsArgs(Synonym arg1, Synonym arg2)
 {
 	//arg1 and arg2 must be numbers(but not constants), number synonyms or "_"
@@ -335,3 +338,5 @@ bool QueryValidator::validateFollowsArgs(Synonym arg1, Synonym arg2)
 
 	return true;  //All the types are valid
 }
+
+*/
