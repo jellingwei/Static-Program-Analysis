@@ -86,7 +86,7 @@ int PKB::insertVar(string varName, int stmtNum)
 }
 int PKB::getVarTableSize() 
 {
-	return varTable->getSize();
+	return varTable->getVarTableSize();
 }
 string PKB::getVarName(int index) 
 {

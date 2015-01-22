@@ -19,24 +19,24 @@ VarTableTest::tearDown() {
 
 void VarTableTest::testInit() {
 	VarTable varTable;
-	CPPUNIT_ASSERT_EQUAL(varTable.getSize(), 0);
+	CPPUNIT_ASSERT_EQUAL(varTable.getVarTableSize(), 0);
 	
 	return;
 }
 
 void VarTableTest::testInsert() {
 	VarTable varTable;
-	CPPUNIT_ASSERT_EQUAL(varTable.getSize(), 0);
+	CPPUNIT_ASSERT_EQUAL(varTable.getVarTableSize(), 0);
 
 	CPPUNIT_ASSERT_EQUAL(varTable.insertVar("x", 1), 1); 
-	CPPUNIT_ASSERT_EQUAL(varTable.getSize(), 1);
+	CPPUNIT_ASSERT_EQUAL(varTable.getVarTableSize(), 1);
 
 	CPPUNIT_ASSERT_EQUAL(varTable.insertVar("y", 10), 2); 
-	CPPUNIT_ASSERT_EQUAL(varTable.getSize(), 2);
+	CPPUNIT_ASSERT_EQUAL(varTable.getVarTableSize(), 2);
 
 	// inserting an existing variable does not generate a new table entry
 	CPPUNIT_ASSERT_EQUAL(varTable.insertVar("x", 12), 1); 
-	CPPUNIT_ASSERT_EQUAL(varTable.getSize(), 2);
+	CPPUNIT_ASSERT_EQUAL(varTable.getVarTableSize(), 2);
 
 	// invalid parameters should cause insertVar to reject the entry and throw exception
 	try {
@@ -49,7 +49,7 @@ void VarTableTest::testInsert() {
 		CPPUNIT_ASSERT_MESSAGE("exception not thrown", false);
 	} catch (exception e) {
 	}
-	CPPUNIT_ASSERT_EQUAL(varTable.getSize(), 2);
+	CPPUNIT_ASSERT_EQUAL(varTable.getVarTableSize(), 2);
 
 }
 
