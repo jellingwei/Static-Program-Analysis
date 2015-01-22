@@ -64,7 +64,8 @@ int VarTable::getVarTableSize()
  */
 string VarTable::getVarName(int index) 
 {
-	return (varMap.size() > 0) ? varMap.at(index) : ""; 
+	
+	return (varMap.count(index) > 0) ? varMap.at(index) : ""; 
 }
 
 /**
