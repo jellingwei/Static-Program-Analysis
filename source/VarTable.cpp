@@ -13,8 +13,11 @@ using namespace stdext;
 
 
 /**
-* Returns the index of the variable.
-*/
+ * If varName is not in the VarTable, inserts it into the VarTable with the
+ * given statement number stmtNum and return its index. Otherwise, return its INDEX
+ * and the table remains unchanged.
+ * @exception if varName is empty or stmtNum is negative or 0.
+ */
 int VarTable::insertVar(string varName, int stmtNum) {
 	if (stmtNum <= 0) {
 		throw exception("varTable error: Negative statement number");
@@ -44,15 +47,16 @@ int VarTable::insertVar(string varName, int stmtNum) {
 }
 
 /**
-* Returns the size of the varTable.
-*/
+ * Return the total number of variables in the the VarTable.
+ */
 int VarTable::getSize() {
 	return varMap.size();
 }
 
 /**
-* Returns the name of a variable in varTable using the index as the key.
-*/
+ * Return the name of the variable in the VarTable with the given index.
+ * If index is out of range, return an empty string.
+ */
 string VarTable::getVarName(int index) {
 	if (varMap.count(index) > 0) {
 		return varMap.at(index);
@@ -62,8 +66,10 @@ string VarTable::getVarName(int index) {
 }
 
 /**
-* Returns the index of a variable in varTable using the variable name as the key.
-*/
+ * If varName is in the VarTable, return its index. Otherwise, return -1 to
+ * indicate there is no such variable in the the VarTable. If “varName” is empty or null, -1 is
+ * returned.
+ */
 int VarTable::getVarIndex(string varName) {
 	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
@@ -77,8 +83,10 @@ int VarTable::getVarIndex(string varName) {
 }
 
 /**
-* Returns the statement number the variable is in the varTable.
-*/
+ * Return the statement number of the variable in the VarTable with the given
+ * varName. Otherwise, return -1 to indicate there is no such statement number.
+ * If there is no answer or if “varName” is empty or null, return an empty list.
+ */
 int VarTable::getStmtNum(string varName) {
 	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
@@ -91,6 +99,10 @@ int VarTable::getStmtNum(string varName) {
 	}
 }
 
+/**
+ * Return all the index of the variables in the the VarTable.
+ * If there is no answer, return an empty list.
+ */
 vector<int> VarTable::getAllVarIndex() {
 	vector<int> allKeys;
 

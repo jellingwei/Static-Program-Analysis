@@ -175,6 +175,12 @@ TNode* ExpressionParser::operatorSubtract(TNode* left)
 
 /**
  * Method to parse an expression. Returns the root of a tree.
+ * For example, given an expression x + (y + z), the following tree is the output.
+ *                           + <- root
+ *                         /   \
+ *                        x     +
+ *                             / \
+ *                            y   z
  * @param bindingLevel Leave empty for normal usage. Used internally during parsing.
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
@@ -230,6 +236,12 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 
 /**
  * Method to parse an expression. Returns the root of a tree.
+ * For example, given an expression x + y + z, the following tree is the output.
+ *                           + <- root
+ *                         /   \
+ *                        +     z
+ *                       / \
+ *                      x   y
  * @param buffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
@@ -237,4 +249,4 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 TNode* ExpressionParser::parseExpression(vector<string> buffer) {
 	updateBuffer(buffer);
 	return parse();
-}
+} 
