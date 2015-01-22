@@ -7,6 +7,11 @@
 
 using namespace std;
 
+//To print out debug error msges
+//#ifndef DEBUG
+//#define DEBUG 
+//#endif
+
 QueryValidator::QueryValidator() {
 }
 QueryValidator::~QueryValidator() {
@@ -72,11 +77,15 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 	vector<string> listArg2;
 
 	try {
-		//if enumQNODE_TYPE is not found it throws, out of range exception
+		//if enum QNODE_TYPE is not found it throws an out of range exception
 		listArg1 = relationshipArg1Map.at(type);
 		listArg2 = relationshipArg2Map.at(type); 
 	}
 	catch (const std::out_of_range& oor) {
+		#ifdef DEBUG
+			cout<< "QueryValidator error: out of range"<<endl;
+		#endif
+
 		throw exception("QueryValidator error: Out of Range");
 	}
 
@@ -118,19 +127,34 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 
 	auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
 	auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
+
+	#ifdef DEBUG
+		cout<< "arg1Type... "<<arg1Type<<endl;
+		cout<< "arg2Type... "<<arg2Type<<endl;
+	#endif
+
 	if(result1 == std::end(listArg1)) // not inside list of type of argument 1
+	{ 
 		return false;
+	}
 	if(result2 == std::end(listArg2)) // not inside list of type of argument 2
+	{
 		return false;
-	
+	}
+
 	//Since the two are constant strings, they must be digits by the checks above
 	if ((arg1Type == "string-int" && arg2Type == "string-int") &&
 		(stoi(arg1.getName()) >= stoi(arg2.getName())) )
 	{
 		return false;  //arg1 must be smaller than arg2 or else it is false
 	}	
-	if(arg1Type!="string-int" && arg2Type!="string-int" && arg1.getName() == arg2.getName())
+	if(arg1Type!="string-int" && arg2Type!="string-int" &&
+		arg1Type!="string-char" && arg2Type!="string-char" && 
+		arg1Type!="_" && arg2Type!="_" &&
+		arg1.getName() == arg2.getName()){
+
 		return false; //arg1 and arg2 cannot have the same names if they are synoyms
+	}
 	
 	
 
