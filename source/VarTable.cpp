@@ -72,6 +72,7 @@ string VarTable::getVarName(int index)
  * If varName is in the VarTable, return its index. Otherwise, return -1 to
  * indicate there is no such variable in the the VarTable. If varName is empty or null, -1 is
  * returned.
+ * @exception if varName is empty
  */
 int VarTable::getVarIndex(string varName) 
 {
@@ -87,6 +88,7 @@ int VarTable::getVarIndex(string varName)
  * Return the statement number of the variable in the VarTable with the given
  * varName. Otherwise, return -1 to indicate there is no such statement number.
  * If there is no answer or if varName is empty or null, return an empty list.
+ * @exception if varName is empty
  */
 
 int VarTable::getStmtNum(string varName) 

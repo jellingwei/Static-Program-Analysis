@@ -62,6 +62,7 @@ string ProcTable::getProcName(int index)
  * If procName is in the ProcTable, return its index. Otherwise, return -1 to
  * indicate there is no such procedure in the the ProcTable. If procName is empty or null, -1 is
  * returned.
+ * @exception if procName is empty
  */
 int ProcTable::getProcIndex(string procName) 
 {

@@ -11,12 +11,13 @@
 #include "ParentTable.h"
 #include "ModifiesTable.h"
 
-
 using namespace std;
 using namespace stdext;
 
 /**
-* Returns true if ModifiesTable updated.
+* Return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
+* If stmtNum and varIndex are already present in the ModifiesTable and are previously set, the ModifiesTable will not be updated.
+* @exception if stmtNum is negative or 0, or varIndex is negative.
 */
 bool ModifiesTable::setModifies(int stmtNum, int varIndex) 
 {
@@ -78,7 +79,9 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 }
 
 /**
-* Returns true if the statement number Modifies the variable.
+* Return TRUE if the Modifies relationship holds between statement number
+* and the variable index.
+* If stmtNum is negative or 0, or varIndex is negative, return FALSE.
 */
 bool ModifiesTable::isModifies(int stmtNum, int varIndex) 
 {
@@ -106,7 +109,8 @@ bool ModifiesTable::isModifies(int stmtNum, int varIndex)
 }
 
 /**
-* Returns a list of statement number that Modifies the variable.
+* Return the list of all the statements that modifies the variable of index “varIndex”. 
+* If there is no answer, or if varIndex is invalid, return an empty list.
 */
 vector<int> ModifiesTable::getModStmtNum(int varIndex) 
 {
@@ -129,7 +133,8 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 }
 
 /**
-* Returns a list of variables modified by the statement number.
+* Return the list of all the variables that is modified by the statement number “stmtNum”. 
+* If there is no answer, or if stmtNum is negative or 0, return an empty list.
 */
 vector<int> ModifiesTable::getModVarForStmt(int stmtNum) 
 {
@@ -151,8 +156,10 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum)
 }
 
 /**
-* Returns a pair of vectors, where Modifies(stmt#, var index) holds.  
-* The first vector returned consists of stmt numbers, the second vector consists of variable indexes.
+* Return a pair of lists of statements and variable indexes, which correspond to the entire set of pairs of statements 
+* and variables satisfying Modifies(stmtNum, varIndex). The first value of the pair(stmtNum) is contained in the first 
+* list in the pair, and the second value of the pair(varIndex) is contained in the second list in the pair. 
+* If there is no such pair, a pair containing 2 empty lists is returned.
 */
 pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() 
 {
@@ -169,3 +176,5 @@ pair<vector<int>, vector<int>> ModifiesTable::getAllModPair()
 
 	return result;
 }
+
+
