@@ -4,6 +4,7 @@
 #include <string>
 #include <cassert>
 #include "TNode.h"
+#include "VarTable.h"
 #include "PKB.h"
 
 using namespace std;
@@ -19,6 +20,8 @@ class ExpressionParser {
 		vector<string> buffer;
 		int stmtNum;
 		string token; // current token
+
+		VarTable* varTable;
 
 		TNode* operatorAdd(TNode* left);
 		TNode* operatorMultiply(TNode* left);
@@ -39,6 +42,8 @@ class ExpressionParser {
 
 	public:
 		ExpressionParser();
+		ExpressionParser(VarTable* varTable);   /*! used during testing, to not involve the entire pkb singleton */
+		~ExpressionParser();
 		void updateBuffer(vector<string>, int skip = 0);
 		void updateStmtNum(int);
 		TNode* parse(int bindingLevel = 0);

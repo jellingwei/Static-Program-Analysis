@@ -11,8 +11,9 @@
 
 using namespace std;
 
-/*
-**Currently, parser to call method to insert stmtNumber read and its type("assign", "while" or "if")
+/* 
+ **Currently, parser to call method to insert stmtNumber read and its type("assign", "while" or "if")
+ * @exception exception. exceptions are thrown when a negative statement number or if the stmt type is invalid.
 */
 bool StmtTable::insertStmt(int stmtNum, string type) 
 {
@@ -68,6 +69,7 @@ string StmtTable::getType(int stmtNum)
 	} /* else { 
 		throw exception("No such statement number");
 	} */
+	return "";
 }
 
 /*
@@ -81,11 +83,6 @@ vector<int> StmtTable::getStmtNumForType(string type)
 	string stmtType = "stmt";
 	string progLineType = "prog_line";
 	string ifType = "if";
-
-	if(!(type==whileType || type==assignType || type==stmtType || type==progLineType || type==ifType)) 
-	{
-		throw exception("StmtTable error: Invalid statement type");
-	}
 
 	if(whileType.compare(type) == 0) 
 	{
@@ -107,7 +104,9 @@ vector<int> StmtTable::getStmtNumForType(string type)
 
 		// sort(result.begin(), result.end()); // TODO: is there a need to sort?
 		return result;
-	} 
+	} else {
+		throw exception("StmtTable error: Invalid statement type");
+	}
 }
 
 bool StmtTable::isAssign(int stmtNo) 

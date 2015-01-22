@@ -15,22 +15,46 @@ using namespace std;
 
 ExpressionParser::ExpressionParser() 
 {
+	varTable = NULL;
 	operPrecedence = makeOperatorMap();
 	this->stmtNum = 0;
 }
 
+/**
+ * Constructor. For use in testing, to avoid potential problems with using a global pkb singleton that may interfere with other tests.
+ */
+ExpressionParser::ExpressionParser(VarTable* varTable) : varTable(varTable)  {
+	operPrecedence = makeOperatorMap();
+	this->stmtNum = 0;
+}
+
+ExpressionParser::~ExpressionParser() 
+{
+	if (varTable) 
+	{
+		delete varTable;
+	}
+}
 
 /**
- * Before calling parse, call this function to initialise the buffer in the expression parser
- * @param newBuffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
+ * Before calling parse, call this function to initialise the buffer in the expression parser.
+ * 
+ * @param newBuffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in.
+ *                  Alternatively, ["x", "+", "y"] can be passed in as well.
  * @param skip		optional. The number of tokens to skip in the newBuffer. Use if the buffer contains other tokens in front.
  */
 void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) 
 {
+	// the expression parser uses ';' to determine if its at the end
+	if (newBuffer.back().compare(";") != 0) {
+		newBuffer.push_back(";");
+	}
+	
 	buffer = newBuffer;
 	bufferIter = buffer.begin() + skip; // 
-
-	token = *(bufferIter++);
+	
+	token = *(bufferIter);
+	++bufferIter;
 }
 
 /**
@@ -58,12 +82,20 @@ int parseConstant(string value, int stmtNum)
 	return constant;
 }
 
-int parseVariable(string value, int stmtNum) 
+int parseVariable(string value, int stmtNum, VarTable* varTable = NULL)  
 {
 	PKB pkb = PKB::getInstance();
-	
-	pkb.insertVar(value, stmtNum);
-	int varIndx = pkb.getVarIndex(value);
+	int varIndx;
+
+	if (varTable == NULL) 
+	{
+		pkb.insertVar(value, stmtNum);
+		varIndx = pkb.getVarIndex(value);
+	} else 
+	{
+		varTable->insertVar(value, stmtNum);
+		varIndx = varTable->getVarIndex(value);
+	}
 
 	// update pkb 
 	// @TODO this should not be done here
@@ -81,13 +113,14 @@ int parseVariable(string value, int stmtNum)
 	return varIndx;
 }
 
-int parseConstantOrVariable(string value, int stmtNum) 
+int parseConstantOrVariable(string value, int stmtNum, VarTable* varTable = NULL) 
 {
 	string constant = matchInteger(value);
 	if (constant.empty()) 
 	{ 
-		return parseVariable(value, stmtNum);
-	} else {
+		return parseVariable(value, stmtNum, varTable);
+	} else 
+	{
 		return parseConstant(value, stmtNum);
 	}
 }
@@ -162,7 +195,16 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 	} else {
 		// prevToken is either variable or constant now
 		bool isVariable = matchInteger(prevToken).empty();
-		leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum));
+
+		if (varTable == NULL) 
+		{
+			leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum));
+		} else 
+		{
+			// this is called when running in unit test
+			leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum, varTable));
+		}
+				   
 	}
 
 	
