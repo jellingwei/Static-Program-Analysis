@@ -13,9 +13,8 @@ using namespace stdext;
 
 
 /**
- * If procName is not in the ProcTable, inserts it into the ProcTable
- * and return its index. Otherwise, return its INDEX
- * and the table remains unchanged.
+ * If procName is not in the ProcTable, inserts it into the ProcTable and 
+ * return its index. Otherwise, return its INDEX and the table remains unchanged.
  * @exception if procName is empty.
  */
 int ProcTable::insertProc(string procName) 

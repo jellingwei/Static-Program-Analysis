@@ -18,6 +18,7 @@ using namespace stdext;
  * and the table remains unchanged.
  * @exception if varName is empty or stmtNum is negative or 0.
  */
+
 int VarTable::insertVar(string varName, int stmtNum) 
 {
 	if (stmtNum <= 0) 
@@ -64,7 +65,6 @@ int VarTable::getVarTableSize()
  */
 string VarTable::getVarName(int index) 
 {
-	
 	return (varMap.count(index) > 0) ? varMap.at(index) : ""; 
 }
 
@@ -87,10 +87,8 @@ int VarTable::getVarIndex(string varName)
 /**
  * Return the statement number of the variable in the VarTable with the given
  * varName. Otherwise, return -1 to indicate there is no such statement number.
- * If there is no answer or if varName is empty or null, return an empty list.
- * @exception if varName is empty
+ * If there is no answer or if “varName” is empty or null, return an empty list.
  */
-
 int VarTable::getStmtNum(string varName) 
 {
 	if (varName.empty()) 
