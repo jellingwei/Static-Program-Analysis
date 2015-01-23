@@ -151,7 +151,7 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 /**
  * Recursively find all pairs of statements which satisfy the condition Follows(stmt1, stmt2) in each stmtlist.
  */
-bool generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector<int>* result1, vector<int>* result2) 
+void generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector<int>* result1, vector<int>* result2) 
 {
 	vector<TNode*> nextLayer;
 
@@ -165,35 +165,51 @@ bool generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector
 				result2->push_back(inputNodes->at(j)->getStmtNumber());
 			}
 
-			if (inputNodes->at(i)->getNodeType() == While) 
+			TNODE_TYPE type = inputNodes->at(i)->getNodeType();
+			if (type == While || type == If) 
 			{
-					generateAllPairs(inputNodes->at(i)->getChildren()->at(1)->getChildren(), transitiveClosure, result1, result2);
+				generateAllPairs(inputNodes->at(i)->getChildren()->at(1)->getChildren(), transitiveClosure, result1, result2);
 			}
 		}
 	} else {
 		if (inputNodes->size() == 0) 
 		{
-			return true;
+			return ;
 		}
 
 		for (size_t i = 0; i < inputNodes->size(); i ++) 
 		{
+			TNode* node = inputNodes->at(i);
 			if (i != inputNodes->size() - 1) 
 			{
-				result1->push_back(inputNodes->at(i)->getStmtNumber());
+				result1->push_back(node->getStmtNumber());
 
 				int j = i + 1;
 				result2->push_back(inputNodes->at(j)->getStmtNumber());
 			}
 
-			if (inputNodes->at(i)->getNodeType() == While) 
+			TNODE_TYPE type = inputNodes->at(i)->getNodeType();
+			if (type == While) 
 			{
-				generateAllPairs(inputNodes->at(i)->getChildren()->at(1)->getChildren(), transitiveClosure, result1, result2);
+				TNode* whileStmtList = node->getChildren()->at(1);
+				generateAllPairs(whileStmtList->getChildren(), transitiveClosure, result1, result2);
+
+			} else if (type == If) 
+			{
+				TNode* ifStmtList = node->getChildren()->at(1);
+				generateAllPairs(ifStmtList->getChildren(), transitiveClosure, result1, result2);
+
+				if (node->getChildren()->size() > 2) 
+				{
+					TNode* elseStmtList = node->getChildren()->at(2);
+					generateAllPairs(elseStmtList->getChildren(), transitiveClosure, result1, result2);
+				}
+
 			}
 		}
 	}
 
-	return true;
+	return ;
 }
 
 /**
@@ -203,7 +219,14 @@ bool generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector
 pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(bool transitiveClosure) 
 {
 	pair<vector<int>, vector<int>> results;
-	generateAllPairs(PKB::getInstance().ast->getRoot()->getChildren(), transitiveClosure, &(results.first), &(results.second));
+	TNode* root = PKB::getInstance().ast->getRoot(); // @Todo should not have direct access to ast due to facade pattern
+	vector<TNode*>* procNodes = root->getChildren();
+
+	for (auto i = procNodes->begin(); i != procNodes->end(); ++i) 
+	{
+		TNode* stmtListNode = (*i)->getChildren()->at(0);
+		generateAllPairs(stmtListNode->getChildren(), transitiveClosure, &(results.first), &(results.second));
+	}
 
 	return results;
 }

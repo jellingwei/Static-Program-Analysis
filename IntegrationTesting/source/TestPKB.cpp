@@ -188,7 +188,9 @@ void PKBTest::testPKB()
 
 	// All pairs for parent
 	pair<vector<int>, vector<int>> allParent = pkb.getAllParentPairs(false);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent pairs size", 4, (int)allParent.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent pairs size", 7, (int)allParent.first.size());
+
 	allParent = pkb.getAllParentPairs(true);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent* pairs size", 10, (int)allParent.first.size());
 }
+
