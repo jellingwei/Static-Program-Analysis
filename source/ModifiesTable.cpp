@@ -99,7 +99,7 @@ bool ModifiesTable::isModifies(int stmtNum, int varIndex)
 }
 
 /**
-* Return the list of all the statements that modifies the variable of index “varIndex”. 
+* Return the list of all the statements that modifies the variable index. 
 * If there is no answer, or if varIndex is invalid, return an empty list.
 */
 vector<int> ModifiesTable::getModStmtNum(int varIndex) 
@@ -120,7 +120,7 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 }
 
 /**
-* Return the list of all the variables that is modified by the statement number “stmtNum”. 
+* Return the list of all the variables that is modified by the statement number. 
 * If there is no answer, or if stmtNum is negative or 0, return an empty list.
 */
 vector<int> ModifiesTable::getModVarForStmt(int stmtNum) 

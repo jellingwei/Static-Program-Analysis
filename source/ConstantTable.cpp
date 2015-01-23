@@ -68,12 +68,7 @@ int ConstantTable::getSize()
  */
 int ConstantTable::getConstant(int index) 
 {
-	if (constantMap.count(index) > 0) 
-	{
-		return constantMap.at(index);
-	} else {
-		return -1;
-	}
+	return (constantMap.count(index) > 0) ? constantMap.at(index) : -1;
 }
 
 /**
@@ -81,17 +76,12 @@ int ConstantTable::getConstant(int index)
 */
 int ConstantTable::getConstantIndex(int constant) 
 {
-	if (constant <= 0) 
+	if (constant < 0) 
 	{
 		throw exception("constantTable error: Negative constant input");
 	}
 
-	if (indexMap.count(constant) > 0) 
-	{
-		return indexMap.at(constant);
-	}else {
-		return -1;
-	}
+	return (indexMap.count(constant) > 0) ? indexMap.at(constant) : -1;
 }
 
 /**
@@ -99,17 +89,12 @@ int ConstantTable::getConstantIndex(int constant)
 */
 vector<int> ConstantTable::getStmtNum(int constant) 
 {
-	if (constant <= 0) 
+	if (constant < 0) 
 	{
 		throw exception("constantTable error: Negative constant input");
 	}
 
-	if (stmtMap.count(constant) > 0) 
-	{
-		return stmtMap.at(constant);
-	}else {
-		return vector<int>();
-	}
+	return (stmtMap.count(constant) > 0) ? stmtMap.at(constant) : vector<int>();
 }
 
 /**
@@ -117,7 +102,7 @@ vector<int> ConstantTable::getStmtNum(int constant)
 */
 bool ConstantTable::isConstant(int number) 
 {
-	if (number <= 0) 
+	if (number < 0) 
 	{
 		throw exception("constantTable error: Negative number input");
 	}
@@ -125,9 +110,9 @@ bool ConstantTable::isConstant(int number)
 	if (indexMap.count(number) > 0) 
 	{
 		return true;
-	}else {
-		return false;
 	}
+		
+	return false;
 }
 
 /**
