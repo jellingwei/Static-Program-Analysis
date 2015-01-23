@@ -84,6 +84,7 @@
     <ClCompile Include="source\TestConstantTable.cpp" />
     <ClCompile Include="source\TestExpressionParser.cpp" />
     <ClCompile Include="source\TestModifiesTable.cpp" />
+    <ClCompile Include="source\TestProcTable.cpp" />
     <ClCompile Include="source\TestQueryEvaluator.cpp" />
     <ClCompile Include="source\TestQueryTree.cpp" />
     <ClCompile Include="source\TestParser.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="source\TestConstantTable.h" />
     <ClInclude Include="source\TestExpressionParser.h" />
     <ClInclude Include="source\TestModifiesTable.h" />
+    <ClInclude Include="source\TestProcTable.h" />
     <ClInclude Include="source\TestQueryEvaluator.h" />
     <ClInclude Include="source\TestQueryTree.h" />
     <ClInclude Include="source\TestParser.h" />

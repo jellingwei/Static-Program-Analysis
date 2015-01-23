@@ -46,12 +46,12 @@ void ConstantTableTest::testInsert() {
 	try {
 		constantTable.insertConstant(6000, -5); 
 		CPPUNIT_ASSERT_MESSAGE("exception not thrown", false);
-	} catch (exception e) {
+	} catch (std::invalid_argument e) {
 	}
 	try{
 		constantTable.insertConstant(-1, 5); 
 		CPPUNIT_ASSERT_MESSAGE("exception not thrown", false);
-	} catch (exception e) {
+	} catch (std::invalid_argument e) {
 	}
 	CPPUNIT_ASSERT_EQUAL(3, constantTable.getSize());
 

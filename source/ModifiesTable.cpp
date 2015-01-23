@@ -35,14 +35,13 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 		varIndexList = varIndexMap.at(stmtNum);
 
 		auto result = find(begin(varIndexList), end(varIndexList), varIndex);
-		if (result != end(varIndexList)) 
+		if (result != end(varIndexList)) // varIndex can be found already
 		{
-			//return false;  // variable already in the ModifiesTable
+			
 		} else {
 			varIndexList.push_back(varIndex);
 			varIndexMap.erase(stmtNum);
 			varIndexMap.insert(pair<int, vector<int>> (stmtNum, varIndexList));
-			//return true;
 		}
 
 	} else {
@@ -61,20 +60,17 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 		auto result = find(begin(stmtList), end(stmtList), stmtNum);
 		if (result != end(stmtList)) 
 		{
-			//return false;  // stmtNum already in the ModifiesTable
+			
 		} else {
 			stmtList.push_back(stmtNum);
 			stmtNumMap.erase(varIndex);
 			stmtNumMap.insert(pair<int, vector<int>> (varIndex, stmtList));
-			//return true;
 		}
 
 	} else {
 		newStmtList.push_back(stmtNum);
 		stmtNumMap.insert(pair<int, vector<int>> (varIndex, newStmtList));
-		//return true;
 	}
-
 	return true;
 }
 
@@ -87,25 +83,19 @@ bool ModifiesTable::isModifies(int stmtNum, int varIndex)
 {
 	if (stmtNum <= 0 || varIndex <= 0) 
 	{
-		//throw exception("ModifiesTable error: Negative statement number or varIndex");
 		return false;
 	}
-
-	vector<int> varIndexList;
 
 	if (varIndexMap.count(stmtNum) == 0) 
 	{
 		return false;
 	}
-	varIndexList = varIndexMap.at(stmtNum);
+
+	vector<int> varIndexList = varIndexMap.at(stmtNum);
 
 	auto result = find(begin(varIndexList), end(varIndexList), varIndex);
-	if (result != end(varIndexList)) 
-	{
-		return true;  
-	} 
-
-	return false;
+	// TRUE if varindex is new in the table
+	return result != end(varIndexList);
 }
 
 /**
@@ -116,7 +106,6 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 {
 	if (varIndex <= 0) 
 	{
-		//throw exception("ModifiesTable error: Negative varIndex");
 		return vector<int>();
 	}
 
@@ -127,8 +116,6 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 	}
 
 	vector<int> stmtList = stmtNumMap.at(varIndex);
-	
-	
 	return stmtList;
 }
 
@@ -140,7 +127,6 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum)
 {
 	if (stmtNum <= 0) 
 	{
-		//throw exception("ModifiesTable error: Negative statement number");
 		return vector<int>();
 	}
 
@@ -151,7 +137,6 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum)
 	}
 
 	vector<int> varIndexList = varIndexMap.at(stmtNum);
-
 	return varIndexList;
 }
 

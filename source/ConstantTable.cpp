@@ -13,27 +13,36 @@ using namespace stdext;
 
 
 /**
-* Returns the index of the constant.
-*/
+ * If constant is not in the ConstantTable, inserts it into the ConstantTable with the
+ * given statement number stmtNum and return its index. Otherwise, return its STATUS
+ * and the table remains unchanged.
+ * @exception if constant is empty or stmtNum is negative or 0.
+ */
 bool ConstantTable::insertConstant(int constant, int stmtNum) 
 {
-	if (stmtNum <= 0 || constant < 0) 
+	if (stmtNum <= 0) 
 	{
-		throw logic_error("constantTable error: Negative statement number or constant number");
+		throw invalid_argument("constantTable error: Negative statement number");
 	}
-	
-	int size = stmtMap.size();		
-	int index = size+1; // @Todo what is this?
+	if (constant < 0) 
+	{
+		throw invalid_argument("constantTable error: Negative constant");
+	}
 
-	pair<int,int> pairIndexVar (index, constant);
-	constantMap.insert(pairIndexVar);
 
-	pair<int,int> pairVarIndex (constant, index);
-	indexMap.insert(pairVarIndex);
+	int index = stmtMap.size() + 1;	
+
+	pair<int,int> pairIndexConstant (index, constant);
+	constantMap.insert(pairIndexConstant);
+
+	pair<int,int> pairConstantIndex (constant, index);
+	indexMap.insert(pairConstantIndex);
+
 
 	vector<int> stmtVector;
 	if (stmtMap.count(constant) > 0) 
 	{
+		// constant table already has a mapping for the constant
 		stmtVector = stmtMap.at(constant);
 		stmtMap.erase(constant);
 	}
@@ -42,20 +51,21 @@ bool ConstantTable::insertConstant(int constant, int stmtNum)
 	pair<int, vector<int>> pairVarStmt (constant, stmtVector);
 	stmtMap.insert(pairVarStmt);
 	
-	return true; //@Todo not always true
+	return true; 
 }
 
 /**
-* Returns the size of the constantTable.
-*/
+ * Return the total number of constants in the the ConstantTable.
+ */
 int ConstantTable::getSize() 
 {
 	return stmtMap.size();
 }
 
 /**
-* Returns the constant in ConstantTable using the index as the key.
-*/
+ * Return the constant in the ConstantTable with the given index.
+ * If index is out of range, return an empty string.
+ */
 int ConstantTable::getConstant(int index) 
 {
 	if (constantMap.count(index) > 0) 

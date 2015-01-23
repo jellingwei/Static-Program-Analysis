@@ -54,7 +54,11 @@ int ProcTable::getProcTableSize()
  */
 string ProcTable::getProcName(int index) 
 {
-	return (procMap.size() > 0) ? procMap.at(index) : "";
+	if (index < 0) 
+	{
+		return "";
+	}
+	return (procMap.size() > index) ? procMap.at(index) : "";
 }
 
 /**
