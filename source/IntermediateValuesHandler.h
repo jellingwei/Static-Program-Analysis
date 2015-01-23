@@ -12,8 +12,8 @@ using std::swap;
 #include "Synonym.h"
 #include "PKB.h"
 
-namespace IntermediateValuesHandler {
-	
+namespace IntermediateValuesHandler 
+{
 	//Public functions
 	void initialize(unordered_map<string, string> synonymMap);
 	void addAndProcessIntermediateSynonym(Synonym synonym);

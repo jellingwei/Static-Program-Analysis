@@ -13,6 +13,7 @@ class Synonym
 	//This class is used to denote synonyms used in the query tree
 public:
 	Synonym();
+	~Synonym();
 	Synonym(string type, string name);
 	Synonym(string type, int name);
 	Synonym(string type, string name, vector<string> values);

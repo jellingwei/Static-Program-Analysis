@@ -3,6 +3,10 @@ using std::sort;
 
 #include "Synonym.h"
 
+Synonym::~Synonym()
+{
+}
+
 Synonym::Synonym()
 {
 	_type = "";
