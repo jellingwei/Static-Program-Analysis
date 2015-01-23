@@ -16,7 +16,11 @@ using namespace std;
 using namespace stdext;
 
 
-
+/**
+* Return TRUE if the ParentTable is updated accordingly. Otherwise, return FALSE. 
+* If stmt1 and stmt2 are already present in the ParentTable and are previously set, the ParentTable will not be updated.
+* @exception if stmt1 or stmt2 is NULL.
+*/
 bool ParentTable::setParent(TNode* stmt1, TNode* stmt2) 
 {
 	if (stmt1 == NULL || stmt2 == NULL) 
@@ -30,7 +34,10 @@ bool ParentTable::setParent(TNode* stmt1, TNode* stmt2)
 	return true;
 }
 
-
+/**
+ * Return a list of possible statement numbers, stmt1, such that stmtNum2 is a child of stmt1. 
+ * If there is no answer, or if stmtNum2 is negative or 0, return an empty list. 
+ */
 vector<int> ParentTable::getParent(int stmtNum2, bool transitiveClosure) 
 {
 	vector<int> result;
@@ -141,7 +148,10 @@ vector<int> getChildDfs(TNode* node1, TNode* node2)
 	return result;
 }
 
-
+/**
+ * Return a list of possible statement numbers, stmt2, such that stmt2 is parent of stmtNum1. 
+ * If there is no answer, or if stmtNum1 is negative or 0, return an empty list.
+ */
 vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure) 
 {
 	vector<int> result;
@@ -211,7 +221,11 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 	
 }
 
-
+/**
+ * Return TRUE if the Parent relationship holds between the statement numbers stmtNum1 and stmtNum2. 
+ * Otherwise, return FALSE.
+ * If stmtNum1 or stmtNum2 is negative or 0, return FALSE.
+*/
 bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
 	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) 
@@ -308,9 +322,8 @@ void generateTransitiveParentPairs(vector<int> parentList, TNode* curNode, vecto
 		
 }
 
-
 /**
- * Returns all pairs of statements, <s1, s2>, where Parent(s1, s2) is satisfied
+ * Return all pairs of statements, <s1, s2>, where Parent(s1, s2) is satisfied
  */
 pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClosure) 
 {

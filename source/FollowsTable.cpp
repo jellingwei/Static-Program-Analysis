@@ -14,14 +14,17 @@
 using namespace std;
 using namespace stdext;
 
-
+/**
+* Return TRUE if the FollowsTable is updated accordingly. Otherwise, return FALSE. 
+* If stmt1 and stmt2 are already present in the FollowsTable and are previously set, the FollowsTable will not be updated.
+* @exception if stmt1 or stmt2 is NULL.
+*/
 bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) 
 {
 	if (stmt1 == NULL || stmt2 == NULL) 
 	{
 		throw exception("FollowsTable invalid parameters provided");
 	}
-
 
 	AST* ast = PKB::getInstance().ast;
 	ast->createLink(Right_Sibling, stmt1, stmt2);
@@ -30,8 +33,8 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2)
 }
 
 /**
- * Given stmt2 as input, returns a vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied.
- * If there is no answer, return an empty vector
+ * Return a list of possible statement numbers, stmt1, such that stmtNum2 follows stmt1. 
+ * If there is no answer, or if stmtNum2 is negative or 0, return an empty list. 
  */
 vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) 
 {
@@ -45,7 +48,6 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 
 	if (!node2) 
 	{
-		//throw exception("FollowsTable exception: invalid stmtNum provided");
 		return vector<int>();
 	}
 
@@ -67,8 +69,8 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 }
 
 /**
- * Given stmt1 as input, returns a vector of int of possible stmt2 such that Follows(stmt1, stmt2) is satisfied.
- * If there is no answer, returns an empty vector
+ * Return a list of possible statement numbers, stmt2, such that stmt2 follows stmtNum1. 
+ * If there is no answer, or if stmtNum1 is negative or 0, return an empty list.
  */
 vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosure) 
 {
@@ -81,7 +83,6 @@ vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosu
 
 	if (!node1) 
 	{
-		//throw exception("FollowsTable exception: invalid stmtNum provided");
 		return vector<int>();
 	}
 	
@@ -102,6 +103,11 @@ vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosu
 	return result;
 }
 
+/**
+ * Return TRUE if the Follows relationship holds between the statement numbers stmtNum1 and stmtNum2. 
+ * Otherwise, return FALSE.
+ * If stmtNum1 or stmtNum2 is negative or 0, return FALSE.
+*/
 bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
 	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
@@ -149,7 +155,7 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 
 
 /**
- * Recursively find all pairs of statements which satisfy the condition Follows(stmt1, stmt2) in each stmtlist.
+ * Return all pairs of statements which satisfy the condition Follows(stmt1, stmt2) in each stmtlist.
  */
 bool generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector<int>* result1, vector<int>* result2) 
 {
@@ -197,8 +203,8 @@ bool generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector
 }
 
 /**
- * Returns all (stmt1, stmt2) such that Follows(stmt1, stmt2) holds. If transitiveClosure is true,
- * returns all (stmt1, stmt2) such that Follows*(stmt1, stmt2) holds.
+ * Return all (stmt1, stmt2) such that Follows(stmt1, stmt2) holds. If transitiveClosure is true,
+ * return all (stmt1, stmt2) such that Follows*(stmt1, stmt2) holds.
  */
 pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(bool transitiveClosure) 
 {

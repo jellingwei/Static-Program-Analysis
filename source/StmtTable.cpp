@@ -111,7 +111,7 @@ vector<int> StmtTable::getStmtNumForType(string type)
 
 /**
 * Return TRUE if stmtNo is of Assignment Type. Otherwise, return FALSE. 
-* If stmtNum is out of range, return FALSE.
+* If stmtNo is out of range, return FALSE.
 */
 bool StmtTable::isAssign(int stmtNo) 
 {
@@ -123,6 +123,10 @@ bool StmtTable::isAssign(int stmtNo)
 	return stmtNumMap.at(stmtNo) == "assign";
 }
 
+/**
+* Return TRUE if stmtNo is of While Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
 bool StmtTable::isWhile(int stmtNo) 
 {
 	if(stmtNo <= 0) 
