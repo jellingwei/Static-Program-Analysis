@@ -45,7 +45,9 @@ namespace Parser
 	}
 
 	/**
-	 * Initialise the parser with a filename
+	 * Initialises and prepares the parser for parsing. 
+	 * The file specified by filename is opened for parsing. 
+	 * Return TRUE if the file can be successfully opened. Otherwise, return FALSE.
 	 */
 	bool initParser(string filename) 
 	{
@@ -619,8 +621,8 @@ namespace Parser
 	}
 
 	/**
-	 * Main function to parse program. Call after using @ref initParser.
-	 * 
+	 * Parses the program and populate data structures in the PKB. 
+	 * Return TRUE if the program can successfully be parsed according to the SIMPLE grammar. Otherwise, return FALSE. 
 	 */
 	bool parseProgram() 
 	{

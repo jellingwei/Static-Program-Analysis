@@ -59,8 +59,8 @@ namespace QueryEvaluator
 	PKB pkb = PKB::getInstance();  //Get the instance of the PKB singleton
 
 	/**
-	* Processes the query tree given a query tree node
-	* Returns an empty vector if the Such That or Pattern clauses are invalid
+	* Processes the query tree given a query tree node.
+	* Return an empty vector if the Such That or Pattern clauses are invalid.
 	*/
 	vector<Synonym> processQueryTree(QueryTree* qTreeRoot) 
 	{

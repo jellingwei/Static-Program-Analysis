@@ -44,7 +44,9 @@ namespace QueryParser
 	QueryValidator* myQueryV;
 	
 	/**
-	 * Initialise the parser with a filename
+	 * Initialises and prepares the parser for parsing with a query.
+	 * Return TRUE if the query parser have been initialized. Otherwise, return FALSE.
+	 * If a query string given is empty, or the buffer’s size is 0 after tokenizing return FALSE. 
 	 */
 	bool initParser(string query)
 	{
@@ -117,7 +119,6 @@ namespace QueryParser
 		return "";
 	}
 
-
 	void testingQueryParser()
 	{
 			string nxtToken = parseToken();
@@ -174,7 +175,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * prints out the query tree onto console (for testing and debugging)
+	 * Print out the built by the query parser onto console for testing and debugging.
 	 **/
 	void queryTreeTesting()
 	{
@@ -1010,6 +1011,10 @@ namespace QueryParser
 		return true;
 	}
 
+	/**
+	 * Return a query tree built by query parser. 
+	 * If input query contain syntax errors, an empty query tree is returned. 
+	 */
 	QueryTree* getQueryTree()
 	{
 		return myQueryTree;
