@@ -17,8 +17,13 @@ QueryValidator::QueryValidator() {
 QueryValidator::~QueryValidator() {
 }
 
-// Initalise table for flexibility in changing program design entity relationships
-//Currently, Visual studio C++ dont support  initializer lists. Thinking of another workaround. 
+
+/**
+ * Initialise program design entity relationships table. A table 
+ * approach is used for flexibility in changing its relationship. 
+ * Currently, Visual studio C++ dont support  initializer lists. 
+ * A string array is used to create a vector <string>. 
+ */
 void QueryValidator::initTable()
 {
 	//Modifies argument 1
@@ -68,9 +73,9 @@ void QueryValidator::initTable()
 }
 
 /**
-* Method to validate the arguments of all such that clause
-* Returns true if the arguments are valid, false otherwise
-*/
+ * Method to validate arguments of all such that clauses.
+ * Returns true if the arguments are valid, false otherwise.
+ */
 bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
 {	
 	vector<string> listArg1;
@@ -80,8 +85,8 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		//if enum QNODE_TYPE is not found it throws an out of range exception
 		listArg1 = relationshipArg1Map.at(type);
 		listArg2 = relationshipArg2Map.at(type); 
-	}
-	catch (const std::out_of_range& oor) {
+	
+	}catch (const std::out_of_range& oor){
 		#ifdef DEBUG
 			cout<< "QueryValidator error: out of range"<<endl;
 		#endif
@@ -92,35 +97,28 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 	string arg1Type = arg1.getType();
 	string arg2Type = arg2.getType();
 	
-	if (arg1Type == "String") 
-	{
+	if (arg1Type == "String"){
+
 		char arg1Value = arg1.getName()[0];  //Get the value of arg1
-		if (isdigit(arg1Value)) 
-		{
+		
+		if (isdigit(arg1Value)){
 			arg1Type = "string-int";
-		}
-		else if (isalpha(arg1Value)) 
-		{
+		}else if (isalpha(arg1Value)){
 			arg1Type = "string-char";
-		}
-		else
-		{
+		}else{
 			arg1Type = "string-mix";	
 		}
 	}
-	if (arg2Type == "String") 
-	{
+
+	if (arg2Type == "String"){
+
 		char arg2Value = arg2.getName()[0];  //Get the value of arg2
-		if (isdigit(arg2Value)) 
-		{
+		
+		if (isdigit(arg2Value)){
 			arg2Type = "string-int";
-		}
-		else if (isalpha(arg2Value)) 
-		{
+		}else if (isalpha(arg2Value)){
 			arg2Type = "string-char";
-		}
-		else
-		{
+		}else{
 			arg2Type = "string-mix";	
 		}
 	}
@@ -133,19 +131,17 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		cout<< "arg2Type... "<<arg2Type<<endl;
 	#endif
 
-	if(result1 == std::end(listArg1)) // not inside list of type of argument 1
-	{ 
+	if(result1 == std::end(listArg1)){ // not inside list of type of argument 1
 		return false;
 	}
-	if(result2 == std::end(listArg2)) // not inside list of type of argument 2
-	{
+	if(result2 == std::end(listArg2)){ // not inside list of type of argument 2
 		return false;
 	}
 
 	//Since the two are constant strings, they must be digits by the checks above
 	if ((arg1Type == "string-int" && arg2Type == "string-int") &&
-		(stoi(arg1.getName()) >= stoi(arg2.getName())) )
-	{
+		(stoi(arg1.getName()) >= stoi(arg2.getName())) ){
+
 		return false;  //arg1 must be smaller than arg2 or else it is false
 	}	
 	if(arg1Type!="string-int" && arg2Type!="string-int" &&
@@ -179,37 +175,48 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 
 }
 
+/**
+ * Method to validate arguments of all pattern clauses.
+ * Returns true if the arguments are valid, false otherwise.
+ */
 bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
 {
 	string patternType = arg0.getType();
 
-	if(patternType == "assign")
-	{
+	if(patternType == "assign"){
 		return validateAssignPattern(arg0, arg1, arg2);
-	}
-	else if(patternType == "while")
-	{
+	}else if(patternType == "while"){
 		return validateWhilePattern(arg0, arg1, arg2);
 	}
 
 	return true;
 }
+
+/**
+ * Supporting function for validating pattern queries. 
+ * It handles assign pattern type. 
+ */
 bool QueryValidator::validateAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2)
 {
 	string arg1Type = arg1.getType();
-	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_") {
+	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_"){
 			return false;
 	}
 	return true;
 }
+
+/**
+ * Supporting function for validating pattern queries. 
+ * It handles while pattern type. 
+ */
 bool QueryValidator::validateWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2)
 {
 	string arg1Type = arg1.getType();
-	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_") {
+	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_"){
 		return false;  //arg1 can only be a constant string or a variable synonym or "_"
 	}
 
-	if (arg2.getName() != "_") {
+	if (arg2.getName() != "_"){
 		return false;  //arg2 must be "_"
 	}
 

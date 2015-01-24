@@ -18,9 +18,9 @@ class QueryValidator {
 public:
 	 QueryValidator();
 	 ~ QueryValidator();
-	void initTable();
-	bool validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2);
-	bool validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2);
+	void initTable(); //creates a program design entity relationships table
+	bool validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2);//Validates all such that queries based on relationship table initialised. 
+	bool validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2);//Validates all pattern queries based on relationship table initialised. 
 
 protected:
 	bool validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2);//Validates the inputs for modifies and uses

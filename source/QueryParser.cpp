@@ -30,7 +30,6 @@ using std::vector;
 
 namespace QueryParser
 {
-
 	ifstream inputFile;
 	vector<string> buffer;
 	vector<string>::iterator bufferIter;
@@ -51,8 +50,7 @@ namespace QueryParser
 	bool initParser(string query)
 	{
 		buffer.clear();
-		if (query.size() == 0)
-		{
+		if (query.size() == 0){
 			#ifdef DEBUG
 				cout<< "ERROR - In initParser: empty query string"<<endl;
 			#endif
@@ -71,15 +69,14 @@ namespace QueryParser
 		string operators = "([\\w\\d\\*]+|[_+;,(\\)\"])";
 		std::regex operRegex(operators);
 
-		for (; rs != reg_end; ++rs) 
-		{
+		for (; rs != reg_end; ++rs){
+
 			std::smatch match;
 			string res(rs->str());
 			
-			while (std::regex_search(res, match, operRegex)) 
-			{
-				if (match.empty()) 
-				{
+			while (std::regex_search(res, match, operRegex)){
+
+				if (match.empty()){
 					break;
 				}
 
@@ -102,9 +99,8 @@ namespace QueryParser
 	 */
 	string parseToken()
 	{
+		if (buffer.size() && bufferIter != buffer.end()){
 
-		if (buffer.size() && bufferIter != buffer.end())
-		{
 			string currToken= (*(bufferIter ++));
 
 			//cout<<"*******print parse token *****"<<endl;
@@ -121,10 +117,10 @@ namespace QueryParser
 
 	void testingQueryParser()
 	{
-			string nxtToken = parseToken();
-			while (nxtToken.compare("")!= 0)
-				nxtToken = parseToken();
-			cout<<endl;
+		string nxtToken = parseToken();
+		while (nxtToken.compare("")!= 0)
+			nxtToken = parseToken();
+		cout<<endl;
 	}
 	/**************************************************************/
 	/**   Supporting Functions - To read the buffer of queries   **/
@@ -206,10 +202,12 @@ namespace QueryParser
 		return (std::regex_match(token,intRegex)) ? true : false;
 	}
 
+	/**
+	 *Matches if the given token follows the naming convention of a factor
+	 */
 	bool matchFactor(string token)
 	{
-		if(!(matchInteger(token) || matchName(token)))
-		{
+		if(!(matchInteger(token) || matchName(token))){
 			#ifdef DEBUG
 				cout<< "QueryParser error : at matchFactor."<<endl;
 			#endif
@@ -230,8 +228,7 @@ namespace QueryParser
 	{
 		std::regex synonymRegex("");
 
-		if (comma)
-		{
+		if (comma){
 			std::regex synonymRegex("[\"+][A-Za-z][A-Za-z0-9#]*[\"+]");
 			return (std::regex_match(token,synonymRegex)) ? true : false;
 		}else{
@@ -246,7 +243,8 @@ namespace QueryParser
 	/**
 	 *Matches if the given token follows the naming convention of entity reference
 	 */
-	bool matchUnderscore(string token){
+	bool matchUnderscore(string token)
+	{
 		return (token.compare("_") == 0);
 	}
 
@@ -287,10 +285,12 @@ namespace QueryParser
 		return false;
 	}
 
+	/**
+	 *Matches if the given token follows the naming convention of design entity reference
+	 */
 	bool matchDesignEntity(string token)
 	{
-		for(int i=0; i<(sizeof(designEntities)/sizeof(*designEntities)); i++)
-		{
+		for(int i=0; i<(sizeof(designEntities)/sizeof(*designEntities)); i++){
 			if(designEntities[i].compare(token) == 0)
 				return true;
 		}
@@ -339,8 +339,7 @@ namespace QueryParser
 		string nextToken = "";
 		string returnToken = "";
 
-		if(parseApostrophe())
-		{
+		if(parseApostrophe()){
 			nextToken = peekBackwards(0);
 			nextToken += parseToken();
 			returnToken = peekBackwards(0);
@@ -364,21 +363,20 @@ namespace QueryParser
 
 		bool res = parse("_");
 		
-		if (res)
-		{
+		if (res){
 			underscorePresent = true;
 		}else{
 
-			if(peekBackwards(0).compare("\"")!=0)
-			{
+			if(peekBackwards(0).compare("\"")!=0){
+
 				#ifdef DEBUG
 					cout<<"QueryParser in parsePatternClause: expression starting have to be _ or \", or error in expression"<<endl;
 				#endif
 
 				return false;
 			}
-			if(whilePatternExp)
-			{
+			if(whilePatternExp){
+
 				#ifdef DEBUG
 					cout<<"QueryParser in parsePatternClause: parseExpressionSpec while missing _"<<endl;
 				#endif
@@ -387,17 +385,14 @@ namespace QueryParser
 			}
 		}
 
-		if (peekInToTheNextToken().compare(")") == 0)
-		{
+		if (peekInToTheNextToken().compare(")") == 0){
 			//for while patterns
-			if(underscorePresent == true && whilePatternExp)
-			{
+			if(underscorePresent == true && whilePatternExp){
 				return true;
 			}
 
 			// for assign patterns with second parameter as _
-			if(underscorePresent)
-			{
+			if(underscorePresent){
 				return true;
 			}
 			//if the second parameter is " only
@@ -408,8 +403,8 @@ namespace QueryParser
 			return false;
 		}else{
 
-			if(whilePatternExp)
-			{
+			if(whilePatternExp){
+
 				#ifdef DEBUG
 					cout<<"QueryParser in parsePatternClause: parseExpressionSpec while pattern arg2 invalid"<<endl;
 				#endif
@@ -417,11 +412,10 @@ namespace QueryParser
 				return false;
 			}
 
-			if(underscorePresent)
-			{
+			if(underscorePresent){
+
 				res = parseApostrophe();
-				if(!res)
-				{
+				if(!res){
 					#ifdef DEBUG
 						cout<<"QueryParser in parsePatternClause: parseExpressionSpec \" is missing "<<endl;
 					#endif
@@ -431,13 +425,12 @@ namespace QueryParser
 
 
 			//reads in the expression
-			if(isFactor(peekInToTheNextToken()))
-			{
+			if(isFactor(peekInToTheNextToken())){
+				
 				do{
-
 					res = parseFactor();
-					if(!res)
-					{
+
+					if(!res){
 						#ifdef DEBUG
 							cout<<"QueryParser in parsePatternClause: parseExpressionSpec factor missing"<<endl;
 						#endif
@@ -445,8 +438,7 @@ namespace QueryParser
 					}
 
 					res = parse("+");
-					if(!res && peekBackwards(0).compare("\"")!=0)
-					{
+					if(!res && peekBackwards(0).compare("\"")!=0){
 						#ifdef DEBUG
 							cout<<"QueryParser in parsePatternClause: parseExpressionSpec invalid expression"<<endl;
 						#endif
@@ -455,9 +447,10 @@ namespace QueryParser
 
 				}while( res );
 			}else{
+
 				res = parseApostrophe();
-				if(!res)
-				{
+
+				if(!res){
 					#ifdef DEBUG
 						cout<<"QueryParser in parsePatternClause: parseExpressionSpec \" is missing "<<endl;
 					#endif
@@ -466,22 +459,19 @@ namespace QueryParser
 			}
 
 			//check the _ in pattern arg2
-			if(underscorePresent && peekInToTheNextToken().compare("_") != 0)
-			{
+			if(underscorePresent && peekInToTheNextToken().compare("_") != 0){
 				#ifdef DEBUG
 					cout<<"QueryParser in parsePatternClause: parseExpressionSpec _ missing"<<endl;
 				#endif
 
 				return false;
-			}else if(peekInToTheNextToken().compare("_") == 0 && !underscorePresent)
-			{
+			}else if(peekInToTheNextToken().compare("_") == 0 && !underscorePresent){
 				#ifdef DEBUG
 					cout<<"QueryParser in parsePatternClause: parseExpressionSpec _ missing earlier"<<endl;
 				#endif
 
 				return false;
-			}else if(peekInToTheNextToken().compare("_") == 0)
-			{
+			}else if(peekInToTheNextToken().compare("_") == 0){
 				parse("_");
 			}		
 
@@ -496,16 +486,14 @@ namespace QueryParser
 		QNODE_TYPE nodeType;
 
 		bool res = parse("such");
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser in parseSuchThatClause : 'such' keyword missing"<<endl;
 			#endif
 			return false;
 		}
 		res = parse("that");
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser in parseSuchThatClause : 'that' keyword missing"<<endl;
 			#endif
@@ -513,14 +501,11 @@ namespace QueryParser
 		}
 
 		nextToken = parseToken();
-		for(int i=0; i<(sizeof(relRef)/sizeof(*relRef)); i++)
-		{
+		for(int i=0; i<(sizeof(relRef)/sizeof(*relRef)); i++){
 
-			if(nextToken.compare(relRef[i]) == 0)
-			{
+			if(nextToken.compare(relRef[i]) == 0){
 				res = parse("(");
-				if (!res)
-				{
+				if (!res){
 					#ifdef DEBUG
 						cout<<"QueryParser in parseSuchThatClause : '(' missing"<<endl;
 					#endif
@@ -528,14 +513,12 @@ namespace QueryParser
 				} 
 
 				res = parseStmtRef();
-				if (!res)
-				{
+				if (!res){
 					return false;
 				} 
 
 				res = parse(",");
-				if (!res)
-				{
+				if (!res){
 					#ifdef DEBUG
 						cout<<"QueryParser in parseSuchThatClause : ',' missing"<<endl;
 					#endif
@@ -543,18 +526,15 @@ namespace QueryParser
 				} 
 
 				string entRef_value="";
-				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0))
-				{
+				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
 					entRef_value = parseEntRef();
-					if (entRef_value.compare("")==0)
-					{
+					if (entRef_value.compare("")==0){
 						return false;
 					} 
 
 				}else{
 					res = parseStmtRef();
-					if (!res)
-					{
+					if (!res){
 						#ifdef DEBUG
 							cout<<"QueryParser in parseSuchThatClause : arg2 error"<<endl;
 						#endif
@@ -564,8 +544,7 @@ namespace QueryParser
 				
 
 				res = parse(")");
-				if (!res)
-				{
+				if (!res){
 					#ifdef DEBUG
 						cout<<"QueryParser in parseSuchThatClause : ')' missing"<<endl;
 					#endif
@@ -575,8 +554,7 @@ namespace QueryParser
 
 
 				/*** Building Query Tree ***/
-				if (nodetypeMap.count(relRef[i]) > 0)
-				{
+				if (nodetypeMap.count(relRef[i]) > 0){
 					nodeType = nodetypeMap.at(relRef[i]);
 				}else{
 					#ifdef DEBUG
@@ -588,22 +566,18 @@ namespace QueryParser
 
 				/* Synonym s2 */
 				string name2;
-				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0))
-				{
+				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
+
 					name2 = entRef_value;
 
-					if (std::regex_match(peekBackwards(1),apostrophe))
-					{
+					if (std::regex_match(peekBackwards(1),apostrophe)){
 						DE_type = "String";
-					}
-					else if(name2.compare("_")==0)
-					{
+					}else if(name2.compare("_")==0){
 						DE_type =name2;
-					}
-					else if(synonymsMap.count(name2) > 0)
-					{
+					}else if(synonymsMap.count(name2) > 0){
 						DE_type = synonymsMap.at(name2);
 					}else{
+
 						#ifdef DEBUG
 							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
 						#endif
@@ -613,22 +587,19 @@ namespace QueryParser
 				}else{
 
 					name2 = peekBackwards(1);
-					if (synonymsMap.count(name2) > 0)
-					{
+					if (synonymsMap.count(name2) > 0){
 						DE_type = synonymsMap.at(name2); 
-					}
-					else if(name2.compare("_")==0)
-					{
+					}else if(name2.compare("_")==0){
 						DE_type = name2;
-					}
-					else if(matchInteger(name2))
-					{
+					}else if(matchInteger(name2)){
 						DE_type = "String";
 					}else{
+
 						#ifdef DEBUG
 							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
 						#endif
 						return false;
+
 					}
 				}
 				//create synonym s2
@@ -636,8 +607,7 @@ namespace QueryParser
 
 				/* Synonym s1 */
 				string name1="";
-				if(!std::regex_match(peekBackwards(1),apostrophe))
-				{
+				if(!std::regex_match(peekBackwards(1),apostrophe)){
 					name1 = peekBackwards(3);
 				}else{
 					name1 = peekBackwards(5);
@@ -645,16 +615,11 @@ namespace QueryParser
 
 
 
-				if (synonymsMap.count(name1) > 0) 
-				{
+				if (synonymsMap.count(name1) > 0){
 					DE_type = synonymsMap.at(name1); 
-				}
-				else if(name1.compare("_")==0)
-				{
+				}else if(name1.compare("_")==0){
 					DE_type = name1;
-				}
-				else if(matchInteger(name1))
-				{
+				}else if(matchInteger(name1)){
 					DE_type = "String";
 				}else{
 					#ifdef DEBUG
@@ -667,8 +632,7 @@ namespace QueryParser
 				Synonym s1(DE_type,name1);
 
 				res = myQueryV->validateSuchThatQueries(nodeType, s1, s2);
-				if(!res)
-				{
+				if(!res){
 					#ifdef DEBUG
 						cout<<"QueryParser in validateSuchThatQueries: returns error"<<endl;
 					#endif
@@ -694,8 +658,7 @@ namespace QueryParser
 		string DE_type;
 
 		bool res = parse("pattern");
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: missing 'pattern' keyword"<<endl;
 			#endif
@@ -704,8 +667,7 @@ namespace QueryParser
 		}
 
 		//parse syn-assign
-		if(synonymsMap.count(parseToken()) > 0)
-		{
+		if(synonymsMap.count(parseToken()) > 0){
 			DE_type = synonymsMap.at(peekBackwards(0));
 		}else{
 			#ifdef DEBUG
@@ -714,24 +676,21 @@ namespace QueryParser
 			return false;
 		}
 
-		if(DE_type.compare("assign")!= 0 && DE_type.compare("while") != 0)
-		{
+		if(DE_type.compare("assign")!= 0 && DE_type.compare("while") != 0){
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: synonym not 'assign' or 'while' type"<<endl;
 			#endif
 
 			return false;
 		}
-		if(DE_type.compare("while") == 0)
-		{
+		if(DE_type.compare("while") == 0){
 			whilePatternExp = true;
 		}
 		Synonym pattern_arg0(DE_type, peekBackwards(0)); 
 		
 
 		res = parse("(");
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: missing '(' "<<endl;
 			#endif
@@ -740,8 +699,7 @@ namespace QueryParser
 		} 
 
 		string pattern_variable = parseEntRef();
-		if (pattern_variable.compare("")==0)
-		{
+		if (pattern_variable.compare("")==0){
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: invalid entRef arg1"<<endl;
 			#endif
@@ -752,14 +710,11 @@ namespace QueryParser
 
 		//Build Query Tree
 		std::regex apostrophe("[\"]");
-		if (std::regex_match(peekBackwards(0),apostrophe))
-		{
+		if (std::regex_match(peekBackwards(0),apostrophe)){
 			DE_type = "String";
-		}else if(pattern_variable.compare("_")==0)
-		{
+		}else if(pattern_variable.compare("_")==0){
 			DE_type = pattern_variable;
-		}else if(synonymsMap.count(pattern_variable) > 0)
-		{
+		}else if(synonymsMap.count(pattern_variable) > 0){
 			DE_type = synonymsMap.at(pattern_variable);
 		}else{
 			#ifdef DEBUG
@@ -769,8 +724,7 @@ namespace QueryParser
 		}
 
 		res = parse(",");
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser in parsePatternClause: comma missing"<<endl;
 			#endif
@@ -779,8 +733,7 @@ namespace QueryParser
 		} 
 
 		res = parseExpressionSpec(whilePatternExp);
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: invalid expression arg2"<<endl;
 			#endif
@@ -793,18 +746,15 @@ namespace QueryParser
 		//Build Query Tree
 		int i = 1;
 		string pattern_patterns = "";
-		while(peekBackwards(i).compare(",")!=0)
-		{
+		while(peekBackwards(i).compare(",")!=0){
 			i++;
 		}
-		for (i-=1; i>=0; i--)
-		{
+		for (i-=1; i>=0; i--){
 			pattern_patterns+=peekBackwards(i);
 		}
 
 		res = parse(")");
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser parsePatternClause error: missing ')' "<<endl;
 			#endif
@@ -816,8 +766,7 @@ namespace QueryParser
 		Synonym pattern_pattern("String", pattern_patterns);
 
 		res = myQueryV->validatePatternQueries(pattern_arg0, pattern_var, pattern_pattern);
-		if(!res)
-		{
+		if(!res){
 			#ifdef DEBUG
 				cout<<"QueryParser in validatePatternQueries: returns error"<<endl;
 			#endif
@@ -836,12 +785,10 @@ namespace QueryParser
 
 		bool res;
 		
-		if(peekInToTheNextToken().compare("such")==0)
-		{
+		if(peekInToTheNextToken().compare("such")==0){
 			res = parseSuchThatClause();
 			if (!res){return false;}
-		}else if(peekInToTheNextToken().compare("pattern")==0)
-		{
+		}else if(peekInToTheNextToken().compare("pattern")==0){
 			res = parsePatternClause();
 		}else{
 			
@@ -858,8 +805,7 @@ namespace QueryParser
 	 */
 	void printSynonymsMap()
 	{
-		for (unordered_map<string, string>::iterator it = synonymsMap.begin(); it != synonymsMap.end(); ++it)
-		{
+		for (unordered_map<string, string>::iterator it = synonymsMap.begin(); it != synonymsMap.end(); ++it){
 			string type = it->first;
 			string name = it->second;
 
@@ -880,8 +826,8 @@ namespace QueryParser
 			if (!res){return false;}
 
 			nextToken = parseToken();
-			while(nextToken.compare(";")!= 0)
-			{
+			while(nextToken.compare(";")!= 0){
+
 				res = (nextToken.compare(",")==0);
 				if (!res){return false;}
 
@@ -896,11 +842,9 @@ namespace QueryParser
 			 *peekBackwards((2*i)+2) is to get the design entity 
 			 *peekBackwards((2*x)-1) is to get the synonyms
 			 *Add into the symbols table the DE and the synonymn of the node*/
-			for(int x=1; x<= i+1;x++)
-			{
+			for(int x=1; x<= i+1;x++){
 				pair<string,string> pairOfSynonyms (peekBackwards((2*x)-1),peekBackwards((2*i)+2));
-				if (synonymsMap.count(peekBackwards((2*x)-1)) >0)
-				{
+				if (synonymsMap.count(peekBackwards((2*x)-1)) >0){
 					#ifdef DEBUG
 						cout<<"synonymn declaration error, the synonymn has been declared previously."<<endl;
 					#endif
@@ -923,8 +867,7 @@ namespace QueryParser
 		string DE_type;
 
 		bool res = parse("Select");
-		if (!res)
-		{
+		if (!res){
 			#ifdef DEBUG
 				cout<<"QueryParser parseSelect error: missing 'Select' keyword"<<endl;
 			#endif
@@ -938,10 +881,8 @@ namespace QueryParser
 		/*** Building Query Tree ***/
 		QNODE_TYPE nodeType = RESULT;
 
-		if (!synonymsMap.empty())
-		{
-			if (synonymsMap.count(peekBackwards(0)) > 0)
-			{
+		if (!synonymsMap.empty()){
+			if (synonymsMap.count(peekBackwards(0)) > 0){
 				DE_type = synonymsMap.at(peekBackwards(0)); 
 			}else{
 				#ifdef DEBUG
@@ -973,8 +914,7 @@ namespace QueryParser
 		res = parseSelect();
 		if (!res){return false;}
 
-		while(buffer.size() && bufferIter != buffer.end())
-		{
+		while(buffer.size() && bufferIter != buffer.end()){
 			res = parseOptionalClauses();
 			if (!res){return false;}
 		}
@@ -995,8 +935,7 @@ namespace QueryParser
 
 
 		//if there's an error in parsing the queries, return an empty query tree
-		if(!res)
-		{
+		if(!res){
 			#ifdef DEBUG
 				cout<<"Error in parsing query. Empty query tree and synonymsMap is passed."<<endl;
 			#endif
