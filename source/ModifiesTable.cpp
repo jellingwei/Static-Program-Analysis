@@ -21,8 +21,7 @@ using namespace stdext;
 */
 bool ModifiesTable::setModifies(int stmtNum, int varIndex) 
 {
-	if (stmtNum <= 0 || varIndex <= 0) 
-	{
+	if (stmtNum <= 0 || varIndex <= 0) {
 		throw exception("ModifiesTable error: Negative statement number or varIndex");
 	}
 
@@ -30,13 +29,11 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 	vector<int> varIndexList;
 
 	//check if varIndexMap key stmtNum contains the variable
-	if (varIndexMap.count(stmtNum) > 0) 
-	{
+	if (varIndexMap.count(stmtNum) > 0) {
 		varIndexList = varIndexMap.at(stmtNum);
 
 		auto result = find(begin(varIndexList), end(varIndexList), varIndex);
-		if (result != end(varIndexList)) // varIndex can be found already
-		{
+		if (result != end(varIndexList)) { // varIndex can be found already
 			
 		} else {
 			varIndexList.push_back(varIndex);
@@ -53,13 +50,11 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 	vector<int> stmtList;
 
 	//check if stmtNumMap key varIndex contains the stmtNum
-	if (stmtNumMap.count(varIndex) > 0) 
-	{
+	if (stmtNumMap.count(varIndex) > 0) {
 		stmtList = stmtNumMap.at(varIndex);
 
 		auto result = find(begin(stmtList), end(stmtList), stmtNum);
-		if (result != end(stmtList)) 
-		{
+		if (result != end(stmtList)) 	{
 			
 		} else {
 			stmtList.push_back(stmtNum);
@@ -81,13 +76,11 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 */
 bool ModifiesTable::isModifies(int stmtNum, int varIndex) 
 {
-	if (stmtNum <= 0 || varIndex <= 0) 
-	{
+	if (stmtNum <= 0 || varIndex <= 0) {
 		return false;
 	}
 
-	if (varIndexMap.count(stmtNum) == 0) 
-	{
+	if (varIndexMap.count(stmtNum) == 0) {
 		return false;
 	}
 
@@ -104,13 +97,11 @@ bool ModifiesTable::isModifies(int stmtNum, int varIndex)
 */
 vector<int> ModifiesTable::getModStmtNum(int varIndex) 
 {
-	if (varIndex <= 0) 
-	{
+	if (varIndex <= 0) {
 		return vector<int>();
 	}
 
-	if (stmtNumMap.count(varIndex) == 0) 
-	{
+	if (stmtNumMap.count(varIndex) == 0) {
 		vector<int> result;
 		return result;
 	}
@@ -125,13 +116,11 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 */
 vector<int> ModifiesTable::getModVarForStmt(int stmtNum) 
 {
-	if (stmtNum <= 0) 
-	{
+	if (stmtNum <= 0) {
 		return vector<int>();
 	}
 
-	if (varIndexMap.count(stmtNum) == 0) 
-	{
+	if (varIndexMap.count(stmtNum) == 0) {
 		vector<int> result;
 		return result;
 	}
@@ -149,10 +138,8 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum)
 pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() 
 {
 	pair<vector<int>, vector<int>> result;
-	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) 
-	{
-		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) 
-		{
+	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
+		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
 			result.first.push_back(iter->first);
 			result.second.push_back(*varListIter);
 		}

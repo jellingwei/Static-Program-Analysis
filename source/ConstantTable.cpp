@@ -20,12 +20,10 @@ using namespace stdext;
  */
 bool ConstantTable::insertConstant(int constant, int stmtNum) 
 {
-	if (stmtNum <= 0) 
-	{
+	if (stmtNum <= 0) {
 		throw invalid_argument("constantTable error: Negative statement number");
 	}
-	if (constant < 0) 
-	{
+	if (constant < 0) {
 		throw invalid_argument("constantTable error: Negative constant");
 	}
 
@@ -40,8 +38,7 @@ bool ConstantTable::insertConstant(int constant, int stmtNum)
 
 
 	vector<int> stmtVector;
-	if (stmtMap.count(constant) > 0) 
-	{
+	if (stmtMap.count(constant) > 0) {
 		// constant table already has a mapping for the constant
 		stmtVector = stmtMap.at(constant);
 		stmtMap.erase(constant);
@@ -76,8 +73,7 @@ int ConstantTable::getConstant(int index)
 */
 int ConstantTable::getConstantIndex(int constant) 
 {
-	if (constant < 0) 
-	{
+	if (constant < 0) {
 		throw exception("constantTable error: Negative constant input");
 	}
 
@@ -89,8 +85,7 @@ int ConstantTable::getConstantIndex(int constant)
 */
 vector<int> ConstantTable::getStmtNum(int constant) 
 {
-	if (constant < 0) 
-	{
+	if (constant < 0) {
 		throw exception("constantTable error: Negative constant input");
 	}
 
@@ -102,13 +97,11 @@ vector<int> ConstantTable::getStmtNum(int constant)
 */
 bool ConstantTable::isConstant(int number) 
 {
-	if (number < 0) 
-	{
+	if (number < 0) {
 		throw exception("constantTable error: Negative number input");
 	}
 
-	if (indexMap.count(number) > 0) 
-	{
+	if (indexMap.count(number) > 0) {
 		return true;
 	}
 		
@@ -122,8 +115,7 @@ vector<int> ConstantTable::getAllConstant()
 {
 	vector<int> allValues;
 
-	for (auto iter = stmtMap.begin(); iter != stmtMap.end(); ++iter) 
-	{
+	for (auto iter = stmtMap.begin(); iter != stmtMap.end(); ++iter) {
 		allValues.push_back(iter->first);
 	}
 

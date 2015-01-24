@@ -20,13 +20,11 @@ using namespace stdext;
 int ProcTable::insertProc(string procName) 
 {
 
-	if (procName.empty()) 
-	{
+	if (procName.empty()) {
 		throw exception("procTable error: Empty procedure name");
 	}
 
-	if (indexMap.count(procName) > 0) 
-	{
+	if (indexMap.count(procName) > 0) {
 		return indexMap.at(procName);
 	} 
 
@@ -54,8 +52,7 @@ int ProcTable::getProcTableSize()
  */
 string ProcTable::getProcName(int index) 
 {
-	if (index < 0) 
-	{
+	if (index < 0) {
 		return "";
 	}
 	return (procMap.size() > index) ? procMap.at(index) : "";
@@ -69,8 +66,7 @@ string ProcTable::getProcName(int index)
  */
 int ProcTable::getProcIndex(string procName) 
 {
-	if (procName.empty()) 
-	{
+	if (procName.empty()) {
 		throw exception("procTable error: Empty variable name");
 	}
 
