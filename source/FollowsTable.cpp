@@ -21,8 +21,7 @@ using namespace stdext;
 */
 bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) 
 {
-	if (stmt1 == NULL || stmt2 == NULL) 
-	{
+	if (stmt1 == NULL || stmt2 == NULL) {
 		throw exception("FollowsTable invalid parameters provided");
 	}
 
@@ -40,27 +39,22 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 {
 	vector<int> result;
 
-	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) 
-	{
+	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) {
 		return vector<int>();
 	}
 	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
 
-	if (!node2) 
-	{
+	if (!node2) {
 		return vector<int>();
 	}
 
-	while (node2->getLeftSibling() != NULL) 
-	{
+	while (node2->getLeftSibling() != NULL) {
 		int possibleStmt1 = node2->getLeftSibling()->getStmtNumber();
 		result.push_back(possibleStmt1);
 
-		if (transitiveClosure) 
-		{
+		if (transitiveClosure) 	{
 			node2 = node2->getLeftSibling();
-		} else 
-		{
+		} else {
 			break;
 		}
 	}
@@ -75,27 +69,22 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosure) 
 {
 	vector<int> result;
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
-	{
+	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
 		return vector<int>();
 	}
 	TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
 
-	if (!node1) 
-	{
+	if (!node1) {
 		return vector<int>();
 	}
 	
-	while (node1->hasRightSibling()) 
-	{
+	while (node1->hasRightSibling()) {
 		int possibleStmt2 = node1->getRightSibling()->getStmtNumber();
 		result.push_back(possibleStmt2);
 
-		if (transitiveClosure) 
-		{
+		if (transitiveClosure) {
 			node1 = node1->getRightSibling();
-		} else 
-		{
+		} else {
 			break;
 		}
 	}
@@ -110,17 +99,14 @@ vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosu
 */
 bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
-	{
+	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
 		return false;
 	}
 
 	TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
 
-	if (!transitiveClosure) 
-	{
-		if (!node1 || !node1->hasRightSibling()) 
-		{
+	if (!transitiveClosure) {
+		if (!node1 || !node1->hasRightSibling()) {
 			return false;
 		}
 
@@ -128,23 +114,19 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 
 		return possibleStmt2 == stmtNum2;
 
-	} else 
-	{
+	} else {
 		 
 		TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
 		// First, check that they are in the first stmt list
-		if (node1->getParent()->getStmtNumber() != node2->getParent()->getStmtNumber()) 
-		{
+		if (node1->getParent()->getStmtNumber() != node2->getParent()->getStmtNumber()) {
 			// If the stmts are not in the same stmtlist, just return false
 			return false;
 		}
 
-		while (node1->hasRightSibling()) 
-		{
+		while (node1->hasRightSibling()) {
 			node1 = node1->getRightSibling();
 
-			if (node1->getStmtNumber() == node2->getStmtNumber()) 
-			{
+			if (node1->getStmtNumber() == node2->getStmtNumber()) {
 				return true;
 			}
 		}
@@ -161,39 +143,31 @@ bool generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector
 {
 	vector<TNode*> nextLayer;
 
-	if (transitiveClosure) 
-	{
-		for (size_t i = 0 ; i < inputNodes->size(); i ++) 
-		{
-			for (size_t j = i + 1; j < inputNodes->size(); j ++) 
-			{
+	if (transitiveClosure) {
+		for (size_t i = 0 ; i < inputNodes->size(); i ++) {
+			for (size_t j = i + 1; j < inputNodes->size(); j ++) {
 				result1->push_back(inputNodes->at(i)->getStmtNumber());
 				result2->push_back(inputNodes->at(j)->getStmtNumber());
 			}
 
-			if (inputNodes->at(i)->getNodeType() == While) 
-			{
+			if (inputNodes->at(i)->getNodeType() == While) {
 					generateAllPairs(inputNodes->at(i)->getChildren()->at(1)->getChildren(), transitiveClosure, result1, result2);
 			}
 		}
 	} else {
-		if (inputNodes->size() == 0) 
-		{
+		if (inputNodes->size() == 0) {
 			return true;
 		}
 
-		for (size_t i = 0; i < inputNodes->size(); i ++) 
-		{
-			if (i != inputNodes->size() - 1) 
-			{
+		for (size_t i = 0; i < inputNodes->size(); i ++) {
+			if (i != inputNodes->size() - 1) {
 				result1->push_back(inputNodes->at(i)->getStmtNumber());
 
 				int j = i + 1;
 				result2->push_back(inputNodes->at(j)->getStmtNumber());
 			}
 
-			if (inputNodes->at(i)->getNodeType() == While) 
-			{
+			if (inputNodes->at(i)->getNodeType() == While) {
 				generateAllPairs(inputNodes->at(i)->getChildren()->at(1)->getChildren(), transitiveClosure, result1, result2);
 			}
 		}

@@ -21,21 +21,17 @@ using namespace stdext;
 
 int VarTable::insertVar(string varName, int stmtNum) 
 {
-	if (stmtNum <= 0) 
-	{
+	if (stmtNum <= 0) {
 		throw exception("varTable error: Negative statement number");
 	}
 
-	if (varName.empty()) 
-	{
+	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
 	}
 
-	if (indexMap.count(varName) > 0) 
-	{
+	if (indexMap.count(varName) > 0) {
 		return indexMap.at(varName);
-	} else 
-	{
+	} else {
 		int index = indexMap.size() + 1;
 
 		pair<int,string> pairIndexVar (index, varName);
@@ -76,8 +72,7 @@ string VarTable::getVarName(int index)
  */
 int VarTable::getVarIndex(string varName) 
 {
-	if (varName.empty()) 
-	{
+	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
 	}
 
@@ -91,8 +86,7 @@ int VarTable::getVarIndex(string varName)
  */
 int VarTable::getStmtNum(string varName) 
 {
-	if (varName.empty()) 
-	{
+	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
 	}
 
@@ -107,8 +101,7 @@ vector<int> VarTable::getAllVarIndex()
 {
 	vector<int> allKeys;
 
-	for (auto iter = varMap.begin(); iter != varMap.end(); ++iter) 
-	{
+	for (auto iter = varMap.begin(); iter != varMap.end(); ++iter) {
 		allKeys.push_back(iter->first);
 	}
 
