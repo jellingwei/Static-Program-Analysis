@@ -18,7 +18,7 @@ unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ExpressionParserTe
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryPreprocessorTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryTreeTest").makeTest());
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryEvaluatorTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("IntermediateValuesHandlerTest").makeTest());
 CppUnit::TestFactoryRegistry::getRegistry().addTestToSuite(unitSuite);
 CppUnit::TextUi::TestRunner runner;
 

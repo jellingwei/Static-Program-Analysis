@@ -19,6 +19,8 @@ public:
 	Synonym(string type, string name, vector<string> values);
 	Synonym(string type, string name, vector<int> values);
 	Synonym(string type, string name, set<int> values);
+	void setValues(vector<int> values);
+	void setValues(set<int> values);
 	string getType();
 	string getName();
 	vector<int> getValues();

@@ -14,16 +14,21 @@ using std::swap;
 
 namespace IntermediateValuesHandler 
 {
-	//Public functions
+	//Public functions to be used
 	void initialize(unordered_map<string, string> synonymMap);
 	void addAndProcessIntermediateSynonym(Synonym synonym);
 	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
+	Synonym getSynonymWithName(string wantedName);
+
+	//Functions made public for testing purposes
+	void clear();
 	void joinWithExistingValues(Synonym synonym);
 	void joinWithExistingValues(Synonym LHS, Synonym RHS);
 	void intersectWithExistingValues(int synonymIndex, vector<int> probeValues);
 	void intersectWithExistingValues(int indexLHS, vector<int> LHSValues, int indexRHS, vector<int> RHSValues);
 	void intersectAndJoinWithExistingValues(int existingIndex, Synonym probe, Synonym newValues);
-	set<int> getIntermediateValues(int synonymIndex);
-	Synonym getSynonymWithName(string wantedName);
+	int findIntermediateSynonymIndex(string synonymName);
+	set<int> getIntermediateValuesSet(int synonymIndex);
+	vector<int> getIntermediateValues(int synonymIndex);
 	inline bool isValueExist(set<int> setToSearch, int value);
 }

@@ -12,7 +12,7 @@ using std::swap;
 namespace IntermediateValuesHandler 
 {
 
-	//Private functions
+	//Private attributes
 	vector<vector<int>> allIntermediateValues;
 	vector<string> allIntermediateNames;
 	unordered_map<string, string> synonymMap;
@@ -25,7 +25,14 @@ namespace IntermediateValuesHandler
 		synonymMap = synonymsMap;
 	}
 
-	int findIntermediateSynonymIndex(string synonymName) 
+	void clear()
+	{
+		allIntermediateValues.clear();
+		allIntermediateNames.clear();
+		synonymMap.clear();
+	}
+
+	int findIntermediateSynonymIndex(string synonymName)
 	{
 		for (unsigned int i = 0; i < allIntermediateNames.size(); i++) 
 		{
@@ -188,6 +195,7 @@ namespace IntermediateValuesHandler
 		allIntermediateNames.push_back(LHS.getName());
 		allIntermediateNames.push_back(RHS.getName());
 
+		//Insert the values if there is nothing in the intermediate values table
 		if (allIntermediateValues.size() == 0) 
 		{
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) 
@@ -198,8 +206,9 @@ namespace IntermediateValuesHandler
 				acceptedValues.push_back(newRow);
 			}
 		} 
-		else 
+		else
 		{
+			//If there are values in the table, do a cartesian product
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) 
 			{
 				for (unsigned int j = 0; j < allIntermediateValues.size(); j++) 
@@ -320,13 +329,23 @@ namespace IntermediateValuesHandler
 		} 
 		else 
 		{
-			set<int> intermediateValues = getIntermediateValues(synonymIndex);
+			set<int> intermediateValues = getIntermediateValuesSet(synonymIndex);
 			Synonym synonym(type, name, intermediateValues);
 			return synonym;
 		}
 	}
 
-	set<int> getIntermediateValues(int synonymIndex) 
+	vector<int> getIntermediateValues(int synonymIndex) 
+	{
+		vector<int> intermediateValues;
+		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) 
+		{
+			intermediateValues.push_back(allIntermediateValues[i][synonymIndex]);
+		}
+		return intermediateValues;
+	}
+
+	set<int> getIntermediateValuesSet(int synonymIndex) 
 	{
 		set<int> intermediateValues;
 		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) 

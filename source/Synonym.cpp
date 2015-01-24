@@ -74,6 +74,21 @@ Synonym::Synonym(string type, string name, set<int> values)
 	}
 }
 
+void Synonym::setValues(vector<int> values)
+{
+	_values = values;
+}
+
+void Synonym::setValues(set<int> values)
+{
+	_values.clear();
+
+	for (set<int>::iterator itr = values.begin(); itr != values.end(); ++itr)
+	{
+		_values.push_back(*itr);
+	}
+}
+
 /**
  * Return the type of the synonym.
  */
