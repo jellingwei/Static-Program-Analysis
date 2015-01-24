@@ -45,7 +45,7 @@ namespace QueryParser
 	
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
-	 * @returns TRUE if the query parser have been initialized. Otherwise, return FALSE.
+	 * @return TRUE if the query parser have been initialized. Otherwise, return FALSE.
 	 * If a query string given is empty, or the buffer’s size is 0 after tokenizing return FALSE. 
 	 */
 	bool initParser(string query)
@@ -96,7 +96,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * @returns the next token
+	 * @return the next token
 	 */
 	string parseToken()
 	{
@@ -132,7 +132,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * @returns a token these number of steps backwards from the currToken.
+	 * @return a token these number of steps backwards from the currToken.
 	 * If steps = 0 , it returns the currToken
 	 * If steps = 1, it returns the previous token
 	 */
@@ -515,7 +515,7 @@ namespace QueryParser
 
 	/**
 	 * Creates QNode for such that clause and validates the query.
-	 * @returns FALSE if there is an error parsing query.
+	 * @return FALSE if there is an error parsing query.
 	 */
 	bool parseSuchThatClause()
 	{
@@ -693,7 +693,7 @@ namespace QueryParser
 
 	/**
 	 * Creates QNode Pattern and validates the pattern clause.
-	 * @returns FALSE if there's errors in the pattern portion of query.
+	 * @return FALSE if there's errors in the pattern portion of query.
 	 */
 	bool parsePatternClause()
 	{
@@ -914,7 +914,7 @@ namespace QueryParser
 
 	/**
 	 * Creates QNode Selection and validates the select synonym.
-	 * @returns FALSE if there's errors in the select synonym.
+	 * @return FALSE if there's errors in the select synonym.
 	 */
 	bool parseSelect()
 	{
@@ -961,7 +961,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * @returns FALSE if there's errors in query declarations and select synonym.
+	 * @return FALSE if there's errors in query declarations and select synonym.
 	 */
 	bool parseQuerySelectClause()
 	{
@@ -1010,7 +1010,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * @returns a query tree built by query parser. 
+	 * @return a query tree built by query parser. 
 	 * If input query contain syntax errors, an empty query tree is returned. 
 	 */
 	QueryTree* getQueryTree()
