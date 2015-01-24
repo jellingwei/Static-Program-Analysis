@@ -33,6 +33,7 @@ TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value)
 	_stmtNumber = stmtNo;
 	_nodeValueIdx = value;
 	_leftSibling = _rightSibling = NULL;
+	_parent = NULL;
 }
 
 /**

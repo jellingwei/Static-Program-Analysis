@@ -16,14 +16,11 @@ using namespace std;
 using namespace stdext;
 
 
-/**
-* Return TRUE if the ParentTable is updated accordingly. Otherwise, return FALSE. 
-* If stmt1 and stmt2 are already present in the ParentTable and are previously set, the ParentTable will not be updated.
-* @exception if stmt1 or stmt2 is NULL.
-*/
+
 bool ParentTable::setParent(TNode* stmt1, TNode* stmt2) 
 {
-	if (stmt1 == NULL || stmt2 == NULL) {
+	if (stmt1 == NULL || stmt2 == NULL) 
+	{
 		throw exception("ParentTable invalid parameters provided");
 	}
 
@@ -33,42 +30,46 @@ bool ParentTable::setParent(TNode* stmt1, TNode* stmt2)
 	return true;
 }
 
-/**
- * Return a list of possible statement numbers, stmt1, such that stmtNum2 is a child of stmt1. 
- * If there is no answer, or if stmtNum2 is negative or 0, return an empty list. 
- */
+
 vector<int> ParentTable::getParent(int stmtNum2, bool transitiveClosure) 
 {
 	vector<int> result;
 
-	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) {
+	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) 
+	{
 		// no such statement
 		return vector<int>();
 	}
 	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
 
-	if (!node2) { 
+	if (!node2) 
+	{ 
 		// defensive coding, in case nodeTable is implemented poorly
 		return vector<int>();
 	}
 
-	if (node2->getParent()->getParent() == NULL) {  //@Todo prevents retrieving root of ast tree, but should rewrite when AST can support multiple procedure
+	if (node2->getParent()->getParent() == NULL) 
+	{  //@Todo prevents retrieving root of ast tree, but should rewrite when AST can support multiple procedure
 		return vector<int>();
 	}
 
-	if (!transitiveClosure) {
+	if (!transitiveClosure) 
+	{
 		int possibleStmt1 = node2->getParent()->getStmtNumber();
 
-		if (possibleStmt1 > 0) {
+		if (possibleStmt1 > 0) 
+		{
 			result.push_back(possibleStmt1);
 		}
 	} 
-	else {
-		//stmt# 0 used as dummy value, might need to reconsider this
-		while (node2->getStmtNumber() != 0 && node2->getParent()->getParent() != NULL) { 
+	else 
+	{
+		while (node2->getStmtNumber() != 0 && node2->getParent()->getParent() != NULL) //stmt# 0 used as dummy value, might need to reconsider this
+		{ 
 			int possibleStmt1 = node2->getParent()->getStmtNumber();
 
-			if (possibleStmt1 > 0) {
+			if (possibleStmt1 > 0) 
+			{
 				result.push_back(possibleStmt1);
 			}
 			
@@ -90,36 +91,44 @@ vector<int> getChildDfs(TNode* node1, TNode* node2)
 	// initialise stack
 	stack<TNode*> nodeStack;
 	nodeStack.push(node1);
-	if (node2 != NULL) {
+	if (node2 != NULL) 
+	{
 		nodeStack.push(node2);
 	}
 
-	while (!nodeStack.empty()) {
+	while (!nodeStack.empty()) 
+	{
 		node1 = nodeStack.top(); nodeStack.pop();
 
-		if (!node1->hasChild()) {
+		if (!node1->hasChild()) 
+		{
 			continue;
 		}
 
 		// iterate through children of the node, and add stmtList nodes to stack if is If or is While
 		vector<TNode*>* children = node1->getChildren();
-		for (size_t i = 0 ; i < children->size(); i++ ) {
+		for (size_t i = 0 ; i < children->size(); i++ ) 
+		{
 			TNode* child = children->at(i);
 			int possibleStmt2 = child->getStmtNumber();
 
-			if (child->getNodeType() == If) {
+			if (child->getNodeType() == If) 
+			{
 				TNode* ifStmtLst1 = child->getChildren()->at(1);
 				assert(ifStmtLst1->getNodeType() == StmtLst);
 				nodeStack.push(ifStmtLst1);
 
-				if (child->getChildren()->size() > 2) {
+				if (child->getChildren()->size() > 2) 
+				{
 					TNode* ifStmtLst2 = child->getChildren()->at(2);
 					assert(ifStmtLst2->getNodeType() == StmtLst);
 					nodeStack.push(ifStmtLst2);
 				}
 
 			} 
-			else if (child->getNodeType() == While) {
+			else 
+			if (child->getNodeType() == While) 
+			{
 				TNode* whileStmtLst = child->getChildren()->at(1);
 				assert(whileStmtLst->getNodeType() == StmtLst);
 				nodeStack.push(whileStmtLst);
@@ -132,15 +141,13 @@ vector<int> getChildDfs(TNode* node1, TNode* node2)
 	return result;
 }
 
-/**
- * Return a list of possible statement numbers, stmt2, such that stmt2 is parent of stmtNum1. 
- * If there is no answer, or if stmtNum1 is negative or 0, return an empty list.
- */
+
 vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure) 
 {
 	vector<int> result;
 
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
+	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
+	{
 		return vector<int>();
 	}
 
@@ -150,86 +157,101 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 	TNode* node1 = NULL;
 	TNode* node2 = NULL;
 
-	if (stmtType == If) {
+	if (stmtType == If) 
+	{
 		node1 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(1); 
 		assert(node1->getNodeType() == StmtLst);
 
-		if (pkb.nodeTable.at(stmtNum1)->getChildren()->size() > 2) {
+		if (pkb.nodeTable.at(stmtNum1)->getChildren()->size() > 2) 
+		{
 			node2 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(2); 
 			assert(node2->getNodeType() == StmtLst);
 		}
 		
-	} else if (stmtType == While) {
+	} else if (stmtType == While) 
+	{
 		node1 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(1); //@Todo refactor
 
 		assert(node1->getNodeType() == StmtLst);
-	} else {
+	} else 
+	{
 		return vector<int>();
 		//throw logic_error("ParentTable: invalid stmt type for finding children");
 	}
 
 
-	if (!transitiveClosure) {
-		if (node1->hasChild()) {
+	if (!transitiveClosure) 
+	{
+		if (node1->hasChild()) 
+		{
 			vector<TNode*>* children = node1->getChildren();
-			for (size_t i = 0 ; i < children->size(); i++ ) {
+			for (size_t i = 0 ; i < children->size(); i++ ) 
+			{
 				int possibleStmt2 = children->at(i)->getStmtNumber();
 				result.push_back(possibleStmt2);
 			}
 		}
 
-		if (node2 != NULL && node2->hasChild()) {
+		if (node2 != NULL && node2->hasChild()) 
+		{
 			vector<TNode*>* children = node2->getChildren();
-			for (size_t i = 0 ; i < children->size(); i++ ) {
+			for (size_t i = 0 ; i < children->size(); i++ ) 
+			{
 				int possibleStmt2 = children->at(i)->getStmtNumber();
 				result.push_back(possibleStmt2);
 			}
 		}
 		return result;
 
-	} else {
+	} else 
+	{
 		return getChildDfs(node1, node2);
 	}
 	
 	
 }
 
-/**
- * Return TRUE if the Parent relationship holds between the statement numbers stmtNum1 and stmtNum2. 
- * Otherwise, return FALSE.
- * If stmtNum1 or stmtNum2 is negative or 0, return FALSE.
-*/
+
 bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
-	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) {
+	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) 
+	{
 		return false;
 	}
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
+	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
+	{
 		return false;
 	}
 
 	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
 
-	if (!transitiveClosure) {
-		if (node2 && node2->getParent()) {
+	if (!transitiveClosure) 
+	{
+		if (node2 && node2->getParent()) 
+		{
 			int possibleStmt1 = node2->getParent()->getStmtNumber();
 
-			if (possibleStmt1 == stmtNum1 && stmtNum1 != 0) {
+			if (possibleStmt1 == stmtNum1 && stmtNum1 != 0) 
+			{
 				return true;
 			}
 		}
 		return false;
 	}
-	else {
+	else 
+	{
 		TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
-		if (!node1 || !node2) {
+		if (!node1 || !node2) 
+		{
 			return false;
 		}
 
 		// @Todo change after ast changes, right now root of ast is a node that has gone out of scope
 		//		 hence the need to check for stmt 0
-		while (node2 != NULL && node2->getStmtNumber() != 0) { 
-			if (node2->getStmtNumber() == node1->getStmtNumber()) {
+		while (node2 != NULL && node2->getStmtNumber() != 0) 
+		{ 
+			if (node2->getStmtNumber() == node1->getStmtNumber()) 
+			{
 				return true;
 			}
 
@@ -243,35 +265,36 @@ bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure)
 
 void generateTransitiveParentPairs(vector<int> parentList, TNode* curNode, vector<int>* result1, vector<int>* result2) 
 {
-	
 	vector<TNode*>* curNodeChildren = curNode->getChildren();
-	for (size_t i = 0; i < curNodeChildren->size(); ++i) {
 
-		for (vector<int>::iterator iter = parentList.begin(); iter != parentList.end(); ++iter) {
+	for (size_t i = 0; i < curNodeChildren->size(); ++i)
+	{
+		TNode* childNode = curNodeChildren->at(i);
+		
+		// for every node x in the parentList, add (x, childNode) to results
+		for (vector<int>::iterator iter = parentList.begin(); iter != parentList.end(); ++iter) 
+		{
 			result1->push_back(*iter);
-			result2->push_back(curNodeChildren->at(i)->getStmtNumber());
+			result2->push_back(childNode->getStmtNumber());
 		}
 
-		if (curNodeChildren->at(i)->getNodeType() == While && curNodeChildren->at(i)->getChildren()->at(1)->hasChild()) {
-			parentList.push_back(curNodeChildren->at(i)->getStmtNumber());
-
-			generateTransitiveParentPairs(parentList, curNodeChildren->at(i)->getChildren()->at(1), result1, result2);
-
+		// @Todo don't use recursion next time
+		if (childNode->getNodeType() == While && childNode->getChildren()->at(1)->hasChild()) 
+		{
+			parentList.push_back(childNode->getStmtNumber());
+			generateTransitiveParentPairs(parentList, childNode->getChildren()->at(1), result1, result2);
 			parentList.erase(parentList.end() - 1);
 		} 
-		else if (curNodeChildren->at(i)->getNodeType() == If) {
-			if (curNodeChildren->at(i)->getChildren()->at(1)->hasChild()) {
-				parentList.push_back(curNodeChildren->at(i)->getStmtNumber());
-
-				generateTransitiveParentPairs(parentList, curNodeChildren->at(i)->getChildren()->at(1), result1, result2);
-
-				parentList.erase(parentList.end() - 1);
-			} 
-			if (curNodeChildren->at(i)->getChildren()->size() > 2 && curNodeChildren->at(i)->getChildren()->at(2)->hasChild()) {
-				parentList.push_back(curNodeChildren->at(i)->getStmtNumber());
-
-				generateTransitiveParentPairs(parentList, curNodeChildren->at(i)->getChildren()->at(2), result1, result2);
-
+		else if (childNode->getNodeType() == If) 
+		{
+			parentList.push_back(childNode->getStmtNumber());
+			generateTransitiveParentPairs(parentList, childNode->getChildren()->at(1), result1, result2);
+			parentList.erase(parentList.end() - 1);
+			
+			if (childNode->getChildren()->size() > 2 && childNode->getChildren()->at(2)->hasChild()) 
+			{
+				parentList.push_back(childNode->getStmtNumber());
+				generateTransitiveParentPairs(parentList, childNode->getChildren()->at(2), result1, result2);
 				parentList.erase(parentList.end() - 1);
 			}
 		}
@@ -280,39 +303,71 @@ void generateTransitiveParentPairs(vector<int> parentList, TNode* curNode, vecto
 		
 }
 
+
 /**
- * Return all pairs of statements, <s1, s2>, where Parent(s1, s2) is satisfied
+ * Returns all pairs of statements, <s1, s2>, where Parent(s1, s2) is satisfied
  */
 pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClosure) 
 {
-	pair<vector<int>, vector<int>> result;
+	pair<vector<int>, vector<int> > result;
 
-	if (!transitiveClosure) {
-		for (auto iter = PKB::getInstance().nodeTable.begin(); iter != PKB::getInstance().nodeTable.end(); ++iter) {
+	if (!transitiveClosure) 
+	{
+		//@Todo make smarter
+		for (auto iter = PKB::getInstance().nodeTable.begin(); iter != PKB::getInstance().nodeTable.end(); ++iter) 
+		{
 			TNode* node = iter->second;
-			if (!node->hasChild() || node->getStmtNumber() <= 0) {
+			if (!node->hasChild() || node->getStmtNumber() <= 0) 
+			{
 				continue;
 			}
-			if (node->getNodeType() != While) {
+			if (node->getNodeType() != While && node->getNodeType() != If) 
+			{
 				continue;
 			}
 
+			// get children of the current node
 			vector<TNode*>* childrenList = node->getChildren()->at(1)->getChildren();
-			
-			for (size_t i = 0; i < childrenList->size(); ++i) {
-				if (childrenList->at(i)->getNodeType() != Assign && childrenList->at(i)->getNodeType() != While) {
+			vector<TNode*>* elseChildrenList = NULL;
+			if (node->getNodeType() == If && node->getChildren()->size() > 2)
+			{
+				elseChildrenList = node->getChildren()->at(2)->getChildren();
+			}
+
+			// add pairs of (node, childNode) into results
+			for (size_t i = 0; i < childrenList->size(); ++i) 
+			{
+				TNode* childNode = childrenList->at(i);
+				if (childNode->getNodeType() != Assign && childNode->getNodeType() != While && childNode->getNodeType() != If) 
+				{
 					continue;
 				}
 
 				result.first.push_back(node->getStmtNumber());
-				result.second.push_back(childrenList->at(i)->getStmtNumber());
+				result.second.push_back(childNode->getStmtNumber());
+			}
+			for (size_t i = 0; elseChildrenList != NULL && i < elseChildrenList->size(); ++i) 
+			{
+				TNode* childNode = elseChildrenList->at(i);
+				if (childNode->getNodeType() != Assign && childNode->getNodeType() != While && childNode->getNodeType() != If) 
+				{
+					continue;
+				}
+
+				result.first.push_back(node->getStmtNumber());
+				result.second.push_back(childNode->getStmtNumber());
 			}
 		}
-	} else {
-		vector<TNode*>* rootChildren = PKB::getInstance().ast->getRoot()->getChildren();
+	} else 
+	{
+		vector<TNode*>* procNodes = PKB::getInstance().ast->getRoot()->getChildren();
 
-		vector<int> emptyList;
-		generateTransitiveParentPairs(emptyList, PKB::getInstance().ast->getRoot(), &(result.first), &(result.second));
+		for (auto iter = procNodes->begin(); iter != procNodes->end(); ++iter) 
+		{
+			TNode* stmtListNode = (*iter)->getChildren()->at(0);
+			vector<int> emptyList;
+			generateTransitiveParentPairs(emptyList, stmtListNode, &(result.first), &(result.second));//@Todo don't use recursion
+		}
 	
 	}
 
