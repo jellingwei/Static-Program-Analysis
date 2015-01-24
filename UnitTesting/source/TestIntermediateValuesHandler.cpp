@@ -9,8 +9,6 @@
 
 using std::string;
 
-#define DEBUG(x) do { std::cerr << x << endl; } while (0)
-
 // Registers the fixture into the 'registry'
 CPPUNIT_TEST_SUITE_REGISTRATION( IntermediateValuesHandlerTest );
 

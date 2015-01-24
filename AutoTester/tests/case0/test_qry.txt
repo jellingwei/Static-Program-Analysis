@@ -993,3 +993,8 @@ stmt s;
 Select s such that Uses(1,_)
 none
 5000
+200 - //
+assign a; stmt s;
+Select s such that Parent(a, 6)
+none
+5000

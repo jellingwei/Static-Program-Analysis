@@ -46,12 +46,6 @@ namespace QueryEvaluator
 	bool processAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2);
 	bool processWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2);
 
-	bool validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2);  //Validates the inputs for modifies and uses
-	bool validateParentArgs(Synonym arg1, Synonym arg2);  //Validates the inputs for parent
-	bool validateFollowsArgs(Synonym arg1, Synonym arg2);  //Validates the inputs for follows
-	bool validateAssignPatternArgs(Synonym arg0, Synonym arg1, Synonym arg2);  //Validates the input for assign pattern
-	bool validateWhilePatternArgs(Synonym arg0, Synonym arg1, Synonym arg2);  //Validates the input for while patterns
-
 	Synonym findSynonymWithName(string wantedSynonymName);
 	pair<vector<int>, vector<int>> filterPairWithSynonymType(pair<vector<int>, vector<int>> allPairs, string arg1Type, string arg2Type);
 
@@ -170,9 +164,7 @@ namespace QueryEvaluator
 	*/
 	bool processModifies(Synonym arg1, Synonym arg2) 
 	{
-		bool isValid = true;  //validateModifiesOrUsesArgs(arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop)
+		if (AbstractWrapper::GlobalStop)
 		{
 			return false;
 		}
@@ -230,9 +222,7 @@ namespace QueryEvaluator
 	*/
 	bool processUses(Synonym arg1, Synonym arg2) 
 	{
-		bool isValid = true;  //validateModifiesOrUsesArgs(arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop) 
+		if (AbstractWrapper::GlobalStop) 
 		{
 			return false;
 		}
@@ -291,9 +281,7 @@ namespace QueryEvaluator
 	*/
 	bool processParent(Synonym arg1, Synonym arg2) 
 	{
-		bool isValid = true;  //validateParentArgs(arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop) 
+		if (AbstractWrapper::GlobalStop) 
 		{
 			return false;
 		}
@@ -349,9 +337,7 @@ namespace QueryEvaluator
 	*/
 	bool processParentS(Synonym arg1, Synonym arg2) 
 	{
-		bool isValid = true;  //validateParentArgs(arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop) 
+		if (AbstractWrapper::GlobalStop) 
 		{
 			return false;
 		}
@@ -407,9 +393,7 @@ namespace QueryEvaluator
 	*/
 	bool processFollows(Synonym arg1, Synonym arg2) 
 	{
-		bool isValid = true;  //validateFollowsArgs(arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop) 
+		if (AbstractWrapper::GlobalStop) 
 		{
 			return false;
 		}
@@ -463,9 +447,7 @@ namespace QueryEvaluator
 
 	bool processFollowsS(Synonym arg1, Synonym arg2) 
 	{
-		bool isValid = true;  //validateFollowsArgs(arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop) 
+		if (AbstractWrapper::GlobalStop) 
 		{
 			return false;
 		}
@@ -515,177 +497,6 @@ namespace QueryEvaluator
 			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
-	}
-
-	/**
-	* Method to validate the arguments of modifies or uses clause
-	* Returns true if the arguments are valid, false otherwise
-	*/
-	bool validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2) {
-		//arg1 must be a statement(but not constant) and cannot have "_"
-		//arg2 must be a character, variable or "_"
-		string arg1Type = arg1.getType();
-		string arg2Type = arg2.getType();
-		if (arg1Type != "String" && arg1Type != "stmt" && arg1Type != "assign" && 
-			arg1Type != "while" && arg1Type != "prog_line") {
-				return false;
-		}
-		if (arg2Type != "String" && arg2Type != "variable" && arg2Type != "_") {
-			return false;
-		}
-
-		if (arg1Type != "String" && arg2Type != "String" && arg1.getName() == arg2.getName()) {
-			return false;  //arg1 and arg2 cannot have the same names if they are synoyms
-		}
-
-		//If it reaches here, the types are valid. Check for the values of arg1 if it is a constant string
-		if (arg1Type == "String") {
-			char arg1Value = arg1.getName()[0];  //Get the value of arg1
-			if (!isdigit(arg1Value)) {
-				return false;  //arg1 must be a digit
-			}
-		} else {
-			//Check that this synonym exists in the synonymVector
-			/* if (findSynonymWithName(arg1.getName()).getName() == "-1") {
-			return false;
-			} */
-		}
-
-		//If it reaches here, arg1 is valid. Check for the values of arg2 if it is a constant string
-		if (arg2Type == "String") {
-			int varIndex = pkb.getVarIndex(arg2.getName());
-			if (varIndex == -1) {
-				//This variable is not found in the var table
-				return false;
-			}
-
-			char arg2Value = arg2.getName()[0];  //Get the value of arg2
-			if (!isalpha(arg2Value)) {
-				return false;  //arg2 must be a character
-			}
-		} else if (arg2Type != "_") {
-			//Check that this synonym exists in the synonymVector
-			/* if (findSynonymWithName(arg2.getName()).getName() == "-1") {
-			return false;
-			} */
-		}
-		return true;  //Everything is valid
-	}
-
-	/**
-	* Method to validate the arguments of parent or follows clause
-	* Returns true if the arguments are valid, false otherwise
-	*/
-	bool validateParentArgs(Synonym arg1, Synonym arg2) {
-		//arg1 and arg2 must be numbers(but not assign, constants), number synonyms or "_"
-		string arg1Type = arg1.getType();
-		string arg2Type = arg2.getType();
-		if (arg1Type != "String" && arg1Type != "stmt" && arg1Type != "_" && 
-			arg1Type != "while" && arg1Type != "prog_line") {
-				return false;
-		}
-		if (arg2Type != "String" && arg2Type != "stmt" && arg2Type != "assign" && arg2Type != "_" && 
-			arg2Type != "while" && arg2Type != "prog_line") {
-				return false;
-		}
-
-		//If it reaches here, the types are valid
-		if (arg1Type == "String") {
-			char arg1Value = arg1.getName()[0];  //Get the value of arg1
-			if (!isdigit(arg1Value)) {
-				return false;  //Check for that arg1 is a number if it is a constant string
-			}
-		} else if (arg1Type != "_") {
-			//Check that this synonym exists in the synonymVector
-			/* if (findSynonymWithName(arg1.getName()).getName() == "-1") {
-			return false;
-			} */
-		}
-
-		//If it reaches here, arg1 is valid
-		if (arg2Type == "String") {
-			char arg2Value = arg2.getName()[0];  //Get the value of arg2
-			if (!isdigit(arg2Value)) {
-				return false;  //Check that arg2 is a number if it is a constant string
-			}
-		} else if (arg2Type != "_") {
-			//Check that this synonym exists in the synonymVector
-			/* if (findSynonymWithName(arg2.getName()).getName() == "-1") {
-			return false;
-			} */
-		}
-
-		if (arg1Type == "String" && arg2Type == "String") {
-			//Since the two are constant strings, they must be digits by the checks above
-			if (stoi(arg1.getName()) >= stoi(arg2.getName())) {
-				return false;  //arg1 must be smaller than arg2 or else it is false
-			}
-		}
-
-		if (arg1Type != "String" && arg2Type != "String" && 
-			arg1Type != "_" && arg2Type != "_" && arg1.getName() == arg2.getName()) {
-				return false;  //arg1 and arg2 cannot have the same synonym name if they are synonyms
-		}
-
-		return true;  //Everything is valid
-	}
-
-	/**
-	* Method to validate the arguments of parent or follows clause
-	* Returns true if the arguments are valid, false otherwise
-	*/
-	bool validateFollowsArgs(Synonym arg1, Synonym arg2) {
-		//arg1 and arg2 must be numbers(but not constants), number synonyms or "_"
-		string arg1Type = arg1.getType();
-		string arg2Type = arg2.getType();
-		if (arg1Type != "String" && arg1Type != "stmt" && arg1Type != "assign" && arg1Type != "_" && 
-			arg1Type != "while" && arg1Type != "prog_line") {
-				return false;
-		}
-		if (arg2Type != "String" && arg2Type != "stmt" && arg2Type != "assign" && arg2Type != "_" && 
-			arg2Type != "while" && arg2Type != "prog_line") {
-				return false;
-		}
-
-		//If it reaches here, the types are valid
-		if (arg1Type == "String") {
-			char arg1Value = arg1.getName()[0];  //Get the value of arg1
-			if (!isdigit(arg1Value)) {
-				return false;  //Check for that arg1 is a number if it is a constant string
-			}
-		} else if (arg1Type != "_") {
-			//Check that this synonym exists in the synonymVector
-			/* if (findSynonymWithName(arg1.getName()).getName() == "-1") {
-			return false;
-			} */
-		}
-
-		//If it reaches here, arg1 is valid
-		if (arg2Type == "String") {
-			char arg2Value = arg2.getName()[0];  //Get the value of arg2
-			if (!isdigit(arg2Value)) {
-				return false;  //Check that arg2 is a number if it is a constant string
-			}
-		} else if (arg2Type != "_") {
-			//Check that this synonym exists in the synonymVector
-			/* if (findSynonymWithName(arg2.getName()).getName() == "-1") {
-			return false;
-			} */
-		}
-
-		if (arg1Type == "String" && arg2Type == "String") {
-			//Since the two are constant strings, they must be digits by the checks above
-			if (stoi(arg1.getName()) >= stoi(arg2.getName())) {
-				return false;  //arg1 must be smaller than arg2 or else it is false
-			}
-		}
-
-		if (arg1Type != "String" && arg2Type != "String" && 
-			arg1Type != "_" && arg2Type != "_" && arg1.getName() == arg2.getName()) {
-				return false;  //arg1 and arg2 cannot have the same synonym name if they are synonyms
-		}
-
-		return true;  //Everything is valid
 	}
 
 	/**
@@ -746,9 +557,7 @@ namespace QueryEvaluator
 	*/
 	bool processAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2) 
 	{
-		bool isValid = true;  //validateAssignPatternArgs(arg0, arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop) 
+		if (AbstractWrapper::GlobalStop) 
 		{
 			return false;
 		}
@@ -812,10 +621,7 @@ namespace QueryEvaluator
 	*/
 	bool processWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2) 
 	{
-		//Validate while pattern
-		bool isValid = true;  //validateWhilePatternArgs(arg0, arg1, arg2);
-
-		if (!isValid || AbstractWrapper::GlobalStop) 
+		if (AbstractWrapper::GlobalStop) 
 		{
 			return false;
 		}
@@ -859,59 +665,6 @@ namespace QueryEvaluator
 			return true;
 		}
 	}
-
-	/**
-	* Method to validate assign patterns
-	* Returns true if the arguments of the assign pattern are valid, false otherwise
-	*/
-	bool validateAssignPatternArgs(Synonym arg0, Synonym arg1, Synonym arg2) {
-		string arg1Type = arg1.getType();
-
-		/* if (findSynonymWithName(arg0.getName()).getName() == "-1") {
-		//Check if this assign synonym has been declared
-		return false;
-		} */
-
-		if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_") {
-			return false;
-		}
-
-		/* if (arg1Type == "variable" && findSynonymWithName(arg1.getName()).getName() == "-1") {
-		//Check if this variable synonym has been declared
-		return false;
-		} */
-
-		return true;
-	}
-
-	/**
-	* Method to validate while patterns
-	* Returns true if the arguments of the assign pattern are valid, false otherwise
-	*/
-	bool validateWhilePatternArgs(Synonym arg0, Synonym arg1, Synonym arg2) {
-		string arg1Type = arg1.getType();
-
-		/* if (findSynonymWithName(arg0.getName()).getName() == "-1") {
-		//Check if this while synonym has been declared
-		return false;
-		} */
-
-		if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_") {
-			return false;  //arg1 can only be a constant string or a variable synonym or "_"
-		}
-
-		/* if (arg1Type == "variable" && findSynonymWithName(arg1.getName()).getName() == "-1") {
-		//Check if this variable synonym has been declared
-		return false;
-		} */
-
-		if (arg2.getName() != "_") {
-			return false;  //arg2 must be "_"
-		}
-
-		return true;
-	}
-
 
 	/**
 	* Helper method to filter the paired synonym values
