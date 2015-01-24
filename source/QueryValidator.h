@@ -14,6 +14,9 @@
 #include "QNode.h"
 #include "Synonym.h"
 
+/**
+ * Checks to verify query with program design entity relationships rules. 
+ */
 class QueryValidator {
 public:
 	 QueryValidator();

@@ -1,8 +1,3 @@
-/* Program: QueryParser.cpp
-   Author: Si Ling, referencing SPA parser by HongJin
-   Description: QueryParser checks the query input to see if it matches with the PQL grammar. 
-   				It reads in the queries and builds a query tree. 
-*/
 #pragma once
 
 //To print out debug error msges
@@ -28,6 +23,12 @@
 using std::string;
 using std::vector;
 
+/**
+	@brief Namespace containing functions for parsing PQL queries.
+	QueryParser checks the query input to see if it matches with 
+	PQL grammar and builds a query tree. 
+
+ */
 namespace QueryParser
 {
 	ifstream inputFile;
@@ -44,7 +45,7 @@ namespace QueryParser
 	
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
-	 * Return TRUE if the query parser have been initialized. Otherwise, return FALSE.
+	 * @returns TRUE if the query parser have been initialized. Otherwise, return FALSE.
 	 * If a query string given is empty, or the buffer’s size is 0 after tokenizing return FALSE. 
 	 */
 	bool initParser(string query)
@@ -95,7 +96,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * Returns the next token
+	 * @returns the next token
 	 */
 	string parseToken()
 	{
@@ -131,7 +132,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * Returns the token these number of steps backwards from the currToken.
+	 * @returns a token these number of steps backwards from the currToken.
 	 * If steps = 0 , it returns the currToken
 	 * If steps = 1, it returns the previous token
 	 */
@@ -143,8 +144,11 @@ namespace QueryParser
 	/**************************************************************/
 	/**     Supporting functions - To build query tree           **/
 	/**************************************************************/
-		
-	bool initQueryTreeAndSymbolsTable()
+	
+	/**
+	 * Initialise query tree, synonymsMap and nodeTypeMap.
+	 */	
+	void initQueryTreeAndSymbolsTable()
 	{
 		pair<string,QNODE_TYPE> pairNodeType;
 		
@@ -167,11 +171,10 @@ namespace QueryParser
 		pair<string,QNODE_TYPE> pairNodeType6 ("Follows*",QNODE_TYPE(FollowsS));
 		nodetypeMap.insert(pairNodeType6);
 
-		return true;
 	}
 
 	/**
-	 * Print out the built by the query parser onto console for testing and debugging.
+	 * Prints out the built by the query parser onto console for testing and debugging.
 	 **/
 	void queryTreeTesting()
 	{
@@ -184,7 +187,7 @@ namespace QueryParser
 	/**************************************************************/
 
 	/**
-	 * Matches if the given token follows the naming convention for NAME, as per the given grammar
+	 * Matches if the given token follows the naming convention for NAME, as per the given grammar.
 	 */
 	bool matchName(string token)
 	{
@@ -194,7 +197,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * Matches if the given token follows the naming convention for INTEGER, as per the given grammar
+	 * Matches if the given token follows the naming convention for INTEGER, as per the given grammar.
 	 */
 	bool matchInteger(string token)
 	{
@@ -203,7 +206,7 @@ namespace QueryParser
 	}
 
 	/**
-	 *Matches if the given token follows the naming convention of a factor
+	 * Matches if the given token follows the naming convention of a factor.
 	 */
 	bool matchFactor(string token)
 	{
@@ -222,7 +225,7 @@ namespace QueryParser
 		return (matchInteger(token) || matchName(token));
 	}
 	/**
-	 *Matches if the given token follows the naming convention of Synonym and IDENT
+	 *Matches if the given token follows the naming convention of Synonym and IDENT.
 	 */
 	bool matchSynonymAndIdent(string token, bool comma)
 	{
@@ -241,7 +244,7 @@ namespace QueryParser
 	}
 
 	/**
-	 *Matches if the given token follows the naming convention of entity reference
+	 * Matches if the given token follows the naming convention of entity reference.
 	 */
 	bool matchUnderscore(string token)
 	{
@@ -249,7 +252,7 @@ namespace QueryParser
 	}
 
 	/**
-	 *Matches if the given token follows the naming convention of stmt reference
+	 * Matches if the given token follows the naming convention of stmt reference.
 	 */
 	bool matchStmtRef(string token)
 	{
@@ -267,7 +270,7 @@ namespace QueryParser
 	}
 
 	/**
-	 *Matches if the given token follows the naming convention of entity reference
+	 * Matches if the given token follows the naming convention of entity reference.
 	 */
 	bool matchEntRef(string token)
 	{
@@ -286,7 +289,7 @@ namespace QueryParser
 	}
 
 	/**
-	 *Matches if the given token follows the naming convention of design entity reference
+	 * Matches if the given token follows the naming convention of design entity reference.
 	 */
 	bool matchDesignEntity(string token)
 	{
@@ -306,34 +309,54 @@ namespace QueryParser
 	/**************************************************************/
 
 	/**
-	 * Parses the next token and check if it is equal to the given target
+	 * Parses the next token and check if it is equal to the given target.
 	 */
 	bool parse(string target)
 	{
 		string nextToken = parseToken();
 		return nextToken.compare(target) == 0;
 	}
+
+	/**
+	 * Parses the next token and check if it is equal to the apostrophe.
+	 */
 	bool parseApostrophe()
 	{
 		string nextToken = parseToken();
 		std::regex synonymRegex("[\"]");
 		return std::regex_match(nextToken,synonymRegex) ? true : false;
 	}
+
+	/**
+	 * Parses the next token and check if is a design entity.
+	 */
 	bool parseDesignEntity()
 	{
 		string nextToken = parseToken();
 		return matchDesignEntity(nextToken);
 	}
+
+	/**
+	 * Parses the next token and check if is a synonym.
+	 */
 	bool parseSynonymns()
 	{
 		string nextToken = parseToken();
 		return matchSynonymAndIdent(nextToken, false);
 	}
+
+	/**
+	 * Parses the next token and check if is a stmt reference.
+	 */
 	bool parseStmtRef()
 	{
 		string nextToken = parseToken();
 		return matchStmtRef(nextToken);
 	}
+
+	/**
+	 * Parses the next token and check if is a entity reference.
+	 */
 	string parseEntRef()
 	{
 		string nextToken = "";
@@ -351,11 +374,21 @@ namespace QueryParser
 
 		return matchEntRef(nextToken) ? returnToken: "";
 	}
+
+	/**
+	 * Parses the next token and check if is a factor
+	 */
 	bool parseFactor()
 	{
 		string nextToken = parseToken();
 		return matchFactor(nextToken);
 	}
+
+	/**
+	 * Parses the next token and check if is an expression for patterns.
+	 * @todo merge this with ExpressionParser and build an expressions 
+	 * query tree.
+	 */
 	bool parseExpressionSpec(bool whilePatternExp)
 	{
 
@@ -479,6 +512,11 @@ namespace QueryParser
 
 		return true;
 	}
+
+	/**
+	 * Creates QNode for such that clause and validates the query.
+	 * @returns FALSE if there is an error parsing query.
+	 */
 	bool parseSuchThatClause()
 	{
 		std::regex apostrophe("[\"]");
@@ -652,6 +690,11 @@ namespace QueryParser
 
 		return false;
 	}
+
+	/**
+	 * Creates QNode Pattern and validates the pattern clause.
+	 * @returns FALSE if there's errors in the pattern portion of query.
+	 */
 	bool parsePatternClause()
 	{
 		bool whilePatternExp = false;
@@ -780,6 +823,7 @@ namespace QueryParser
 
 		return true;
 	}
+
 	bool parseOptionalClauses()
 	{
 
@@ -800,8 +844,9 @@ namespace QueryParser
 
 		return res;
 	}
+
 	/*
-	 * For Testing Synonyms Map
+	 * Method for printing synonyms map.
 	 */
 	void printSynonymsMap()
 	{
@@ -812,6 +857,10 @@ namespace QueryParser
 			cout <<"name : "<<name <<"type : " <<type<<endl;
 		}
 	}
+
+	/**
+	 * Supporting function to parse declarations.
+	 */
 	bool parseDeclarations()
 	{
 		bool res;
@@ -862,6 +911,11 @@ namespace QueryParser
 
 		return res;
 	}
+
+	/**
+	 * Creates QNode Selection and validates the select synonym.
+	 * @returns FALSE if there's errors in the select synonym.
+	 */
 	bool parseSelect()
 	{
 		string DE_type;
@@ -905,6 +959,10 @@ namespace QueryParser
 
 		return res;
 	}
+
+	/**
+	 * @returns FALSE if there's errors in query declarations and select synonym.
+	 */
 	bool parseQuerySelectClause()
 	{
 		bool res; 
@@ -920,6 +978,10 @@ namespace QueryParser
 		}
 		return res;
 	}
+
+	/**
+	 * It takes in a query, validates the query and builds a query tree.  
+	 */
 	bool parseQuery()
 	{
 		//testingQueryParser();
@@ -927,13 +989,10 @@ namespace QueryParser
 		myQueryV = new QueryValidator();
 		myQueryV->initTable(); //propagate relationships data onto table
 
-		bool res = initQueryTreeAndSymbolsTable();
-		if (!res){return false;}
-
-		//does syntax chacks
-		res = parseQuerySelectClause();
+		initQueryTreeAndSymbolsTable();
 
 
+		bool res = parseQuerySelectClause();
 		//if there's an error in parsing the queries, return an empty query tree
 		if(!res){
 			#ifdef DEBUG
@@ -951,7 +1010,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * Return a query tree built by query parser. 
+	 * @returns a query tree built by query parser. 
 	 * If input query contain syntax errors, an empty query tree is returned. 
 	 */
 	QueryTree* getQueryTree()
