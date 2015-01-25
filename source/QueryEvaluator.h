@@ -9,6 +9,7 @@ using std::pair;
 #include "QueryTree.h"  //For the definition of the query tree nodes
 #include "Synonym.h"
 
-namespace QueryEvaluator {
+namespace QueryEvaluator 
+{
 	vector<Synonym> processQueryTree(QueryTree* queryTree);
 }

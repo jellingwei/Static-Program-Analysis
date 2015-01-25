@@ -7,7 +7,7 @@ namespace ResultProjector {
 	PKB pkb = PKB::getInstance();  //Declare the PKB instance here to avoid repeated calls
 
 	/**
-	* Given a list, inserts all the values into the list from the vector of Synonyms
+	* Given a list, inserts all the values into the list from the vector of Synonyms.
 	* Also performs the cartesian product if there is a tuple specified (not yet implemented)
 	*/
 	void projectResultToList(vector<Synonym> resultVector, list<string>& resultList) {

@@ -65,14 +65,7 @@ void ExpressionParser::updateStmtNum(int stmtNum)
 	this->stmtNum = stmtNum;
 }
 
-//@Todo code duplication between here and Parser. Might not need to bother though
-string matchInteger(string token) 
-{
-	std::regex intRegex("\\d+");
-	return (std::regex_match(token,intRegex)) ? token : "";
-}
-
-int parseConstant(string value, int stmtNum) 
+int matchConstant(string value, int stmtNum) 
 {
 	PKB pkb = PKB::getInstance();
 	int constant = atoi(value.c_str());
@@ -82,7 +75,7 @@ int parseConstant(string value, int stmtNum)
 	return constant;
 }
 
-int parseVariable(string value, int stmtNum, VarTable* varTable = NULL)  
+int matchVariable(string value, int stmtNum, VarTable* varTable = NULL)  
 {
 	PKB pkb = PKB::getInstance();
 	int varIndx;
@@ -115,13 +108,13 @@ int parseVariable(string value, int stmtNum, VarTable* varTable = NULL)
 
 int parseConstantOrVariable(string value, int stmtNum, VarTable* varTable = NULL) 
 {
-	string constant = matchInteger(value);
+	string constant = Parser::matchInteger(value);
 	if (constant.empty()) 
 	{ 
-		return parseVariable(value, stmtNum, varTable);
+		return matchVariable(value, stmtNum, varTable);
 	} else 
 	{
-		return parseConstant(value, stmtNum);
+		return matchConstant(value, stmtNum);
 	}
 }
 
@@ -206,7 +199,7 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 		token = *(bufferIter ++);
 	} else {
 		// prevToken is either variable or constant now
-		bool isVariable = matchInteger(prevToken).empty();
+		bool isVariable = Parser::matchInteger(prevToken).empty();
 
 		if (varTable == NULL) 
 		{

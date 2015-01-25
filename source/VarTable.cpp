@@ -18,23 +18,20 @@ using namespace stdext;
  * and the table remains unchanged.
  * @exception if varName is empty or stmtNum is negative or 0.
  */
+
 int VarTable::insertVar(string varName, int stmtNum) 
 {
-	if (stmtNum <= 0) 
-	{
+	if (stmtNum <= 0) {
 		throw exception("varTable error: Negative statement number");
 	}
 
-	if (varName.empty()) 
-	{
+	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
 	}
 
-	if (indexMap.count(varName) > 0) 
-	{
+	if (indexMap.count(varName) > 0) {
 		return indexMap.at(varName);
-	} else 
-	{
+	} else {
 		int index = indexMap.size() + 1;
 
 		pair<int,string> pairIndexVar (index, varName);
@@ -64,7 +61,6 @@ int VarTable::getVarTableSize()
  */
 string VarTable::getVarName(int index) 
 {
-	
 	return (varMap.count(index) > 0) ? varMap.at(index) : ""; 
 }
 
@@ -76,8 +72,7 @@ string VarTable::getVarName(int index)
  */
 int VarTable::getVarIndex(string varName) 
 {
-	if (varName.empty()) 
-	{
+	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
 	}
 
@@ -87,14 +82,11 @@ int VarTable::getVarIndex(string varName)
 /**
  * Return the statement number of the variable in the VarTable with the given
  * varName. Otherwise, return -1 to indicate there is no such statement number.
- * If there is no answer or if varName is empty or null, return an empty list.
- * @exception if varName is empty
+ * If there is no answer or if “varName” is empty or null, return an empty list.
  */
-
 int VarTable::getStmtNum(string varName) 
 {
-	if (varName.empty()) 
-	{
+	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
 	}
 
@@ -109,8 +101,7 @@ vector<int> VarTable::getAllVarIndex()
 {
 	vector<int> allKeys;
 
-	for (auto iter = varMap.begin(); iter != varMap.end(); ++iter) 
-	{
+	for (auto iter = varMap.begin(); iter != varMap.end(); ++iter) {
 		allKeys.push_back(iter->first);
 	}
 

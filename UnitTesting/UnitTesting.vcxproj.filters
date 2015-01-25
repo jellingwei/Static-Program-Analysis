@@ -42,10 +42,13 @@
     <ClCompile Include="source\TestAST.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\TestQueryEvaluator.cpp">
+    <ClCompile Include="source\TestExpressionParser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\TestExpressionParser.cpp">
+    <ClCompile Include="source\TestProcTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\TestIntermediateValuesHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,10 +77,13 @@
     <ClInclude Include="source\TestAST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\TestQueryEvaluator.h">
+    <ClInclude Include="source\TestExpressionParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\TestExpressionParser.h">
+    <ClInclude Include="source\TestProcTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\TestIntermediateValuesHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
