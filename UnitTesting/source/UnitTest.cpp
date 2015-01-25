@@ -8,7 +8,8 @@ int main(int argc, char* argv[])
 {
 // Get the top level suite from the registry
 CppUnit::TestSuite *unitSuite = new CppUnit::TestSuite( "All unit test" );
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("VarTableTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("VarTableTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ConstantTableTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("UsesTableTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ModifiesTableTest").makeTest());	
@@ -17,7 +18,7 @@ unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ExpressionParserTe
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryPreprocessorTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryTreeTest").makeTest());
-unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryEvaluatorTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("IntermediateValuesHandlerTest").makeTest());
 CppUnit::TestFactoryRegistry::getRegistry().addTestToSuite(unitSuite);
 CppUnit::TextUi::TestRunner runner;
 

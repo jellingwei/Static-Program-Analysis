@@ -45,7 +45,9 @@ namespace Parser
 	}
 
 	/**
-	 * Initialise the parser with a filename
+	 * Initialises and prepares the parser for parsing. 
+	 * The file specified by filename is opened for parsing. 
+	 * Return TRUE if the file can be successfully opened. Otherwise, return FALSE.
 	 */
 	bool initParser(string filename) 
 	{
@@ -342,7 +344,6 @@ namespace Parser
 				pkb.createLink(Child, node, stmtlist2Node); 
 				ASTParent.push_back(stmtlist2Node);
 
-
 				res = parse("{");
 				if (!res) return false;
 				
@@ -530,14 +531,21 @@ namespace Parser
 			res = parse("{");
 			if (!res) return false;
 		
+			PKB pkb = PKB::getInstance();
+			TNode* root = pkb.getRoot();
+			TNode* procNode = pkb.createTNode(Procedure, 0, 0);
+			pkb.createLink(Child, root, procNode);
+			TNode* stmtListNode = pkb.createTNode(StmtLst, 0, 0);
+			pkb.createLink(Child, procNode, stmtListNode);
 		
-			// @Todo multiple procedures
-			ASTParent.push_back(PKB::getInstance().getRoot());
+			ASTParent.push_back(stmtListNode);
 
 			res = parseStmtList();
 
-			if (!res) return false;
+			// remove the stmtlist node from ASTParent
+			ASTParent.erase(ASTParent.end() - 1); 
 
+			if (!res) return false;
 			return true;
 		}
 
@@ -554,11 +562,15 @@ namespace Parser
 				bool isVariable = (nodeQueue.front()->getNodeType() == Variable);
 				bool isPlus = (nodeQueue.front()->getNodeType() == Plus);
 				bool isAssign = (nodeQueue.front()->getNodeType() == Assign);
+				bool isStmtLst = (nodeQueue.front()->getNodeType() == StmtLst);
 
 				cout << *(nodeQueue.front()) << endl;
-				cout << " isConstant: " << isConstant << " isVariable:" << isVariable << " isPlus: " << isPlus << " isAssign: " << isAssign <<  endl;
-				cout << "  parent: " << nodeQueue.front()->getParent()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getParent()->getStmtNumber() << endl;
-
+				cout << " isConstant: " << isConstant << " isVariable:" << isVariable << " isPlus: " << isPlus << " isAssign: " << isAssign << " isStmtLst" << isStmtLst << endl;
+				
+				if (nodeQueue.front()->getParent() != NULL)
+				{
+					cout << "  parent: " << nodeQueue.front()->getParent()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getParent()->getStmtNumber() << endl;
+				}
 			
 				vector<TNode*>* children = nodeQueue.front()->getChildren();
 				if (nodeQueue.front()->hasChild()) 
@@ -619,8 +631,8 @@ namespace Parser
 	}
 
 	/**
-	 * Main function to parse program. Call after using @ref initParser.
-	 * 
+	 * Parses the program and populate data structures in the PKB. 
+	 * Return TRUE if the program can successfully be parsed according to the SIMPLE grammar. Otherwise, return FALSE. 
 	 */
 	bool parseProgram() 
 	{
@@ -628,8 +640,8 @@ namespace Parser
 		// matchProcedure call is neccessary
 		bool res = util::parseProcedure();
 		assert(res); // do not evaluate queries if parser has failed
-		//cout << "parser has completed the parse" << endl;
-		//util::traverseAndPrintTree(PKB::getInstance().getRoot());
+		cout << "parser has completed the parse" << endl;
+		util::traverseAndPrintTree(PKB::getInstance().getRoot());
 		return res;
 	}
 	

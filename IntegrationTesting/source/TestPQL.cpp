@@ -59,8 +59,8 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Parent(7, 10)", 15, (int)evaluate("stmt s; Select s such that Parent(7, 10)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a1; Parent(w, a2)", 10, (int)evaluate("assign a1, a2; while w; Select a1 such that Parent(w, a2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, w)", (string)"8", evaluate("while w; Select w such that Parent(_, w)").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, a)", 3, (int)evaluate("assign a; Select a such that Parent(_, a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, _)", 3, (int)evaluate("stmt s; Select s such that Parent(s, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, a)", 5, (int)evaluate("assign a; Select a such that Parent(_, a)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, _)", 5, (int)evaluate("stmt s; Select s such that Parent(s, _)").size());
 	//CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, _)", 6, (int)evaluate("variable v; Select v such that Parent(_, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, _)", 0, (int)evaluate("variable v; Select v such that Parent(_, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(l,)", 0, (int)evaluate("prog_line l; Select l such that Parent(l,)").size());

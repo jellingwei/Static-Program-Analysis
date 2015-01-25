@@ -13,21 +13,18 @@ using namespace stdext;
 
 
 /**
- * If procName is not in the ProcTable, inserts it into the ProcTable
- * and return its index. Otherwise, return its INDEX
- * and the table remains unchanged.
+ * If procName is not in the ProcTable, inserts it into the ProcTable and 
+ * return its index. Otherwise, return its INDEX and the table remains unchanged.
  * @exception if procName is empty.
  */
 int ProcTable::insertProc(string procName) 
 {
 
-	if (procName.empty()) 
-	{
+	if (procName.empty()) {
 		throw exception("procTable error: Empty procedure name");
 	}
 
-	if (indexMap.count(procName) > 0) 
-	{
+	if (indexMap.count(procName) > 0) {
 		return indexMap.at(procName);
 	} 
 
@@ -55,7 +52,10 @@ int ProcTable::getProcTableSize()
  */
 string ProcTable::getProcName(int index) 
 {
-	return (procMap.size() > 0) ? procMap.at(index) : "";
+	if (index < 0) {
+		return "";
+	}
+	return (procMap.size() > index) ? procMap.at(index) : "";
 }
 
 /**
@@ -66,8 +66,7 @@ string ProcTable::getProcName(int index)
  */
 int ProcTable::getProcIndex(string procName) 
 {
-	if (procName.empty()) 
-	{
+	if (procName.empty()) {
 		throw exception("procTable error: Empty variable name");
 	}
 

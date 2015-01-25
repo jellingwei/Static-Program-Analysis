@@ -21,8 +21,7 @@ using namespace stdext;
 */
 bool ModifiesTable::setModifies(int stmtNum, int varIndex) 
 {
-	if (stmtNum <= 0 || varIndex <= 0) 
-	{
+	if (stmtNum <= 0 || varIndex <= 0) {
 		throw exception("ModifiesTable error: Negative statement number or varIndex");
 	}
 
@@ -30,19 +29,16 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 	vector<int> varIndexList;
 
 	//check if varIndexMap key stmtNum contains the variable
-	if (varIndexMap.count(stmtNum) > 0) 
-	{
+	if (varIndexMap.count(stmtNum) > 0) {
 		varIndexList = varIndexMap.at(stmtNum);
 
 		auto result = find(begin(varIndexList), end(varIndexList), varIndex);
-		if (result != end(varIndexList)) 
-		{
-			//return false;  // variable already in the ModifiesTable
+		if (result != end(varIndexList)) { // varIndex can be found already
+			
 		} else {
 			varIndexList.push_back(varIndex);
 			varIndexMap.erase(stmtNum);
 			varIndexMap.insert(pair<int, vector<int>> (stmtNum, varIndexList));
-			//return true;
 		}
 
 	} else {
@@ -54,27 +50,22 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 	vector<int> stmtList;
 
 	//check if stmtNumMap key varIndex contains the stmtNum
-	if (stmtNumMap.count(varIndex) > 0) 
-	{
+	if (stmtNumMap.count(varIndex) > 0) {
 		stmtList = stmtNumMap.at(varIndex);
 
 		auto result = find(begin(stmtList), end(stmtList), stmtNum);
-		if (result != end(stmtList)) 
-		{
-			//return false;  // stmtNum already in the ModifiesTable
+		if (result != end(stmtList)) 	{
+			
 		} else {
 			stmtList.push_back(stmtNum);
 			stmtNumMap.erase(varIndex);
 			stmtNumMap.insert(pair<int, vector<int>> (varIndex, stmtList));
-			//return true;
 		}
 
 	} else {
 		newStmtList.push_back(stmtNum);
 		stmtNumMap.insert(pair<int, vector<int>> (varIndex, newStmtList));
-		//return true;
 	}
-
 	return true;
 }
 
@@ -85,73 +76,56 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 */
 bool ModifiesTable::isModifies(int stmtNum, int varIndex) 
 {
-	if (stmtNum <= 0 || varIndex <= 0) 
-	{
-		//throw exception("ModifiesTable error: Negative statement number or varIndex");
+	if (stmtNum <= 0 || varIndex <= 0) {
 		return false;
 	}
 
-	vector<int> varIndexList;
-
-	if (varIndexMap.count(stmtNum) == 0) 
-	{
+	if (varIndexMap.count(stmtNum) == 0) {
 		return false;
 	}
-	varIndexList = varIndexMap.at(stmtNum);
+
+	vector<int> varIndexList = varIndexMap.at(stmtNum);
 
 	auto result = find(begin(varIndexList), end(varIndexList), varIndex);
-	if (result != end(varIndexList)) 
-	{
-		return true;  
-	} 
-
-	return false;
+	// TRUE if varindex is new in the table
+	return result != end(varIndexList);
 }
 
 /**
-* Return the list of all the statements that modifies the variable of index “varIndex”. 
+* Return the list of all the statements that modifies the variable index. 
 * If there is no answer, or if varIndex is invalid, return an empty list.
 */
 vector<int> ModifiesTable::getModStmtNum(int varIndex) 
 {
-	if (varIndex <= 0) 
-	{
-		//throw exception("ModifiesTable error: Negative varIndex");
+	if (varIndex <= 0) {
 		return vector<int>();
 	}
 
-	if (stmtNumMap.count(varIndex) == 0) 
-	{
+	if (stmtNumMap.count(varIndex) == 0) {
 		vector<int> result;
 		return result;
 	}
 
 	vector<int> stmtList = stmtNumMap.at(varIndex);
-	
-	
 	return stmtList;
 }
 
 /**
-* Return the list of all the variables that is modified by the statement number “stmtNum”. 
+* Return the list of all the variables that is modified by the statement number. 
 * If there is no answer, or if stmtNum is negative or 0, return an empty list.
 */
 vector<int> ModifiesTable::getModVarForStmt(int stmtNum) 
 {
-	if (stmtNum <= 0) 
-	{
-		//throw exception("ModifiesTable error: Negative statement number");
+	if (stmtNum <= 0) {
 		return vector<int>();
 	}
 
-	if (varIndexMap.count(stmtNum) == 0) 
-	{
+	if (varIndexMap.count(stmtNum) == 0) {
 		vector<int> result;
 		return result;
 	}
 
 	vector<int> varIndexList = varIndexMap.at(stmtNum);
-
 	return varIndexList;
 }
 
@@ -164,10 +138,8 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum)
 pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() 
 {
 	pair<vector<int>, vector<int>> result;
-	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) 
-	{
-		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) 
-		{
+	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
+		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
 			result.first.push_back(iter->first);
 			result.second.push_back(*varListIter);
 		}
