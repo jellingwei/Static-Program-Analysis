@@ -265,6 +265,7 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(w,v) pattern w(v, _)", 3, (int)evaluate("while w; variable v; Select w such that Uses(w,v) pattern w(v,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(w,v) pattern w(v, _)", 0, (int)evaluate("while w; variable v; Select v such that Modifies(w,v) pattern w(v,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(w,v) pattern w(v, _)", 0, (int)evaluate("while w; variable v; Select w such that Modifies(w,v) pattern w(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("parent*(w,a) pattern a(v, _)", 3, (int)evaluate("assign a; while w; variable v; Select v such that Parent*(w,a) pattern a(v,_)").size());
 }
 
 list<string> evaluate(string query)
