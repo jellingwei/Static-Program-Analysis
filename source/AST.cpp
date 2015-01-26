@@ -20,14 +20,14 @@ AST::AST() {
 }
 
 /**
-* Return the root node of the AST.
+* @return the root node of the AST.
 */
 TNode* AST::getRoot() {
 	return _rootNode;
 }
 
 /**
-* Return a TNode for the given design entity together with its statement number and index. 
+* @return a TNode for the given design entity together with its statement number and index. 
 * @exception if stmtNo is negative or 0 or index is negative.
 */
 TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
@@ -45,7 +45,7 @@ TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 }
 
 /**
-* Return TRUE if the link between the fromNode to toNode is created successfully. Otherwise, return FALSE. 
+* @return TRUE if the link between the fromNode to toNode is created successfully. Otherwise, return FALSE. 
 * @exception if link is invalid, or fromNode and toNode is NULL.
 */
 bool AST::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
@@ -82,7 +82,7 @@ bool AST::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
 }
 
 /**
-* Return the total number of children the parent TNode has. 
+* @return the total number of children the parent TNode has. 
 * @exception if parent is NULL.
 */
 int AST::getChildrenSize(TNode* parent) {
@@ -97,7 +97,7 @@ int AST::getChildrenSize(TNode* parent) {
 }
 
 /**
-* Return the list of all the children nodes the parent TNode has.
+* @return the list of all the children nodes the parent TNode has.
 * If there is no answer, return an empty list.
 * @exception if parent is NULL.
 */
@@ -111,7 +111,7 @@ vector<TNode*>* AST::getChildrenNode(TNode* parent) {
 }
 
 /**
-* Return TRUE if child TNode is a child node of parent TNode. Otherwise, return FALSE.
+* @return TRUE if child TNode is a child node of parent TNode. Otherwise, return FALSE.
 * @exception if parent or child is NULL.
 */
 bool AST::isChildNode(TNode* parent, TNode* child) {
@@ -126,7 +126,7 @@ bool AST::isChildNode(TNode* parent, TNode* child) {
 }
 
 /**
-* Return TRUE if node exists. Otherwise, return FALSE.
+* @return TRUE if node exists. Otherwise, return FALSE.
 * @exception if node is NULL.
 */
 bool AST::isExists(TNode* node) { 
@@ -146,7 +146,7 @@ TNode* AST::getLastImpt() {
 }
 
 /**
- * Return the total number of nodes in the the AST.
+ * @return the total number of nodes in the the AST.
  */
 int AST::getSize() {
 	return allNodes.size();

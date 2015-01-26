@@ -13,12 +13,20 @@ QueryTree::QueryTree()
 	_synonymsMap.clear();
 }
 
+/**
+ * This function creates a QNode with the given NODE_TYPE and SYNONYM
+ * arguments.
+ * @return a QNode
+ */
 QNode* QueryTree::createQNode(QNODE_TYPE QNODE_TYPE,Synonym arg0, Synonym arg1, Synonym arg2)
 {
 	QNode* node = new QNode(QNODE_TYPE, arg0, arg1, arg2);
 	return node;
 }
 
+/**
+ * This function creates a link between parent QNode and the child QNode.
+ */
 bool QueryTree::linkNode(QNode* parent_node, QNode* child_node)
 {
 	child_node->setParent(parent_node);
@@ -26,31 +34,53 @@ bool QueryTree::linkNode(QNode* parent_node, QNode* child_node)
 	return true;
 }
 
+/**
+ * @return the root of the query tree.
+ */
 QNode* QueryTree::getRoot()
 {
 	return &_root;
 }
 
+/**
+ * @return the head of the result nodes.
+ */
 QNode* QueryTree::getResultNode()
 {
 	return &_result;
 }
 
+/**
+ * @return the head of the pattern nodes.
+ */
 QNode* QueryTree::getPatternNode()
 {
 	return &_pattern;
 }
 
+/**
+ * @return the head of the such that nodes.
+ */
 QNode* QueryTree::getSuchThatNode()
 {
 	return &_such_that;
 }
 
+/**
+ * It stores all the design entities and synonyms in string. The key to the
+ * synonym map is the synonym.
+ * @return a synonym map if the query is successfully parsed and there is no syntax error.
+ * Otherwise, it returns an empty synonym map .
+ */
 unordered_map<string, string> QueryTree::getSynonymsMap()
 {
 	return _synonymsMap;
 }
 
+/**
+ * Set the synonym map in the query tree. This overwrites the current
+ * synonym map in the query tree.
+ */
 void QueryTree::setSynonymsMap(unordered_map<string, string> synonymsMap)
 {
 	_synonymsMap = synonymsMap;
