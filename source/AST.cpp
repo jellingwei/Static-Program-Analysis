@@ -33,9 +33,10 @@ TNode* AST::getRoot() {
 TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 
 	if(stmtNo < 0) {
-		throw exception("AST error: Negative statment number");
-	} else if(!(ast_node_type==0 || ast_node_type==1 || ast_node_type==2 || ast_node_type==3 || ast_node_type==4 || ast_node_type==5 || ast_node_type==6 || ast_node_type==7)) {
-		throw exception("AST error: Invalid TNode_Type");
+		throw invalid_argument("AST error: Negative statement number");
+	} else if(!(ast_node_type==Procedure || ast_node_type==Assign || ast_node_type==Plus || ast_node_type==Multiply || ast_node_type==Minus ||
+				ast_node_type==Variable || ast_node_type==StmtLst || ast_node_type==While ||ast_node_type==If || ast_node_type==Constant  )) {
+		throw invalid_argument("AST error: Invalid TNode_Type");
 	}
 
 	TNode* temp = new TNode(ast_node_type, stmtNo, idx);

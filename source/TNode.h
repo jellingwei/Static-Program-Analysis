@@ -10,7 +10,7 @@ using namespace std;
 
 enum TNODE_TYPE
 {
-	Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant
+	Procedure, Assign, Plus, Multiply, Minus, Variable, StmtLst, While, If, Constant
 };
 
 enum LINK_TYPE
