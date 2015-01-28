@@ -40,6 +40,19 @@ void ExpressionParserTest::testSingleNode() {
 	CPPUNIT_ASSERT_EQUAL(Constant, top->getNodeType());
 	CPPUNIT_ASSERT_EQUAL(0, top->getNodeValueIdx());
 
+	const char* args2[] = {"7070707"};
+	vector<string> argVector2(args2, args2 + 1);
+
+	top = exprParser->parseExpression(argVector2);
+	CPPUNIT_ASSERT_EQUAL(Constant, top->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(7070707, top->getNodeValueIdx());
+
+	const char* args3[] = {"x"};
+	vector<string> argVector3(args3, args3 + 1);
+
+	top = exprParser->parseExpression(argVector3);
+	CPPUNIT_ASSERT_EQUAL(Variable, top->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(1, top->getNodeValueIdx());
 }
 
 void ExpressionParserTest::testSimpleCases() {

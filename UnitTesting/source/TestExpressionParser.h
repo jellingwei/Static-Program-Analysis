@@ -5,6 +5,7 @@
 class ExpressionParserTest : public CPPUNIT_NS::TestFixture 
 { 
 	CPPUNIT_TEST_SUITE( ExpressionParserTest ); 
+	CPPUNIT_TEST( testSingleNode );
 	CPPUNIT_TEST( testSimpleCases );
 	CPPUNIT_TEST( testComplexCases );
 	
