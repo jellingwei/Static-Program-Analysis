@@ -32,19 +32,5 @@ void TestWrapper::parse(std::string filename) {
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 
 	std::cout<<"TestWrapper evaluating query"<<std::endl;
-	QueryParser::initParser(query);
-
-	bool res = QueryParser::parseQuery();
-
-	// ...code to evaluate query...
-
-	// store the answers to the query in the results list (it is initially empty)
-	// each result must be a string.
-	QueryTree* qT = QueryParser::getQueryTree();
-	vector<Synonym> queryResults;
-	try {
-		queryResults = QueryEvaluator::processQueryTree(qT);
-	} catch (exception e) {
-	}
-	ResultProjector::projectResultToList(queryResults, results);
+	PQLController::evaluate(query, results);
 }

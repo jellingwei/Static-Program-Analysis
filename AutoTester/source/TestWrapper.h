@@ -7,12 +7,8 @@
 
 // include your other headers here
 #include "AbstractWrapper.h"
-#include "QueryParser.h"
 #include "SourceParser.h"
-#include "InputQueryParser.h"
-#include "QueryEvaluator.h"
-#include "ResultProjector.h"
-#include "QueryTree.h"
+#include "PQLController.h"
 
 class TestWrapper : public AbstractWrapper {
  public:
