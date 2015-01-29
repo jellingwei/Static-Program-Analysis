@@ -200,7 +200,7 @@ std::ostream& operator<<(std::ostream &strm, const TNode &node)
 			case (Plus):
 				oper = "+";
 				break;
-			case (Multiply):
+			case (Times):
 				oper = "*";
 				break;
 			case (Minus):

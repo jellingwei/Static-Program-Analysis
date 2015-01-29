@@ -145,7 +145,7 @@ TNode* ExpressionParser::operatorMultiply(TNode* left)
 {
 	TNode* right = parse(operPrecedence["*"]);
 	PKB pkb = PKB::getInstance();
-	TNode* top = pkb.createTNode(Multiply, stmtNum, -2);
+	TNode* top = pkb.createTNode(Times, stmtNum, -2);
 
 	pkb.createLink(Child, top, left);
 	pkb.createLink(Child, top, right);

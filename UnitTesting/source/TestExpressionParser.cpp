@@ -176,7 +176,7 @@ void ExpressionParserTest::testSimpleCases() {
 	CPPUNIT_ASSERT_EQUAL(1, leftChild->getNodeValueIdx());
 
 	rightChild = top->getChildren()->at(1);
-	CPPUNIT_ASSERT_EQUAL(Multiply, rightChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(Times, rightChild->getNodeType());
 	
 	
 	leftMostChild = rightChild->getChildren()->at(0);
@@ -203,7 +203,7 @@ void ExpressionParserTest::testSimpleCases() {
 	CPPUNIT_ASSERT_EQUAL(1, leftChild->getNodeValueIdx());
 
 	rightChild = top->getChildren()->at(1);
-	CPPUNIT_ASSERT_EQUAL(Multiply, rightChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(Times, rightChild->getNodeType());
 	
 	
 	leftMostChild = rightChild->getChildren()->at(0);
@@ -223,7 +223,7 @@ void ExpressionParserTest::testSimpleCases() {
 	exprParser->updateBuffer(argVector6);
 
 	top = exprParser->parse();
-	CPPUNIT_ASSERT_EQUAL(Multiply, top->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(Times, top->getNodeType());
 
 	leftChild = top->getChildren()->at(0);
 	CPPUNIT_ASSERT_EQUAL(Minus, leftChild->getNodeType());
@@ -307,7 +307,7 @@ void ExpressionParserTest::testComplexCases() {
 	CPPUNIT_ASSERT_EQUAL(3, rightChild->getNodeValueIdx());
 
 	leftLeftChild = leftChild->getChildren()->at(0);
-	CPPUNIT_ASSERT_EQUAL(Multiply, leftLeftChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(Times, leftLeftChild->getNodeType());
 
 	leftRightChild = leftChild->getChildren()->at(1);
 	CPPUNIT_ASSERT_EQUAL(Variable, leftRightChild->getNodeType());
@@ -341,7 +341,7 @@ void ExpressionParserTest::testComplexCases() {
 
 	top = exprParser->parseExpression(argVector2);
 	 
-	CPPUNIT_ASSERT_EQUAL(Multiply, top->getNodeType());                                 // topmost layer
+	CPPUNIT_ASSERT_EQUAL(Times, top->getNodeType());                                 // topmost layer
 
 	leftChild = top->getChildren()->at(0);						//    *                 //2nd layer
 	CPPUNIT_ASSERT_EQUAL(Constant, leftChild->getNodeType());   //    ^ 
@@ -362,10 +362,10 @@ void ExpressionParserTest::testComplexCases() {
 	CPPUNIT_ASSERT_EQUAL(1, rightLeftLeftChild->getNodeValueIdx());
 
 	TNode* rightLeftRightChild = rightLeftChild->getChildren()->at(1);
-	CPPUNIT_ASSERT_EQUAL(Multiply, rightLeftRightChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(Times, rightLeftRightChild->getNodeType());
 
 	TNode* rightLeftRightLeftChild = rightLeftRightChild->getChildren()->at(0);           // 2nd lowest layer
-	CPPUNIT_ASSERT_EQUAL(Multiply, rightLeftRightLeftChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(Times, rightLeftRightLeftChild->getNodeType());
 	
 	TNode* rightLeftRightRightChild = rightLeftRightChild->getChildren()->at(1);
 	CPPUNIT_ASSERT_EQUAL(Variable, rightLeftRightRightChild->getNodeType());

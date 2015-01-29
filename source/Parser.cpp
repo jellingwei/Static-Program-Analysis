@@ -640,8 +640,7 @@ namespace Parser
 		// matchProcedure call is neccessary
 		bool res = util::parseProcedure();
 		assert(res); // do not evaluate queries if parser has failed
-		cout << "parser has completed the parse" << endl;
-		util::traverseAndPrintTree(PKB::getInstance().getRoot());
+	
 		return res;
 	}
 	
