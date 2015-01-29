@@ -12,7 +12,7 @@ using std::vector;
 enum QNODE_TYPE
 {
 	// Default QueryTree Placeholder QNODE_TYPEs
-	ROOT, RESULT, SUCHTHAT, PATTERN,
+	ROOT, RESULT, SUCHTHAT, PATTERN, WITH,
 
 	// Query QNODE_TYPEs
 	Affects, AffectsS,
