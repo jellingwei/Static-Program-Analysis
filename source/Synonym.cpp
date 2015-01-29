@@ -8,18 +8,9 @@ Synonym::~Synonym()
 }
 
 /**
- * Set the synonym type and name to be an empty string.
- */
-Synonym::Synonym()
-{
-	_type = "";
-	_name = "";
-}
-
-/**
  * Set the synonym type and name to the given type and name respectively.
  */
-Synonym::Synonym(string type, string name)
+Synonym::Synonym(SYNONYM_TYPE type, string name)
 {
 	_type = type;
 	_name = name;
@@ -28,7 +19,17 @@ Synonym::Synonym(string type, string name)
 /**
  * Set the synonym type and name to the given type and name respectively.
  */
-Synonym::Synonym(string type, int name)
+Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
+{
+	_type = type;
+	_name = name;
+	_attribute = attribute;
+}
+
+/**
+ * Set the synonym type and name to the given type and name respectively.
+ */
+Synonym::Synonym(SYNONYM_TYPE type, int name)
 {
 	_type = type;
 	_name = to_string(static_cast<long long>(name));
@@ -38,7 +39,7 @@ Synonym::Synonym(string type, int name)
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
  */
-Synonym::Synonym(string type, string name, vector<string> values)
+Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
 {
 	_type = type;
 	_name = name;
@@ -52,7 +53,7 @@ Synonym::Synonym(string type, string name, vector<string> values)
 /**
  * Set the synonym type and name to the given type and name respectively.
  */
-Synonym::Synonym(string type, string name, vector<int> values)
+Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 {
 	_type = type;
 	_name = name;
@@ -63,7 +64,7 @@ Synonym::Synonym(string type, string name, vector<int> values)
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
  */
-Synonym::Synonym(string type, string name, set<int> values)
+Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 {
 	_type = type;
 	_name = name;
@@ -92,9 +93,14 @@ void Synonym::setValues(set<int> values)
 /**
  * Return the type of the synonym.
  */
-string Synonym::getType()
+SYNONYM_TYPE Synonym::getType()
 {
 	return _type;
+}
+
+SYNONYM_ATTRIBUTE Synonym::getAttribute()
+{
+	return _attribute;
 }
 
 /**
