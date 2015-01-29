@@ -145,7 +145,7 @@ TNode* ExpressionParser::operatorMultiply(TNode* left)
 {
 	TNode* right = parse(operPrecedence["*"]);
 	PKB pkb = PKB::getInstance();
-	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
+	TNode* top = pkb.createTNode(Multiply, stmtNum, -2);
 
 	pkb.createLink(Child, top, left);
 	pkb.createLink(Child, top, right);
@@ -157,7 +157,7 @@ TNode* ExpressionParser::operatorSubtract(TNode* left)
 {
 	TNode* right = parse(operPrecedence["-"]);
 	PKB pkb = PKB::getInstance();
-	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
+	TNode* top = pkb.createTNode(Minus, stmtNum, -2);
 
 	pkb.createLink(Child, top, left);
 	pkb.createLink(Child, top, right);

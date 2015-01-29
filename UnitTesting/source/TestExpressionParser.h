@@ -5,18 +5,21 @@
 class ExpressionParserTest : public CPPUNIT_NS::TestFixture 
 { 
 	CPPUNIT_TEST_SUITE( ExpressionParserTest ); 
-	CPPUNIT_TEST( testInit );
+	CPPUNIT_TEST( testSingleNode );
+	CPPUNIT_TEST( testSimpleCases );
+	CPPUNIT_TEST( testComplexCases );
 	
 
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 	ExpressionParser* exprParser;
-	int varX;
-	int varY;
+
 	void setUp();
 	void tearDown();
 
-	void testInit();
+	void testSingleNode();
+	void testSimpleCases();
+	void testComplexCases();
 	
 };

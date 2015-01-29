@@ -200,6 +200,12 @@ std::ostream& operator<<(std::ostream &strm, const TNode &node)
 			case (Plus):
 				oper = "+";
 				break;
+			case (Multiply):
+				oper = "*";
+				break;
+			case (Minus):
+				oper = "-";
+				break;
 			default:
 				break;
 		}
