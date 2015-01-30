@@ -17,15 +17,18 @@ ExpressionParser::ExpressionParser()
 {
 	varTable = NULL;
 	operPrecedence = makeOperatorMap();
-	this->stmtNum = 0;
+	this->stmtNum = 1;
+	this->readOnly = false;
 }
 
+
 /**
- * Constructor. For use in testing, to avoid potential problems with using a global pkb singleton that may interfere with other tests.
+ * Constructor. Only for use in unit testing, to avoid potential problems with using a global pkb singleton that may interfere with other unit tests.
  */
 ExpressionParser::ExpressionParser(VarTable* varTable) : varTable(varTable)  {
 	operPrecedence = makeOperatorMap();
-	this->stmtNum = 0;
+	this->stmtNum = 1;
+	this->readOnly = false;   
 }
 
 ExpressionParser::~ExpressionParser() 
@@ -65,56 +68,70 @@ void ExpressionParser::updateStmtNum(int stmtNum)
 	this->stmtNum = stmtNum;
 }
 
-int matchConstant(string value, int stmtNum) 
+int matchConstant(string value, int stmtNum, bool readOnly = false) 
 {
 	PKB pkb = PKB::getInstance();
 	int constant = atoi(value.c_str());
 	
-	pkb.insertConstant(constant, stmtNum);
+	if (!readOnly) {
+		pkb.insertConstant(constant, stmtNum);
+	}
 	
 	return constant;
 }
 
-int matchVariable(string value, int stmtNum, VarTable* varTable = NULL)  
+int matchVariable(string value, int stmtNum, VarTable* varTable = NULL, bool readOnly = false)  
 {
 	PKB pkb = PKB::getInstance();
 	int varIndx;
+
+	// prevent writing to pkb when parsing expression on the query side
+	if (readOnly) {
+		varIndx = varTable == NULL? pkb.getVarIndex(value) : varTable->getVarIndex(value);
+		if (varIndx == -1) {
+			throw runtime_error("ExpressionParser: variable '" + value + "' is not found in varTable!");
+		}
+		return varIndx;
+	}
 
 	if (varTable == NULL) 
 	{
 		pkb.insertVar(value, stmtNum);
 		varIndx = pkb.getVarIndex(value);
+
+		// update pkb 
+		// @todo this should not be done here
+		pkb.setUses(stmtNum, varIndx);
+	
+		// propagate Uses for parent nodes
+		while (pkb.getParent(stmtNum).size()) 
+		{
+			stmtNum = pkb.getParent(stmtNum).at(0);
+			if (stmtNum > 0) 
+			{
+				pkb.setUses(stmtNum, varIndx);	
+			}
+		}
 	} else 
 	{
 		varTable->insertVar(value, stmtNum);
 		varIndx = varTable->getVarIndex(value);
 	}
-
-	// update pkb 
-	// @TODO this should not be done here
-	pkb.setUses(stmtNum, varIndx);
-
-	while (pkb.getParent(stmtNum).size()) 
-	{
-		stmtNum = pkb.getParent(stmtNum).at(0);
-		if (stmtNum > 0) 
-		{
-			pkb.setUses(stmtNum, varIndx);	
-		}
-	}
+	
+	
 
 	return varIndx;
 }
 
-int parseConstantOrVariable(string value, int stmtNum, VarTable* varTable = NULL) 
+int parseConstantOrVariable(string value, int stmtNum, VarTable* varTable = NULL, bool readOnly = false) 
 {
 	string constant = Parser::matchInteger(value);
 	if (constant.empty()) 
 	{ 
-		return matchVariable(value, stmtNum, varTable);
+		return matchVariable(value, stmtNum, varTable, readOnly);
 	} else 
 	{
-		return matchConstant(value, stmtNum);
+		return matchConstant(value, stmtNum, readOnly);
 	}
 }
 
@@ -201,15 +218,8 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 		// prevToken is either variable or constant now
 		bool isVariable = Parser::matchInteger(prevToken).empty();
 
-		if (varTable == NULL) 
-		{
-			leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum));
-		} else 
-		{
-			// this is called when running in unit test
-			leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum, varTable));
-		}
-				   
+		//@todo branch
+		leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum, varTable, readOnly));		   
 	}
 
 	
@@ -235,7 +245,8 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 }
 
 /**
- * Method to parse an expression. Returns the root of a tree.
+ * Method to parse an expression. Returns the root of a tree. This function writes data to the pkb (UsesTable and VarTable).
+ * 
  * For example, given an expression x + y + z, the following tree is the output.
  *                           + <- root
  *                         /   \
@@ -245,8 +256,32 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
  * @param buffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
+ * @sa ExpressionParser::parseExpressionForQuerying
  */
-TNode* ExpressionParser::parseExpression(vector<string> buffer) {
+TNode* ExpressionParser::parseExpressionForAST(vector<string> buffer) {
+	return parseExpression(buffer, false);
+} 
+
+/**
+ * Method to parse an expression. Returns the root of a tree. This method differs from parseExpressionForAST as it does not 
+ * write data to the PKB.
+ * For example, given an expression x + y + z, the following tree is the output.
+ *                           + <- root
+ *                         /   \
+ *                        +     z
+ *                       / \
+ *                      x   y
+ * @param buffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y"] should be passed in
+ * @sa ExpressionParser::updateBuffer
+ * @sa ExpressionParser::updateStmtNum
+ * @sa ExpressionParser::parseExpressionForAST
+ */
+TNode* ExpressionParser::parseExpressionForQuerying(vector<string> buffer) {
+	return parseExpression(buffer, true);
+} 
+
+TNode* ExpressionParser::parseExpression(vector<string> buffer, bool readOnly) {
 	updateBuffer(buffer);
+	this->readOnly = readOnly;
 	return parse();
 } 

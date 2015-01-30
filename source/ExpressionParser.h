@@ -21,6 +21,8 @@ class ExpressionParser {
 		int stmtNum;
 		string token; // current token
 
+		bool readOnly; /*! if this is set to true, the expression will not make any updates onto the pkb. This is used when parsing expressions for querying */
+
 		VarTable* varTable;
 
 		TNode* operatorAdd(TNode* left);
@@ -39,13 +41,17 @@ class ExpressionParser {
 		};
 
 		int getOperatorPrecedence(string oper);
+		TNode* parseExpression(vector<string>, bool readOnly);
 
 	public:
 		ExpressionParser();
 		ExpressionParser(VarTable* varTable);   /*! used during testing, to not involve the entire pkb singleton */
 		~ExpressionParser();
+
+		//@todo clean up api
 		void updateBuffer(vector<string>, int skip = 0);
 		void updateStmtNum(int);
 		TNode* parse(int bindingLevel = 0);
-		TNode* parseExpression(vector<string>);
+		TNode* parseExpressionForAST(vector<string>);
+		TNode* parseExpressionForQuerying(vector<string>);
 };

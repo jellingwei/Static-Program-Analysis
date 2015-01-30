@@ -28,7 +28,7 @@ void ExpressionParserTest::testSingleNode() {
 	const char* args[] = {"(", "x", ")"};
 	vector<string> argVector(args, args + 3);
 
-	TNode* top = exprParser->parseExpression(argVector);
+	TNode* top = exprParser->parseExpressionForAST(argVector);
 	CPPUNIT_ASSERT_EQUAL(Variable, top->getNodeType());
 	CPPUNIT_ASSERT_EQUAL(1, top->getNodeValueIdx());
 
@@ -36,24 +36,95 @@ void ExpressionParserTest::testSingleNode() {
 	const char* args1[] = {"(", "(", "0", ")", ")"};
 	vector<string> argVector1(args1, args1 + 5);
 
-	top = exprParser->parseExpression(argVector1);
+	top = exprParser->parseExpressionForAST(argVector1);
 	CPPUNIT_ASSERT_EQUAL(Constant, top->getNodeType());
 	CPPUNIT_ASSERT_EQUAL(0, top->getNodeValueIdx());
 
 	const char* args2[] = {"7070707"};
 	vector<string> argVector2(args2, args2 + 1);
 
-	top = exprParser->parseExpression(argVector2);
+	top = exprParser->parseExpressionForAST(argVector2);
 	CPPUNIT_ASSERT_EQUAL(Constant, top->getNodeType());
 	CPPUNIT_ASSERT_EQUAL(7070707, top->getNodeValueIdx());
 
 	const char* args3[] = {"x"};
 	vector<string> argVector3(args3, args3 + 1);
 
-	top = exprParser->parseExpression(argVector3);
+	top = exprParser->parseExpressionForAST(argVector3);
 	CPPUNIT_ASSERT_EQUAL(Variable, top->getNodeType());
 	CPPUNIT_ASSERT_EQUAL(1, top->getNodeValueIdx());
 }
+
+void
+ExpressionParserTest::testQuery() {
+	
+	const char* args[] = {"i", "*", "o"}; // i and o are variables that have not been encountered before
+	vector<string> argVector(args, args + 3);
+	CPPUNIT_ASSERT_THROW_MESSAGE("Expression parser should throw runtime_error if a unseen variable is used", exprParser->parseExpressionForQuerying(argVector), runtime_error);
+	
+
+	VarTable* newVarTable = new VarTable();
+	int iIndex = newVarTable->insertVar("i", 1);
+	int oIndex = newVarTable->insertVar("o", 1);
+	int nIndex = newVarTable->insertVar("n", 1);
+	int longvarIndex = newVarTable->insertVar("longvar", 1);
+
+	//  *
+	// / \
+	// i  o
+	ExpressionParser* exprParserForQuerying = new ExpressionParser(newVarTable);  // use a vartable with test data for testing. 
+																				  // for real usage, do not pass in a vartable and the expressionparser will
+																				  // use the pkb singleton
+	TNode* top = exprParserForQuerying->parseExpressionForQuerying(argVector);
+	CPPUNIT_ASSERT_EQUAL(Times, top->getNodeType());
+
+	TNode* leftChild = top->getChildren()->at(0);
+	TNode* rightChild = top->getChildren()->at(1);
+
+	CPPUNIT_ASSERT_EQUAL(Variable, leftChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(iIndex, leftChild->getNodeValueIdx());
+
+	CPPUNIT_ASSERT_EQUAL(Variable, rightChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(oIndex, rightChild->getNodeValueIdx());
+
+}
+
+/**
+ * Test that when readOnly is true, the expression parser does not write to the pkb. 
+ */
+void 
+ExpressionParserTest::testSideEffects() {
+	exprParser->updateStmtNum(1);  // can pass in any dummy value for now.
+	 
+	// Test 1: test that readonly mode works when the expression parser is not using the global pkb (in setUp, an empty vartable is passed into exprParser)
+	const char* args[] = {"unusedx", "+", "unusedy"}; // unusedx and unusedy are variables that have not been encountered before
+	vector<string> argVector(args, args + 3);
+	
+	CPPUNIT_ASSERT_THROW_MESSAGE("expression parser failed to throw exception for new variable", exprParser->parseExpressionForQuerying(argVector), runtime_error);
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser wrote to the UsesTable in readonly mode", 0, (int)PKB::getInstance().getUsesVarForStmt(1).size());
+	PKB pkb = PKB::getInstance();
+	int index = pkb.getVarIndex("unusedx");
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser, under unit testing, is writing to VarTable in the PKB! This may be causing other unit tests to fail.", -1, index);
+
+	// Test 2: test when expression parser is not using the global pkb and under testing mode
+	exprParser->parseExpressionForAST(argVector);
+
+	pkb = PKB::getInstance();
+	index = pkb.getVarIndex("unusedx");
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser wrote to the UsesTable in unit testing", 0, (int)PKB::getInstance().getUsesVarForStmt(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser, under unit testing, is leaking side effects into the PKB! This may be causing other unit tests to fail.", -1, index);
+
+
+	// Test 3: test that readonly mode works when the expression parser is using the global pkb
+	ExpressionParser* exprParser1 = new ExpressionParser();
+	CPPUNIT_ASSERT_THROW(exprParser1->parseExpressionForQuerying(argVector), runtime_error);
+
+	index = pkb.getVarIndex("unusedx");
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser wrote to the UsesTable in readonly mode", 0, (int)PKB::getInstance().getUsesVarForStmt(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser is leaking side effects into the PKB! This may be causing other unit tests to fail.", -1, index);
+}
+
 
 void ExpressionParserTest::testSimpleCases() {
 	
@@ -62,7 +133,7 @@ void ExpressionParserTest::testSimpleCases() {
 	const char* args[] = {"x", "+", "y"};
 	vector<string> argVector(args, args + 3);
 
-	TNode* top = exprParser->parseExpression(argVector);
+	TNode* top = exprParser->parseExpressionForAST(argVector);
 	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
 
 	TNode* leftChild = top->getChildren()->at(0);
@@ -78,7 +149,7 @@ void ExpressionParserTest::testSimpleCases() {
 	const char* args1[] = {"x", "+", "y", "+", "z"};
 	vector<string> argVector1(args1, args1 + 5);
 	
-	top = exprParser->parseExpression(argVector1);
+	top = exprParser->parseExpressionForAST(argVector1);
 	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
 
 	leftChild = top->getChildren()->at(0);
@@ -258,7 +329,7 @@ void ExpressionParserTest::testComplexCases() {
 	char* args[] = {"x", "+", "y", "+", "z", "+", "3"};
 	vector<string> argVector(args, args + 7);
 
-	TNode* top = exprParser->parseExpression(argVector);
+	TNode* top = exprParser->parseExpressionForAST(argVector);
 
 	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
 
@@ -295,7 +366,7 @@ void ExpressionParserTest::testComplexCases() {
 	char* args1[] = {"(", "x", "*", "y", ")", "+", "z", "+", "(", "3", ")"};
 	vector<string> argVector1(args1, args1 + 11);
 
-	top = exprParser->parseExpression(argVector1);
+	top = exprParser->parseExpressionForAST(argVector1);
 
 	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
 
@@ -339,7 +410,7 @@ void ExpressionParserTest::testComplexCases() {
 	char* args2[] = {"150", "*", "(", "x", "+", "x", "*", "y", "*", "x", "-", "z" ,")"};
 	vector<string> argVector2(args2, args2 + 13);
 
-	top = exprParser->parseExpression(argVector2);
+	top = exprParser->parseExpressionForAST(argVector2);
 	 
 	CPPUNIT_ASSERT_EQUAL(Times, top->getNodeType());                                 // topmost layer
 
