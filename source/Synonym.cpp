@@ -130,3 +130,58 @@ set<int> Synonym::getValuesSet()
 	}
 	return returnValues;
 }
+
+string Synonym::convertToString(SYNONYM_TYPE synonymType)
+{
+	switch (synonymType) {
+	case PROCEDURE:
+		return "procedure";
+	case STMT:
+		return "stmt";
+	case ASSIGN:
+		return "assign";
+	case CALL:
+		return "call";
+	case WHILE:
+		return "while";
+	case IF:
+		return "if";
+	case VARIABLE:
+		return "variable";
+	case CONSTANT:
+		return "constant";
+	case PROG_LINE:
+		return "prog_line";
+	case STRING:
+		return "string";
+	case UNDEFINED:
+		return "_";
+	default:
+		return "";
+	}
+}
+
+SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
+{
+	if (synonymType == "procedure") {
+		return PROCEDURE;
+	} else if (synonymType == "stmt") {
+		return STMT;
+	} else if (synonymType == "assign") {
+		return ASSIGN;
+	} else if (synonymType == "call") {
+		return CALL;
+	} else if (synonymType == "if") {
+		return IF;
+	} else if (synonymType == "variable") {
+		return VARIABLE;
+	} else if (synonymType == "constant") {
+		return CONSTANT;
+	} else if (synonymType == "prog_line") {
+		return PROG_LINE;
+	} else if (synonymType == "string") {
+		return STRING;
+	} else {
+		return UNDEFINED;
+	}
+}

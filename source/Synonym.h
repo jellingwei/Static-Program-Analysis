@@ -38,6 +38,9 @@ public:
 	string getName();
 	vector<int> getValues();
 	set<int> getValuesSet();
+	
+	static string convertToString(SYNONYM_TYPE synonymType);
+	static SYNONYM_TYPE convertToEnum(string synonymType);
 
 private:
 	SYNONYM_TYPE _type;  //Type of synonym (Can use "string" or "boolean")
