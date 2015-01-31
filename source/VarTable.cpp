@@ -18,7 +18,6 @@ using namespace stdext;
  * and the table remains unchanged.
  * @exception if varName is empty or stmtNum is negative or 0.
  */
-
 int VarTable::insertVar(string varName, int stmtNum) 
 {
 	if (stmtNum <= 0) {

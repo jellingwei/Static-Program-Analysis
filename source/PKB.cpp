@@ -24,32 +24,64 @@ PKB::PKB()
 	ast = new AST();
 }
 
+/**
+* @return a TNode for the given design entity together with its statement number and index. 
+* @exception if stmtNo is negative or 0 or index is negative.
+*/
 TNode* PKB::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) 
 {
 	return ast->createTNode(ast_node_type, stmtNo, idx);
 }
+
+/**
+* @return the root node of the AST.
+*/
 TNode* PKB::getRoot() 
 {
 	return ast->getRoot();
 }
+
+/**
+* @return TRUE if the link between the fromNode to toNode is created successfully. Otherwise, return FALSE. 
+* @exception if link is invalid, or fromNode and toNode is NULL.
+*/
 bool PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) 
 {
 	return ast->createLink(link, fromNode, toNode);
 }
-		
+
+/**
+* @return the total number of children the parent TNode has. 
+* @exception if parent is NULL.
+*/
 int PKB::getChildrenSize(TNode* parent) 
 {
 	return ast->getChildrenSize(parent);
 }
+
+/**
+* @return the list of all the children nodes the parent TNode has.
+* If there is no answer, return an empty list.
+* @exception if parent is NULL.
+*/
 vector<TNode*>* PKB::getChildrenNode(TNode* parent) 
 {
 	return ast->getChildrenNode(parent);
 }
+
+/**
+* @return TRUE if child TNode is a child node of parent TNode. Otherwise, return FALSE.
+* @exception if parent or child is NULL.
+*/
 bool PKB::isChildNode(TNode* parent, TNode* child) 
 {
 	return ast->isChildNode(parent, child);
 }
 
+/**
+* @return TRUE if node exists. Otherwise, return FALSE.
+* @exception if node is NULL.
+*/
 bool PKB::isExists(TNode* node) 
 {
 	return ast->isExists(node);
@@ -58,21 +90,43 @@ TNode* PKB::getLastImpt()
 {
 	return ast->getLastImpt();
 }
+
+/**
+ * @return the total number of nodes in the the AST.
+ */
 int PKB::getASTSize() 
 {
 	return ast->getSize();
 }
 
+/**
+ * Pattern matching for assign statements.
+ * @return a vector of statement numbers which are assign stmts, and uses the input RHS as its right substree.
+ * @param RHS to match the expression query with a suitable subtree.
+ */
 vector<int> PKB::patternMatchAssign(string RHS) 
 {
 	return ast->patternMatchAssign(RHS);
 }
 
+/**
+ * Pattern matching for while statements.
+ * @return a vector of statement numbers which are while loops, and uses the input LHS as its control variable.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
+ */
 vector<int> PKB::patternMatchWhile(string LHS) 
 {
 	return ast->patternMatchWhile(LHS);
 }
 
+/**
+ * Obtain the index of control variable of a while loop. 
+ * @param stmtNum the statement number of the while loop
+ * @return -1 if 1. an invalid statement number is provided.
+ *     2. the statement indicated by the stmtNum is not a While statement
+ *     3. the AST is poorly formed and the while loop's node is in an invalid state
+ * Otherwise, return the index of the control variable.
+ */
 int PKB::getControlVariable(int stmtNum) 
 {
 	return ast->getControlVariable(stmtNum);
@@ -80,26 +134,60 @@ int PKB::getControlVariable(int stmtNum)
 
 // VarTable
 
+/**
+ * If varName is not in the VarTable, inserts it into the VarTable with the
+ * given statement number stmtNum and return its index. Otherwise, return its INDEX
+ * and the table remains unchanged.
+ * @return index of variable
+ * @exception if varName is empty or stmtNum is negative or 0.
+ */
 int PKB::insertVar(string varName, int stmtNum) 
 {
 	return varTable->insertVar(varName, stmtNum);
 }
+
+/**
+ * @return the total number of variables in the the VarTable.
+ */
 int PKB::getVarTableSize() 
 {
 	return varTable->getVarTableSize();
 }
+/**
+ * @return the name of the variable in the VarTable with the given index.
+ * If index is out of range, return an empty string.
+ */
 string PKB::getVarName(int index) 
 {
 	return varTable->getVarName(index);
 }
+
+/**
+ * If varName is in the VarTable, return its index. Otherwise, return -1 to
+ * indicate there is no such variable in the the VarTable. If varName is empty or null, -1 is
+ * returned.
+ * @return index of variable or -1 if varName is empty or null
+ * @exception if varName is empty
+ */
 int PKB::getVarIndex(string varName) 
 {
 	return varTable->getVarIndex(varName);
 }
+
+/**
+ * @return the statement number of the variable in the VarTable with the given
+ * varName. Otherwise, return -1 to indicate there is no such statement number.
+ * If there is no answer or if “varName” is empty or null, return an empty list.
+ */
 int PKB::getStmtNum(string varName) 
 {
 	return varTable->getStmtNum(varName);
 }
+
+/**
+ * Return all the index of the variables in the the VarTable.
+ * If there is no answer, return an empty list.
+ */
 vector<int> PKB::getAllVarIndex() 
 {
 	return varTable->getAllVarIndex();
@@ -126,56 +214,107 @@ int PKB::getProcIndex(string procName)
 }
 
 //Constant
+/**
+ * If constant is not in the ConstantTable, inserts it into the ConstantTable with the
+ * given statement number stmtNum.
+ * @return TRUE if constantTable got updated.
+ * @exception if constant is empty or stmtNum is negative or 0.
+ */
 bool PKB::insertConstant(int constant, int stmtNum) 
 {
 	return constantTable->insertConstant(constant, stmtNum);
 }
+
 int PKB::getConstantTableSize() 
 {
 	return constantTable->getSize();
 }
+/**
+ * @return the constant in the ConstantTable with the given index.
+ * If index is out of range, return an empty string.
+ */
 int PKB::getConstant(int index) 
 {
 	return constantTable->getConstant(index);
 }
+/**
+* @return the index of a constant in ConstantTable using the constant as the key.
+*/
 int PKB::getConstantIndex(int constant) 
 {
 	return constantTable->getConstantIndex(constant);
 }
+/**
+* @return the statement number the constant is in the ConstantTable.
+*/
 vector<int> PKB::getStmtNum(int constant) 
 {
 	return constantTable->getStmtNum(constant);
 }
+/**
+* Check if it is a constant in the ConstantTable.
+* @return TRUE if number is a constant in the ConstantTable, otherwise FALSE
+*/
 bool PKB::isConstant(int number) 
 {
 	return constantTable->isConstant(number);
 }
+
+/**
+* @return the list of all the constant in the ConstantTable.
+*/
 vector<int> PKB::getAllConstant() 
 {
 	return constantTable->getAllConstant();
 }
 
 // StmtTable
+/**
+* @return TRUE if the StmtTable is updated accordingly. Otherwise, return FALSE. 
+* If stmtNum and type are already present in the StmtTable and are previously set, the StmtTable will not be updated.
+* @exception if stmtNum is negative or 0, or type is not while/assign/if.
+*/
 bool PKB::insertStmt(int stmtNum, string type) 
 {
 	return stmtTable->insertStmt(stmtNum, type);
 }
+/**
+ * @return the statement type in the StmtTable with the given statement number.
+ * If stmtNum is out of range, return an empty string.
+ * @exception if stmtNum is negative or 0.
+ */
 string PKB::getType(int stmtNum) 
 {
 	return stmtTable->getType(stmtNum);
 }
+/**
+ * @return all the statement number of the statement type in the the StmtTable. 
+ * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+*/
 vector<int> PKB::getStmtNumForType(string type) 
 {
 	return stmtTable->getStmtNumForType(type);
 }
+/**
+* @return TRUE if stmtNo is of Assignment Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
 bool PKB::isAssign(int stmtNum) 
 {
 	return stmtTable->isAssign(stmtNum);
 }
+/**
+* @return TRUE if stmtNo is of While Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
 bool PKB::isWhile(int stmtNum) 
 {
 	return stmtTable->isWhile(stmtNum);
 }
+
+/**
+ * @return the total number of statements in the the StmtTable.
+ */
 int PKB::getStmtTableSize() 
 {
 	return stmtTable->getSize();

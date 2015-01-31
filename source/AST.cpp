@@ -524,16 +524,16 @@ int AST::getControlVariable(int stmtNum) {
 	if (PKB::getInstance().nodeTable.count(stmtNum) <= 0) {
 		return -1;
 	}
-	TNode* whileNode = PKB::getInstance().nodeTable.at(stmtNum);
-	if (whileNode->getNodeType() != While) {
+	TNode* node = PKB::getInstance().nodeTable.at(stmtNum);
+	if (node->getNodeType() != While && node->getNodeType() != If) {
 		return -1;
 	}
 
-	assert(whileNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
-	if (whileNode->getChildren()->size() < 1) {
+	assert(node->getChildren()->size() >= 2); // < 2 children is an invalid state for a while or if node
+	if (node->getChildren()->size() < 1) {
 		return -1;
 	}
-	int controlVariable = whileNode->getChildren()->at(0)->getNodeValueIdx();
+	int controlVariable = node->getChildren()->at(0)->getNodeValueIdx();
 
 	return controlVariable;
 }

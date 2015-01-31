@@ -32,6 +32,7 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2)
 /**
  * Given stmt2 as input, returns a vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied.
  * If there is no answer, return an empty vector
+ * @return vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied
  */
 vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) 
 {
@@ -45,7 +46,6 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 
 	if (!node2) 
 	{
-		//throw exception("FollowsTable exception: invalid stmtNum provided");
 		return vector<int>();
 	}
 

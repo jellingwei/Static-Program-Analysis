@@ -146,6 +146,7 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 {
 	vector<int> result;
 
+	// return an empty vector if the node for the stmtNum cannot be found
 	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
 	{
 		return vector<int>();
@@ -159,9 +160,11 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 
 	if (stmtType == If) 
 	{
+		// handle stmt under "if"
 		node1 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(1); 
 		assert(node1->getNodeType() == StmtLst);
 
+		// handle stmts under "else"
 		if (pkb.nodeTable.at(stmtNum1)->getChildren()->size() > 2) 
 		{
 			node2 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(2); 
@@ -175,13 +178,15 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 		assert(node1->getNodeType() == StmtLst);
 	} else 
 	{
+		// the node is not a If or While, therefore it does not have children
 		return vector<int>();
-		//throw logic_error("ParentTable: invalid stmt type for finding children");
+		
 	}
 
 
 	if (!transitiveClosure) 
 	{
+		// the "if" of if statements, and for while statements
 		if (node1->hasChild()) 
 		{
 			vector<TNode*>* children = node1->getChildren();
@@ -192,6 +197,7 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 			}
 		}
 
+		// handles the "else" of if statements
 		if (node2 != NULL && node2->hasChild()) 
 		{
 			vector<TNode*>* children = node2->getChildren();
