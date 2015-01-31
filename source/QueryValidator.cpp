@@ -92,8 +92,6 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 	vector<string> listArg1;
 	vector<string> listArg2;
 
-	cout<< "HEREEEE"<<endl;
-
 	try {
 		//if enum QNODE_TYPE is not found it throws an out of range exception
 		listArg1 = relationshipArg1Map.at(type);
