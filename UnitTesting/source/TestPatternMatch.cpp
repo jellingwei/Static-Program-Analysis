@@ -22,6 +22,13 @@ void PatternMatchTest::setUp()
 
 void PatternMatchTest::testAssign()
 {
+	PKB pkb = PKB::getInstance();
+	
+	cout << "constant Table" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of constants", 0, pkb.getConstantTableSize());
+	cout << "var Table" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of variables", 0, pkb.getVarTableSize());
+
 	/*Parser::initParser("test/i_src2.txt");
 	AST* ast = PKB::getInstance().ast;
 cout << "ast size " << ast->getSize() << " ";
@@ -50,12 +57,7 @@ cout << "ast size " << ast.getSize() << " ";
 
 	//Parser::initParser("test/i_src2.txt");
 
-	PKB pkb = PKB::getInstance();
-	// ConstantTable
-	//cout << "constant Table" << endl;
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of constants", 3, pkb.getConstantTableSize());
-	cout << "var Table" << endl;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of variables", 6, pkb.getVarTableSize());
+	
 }
 
 void PatternMatchTest::testWhile()
