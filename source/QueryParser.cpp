@@ -6,6 +6,7 @@
 //#endif
 
 #include<stdio.h>
+#include <tuple>
 #include <unordered_map>
 #include <iostream>
 #include <string>
@@ -22,6 +23,7 @@
 
 using std::string;
 using std::vector;
+using std::make_tuple;
 
 /**
 	@brief Namespace containing functions for parsing PQL queries.
@@ -31,18 +33,25 @@ using std::vector;
  */
 namespace QueryParser
 {
+	enum REF_TYPE
+	{
+		entRef, stmtRef, lineRef, varRef
+	};
+
 	ifstream inputFile;
 	vector<string> buffer;
 	vector<string>::iterator bufferIter;
 	string currentParsedLine;
 
 	string designEntities[] = {"stmt","assign","while","variable","constant","prog_line"};
-	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*"};
+	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*", "Calls", "Calls*"};
 	QueryTree* myQueryTree;
 	unordered_map<string, string> synonymsMap; //key: synonyms
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
+	unordered_map<string, tuple<REF_TYPE, REF_TYPE>> relRefMap; //key: relRef
 	QueryValidator* myQueryV;
-	
+
+
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
 	 * @return TRUE if the query parser have been initialized. Otherwise, return FALSE.
@@ -150,12 +159,11 @@ namespace QueryParser
 	 */	
 	void initQueryTreeAndSymbolsTable()
 	{
-		pair<string,QNODE_TYPE> pairNodeType;
-		
 		myQueryTree = new QueryTree();
 		
 		synonymsMap.clear();
 		nodetypeMap.clear();
+		relRefMap.clear();
 
 		//populate nodetypeMap
 		pair<string,QNODE_TYPE> pairNodeType1 ("Modifies", QNODE_TYPE(Modifies));
@@ -170,7 +178,33 @@ namespace QueryParser
 		nodetypeMap.insert(pairNodeType5);
 		pair<string,QNODE_TYPE> pairNodeType6 ("Follows*",QNODE_TYPE(FollowsS));
 		nodetypeMap.insert(pairNodeType6);
+		pair<string,QNODE_TYPE> pairNodeType7 ("Calls",QNODE_TYPE(Calls));
+		nodetypeMap.insert(pairNodeType7);
+		pair<string,QNODE_TYPE> pairNodeType8 ("Calls*",QNODE_TYPE(CallsS));
+		nodetypeMap.insert(pairNodeType8);
 
+		//populate relRefMap
+		
+		auto node1 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(entRef));
+		auto node2 = make_tuple(REF_TYPE(entRef), REF_TYPE(entRef));
+		auto node3 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(stmtRef));
+
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode1 ("Modifies", node1);
+		relRefMap.insert(pairRelNode1);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode2 ("Uses", node1);
+		relRefMap.insert(pairRelNode2);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode3 ("Calls", node2);
+		relRefMap.insert(pairRelNode3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode4 ("Calls*", node2);
+		relRefMap.insert(pairRelNode4);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode5 ("Parent", node3);
+		relRefMap.insert(pairRelNode5);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode6 ("Parent*", node3);
+		relRefMap.insert(pairRelNode6);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode7 ("Follows", node3);
+		relRefMap.insert(pairRelNode7);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode8 ("Follows*", node3);
+		relRefMap.insert(pairRelNode8);
 	}
 
 	/**
@@ -518,11 +552,23 @@ namespace QueryParser
 	 *  After parsing the relRef, build a tree.
 	 *  @To-do Temporarily it's for such-that. Extend it for patterns, select, with
 	 */
-	bool buildQueryTree(QNODE_TYPE nodeType, Synonym s1, Synonym s2)
+	bool buildQueryTree(string relRef, Synonym s1, Synonym s2)
 	{				
-		bool res = myQueryV->validateSuchThatQueries(nodeType, s1, s2);
+		bool res;
+		QNODE_TYPE nodeType;
+
+		//get the nodeType
+		if (nodetypeMap.count(relRef) > 0){
+			nodeType = nodetypeMap.at(relRef);
+		}else{
+			return false;
+		}
+
+		//validate the query
+		res = myQueryV->validateSuchThatQueries(nodeType, s1, s2);
 		if(!res){return false;}
 
+		//build the tree
 		QNode* childNode = myQueryTree->createQNode(nodeType, Synonym(), s1, s2);
 		res = myQueryTree->linkNode(myQueryTree->getSuchThatNode(), childNode);
 
@@ -566,6 +612,7 @@ namespace QueryParser
 		
 		}
 
+		//if parsing fails an empty string is passed.
 		return entRef_value;
 	}
 
@@ -579,7 +626,6 @@ namespace QueryParser
 	{
 		std::regex apostrophe("[\"]");
 		string DE_type, nextToken, entRef_value;
-		QNODE_TYPE nodeType;
 
 		bool res = parse("such");
 		if (!res){return false;}
@@ -610,13 +656,6 @@ namespace QueryParser
 
 				/***Parsing is done. Building Query Tree ***/
 
-				if (nodetypeMap.count(relRef[i]) > 0){
-					nodeType = nodetypeMap.at(relRef[i]);
-				}else{
-					return false;
-				}
-
-
 				/* Synonym s2 */
 				string name2;
 				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
@@ -630,10 +669,6 @@ namespace QueryParser
 					}else if(synonymsMap.count(name2) > 0){
 						DE_type = synonymsMap.at(name2);
 					}else{
-
-						#ifdef DEBUG
-							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
-						#endif
 						return false;
 					}
 
@@ -647,12 +682,7 @@ namespace QueryParser
 					}else if(matchInteger(name2)){
 						DE_type = "String";
 					}else{
-
-						#ifdef DEBUG
-							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
-						#endif
 						return false;
-
 					}
 				}
 				//create synonym s2
@@ -667,7 +697,6 @@ namespace QueryParser
 					name1 = peekBackwards(5);
 				}
 
-
 				if (synonymsMap.count(name1) > 0){
 					DE_type = synonymsMap.at(name1); 
 				}else if(name1.compare("_")==0){
@@ -675,9 +704,6 @@ namespace QueryParser
 				}else if(matchInteger(name1)){
 					DE_type = "String";
 				}else{
-					#ifdef DEBUG
-						cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
-					#endif
 					return false;
 				}
 				
@@ -685,15 +711,11 @@ namespace QueryParser
 				Synonym s1(DE_type,name1);
 
 
-				res = buildQueryTree(nodeType, s1, s2);
+				res = buildQueryTree(relRef[i], s1, s2);
 
 				return res;
 			}
 		}
-
-		#ifdef DEBUG
-			cout<<"QueryParser in parseSuchThatClause : there is no matching relRef[]"<<endl;
-		#endif
 
 		return false;
 	}
