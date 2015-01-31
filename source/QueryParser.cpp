@@ -6,6 +6,7 @@
 //#endif
 
 #include<stdio.h>
+#include <tuple>
 #include <unordered_map>
 #include <iostream>
 #include <string>
@@ -22,6 +23,7 @@
 
 using std::string;
 using std::vector;
+using std::make_tuple;
 
 /**
 	@brief Namespace containing functions for parsing PQL queries.
@@ -31,18 +33,25 @@ using std::vector;
  */
 namespace QueryParser
 {
+	enum REF_TYPE
+	{
+		entRef, stmtRef, lineRef, varRef
+	};
+
 	ifstream inputFile;
 	vector<string> buffer;
 	vector<string>::iterator bufferIter;
 	string currentParsedLine;
 
-	string designEntities[] = {"stmt","assign","while","variable","constant","prog_line"};
-	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*"};
+	string designEntities[] = {"procedure", "stmtLst", "stmt","assign", "call", "while", "if", "variable","constant","prog_line", "plus", "minus", "times"};
+	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*", "Calls", "Calls*"};
 	QueryTree* myQueryTree;
 	unordered_map<string, string> synonymsMap; //key: synonyms
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
+	unordered_map<string, tuple<REF_TYPE, REF_TYPE>> relRefMap; //key: relRef
 	QueryValidator* myQueryV;
-	
+
+
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
 	 * @return TRUE if the query parser have been initialized. Otherwise, return FALSE.
@@ -150,12 +159,11 @@ namespace QueryParser
 	 */	
 	void initQueryTreeAndSymbolsTable()
 	{
-		pair<string,QNODE_TYPE> pairNodeType;
-		
 		myQueryTree = new QueryTree();
 		
 		synonymsMap.clear();
 		nodetypeMap.clear();
+		relRefMap.clear();
 
 		//populate nodetypeMap
 		pair<string,QNODE_TYPE> pairNodeType1 ("Modifies", QNODE_TYPE(Modifies));
@@ -170,7 +178,33 @@ namespace QueryParser
 		nodetypeMap.insert(pairNodeType5);
 		pair<string,QNODE_TYPE> pairNodeType6 ("Follows*",QNODE_TYPE(FollowsS));
 		nodetypeMap.insert(pairNodeType6);
+		pair<string,QNODE_TYPE> pairNodeType7 ("Calls",QNODE_TYPE(Calls));
+		nodetypeMap.insert(pairNodeType7);
+		pair<string,QNODE_TYPE> pairNodeType8 ("Calls*",QNODE_TYPE(CallsS));
+		nodetypeMap.insert(pairNodeType8);
 
+		//populate relRefMap
+		
+		auto node1 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(entRef));
+		auto node2 = make_tuple(REF_TYPE(entRef), REF_TYPE(entRef));
+		auto node3 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(stmtRef));
+
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode1 ("Modifies", node1);
+		relRefMap.insert(pairRelNode1);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode2 ("Uses", node1);
+		relRefMap.insert(pairRelNode2);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode3 ("Calls", node2);
+		relRefMap.insert(pairRelNode3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode4 ("Calls*", node2);
+		relRefMap.insert(pairRelNode4);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode5 ("Parent", node3);
+		relRefMap.insert(pairRelNode5);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode6 ("Parent*", node3);
+		relRefMap.insert(pairRelNode6);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode7 ("Follows", node3);
+		relRefMap.insert(pairRelNode7);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode8 ("Follows*", node3);
+		relRefMap.insert(pairRelNode8);
 	}
 
 	/**
@@ -347,15 +381,17 @@ namespace QueryParser
 
 	/**
 	 * Parses the next token and check if is a stmt reference.
+	 * @return an empty string if parsing fails
 	 */
-	bool parseStmtRef()
+	string parseStmtRef()
 	{
 		string nextToken = parseToken();
-		return matchStmtRef(nextToken);
+		return matchStmtRef(nextToken) ? nextToken: "";
 	}
 
 	/**
 	 * Parses the next token and check if is a entity reference.
+	 * @return an empty string if parsing fails
 	 */
 	string parseEntRef()
 	{
@@ -514,179 +550,175 @@ namespace QueryParser
 	}
 
 	/**
+	 *	Helper function for parse such that clause
+	 *  After parsing the relRef, build a tree.
+	 *  @To-do Temporarily it's for such-that. Extend it for patterns, select, with
+	 */
+	bool buildQueryTree(string relRef, Synonym s1, Synonym s2)
+	{				
+		bool res;
+		QNODE_TYPE nodeType;
+
+		//get the nodeType
+		if (nodetypeMap.count(relRef) > 0){
+			nodeType = nodetypeMap.at(relRef);
+		}else{
+			return false;
+		}
+
+		//validate the query
+		res = myQueryV->validateSuchThatQueries(nodeType, s1, s2);
+		if(!res){return false;}
+
+		//build the tree
+		QNode* childNode = myQueryTree->createQNode(nodeType, Synonym(), s1, s2);
+		res = myQueryTree->linkNode(myQueryTree->getSuchThatNode(), childNode);
+
+		return res;
+	}
+
+	Synonym createSynonym(string relRef,string value, int arg)
+	{
+		string DE_type;
+		REF_TYPE node;
+		std::regex apostrophe("[\"]");
+
+		auto nodeTuple = relRefMap.at(relRef);
+		if(arg==1)
+			node = std::get<0>(nodeTuple);
+		else if(arg==2)
+			node = std::get<1>(nodeTuple);
+		else
+			return Synonym(); //arg can only be 1 or 2 
+
+
+		if(node==REF_TYPE(stmtRef)){
+
+			if (synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value); 
+			}else if(value.compare("_")==0){
+				DE_type = value;
+			}else if(matchInteger(value)){
+				DE_type = "String";
+			}else{
+				return Synonym();  //error type mismatch
+			}
+
+		}else if(node==REF_TYPE(entRef)){
+
+			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
+				DE_type = "String";
+			}else if(value.compare("_")==0){
+				DE_type =value;
+			}else if(synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value);
+			}
+			else{
+				return Synonym();  //error type mismatch
+			}
+		}
+
+		return Synonym(DE_type,value);
+
+	}
+
+	/**
+	 *	Helper function for parse such that clause
+	 *  @param[in] input the relRef (ie "Follows*") and the argument it's parsing(either 1 or 2 only) 
+	 *  Argument 1 can be an entRef, stmtRef or lineRef.
+	 *  Argument 2 can be an entRef, stmtRef, lineRef or varRef.
+	 *  If @return is an empty string, means parsing failed.
+	 *  @To-do return synonym  
+	 */
+	string parseArg(string relRef, int arg)
+	{
+		bool res;
+		REF_TYPE node;
+		string entRef_value="";
+
+		auto nodeTuple = relRefMap.at(relRef);
+		if(arg==1)
+			node = std::get<0>(nodeTuple);
+		else if(arg==2)
+			node = std::get<1>(nodeTuple);
+		else
+			return ""; //arg can only be 1 or 2 
+		
+		if(node==REF_TYPE(stmtRef)){
+
+			entRef_value = parseStmtRef();
+			
+		}else if(node==REF_TYPE(entRef)){
+
+			entRef_value = parseEntRef();
+		
+		}//else do nothing and an empty string is passed.
+
+
+		return entRef_value;
+	}
+
+
+
+	/**
 	 * Creates QNode for such that clause and validates the query.
 	 * @return FALSE if there is an error parsing query.
 	 */
 	bool parseSuchThatClause()
 	{
-		std::regex apostrophe("[\"]");
-		string DE_type, nextToken;
-		QNODE_TYPE nodeType;
+		string DE_type, nextToken, entRef_value1,entRef_value2;
 
 		bool res = parse("such");
-		if (!res){
-			#ifdef DEBUG
-				cout<<"QueryParser in parseSuchThatClause : 'such' keyword missing"<<endl;
-			#endif
-			return false;
-		}
+		if (!res){return false;}
 		res = parse("that");
-		if (!res){
-			#ifdef DEBUG
-				cout<<"QueryParser in parseSuchThatClause : 'that' keyword missing"<<endl;
-			#endif
-			return false;
-		}
+		if (!res){return false;}
 
 		nextToken = parseToken();
 		for(int i=0; i<(sizeof(relRef)/sizeof(*relRef)); i++){
 
 			if(nextToken.compare(relRef[i]) == 0){
 				res = parse("(");
-				if (!res){
+				if (!res){return false;} 
+
+				entRef_value1 = parseArg(relRef[i], 1);
+				if(entRef_value1.compare("")==0){
 					#ifdef DEBUG
-						cout<<"QueryParser in parseSuchThatClause : '(' missing"<<endl;
+						cout<<"QueryParser parseSuchThatClause error: invalid arg1 used"<<endl;
 					#endif
 					return false;
-				} 
+				} //empty string if parsing fails.
 
-				res = parseStmtRef();
-				if (!res){
-					return false;
-				} 
+				//create synonym s1
+				Synonym s1 = createSynonym(relRef[i], entRef_value1, 1);
 
 				res = parse(",");
-				if (!res){
+				if (!res){return false;} 
+
+				entRef_value2 = parseArg(relRef[i], 2);
+				if(entRef_value2.compare("")==0){
+
 					#ifdef DEBUG
-						cout<<"QueryParser in parseSuchThatClause : ',' missing"<<endl;
+						cout<<"QueryParser parseSuchThatClause error: invalid arg2 used"<<endl;
 					#endif
 					return false;
-				} 
+				} //empty string if parsing fails.
 
-				string entRef_value="";
-				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
-					entRef_value = parseEntRef();
-					if (entRef_value.compare("")==0){
-						return false;
-					} 
-
-				}else{
-					res = parseStmtRef();
-					if (!res){
-						#ifdef DEBUG
-							cout<<"QueryParser in parseSuchThatClause : arg2 error"<<endl;
-						#endif
-						return false;
-					} 
-				}
-				
-
-				res = parse(")");
-				if (!res){
-					#ifdef DEBUG
-						cout<<"QueryParser in parseSuchThatClause : ')' missing"<<endl;
-					#endif
-
-					return false;
-				} 
-
-
-				/*** Building Query Tree ***/
-				if (nodetypeMap.count(relRef[i]) > 0){
-					nodeType = nodetypeMap.at(relRef[i]);
-				}else{
-					#ifdef DEBUG
-						cout<<"QueryParser parseSuchThatClause() error: unable to find the DE"<<endl;
-					#endif
-					return false;
-				}
-
-
-				/* Synonym s2 */
-				string name2;
-				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
-
-					name2 = entRef_value;
-
-					if (std::regex_match(peekBackwards(1),apostrophe)){
-						DE_type = "String";
-					}else if(name2.compare("_")==0){
-						DE_type =name2;
-					}else if(synonymsMap.count(name2) > 0){
-						DE_type = synonymsMap.at(name2);
-					}else{
-
-						#ifdef DEBUG
-							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
-						#endif
-						return false;
-					}
-
-				}else{
-
-					name2 = peekBackwards(1);
-					if (synonymsMap.count(name2) > 0){
-						DE_type = synonymsMap.at(name2); 
-					}else if(name2.compare("_")==0){
-						DE_type = name2;
-					}else if(matchInteger(name2)){
-						DE_type = "String";
-					}else{
-
-						#ifdef DEBUG
-							cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
-						#endif
-						return false;
-
-					}
-				}
 				//create synonym s2
-				Synonym s2(DE_type,name2);
-
-				/* Synonym s1 */
-				string name1="";
-				if(!std::regex_match(peekBackwards(1),apostrophe)){
-					name1 = peekBackwards(3);
-				}else{
-					name1 = peekBackwards(5);
-				}
-
-
-
-				if (synonymsMap.count(name1) > 0){
-					DE_type = synonymsMap.at(name1); 
-				}else if(name1.compare("_")==0){
-					DE_type = name1;
-				}else if(matchInteger(name1)){
-					DE_type = "String";
-				}else{
-					#ifdef DEBUG
-						cout<<"QueryParser in parseSuchThatClause:building query tree error"<<endl;
-					#endif
-					return false;
-				}
+				Synonym s2 = createSynonym(relRef[i], entRef_value2, 2);
 				
-				//create synonym s1
-				Synonym s1(DE_type,name1);
+				res = parse(")");
+				if (!res){ return false;} 
 
-				res = myQueryV->validateSuchThatQueries(nodeType, s1, s2);
-				if(!res){
-					#ifdef DEBUG
-						cout<<"QueryParser in validateSuchThatQueries: returns error"<<endl;
-					#endif
-					return false;
-				}
 
-				QNode* childNode = myQueryTree->createQNode(nodeType, Synonym(), s1, s2);
-				res = myQueryTree->linkNode(myQueryTree->getSuchThatNode(), childNode);
+
+				/***Parsing is done. Building Query Tree ***/
+
+
+				res = buildQueryTree(relRef[i], s1, s2);
 
 				return res;
 			}
 		}
-
-		#ifdef DEBUG
-			cout<<"QueryParser in parseSuchThatClause : there is no matching relRef[]"<<endl;
-		#endif
 
 		return false;
 	}
