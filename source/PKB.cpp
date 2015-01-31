@@ -285,6 +285,28 @@ pair<vector<int>, vector<int>> PKB::getAllModPair()
 	return modifiesTable->getAllModPair();
 }
 
+bool PKB::setModifiesProc(int procIndex, int varIndex) 
+{
+	return modifiesTable->setModifiesProc(procIndex, varIndex);
+}
+bool PKB::isModifiesProc(int procIndex, int varIndex) 
+{
+	return modifiesTable->isModifiesProc(procIndex, varIndex);
+}
+vector<int> PKB::getModProcIndex(int varIndex) 
+{
+	return modifiesTable->getModProcIndex(varIndex);
+}
+vector<int> PKB::getModVarForProc(int procIndex) 
+{
+	return modifiesTable->getModVarForProc(procIndex);
+}
+pair<vector<int>, vector<int>> PKB::getAllModProcPair() 
+{
+	return modifiesTable->getAllModProcPair();
+}
+
+
 // UsesTable methods
 bool PKB::setUses(int stmtNum, int varIndex) 
 {

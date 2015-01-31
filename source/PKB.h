@@ -114,6 +114,12 @@ public:
 	vector<int> getModVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllModPair();
 
+	bool setModifiesProc(int procIndex, int varIndex);
+	bool isModifiesProc(int procIndex, int varIndex);
+	vector<int> getModProcIndex(int varIndex);
+	vector<int> getModVarForProc(int procIndex);
+	pair<vector<int>, vector<int>> getAllModProcPair();
+
 	// UsesTable methods
 	bool setUses(int stmtNum, int varIndex);
 	bool isUses(int stmtNum, int varIndex);
