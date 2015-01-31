@@ -43,7 +43,7 @@ namespace QueryParser
 	vector<string>::iterator bufferIter;
 	string currentParsedLine;
 
-	string designEntities[] = {"stmt","assign","while","variable","constant","prog_line"};
+	string designEntities[] = {"procedure", "stmtLst", "stmt","assign", "call", "while", "if", "variable","constant","prog_line", "plus", "minus", "times"};
 	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*", "Calls", "Calls*"};
 	QueryTree* myQueryTree;
 	unordered_map<string, string> synonymsMap; //key: synonyms
@@ -381,15 +381,17 @@ namespace QueryParser
 
 	/**
 	 * Parses the next token and check if is a stmt reference.
+	 * @return an empty string if parsing fails
 	 */
-	bool parseStmtRef()
+	string parseStmtRef()
 	{
 		string nextToken = parseToken();
-		return matchStmtRef(nextToken);
+		return matchStmtRef(nextToken) ? nextToken: "";
 	}
 
 	/**
 	 * Parses the next token and check if is a entity reference.
+	 * @return an empty string if parsing fails
 	 */
 	string parseEntRef()
 	{
@@ -575,6 +577,51 @@ namespace QueryParser
 		return res;
 	}
 
+	Synonym createSynonym(string relRef,string value, int arg)
+	{
+		string DE_type;
+		REF_TYPE node;
+		std::regex apostrophe("[\"]");
+
+		auto nodeTuple = relRefMap.at(relRef);
+		if(arg==1)
+			node = std::get<0>(nodeTuple);
+		else if(arg==2)
+			node = std::get<1>(nodeTuple);
+		else
+			return Synonym(); //arg can only be 1 or 2 
+
+
+		if(node==REF_TYPE(stmtRef)){
+
+			if (synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value); 
+			}else if(value.compare("_")==0){
+				DE_type = value;
+			}else if(matchInteger(value)){
+				DE_type = "String";
+			}else{
+				return Synonym();  //error type mismatch
+			}
+
+		}else if(node==REF_TYPE(entRef)){
+
+			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
+				DE_type = "String";
+			}else if(value.compare("_")==0){
+				DE_type =value;
+			}else if(synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value);
+			}
+			else{
+				return Synonym();  //error type mismatch
+			}
+		}
+
+		return Synonym(DE_type,value);
+
+	}
+
 	/**
 	 *	Helper function for parse such that clause
 	 *  @param[in] input the relRef (ie "Follows*") and the argument it's parsing(either 1 or 2 only) 
@@ -599,10 +646,7 @@ namespace QueryParser
 		
 		if(node==REF_TYPE(stmtRef)){
 
-			res = parseStmtRef();
-			if(res) {
-				entRef_value = "PASS";// if parsing didn't fail, return "PASS"
-			}
+			entRef_value = parseStmtRef();
 			
 		}else if(node==REF_TYPE(entRef)){
 
@@ -622,7 +666,6 @@ namespace QueryParser
 	 */
 	bool parseSuchThatClause()
 	{
-		std::regex apostrophe("[\"]");
 		string DE_type, nextToken, entRef_value1,entRef_value2;
 
 		bool res = parse("such");
@@ -638,75 +681,37 @@ namespace QueryParser
 				if (!res){return false;} 
 
 				entRef_value1 = parseArg(relRef[i], 1);
-				if(entRef_value1.compare("")==0){return false;} //empty string if parsing fails.
+				if(entRef_value1.compare("")==0){
+					#ifdef DEBUG
+						cout<<"QueryParser parseSuchThatClause error: invalid arg1 used"<<endl;
+					#endif
+					return false;
+				} //empty string if parsing fails.
+
+				//create synonym s1
+				Synonym s1 = createSynonym(relRef[i], entRef_value1, 1);
 
 				res = parse(",");
 				if (!res){return false;} 
 
 				entRef_value2 = parseArg(relRef[i], 2);
-				if(entRef_value2.compare("")==0){return false;} //empty string if parsing fails.
+				if(entRef_value2.compare("")==0){
+
+					#ifdef DEBUG
+						cout<<"QueryParser parseSuchThatClause error: invalid arg2 used"<<endl;
+					#endif
+					return false;
+				} //empty string if parsing fails.
+
+				//create synonym s2
+				Synonym s2 = createSynonym(relRef[i], entRef_value2, 2);
 				
 				res = parse(")");
 				if (!res){ return false;} 
 
 
 
-
 				/***Parsing is done. Building Query Tree ***/
-
-				/* Synonym s2 */
-				string name2;
-				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
-
-					name2 = entRef_value2;
-
-					if (std::regex_match(peekBackwards(1),apostrophe)){
-						DE_type = "String";
-					}else if(name2.compare("_")==0){
-						DE_type =name2;
-					}else if(synonymsMap.count(name2) > 0){
-						DE_type = synonymsMap.at(name2);
-					}else{
-						return false;
-					}
-
-				}else{
-
-					name2 = peekBackwards(1);
-					if (synonymsMap.count(name2) > 0){
-						DE_type = synonymsMap.at(name2); 
-					}else if(name2.compare("_")==0){
-						DE_type = name2;
-					}else if(matchInteger(name2)){
-						DE_type = "String";
-					}else{
-						return false;
-					}
-				}
-				//create synonym s2
-				Synonym s2(DE_type,name2);
-
-
-				/* Synonym s1 */
-				string name1="";
-				if(!std::regex_match(peekBackwards(1),apostrophe)){
-					name1 = peekBackwards(3);
-				}else{
-					name1 = peekBackwards(5);
-				}
-
-				if (synonymsMap.count(name1) > 0){
-					DE_type = synonymsMap.at(name1); 
-				}else if(name1.compare("_")==0){
-					DE_type = name1;
-				}else if(matchInteger(name1)){
-					DE_type = "String";
-				}else{
-					return false;
-				}
-				
-				//create synonym s1
-				Synonym s1(DE_type,name1);
 
 
 				res = buildQueryTree(relRef[i], s1, s2);

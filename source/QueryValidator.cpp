@@ -70,6 +70,17 @@ void QueryValidator::initTable()
 	//FollowsS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
 
+	//Calls argument 1
+	string list6array[] = { "procedure","string-char", "_"};
+	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 3);
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Calls), list6));
+	//Calls argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Calls), list6));
+	//CallsS argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(CallsS), list6));
+	//CallsS argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsS), list6));
+
 }
 
 /**
@@ -80,6 +91,8 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 {	
 	vector<string> listArg1;
 	vector<string> listArg2;
+
+	cout<< "HEREEEE"<<endl;
 
 	try {
 		//if enum QNODE_TYPE is not found it throws an out of range exception
