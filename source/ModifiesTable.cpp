@@ -149,4 +149,120 @@ pair<vector<int>, vector<int>> ModifiesTable::getAllModPair()
 	return result;
 }
 
+// for procedures
+
+bool ModifiesTable::setModifiesProc(int procIndex, int varIndex) 
+{
+	if (procIndex <= 0 || varIndex <= 0) {
+		throw exception("ModifiesTable error: Negative procedure index or varIndex");
+	}
+
+	vector<int> newVarList;
+	vector<int> varIndexList;
+
+	//check if varIndexMap key stmtNum contains the variable
+	if (procVarIndexMap.count(procIndex) > 0) {
+		varIndexList = procVarIndexMap.at(procIndex);
+
+		auto result = find(begin(varIndexList), end(varIndexList), varIndex);
+		if (result != end(varIndexList)) { // varIndex can be found already
+			
+		} else {
+			varIndexList.push_back(varIndex);
+			procVarIndexMap.erase(procIndex);
+			procVarIndexMap.insert(pair<int, vector<int>> (procIndex, varIndexList));
+		}
+
+	} else {
+		newVarList.push_back(varIndex);
+		procVarIndexMap.insert(pair<int, vector<int>> (procIndex, newVarList));
+	}
+
+	vector<int> newProcIndexList;
+	vector<int> procIndexList;
+
+	//check if procIndexMap key varIndex contains the procedure index
+	if (procIndexMap.count(varIndex) > 0) {
+		procIndexList = procIndexMap.at(varIndex);
+
+		auto result = find(begin(procIndexList), end(procIndexList), procIndex);
+		if (result != end(procIndexList)) 	{
+			
+		} else {
+			procIndexList.push_back(procIndex);
+			procIndexMap.erase(varIndex);
+			procIndexMap.insert(pair<int, vector<int>> (varIndex, procIndexList));
+		}
+
+	} else {
+		newProcIndexList.push_back(procIndex);
+		procIndexMap.insert(pair<int, vector<int>> (varIndex, newProcIndexList));
+	}
+	return true;
+}
+
+bool ModifiesTable::isModifiesProc(int procIndex, int varIndex) 
+{
+	if (procIndex <= 0 || varIndex <= 0) {
+		return false;
+	}
+
+	if (varIndexMap.count(procIndex) == 0) {
+		return false;
+	}
+
+	vector<int> varIndexList = varIndexMap.at(procIndex);
+
+	auto result = find(begin(varIndexList), end(varIndexList), varIndex);
+	// TRUE if varindex is new in the table
+	return result != end(varIndexList);
+}
+
+vector<int> ModifiesTable::getModProcIndex(int varIndex) 
+{
+	if (varIndex <= 0) {
+		return vector<int>();
+	}
+
+	if (procIndexMap.count(varIndex) == 0) {
+		vector<int> result;
+		return result;
+	}
+
+	vector<int> procIndexList = procIndexMap.at(varIndex);
+	return procIndexList;
+}
+
+vector<int> ModifiesTable::getModVarForProc(int procIndex) 
+{
+	if (procIndex <= 0) {
+		return vector<int>();
+	}
+
+	if (procVarIndexMap.count(procIndex) == 0) {
+		vector<int> result;
+		return result;
+	}
+
+	vector<int> varIndexList = procVarIndexMap.at(procIndex);
+	return varIndexList;
+}
+
+pair<vector<int>, vector<int>> ModifiesTable::getAllModProcPair() 
+{
+	pair<vector<int>, vector<int>> result;
+	for (auto iter = procVarIndexMap.begin(); iter != procVarIndexMap.end(); ++iter) {
+		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
+			result.first.push_back(iter->first);
+			result.second.push_back(*varListIter);
+		}
+		
+	}
+
+	return result;
+}
+
+
+
+
 
