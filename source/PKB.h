@@ -127,6 +127,13 @@ public:
 	vector<int> getUsesVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllUsesPair();
 
+	bool setUsesProc(int procIndex, int varIndex);
+	bool isUsesProc(int procIndex, int varIndex);
+	vector<int> getUsesProcIndex(int varIndex);
+	vector<int> getUsesVarForProc(int procIndex);
+	pair<vector<int>, vector<int>> getAllUsesProcPair();
+
+
 	
 	unordered_map<int, TNode*> nodeTable;
 

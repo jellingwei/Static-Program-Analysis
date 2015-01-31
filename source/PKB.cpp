@@ -468,6 +468,27 @@ pair<vector<int>, vector<int>> PKB::getAllUsesPair()
 	return usesTable->getAllUsesPair();
 }
 
+bool PKB::setUsesProc(int procIndex, int varIndex) 
+{
+	return usesTable->setUsesProc(procIndex, varIndex);
+}
+bool PKB::isUsesProc(int procIndex, int varIndex) 
+{
+	return usesTable->isUsesProc(procIndex, varIndex);
+}
+vector<int> PKB::getUsesProcIndex(int varIndex) 
+{
+	return usesTable->getUsesProcIndex(varIndex);
+}
+vector<int> PKB::getUsesVarForProc(int procIndex) 
+{
+	return usesTable->getUsesVarForProc(procIndex);
+}
+pair<vector<int>, vector<int>> PKB::getAllUsesProcPair() 
+{
+	return usesTable->getAllUsesProcPair();
+}
+
 
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
