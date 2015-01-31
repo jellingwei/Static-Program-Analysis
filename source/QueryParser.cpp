@@ -577,42 +577,40 @@ namespace QueryParser
 
 	/**
 	 *	Helper function for parse such that clause
-	 *  argument 1 can be an entRef, stmtRef, or a lineRef
-	 *  @To-do return synonym 
-	 */
-	bool parseArg1(string relRef)
-	{
-
-		bool res = parseStmtRef();
-
-		return res;
-	}
-
-	/**
-	 *	Helper function for parse such that clause
-	 *  argument 2 can be an entRef, stmtRef, lineRef or varRef
+	 *  @param[in] input the relRef (ie "Follows*") and the argument it's parsing(either 1 or 2 only) 
+	 *  Argument 1 can be an entRef, stmtRef or lineRef.
+	 *  Argument 2 can be an entRef, stmtRef, lineRef or varRef.
 	 *  If @return is an empty string, means parsing failed.
 	 *  @To-do return synonym  
 	 */
-	string parseArg2(string relRef)
+	string parseArg(string relRef, int arg)
 	{
 		bool res;
+		REF_TYPE node;
 		string entRef_value="";
 
-		if((relRef.compare("Modifies")==0) || (relRef.compare("Uses")==0)){
-
-			entRef_value = parseEntRef(); 
+		auto nodeTuple = relRefMap.at(relRef);
+		if(arg==1)
+			node = std::get<0>(nodeTuple);
+		else if(arg==2)
+			node = std::get<1>(nodeTuple);
+		else
+			return ""; //arg can only be 1 or 2 
 		
-		}else{
+		if(node==REF_TYPE(stmtRef)){
+
 			res = parseStmtRef();
 			if(res) {
-				// if parsing didn't fail, return "PASS"
-				entRef_value = "PASS";
+				entRef_value = "PASS";// if parsing didn't fail, return "PASS"
 			}
-		
-		}
+			
+		}else if(node==REF_TYPE(entRef)){
 
-		//if parsing fails an empty string is passed.
+			entRef_value = parseEntRef();
+		
+		}//else do nothing and an empty string is passed.
+
+
 		return entRef_value;
 	}
 
@@ -625,7 +623,7 @@ namespace QueryParser
 	bool parseSuchThatClause()
 	{
 		std::regex apostrophe("[\"]");
-		string DE_type, nextToken, entRef_value;
+		string DE_type, nextToken, entRef_value1,entRef_value2;
 
 		bool res = parse("such");
 		if (!res){return false;}
@@ -639,14 +637,14 @@ namespace QueryParser
 				res = parse("(");
 				if (!res){return false;} 
 
-				res = parseArg1(relRef[i]);
-				if (!res){return false;} 
+				entRef_value1 = parseArg(relRef[i], 1);
+				if(entRef_value1.compare("")==0){return false;} //empty string if parsing fails.
 
 				res = parse(",");
 				if (!res){return false;} 
 
-				entRef_value = parseArg2(relRef[i]);
-				if(entRef_value.compare("")==0){return false;} //empty string if parsing fails.
+				entRef_value2 = parseArg(relRef[i], 2);
+				if(entRef_value2.compare("")==0){return false;} //empty string if parsing fails.
 				
 				res = parse(")");
 				if (!res){ return false;} 
@@ -660,7 +658,7 @@ namespace QueryParser
 				string name2;
 				if((relRef[i].compare("Modifies")==0) || (relRef[i].compare("Uses")==0)){
 
-					name2 = entRef_value;
+					name2 = entRef_value2;
 
 					if (std::regex_match(peekBackwards(1),apostrophe)){
 						DE_type = "String";
