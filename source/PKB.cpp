@@ -119,6 +119,11 @@ vector<int> PKB::patternMatchWhile(string LHS)
 	return ast->patternMatchWhile(LHS);
 }
 
+vector<int> PKB::patternMatchIf(string LHS) 
+{
+	return ast->patternMatchIf(LHS);
+}
+
 /**
  * Obtain the index of control variable of a while loop. 
  * @param stmtNum the statement number of the while loop
@@ -311,6 +316,25 @@ bool PKB::isWhile(int stmtNum)
 {
 	return stmtTable->isWhile(stmtNum);
 }
+
+/**
+* @return TRUE if stmtNo is of If Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
+bool PKB::isIf(int stmtNum) 
+{
+	return stmtTable->isIf(stmtNum);
+}
+
+/**
+* @return TRUE if stmtNo is of Call Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
+bool PKB::isCall(int stmtNum) 
+{
+	return stmtTable->isCall(stmtNum);
+}
+
 
 /**
  * @return the total number of statements in the the StmtTable.

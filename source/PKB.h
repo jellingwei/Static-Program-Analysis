@@ -52,6 +52,7 @@ public:
 
 	vector<int> patternMatchAssign(string RHS);
 	vector<int> patternMatchWhile(string LHS);
+	vector<int> patternMatchIf(string LHS);
 	int getControlVariable(int stmtNum);
 
 	// VarTable methods
@@ -83,6 +84,8 @@ public:
 	vector<int> getStmtNumForType(string);
 	bool isAssign(int);
 	bool isWhile(int);
+	bool isIf(int);
+	bool isCall(int);
 	int getStmtTableSize();
 
 	// Parent Table methods

@@ -205,6 +205,16 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(v, _) given invalid stmtnum", -1, pkb.getControlVariable(8000));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(v, _) given invalid stmtnum", -1, pkb.getControlVariable(0));
 
+	// Pattern for if 
+	cout << "pattern for if" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _)", 12, pkb.patternMatchIf(" b ").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('c', _)", 13, pkb.patternMatchIf("c").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('unusedvar', _)", 0, (int)pkb.patternMatchIf("unusedvar").size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 12", pkb.getVarIndex("b"), pkb.getControlVariable(12));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 8", pkb.getVarIndex("c"), pkb.getControlVariable(13));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum which is not a if statement", -1, pkb.getControlVariable(14));
+
 	// All pairs for Follows
 	pair<vector<int>, vector<int>> allFollows = pkb.getAllFollowsPairs(false);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows pairs size", 8, (int)allFollows.first.size());

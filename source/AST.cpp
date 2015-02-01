@@ -463,11 +463,12 @@ vector<int> AST::patternMatchAssign(string RHS) {
 
 
 /**
- * Pattern matching for while statements.
- * @return a vector of statement numbers which are while loops, and uses the input LHS as its control variable.
+ * Pattern matching for while or if statements.
+ * @return a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable.
  * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
+ * @param type the type of statement to match, either While or If
  */
-vector<int> AST::patternMatchWhile(string LHS) {
+vector<int> patternMatchParentStmt(string LHS, TNODE_TYPE type) {
 	// strip leading and trailing space
 	LHS.erase(0, LHS.find_first_not_of(" "));
 	LHS.erase(LHS.find_last_not_of(" ") + 1);
@@ -486,22 +487,26 @@ vector<int> AST::patternMatchWhile(string LHS) {
 	// Get statements using the variable
 	vector<int> candidateList = PKB::getInstance().getUsesStmtNum(varIndex);
 
-	// Filter non-while statements from these statements
+	// Filter non-matching types from these statements
 	vector<int> result;
 	for (auto stmt = candidateList.begin(); stmt != candidateList.end(); ++stmt) {
-		bool isWhile = PKB::getInstance().isWhile(*stmt); 
-		if (isWhile) {
-			TNode* stmtNode = PKB::getInstance().nodeTable.at(*stmt);
+		bool isCorrectType = type == While ? 
+							 PKB::getInstance().isWhile(*stmt) : 
+							 PKB::getInstance().isIf(*stmt); ;
+		if (!isCorrectType) {
+			continue;
+		}
 
-			assert(stmtNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
-			if (stmtNode->getChildren()->size() < 1) {
-				continue;
-			}
-			int controlVariable = stmtNode->getChildren()->at(0)->getNodeValueIdx();
+		TNode* stmtNode = PKB::getInstance().nodeTable.at(*stmt);
 
-			if (controlVariable == varIndex) {
-				result.push_back(*stmt);
-			}
+		assert(stmtNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
+		if (stmtNode->getChildren()->size() < 1) {
+			continue;
+		}
+
+		int controlVariable = stmtNode->getChildren()->at(0)->getNodeValueIdx();
+		if (controlVariable == varIndex) {
+			result.push_back(*stmt);
 		}
 	}
 
@@ -509,11 +514,11 @@ vector<int> AST::patternMatchWhile(string LHS) {
 }
 
 /**
- * Obtain the index of control variable of a while loop. 
- * @param stmtNum the statement number of the while loop
+ * Obtain the index of control variable of a while or if statement. 
+ * @param stmtNum the statement number of the while or if statement
  * @return -1 if 1. an invalid statement number is provided.
- *     2. the statement indicated by the stmtNum is not a While statement
- *     3. the AST is poorly formed and the while loop's node is in an invalid state
+ *     2. the statement indicated by the stmtNum is not a While statement or If statement
+ *     3. the AST is poorly formed and the while or if's node is in an invalid state
  * Otherwise, return the index of the control variable.
  */
 int AST::getControlVariable(int stmtNum) {
@@ -536,4 +541,21 @@ int AST::getControlVariable(int stmtNum) {
 	int controlVariable = node->getChildren()->at(0)->getNodeValueIdx();
 
 	return controlVariable;
+}
+
+/**
+ * Pattern matching for while statements.
+ * @return a vector of statement numbers which are while loops, and uses the input LHS as its control variable.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
+ */
+vector<int> AST::patternMatchWhile(string LHS) {
+	return patternMatchParentStmt(LHS, While);
+}
+/**
+ * Pattern matching for if statements.
+ * @return a vector of statement numbers which are if statements, and uses the input LHS as its control variable.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
+ */
+vector<int> AST::patternMatchIf(string LHS) {
+	return patternMatchParentStmt(LHS, If);
 }
