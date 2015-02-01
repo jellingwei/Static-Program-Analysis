@@ -272,13 +272,15 @@ namespace Parser
 		{
 			bool res = true;
 			const int alreadyParsed = 2;
-			//int bufferSize = buffer.size() - alreadyParsed;
+			
+			vector<string>::const_iterator first = buffer.begin() + alreadyParsed;
+			vector<string>::const_iterator last = buffer.end();
+			vector<string> slicedBuffer(first, last);
 
 			ExpressionParser exprParser;
-			exprParser.updateBuffer(buffer, alreadyParsed); 
 			exprParser.updateStmtNum(stmtNum);
+			TNode* top = exprParser.parseExpressionForAST(slicedBuffer);
 
-			TNode* top = exprParser.parse();
 			PKB::getInstance().createLink(Child, exprRoot, top);
 
 			while ((bufferIter++)->compare(";") != 0) 

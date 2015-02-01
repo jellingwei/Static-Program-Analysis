@@ -42,6 +42,8 @@ class ExpressionParser {
 
 		int getOperatorPrecedence(string oper);
 		TNode* parseExpression(vector<string>, bool readOnly);
+		TNode* parse(int bindingLevel = 0);	
+		void updateBuffer(vector<string>, int skip = 0);  
 
 	public:
 		ExpressionParser();						// use this in files that are not "TestExpressionParser"
@@ -49,9 +51,9 @@ class ExpressionParser {
 		~ExpressionParser();
 
 		//@todo clean up api
-		void updateBuffer(vector<string>, int skip = 0);  //@todo make private, do not call this function
+		
 		void updateStmtNum(int);					
-		TNode* parse(int bindingLevel = 0);			//@todo make private after removing calls to this, do not call this function 
+		
 		TNode* parseExpressionForAST(vector<string>);		// use this in parser for parsing SIMPLE
 		TNode* parseExpressionForQuerying(vector<string>);  // use this when parsing queries
 };

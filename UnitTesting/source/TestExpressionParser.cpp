@@ -87,6 +87,7 @@ ExpressionParserTest::testQuery() {
 	CPPUNIT_ASSERT_EQUAL(Variable, rightChild->getNodeType());
 	CPPUNIT_ASSERT_EQUAL(oIndex, rightChild->getNodeValueIdx());
 
+	delete exprParserForQuerying;
 }
 
 /**
