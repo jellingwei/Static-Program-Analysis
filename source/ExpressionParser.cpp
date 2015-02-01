@@ -18,6 +18,7 @@ ExpressionParser::ExpressionParser()
 	varTable = NULL;
 	operPrecedence = makeOperatorMap();
 	this->stmtNum = 1;
+	this->procIndex = 0;
 	this->readOnly = false;
 }
 
@@ -28,6 +29,7 @@ ExpressionParser::ExpressionParser()
 ExpressionParser::ExpressionParser(VarTable* varTable) : varTable(varTable)  {
 	operPrecedence = makeOperatorMap();
 	this->stmtNum = 1;
+	this->procIndex = 0;
 	this->readOnly = false;   
 }
 
@@ -44,9 +46,8 @@ ExpressionParser::~ExpressionParser()
  * 
  * @param newBuffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in.
  *                  Alternatively, ["x", "+", "y"] can be passed in as well.
- * @param skip		optional. The number of tokens to skip in the newBuffer. Use if the buffer contains other tokens in front.
  */
-void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip) 
+void ExpressionParser::updateBuffer(vector<string> newBuffer) 
 {
 	// the expression parser uses ';' to determine if its at the end
 	if (newBuffer.back().compare(";") != 0) {
@@ -54,10 +55,14 @@ void ExpressionParser::updateBuffer(vector<string> newBuffer, int skip)
 	}
 	
 	buffer = newBuffer;
-	bufferIter = buffer.begin() + skip; // 
+	bufferIter = buffer.begin(); // 
 	
 	token = *(bufferIter);
 	++bufferIter;
+}
+
+void ExpressionParser::updateProcIndex(int procIndex) {
+	this->procIndex = procIndex;
 }
 
 /**
@@ -81,7 +86,7 @@ int matchConstant(string value, int stmtNum, VarTable* varTable = NULL, bool rea
 	return constant;
 }
 
-int matchVariable(string value, int stmtNum, VarTable* varTable = NULL, bool readOnly = false)  
+int matchVariable(string value, int stmtNum, int procIndex, VarTable* varTable = NULL, bool readOnly = false)  
 {
 	PKB pkb = PKB::getInstance();
 	int varIndx;
@@ -95,14 +100,16 @@ int matchVariable(string value, int stmtNum, VarTable* varTable = NULL, bool rea
 		return varIndx;
 	}
 
+	// write to pkb if not under test, otherwise write to vartable
 	bool isUnderTest = varTable != NULL;
 	if (!isUnderTest) {
 		pkb.insertVar(value, stmtNum);
 		varIndx = pkb.getVarIndex(value);
 
 		// update pkb 
-		// @todo this should not be done here
+		// @todo this really should not be done here
 		pkb.setUses(stmtNum, varIndx);
+		pkb.setUsesProc(procIndex, varIndx);
 	
 		// propagate Uses to parent nodes
 		while (pkb.getParent(stmtNum).size())  {
@@ -117,16 +124,15 @@ int matchVariable(string value, int stmtNum, VarTable* varTable = NULL, bool rea
 	}
 	
 	
-
 	return varIndx;
 }
 
-int parseConstantOrVariable(string value, int stmtNum, VarTable* varTable = NULL, bool readOnly = false) 
+int parseConstantOrVariable(string value, int stmtNum, int procIndex, VarTable* varTable = NULL, bool readOnly = false) 
 {
 	string constant = Parser::matchInteger(value);
 	if (constant.empty()) 
 	{ 
-		return matchVariable(value, stmtNum, varTable, readOnly);
+		return matchVariable(value, stmtNum, procIndex, varTable, readOnly);
 	} else 
 	{
 		return matchConstant(value, stmtNum, varTable, readOnly);
@@ -193,7 +199,7 @@ TNode* ExpressionParser::operatorSubtract(TNode* left)
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
  */
-TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
+TNode* ExpressionParser::parse(int bindingLevel) 
 {
 	PKB pkb = PKB::getInstance();
 
@@ -217,7 +223,7 @@ TNode* ExpressionParser::parse(int bindingLevel)  //@Todo make private
 		bool isVariable = Parser::matchInteger(prevToken).empty();
 
 		//@todo branch
-		leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum, varTable, readOnly));		   
+		leftNode = pkb.createTNode(isVariable ? Variable : Constant, stmtNum, parseConstantOrVariable(prevToken, stmtNum, procIndex, varTable, readOnly));		   
 	}
 
 	

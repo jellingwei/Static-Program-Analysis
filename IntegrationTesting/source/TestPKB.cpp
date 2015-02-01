@@ -158,6 +158,11 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'f')", 4, (int)pkb.getUsesStmtNum(pkb.getVarIndex("f")).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 0", 6, (int)pkb.getUsesVarForProc(0).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 1", 0, (int)pkb.getUsesVarForProc(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'a')", 0, pkb.getUsesProcIndex(pkb.getVarIndex("a")).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'a')", 1, (int)pkb.getUsesProcIndex(pkb.getVarIndex("a")).size());
+
 	// Modifies
 	cout << "Modifies" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(1, 'a')", true, pkb.isModifies(1, pkb.getVarIndex("a")));
@@ -169,6 +174,11 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(7, v)", 2, (int)pkb.getModVarForStmt(7).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(8, v)", (string)"f", pkb.getVarName(pkb.getModVarForStmt(8).front()));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(11, v)", (string)"a", pkb.getVarName(pkb.getModVarForStmt(11).front()));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 0", 6, (int)pkb.getModVarForProc(0).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 1", 0, (int)pkb.getModVarForProc(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 0, pkb.getModProcIndex(pkb.getVarIndex("a")).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 1, (int)pkb.getModProcIndex(pkb.getVarIndex("a")).size());
 
 	// Pattern
 	cout << "Pattern" << endl;

@@ -213,6 +213,8 @@ namespace Parser
 						pkb.setModifies(statement, modifiedVarIndex);	
 					}
 				}
+
+				pkb.setModifiesProc(currentProcIndex, modifiedVarIndex);
 			
 				return true;
 			} else if (designEntity.compare("Uses") == 0) 
@@ -230,6 +232,8 @@ namespace Parser
 						pkb.setUses(statement, usedVarIndex);	
 					}
 				}
+
+				pkb.setUsesProc(currentProcIndex, usedVarIndex);
 			
 				return true;
 			} else if (designEntity.compare("ConstantTable") == 0) 
@@ -585,11 +589,12 @@ namespace Parser
 		
 			// add procName to the procTable
 			callPkb("ProcTable", procName, procName);
+			PKB pkb = PKB::getInstance();
+			currentProcIndex = pkb.getProcIndex(procName);
 
 			res = parse("{");
 			if (!res) return false;
 		
-			PKB pkb = PKB::getInstance();
 			TNode* root = pkb.getRoot();
 			int procIndex = pkb.getProcIndex(procName);
 			TNode* procNode = pkb.createTNode(Procedure, 0, procIndex);
@@ -604,8 +609,7 @@ namespace Parser
 			// remove the stmtlist node from ASTParent
 			ASTParent.erase(ASTParent.end() - 1); 
 
-			if (!res) return false;
-			return true;
+			return res;
 		}
 
 		void traverseAndPrintTree(TNode* root) 

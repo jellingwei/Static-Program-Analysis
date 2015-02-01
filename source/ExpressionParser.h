@@ -19,6 +19,7 @@ class ExpressionParser {
 		vector<string>::iterator bufferIter;
 		vector<string> buffer;
 		int stmtNum;
+		int procIndex;
 		string token; // current token
 
 		bool readOnly; /*! if this is set to true, the expression will not make any updates onto the pkb. This is used when parsing expressions for querying */
@@ -43,16 +44,15 @@ class ExpressionParser {
 		int getOperatorPrecedence(string oper);
 		TNode* parseExpression(vector<string>, bool readOnly);
 		TNode* parse(int bindingLevel = 0);	
-		void updateBuffer(vector<string>, int skip = 0);  
+		void updateBuffer(vector<string>);  
 
 	public:
 		ExpressionParser();						// use this in files that are not "TestExpressionParser"
 		ExpressionParser(VarTable* varTable);   /*! used during testing, to not involve the entire pkb singleton */
 		~ExpressionParser();
-
-		//@todo clean up api
 		
 		void updateStmtNum(int);					
+		void updateProcIndex(int);		
 		
 		TNode* parseExpressionForAST(vector<string>);		// use this in parser for parsing SIMPLE
 		TNode* parseExpressionForQuerying(vector<string>);  // use this when parsing queries

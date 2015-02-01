@@ -153,8 +153,11 @@ pair<vector<int>, vector<int>> ModifiesTable::getAllModPair()
 
 bool ModifiesTable::setModifiesProc(int procIndex, int varIndex) 
 {
-	if (procIndex <= 0 || varIndex <= 0) {
-		throw exception("ModifiesTable error: Negative procedure index or varIndex");
+	if (procIndex < 0 ) {
+		throw logic_error("ModifiesTable error: Negative procedure index");
+	}
+	if (varIndex <= 0) {
+		throw logic_error("ModifiesTable error: Negative varIndex");
 	}
 
 	vector<int> newVarList;
@@ -203,7 +206,7 @@ bool ModifiesTable::setModifiesProc(int procIndex, int varIndex)
 
 bool ModifiesTable::isModifiesProc(int procIndex, int varIndex) 
 {
-	if (procIndex <= 0 || varIndex <= 0) {
+	if (procIndex < 0 || varIndex <= 0) {
 		return false;
 	}
 
@@ -235,7 +238,7 @@ vector<int> ModifiesTable::getModProcIndex(int varIndex)
 
 vector<int> ModifiesTable::getModVarForProc(int procIndex) 
 {
-	if (procIndex <= 0) {
+	if (procIndex < 0) {
 		return vector<int>();
 	}
 
