@@ -236,6 +236,10 @@ namespace Parser
 				pkb.insertProc(LHS);
 
 				return true;
+			} else if (designEntity.compare("CallTable") == 0) {
+				//@todo call table
+
+				return true;
 			}
 
 			return false;
@@ -465,18 +469,14 @@ namespace Parser
 			bool res = parse("=");
 			if (!res) return false;
 		
-
 			// AST interactions
 			AST* ast = PKB::getInstance().ast;
 			PKB pkb = PKB::getInstance();
-			TNode* node = pkb.createTNode(Call, stmtNum, -1);
-			
-			TNode* RHSNode = node;  // pass the assignNode directly to parseExpr, which will attach the variable/constant to it
-
+			int index = pkb.insertProc(procName);
+			TNode* node = pkb.createTNode(Call, stmtNum, index);
 		
 			pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
 			PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
-
 
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
 			if (prevStmtInStmtList) 
@@ -485,7 +485,6 @@ namespace Parser
 			}
 			PKB::getInstance().setParent(currentASTParent(), node);
 		
-			res = parseExpr(RHSNode);
 		
 			callPkb("CallTable", std::to_string(static_cast<long long>(currentProcIndex)), procName);
 		
