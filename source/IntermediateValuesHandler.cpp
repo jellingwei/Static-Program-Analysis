@@ -44,7 +44,7 @@ namespace IntermediateValuesHandler
 
 	void addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
-		if (synonym.getType() == "_") {
+		if (synonym.getType() == UNDEFINED) {
 			return;
 		}
 
@@ -55,18 +55,18 @@ namespace IntermediateValuesHandler
 			//If this synonym is not yet in the table,
 			//get all the default values, intersect and join
 
-			string type = synonym.getType();
+			SYNONYM_TYPE type = synonym.getType();
 			vector<int> allValues;
 			set<int> intermediateValues = synonym.getValuesSet();
 			set<int> finalValues;
 
 			//Get the default values
-			if (type == "variable") {
+			if (type == VARIABLE) {
 				allValues = pkb.getAllVarIndex();
-			} else if (type == "constant") {
+			} else if (type == CONSTANT) {
 				allValues = pkb.getAllConstant();
 			} else {
-				allValues = pkb.getStmtNumForType(type);
+				allValues = pkb.getStmtNumForType(Synonym::convertToString(type));
 			}
 
 			//Intersection
@@ -77,8 +77,8 @@ namespace IntermediateValuesHandler
 			}
 
 			//Join
-			Synonym newSynonym(type, name, finalValues);
-			joinWithExistingValues(newSynonym);
+			synonym.setValues(finalValues);
+			joinWithExistingValues(synonym);
 		} else {
 			//This synonym is already in the table
 			//Just do intersection with the existing intermediate values
@@ -88,12 +88,12 @@ namespace IntermediateValuesHandler
 
 	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
 	{
-		if (LHS.getType() == "_" && RHS.getType() == "_") {
+		if (LHS.getType() == UNDEFINED && RHS.getType() == UNDEFINED) {
 			return;
-		} else if (LHS.getType() == "_") {
+		} else if (LHS.getType() == UNDEFINED) {
 			addAndProcessIntermediateSynonym(RHS);
 			return;
-		} else if (RHS.getType() == "_") {
+		} else if (RHS.getType() == UNDEFINED) {
 			addAndProcessIntermediateSynonym(LHS);
 			return;
 		}
@@ -272,11 +272,10 @@ namespace IntermediateValuesHandler
 				synonymValues = pkb.getStmtNumForType(type);
 			}
 
-			Synonym synonym(type, name, synonymValues);
+			Synonym synonym(Synonym::convertToEnum(type), name, synonymValues);
 			return synonym;
 		} else {
-			set<int> intermediateValues = getIntermediateValuesSet(synonymIndex);
-			Synonym synonym(type, name, intermediateValues);
+			Synonym synonym(Synonym::convertToEnum(type), name, getIntermediateValuesSet(synonymIndex));
 			return synonym;
 		}
 	}
