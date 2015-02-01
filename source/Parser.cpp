@@ -69,11 +69,6 @@ namespace Parser
 		
 		bool parseStmtList();
 
-		bool isEof() 
-		{
-			return inputFile.eof();
-		}
-
 		/**
 		 * Returns the next line of input as a vector of tokens.
 		 */
@@ -149,7 +144,7 @@ namespace Parser
 				bool res = parseLine();
 				if (!res) 
 				{
-					return parseToken();
+					return inputFile.eof()? "" : parseToken();
 				} else {
 					bufferIter = buffer.begin();
 					return *(bufferIter ++);
@@ -166,7 +161,7 @@ namespace Parser
 				bool res = parseLine();
 				if (!res) 
 				{
-					return parseToken();
+					return inputFile.eof()? "" : parseToken();
 				} else {
 					bufferIter = buffer.begin();
 					return *(bufferIter);
@@ -174,6 +169,16 @@ namespace Parser
 			}
 
 		}
+
+		bool isEof() 
+		{
+			if (peekToken().empty()) {
+				return inputFile.eof();
+			} else {
+				return false;
+			}
+		}
+
 
 		TNode* currentASTParent() 
 		{
@@ -688,12 +693,15 @@ namespace Parser
 	 */
 	bool parseProgram() 
 	{
-		// Assignment 4 only involves program with one procedure, so only one
-		// matchProcedure call is neccessary
-		bool res = util::parseProcedure();
-		assert(res); // do not evaluate queries if parser has failed
-	
-		return res;
+		using util::isEof;
+
+		bool isParseSuccessful;
+		while (!isEof()) {
+			isParseSuccessful = util::parseProcedure();
+		}
+
+		assert(isParseSuccessful); // do not evaluate queries if parser has failed
+		return isParseSuccessful;
 	}
 	
 }
