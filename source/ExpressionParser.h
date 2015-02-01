@@ -45,6 +45,7 @@ class ExpressionParser {
 		TNode* parseExpression(vector<string>, bool readOnly);
 		TNode* parse(int bindingLevel = 0);	
 		void updateBuffer(vector<string>);  
+		void init();
 
 	public:
 		ExpressionParser();						// use this in files that are not "TestExpressionParser"

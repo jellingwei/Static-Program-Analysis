@@ -13,13 +13,17 @@
 
 using namespace std;
 
-ExpressionParser::ExpressionParser() 
-{
-	varTable = NULL;
+void ExpressionParser::init() {
 	operPrecedence = makeOperatorMap();
 	this->stmtNum = 1;
 	this->procIndex = 0;
 	this->readOnly = false;
+}
+
+ExpressionParser::ExpressionParser() 
+{
+	varTable = NULL;
+	init();
 }
 
 
@@ -27,10 +31,7 @@ ExpressionParser::ExpressionParser()
  * Constructor. Only for use in unit testing, to avoid potential problems with using a global pkb singleton that may interfere with other unit tests.
  */
 ExpressionParser::ExpressionParser(VarTable* varTable) : varTable(varTable)  {
-	operPrecedence = makeOperatorMap();
-	this->stmtNum = 1;
-	this->procIndex = 0;
-	this->readOnly = false;   
+	init();  
 }
 
 ExpressionParser::~ExpressionParser() 
