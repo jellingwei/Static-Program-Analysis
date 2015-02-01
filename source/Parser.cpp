@@ -19,17 +19,18 @@
 #include "SourceParser.h"
 #include "ExpressionParser.h"
 
-using std::string;
-using std::vector;
-using std::regex;
-
 /**
-	@brief Namespace containing functions for parsing the source SIMPLE file
+	@brief Namespace containing functions for parsing the source SIMPLE file as well as utility functions to parse and match strings from
+			the SIMPLE grammar
 
  */
 namespace Parser 
 {
-	namespace var 
+	using std::string;
+	using std::vector;
+	using std::regex;
+
+	namespace var // contains state of the parser
 	{
 		ifstream inputFile;
 
@@ -42,6 +43,7 @@ namespace Parser
 
 		int stmtNum;
 		int progLineNum;
+		int currentProcIndex;
 	}
 
 	/**
@@ -229,6 +231,10 @@ namespace Parser
 			{
 				pkb.insertConstant(atoi(RHS.c_str()), atoi(LHS.c_str()));
 			
+				return true;
+			} else if (designEntity.compare("ProcTable") == 0) {
+				pkb.insertProc(LHS);
+
 				return true;
 			}
 
@@ -451,6 +457,41 @@ namespace Parser
 			return res;
 		}
 
+		bool parseCall(string firstToken) {
+			string procName = parseName();
+
+			if (procName.size() == 0) return false;
+
+			bool res = parse("=");
+			if (!res) return false;
+		
+
+			// AST interactions
+			AST* ast = PKB::getInstance().ast;
+			PKB pkb = PKB::getInstance();
+			TNode* node = pkb.createTNode(Call, stmtNum, -1);
+			
+			TNode* RHSNode = node;  // pass the assignNode directly to parseExpr, which will attach the variable/constant to it
+
+		
+			pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+			PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+
+
+			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
+			if (prevStmtInStmtList) 
+			{
+				PKB::getInstance().setFollows(prevStmtInStmtList, node);
+			}
+			PKB::getInstance().setParent(currentASTParent(), node);
+		
+			res = parseExpr(RHSNode);
+		
+			callPkb("CallTable", std::to_string(static_cast<long long>(currentProcIndex)), procName);
+		
+			return res;
+		}
+
 
 		/**
 		 * Matches a statement.
@@ -494,6 +535,12 @@ namespace Parser
 					int parent = stmtListParent[stmtListParent.size() - 1];
 					callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
 				}
+			} else if (firstToken == "call") 
+			{
+				stmtNum += 1;
+
+				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "call");
+				res = parseCall(firstToken);
 			}
 
 			return res;
@@ -508,8 +555,9 @@ namespace Parser
 			while (!isEndOfStmtList) 
 			{
 				res = matchStmt(nextToken);
-				if (!res) 
-					{return false; }
+				if (!res) {
+					return false; 
+				}
 			
 				nextToken = parseToken();			
 			
@@ -528,12 +576,16 @@ namespace Parser
 			string procName = parseName();
 			if (procName.size() == 0) return false;
 		
+			// add procName to the procTable
+			callPkb("ProcTable", procName, procName);
+
 			res = parse("{");
 			if (!res) return false;
 		
 			PKB pkb = PKB::getInstance();
 			TNode* root = pkb.getRoot();
-			TNode* procNode = pkb.createTNode(Procedure, 0, 0);
+			int procIndex = pkb.getProcIndex(procName);
+			TNode* procNode = pkb.createTNode(Procedure, 0, procIndex);
 			pkb.createLink(Child, root, procNode);
 			TNode* stmtListNode = pkb.createTNode(StmtLst, 0, 0);
 			pkb.createLink(Child, procNode, stmtListNode);

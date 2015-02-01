@@ -20,7 +20,7 @@ bool StmtTable::insertStmt(int stmtNum, string type)
 {
 	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
-	} else if(!(type=="while" || type=="assign" || type=="if")) {
+	} else if(!(type=="while" || type=="assign" || type=="if" || type=="call")) {
 		throw exception("StmtTable error: Invalid statement type");
 	}
 
@@ -32,12 +32,20 @@ bool StmtTable::insertStmt(int stmtNum, string type)
 
 		string whileType = "while";
 		string assignType = "assign";
+		string callType = "call";
+		string ifType = "if";
 		
 		if(whileType.compare(type) == 0) {
 			whileStmt.push_back(stmtNum);
 		}
 		else if(assignType.compare(type) == 0) {
 			assignStmt.push_back(stmtNum);
+		}
+		else if (callType.compare(type) == 0) {
+			callStmt.push_back(stmtNum);
+		} 
+		else if (ifType.compare(type) == 0) {
+			ifStmt.push_back(stmtNum);
 		}
 		
 		return true;
@@ -73,17 +81,27 @@ vector<int> StmtTable::getStmtNumForType(string type)
 
 	string whileType = "while";
 	string assignType = "assign";
+	string ifType = "if";
+	string callType = "call";
 	string stmtType = "stmt";
 	string progLineType = "prog_line";
-	string ifType = "if";
+	
 
 	if(whileType.compare(type) == 0) {
-		sort(whileStmt.begin(), whileStmt.end());
+		sort(whileStmt.begin(), whileStmt.end());  //@todo do we really need to sort?
 		return whileStmt;
 
 	} else if(assignType.compare(type) == 0) {
 		sort(assignStmt.begin(), assignStmt.end());
 		return assignStmt;
+
+	} else if (ifType.compare(type) == 0) {
+		sort(ifStmt.begin(), ifStmt.end());
+		return ifStmt;
+
+	} else if (callType.compare(type) == 0) {
+		sort(callStmt.begin(), callStmt.end());
+		return callStmt;
 
 	} else if (stmtType.compare(type) == 0 || progLineType.compare(type) == 0) {
 		vector<int> result;
@@ -122,6 +140,34 @@ bool StmtTable::isWhile(int stmtNo)
 	}
 
 	return stmtNumMap.at(stmtNo) == "while";
+	
+}
+
+/**
+* Return TRUE if stmtNo is of If Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
+bool StmtTable::isIf(int stmtNo) 
+{
+	if(stmtNo <= 0) {
+		throw exception("StmtTable error: Negative statment number");
+	}
+
+	return stmtNumMap.at(stmtNo) == "if";
+	
+}
+
+/**
+* Return TRUE if stmtNo is of call Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
+bool StmtTable::isCall(int stmtNo) 
+{
+	if(stmtNo <= 0) {
+		throw exception("StmtTable error: Negative statment number");
+	}
+
+	return stmtNumMap.at(stmtNo) == "call";
 	
 }
 

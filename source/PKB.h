@@ -66,7 +66,7 @@ public:
 	int insertProc(string procName);
 	int getProcTableSize();
 	string getProcName(int index);
-	int getProcIndex(string varName);
+	int getProcIndex(string procName);
 
 	// ConstantTable methods
 	bool insertConstant(int constant, int stmtNum);

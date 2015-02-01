@@ -16,6 +16,8 @@ public:
 	vector<int> getStmtNumForType(string);
 	bool isAssign(int);
 	bool isWhile(int);
+	bool isIf(int);
+	bool isCall(int);
 	int getSize();
 
 private:
@@ -23,4 +25,6 @@ private:
 	//unordered_map<string, int> stmtTypeMap; //key is given by stmtType
 	vector<int> whileStmt;
 	vector<int> assignStmt;
+	vector<int> ifStmt;
+	vector<int> callStmt;
 };
