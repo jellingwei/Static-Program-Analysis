@@ -1,0 +1,42 @@
+procedure Test4 {
+	appple = 777;									\\1							
+	banana = cancer + duck;			\\2
+
+	eat = 4 + banana + fries;						\\3							
+	if fries {									\\4								
+		appple = duck + 241 * guacamole ;			\\5			
+		while guacamole {								\\6							
+			banana = banana; 						\\7			
+			banana = duck               ;			\\8
+		}
+	} else 
+	{
+		fries = 1;									\\9
+
+	}
+	cancer = eat + fries;		\\10								
+	guacamole = cancer - duck;								\\11				
+	
+}
+
+procedure Test4a {
+	while guacamole {											\\12						
+		guacamole = guacamole * 2;							\\13		
+	}
+	if fries {												\\14			
+		cancer       =  1;								\\15
+											
+		if banana {											\\16					
+			appple = 0 ;										\\17	
+			while appple {									\\18				
+				appple = 1 + 2; }						\\19
+		} 
+		else {
+			fries = 1;									\\20
+		}
+	}
+	hellokitty = 5;									\\21
+
+}
+
+

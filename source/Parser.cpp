@@ -695,9 +695,9 @@ namespace Parser
 	{
 		using util::isEof;
 
-		bool isParseSuccessful;
+		bool isParseSuccessful = true;
 		while (!isEof()) {
-			isParseSuccessful = util::parseProcedure();
+			isParseSuccessful &= util::parseProcedure();
 		}
 
 		assert(isParseSuccessful); // do not evaluate queries if parser has failed
