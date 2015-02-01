@@ -29,17 +29,22 @@ void PKBTest::testPKB()
 
 	PKB pkb = PKB::getInstance();
 	
+	// ProcTable
+	cout << "Proc Table" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of procedures", 1, pkb.getProcTableSize());
+
 	// ConstantTable
-	cout << "constant Table" << endl;
+	cout << "Constant Table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of constants", 3, pkb.getConstantTableSize());
 
 	// VarTable
-	cout << "var Table" << endl;
+	cout << "Var Table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of variables", 6, pkb.getVarTableSize());
 	CPPUNIT_ASSERT(pkb.getVarIndex("f"));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Get invalid variable", -1, pkb.getVarIndex("z"));
 
 	// statements
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of statements", 15, (int)pkb.getStmtNumForType("stmt").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of assign", 10, (int)pkb.getStmtNumForType("assign").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of if", 2, (int)pkb.getStmtNumForType("if").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 3, (int)pkb.getStmtNumForType("while").size());
@@ -105,9 +110,13 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 6)", 5, pkb.getStmtFollowedTo(6).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 10)", 8, pkb.getStmtFollowedTo(10).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 1)", 0, (int)pkb.getStmtFollowedTo(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 12)", 11, pkb.getStmtFollowedTo(12).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 13)", 0, (int)pkb.getStmtFollowedTo(13).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(6, s)", 7, pkb.getStmtFollowedFrom(6).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(7, s)", 11, pkb.getStmtFollowedFrom(7).front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9, s)", 0, (int)pkb.getStmtFollowedFrom(9).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(8, s)", 10, pkb.getStmtFollowedFrom(8).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(13, s)", 0, (int)pkb.getStmtFollowedFrom(13).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(14, s)", 0, (int)pkb.getStmtFollowedFrom(14).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9999, 10000)", false, pkb.isFollows(9999,10000));
 
 	// Follows*
