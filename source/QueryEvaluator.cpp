@@ -1,8 +1,8 @@
-//TODO: Select boolean
 //TODO: What if no while loops and query asks for while
 //TODO: With clauses
 //TODO: if patterns
 //TODO: Use one side to probe instead of finding all pairs
+//TODO: Calls table for calls relation
 
 #include <vector>
 #include <string>
@@ -26,18 +26,19 @@ namespace QueryEvaluator
 	vector<Synonym> processResultNode(QNode* resultNode);
 	bool processSuchThatNode(QNode* suchThatNode);
 	bool processPatternNode(QNode* patternNode);
-	bool processSuchThatClause(QNode* clauseNode);
-	bool processWithClause(QNode* withClause);
+	bool processWithNode(QNode* withNode);
+	bool checkResultNodeForBoolean(QNode* resultNode);
 
 	//Functions to process clauses
+	bool processSuchThatClause(QNode* clauseNode);
 	bool processModifies(Synonym arg1, Synonym arg2);
 	bool processUses(Synonym arg1, Synonym arg2);
 	bool processParent(Synonym arg1, Synonym arg2);
 	bool processParentS(Synonym arg1, Synonym arg2);
-	bool evaluateParentS(Synonym arg1, Synonym arg2);
 	bool processFollows(Synonym arg1, Synonym arg2);
 	bool processFollowsS(Synonym arg1, Synonym arg2);
-	bool evaluateFollowsS(Synonym arg1, Synonym arg2);
+	bool processCalls(Synonym arg1, Synonym arg2);
+	bool processCallsS(Synonym arg1, Synonym arg2);
 
 	//Functions to process pattern clauses
 	bool processPatternClause(QNode* patternClause);
@@ -45,7 +46,7 @@ namespace QueryEvaluator
 	bool processWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2);
 
 	//Functions to process with clauses
-	bool evaluateWith(Synonym arg1, Synonym arg2);
+	bool processWithClause(QNode* withClause);
 
 	pair<vector<int>, vector<int>> filterPairWithSynonymType(pair<vector<int>, vector<int>> allPairs,
 		SYNONYM_TYPE arg1Type, SYNONYM_TYPE arg2Type);
@@ -55,25 +56,60 @@ namespace QueryEvaluator
 	/**
 	* Processes the query tree given a query tree node.
 	* Return an empty vector if the Such That or Pattern clauses are invalid.
+	* @todo A more efficient way of organizing this function
 	*/
 	vector<Synonym> processQueryTree(QueryTree* qTreeRoot) 
 	{
 		IntermediateValuesHandler::initialize(qTreeRoot->getSynonymsMap());
 		vector<Synonym> synonymResult;
+		
+		bool isBoolean = checkResultNodeForBoolean(qTreeRoot->getResultNode());
+		
+		if (isBoolean) {
+			bool isValidSuchThat = processSuchThatNode(qTreeRoot->getSuchThatNode());
+			if (!isValidSuchThat) {
+				Synonym s(BOOLEAN, "false");
+				synonymResult.push_back(s);
+				return synonymResult;
+			}
+			
+			bool isValidPattern = processPatternNode(qTreeRoot->getPatternNode());
+			if (!isValidPattern) {
+				Synonym s(BOOLEAN, "false");
+				synonymResult.push_back(s);
+				return synonymResult;
+			}
+			
+			bool isValidWith = processWithNode(qTreeRoot->getWithNode());
+			if (!isValidWith) {
+				Synonym s(BOOLEAN, "false");
+				synonymResult.push_back(s);
+				return synonymResult;
+			}
+			
+			Synonym s(BOOLEAN, "true");
+			synonymResult.push_back(s);
+			return synonymResult;
+		} else {
+			bool isValidSuchThat = processSuchThatNode(qTreeRoot->getSuchThatNode());
+			if (!isValidSuchThat) {
+				return synonymResult;  //Return empty vector
+			}
 
-		bool isValidSuchThat = processSuchThatNode(qTreeRoot->getSuchThatNode());
-		if (!isValidSuchThat) {
-			return synonymResult;  //Return empty vector
+			bool isValidPattern = processPatternNode(qTreeRoot->getPatternNode());
+			if (!isValidPattern) {
+				return synonymResult;  //Return empty vector
+			}
+			
+			bool isValidWith = processWithNode(qTreeRoot->getWithNode());
+			if (!isValidWith) {
+				return synonymResult;  //Return empty vector
+			}
+			
+			//All clauses are valid
+			synonymResult = processResultNode(qTreeRoot->getResultNode());
+			return synonymResult;
 		}
-
-		bool isValidPattern = processPatternNode(qTreeRoot->getPatternNode());
-		if (!isValidPattern) {
-			return synonymResult;  //Return empty vector
-		}
-
-		//Both such that and pattern clauses are valid
-		synonymResult = processResultNode(qTreeRoot->getResultNode());
-		return synonymResult;
 	}
 
 	/**
@@ -98,6 +134,23 @@ namespace QueryEvaluator
 			resultChildNode = resultNode->getNextChild();
 		}
 		return result;
+	}
+
+	bool checkResultNodeForBoolean(QNode* resultNode)
+	{
+		int numberOfSynonyms = resultNode->getNumberOfChildren();
+		if (numberOfSynonyms > 1) {
+			return false;  //Select boolean clause should only have one child node
+		}
+
+		QNode* resultChildNode = resultNode->getChild();
+		Synonym wantedSynonym = resultChildNode->getArg1();
+
+		if (wantedSynonym.getType() == BOOLEAN) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -144,6 +197,10 @@ namespace QueryEvaluator
 			return processFollows(arg1, arg2);
 		case FollowsS:
 			return processFollowsS(arg1, arg2);
+		case Calls:
+			return processCalls(arg1, arg2);
+		case CallsS:
+			return processCallsS(arg1, arg2);
 		default:
 			return false;
 		}
@@ -623,5 +680,50 @@ namespace QueryEvaluator
 
 		pair<vector<int>, vector<int>> filteredPairs(filteredFirstElements, filteredSecondElements);
 		return filteredPairs;
+	}
+	
+	bool processWithNode(QNode* withNode) 
+	{
+		int numberOfWith = withNode->getNumberOfChildren();
+		QNode* withClause = withNode->getChild();
+
+		for (int i = 0; i < numberOfWith; i++) {
+			bool isValid = processWithClause(withClause);
+
+			if (!isValid) {
+				return false;
+			} else {
+				withClause = withNode->getNextChild();
+			}
+		}
+		//There are no with nodes or they are valid
+		return true;
+	}
+	
+	//@todo call.procName and call.stmtNo
+	bool processWithClause(QNode* withClause)
+	{
+		//Assume that var and int cannot be compared (should be checked by the query validator)
+		Synonym arg1 = withClause->getArg1();
+		Synonym arg2 = withClause->getArg2();
+		pair<vector<int>, vector<int>> valuesPair = IntermediateValuesHandler::getValuesPair(arg1.getName(), arg2.getName());
+		
+		vector<int> acceptedValues1, acceptedValues2;
+		
+		for (unsigned int i = 0; i < valuesPair.first.size(); i++) {
+			if (valuesPair.first[i] == valuesPair.second[i]) {
+				acceptedValues1.push_back(valuesPair.first[i]);
+				acceptedValues2.push_back(valuesPair.second[i]);
+			}
+		}
+		
+		if (acceptedValues1.size() == 0) {
+			return false;
+		}
+		
+		arg1.setValues(acceptedValues1);
+		arg2.setValues(acceptedValues2);
+		IntermediateValuesHandler::addAndProcessIntermediateSynonyms(arg1, arg2);
+		return true;
 	}
 }
