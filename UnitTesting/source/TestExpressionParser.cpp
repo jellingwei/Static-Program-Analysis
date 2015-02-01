@@ -13,7 +13,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ExpressionParserTest );
 
 void 
 ExpressionParserTest::setUp() {
-	cout << "Expression Parser Unit Test"  << endl;
 	VarTable* vartable = new VarTable();
 	exprParser = new ExpressionParser(vartable);
 }

@@ -39,7 +39,13 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT(pkb.getVarIndex("f"));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Get invalid variable", -1, pkb.getVarIndex("z"));
 
+	// statements
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of assign", 10, (int)pkb.getStmtNumForType("assign").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of if", 2, (int)pkb.getStmtNumForType("if").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 3, (int)pkb.getStmtNumForType("while").size());
+
 	// Test Design Extractor
+
 	// Parent
 	cout << "Parent" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, 4)", 3, pkb.getParent(4).front());
