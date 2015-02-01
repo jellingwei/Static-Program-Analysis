@@ -11,12 +11,16 @@ using std::to_string;
 enum SYNONYM_TYPE
 {
 	PROCEDURE, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE, STRING,
+	BOOLEAN,   //Used for select boolean clauses
 	UNDEFINED  //Used to denote "_"
 };
 
 enum SYNONYM_ATTRIBUTE
 {
-	procName, varName, value, stmtNo
+	procName,  //Used for procedure and call
+	varName,   //Used for var
+	value,     //Used for constant
+	stmtNo     //Used for all others including call
 };
 
 class Synonym
@@ -31,8 +35,10 @@ public:
 	Synonym(SYNONYM_TYPE type, string name, vector<string> values);
 	Synonym(SYNONYM_TYPE type, string name, vector<int> values);
 	Synonym(SYNONYM_TYPE type, string name, set<int> values);
+	
 	void setValues(vector<int> values);
 	void setValues(set<int> values);
+	
 	SYNONYM_TYPE getType();
 	SYNONYM_ATTRIBUTE getAttribute();
 	string getName();
