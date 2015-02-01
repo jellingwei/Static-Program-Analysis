@@ -232,6 +232,10 @@ namespace Parser
 				pkb.insertConstant(atoi(RHS.c_str()), atoi(LHS.c_str()));
 			
 				return true;
+			} else if (designEntity.compare("ProcTable") == 0) {
+				pkb.insertProc(LHS);
+
+				return true;
 			}
 
 			return false;
@@ -483,7 +487,7 @@ namespace Parser
 		
 			res = parseExpr(RHSNode);
 		
-			callPkb("CallTable", currentProcIndex, procName);
+			callPkb("CallTable", std::to_string(static_cast<long long>(currentProcIndex)), procName);
 		
 			return res;
 		}
@@ -573,14 +577,15 @@ namespace Parser
 			if (procName.size() == 0) return false;
 		
 			// add procName to the procTable
-			callPkb("ProcTable", std::to_string(static_cast<long long>(stmtNum)), procName);
+			callPkb("ProcTable", procName, procName);
 
 			res = parse("{");
 			if (!res) return false;
 		
 			PKB pkb = PKB::getInstance();
 			TNode* root = pkb.getRoot();
-			TNode* procNode = pkb.createTNode(Procedure, 0, 0);
+			int procIndex = pkb.getProcIndex(procName);
+			TNode* procNode = pkb.createTNode(Procedure, 0, procIndex);
 			pkb.createLink(Child, root, procNode);
 			TNode* stmtListNode = pkb.createTNode(StmtLst, 0, 0);
 			pkb.createLink(Child, procNode, stmtListNode);
