@@ -80,7 +80,7 @@ namespace QueryEvaluator
 				return synonymResult;
 			}
 			
-			bool isValidWith = processWithNode(qTreeRoot->getWithNode());
+			bool isValidWith = true;  //processWithNode(qTreeRoot->getWithNode());
 			if (!isValidWith) {
 				Synonym s(BOOLEAN, "false");
 				synonymResult.push_back(s);
@@ -101,7 +101,7 @@ namespace QueryEvaluator
 				return synonymResult;  //Return empty vector
 			}
 			
-			bool isValidWith = processWithNode(qTreeRoot->getWithNode());
+			bool isValidWith = true;  //processWithNode(qTreeRoot->getWithNode());
 			if (!isValidWith) {
 				return synonymResult;  //Return empty vector
 			}
@@ -198,9 +198,9 @@ namespace QueryEvaluator
 		case FollowsS:
 			return processFollowsS(arg1, arg2);
 		case Calls:
-			return processCalls(arg1, arg2);
+			//return processCalls(arg1, arg2);
 		case CallsS:
-			return processCallsS(arg1, arg2);
+			//return processCallsS(arg1, arg2);
 		default:
 			return false;
 		}
@@ -682,7 +682,7 @@ namespace QueryEvaluator
 		return filteredPairs;
 	}
 	
-	bool processWithNode(QNode* withNode) 
+	/*bool processWithNode(QNode* withNode) 
 	{
 		int numberOfWith = withNode->getNumberOfChildren();
 		QNode* withClause = withNode->getChild();
@@ -698,14 +698,16 @@ namespace QueryEvaluator
 		}
 		//There are no with nodes or they are valid
 		return true;
-	}
+	}*/
 	
 	//@todo call.procName and call.stmtNo
-	bool processWithClause(QNode* withClause)
+	//@todo with clauses for constant strings
+	/*bool processWithClause(QNode* withClause)
 	{
 		//Assume that var and int cannot be compared (should be checked by the query validator)
 		Synonym arg1 = withClause->getArg1();
 		Synonym arg2 = withClause->getArg2();
+
 		pair<vector<int>, vector<int>> valuesPair = IntermediateValuesHandler::getValuesPair(arg1.getName(), arg2.getName());
 		
 		vector<int> acceptedValues1, acceptedValues2;
@@ -725,5 +727,5 @@ namespace QueryEvaluator
 		arg2.setValues(acceptedValues2);
 		IntermediateValuesHandler::addAndProcessIntermediateSynonyms(arg1, arg2);
 		return true;
-	}
+	}*/
 }
