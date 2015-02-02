@@ -70,6 +70,17 @@ void QueryValidator::initTable()
 	//FollowsS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
 
+	//Calls argument 1
+	string list6array[] = { "procedure","string-char", "_"};
+	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 3);
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Calls), list6));
+	//Calls argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Calls), list6));
+	//CallsS argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(CallsS), list6));
+	//CallsS argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsS), list6));
+
 }
 
 /**
@@ -94,10 +105,10 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		throw exception("QueryValidator error: Out of Range");
 	}
 
-	string arg1Type = arg1.getType();
-	string arg2Type = arg2.getType();
+	string arg1Type = Synonym::convertToString(arg1.getType());
+	string arg2Type = Synonym::convertToString(arg2.getType());
 	
-	if (arg1Type == "String"){
+	if (arg1Type == "string"){
 
 		char arg1Value = arg1.getName()[0];  //Get the value of arg1
 		
@@ -110,7 +121,7 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		}
 	}
 
-	if (arg2Type == "String"){
+	if (arg2Type == "string"){
 
 		char arg2Value = arg2.getName()[0];  //Get the value of arg2
 		
@@ -125,11 +136,6 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 
 	auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
 	auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
-
-	#ifdef DEBUG
-		cout<< "arg1Type... "<<arg1Type<<endl;
-		cout<< "arg2Type... "<<arg2Type<<endl;
-	#endif
 
 	if(result1 == std::end(listArg1)){ // not inside list of type of argument 1
 		return false;
@@ -164,7 +170,7 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
  */
 bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
 {
-	string patternType = arg0.getType();
+	string patternType = Synonym::convertToString(arg0.getType());
 
 	if(patternType == "assign"){
 		return validateAssignPattern(arg0, arg1, arg2);
@@ -181,8 +187,8 @@ bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym 
  */
 bool QueryValidator::validateAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2)
 {
-	string arg1Type = arg1.getType();
-	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_"){
+	string arg1Type = Synonym::convertToString(arg1.getType());
+	if (arg1Type != "string" && arg1Type != "variable" && arg1Type != "_"){
 			return false;
 	}
 	return true;
@@ -194,8 +200,8 @@ bool QueryValidator::validateAssignPattern(Synonym arg0, Synonym arg1, Synonym a
  */
 bool QueryValidator::validateWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2)
 {
-	string arg1Type = arg1.getType();
-	if (arg1Type != "String" && arg1Type != "variable" && arg1Type != "_"){
+	string arg1Type = Synonym::convertToString(arg1.getType());
+	if (arg1Type != "string" && arg1Type != "variable" && arg1Type != "_"){
 		return false;  //arg1 can only be a constant string or a variable synonym or "_"
 	}
 
