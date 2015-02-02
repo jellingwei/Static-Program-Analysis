@@ -950,6 +950,8 @@ namespace QueryParser
 	bool parseSelect()
 	{
 		string DE_type;
+		QNODE_TYPE nodeType;
+		QNode* childNode;
 
 		bool res = parse("Select");
 		if (!res){
@@ -959,36 +961,44 @@ namespace QueryParser
 			return false;
 		}
 
-		res = parseSynonymns();
-		if (!res){return false;}
+		if(peekInToTheNextToken().compare("BOOLEAN")==0){
+		
+			parseToken();
+			Synonym s1(SYNONYM_TYPE(BOOLEAN),"");
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+		
+		}else{
+			res = parseSynonymns();
+			if (!res){return false;}
 
 
-		/*** Building Query Tree ***/
-		QNODE_TYPE nodeType = RESULT;
+			/*** Building Query Tree ***/
+			nodeType = RESULT;
 
-		if (!synonymsMap.empty()){
-			if (synonymsMap.count(peekBackwards(0)) > 0){
-				DE_type = synonymsMap.at(peekBackwards(0)); 
+			if (!synonymsMap.empty()){
+				if (synonymsMap.count(peekBackwards(0)) > 0){
+					DE_type = synonymsMap.at(peekBackwards(0)); 
+				}else{
+					#ifdef DEBUG
+						cout<<"QueryParser synonymsMap error: unable to find the synonym"<<endl;
+					#endif
+					return false;
+				}
+
 			}else{
 				#ifdef DEBUG
-					cout<<"QueryParser synonymsMap error: unable to find the synonym"<<endl;
+					cout<<"QueryParser synonymsMap error: synonymsMap is empty"<<endl;
 				#endif
 				return false;
 			}
 
-		}else{
-			#ifdef DEBUG
-				cout<<"QueryParser synonymsMap error: synonymsMap is empty"<<endl;
-			#endif
-			return false;
+			Synonym s1(Synonym::convertToEnum(DE_type),peekBackwards(0));
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+
 		}
-
-		Synonym s1(Synonym::convertToEnum(DE_type),peekBackwards(0));
-		QNode* childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
 		res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
-		if(!res){return false;}
-
 		return res;
+
 	}
 
 	/**

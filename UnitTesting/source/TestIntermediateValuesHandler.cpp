@@ -229,7 +229,7 @@ void IntermediateValuesHandlerTest::testFindIntermediateSynonymIndex()
 	CPPUNIT_ASSERT_EQUAL(0, IntermediateValuesHandler::findIntermediateSynonymIndex("s"));
 	CPPUNIT_ASSERT_EQUAL(-1, IntermediateValuesHandler::findIntermediateSynonymIndex("w"));
 
-	Synonym w(SYNONYM_TYPE(WHILE)), "w", values);
+	Synonym w(SYNONYM_TYPE(WHILE), "w", values);
 	IntermediateValuesHandler::joinWithExistingValues(w);
 	CPPUNIT_ASSERT_EQUAL(0, IntermediateValuesHandler::findIntermediateSynonymIndex("s"));
 	CPPUNIT_ASSERT_EQUAL(1, IntermediateValuesHandler::findIntermediateSynonymIndex("w"));
