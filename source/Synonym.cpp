@@ -158,6 +158,8 @@ string Synonym::convertToString(SYNONYM_TYPE synonymType)
 		return "prog_line";
 	case STRING:
 		return "string";
+	case BOOLEAN:
+		return "boolean";
 	case UNDEFINED:
 		return "_";
 	default:
@@ -175,6 +177,8 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return ASSIGN;
 	} else if (synonymType == "call") {
 		return CALL;
+	} else if (synonymType == "while") {
+		return WHILE;
 	} else if (synonymType == "if") {
 		return IF;
 	} else if (synonymType == "variable") {
@@ -185,6 +189,8 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return PROG_LINE;
 	} else if (synonymType == "string") {
 		return STRING;
+	} else if (synonymType == "boolean") {
+		return BOOLEAN;
 	} else {
 		return UNDEFINED;
 	}
