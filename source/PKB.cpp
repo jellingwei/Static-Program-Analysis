@@ -17,6 +17,7 @@ PKB::PKB()
 	procTable = new ProcTable();
 	stmtTable = new StmtTable();
 	constantTable = new ConstantTable();
+	callsTable = new CallsTable();
 	modifiesTable = new ModifiesTable();
 	usesTable = new UsesTable();
 	followsTable = new FollowsTable();
@@ -425,6 +426,30 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure)
 {
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
+
+
+// CallsTable methods
+bool PKB::setCalls(int procIndex1, int procIndex2)
+{
+	return callsTable->setCalls(procIndex1, procIndex2);
+}
+bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) 
+{
+	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);;
+}
+vector<int> PKB::getCalledFrom(int procIndex2, bool transitiveClosure) 
+{
+	return callsTable->getCalledFrom(procIndex2, transitiveClosure);
+}
+vector<int> PKB::getCalledBy(int procIndex1, bool transitiveClosure) 
+{
+	return callsTable->getCalledBy(procIndex1, transitiveClosure);
+}
+pair<vector<int>, vector<int>> PKB::getAllCallsPairs(bool transitiveClosure) 
+{
+	return callsTable->getAllCallsPairs(transitiveClosure);
+}
+
 
 // ModifiesTable methods
 bool PKB::setModifies(int stmtNum, int varIndex) 

@@ -12,6 +12,7 @@
 #include "FollowsTable.h"
 #include "ParentTable.h"
 #include "ConstantTable.h"
+#include "CallsTable.h"
 #include "AST.h"
 #include "TNode.h"
 
@@ -31,6 +32,7 @@ public:
 	ProcTable* procTable;
 	StmtTable* stmtTable;
 	ConstantTable* constantTable;
+	CallsTable* callsTable;
 	ModifiesTable* modifiesTable;
 	UsesTable* usesTable;
 	FollowsTable* followsTable;
@@ -77,6 +79,13 @@ public:
 	vector<int> getStmtNum(int constant);
 	bool isConstant(int number);
 	vector<int> getAllConstant();
+
+	// CallsTable methods
+	bool setCalls(int procIndex1, int procIndex2);
+	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure);
+	vector<int> getCalledFrom(int procIndex2, bool transitiveClosure);
+	vector<int> getCalledBy(int procIndex1, bool transitiveClosure);
+	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
 
 	// StmtTable methods
 	bool insertStmt(int, string);
