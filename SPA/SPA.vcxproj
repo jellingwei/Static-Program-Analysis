@@ -40,6 +40,7 @@
     <ClInclude Include="..\source\AST.h" />
     <ClInclude Include="..\source\CallsTable.h" />
     <ClInclude Include="..\source\ConstantTable.h" />
+    <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExpressionParser.h" />
     <ClInclude Include="..\source\FollowsTable.h" />
     <ClInclude Include="..\source\InputQueryParser.h" />
