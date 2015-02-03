@@ -158,11 +158,11 @@ void QueryTree::printNode(QNode* node)
 	default:
 		type = "unknown";
 	}
-	arg0_type = node->getArg0().getType();
+	arg0_type = Synonym::convertToString(node->getArg0().getType());
 	arg0_name = node->getArg0().getName();
-	arg1_type = node->getArg1().getType();
+	arg1_type = Synonym::convertToString(node->getArg1().getType());
 	arg1_name = node->getArg1().getName();
-	arg2_type = node->getArg2().getType();
+	arg2_type = Synonym::convertToString(node->getArg2().getType());
 	arg2_name = node->getArg2().getName();
 
 	cout << "(TYPE:" << type << ", " << 

@@ -6,6 +6,7 @@ using std::set;
 using std::vector;
 using std::string;
 using std::swap;
+using std::stoi;
 
 #include "IntermediateValuesHandler.h"
 
@@ -17,7 +18,7 @@ namespace IntermediateValuesHandler
 	vector<string> allIntermediateNames;
 	unordered_map<string, string> synonymMap;
 	PKB pkb = PKB::getInstance();
-
+	
 	void initialize(unordered_map<string, string> synonymsMap) 
 	{
 		allIntermediateValues.clear();
@@ -44,7 +45,7 @@ namespace IntermediateValuesHandler
 
 	void addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
-		if (synonym.getType() == "_") {
+		if (synonym.getType() == UNDEFINED) {
 			return;
 		}
 
@@ -55,18 +56,18 @@ namespace IntermediateValuesHandler
 			//If this synonym is not yet in the table,
 			//get all the default values, intersect and join
 
-			string type = synonym.getType();
+			SYNONYM_TYPE type = synonym.getType();
 			vector<int> allValues;
 			set<int> intermediateValues = synonym.getValuesSet();
 			set<int> finalValues;
 
 			//Get the default values
-			if (type == "variable") {
+			if (type == VARIABLE) {
 				allValues = pkb.getAllVarIndex();
-			} else if (type == "constant") {
+			} else if (type == CONSTANT) {
 				allValues = pkb.getAllConstant();
 			} else {
-				allValues = pkb.getStmtNumForType(type);
+				allValues = pkb.getStmtNumForType(Synonym::convertToString(type));
 			}
 
 			//Intersection
@@ -77,8 +78,8 @@ namespace IntermediateValuesHandler
 			}
 
 			//Join
-			Synonym newSynonym(type, name, finalValues);
-			joinWithExistingValues(newSynonym);
+			synonym.setValues(finalValues);
+			joinWithExistingValues(synonym);
 		} else {
 			//This synonym is already in the table
 			//Just do intersection with the existing intermediate values
@@ -88,12 +89,12 @@ namespace IntermediateValuesHandler
 
 	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
 	{
-		if (LHS.getType() == "_" && RHS.getType() == "_") {
+		if (LHS.getType() == UNDEFINED && RHS.getType() == UNDEFINED) {
 			return;
-		} else if (LHS.getType() == "_") {
+		} else if (LHS.getType() == UNDEFINED) {
 			addAndProcessIntermediateSynonym(RHS);
 			return;
-		} else if (RHS.getType() == "_") {
+		} else if (RHS.getType() == UNDEFINED) {
 			addAndProcessIntermediateSynonym(LHS);
 			return;
 		}
@@ -246,6 +247,47 @@ namespace IntermediateValuesHandler
 
 		swap(allIntermediateValues, acceptedValues);
 	}
+	
+	bool filterEqualValue(Synonym synonym, string wantedValue)
+	{
+		int synonymIndex = findIntermediateSynonymIndex(synonym.getName());
+		if (synonymIndex == -1) {
+			return false;
+		}
+		
+		vector<vector<int>> acceptedValues;
+		
+		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
+			int value = stoi(wantedValue);
+			if (allIntermediateValues[i][synonymIndex] == value) {
+				acceptedValues.push_back(allIntermediateValues[i]);
+			}
+		}
+		
+		swap(allIntermediateValues, acceptedValues);
+		return (allIntermediateValues.size() != 0);
+	}
+	
+	bool filterEqualPair(Synonym LHS, Synonym RHS)
+	{
+		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
+		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
+		
+		if (indexLHS == -1 || indexRHS == -1) {
+			return false;
+		}
+		
+		vector<vector<int>> acceptedValues;
+		
+		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
+			if (allIntermediateValues[i][indexLHS] == allIntermediateValues[i][indexRHS]) {
+				acceptedValues.push_back(allIntermediateValues[i]);
+			}
+		}
+		
+		swap(allIntermediateValues, acceptedValues);
+		return (allIntermediateValues.size() != 0);
+	}
 
 	/**
 	* Helper method to get the synonym with its final values
@@ -272,11 +314,10 @@ namespace IntermediateValuesHandler
 				synonymValues = pkb.getStmtNumForType(type);
 			}
 
-			Synonym synonym(type, name, synonymValues);
+			Synonym synonym(Synonym::convertToEnum(type), name, synonymValues);
 			return synonym;
 		} else {
-			set<int> intermediateValues = getIntermediateValuesSet(synonymIndex);
-			Synonym synonym(type, name, intermediateValues);
+			Synonym synonym(Synonym::convertToEnum(type), name, getIntermediateValuesSet(synonymIndex));
 			return synonym;
 		}
 	}

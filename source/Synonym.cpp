@@ -3,23 +3,18 @@ using std::sort;
 
 #include "Synonym.h"
 
+Synonym::Synonym()
+{
+}
+
 Synonym::~Synonym()
 {
 }
 
 /**
- * Set the synonym type and name to be an empty string.
- */
-Synonym::Synonym()
-{
-	_type = "";
-	_name = "";
-}
-
-/**
  * Set the synonym type and name to the given type and name respectively.
  */
-Synonym::Synonym(string type, string name)
+Synonym::Synonym(SYNONYM_TYPE type, string name)
 {
 	_type = type;
 	_name = name;
@@ -28,7 +23,17 @@ Synonym::Synonym(string type, string name)
 /**
  * Set the synonym type and name to the given type and name respectively.
  */
-Synonym::Synonym(string type, int name)
+Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
+{
+	_type = type;
+	_name = name;
+	_attribute = attribute;
+}
+
+/**
+ * Set the synonym type and name to the given type and name respectively.
+ */
+Synonym::Synonym(SYNONYM_TYPE type, int name)
 {
 	_type = type;
 	_name = to_string(static_cast<long long>(name));
@@ -38,7 +43,7 @@ Synonym::Synonym(string type, int name)
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
  */
-Synonym::Synonym(string type, string name, vector<string> values)
+Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
 {
 	_type = type;
 	_name = name;
@@ -52,7 +57,7 @@ Synonym::Synonym(string type, string name, vector<string> values)
 /**
  * Set the synonym type and name to the given type and name respectively.
  */
-Synonym::Synonym(string type, string name, vector<int> values)
+Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 {
 	_type = type;
 	_name = name;
@@ -63,7 +68,7 @@ Synonym::Synonym(string type, string name, vector<int> values)
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
  */
-Synonym::Synonym(string type, string name, set<int> values)
+Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 {
 	_type = type;
 	_name = name;
@@ -92,9 +97,14 @@ void Synonym::setValues(set<int> values)
 /**
  * Return the type of the synonym.
  */
-string Synonym::getType()
+SYNONYM_TYPE Synonym::getType()
 {
 	return _type;
+}
+
+SYNONYM_ATTRIBUTE Synonym::getAttribute()
+{
+	return _attribute;
 }
 
 /**
@@ -123,4 +133,65 @@ set<int> Synonym::getValuesSet()
 		returnValues.insert(_values[i]);
 	}
 	return returnValues;
+}
+
+string Synonym::convertToString(SYNONYM_TYPE synonymType)
+{
+	switch (synonymType) {
+	case PROCEDURE:
+		return "procedure";
+	case STMT:
+		return "stmt";
+	case ASSIGN:
+		return "assign";
+	case CALL:
+		return "call";
+	case WHILE:
+		return "while";
+	case IF:
+		return "if";
+	case VARIABLE:
+		return "variable";
+	case CONSTANT:
+		return "constant";
+	case PROG_LINE:
+		return "prog_line";
+	case STRING:
+		return "string";
+	case BOOLEAN:
+		return "boolean";
+	case UNDEFINED:
+		return "_";
+	default:
+		return "";
+	}
+}
+
+SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
+{
+	if (synonymType == "procedure") {
+		return PROCEDURE;
+	} else if (synonymType == "stmt") {
+		return STMT;
+	} else if (synonymType == "assign") {
+		return ASSIGN;
+	} else if (synonymType == "call") {
+		return CALL;
+	} else if (synonymType == "while") {
+		return WHILE;
+	} else if (synonymType == "if") {
+		return IF;
+	} else if (synonymType == "variable") {
+		return VARIABLE;
+	} else if (synonymType == "constant") {
+		return CONSTANT;
+	} else if (synonymType == "prog_line") {
+		return PROG_LINE;
+	} else if (synonymType == "string") {
+		return STRING;
+	} else if (synonymType == "boolean") {
+		return BOOLEAN;
+	} else {
+		return UNDEFINED;
+	}
 }

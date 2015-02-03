@@ -599,7 +599,7 @@ namespace QueryParser
 			}else if(value.compare("_")==0){
 				DE_type = value;
 			}else if(matchInteger(value)){
-				DE_type = "String";
+				DE_type = "string";
 			}else{
 				return Synonym();  //error type mismatch
 			}
@@ -607,7 +607,7 @@ namespace QueryParser
 		}else if(node==REF_TYPE(entRef)){
 
 			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
-				DE_type = "String";
+				DE_type = "string";
 			}else if(value.compare("_")==0){
 				DE_type =value;
 			}else if(synonymsMap.count(value) > 0){
@@ -618,7 +618,7 @@ namespace QueryParser
 			}
 		}
 
-		return Synonym(DE_type,value);
+		return Synonym(Synonym::convertToEnum(DE_type),value);
 
 	}
 
@@ -632,7 +632,6 @@ namespace QueryParser
 	 */
 	string parseArg(string relRef, int arg)
 	{
-		bool res;
 		REF_TYPE node;
 		string entRef_value="";
 
@@ -715,6 +714,11 @@ namespace QueryParser
 
 
 				res = buildQueryTree(relRef[i], s1, s2);
+				if(!res){
+					#ifdef DEBUG
+						cout<<"QueryParser parseSuchThatClause error: in buildQueryTree"<<endl;
+					#endif
+				}
 
 				return res;
 			}
@@ -761,7 +765,7 @@ namespace QueryParser
 		if(DE_type.compare("while") == 0){
 			whilePatternExp = true;
 		}
-		Synonym pattern_arg0(DE_type, peekBackwards(0)); 
+		Synonym pattern_arg0(Synonym::convertToEnum(DE_type), peekBackwards(0)); 
 		
 
 		res = parse("(");
@@ -786,7 +790,7 @@ namespace QueryParser
 		//Build Query Tree
 		std::regex apostrophe("[\"]");
 		if (std::regex_match(peekBackwards(0),apostrophe)){
-			DE_type = "String";
+			DE_type = "string";
 		}else if(pattern_variable.compare("_")==0){
 			DE_type = pattern_variable;
 		}else if(synonymsMap.count(pattern_variable) > 0){
@@ -837,8 +841,8 @@ namespace QueryParser
 		} 
 
 		//Build Query Tree
-		Synonym pattern_var(DE_type, pattern_variable);
-		Synonym pattern_pattern("String", pattern_patterns);
+		Synonym pattern_var(Synonym::convertToEnum(DE_type), pattern_variable);
+		Synonym pattern_pattern(SYNONYM_TYPE(STRING), pattern_patterns);
 
 		res = myQueryV->validatePatternQueries(pattern_arg0, pattern_var, pattern_pattern);
 		if(!res){
@@ -951,6 +955,8 @@ namespace QueryParser
 	bool parseSelect()
 	{
 		string DE_type;
+		QNODE_TYPE nodeType;
+		QNode* childNode;
 
 		bool res = parse("Select");
 		if (!res){
@@ -960,36 +966,44 @@ namespace QueryParser
 			return false;
 		}
 
-		res = parseSynonymns();
-		if (!res){return false;}
+		if(peekInToTheNextToken().compare("BOOLEAN")==0){
+		
+			parseToken();
+			Synonym s1(SYNONYM_TYPE(BOOLEAN),"");
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+		
+		}else{
+			res = parseSynonymns();
+			if (!res){return false;}
 
 
-		/*** Building Query Tree ***/
-		QNODE_TYPE nodeType = RESULT;
+			/*** Building Query Tree ***/
+			nodeType = RESULT;
 
-		if (!synonymsMap.empty()){
-			if (synonymsMap.count(peekBackwards(0)) > 0){
-				DE_type = synonymsMap.at(peekBackwards(0)); 
+			if (!synonymsMap.empty()){
+				if (synonymsMap.count(peekBackwards(0)) > 0){
+					DE_type = synonymsMap.at(peekBackwards(0)); 
+				}else{
+					#ifdef DEBUG
+						cout<<"QueryParser synonymsMap error: unable to find the synonym"<<endl;
+					#endif
+					return false;
+				}
+
 			}else{
 				#ifdef DEBUG
-					cout<<"QueryParser synonymsMap error: unable to find the synonym"<<endl;
+					cout<<"QueryParser synonymsMap error: synonymsMap is empty"<<endl;
 				#endif
 				return false;
 			}
 
-		}else{
-			#ifdef DEBUG
-				cout<<"QueryParser synonymsMap error: synonymsMap is empty"<<endl;
-			#endif
-			return false;
+			Synonym s1(Synonym::convertToEnum(DE_type),peekBackwards(0));
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+
 		}
-
-		Synonym s1(DE_type,peekBackwards(0));
-		QNode* childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
 		res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
-		if(!res){return false;}
-
 		return res;
+
 	}
 
 	/**
@@ -999,15 +1013,28 @@ namespace QueryParser
 	{
 		bool res; 
 		res = parseDeclarations();
-		if (!res){return false;}
+		if (!res){
+			#ifdef DEBUG
+				cout<<"QueryParser declarations failed."<<endl;
+			#endif
+			return false;}
 
 		res = parseSelect();
-		if (!res){return false;}
+		if (!res){
+			#ifdef DEBUG
+				cout<<"QueryParser select failed."<<endl;
+			#endif
+			return false;}
 
 		while(buffer.size() && bufferIter != buffer.end()){
 			res = parseOptionalClauses();
-			if (!res){return false;}
+			if (!res){
+			#ifdef DEBUG
+				cout<<"QueryParser optional clauses failed."<<endl;
+			#endif
+			return false;}
 		}
+		
 		return res;
 	}
 
