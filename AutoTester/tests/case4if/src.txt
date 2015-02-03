@@ -16,27 +16,41 @@ procedure Test4 {
 	}
 	cancer = eat + fries;		\\10								
 	guacamole = cancer - duck;								\\11				
-	
-}
-
-procedure Test4a {
-	while guacamole {											\\12						
-		guacamole = guacamole * 2;							\\13		
+    call Test4a												\\12
+}procedure Test4a {
+	while guacamole {											\\13
+		guacamole = guacamole * 2;							\\14		
 	}
-	if fries {												\\14			
-		cancer       =  1;								\\15
+	if fries {												\\15			
+		cancer       =  1;								\\16
 											
-		if banana {											\\16					
-			appple = 0 ;										\\17	
-			while appple {									\\18				
-				appple = 1 + 2; }						\\19
+		if banana {											\\17					
+			appple = 0 ;										\\18	
+			while appple {									\\19				
+				appple = 1 + 2; }						\\20
 		} 
 		else {
-			fries = 1;									\\20
+			fries = 1;									\\21
 		}
 	}
-	hellokitty = 5;									\\21
-	call Test4;
+	hellokitty = 5;									\\22
+	call fourth;			\\23
 }
 
 
+
+
+
+
+
+
+
+procedure Third {
+	call fourth; 	\\24
+
+
+}
+procedure fourth {
+	zzz = cancer; \\25
+
+}

@@ -21,10 +21,12 @@ void TestWrapper::parse(std::string filename) {
 
 	std::cout<<"TestWrapper parsing source"<<std::endl;
 	Parser::initParser(filename);
-
 	Parser::parseProgram();
 
-	// ...rest of your code...
+	DesignExtractor extractor;
+	vector<int> callingOrder = extractor.getCallsInTopologicalOrder();
+	vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder(callingOrder);
+	
 }
 
 // method to evaluating a query

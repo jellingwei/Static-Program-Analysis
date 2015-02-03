@@ -14,7 +14,7 @@ using namespace std;
 /**
 * Return TRUE if the StmtTable is updated accordingly. Otherwise, return FALSE. 
 * If stmtNum and type are already present in the StmtTable and are previously set, the StmtTable will not be updated.
-* @exception if stmtNum is negative or 0, or type is not while/assign/if.
+* @exception if stmtNum is negative or 0, or type is not while/assign/if/call.
 */
 bool StmtTable::insertStmt(int stmtNum, string type) 
 {
@@ -88,7 +88,7 @@ vector<int> StmtTable::getStmtNumForType(string type)
 	
 
 	if(whileType.compare(type) == 0) {
-		sort(whileStmt.begin(), whileStmt.end());  //@todo do we really need to sort?
+		sort(whileStmt.begin(), whileStmt.end());  
 		return whileStmt;
 
 	} else if(assignType.compare(type) == 0) {

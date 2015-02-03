@@ -146,8 +146,9 @@ public:
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
 
-	
+	//@todo move to somewhere in pkb? discuss with kenson
 	unordered_map<int, TNode*> nodeTable;
+	unordered_map<int, int> stmtToProcMap;  // a temporary structure for convenience
 
 private:
 	PKB();
