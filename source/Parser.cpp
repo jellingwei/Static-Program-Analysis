@@ -234,7 +234,6 @@ namespace Parser
 				}
 
 				pkb.setUsesProc(currentProcIndex, usedVarIndex);
-			
 				return true;
 			} else if (designEntity.compare("ConstantTable") == 0) 
 			{
@@ -289,6 +288,7 @@ namespace Parser
 
 			ExpressionParser exprParser;
 			exprParser.updateStmtNum(stmtNum);
+			exprParser.updateProcIndex(currentProcIndex);
 			TNode* top = exprParser.parseExpressionForAST(slicedBuffer);
 
 			PKB::getInstance().createLink(Child, exprRoot, top);

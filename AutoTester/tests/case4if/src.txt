@@ -47,7 +47,7 @@ procedure Test4 {
 
 procedure Third {
 	while hellokitty { \\24
-	call fourth;}	\\25
+	call fifth;}	\\25
 
 
 }
@@ -55,3 +55,7 @@ procedure fourth {
 	zzz=cancer; \\26
 
 }
+
+procedure fifth 
+
+{call fourth;} \\27

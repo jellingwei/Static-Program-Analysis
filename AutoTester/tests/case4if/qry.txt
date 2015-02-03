@@ -21,10 +21,15 @@ Select i
 5 - Select p
 procedure p;
 Select p
-4,15,17
+Test4,Test4a,Third,fourth,fifth
 1000
-6- asdasd
+6- Modifies across procs
 stmt s;
 Select s such that Modifies(s, "zzz")
-12,23,24,25,26
+12,23,24,25,26,27
+2000
+7- Uses across procs
+stmt s;
+Select s such that Uses(s, "cancer")
+11,12,2,23,24,25,26,27
 2000
