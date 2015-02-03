@@ -1,0 +1,20 @@
+1 - Select assign
+assign a;
+Select a
+1,10,11,13,15,17,19,2,20,21,3,5,7,8,9
+1000
+2 - Select variable
+variable v;
+Select v
+appple,banana,cancer,duck,eat,fries,guacamole,hellokitty
+1000
+3 - Select while
+while w;
+Select w
+6,12,18
+1000
+4 - Select if
+if i;
+Select i
+4,14,16
+1000

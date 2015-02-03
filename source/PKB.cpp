@@ -17,6 +17,7 @@ PKB::PKB()
 	procTable = new ProcTable();
 	stmtTable = new StmtTable();
 	constantTable = new ConstantTable();
+	callsTable = new CallsTable();
 	modifiesTable = new ModifiesTable();
 	usesTable = new UsesTable();
 	followsTable = new FollowsTable();
@@ -117,6 +118,11 @@ vector<int> PKB::patternMatchAssign(string RHS)
 vector<int> PKB::patternMatchWhile(string LHS) 
 {
 	return ast->patternMatchWhile(LHS);
+}
+
+vector<int> PKB::patternMatchIf(string LHS) 
+{
+	return ast->patternMatchIf(LHS);
 }
 
 /**
@@ -313,6 +319,25 @@ bool PKB::isWhile(int stmtNum)
 }
 
 /**
+* @return TRUE if stmtNo is of If Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
+bool PKB::isIf(int stmtNum) 
+{
+	return stmtTable->isIf(stmtNum);
+}
+
+/**
+* @return TRUE if stmtNo is of Call Type. Otherwise, return FALSE. 
+* If stmtNo is out of range, return FALSE.
+*/
+bool PKB::isCall(int stmtNum) 
+{
+	return stmtTable->isCall(stmtNum);
+}
+
+
+/**
  * @return the total number of statements in the the StmtTable.
  */
 int PKB::getStmtTableSize() 
@@ -401,6 +426,30 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure)
 {
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
+
+
+// CallsTable methods
+bool PKB::setCalls(int procIndex1, int procIndex2)
+{
+	return callsTable->setCalls(procIndex1, procIndex2);
+}
+bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) 
+{
+	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);;
+}
+vector<int> PKB::getProcsCalling(int procIndex2, bool transitiveClosure) 
+{
+	return callsTable->getProcsCalling(procIndex2, transitiveClosure);
+}
+vector<int> PKB::getProcsCalledBy(int procIndex1, bool transitiveClosure) 
+{
+	return callsTable->getProcsCalledBy(procIndex1, transitiveClosure);
+}
+pair<vector<int>, vector<int>> PKB::getAllCallsPairs(bool transitiveClosure) 
+{
+	return callsTable->getAllCallsPairs(transitiveClosure);
+}
+
 
 // ModifiesTable methods
 bool PKB::setModifies(int stmtNum, int varIndex) 

@@ -12,6 +12,7 @@
 #include "FollowsTable.h"
 #include "ParentTable.h"
 #include "ConstantTable.h"
+#include "CallsTable.h"
 #include "AST.h"
 #include "TNode.h"
 
@@ -31,6 +32,7 @@ public:
 	ProcTable* procTable;
 	StmtTable* stmtTable;
 	ConstantTable* constantTable;
+	CallsTable* callsTable;
 	ModifiesTable* modifiesTable;
 	UsesTable* usesTable;
 	FollowsTable* followsTable;
@@ -52,6 +54,7 @@ public:
 
 	vector<int> patternMatchAssign(string RHS);
 	vector<int> patternMatchWhile(string LHS);
+	vector<int> patternMatchIf(string LHS);
 	int getControlVariable(int stmtNum);
 
 	// VarTable methods
@@ -77,12 +80,21 @@ public:
 	bool isConstant(int number);
 	vector<int> getAllConstant();
 
+	// CallsTable methods
+	bool setCalls(int procIndex1, int procIndex2);
+	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure);
+	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure);
+	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure);
+	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
+
 	// StmtTable methods
 	bool insertStmt(int, string);
 	string getType(int);
 	vector<int> getStmtNumForType(string);
 	bool isAssign(int);
 	bool isWhile(int);
+	bool isIf(int);
+	bool isCall(int);
 	int getStmtTableSize();
 
 	// Parent Table methods

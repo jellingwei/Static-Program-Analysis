@@ -29,6 +29,7 @@ class AST {
 
 		vector<int> patternMatchAssign(string RHS);
 		vector<int> patternMatchWhile(string LHS);
+		vector<int> patternMatchIf(string LHS);
 
 		int getControlVariable(int stmtNum);
 };

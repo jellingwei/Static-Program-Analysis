@@ -29,17 +29,22 @@ void PKBTest::testPKB()
 
 	PKB pkb = PKB::getInstance();
 	
+	// ProcTable
+	cout << "Proc Table" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of procedures", 1, pkb.getProcTableSize());
+
 	// ConstantTable
-	cout << "constant Table" << endl;
+	cout << "Constant Table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of constants", 3, pkb.getConstantTableSize());
 
 	// VarTable
-	cout << "var Table" << endl;
+	cout << "Var Table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of variables", 6, pkb.getVarTableSize());
 	CPPUNIT_ASSERT(pkb.getVarIndex("f"));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Get invalid variable", -1, pkb.getVarIndex("z"));
 
 	// statements
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of statements", 15, (int)pkb.getStmtNumForType("stmt").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of assign", 10, (int)pkb.getStmtNumForType("assign").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of if", 2, (int)pkb.getStmtNumForType("if").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 3, (int)pkb.getStmtNumForType("while").size());
@@ -105,9 +110,13 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 6)", 5, pkb.getStmtFollowedTo(6).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 10)", 8, pkb.getStmtFollowedTo(10).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 1)", 0, (int)pkb.getStmtFollowedTo(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 12)", 11, pkb.getStmtFollowedTo(12).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 13)", 0, (int)pkb.getStmtFollowedTo(13).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(6, s)", 7, pkb.getStmtFollowedFrom(6).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(7, s)", 11, pkb.getStmtFollowedFrom(7).front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9, s)", 0, (int)pkb.getStmtFollowedFrom(9).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(8, s)", 10, pkb.getStmtFollowedFrom(8).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(13, s)", 0, (int)pkb.getStmtFollowedFrom(13).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(14, s)", 0, (int)pkb.getStmtFollowedFrom(14).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9999, 10000)", false, pkb.isFollows(9999,10000));
 
 	// Follows*
@@ -149,6 +158,11 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'f')", 4, (int)pkb.getUsesStmtNum(pkb.getVarIndex("f")).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 0", 6, (int)pkb.getUsesVarForProc(0).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 1", 0, (int)pkb.getUsesVarForProc(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'a')", 0, pkb.getUsesProcIndex(pkb.getVarIndex("a")).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'a')", 1, (int)pkb.getUsesProcIndex(pkb.getVarIndex("a")).size());
+
 	// Modifies
 	cout << "Modifies" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(1, 'a')", true, pkb.isModifies(1, pkb.getVarIndex("a")));
@@ -160,6 +174,11 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(7, v)", 2, (int)pkb.getModVarForStmt(7).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(8, v)", (string)"f", pkb.getVarName(pkb.getModVarForStmt(8).front()));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(11, v)", (string)"a", pkb.getVarName(pkb.getModVarForStmt(11).front()));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 0", 6, (int)pkb.getModVarForProc(0).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 1", 0, (int)pkb.getModVarForProc(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 0, pkb.getModProcIndex(pkb.getVarIndex("a")).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 1, (int)pkb.getModProcIndex(pkb.getVarIndex("a")).size());
 
 	// Pattern
 	cout << "Pattern" << endl;
@@ -185,6 +204,16 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(v, _) given stmtnum which is not a while loop", -1, pkb.getControlVariable(5));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(v, _) given invalid stmtnum", -1, pkb.getControlVariable(8000));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(v, _) given invalid stmtnum", -1, pkb.getControlVariable(0));
+
+	// Pattern for if 
+	cout << "pattern for if" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _)", 12, pkb.patternMatchIf(" b ").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('c', _)", 13, pkb.patternMatchIf("c").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('unusedvar', _)", 0, (int)pkb.patternMatchIf("unusedvar").size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 12", pkb.getVarIndex("b"), pkb.getControlVariable(12));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 8", pkb.getVarIndex("c"), pkb.getControlVariable(13));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum which is not a if statement", -1, pkb.getControlVariable(14));
 
 	// All pairs for Follows
 	pair<vector<int>, vector<int>> allFollows = pkb.getAllFollowsPairs(false);

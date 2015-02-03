@@ -69,11 +69,6 @@ namespace Parser
 		
 		bool parseStmtList();
 
-		bool isEof() 
-		{
-			return inputFile.eof();
-		}
-
 		/**
 		 * Returns the next line of input as a vector of tokens.
 		 */
@@ -149,7 +144,7 @@ namespace Parser
 				bool res = parseLine();
 				if (!res) 
 				{
-					return parseToken();
+					return inputFile.eof()? "" : parseToken();
 				} else {
 					bufferIter = buffer.begin();
 					return *(bufferIter ++);
@@ -166,7 +161,7 @@ namespace Parser
 				bool res = parseLine();
 				if (!res) 
 				{
-					return parseToken();
+					return inputFile.eof()? "" : parseToken();
 				} else {
 					bufferIter = buffer.begin();
 					return *(bufferIter);
@@ -174,6 +169,16 @@ namespace Parser
 			}
 
 		}
+
+		bool isEof() 
+		{
+			if (peekToken().empty()) {
+				return inputFile.eof();
+			} else {
+				return false;
+			}
+		}
+
 
 		TNode* currentASTParent() 
 		{
@@ -208,6 +213,8 @@ namespace Parser
 						pkb.setModifies(statement, modifiedVarIndex);	
 					}
 				}
+
+				pkb.setModifiesProc(currentProcIndex, modifiedVarIndex);
 			
 				return true;
 			} else if (designEntity.compare("Uses") == 0) 
@@ -225,6 +232,8 @@ namespace Parser
 						pkb.setUses(statement, usedVarIndex);	
 					}
 				}
+
+				pkb.setUsesProc(currentProcIndex, usedVarIndex);
 			
 				return true;
 			} else if (designEntity.compare("ConstantTable") == 0) 
@@ -271,13 +280,15 @@ namespace Parser
 		{
 			bool res = true;
 			const int alreadyParsed = 2;
-			//int bufferSize = buffer.size() - alreadyParsed;
+			
+			vector<string>::const_iterator first = buffer.begin() + alreadyParsed;
+			vector<string>::const_iterator last = buffer.end();
+			vector<string> slicedBuffer(first, last);
 
 			ExpressionParser exprParser;
-			exprParser.updateBuffer(buffer, alreadyParsed); 
 			exprParser.updateStmtNum(stmtNum);
+			TNode* top = exprParser.parseExpressionForAST(slicedBuffer);
 
-			TNode* top = exprParser.parse();
 			PKB::getInstance().createLink(Child, exprRoot, top);
 
 			while ((bufferIter++)->compare(";") != 0) 
@@ -577,11 +588,12 @@ namespace Parser
 		
 			// add procName to the procTable
 			callPkb("ProcTable", procName, procName);
+			PKB pkb = PKB::getInstance();
+			currentProcIndex = pkb.getProcIndex(procName);
 
 			res = parse("{");
 			if (!res) return false;
 		
-			PKB pkb = PKB::getInstance();
 			TNode* root = pkb.getRoot();
 			int procIndex = pkb.getProcIndex(procName);
 			TNode* procNode = pkb.createTNode(Procedure, 0, procIndex);
@@ -596,8 +608,7 @@ namespace Parser
 			// remove the stmtlist node from ASTParent
 			ASTParent.erase(ASTParent.end() - 1); 
 
-			if (!res) return false;
-			return true;
+			return res;
 		}
 
 		void traverseAndPrintTree(TNode* root) 
@@ -687,12 +698,15 @@ namespace Parser
 	 */
 	bool parseProgram() 
 	{
-		// Assignment 4 only involves program with one procedure, so only one
-		// matchProcedure call is neccessary
-		bool res = util::parseProcedure();
-		assert(res); // do not evaluate queries if parser has failed
-	
-		return res;
+		using util::isEof;
+
+		bool isParseSuccessful = true;
+		while (!isEof()) {
+			isParseSuccessful &= util::parseProcedure();
+		}
+
+		assert(isParseSuccessful); // do not evaluate queries if parser has failed
+		return isParseSuccessful;
 	}
 	
 }

@@ -156,7 +156,7 @@ pair<vector<int>, vector<int>> UsesTable::getAllUsesPair()
 
 bool UsesTable::setUsesProc(int procIndex, int varIndex) 
 {
-	if (procIndex <= 0 || varIndex <= 0) {
+	if (procIndex < 0 || varIndex <= 0) {
 		throw exception("UsesTable error: Negative procedure index or varIndex");
 	}
 
@@ -208,7 +208,7 @@ bool UsesTable::setUsesProc(int procIndex, int varIndex)
 
 bool UsesTable::isUsesProc(int procIndex, int varIndex) 
 {
-	if (procIndex <= 0 || varIndex <= 0) {
+	if (procIndex < 0 || varIndex <= 0) {
 		return false;
 	}
 
@@ -246,7 +246,7 @@ vector<int> UsesTable::getUsesProcIndex(int varIndex)
 
 vector<int> UsesTable::getUsesVarForProc(int procIndex) 
 {
-	if (procIndex <= 0) {
+	if (procIndex < 0) {
 		return vector<int>();
 	}
 
