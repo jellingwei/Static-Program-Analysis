@@ -6,6 +6,7 @@ using std::set;
 using std::vector;
 using std::string;
 using std::swap;
+using std::stoi;
 
 #include "IntermediateValuesHandler.h"
 
@@ -17,7 +18,7 @@ namespace IntermediateValuesHandler
 	vector<string> allIntermediateNames;
 	unordered_map<string, string> synonymMap;
 	PKB pkb = PKB::getInstance();
-
+	
 	void initialize(unordered_map<string, string> synonymsMap) 
 	{
 		allIntermediateValues.clear();
@@ -245,6 +246,47 @@ namespace IntermediateValuesHandler
 		}
 
 		swap(allIntermediateValues, acceptedValues);
+	}
+	
+	bool filterEqualValue(Synonym synonym, string wantedValue)
+	{
+		int synonymIndex = findIntermediateSynonymIndex(synonym.getName());
+		if (synonymIndex == -1) {
+			return false;
+		}
+		
+		vector<vector<int>> acceptedValues;
+		
+		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
+			int value = stoi(wantedValue);
+			if (allIntermediateValues[i][synonymIndex] == value) {
+				acceptedValues.push_back(allIntermediateValues[i]);
+			}
+		}
+		
+		swap(allIntermediateValues, acceptedValues);
+		return (allIntermediateValues.size() != 0);
+	}
+	
+	bool filterEqualPair(Synonym LHS, Synonym RHS)
+	{
+		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
+		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
+		
+		if (indexLHS == -1 || indexRHS == -1) {
+			return false;
+		}
+		
+		vector<vector<int>> acceptedValues;
+		
+		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
+			if (allIntermediateValues[i][indexLHS] == allIntermediateValues[i][indexRHS]) {
+				acceptedValues.push_back(allIntermediateValues[i]);
+			}
+		}
+		
+		swap(allIntermediateValues, acceptedValues);
+		return (allIntermediateValues.size() != 0);
 	}
 
 	/**
