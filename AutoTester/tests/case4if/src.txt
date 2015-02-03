@@ -27,7 +27,7 @@ procedure Test4 {
 		if banana {											\\17					
 			appple = 0 ;										\\18	
 			while appple {									\\19				
-				appple = 1 + 2; }						\\20
+				appple = 1+2;}						\\20
 		} 
 		else {
 			fries = 1;									\\21
@@ -46,11 +46,12 @@ procedure Test4 {
 
 
 procedure Third {
-	call fourth; 	\\24
+	while hellokitty { \\24
+	call fourth;}	\\25
 
 
 }
 procedure fourth {
-	zzz = cancer; \\25
+	zzz=cancer; \\26
 
 }

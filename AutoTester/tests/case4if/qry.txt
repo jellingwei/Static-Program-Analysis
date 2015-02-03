@@ -1,17 +1,17 @@
 1 - Select assign
 assign a;
 Select a
-1,10,11,14,16,18,2,20,21,22,25,3,5,7,8,9
+1,10,11,14,16,18,2,20,21,22,26,3,5,7,8,9
 1000
 2 - Select variable
 variable v;
 Select v
-appple,banana,cancer,duck,eat,fries,guacamole,hellokitty
+appple,banana,cancer,duck,eat,fries,guacamole,hellokitty,zzz
 1000
 3 - Select while
 while w;
 Select w
-6,13,19
+6,13,19,24
 1000
 4 - Select if
 if i;
@@ -23,3 +23,8 @@ procedure p;
 Select p
 4,15,17
 1000
+6- asdasd
+stmt s;
+Select s such that Modifies(s, "zzz")
+12,23,24,25,26
+2000
