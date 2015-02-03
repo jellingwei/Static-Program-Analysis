@@ -714,6 +714,11 @@ namespace QueryParser
 
 
 				res = buildQueryTree(relRef[i], s1, s2);
+				if(!res){
+					#ifdef DEBUG
+						cout<<"QueryParser parseSuchThatClause error: in buildQueryTree"<<endl;
+					#endif
+				}
 
 				return res;
 			}
@@ -1008,15 +1013,28 @@ namespace QueryParser
 	{
 		bool res; 
 		res = parseDeclarations();
-		if (!res){return false;}
+		if (!res){
+			#ifdef DEBUG
+				cout<<"QueryParser declarations failed."<<endl;
+			#endif
+			return false;}
 
 		res = parseSelect();
-		if (!res){return false;}
+		if (!res){
+			#ifdef DEBUG
+				cout<<"QueryParser select failed."<<endl;
+			#endif
+			return false;}
 
 		while(buffer.size() && bufferIter != buffer.end()){
 			res = parseOptionalClauses();
-			if (!res){return false;}
+			if (!res){
+			#ifdef DEBUG
+				cout<<"QueryParser optional clauses failed."<<endl;
+			#endif
+			return false;}
 		}
+		
 		return res;
 	}
 

@@ -137,6 +137,12 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 	auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
 	auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
 
+	#ifdef DEBUG
+		cout<<"arg1Type : "<<arg1Type<<endl;
+		cout<<"arg2Type : "<<arg2Type<<endl;
+	#endif
+
+
 	if(result1 == std::end(listArg1)){ // not inside list of type of argument 1
 		return false;
 	}
