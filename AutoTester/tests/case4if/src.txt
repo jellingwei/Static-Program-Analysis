@@ -36,7 +36,7 @@ procedure Test4a {
 		}
 	}
 	hellokitty = 5;									\\21
-
+	call Test4;
 }
 
 

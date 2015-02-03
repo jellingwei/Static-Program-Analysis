@@ -75,8 +75,6 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 
 bool CallsTable::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) 
 {
-	bool status = true;
-
 	if (procIndex1 < 0 || procIndex2 < 0) {
 		return false;
 	}
@@ -85,6 +83,9 @@ bool CallsTable::isCalls(int procIndex1, int procIndex2, bool transitiveClosure)
 		if ((procIndex1Map.count(procIndex2) == 0) || (procIndex2Map.count(procIndex1) == 0)) {
 			return false;
 		}
+		vector<int> calledProcs = getProcsCalledBy(procIndex1, false);
+
+		return find(calledProcs.begin(), calledProcs.end(), procIndex2) != calledProcs.end();
 	} else {
 		bool isTransitiveClosure = true;
 		vector<int> allCalledProcs = getProcsCalledBy(procIndex1, isTransitiveClosure);

@@ -245,8 +245,10 @@ namespace Parser
 				pkb.insertProc(LHS);
 
 				return true;
-			} else if (designEntity.compare("CallTable") == 0) {
-				//@todo call table
+			} else if (designEntity.compare("CallsTable") == 0) {
+				int leftProc = atoi(LHS.c_str());
+				int rightProc = atoi(RHS.c_str());
+				pkb.setCalls(leftProc, rightProc);
 
 				return true;
 			}
@@ -474,16 +476,13 @@ namespace Parser
 
 		bool parseCall(string firstToken) {
 			string procName = parseName();
-
 			if (procName.size() == 0) return false;
 
-			bool res = parse("=");
-			if (!res) return false;
+			PKB pkb = PKB::getInstance();
+			int index = pkb.insertProc(procName);
 		
 			// AST interactions
 			AST* ast = PKB::getInstance().ast;
-			PKB pkb = PKB::getInstance();
-			int index = pkb.insertProc(procName);
 			TNode* node = pkb.createTNode(Call, stmtNum, index);
 		
 			pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
@@ -496,10 +495,10 @@ namespace Parser
 			}
 			PKB::getInstance().setParent(currentASTParent(), node);
 		
-		
-			callPkb("CallTable", std::to_string(static_cast<long long>(currentProcIndex)), procName);
-		
-			return res;
+			int calledProcIndex = pkb.getProcIndex(procName);
+			callPkb("CallsTable", std::to_string(static_cast<long long>(currentProcIndex)), std::to_string(static_cast<long long>(calledProcIndex)));
+	
+			return true;
 		}
 
 
