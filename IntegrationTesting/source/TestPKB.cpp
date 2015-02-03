@@ -5,6 +5,9 @@
 #include "SourceParser.h"
 #include "PKB.h"
 #include "ConstantTable.h"
+#include "PatternMatch.h"
+
+#include "ExpressionParser.h"
 
 #define DEBUG(x) do { std::cerr << x << endl; } while (0)
 
@@ -166,6 +169,23 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'a + f')", 6, (int)pkb.patternMatchAssign("a + f").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '3')", 11, pkb.patternMatchAssign("3").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'd')", 0, (int)pkb.patternMatchAssign("d").size());
+
+	// New Pattern Design
+	const char* args[] = {"d", "+", "f"};
+	vector<string> argVector(args, args + 3);
+	ExpressionParser exprParser;
+	TNode* top = exprParser.parseExpressionForQuerying(argVector);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("ok", Plus, top->getNodeType());
+	PatternMatch pattern;
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 2, pattern.PatternMatchAssign(top, "*").at(0));
+
+	const char* args2[] = {"1"};
+	vector<string> argVector2(args2, args2 + 1);
+	TNode* top2 = exprParser.parseExpressionForQuerying(argVector2);
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 9, pattern.PatternMatchAssign(top2, ",").at(2));
+
 
 	// Pattern for while
 	cout << "Pattern for while" << endl;

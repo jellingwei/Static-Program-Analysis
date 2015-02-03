@@ -68,13 +68,12 @@ void ExpressionParser::updateStmtNum(int stmtNum)
 	this->stmtNum = stmtNum;
 }
 
-int matchConstant(string value, int stmtNum, VarTable* varTable = NULL, bool readOnly = false) 
+int matchConstant(string value, int stmtNum, bool readOnly = false) 
 {
 	PKB pkb = PKB::getInstance();
 	int constant = atoi(value.c_str());
 	
-	bool isUnderTest = varTable != NULL;
-	if (!readOnly && !isUnderTest) {
+	if (!readOnly) {
 		pkb.insertConstant(constant, stmtNum);
 	}
 	
@@ -95,8 +94,8 @@ int matchVariable(string value, int stmtNum, VarTable* varTable = NULL, bool rea
 		return varIndx;
 	}
 
-	bool isUnderTest = varTable != NULL;
-	if (!isUnderTest) {
+	if (varTable == NULL) 
+	{
 		pkb.insertVar(value, stmtNum);
 		varIndx = pkb.getVarIndex(value);
 
@@ -104,14 +103,17 @@ int matchVariable(string value, int stmtNum, VarTable* varTable = NULL, bool rea
 		// @todo this should not be done here
 		pkb.setUses(stmtNum, varIndx);
 	
-		// propagate Uses to parent nodes
-		while (pkb.getParent(stmtNum).size())  {
+		// propagate Uses for parent nodes
+		while (pkb.getParent(stmtNum).size()) 
+		{
 			stmtNum = pkb.getParent(stmtNum).at(0);
-			if (stmtNum > 0) {
+			if (stmtNum > 0) 
+			{
 				pkb.setUses(stmtNum, varIndx);	
 			}
 		}
-	} else {
+	} else 
+	{
 		varTable->insertVar(value, stmtNum);
 		varIndx = varTable->getVarIndex(value);
 	}
@@ -129,7 +131,7 @@ int parseConstantOrVariable(string value, int stmtNum, VarTable* varTable = NULL
 		return matchVariable(value, stmtNum, varTable, readOnly);
 	} else 
 	{
-		return matchConstant(value, stmtNum, varTable, readOnly);
+		return matchConstant(value, stmtNum, readOnly);
 	}
 }
 

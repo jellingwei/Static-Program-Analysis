@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include <utility>
-#include <queue>
 
 
 #include "TNode.h"
@@ -18,8 +17,8 @@ class PatternMatch
 public:
 	PatternMatch();
 	vector<int> PatternMatchAssign(TNode *queryASTroot, string isExact);
-	//bool checkPatternMatchAssign(TNode *_rightChildNodeA, TNode *_rootNodeQ, string isExact);
 	vector<int> PatternMatchWhile(string LHS);
+	vector<int> PatternMatchIf(string LHS);
 private:
 	
 };

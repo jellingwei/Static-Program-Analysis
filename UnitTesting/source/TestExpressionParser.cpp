@@ -13,7 +13,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION( ExpressionParserTest );
 
 void 
 ExpressionParserTest::setUp() {
-	cout << "Expression Parser Unit Test"  << endl;
 	VarTable* vartable = new VarTable();
 	exprParser = new ExpressionParser(vartable);
 }
@@ -98,7 +97,7 @@ ExpressionParserTest::testSideEffects() {
 	exprParser->updateStmtNum(1);  // can pass in any dummy value for now.
 	 
 	// Test 1: test that readonly mode works when the expression parser is not using the global pkb (in setUp, an empty vartable is passed into exprParser)
-	const char* args[] = {"unusedx", "+", "400"}; // unusedx and unusedy are variables that have not been encountered before
+	const char* args[] = {"unusedx", "+", "unusedy"}; // unusedx and unusedy are variables that have not been encountered before
 	vector<string> argVector(args, args + 3);
 	
 	CPPUNIT_ASSERT_THROW_MESSAGE("expression parser failed to throw exception for new variable", exprParser->parseExpressionForQuerying(argVector), runtime_error);
@@ -106,33 +105,24 @@ ExpressionParserTest::testSideEffects() {
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser wrote to the UsesTable in readonly mode", 0, (int)PKB::getInstance().getUsesVarForStmt(1).size());
 	PKB pkb = PKB::getInstance();
 	int index = pkb.getVarIndex("unusedx");
-	bool constant = pkb.isConstant(400);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser, under unit testing, is writing to VarTable in the PKB! This may be causing other unit tests to fail.", -1, index);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser, under unit testing, is writing to ConstantTable in the PKB! This may be causing other unit tests to fail.", false, constant);
-	CPPUNIT_ASSERT_EQUAL(0, (int)pkb.getAllConstant().size());
 
 	// Test 2: test when expression parser is not using the global pkb and under testing mode
 	exprParser->parseExpressionForAST(argVector);
 
 	pkb = PKB::getInstance();
 	index = pkb.getVarIndex("unusedx");
-	constant = pkb.isConstant(400);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser wrote to the UsesTable in unit testing", 0, (int)PKB::getInstance().getUsesVarForStmt(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser, under unit testing, is leaking side effects into the PKB! This may be causing other unit tests to fail.", -1, index);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser, under unit testing, is leaking side effects in the PKB! This may be causing other unit tests to fail.", false, constant);
-	CPPUNIT_ASSERT_EQUAL(0, (int)pkb.getAllConstant().size());
+
 
 	// Test 3: test that readonly mode works when the expression parser is using the global pkb
 	ExpressionParser* exprParser1 = new ExpressionParser();
 	CPPUNIT_ASSERT_THROW(exprParser1->parseExpressionForQuerying(argVector), runtime_error);
 
 	index = pkb.getVarIndex("unusedx");
-	constant = pkb.isConstant(400);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser wrote to the UsesTable in readonly mode", 0, (int)PKB::getInstance().getUsesVarForStmt(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser is leaking side effects into the PKB! This may be causing other unit tests to fail.", -1, index);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Expression parser is leaking side effects in the PKB! This may be causing other unit tests to fail.", false, constant);
-	CPPUNIT_ASSERT_EQUAL(0, (int)pkb.getAllConstant().size());
-
 }
 
 
@@ -184,8 +174,9 @@ void ExpressionParserTest::testSimpleCases() {
 	//      / \
 	//     y   z
 	vector<string> argVector2(args2, args2 + 7);
-	top = exprParser->parseExpressionForAST(argVector2);
+	exprParser->updateBuffer(argVector2);
 
+	top = exprParser->parse();
 	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
 
 	leftChild = top->getChildren()->at(0);
@@ -211,8 +202,9 @@ void ExpressionParserTest::testSimpleCases() {
 	//  / \    / \
 	// x  y   z   1
 	vector<string> argVector3(args3, args3 + 11);
-	top = exprParser->parseExpressionForAST(argVector3);
+	exprParser->updateBuffer(argVector3);
 
+	top = exprParser->parse();
 	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
 
 	leftChild = top->getChildren()->at(0);
@@ -245,8 +237,9 @@ void ExpressionParserTest::testSimpleCases() {
 	//      / \
 	//     y   z
 	vector<string> argVector4(args4, args4 + 5);
-	top = exprParser->parseExpressionForAST(argVector4);
+	exprParser->updateBuffer(argVector4);
 
+	top = exprParser->parse();
 	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
 
 	leftChild = top->getChildren()->at(0);
@@ -271,8 +264,9 @@ void ExpressionParserTest::testSimpleCases() {
 	//      / \
 	//     y   z
 	vector<string> argVector5(args5, args5 + 5);
-	top = exprParser->parseExpressionForAST(argVector5);
+	exprParser->updateBuffer(argVector5);
 
+	top = exprParser->parse();
 	CPPUNIT_ASSERT_EQUAL(Minus, top->getNodeType());
 
 	leftChild = top->getChildren()->at(0);
@@ -297,8 +291,9 @@ void ExpressionParserTest::testSimpleCases() {
 	//  / \
 	// x   y
 	vector<string> argVector6(args6, args6 + 7);
-	top = exprParser->parseExpressionForAST(argVector6);
+	exprParser->updateBuffer(argVector6);
 
+	top = exprParser->parse();
 	CPPUNIT_ASSERT_EQUAL(Times, top->getNodeType());
 
 	leftChild = top->getChildren()->at(0);
