@@ -44,12 +44,12 @@ void IntermediateValuesHandlerTest::testJoinWithExistingValues()
 	vector<int> values;
 
 	fillVector(values, 1, 10);  //Fill from 1 to 10
-	Synonym a("assign", "a", values);
-	Synonym c("constant", "c", values);
+	Synonym a(SYNONYM_TYPE(ASSIGN), "a", values);
+	Synonym c(SYNONYM_TYPE(CONSTANT), "c", values);
 	values.clear();
 	fillVector(values, 11, 20);  //Fill from 11 to 20
-	Synonym s("stmt", "s", values);
-	Synonym w("while", "w", values);
+	Synonym s(SYNONYM_TYPE(STMT), "s", values);
+	Synonym w(SYNONYM_TYPE(WHILE), "w", values);
 
 	IntermediateValuesHandler::clear();
 
@@ -92,7 +92,7 @@ void IntermediateValuesHandlerTest::testIntersectWithExistingValues()
 	vector<int> values1, values2;
 	fillVector(values1, 1, 10);  //Fill from 1 to 10
 	fillVector(values2, 11, 20);
-	Synonym s("stmt", "s", values1);
+	Synonym s(SYNONYM_TYPE(STMT), "s", values1);
 
 	//Intersection of one synonym with one synonym
 
@@ -119,7 +119,7 @@ void IntermediateValuesHandlerTest::testIntersectWithExistingValues()
 	//Intersection of two synonyms with one synonym
 
 	IntermediateValuesHandler::clear();
-	Synonym w("while", "w", values2);
+	Synonym w(SYNONYM_TYPE(WHILE), "w", values2);
 	IntermediateValuesHandler::joinWithExistingValues(s, w);
 
 	IntermediateValuesHandler::intersectWithExistingValues(1, values2);
@@ -185,10 +185,10 @@ void IntermediateValuesHandlerTest::testIntersectAndJoinWithExistingValues()
 {
 	vector<int> values;
 	fillVector(values, 1, 10);  //Fill from 1 to 10
-	Synonym s("stmt", "s", values);
+	Synonym s(SYNONYM_TYPE(STMT), "s", values);
 	values.clear();
 	fillVector(values, 11, 20);
-	Synonym w("while", "w", values);
+	Synonym w(SYNONYM_TYPE(WHILE), "w", values);
 
 	IntermediateValuesHandler::clear();
 	IntermediateValuesHandler::joinWithExistingValues(s);  //Insert into the intermediate values table
@@ -223,13 +223,13 @@ void IntermediateValuesHandlerTest::testFindIntermediateSynonymIndex()
 
 	vector<int> values;
 	fillVector(values, 1, 10);  //Fill from 1 to 10
-	Synonym s("stmt", "s", values);
+	Synonym s(SYNONYM_TYPE(STMT), "s", values);
 
 	IntermediateValuesHandler::joinWithExistingValues(s);  //Insert into the intermediate values table
 	CPPUNIT_ASSERT_EQUAL(0, IntermediateValuesHandler::findIntermediateSynonymIndex("s"));
 	CPPUNIT_ASSERT_EQUAL(-1, IntermediateValuesHandler::findIntermediateSynonymIndex("w"));
 
-	Synonym w("while", "w", values);
+	Synonym w(SYNONYM_TYPE(WHILE), "w", values);
 	IntermediateValuesHandler::joinWithExistingValues(w);
 	CPPUNIT_ASSERT_EQUAL(0, IntermediateValuesHandler::findIntermediateSynonymIndex("s"));
 	CPPUNIT_ASSERT_EQUAL(1, IntermediateValuesHandler::findIntermediateSynonymIndex("w"));

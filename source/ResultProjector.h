@@ -12,5 +12,5 @@ using std::to_string;
 
 namespace ResultProjector {
 	void projectResultToList(vector<Synonym> resultVector, list<string> & outputList);
-	string convertValueToString(int value, string type);
+	string convertValueToString(int value, SYNONYM_TYPE type);
 }

@@ -29,19 +29,19 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 	}
 
 	vector<int> newProc1List;
-	vector<int> ProcIndex1List;
+	vector<int> procIndex1List;
 
 	// check if procIndex1Map key procIndex2 contains the procIndex1
 	if (procIndex1Map.count(procIndex2) > 0) {
-		ProcIndex1List = procIndex1Map.at(procIndex2);
+		procIndex1List = procIndex1Map.at(procIndex2);
 
-		auto result = find(begin(ProcIndex1List), end(ProcIndex1List), procIndex1);
-		if (result != end(ProcIndex1List)) { // procIndex1 can be found already
+		auto result = find(begin(procIndex1List), end(procIndex1List), procIndex1);
+		if (result != end(procIndex1List)) { // procIndex1 can be found already
 			
 		} else {
-			ProcIndex1List.push_back(procIndex1);
+			procIndex1List.push_back(procIndex1);
 			procIndex1Map.erase(procIndex2);
-			procIndex1Map.insert(pair<int, vector<int>> (procIndex2, ProcIndex1List));
+			procIndex1Map.insert(pair<int, vector<int>> (procIndex2, procIndex1List));
 		}
 
 	} else {
@@ -50,19 +50,19 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 	}
 
 	vector<int> newProc2List;
-	vector<int> ProcIndex2List;
+	vector<int> procIndex2List;
 
 	// check if procIndex2Map key procIndex1 contains the procIndex2
 	if (procIndex2Map.count(procIndex1) > 0) {
-		ProcIndex2List = procIndex2Map.at(procIndex1);
+		procIndex2List = procIndex2Map.at(procIndex1);
 
-		auto result = find(begin(ProcIndex2List), end(ProcIndex2List), procIndex2);
-		if (result != end(ProcIndex2List)) 	{ // procIndex2 can be found already
+		auto result = find(begin(procIndex2List), end(procIndex2List), procIndex2);
+		if (result != end(procIndex2List)) 	{ // procIndex2 can be found already
 			
 		} else {
-			ProcIndex2List.push_back(procIndex2);
+			procIndex2List.push_back(procIndex2);
 			procIndex2Map.erase(procIndex1);
-			procIndex2Map.insert(pair<int, vector<int>> (procIndex1, ProcIndex2List));
+			procIndex2Map.insert(pair<int, vector<int>> (procIndex1, procIndex2List));
 		}
 
 	} else {
