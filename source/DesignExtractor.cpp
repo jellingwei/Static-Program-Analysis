@@ -125,3 +125,83 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder(vector<in
 	
 	return allCallStatementNodes;
 }
+
+
+void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
+
+	PKB pkb = PKB::getInstance();
+
+	for (auto stmt = callStmt.begin(); stmt != callStmt.end(); ++stmt) {
+		int procCalled = (*stmt)->getNodeValueIdx();
+		int stmtNumber = (*stmt)->getStmtNumber();
+		int currentProc = pkb.stmtToProcMap.at(stmtNumber);
+
+		vector<int> varModifiedByProcCalled = pkb.getModVarForProc(procCalled);
+
+		// set modifies for the (current statement, all variables modified by the function called)
+		for (auto iter = varModifiedByProcCalled.begin(); iter != varModifiedByProcCalled.end(); ++iter) {
+			pkb.setModifies(stmtNumber, *iter);
+		}
+		
+		// for ancestors, set (parent, all variabled modified by the function called)
+		while (pkb.getParent(stmtNumber).size()) 
+		{
+			stmtNumber = pkb.getParent(stmtNumber).at(0);
+			if (stmtNumber <= 0) {
+				continue;
+			}
+			for (auto iter = varModifiedByProcCalled.begin(); iter != varModifiedByProcCalled.end(); ++iter) {
+				pkb.setModifies(stmtNumber, *iter);
+			}			
+		}
+
+		// for the current proc, set modifies
+		for (auto iter = varModifiedByProcCalled.begin(); iter != varModifiedByProcCalled.end(); ++iter) {
+			pkb.setModifiesProc(currentProc, *iter);
+		}
+		
+	}
+
+}
+
+void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
+
+	PKB pkb = PKB::getInstance();
+
+	for (auto stmt = callStmt.begin(); stmt != callStmt.end(); ++stmt) {
+		int procCalled = (*stmt)->getNodeValueIdx();
+		int stmtNumber = (*stmt)->getStmtNumber();
+		int currentProc = pkb.stmtToProcMap.at(stmtNumber);
+
+		vector<int> varUsedByProcCalled = pkb.getUsesVarForProc(procCalled);
+
+		// set uses for the (current statement, all variables modified by the function called)
+		for (auto iter = varUsedByProcCalled.begin(); iter != varUsedByProcCalled.end(); ++iter) {
+			pkb.setUses(stmtNumber, *iter);
+		}
+		
+		// for ancestors, set (parent, all variabled modified by the function called)
+		while (pkb.getParent(stmtNumber).size()) 
+		{
+			stmtNumber = pkb.getParent(stmtNumber).at(0);
+			if (stmtNumber <= 0) {
+				continue;
+			}
+			for (auto iter = varUsedByProcCalled.begin(); iter != varUsedByProcCalled.end(); ++iter) {
+				pkb.setUses(stmtNumber, *iter);
+			}			
+		}
+
+		// for the current proc, set uses
+		for (auto iter = varUsedByProcCalled.begin(); iter != varUsedByProcCalled.end(); ++iter) {
+			pkb.setUsesProc(currentProc, *iter);
+		}
+		
+	}
+
+}
+
+
+bool DesignExtractor::constructCfg() {
+	throw exception("Not implemented yet");
+}

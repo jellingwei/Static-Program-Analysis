@@ -26,7 +26,9 @@ void TestWrapper::parse(std::string filename) {
 	DesignExtractor extractor;
 	vector<int> callingOrder = extractor.getCallsInTopologicalOrder();
 	vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder(callingOrder);
-	
+	extractor.setModifiesForCallStatements(callNodes);
+	extractor.setUsesForCallStatements(callNodes);
+
 }
 
 // method to evaluating a query
