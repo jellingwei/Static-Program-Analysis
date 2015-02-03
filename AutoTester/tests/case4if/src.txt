@@ -24,7 +24,7 @@ procedure Test4 {
 	if fries then {												\\15			
 		cancer       =  1;								\\16
 											
-		if banana {											\\17					
+		if banana then {											\\17					
 			appple = 0 ;										\\18	
 			while appple {									\\19				
 				appple = 1+2;}						\\20

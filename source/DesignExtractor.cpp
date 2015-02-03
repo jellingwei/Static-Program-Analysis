@@ -9,13 +9,14 @@
 #include <numeric>
 #include <algorithm>
 #include <cassert>
+
 #include "DesignExtractor.h"
 #include "TNode.h"
+#include "PKB.h"
+
 
 using namespace std;
 
-
-#include "PKB.h"
 
 DesignExtractor::DesignExtractor() {
 	PKB pkb = PKB::getInstance();
@@ -58,12 +59,13 @@ vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set
 	return result;
 }
 
-
+/**
+ * Return the called procedures in topological order
+ */
 vector<int> DesignExtractor::getCallsInTopologicalOrder() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 	
-	// Assuming that the 0th procedure is the first procedure encountered
 	int startProc = 0;
 
 	vector<int> allProcs(pkb.getProcTableSize()); // used to check which procs hasn't been included
@@ -86,9 +88,13 @@ public:
 	CallComparator(vector<int> topoOrder) {this->topoOrder = topoOrder; }
 
 	bool operator() (TNode* i, TNode* j) { 
+		assert(i->getNodeType() == Call);
+		assert(j->getNodeType() == Call);
+
 		PKB pkb = PKB::getInstance();
 		int iProc = pkb.stmtToProcMap.at(i->getStmtNumber());
 		int jProc = pkb.stmtToProcMap.at(j->getStmtNumber());
+
 		int iPosition = find(topoOrder.begin(), topoOrder.end(), iProc) - topoOrder.begin();
 		int jPosition = find(topoOrder.begin(), topoOrder.end(), jProc) - topoOrder.begin();
 		return iPosition < jPosition;
@@ -110,25 +116,16 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder(vector<in
 		allCallStatementNodes.push_back(node);
 	}
 
-	cout << "call statements: " << endl;
-	for (auto iter = allCallStatementNodes.begin(); iter != allCallStatementNodes.end(); ++iter) {
-		cout << " " << **iter;
-	} cout << endl;
-
 	CallComparator compare(topologicalOrder);
-
-	sort(allCallStatementNodes.begin(), allCallStatementNodes.end(), compare); 
-	cout << "sorted call statements: " << endl;
-	for (auto iter = allCallStatementNodes.begin(); iter != allCallStatementNodes.end(); ++iter) {
-		cout << " " << **iter;
-	} cout << endl;
+	sort(allCallStatementNodes.begin(), allCallStatementNodes.end(), compare);
 	
 	return allCallStatementNodes;
 }
 
-
+/**
+ * For the input call statements nodes, set Modifies for them as well as all their ancestors
+ */
 void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
-
 	PKB pkb = PKB::getInstance();
 
 	for (auto stmt = callStmt.begin(); stmt != callStmt.end(); ++stmt) {
@@ -164,6 +161,9 @@ void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
 
 }
 
+/**
+ * For the input call statements nodes, set Uses for them as well as all their ancestors
+ */
 void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
 
 	PKB pkb = PKB::getInstance();
@@ -201,7 +201,9 @@ void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
 
 }
 
-
+/**
+ * Build Control Flow Graph
+ */
 bool DesignExtractor::constructCfg() {
 	throw exception("Not implemented yet");
 }

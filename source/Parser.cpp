@@ -111,7 +111,7 @@ namespace Parser
 			sregex_token_iterator rs(line.begin(), line.end(), separatorRegex, -1);
 
 			// tokenise words and operators
-			string operators = "([\\w\\d]+|[+=;{}\\(\\)])";
+			string operators = "([\\w\\d]+|[*\\-+=;{}\\(\\)])";
 			regex operRegex(operators);
 
 			for (; rs != reg_end; ++rs) 
@@ -590,7 +590,7 @@ namespace Parser
 		}
 
 		bool parseProcedure() 
-		{
+		{	
 			bool res;
 
 			res = parse("procedure");
@@ -701,7 +701,7 @@ namespace Parser
 	 */
 	string matchOperator(string token) 
 	{
-		regex operRegex("[;\\+-*=]");
+		regex operRegex("[;\\+-\\*=]");
 		return (regex_match(token, operRegex)) ? token: "";
 	}
 
@@ -714,7 +714,7 @@ namespace Parser
 		using util::isEof;
 
 		bool isParseSuccessful = true;
-		while (!isEof()) {
+		while (!isEof() && isParseSuccessful) {
 			isParseSuccessful &= util::parseProcedure();
 		}
 
