@@ -3,7 +3,7 @@ procedure Test4 {
 	banana = cancer + duck;			\\2
 
 	eat = 4 + banana + fries;						\\3							
-	if fries {									\\4								
+	if fries then {									\\4								
 		appple = duck + 241 * guacamole ;			\\5			
 		while guacamole {								\\6							
 			banana = banana; 						\\7			
@@ -21,7 +21,7 @@ procedure Test4 {
 	while guacamole {											\\13
 		guacamole = guacamole * 2;							\\14		
 	}
-	if fries {												\\15			
+	if fries then {												\\15			
 		cancer       =  1;								\\16
 											
 		if banana {											\\17					

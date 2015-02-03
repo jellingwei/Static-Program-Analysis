@@ -317,6 +317,7 @@ namespace Parser
 			if (varName.size() == 0) return false;
 			callPkb("VarTable", std::to_string(static_cast<long long>(stmtNum)), varName);
 
+			res = parse("then");
 			res = parse("{");
 			if (!res) return false;
 
