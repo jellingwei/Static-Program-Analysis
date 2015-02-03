@@ -437,13 +437,13 @@ bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure)
 {
 	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);;
 }
-vector<int> PKB::getCalledFrom(int procIndex2, bool transitiveClosure) 
+vector<int> PKB::getProcsCalling(int procIndex2, bool transitiveClosure) 
 {
-	return callsTable->getCalledFrom(procIndex2, transitiveClosure);
+	return callsTable->getProcsCalling(procIndex2, transitiveClosure);
 }
-vector<int> PKB::getCalledBy(int procIndex1, bool transitiveClosure) 
+vector<int> PKB::getProcsCalledBy(int procIndex1, bool transitiveClosure) 
 {
-	return callsTable->getCalledBy(procIndex1, transitiveClosure);
+	return callsTable->getProcsCalledBy(procIndex1, transitiveClosure);
 }
 pair<vector<int>, vector<int>> PKB::getAllCallsPairs(bool transitiveClosure) 
 {

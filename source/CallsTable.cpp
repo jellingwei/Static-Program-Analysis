@@ -6,6 +6,8 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <queue>
+#include <unordered_set>
 
 #include "CallsTable.h"
 #include "PKB.h"
@@ -14,7 +16,7 @@
 using namespace std;
 using namespace stdext;
 
-// @ToDo Fixed all Transitive Closure Issues
+// @todo Fix all Transitive Closure Issues
 
 bool CallsTable::setCalls(int procIndex1, int procIndex2) 
 {
@@ -29,7 +31,7 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 	vector<int> newProc1List;
 	vector<int> ProcIndex1List;
 
-	//check if procIndex1Map key procIndex2 contains the procIndex1
+	// check if procIndex1Map key procIndex2 contains the procIndex1
 	if (procIndex1Map.count(procIndex2) > 0) {
 		ProcIndex1List = procIndex1Map.at(procIndex2);
 
@@ -50,7 +52,7 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 	vector<int> newProc2List;
 	vector<int> ProcIndex2List;
 
-	//check if procIndex2Map key procIndex1 contains the procIndex2
+	// check if procIndex2Map key procIndex1 contains the procIndex2
 	if (procIndex2Map.count(procIndex1) > 0) {
 		ProcIndex2List = procIndex2Map.at(procIndex1);
 
@@ -70,80 +72,92 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 	return true;
 }
 
+
 bool CallsTable::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) 
 {
 	bool status = true;
 
 	if (procIndex1 < 0 || procIndex2 < 0) {
-		status = false;
+		return false;
 	}
 
 	if (!transitiveClosure) {
 		if ((procIndex1Map.count(procIndex2) == 0) || (procIndex2Map.count(procIndex1) == 0)) {
-			status = false;
+			return false;
 		}
-
 	} else {
-		 
+		bool isTransitiveClosure = true;
+		vector<int> allCalledProcs = getProcsCalledBy(procIndex1, isTransitiveClosure);
 		
+		// return true if procIndex2 can be found in procs called by proc1
+		return find(allCalledProcs.begin(), allCalledProcs.end(), procIndex2) != allCalledProcs.end();
 	}
 }
 
-vector<int> CallsTable::getCalledFrom(int procIndex2, bool transitiveClosure) 
+vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure) 
 {
-	if (procIndex2 < 0) {
+	if (procIndex2 < 0 || procIndex1Map.count(procIndex2) == 0) {
 		return vector<int>();
 	}
 
-	vector<int> result = vector<int>();
-	vector<int> intermediateResult;
-	int currentProc = procIndex2;
-	int i = 0;
+	if (!transitiveClosure) {
+		return procIndex1Map.at(procIndex2);
+	}
 
-	while (procIndex1Map.count(currentProc) > 0) 
-	{
-		vector<int> list = procIndex1Map.at(currentProc);
+	vector<int> intermediateValues = procIndex2Map.at(procIndex2);
 
-		if (transitiveClosure) 
-		{
-			for (int i = 0; i < list.size()-1; i++) {
-				intermediateResult.push_back(list.at(i));
-			}
-		} else 
-		{
-			result = list;
-			break;
-		}
+	if (intermediateValues.empty()) {
+		return vector<int>();
 	}
 	
-	return result;
+	queue<int> frontier(std::deque<int>(intermediateValues.begin(), intermediateValues.end()));
+	//@todo optimise by not storing as set first
+	unordered_set<int> result(intermediateValues.begin(), intermediateValues.end()); // store as set first to prevent duplicates
+		
+	while (frontier.empty()) {
+		int curProc = frontier.front(); frontier.pop();
+		intermediateValues = getProcsCalling(curProc, false);
+		for (auto iter = intermediateValues.begin(); iter != intermediateValues.end(); ++iter) {
+			frontier.push(*iter);
+			result.insert(*iter);
+		}
+	}
+		
+	vector<int> resultList(result.begin(), result.end());
+	return resultList;
 }
 
 
-vector<int> CallsTable::getCalledBy(int procIndex1, bool transitiveClosure) 
+vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure) 
 {
-	if (procIndex1 < 0) {
+	if (procIndex1 < 0 || procIndex2Map.count(procIndex1) == 0) {
 		return vector<int>();
 	}
 
-	vector<int> result = vector<int>();
-	int currentProc = procIndex1;
+	if (!transitiveClosure) {
+		return procIndex2Map.at(procIndex1);
+	}
+		
+	vector<int> intermediateValues = procIndex2Map.at(procIndex1);
 
-	while (procIndex2Map.count(currentProc) > 0) 
-	{
-		vector<int> list = procIndex2Map.at(currentProc);
-
-		if (transitiveClosure) 
-		{
-			
-		} else 
-		{
-			result = list;
-			break;
+	if (intermediateValues.empty()) {
+		return vector<int>();
+	}
+	queue<int> frontier(std::deque<int>(intermediateValues.begin(), intermediateValues.end()));
+	//@todo optimise by not storing as set first
+	unordered_set<int> result(intermediateValues.begin(), intermediateValues.end()); // store as set first to prevent duplicates
+		
+	while (frontier.empty()) {
+		int curProc = frontier.front(); frontier.pop();
+		intermediateValues = getProcsCalledBy(curProc, false);
+		for (auto iter = intermediateValues.begin(); iter != intermediateValues.end(); ++iter) {
+			frontier.push(*iter);
+			result.insert(*iter);
 		}
 	}
-	
-	return result;
+		
+	vector<int> resultList(result.begin(), result.end());
+	return resultList;
 }
 
 

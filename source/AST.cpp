@@ -554,7 +554,7 @@ vector<int> AST::patternMatchWhile(string LHS) {
 /**
  * Pattern matching for if statements.
  * @return a vector of statement numbers which are if statements, and uses the input LHS as its control variable.
- * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
+ * @param LHS  the name of the variable that acts as the control variable for the if statements we are interested in.
  */
 vector<int> AST::patternMatchIf(string LHS) {
 	return patternMatchParentStmt(LHS, If);

@@ -83,8 +83,8 @@ public:
 	// CallsTable methods
 	bool setCalls(int procIndex1, int procIndex2);
 	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure);
-	vector<int> getCalledFrom(int procIndex2, bool transitiveClosure);
-	vector<int> getCalledBy(int procIndex1, bool transitiveClosure);
+	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure);
+	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure);
 	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
 
 	// StmtTable methods
