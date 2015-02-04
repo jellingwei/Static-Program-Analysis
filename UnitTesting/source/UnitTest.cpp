@@ -19,6 +19,8 @@ unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryPreprocessorT
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("QueryTreeTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("IntermediateValuesHandlerTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ASTTest").makeTest());
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("PatternMatchTest").makeTest());
 CppUnit::TestFactoryRegistry::getRegistry().addTestToSuite(unitSuite);
 CppUnit::TextUi::TestRunner runner;
 
