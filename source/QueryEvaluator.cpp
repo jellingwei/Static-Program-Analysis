@@ -1,8 +1,9 @@
-//TODO: What if no while loops and query asks for while
-//TODO: With clauses
-//TODO: if patterns
-//TODO: Use one side to probe instead of finding all pairs
-//TODO: Calls table for calls relation
+//@TODO: What if no while loops and query asks for while
+//@TODO: With clauses
+//@TODO: if patterns
+//@TODO: Use one side to probe instead of finding all pairs
+//@TODO: Find which side to use to probe instead of finding all pairs
+//@TODO: Calls table for calls relation
 
 #include <vector>
 #include <string>
@@ -35,8 +36,8 @@ namespace QueryEvaluator
 	bool processWithClause(QNode* withClause);
 
 	bool processModifies(Synonym arg1, Synonym arg2);
-	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
-	pair<vector<int>, vector<int>> evaluateModifiesByrRHS(Synonym LHS, Synonym RHS);
+	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS);
+	pair<vector<int>, vector<int>> evaluateModifiesByrRHS(Synonym RHS);
 	bool processUses(Synonym arg1, Synonym arg2);
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS);
 	pair<vector<int>, vector<int>> evaluateUsesByrRHS(Synonym RHS);
@@ -205,28 +206,26 @@ namespace QueryEvaluator
 			if (stmts.size() == 0) {
 				return false;
 			}
-			Synonym synonym(arg2Type, arg2.getName(), stmts);
-			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
+			arg2.setValues(stmts);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(arg2);
 		} else if (arg2Type == STRING) {
 			//arg2 is the variable that is modified, find the statements
 			vector<int> stmts = pkb.getModStmtNum(pkb.getVarIndex(arg2.getName()));
 			if (stmts.size() == 0) {
 				return false;
 			}
-			Synonym synonym(arg1Type, arg1.getName(), stmts);
-			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
+			arg1.setValues(stmts);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(arg1);
 		} else {
-			pair<vector<int>, vector<int>> allModifiesPair = pkb.getAllModPair();
-			pair<vector<int>, vector<int>> filteredModifiesPair = 
-				filterPairWithSynonymType(allModifiesPair, arg1Type, arg2Type);
+			pair<vector<int>, vector<int>> filteredModifiesPair = evaluateModifiesByLHS(arg1);
 
 			if (filteredModifiesPair.first.size() == 0 || filteredModifiesPair.second.size() == 0) {
 				return false;
 			}
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredModifiesPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredModifiesPair.second);
-			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
+			arg1.setValues(filteredModifiesPair.first);
+			arg2.setValues(filteredModifiesPair.second);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(arg1, arg2);
 		}
 		return true;
 	}
@@ -298,9 +297,7 @@ namespace QueryEvaluator
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
-			pair<vector<int>, vector<int>> allUsesPair = pkb.getAllUsesPair();
-			pair<vector<int>, vector<int>> filteredUsesPair = 
-				filterPairWithSynonymType(allUsesPair, arg1Type, arg2Type);
+			pair<vector<int>, vector<int>> filteredUsesPair = evaluateUsesByLHS(arg1);
 
 			if (filteredUsesPair.first.size() == 0 || filteredUsesPair.second.size() == 0) {
 				return false;
@@ -311,6 +308,40 @@ namespace QueryEvaluator
 			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
+	}
+
+	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS)
+	{
+		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
+		vector<int> pairLHS;
+		vector<int> pairRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts = pkb.getUsesVarForStmt(i);
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				pairLHS.push_back(i);
+				pairRHS.push_back(j);
+			}
+		}
+		return make_pair(pairLHS, pairRHS);
+	}
+
+	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym RHS)
+	{
+		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
+		vector<int> pairLHS;
+		vector<int> pairRHS;
+
+		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+			vector<int> stmts = pkb.getUsesStmtNum(i);
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				pairLHS.push_back(j);
+				pairRHS.push_back(i);
+			}
+		}
+		return make_pair(pairLHS, pairRHS);
 	}
 
 	inline bool processParent(Synonym arg1, Synonym arg2) 
