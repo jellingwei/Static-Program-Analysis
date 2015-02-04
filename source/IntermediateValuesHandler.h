@@ -19,7 +19,8 @@ namespace IntermediateValuesHandler
 	void addAndProcessIntermediateSynonym(Synonym synonym);
 	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
 	Synonym getSynonymWithName(string wantedName);
-	pair<vector<int>, vector<int>> getValuesPair(string name1, string name2);
+	bool filterEqualValue(Synonym synonym, string wantedValue);
+	bool filterEqualPair(Synonym LHS, Synonym RHS);
 
 	//Functions made public for testing purposes
 	void clear();

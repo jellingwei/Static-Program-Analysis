@@ -248,6 +248,7 @@ namespace IntermediateValuesHandler
 		swap(allIntermediateValues, acceptedValues);
 	}
 	
+	//@todo Now can process varName. Need procName also.
 	bool filterEqualValue(Synonym synonym, string wantedValue)
 	{
 		int synonymIndex = findIntermediateSynonymIndex(synonym.getName());
@@ -256,9 +257,15 @@ namespace IntermediateValuesHandler
 		}
 		
 		vector<vector<int>> acceptedValues;
+		int value;
+
+		if (synonym.getType() == VARIABLE) {
+			value = pkb.getVarIndex(wantedValue);
+		} else {
+			value = stoi(wantedValue);
+		}
 		
 		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
-			int value = stoi(wantedValue);
 			if (allIntermediateValues[i][synonymIndex] == value) {
 				acceptedValues.push_back(allIntermediateValues[i]);
 			}
@@ -268,6 +275,7 @@ namespace IntermediateValuesHandler
 		return (allIntermediateValues.size() != 0);
 	}
 	
+	//Assume that varIndex and int cannot be compared
 	bool filterEqualPair(Synonym LHS, Synonym RHS)
 	{
 		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
