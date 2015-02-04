@@ -4,11 +4,14 @@ QueryTree::QueryTree()
 {
 	Synonym empty;
 	_root = QNode(ROOT,empty, empty, empty);
-	_such_that = QNode(SUCHTHAT,empty, empty, empty);
 	_result = QNode(RESULT,empty, empty, empty);
+	_such_that = QNode(SUCHTHAT,empty, empty, empty);
 	_pattern = QNode(PATTERN, empty, empty, empty);
+	_with = QNode(WITH, empty, empty, empty);
 	linkNode(&_root, &_result);
 	linkNode(&_root, &_such_that);
+	linkNode(&_root, &_pattern);
+	linkNode(&_root, &_with);
 	unordered_map<string, string> _synonymsMap; 
 	_synonymsMap.clear();
 }
@@ -67,6 +70,14 @@ QNode* QueryTree::getSuchThatNode()
 }
 
 /**
+ * @return the head of the with nodes.
+ */
+QNode* QueryTree::getWithNode()
+{
+	return &_with;
+}
+
+/**
  * It stores all the design entities and synonyms in string. The key to the
  * synonym map is the synonym.
  * @return a synonym map if the query is successfully parsed and there is no syntax error.
@@ -96,6 +107,10 @@ void QueryTree::printTree()
 	cout << "Such That: " << endl;
 	for(int i=0; i<_such_that.getNumberOfChildren(); i++) {
 		printNode(_such_that.getChild(i));
+	}
+	cout << "With: " << endl;
+	for(int i=0; i<_with.getNumberOfChildren(); i++) {
+		printNode(_with.getChild(i));
 	}
 	cout << "Pattern: " << endl;
 	for(int i=0; i<_pattern.getNumberOfChildren(); i++) {
@@ -154,6 +169,9 @@ void QueryTree::printNode(QNode* node)
 		break;
 	case Pattern:
 		type = "Pattern";
+		break;
+	case WITH:
+		type = "With";
 		break;
 	default:
 		type = "unknown";
