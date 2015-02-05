@@ -157,9 +157,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(2, 'a')", false, pkb.isUses(2, pkb.getVarIndex("a")));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(3, v)", (string)"a", (string)pkb.getVarName(pkb.getUsesVarForStmt(3).front())); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(7, v)", 4, (int)pkb.getUsesVarForStmt(7).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(11, v)", 0, (int)pkb.getUsesVarForStmt(11).size()); 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(11, v)", 3, (int)pkb.getUsesVarForStmt(11).size()); 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, v)", 0, (int)pkb.getUsesVarForStmt(1).size()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'c')", 8, pkb.getUsesStmtNum(pkb.getVarIndex("c")).front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'f')", 4, (int)pkb.getUsesStmtNum(pkb.getVarIndex("f")).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'f')", 5, (int)pkb.getUsesStmtNum(pkb.getVarIndex("f")).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 0", 6, (int)pkb.getUsesVarForProc(0).size());
@@ -187,24 +188,25 @@ void PKBTest::testPKB()
 
 	// Pattern
 	cout << "Pattern" << endl;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'f'_)", 3, (int)pkb.patternMatchAssign("_\"f\"_").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'f'_)", 4, (int)pkb.patternMatchAssign("_\"f\"_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'a+f'_)", 6, pkb.patternMatchAssign("_\"a+f\"_").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'a + f'_)", 6, pkb.patternMatchAssign("_\"a + f\"_").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'d + e'_)", 0, (int)pkb.patternMatchAssign("_\"d + e\"_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'1'_)", 1, pkb.patternMatchAssign("_\"1\"_").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 10, (int)pkb.patternMatchAssign("_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'a + f')", 6, (int)pkb.patternMatchAssign("a + f").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '3')", 11, pkb.patternMatchAssign("3").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '2')", 4, pkb.patternMatchAssign("2").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '2')", 2, (int)pkb.patternMatchAssign("2").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'd')", 0, (int)pkb.patternMatchAssign("d").size());
 
 	// New Pattern Design
+	cout << "new pattern design" << endl;
 	const char* args[] = {"d", "+", "f"};
 	vector<string> argVector(args, args + 3);
 	ExpressionParser exprParser;
 	TNode* top = exprParser.parseExpressionForQuerying(argVector);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("ok", Plus, top->getNodeType());
 	PatternMatch pattern;
-	
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 2, pattern.PatternMatchAssign(top, "*").at(0));
 
 	const char* args2[] = {"1"};
@@ -212,6 +214,18 @@ void PKBTest::testPKB()
 	TNode* top2 = exprParser.parseExpressionForQuerying(argVector2);
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 9, pattern.PatternMatchAssign(top2, ",").at(2));
+
+	const char* args3[] = {"e", "+", "3", "*", "b", "+", "f"};
+	vector<string> argVector3(args3, args3 + 7);
+	TNode* top3 = exprParser.parseExpressionForQuerying(argVector3);
+	// full pattern match for e+3*b+f
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 11, pattern.PatternMatchAssign(top3, ",").at(0));
+
+	const char* args4[] = {"3", "*", "b"};
+	vector<string> argVector4(args4, args4 + 3);
+	TNode* top4 = exprParser.parseExpressionForQuerying(argVector4);
+	// partial match from 3 * b
+	//CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 1, (int)pattern.PatternMatchAssign(top4, ",").size());
 
 
 	// Pattern for while
