@@ -512,59 +512,27 @@ namespace Parser
 			if (currentParsedLine.find("=") == string::npos && firstToken != "while" && firstToken != "if" && firstToken != "call") {
 				return true;
 			}
-		
-			if (currentParsedLine.find("=") != string::npos) 
-			{
-				stmtNum += 1;
-			
+			stmtNum += 1;
+
+			if (currentParsedLine.find("=") != string::npos) {
 				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "assign");
 				res = parseAssign(firstToken);
-				if (stmtListParent.size() > 0) 
-				{
-					int parent = stmtListParent[stmtListParent.size() - 1];
-					callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
-				}
-				PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
-			} else if (firstToken == "while") 
-			{
-				stmtNum += 1;
-
+			} else if (firstToken == "while") {
 				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "while");
 				res = parseWhile(firstToken);
-
-				if (stmtListParent.size() > 0) 
-				{
-					int parent = stmtListParent[stmtListParent.size() - 1];
-					callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
-				}
-				PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
-			} else if (firstToken == "if") 
-			{
-				stmtNum += 1;
-
+			} else if (firstToken == "if") {
 				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "if");
-				res = parseIf(firstToken);
-
-				if (stmtListParent.size() > 0) 
-				{
-					int parent = stmtListParent[stmtListParent.size() - 1];
-					callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
-				}
-				PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
-			} else if (firstToken == "call") 
-			{
-				stmtNum += 1;
-
+				res = parseIf(firstToken);	
+			} else if (firstToken == "call") {
 				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "call");
 				res = parseCall(firstToken);
-
-				if (stmtListParent.size() > 0) 
-				{
-					int parent = stmtListParent[stmtListParent.size() - 1];
-					callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
-				}
-				PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
 			}
+
+			if (stmtListParent.size() > 0)  {
+				int parent = stmtListParent[stmtListParent.size() - 1];
+				callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
+			}
+			PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
 
 			return res;
 		}

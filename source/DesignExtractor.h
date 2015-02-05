@@ -8,10 +8,10 @@ using std::vector;
 class DesignExtractor {
 	public:
 		DesignExtractor();
-		vector<int> getCallsInTopologicalOrder();
-		vector<TNode*> obtainCallStatementsInTopologicalOrder(vector<int>);
+		vector<TNode*> obtainCallStatementsInTopologicalOrder();
 		void setModifiesForCallStatements(vector<TNode*>);
 		void setUsesForCallStatements(vector<TNode*>);
 		
 		bool constructCfg();
+		void constructStatisticsTable();
 };

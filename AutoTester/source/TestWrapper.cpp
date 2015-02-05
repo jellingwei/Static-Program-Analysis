@@ -18,17 +18,19 @@ TestWrapper::TestWrapper() {
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-
-	std::cout<<"TestWrapper parsing source"<<std::endl;
+	//@todo maybe a front end controller
+	cout<<"TestWrapper parsing source"<<std::endl;
 	Parser::initParser(filename);
 	Parser::parseProgram();
 
+	cout<<"Design Extractor"<<std::endl;
 	DesignExtractor extractor;
-	vector<int> callingOrder = extractor.getCallsInTopologicalOrder();
-	vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder(callingOrder);
+	vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder();
 	extractor.setModifiesForCallStatements(callNodes);
 	extractor.setUsesForCallStatements(callNodes);
 
+	//extractor.constructCfg();
+	//extractor.constructStatisticsTable();
 }
 
 // method to evaluating a query

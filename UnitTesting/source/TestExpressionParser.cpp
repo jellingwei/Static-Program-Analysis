@@ -316,6 +316,62 @@ void ExpressionParserTest::testSimpleCases() {
 	CPPUNIT_ASSERT_EQUAL(Variable, rightMostChild->getNodeType());
 	CPPUNIT_ASSERT_EQUAL(2, rightMostChild->getNodeValueIdx());
 
+
+	const char* args7[] = {"x", "+", "3", "*", "y", "+", "z", ";"}; 
+	//              + 
+	//           /      \
+	//          +        z
+	//         /  \ 
+	//        x    * 
+	//            /  \
+	//           3    y
+	//
+	vector<string> argVector7(args7, args7 + 8);
+	top = exprParser->parseExpressionForAST(argVector7);
+
+	CPPUNIT_ASSERT_EQUAL(Plus, top->getNodeType());
+
+	leftChild = top->getChildren()->at(0);
+	CPPUNIT_ASSERT_EQUAL(Plus, leftChild->getNodeType());
+
+	rightChild = top->getChildren()->at(1);
+	CPPUNIT_ASSERT_EQUAL(Variable, rightChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(3, rightChild->getNodeValueIdx());
+
+	leftLeftChild = leftChild->getChildren()->at(0);
+	leftRightChild = leftChild->getChildren()->at(1);
+	CPPUNIT_ASSERT_EQUAL(Variable, leftLeftChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(1, leftLeftChild->getNodeValueIdx());
+
+	CPPUNIT_ASSERT_EQUAL(Times, leftRightChild->getNodeType());
+
+	leftMostChild = leftRightChild->getChildren()->at(0);   // leftMost is actually bottom layer left 
+	rightMostChild = leftRightChild->getChildren()->at(1);  // rightMost is actually bottom layer right
+	CPPUNIT_ASSERT_EQUAL(Constant, leftMostChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(3, leftMostChild->getNodeValueIdx());
+	CPPUNIT_ASSERT_EQUAL(Variable, rightMostChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(2, rightMostChild->getNodeValueIdx());
+
+
+	const char* args8[] = {"3", "*", "y"}; 
+	//             * 
+	//            /  \
+	//           3    y
+	//
+	vector<string> argVector8(args8, args8 + 3);
+	top = exprParser->parseExpressionForAST(argVector8);
+
+	CPPUNIT_ASSERT_EQUAL(Times, top->getNodeType());
+
+	leftChild = top->getChildren()->at(0);
+	CPPUNIT_ASSERT_EQUAL(Constant, leftChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(3, leftChild->getNodeValueIdx());
+
+	rightChild = top->getChildren()->at(1);
+	CPPUNIT_ASSERT_EQUAL(Variable, rightChild->getNodeType());
+	CPPUNIT_ASSERT_EQUAL(2, rightChild->getNodeValueIdx());
+
+
 	return;
 
 }
