@@ -7,9 +7,8 @@
 
 // include your other headers here
 #include "AbstractWrapper.h"
-#include "SourceParser.h"
-#include "DesignExtractor.h"
 #include "PQLController.h"
+#include "FrontEndController.h"
 
 class TestWrapper : public AbstractWrapper {
  public:
