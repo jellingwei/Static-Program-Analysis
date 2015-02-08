@@ -1,0 +1,22 @@
+procedure A {
+  a = 1; \\1
+  b = 2; \\2
+  while b { \\3
+    call B; \\4
+  }
+  if a then { \\5
+    d = a + b; \\6
+  }
+  else {
+    c = c + a; \\7
+    call C; \\8
+  }
+}
+
+procedure B {
+  call C; \\9
+}
+
+procedure C {
+  c = b; \\10
+}
