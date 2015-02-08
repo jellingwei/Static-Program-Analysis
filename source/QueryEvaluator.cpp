@@ -72,7 +72,7 @@ namespace QueryEvaluator
 			return synonymResult;  //Return empty vector
 		}
 
-		isValid = true;  //processWithNode(qTreeRoot->getWithNode());
+		isValid = processWithNode(qTreeRoot->getWithNode());
 		if (!isValid) {
 			return synonymResult;  //Return empty vector
 		}
@@ -104,9 +104,6 @@ namespace QueryEvaluator
 
 			string wantedSynonymName = wantedSynonym.getName();
 			Synonym s = IntermediateValuesHandler::getSynonymWithName(wantedSynonymName);
-			if (s.getName() == "-1") {
-				break;  //It should never come here
-			}
 			result.push_back(s);
 			resultChildNode = resultNode->getNextChild();
 		}
@@ -158,9 +155,9 @@ namespace QueryEvaluator
 		case FollowsS:
 			return processFollowsS(arg1, arg2);
 		case Calls:
-			//return processCalls(arg1, arg2);
+			return processCalls(arg1, arg2);
 		case CallsS:
-			//return processCallsS(arg1, arg2);
+			return processCallsS(arg1, arg2);
 		default:
 			return false;
 		}
@@ -442,6 +439,88 @@ namespace QueryEvaluator
 		return true;
 	}
 
+	bool processCalls(Synonym arg1, Synonym arg2)
+	{
+		if (AbstractWrapper::GlobalStop) {
+			return false;
+		}
+
+		SYNONYM_TYPE arg1Type = arg1.getType();
+		SYNONYM_TYPE arg2Type = arg2.getType();
+
+		if (arg1Type == STRING && arg2Type == STRING) {
+			return pkb.isCalls(stoi(arg1.getName()), stoi(arg2.getName()), false);
+		} else if (arg1Type == STRING) {
+			vector<int> stmt = pkb.getProcsCalledBy(stoi(arg1.getName()), false);
+			if (stmt.size() == 0) {
+				return false;
+			}
+			Synonym synonym(arg2Type, arg2.getName(), stmt);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
+		} else if (arg2Type == STRING) {
+			vector<int> stmt = pkb.getProcsCalling(stoi(arg2.getName()), false);
+			if (stmt.size() == 0) {
+				return false;
+			}
+			Synonym synonym(arg2Type, arg2.getName(), stmt);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
+		} else {
+			pair<vector<int>, vector<int>> allCallsPair = pkb.getAllCallsPairs(false);
+			pair<vector<int>, vector<int>> filteredCallsPair = 
+				filterPairWithSynonymType(allCallsPair, arg1Type, arg2Type);
+
+			if (filteredCallsPair.first.size() == 0 || filteredCallsPair.second.size() == 0) {
+				return false;
+			}
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredCallsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredCallsPair.second);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
+		}
+		return true;
+	}
+
+	bool processCallsS(Synonym arg1, Synonym arg2)
+	{
+		if (AbstractWrapper::GlobalStop) {
+			return false;
+		}
+
+		SYNONYM_TYPE arg1Type = arg1.getType();
+		SYNONYM_TYPE arg2Type = arg2.getType();
+
+		if (arg1Type == STRING && arg2Type == STRING) {
+			return pkb.isCalls(stoi(arg1.getName()), stoi(arg2.getName()), true);
+		} else if (arg1Type == STRING) {
+			vector<int> stmt = pkb.getProcsCalledBy(stoi(arg1.getName()), true);
+			if (stmt.size() == 0) {
+				return false;
+			}
+			Synonym synonym(arg2Type, arg2.getName(), stmt);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
+		} else if (arg2Type == STRING) {
+			vector<int> stmt = pkb.getProcsCalling(stoi(arg2.getName()), true);
+			if (stmt.size() == 0) {
+				return false;
+			}
+			Synonym synonym(arg2Type, arg2.getName(), stmt);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
+		} else {
+			pair<vector<int>, vector<int>> allCallsPair = pkb.getAllCallsPairs(true);
+			pair<vector<int>, vector<int>> filteredCallsPair = 
+				filterPairWithSynonymType(allCallsPair, arg1Type, arg2Type);
+
+			if (filteredCallsPair.first.size() == 0 || filteredCallsPair.second.size() == 0) {
+				return false;
+			}
+
+			Synonym LHS(arg1Type, arg1.getName(), filteredCallsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), filteredCallsPair.second);
+			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
+		}
+		return true;
+	}
+
 	/**
 	* Method to process the pattern node in the query tree
 	* Returns true if all the patterns are valid or there are no patterns to match
@@ -599,8 +678,8 @@ namespace QueryEvaluator
 			int firstElement = allPairs.first[i];
 			int secondElement = allPairs.second[i];
 
-			if (arg1Type == STMT || arg1Type == PROG_LINE || arg1Type == UNDEFINED) {
-				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED) {
+			if (arg1Type == STMT || arg1Type == PROG_LINE || arg1Type == UNDEFINED || arg1Type == CALL) {
+				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED || arg2Type == CALL) {
 					return allPairs;
 				} else if (arg2Type == CONSTANT && pkb.isConstant(secondElement)) {
 					//The constant table has been probed and arg2 constant value exists
@@ -642,48 +721,46 @@ namespace QueryEvaluator
 		return filteredPairs;
 	}
 
-	/*bool processWithNode(QNode* withNode) 
+	bool processWithNode(QNode* withNode) 
 	{
-	int numberOfWith = withNode->getNumberOfChildren();
-	QNode* withClause = withNode->getChild();
+		int numberOfWith = withNode->getNumberOfChildren();
+		QNode* withClause = withNode->getChild();
 
-	for (int i = 0; i < numberOfWith; i++) {
-	bool isValid = processWithClause(withClause);
+		for (int i = 0; i < numberOfWith; i++) {
+			bool isValid = processWithClause(withClause);
 
-	if (!isValid) {
-	return false;
-	} else {
-	withClause = withNode->getNextChild();
+			if (!isValid) {
+				return false;
+			} else {
+				withClause = withNode->getNextChild();
+			}
+		}
+		//There are no with nodes or they are valid
+		return true;
 	}
-	}
-	//There are no with nodes or they are valid
-	return true;
-	}*/
 
 	//@todo call.procName and call.stmtNo
 	//@todo with clauses for constant strings
-	/*bool processWithClause(QNode* withClause)
+	bool processWithClause(QNode* withClause)
 	{
-	//Assume that var and int cannot be compared (should be checked by the query validator)
-	Synonym arg1 = withClause->getArg1();
-	Synonym arg2 = withClause->getArg2();
-	SYNONYM_TYPE arg1Type = arg1.getType();
-	SYNONYM_TYPE arg2Type = arg2.getType();
+		//Assume that var and int cannot be compared (should be checked by the query validator)
+		Synonym arg1 = withClause->getArg1();
+		Synonym arg2 = withClause->getArg2();
+		SYNONYM_TYPE arg1Type = arg1.getType();
+		SYNONYM_TYPE arg2Type = arg2.getType();
 
-	if (arg1Type == STRING && arg2Type == STRING) {
-	string arg1Value = arg1.getName();
-	string arg2Value = arg2.getName();
-
-	return arg1Value == arg2Value;
-	} else if (arg1Type == STRING) {
-	string arg1Value = arg1.getName();
-	IntermediateValuesHandler::filterEqualValue(arg2, arg1Value);
-	} else if (arg2Type == STRING) {
-	string arg2Value = arg2.getName();
-	IntermediateValuesHandler::filterEqualValue(arg1, arg2Value);
-	} else {
-	IntermediateValuesHandler::filterEqualPair(arg1, arg2);
+		if (arg1Type == STRING && arg2Type == STRING) {
+			string arg1Value = arg1.getName();
+			string arg2Value = arg2.getName();
+			return arg1Value == arg2Value;
+		} else if (arg1Type == STRING) {
+			string arg1Value = arg1.getName();
+			return IntermediateValuesHandler::filterEqualValue(arg2, arg1Value);
+		} else if (arg2Type == STRING) {
+			string arg2Value = arg2.getName();
+			return IntermediateValuesHandler::filterEqualValue(arg1, arg2Value);
+		} else {
+			return IntermediateValuesHandler::filterEqualPair(arg1, arg2);
+		}
 	}
-	return true;
-	}*/
 }
