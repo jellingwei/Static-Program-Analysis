@@ -73,3 +73,17 @@ int ProcTable::getProcIndex(string procName)
 	return (indexMap.count(procName) > 0) ? indexMap.at(procName) : -1;
 }
 
+/**
+ * Return all the index of the variables in the the ProcTable.
+ * If there is no answer, return an empty list.
+ */
+vector<int> ProcTable::getAllProcIndex() 
+{
+	vector<int> allKeys;
+
+	for(int i = 0; i< procMap.size();i++) {
+		allKeys.push_back(i);
+	}
+
+	return allKeys;
+}

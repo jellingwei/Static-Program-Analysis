@@ -70,6 +70,7 @@ public:
 	int getProcTableSize();
 	string getProcName(int index);
 	int getProcIndex(string procName);
+	vector<int> getAllProcIndex();
 
 	// ConstantTable methods
 	bool insertConstant(int constant, int stmtNum);

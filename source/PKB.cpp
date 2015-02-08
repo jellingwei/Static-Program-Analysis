@@ -218,6 +218,10 @@ int PKB::getProcIndex(string procName)
 {
 	return procTable->getProcIndex(procName);
 }
+vector<int> PKB::getAllProcIndex() 
+{
+	return procTable->getAllProcIndex() ;
+}
 
 //Constant
 /**
