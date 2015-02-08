@@ -51,7 +51,7 @@ namespace IntermediateValuesHandler
 		} else if (type == CONSTANT) {
 			return pkb.getAllConstant();
 		} else if (type == PROCEDURE) {
-			return pkb.getAllProcIndex();  //waiting for this function
+			return pkb.getAllProcIndex();
 		} else {
 			return pkb.getStmtNumForType(Synonym::convertToString(type));
 		}
@@ -81,7 +81,7 @@ namespace IntermediateValuesHandler
 			} else if (type == CONSTANT) {
 				allValues = pkb.getAllConstant();
 			} else if (type == PROCEDURE) {
-				allValues = pkb.getAllProcIndex();  //waiting for this function
+				allValues = pkb.getAllProcIndex();
 			} else {
 				allValues = pkb.getStmtNumForType(Synonym::convertToString(type));
 			}

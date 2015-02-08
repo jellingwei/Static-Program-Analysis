@@ -678,8 +678,8 @@ namespace QueryEvaluator
 			int firstElement = allPairs.first[i];
 			int secondElement = allPairs.second[i];
 
-			if (arg1Type == STMT || arg1Type == PROG_LINE || arg1Type == UNDEFINED || arg1Type == CALL) {
-				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED || arg2Type == CALL) {
+			if (arg1Type == STMT || arg1Type == PROG_LINE || arg1Type == UNDEFINED) {
+				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED) {
 					return allPairs;
 				} else if (arg2Type == CONSTANT && pkb.isConstant(secondElement)) {
 					//The constant table has been probed and arg2 constant value exists
