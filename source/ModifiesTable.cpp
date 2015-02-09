@@ -14,11 +14,7 @@
 using namespace std;
 using namespace stdext;
 
-/**
-* Return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
-* If stmtNum and varIndex are already present in the ModifiesTable and are previously set, the ModifiesTable will not be updated.
-* @exception if stmtNum is negative or 0, or varIndex is negative.
-*/
+
 bool ModifiesTable::setModifies(int stmtNum, int varIndex) 
 {
 	if (stmtNum <= 0 || varIndex <= 0) {
@@ -69,11 +65,6 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 	return true;
 }
 
-/**
-* Return TRUE if the Modifies relationship holds between statement number
-* and the variable index.
-* If stmtNum is negative or 0, or varIndex is negative, return FALSE.
-*/
 bool ModifiesTable::isModifies(int stmtNum, int varIndex) 
 {
 	if (stmtNum <= 0 || varIndex <= 0) {
@@ -91,10 +82,6 @@ bool ModifiesTable::isModifies(int stmtNum, int varIndex)
 	return result != end(varIndexList);
 }
 
-/**
-* Return the list of all the statements that modifies the variable index. 
-* If there is no answer, or if varIndex is invalid, return an empty list.
-*/
 vector<int> ModifiesTable::getModStmtNum(int varIndex) 
 {
 	if (varIndex <= 0) {
@@ -110,10 +97,7 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 	return stmtList;
 }
 
-/**
-* Return the list of all the variables that is modified by the statement number. 
-* If there is no answer, or if stmtNum is negative or 0, return an empty list.
-*/
+
 vector<int> ModifiesTable::getModVarForStmt(int stmtNum) 
 {
 	if (stmtNum <= 0) {
@@ -129,12 +113,7 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum)
 	return varIndexList;
 }
 
-/**
-* Return a pair of lists of statements and variable indexes, which correspond to the entire set of pairs of statements 
-* and variables satisfying Modifies(stmtNum, varIndex). The first value of the pair(stmtNum) is contained in the first 
-* list in the pair, and the second value of the pair(varIndex) is contained in the second list in the pair. 
-* If there is no such pair, a pair containing 2 empty lists is returned.
-*/
+
 pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() 
 {
 	pair<vector<int>, vector<int>> result;
