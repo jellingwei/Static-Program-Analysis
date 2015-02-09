@@ -11,6 +11,7 @@ CppUnit::TestSuite *unitSuite = new CppUnit::TestSuite( "All unit test" );
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("VarTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ProcTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ConstantTableTest").makeTest());	
+unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("CallsTableTest").makeTest());
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("UsesTableTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ModifiesTableTest").makeTest());	
 unitSuite->addTest(CppUnit::TestFactoryRegistry::getRegistry("ParserTest").makeTest());

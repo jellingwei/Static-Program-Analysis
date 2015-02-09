@@ -105,7 +105,11 @@ vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure)
 		return procIndex1Map.at(procIndex2);
 	}
 
-	vector<int> intermediateValues = procIndex2Map.at(procIndex2);
+	if (procIndex1Map.count(procIndex2) < 0){
+		return vector<int>();
+	}
+
+	vector<int> intermediateValues = procIndex1Map.at(procIndex2);
 
 	if (intermediateValues.empty()) {
 		return vector<int>();
@@ -138,7 +142,11 @@ vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure)
 	if (!transitiveClosure) {
 		return procIndex2Map.at(procIndex1);
 	}
-		
+
+	if (procIndex2Map.count(procIndex1) < 0) {
+		return vector<int>();
+	}
+
 	vector<int> intermediateValues = procIndex2Map.at(procIndex1);
 
 	if (intermediateValues.empty()) {
