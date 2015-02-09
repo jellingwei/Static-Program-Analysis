@@ -381,87 +381,163 @@ int PKB::getStmtTableSize()
 
 // Parent
 
-
+/**
+* Sets the parent relation.
+* @return TRUE if the AST is updated accordingly. Otherwise, return FALSE. 
+* If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
+* @exception if stmtNum is negative or 0, or stmtNum2 is negative.
+*/
 bool PKB::setParent(TNode* stmtNum1, TNode* stmtNum2) 
 {
 	return parentTable->setParent(stmtNum1, stmtNum2);
 }
 	
 
-
+/**
+* @return a vector of stmtNums of the parent of stmtNum2, based on the Parent relation, if transitiveClosure is false,
+*		  otherwise, a vector of ancestors of stmtNum2
+*/
 vector<int> PKB::getParent(int stmtNum2, bool transitiveClosure) 
 {
 	return parentTable->getParent(stmtNum2, transitiveClosure);
 }
+
+/**
+* @return a vector of ancestors of stmtNum2, based on the Parent relation.
+*/
 vector<int> PKB::getParentS(int stmtNum2) 
 {
 	bool transitiveClosure = true;
 	return parentTable->getParent(stmtNum2, transitiveClosure);
 }
+
+/**
+* @return a vector of stmtNums of the child of stmtNum1, based on the Parent relation, if transitiveClosure is false,
+*		  otherwise, a vector of ancestors of stmtNum2
+*/
 vector<int> PKB::getChild(int stmtNum1, bool transitiveClosure) 
 {
 	return parentTable->getChild(stmtNum1, transitiveClosure);
 }
+
+/**
+* @return a vector of descendants of stmtNum2, based on the Parent relation.
+*/
 vector<int> PKB::getChildS(int stmtNum1) 
 {
 	bool transitiveClosure = true;
 	return parentTable->getChild(stmtNum1, transitiveClosure);
 }
 
+/**
+ * @return TRUE if Parent(stmtNum1, stmtNum2) holds
+ */
 bool PKB::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
+/**
+ * @return TRUE if Parent*(stmtNum1, stmtNum2) holds
+ */
 bool PKB::isParentS(int stmtNum1, int stmtNum2) 
 {
 	bool transitiveClosure = true;
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
 
+/**
+* Get all pairs of stmtNum1, stmtNum2 where Parent(stmtNum1, stmtNum2) is satisfied
+*/
 pair<vector<int>, vector<int>> PKB::getAllParentPairs(bool transitiveClosure) 
 {
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
+
+/**
+* Get all pairs of stmtNum1, stmtNum2 where Parent*(stmtNum1, stmtNum2) is satisfied
+*/
 pair<vector<int>, vector<int>> PKB::getAllParentPairsS() 
 {
 	bool transitiveClosure = true;
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
 
-
+/**
+* Sets the Follows relation.
+* Return TRUE if the AST is updated accordingly. Otherwise, return FALSE. 
+* If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
+* @exception if stmtNum is negative or 0, or stmtNum2 is negative.
+*/
 bool PKB::setFollows(TNode* stmt1, TNode* stmt2) 
 {
 	return followsTable->setFollows(stmt1, stmt2);
 }	
+
+/**
+* @param stmtNum2
+* @return a vector of stmtNum, where Follows(stmtNum, stmtNum2) is satisfied.
+*/
 vector<int> PKB::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) 
 {
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
+/**
+* @param stmtNum2
+* @return a vector of stmtNum, where Follows*(stmtNum, stmtNum2) is satisfied.
+*/
 vector<int> PKB::getStmtFollowedToS(int stmtNum2) 
 {
 	bool transitiveClosure = true;
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
+/**
+* @param stmtNum1
+* @return a vector of stmtNum, where Follows(stmtNum1, stmtNum) is satisfied.
+*/
 vector<int> PKB::getStmtFollowedFrom(int stmtNum1 , bool transitiveClosure) 
 {
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
+/**
+* @param stmtNum1
+* @return a vector of stmtNum, where Follows*(stmtNum1, stmtNum) is satisfied.
+*/
 vector<int> PKB::getStmtFollowedFromS(int stmtNum1) 
 {
 	bool transitiveClosure = true;
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
+
+/**
+* @return TRUE if Follows(stmtNum1, stmtNum2) is satisfied
+*/
 bool PKB::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
 	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
 }
+/**
+* @return TRUE if Follows*(stmtNum1, stmtNum2) is satisfied
+*/
 bool PKB::isFollowsS(int stmtNum1, int stmtNum2) 
 {
 	bool transitiveClosure = true;
 	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
 }
+
+/**
+* Get all pairs of stmtNum1, stmtNum2 where Follows(stmtNum1, stmtNum2) is satisfied.
+*/
 pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure) 
 {
+	return followsTable->getAllFollowsPairs(transitiveClosure);
+}
+
+/**
+* Get all pairs of stmtNum1, stmtNum2 where Follows*(stmtNum1, stmtNum2) is satisfied.
+*/
+pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS() 
+{
+	bool transitiveClosure = true;
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
@@ -479,27 +555,81 @@ bool PKB::setCalls(int procIndex1, int procIndex2)
 }
 
 /**
-* Return TRUE if the Calls or Calls* relationship holds between 2 procedures, p and q.
+* Return TRUE if the Calls relationship holds between 2 procedures, p and q.
 * If procIndex1 or procIndex2 is negative, return FALSE.
 */
 bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) 
 {
-	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);;
+	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);
 }
 
+/**
+* Return TRUE if the Calls* relationship holds between 2 procedures, p and q.
+* If procIndex1 or procIndex2 is negative, return FALSE.
+*/
+bool PKB::isCallsS(int procIndex1, int procIndex2) 
+{
+	bool transitiveClosure = true;
+	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);
+}
 
+/**
+ * @param procIndex2
+ * @return a vector of procedures indexes that call procIndex2
+ */
 vector<int> PKB::getProcsCalling(int procIndex2, bool transitiveClosure) 
 {
 	return callsTable->getProcsCalling(procIndex2, transitiveClosure);
 }
+
+/**
+ * @param procIndex2
+ * @return a vector of procedures indexes that transitively call procIndex2
+ */
+vector<int> PKB::getProcsCallingS(int procIndex2) 
+{
+	bool transitiveClosure = true;
+	return callsTable->getProcsCalling(procIndex2, transitiveClosure);
+}
+
+/**
+ * @param procIndex1
+ * @return a vector of procedures indexes that proxIndex1 calls
+ */
 vector<int> PKB::getProcsCalledBy(int procIndex1, bool transitiveClosure) 
 {
 	return callsTable->getProcsCalledBy(procIndex1, transitiveClosure);
 }
+
+/**
+ * @param procIndex1
+ * @return a vector of procedures indexes that proxIndex1 calls
+ */
+vector<int> PKB::getProcsCalledByS(int procIndex1) 
+{
+	bool transitiveClosure = true;
+	return callsTable->getProcsCalledBy(procIndex1, transitiveClosure);
+}
+
+/**
+ * @param procIndex1
+ * @return a vector of procedures indexes that proxIndex1 calls 
+ */
 pair<vector<int>, vector<int>> PKB::getAllCallsPairs(bool transitiveClosure) 
 {
 	return callsTable->getAllCallsPairs(transitiveClosure);
 }
+
+/**
+ * @param procIndex1
+ * @return a vector of procedures indexes that proxIndex1 calls transitively
+ */
+pair<vector<int>, vector<int>> PKB::getAllCallsPairsS() 
+{
+	bool transitiveClosure = true;
+	return callsTable->getAllCallsPairs(transitiveClosure);
+}
+
 
 
 // ModifiesTable methods
