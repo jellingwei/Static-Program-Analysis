@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Group 5 SPA: Parser Namespace Reference</title>
+<title>SPA: Parser Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,9 +22,8 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">Group 5 SPA
+   <div id="projectname">SPA
    </div>
   </td>
  </tr>
@@ -39,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -89,18 +89,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Namespace containing functions for parsing the source SIMPLE file.  
+<p>Namespace containing functions for parsing the source SIMPLE file as well as utility functions to parse and match strings from the SIMPLE grammar.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a7ae4f148b0d9ca3f5320ff1abbf99c40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_parser.html#a7ae4f148b0d9ca3f5320ff1abbf99c40">initParser</a> (string filename)</td></tr>
 <tr class="separator:a7ae4f148b0d9ca3f5320ff1abbf99c40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35e8f86210f5615cfefd8769138b1e5f"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_parser.html#a35e8f86210f5615cfefd8769138b1e5f">matchName</a> (string token)</td></tr>
+<tr class="separator:a35e8f86210f5615cfefd8769138b1e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79c52f03c3b8a1a1cc287fdb6b3ebc41"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_parser.html#a79c52f03c3b8a1a1cc287fdb6b3ebc41">matchInteger</a> (string token)</td></tr>
+<tr class="separator:a79c52f03c3b8a1a1cc287fdb6b3ebc41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a1347b54d0cd28f146ece8d08637d12"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_parser.html#a7a1347b54d0cd28f146ece8d08637d12">matchOperator</a> (string token)</td></tr>
+<tr class="separator:a7a1347b54d0cd28f146ece8d08637d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30783d5cc07500f4fbd9ea7807478e3e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_parser.html#a30783d5cc07500f4fbd9ea7807478e3e">parseProgram</a> ()</td></tr>
 <tr class="separator:a30783d5cc07500f4fbd9ea7807478e3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Namespace containing functions for parsing the source SIMPLE file. </p>
+<div class="textblock"><p>Namespace containing functions for parsing the source SIMPLE file as well as utility functions to parse and match strings from the SIMPLE grammar. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a7ae4f148b0d9ca3f5320ff1abbf99c40"></a>
 <div class="memitem">
@@ -115,7 +121,58 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Initialise the parser with a filename </p>
+<p>Initialises and prepares the parser for parsing. The file specified by filename is opened for parsing. Return TRUE if the file can be successfully opened. Otherwise, return FALSE. </p>
+
+</div>
+</div>
+<a class="anchor" id="a79c52f03c3b8a1a1cc287fdb6b3ebc41"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string Parser::matchInteger </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Matches integers </p><dl class="section return"><dt>Returns</dt><dd>true if the given token follows the naming convention for INTEGER, as per SIMPLE grammar </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a35e8f86210f5615cfefd8769138b1e5f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string Parser::matchName </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Matches names </p><dl class="section return"><dt>Returns</dt><dd>true if the given token follows the naming convention for NAME, as per the given grammar </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7a1347b54d0cd28f146ece8d08637d12"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string Parser::matchOperator </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Matches operators </p><dl class="section return"><dt>Returns</dt><dd>true if the given token is an operator </dd></dl>
 
 </div>
 </div>
@@ -131,14 +188,14 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Main function to parse program. Call after using <a class="el" href="namespace_parser.html#a7ae4f148b0d9ca3f5320ff1abbf99c40">initParser</a>. </p>
+<p>Parses the program and populate data structures in the <a class="el" href="class_p_k_b.html">PKB</a>. Return TRUE if the program can successfully be parsed according to the SIMPLE grammar. Otherwise, return FALSE. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 15 2015 16:51:20 for Group 5 SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 9 2015 10:09:21 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

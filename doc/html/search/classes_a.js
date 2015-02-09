@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vartable',['VarTable',['../class_var_table.html',1,'']]]
+  ['usestable',['UsesTable',['../class_uses_table.html',1,'']]]
 ];

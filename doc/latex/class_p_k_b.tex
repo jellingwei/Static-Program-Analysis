@@ -1,0 +1,239 @@
+\hypertarget{class_p_k_b}{}\section{P\+K\+B Class Reference}
+\label{class_p_k_b}\index{P\+K\+B@{P\+K\+B}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_p_k_b_a5612d22361c1037a9dca418bd9e345ec}{}\hyperlink{class_t_node}{T\+Node} $\ast$ {\bfseries create\+T\+Node} (T\+N\+O\+D\+E\+\_\+\+T\+Y\+P\+E ast\+\_\+node\+\_\+type, int stmt\+No, int idx)\label{class_p_k_b_a5612d22361c1037a9dca418bd9e345ec}
+
+\item 
+\hypertarget{class_p_k_b_a9e2e37a6df4cb87146b0fd9e5fd6cd67}{}\hyperlink{class_t_node}{T\+Node} $\ast$ {\bfseries get\+Root} ()\label{class_p_k_b_a9e2e37a6df4cb87146b0fd9e5fd6cd67}
+
+\item 
+\hypertarget{class_p_k_b_a0c1c1c5a588f2a14f89d7bc3a6925650}{}bool {\bfseries create\+Link} (L\+I\+N\+K\+\_\+\+T\+Y\+P\+E link, \hyperlink{class_t_node}{T\+Node} $\ast$from\+Node, \hyperlink{class_t_node}{T\+Node} $\ast$to\+Node)\label{class_p_k_b_a0c1c1c5a588f2a14f89d7bc3a6925650}
+
+\item 
+\hypertarget{class_p_k_b_a721bfb2515f76b6987ddd1c98f6f75f3}{}int {\bfseries get\+Children\+Size} (\hyperlink{class_t_node}{T\+Node} $\ast$parent)\label{class_p_k_b_a721bfb2515f76b6987ddd1c98f6f75f3}
+
+\item 
+\hypertarget{class_p_k_b_a7c1cb3bc60d600e86d3da40a488b39db}{}vector$<$ \hyperlink{class_t_node}{T\+Node} $\ast$ $>$ $\ast$ {\bfseries get\+Children\+Node} (\hyperlink{class_t_node}{T\+Node} $\ast$parent)\label{class_p_k_b_a7c1cb3bc60d600e86d3da40a488b39db}
+
+\item 
+\hypertarget{class_p_k_b_ab3b48cdd915cc46e215b56465e85bced}{}bool {\bfseries is\+Child\+Node} (\hyperlink{class_t_node}{T\+Node} $\ast$parent, \hyperlink{class_t_node}{T\+Node} $\ast$child)\label{class_p_k_b_ab3b48cdd915cc46e215b56465e85bced}
+
+\item 
+\hypertarget{class_p_k_b_a09ebe6d9c9bc88d6547a73ea8196c1bf}{}bool {\bfseries is\+Exists} (\hyperlink{class_t_node}{T\+Node} $\ast$node)\label{class_p_k_b_a09ebe6d9c9bc88d6547a73ea8196c1bf}
+
+\item 
+\hypertarget{class_p_k_b_a6f03e63687e9b8233ffe5e4c74808b52}{}\hyperlink{class_t_node}{T\+Node} $\ast$ {\bfseries get\+Last\+Impt} ()\label{class_p_k_b_a6f03e63687e9b8233ffe5e4c74808b52}
+
+\item 
+\hypertarget{class_p_k_b_ae87b71cfce8707d411f9df9541aa3f34}{}int {\bfseries get\+A\+S\+T\+Size} ()\label{class_p_k_b_ae87b71cfce8707d411f9df9541aa3f34}
+
+\item 
+\hypertarget{class_p_k_b_aa2844f8ae34e714502a197573dc5804c}{}vector$<$ int $>$ {\bfseries pattern\+Match\+Assign} (string R\+H\+S)\label{class_p_k_b_aa2844f8ae34e714502a197573dc5804c}
+
+\item 
+\hypertarget{class_p_k_b_a410db4849af9bf5220f5439a5dcd55de}{}vector$<$ int $>$ {\bfseries pattern\+Match\+While} (string L\+H\+S)\label{class_p_k_b_a410db4849af9bf5220f5439a5dcd55de}
+
+\item 
+\hypertarget{class_p_k_b_ad58dc44a6828c9638d814f3a782c00e9}{}int {\bfseries get\+Control\+Variable} (int stmt\+Num)\label{class_p_k_b_ad58dc44a6828c9638d814f3a782c00e9}
+
+\item 
+\hypertarget{class_p_k_b_a0b2513c2dd6c90dcb3783bad8af8fc2e}{}int {\bfseries insert\+Var} (string var\+Name, int stmt\+Num)\label{class_p_k_b_a0b2513c2dd6c90dcb3783bad8af8fc2e}
+
+\item 
+\hypertarget{class_p_k_b_a223f730c7dd475c6b8d82b94fab078ec}{}int {\bfseries get\+Var\+Table\+Size} ()\label{class_p_k_b_a223f730c7dd475c6b8d82b94fab078ec}
+
+\item 
+\hypertarget{class_p_k_b_ab66db6b9f5a206262b1ba5d3faa93016}{}string {\bfseries get\+Var\+Name} (int index)\label{class_p_k_b_ab66db6b9f5a206262b1ba5d3faa93016}
+
+\item 
+\hypertarget{class_p_k_b_a9fb5448a1020b19e7d75574e1fc2fe0e}{}int {\bfseries get\+Var\+Index} (string var\+Name)\label{class_p_k_b_a9fb5448a1020b19e7d75574e1fc2fe0e}
+
+\item 
+\hypertarget{class_p_k_b_ae197e5784d4341492592a3e6b278437b}{}int {\bfseries get\+Stmt\+Num} (string var\+Name)\label{class_p_k_b_ae197e5784d4341492592a3e6b278437b}
+
+\item 
+\hypertarget{class_p_k_b_a588f9fa0f6c683965695efb85c7b27c1}{}vector$<$ int $>$ {\bfseries get\+All\+Var\+Index} ()\label{class_p_k_b_a588f9fa0f6c683965695efb85c7b27c1}
+
+\item 
+\hypertarget{class_p_k_b_ae48aadc241983a1e95ddbe9f75d53f0a}{}int {\bfseries insert\+Proc} (string proc\+Name)\label{class_p_k_b_ae48aadc241983a1e95ddbe9f75d53f0a}
+
+\item 
+\hypertarget{class_p_k_b_a4eab92c4a163ff90280ca717d0cd61c2}{}int {\bfseries get\+Proc\+Table\+Size} ()\label{class_p_k_b_a4eab92c4a163ff90280ca717d0cd61c2}
+
+\item 
+\hypertarget{class_p_k_b_a92007ea06d3844408e15c1bb1c6e7b3f}{}string {\bfseries get\+Proc\+Name} (int index)\label{class_p_k_b_a92007ea06d3844408e15c1bb1c6e7b3f}
+
+\item 
+\hypertarget{class_p_k_b_adb8e6c8b702f57acd975cf67e71771aa}{}int {\bfseries get\+Proc\+Index} (string var\+Name)\label{class_p_k_b_adb8e6c8b702f57acd975cf67e71771aa}
+
+\item 
+\hypertarget{class_p_k_b_af33da61abfeffab854edfe5eb24b6832}{}bool {\bfseries insert\+Constant} (int constant, int stmt\+Num)\label{class_p_k_b_af33da61abfeffab854edfe5eb24b6832}
+
+\item 
+\hypertarget{class_p_k_b_afe9e727ce67e8194ef1fe3ef1c508e05}{}int {\bfseries get\+Constant\+Table\+Size} ()\label{class_p_k_b_afe9e727ce67e8194ef1fe3ef1c508e05}
+
+\item 
+\hypertarget{class_p_k_b_aa6843fbd96b474a0e223774b04f43265}{}int {\bfseries get\+Constant} (int index)\label{class_p_k_b_aa6843fbd96b474a0e223774b04f43265}
+
+\item 
+\hypertarget{class_p_k_b_a0903c842d21115c44c2438e10d181fda}{}int {\bfseries get\+Constant\+Index} (int constant)\label{class_p_k_b_a0903c842d21115c44c2438e10d181fda}
+
+\item 
+\hypertarget{class_p_k_b_acf72ef25c7a3e60ccc96f27c05559107}{}vector$<$ int $>$ {\bfseries get\+Stmt\+Num} (int constant)\label{class_p_k_b_acf72ef25c7a3e60ccc96f27c05559107}
+
+\item 
+\hypertarget{class_p_k_b_a0fe7bb9fc063eaa8e6f490cd0421ab4c}{}bool {\bfseries is\+Constant} (int number)\label{class_p_k_b_a0fe7bb9fc063eaa8e6f490cd0421ab4c}
+
+\item 
+\hypertarget{class_p_k_b_a8296de3e1adf78db4c8b498649477947}{}vector$<$ int $>$ {\bfseries get\+All\+Constant} ()\label{class_p_k_b_a8296de3e1adf78db4c8b498649477947}
+
+\item 
+\hypertarget{class_p_k_b_ad25761f60476280fdec6823a3dd86ca3}{}bool {\bfseries insert\+Stmt} (int, string)\label{class_p_k_b_ad25761f60476280fdec6823a3dd86ca3}
+
+\item 
+\hypertarget{class_p_k_b_a27b7b2b9de7323cc6091346266232498}{}string {\bfseries get\+Type} (int)\label{class_p_k_b_a27b7b2b9de7323cc6091346266232498}
+
+\item 
+\hypertarget{class_p_k_b_a4eb8a4274e37e898510024b03e45be3f}{}vector$<$ int $>$ {\bfseries get\+Stmt\+Num\+For\+Type} (string)\label{class_p_k_b_a4eb8a4274e37e898510024b03e45be3f}
+
+\item 
+\hypertarget{class_p_k_b_af4e86d4a594bb5bf6c93e8eed5d20c23}{}bool {\bfseries is\+Assign} (int)\label{class_p_k_b_af4e86d4a594bb5bf6c93e8eed5d20c23}
+
+\item 
+\hypertarget{class_p_k_b_a648f7fead9e8db61831d60eccd28a57f}{}bool {\bfseries is\+While} (int)\label{class_p_k_b_a648f7fead9e8db61831d60eccd28a57f}
+
+\item 
+\hypertarget{class_p_k_b_ab570be45efa7bf5cc83c2ed8708c25de}{}int {\bfseries get\+Stmt\+Table\+Size} ()\label{class_p_k_b_ab570be45efa7bf5cc83c2ed8708c25de}
+
+\item 
+\hypertarget{class_p_k_b_a7948dec07e7b413b6940b9fefc06969a}{}bool {\bfseries set\+Parent} (\hyperlink{class_t_node}{T\+Node} $\ast$stmt\+Num1, \hyperlink{class_t_node}{T\+Node} $\ast$stmt\+Num2)\label{class_p_k_b_a7948dec07e7b413b6940b9fefc06969a}
+
+\item 
+\hypertarget{class_p_k_b_a4358e4d65d46f2eea2ae0a6349ed39aa}{}vector$<$ int $>$ {\bfseries get\+Parent} (int stmt\+Num2, bool transitive\+Closure=false)\label{class_p_k_b_a4358e4d65d46f2eea2ae0a6349ed39aa}
+
+\item 
+\hypertarget{class_p_k_b_a0395c724a3d4059910d6944fb04b33d7}{}vector$<$ int $>$ {\bfseries get\+Parent\+S} (int stmt\+Num2)\label{class_p_k_b_a0395c724a3d4059910d6944fb04b33d7}
+
+\item 
+\hypertarget{class_p_k_b_aab801de5e6f32d627bbd0e95c482e82e}{}vector$<$ int $>$ {\bfseries get\+Child} (int stmt\+Num1, bool transitive\+Closure=false)\label{class_p_k_b_aab801de5e6f32d627bbd0e95c482e82e}
+
+\item 
+\hypertarget{class_p_k_b_a37f1e902a818d98f6d69b183977ac91d}{}vector$<$ int $>$ {\bfseries get\+Child\+S} (int stmt\+Num1)\label{class_p_k_b_a37f1e902a818d98f6d69b183977ac91d}
+
+\item 
+\hypertarget{class_p_k_b_ad3599251f1d8110a4ca107197c944829}{}bool {\bfseries is\+Parent} (int stmt\+Num1, int stmt\+Num2, bool transitive\+Closure=false)\label{class_p_k_b_ad3599251f1d8110a4ca107197c944829}
+
+\item 
+\hypertarget{class_p_k_b_a7df8d85b8745c159332e594f85ee44a7}{}bool {\bfseries is\+Parent\+S} (int stmt\+Num1, int stmt\+Num2)\label{class_p_k_b_a7df8d85b8745c159332e594f85ee44a7}
+
+\item 
+\hypertarget{class_p_k_b_aaffa0700682bdcf059fab3f2ba05668e}{}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ {\bfseries get\+All\+Parent\+Pairs} (bool transitive\+Closure=false)\label{class_p_k_b_aaffa0700682bdcf059fab3f2ba05668e}
+
+\item 
+\hypertarget{class_p_k_b_a0246cf74d3a109563e461e2813407eda}{}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ {\bfseries get\+All\+Parent\+Pairs\+S} ()\label{class_p_k_b_a0246cf74d3a109563e461e2813407eda}
+
+\item 
+\hypertarget{class_p_k_b_a083ab5baff586b190352d31112cd2dda}{}bool {\bfseries set\+Follows} (\hyperlink{class_t_node}{T\+Node} $\ast$stmt1, \hyperlink{class_t_node}{T\+Node} $\ast$stmt2)\label{class_p_k_b_a083ab5baff586b190352d31112cd2dda}
+
+\item 
+\hypertarget{class_p_k_b_a4a627a83a6ca91a599fac3efe928a49d}{}vector$<$ int $>$ {\bfseries get\+Stmt\+Followed\+To} (int stmt\+Num2, bool transitive\+Closure=false)\label{class_p_k_b_a4a627a83a6ca91a599fac3efe928a49d}
+
+\item 
+\hypertarget{class_p_k_b_a6140e8a103913b65086ad203804054a9}{}vector$<$ int $>$ {\bfseries get\+Stmt\+Followed\+To\+S} (int stmt\+Num2)\label{class_p_k_b_a6140e8a103913b65086ad203804054a9}
+
+\item 
+\hypertarget{class_p_k_b_a96e3ea5fdcb5f7beefa1c8ba69e7bf44}{}vector$<$ int $>$ {\bfseries get\+Stmt\+Followed\+From} (int stmt\+Num1, bool transitive\+Closure=false)\label{class_p_k_b_a96e3ea5fdcb5f7beefa1c8ba69e7bf44}
+
+\item 
+\hypertarget{class_p_k_b_a31949bbf77cb4fbb25ba61df9089c3cf}{}vector$<$ int $>$ {\bfseries get\+Stmt\+Followed\+From\+S} (int stmt\+Num1)\label{class_p_k_b_a31949bbf77cb4fbb25ba61df9089c3cf}
+
+\item 
+\hypertarget{class_p_k_b_ad1383cdcf44c16742f7fac193d1be88b}{}bool {\bfseries is\+Follows} (int stmt\+Num1, int stmt\+Num2, bool transitive\+Closure=false)\label{class_p_k_b_ad1383cdcf44c16742f7fac193d1be88b}
+
+\item 
+\hypertarget{class_p_k_b_ad068fa67294fffe6956a58faff7d7060}{}bool {\bfseries is\+Follows\+S} (int stmt\+Num1, int stmt\+Num2)\label{class_p_k_b_ad068fa67294fffe6956a58faff7d7060}
+
+\item 
+\hypertarget{class_p_k_b_ae2cbd8cb8db3c3cad69b4070fde46a26}{}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ {\bfseries get\+All\+Follows\+Pairs} (bool transitive\+Closure=false)\label{class_p_k_b_ae2cbd8cb8db3c3cad69b4070fde46a26}
+
+\item 
+\hypertarget{class_p_k_b_abe5c1609a12ca53ef704780354695c6a}{}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ {\bfseries get\+All\+Follows\+Pairs\+S} ()\label{class_p_k_b_abe5c1609a12ca53ef704780354695c6a}
+
+\item 
+\hypertarget{class_p_k_b_a5e20c40fe38f091d852db45244b9fad5}{}bool {\bfseries set\+Modifies} (int stmt\+Num, int var\+Index)\label{class_p_k_b_a5e20c40fe38f091d852db45244b9fad5}
+
+\item 
+\hypertarget{class_p_k_b_a4f0ae22beb83a19c9a830e2257c9bc93}{}bool {\bfseries is\+Modifies} (int stmt\+Num, int var\+Index)\label{class_p_k_b_a4f0ae22beb83a19c9a830e2257c9bc93}
+
+\item 
+\hypertarget{class_p_k_b_af44fd9ae4269e60bf79fa6f705272f75}{}vector$<$ int $>$ {\bfseries get\+Mod\+Stmt\+Num} (int var\+Index)\label{class_p_k_b_af44fd9ae4269e60bf79fa6f705272f75}
+
+\item 
+\hypertarget{class_p_k_b_a8820ded0f372ac3917cbc2456efde382}{}vector$<$ int $>$ {\bfseries get\+Mod\+Var\+For\+Stmt} (int stmt\+Num)\label{class_p_k_b_a8820ded0f372ac3917cbc2456efde382}
+
+\item 
+\hypertarget{class_p_k_b_ac1344c37e86afe1895969b527d194be3}{}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ {\bfseries get\+All\+Mod\+Pair} ()\label{class_p_k_b_ac1344c37e86afe1895969b527d194be3}
+
+\item 
+\hypertarget{class_p_k_b_a93cc07428451daccf6536f17993e547f}{}bool {\bfseries set\+Uses} (int stmt\+Num, int var\+Index)\label{class_p_k_b_a93cc07428451daccf6536f17993e547f}
+
+\item 
+\hypertarget{class_p_k_b_a9172069feab68ac212353a300d91a135}{}bool {\bfseries is\+Uses} (int stmt\+Num, int var\+Index)\label{class_p_k_b_a9172069feab68ac212353a300d91a135}
+
+\item 
+\hypertarget{class_p_k_b_a70940a7f83e7536378d9cb19ef4e34c0}{}vector$<$ int $>$ {\bfseries get\+Uses\+Stmt\+Num} (int var\+Index)\label{class_p_k_b_a70940a7f83e7536378d9cb19ef4e34c0}
+
+\item 
+\hypertarget{class_p_k_b_ae638fd3055b5c863a2472ba2cf52a49a}{}vector$<$ int $>$ {\bfseries get\+Uses\+Var\+For\+Stmt} (int stmt\+Num)\label{class_p_k_b_ae638fd3055b5c863a2472ba2cf52a49a}
+
+\item 
+\hypertarget{class_p_k_b_a3418fe748fa2cad0bb19f829420f69ef}{}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ {\bfseries get\+All\+Uses\+Pair} ()\label{class_p_k_b_a3418fe748fa2cad0bb19f829420f69ef}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_p_k_b_af2a7def736f28e61707ae72d608d2caf}{}static \hyperlink{class_p_k_b}{P\+K\+B} \& {\bfseries get\+Instance} ()\label{class_p_k_b_af2a7def736f28e61707ae72d608d2caf}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_p_k_b_ac3fb1c4fc89ccee70b53768c56557052}{}\hyperlink{class_var_table}{Var\+Table} $\ast$ {\bfseries var\+Table}\label{class_p_k_b_ac3fb1c4fc89ccee70b53768c56557052}
+
+\item 
+\hypertarget{class_p_k_b_ab1749778e546e4965f3aa53beec4fab2}{}\hyperlink{class_proc_table}{Proc\+Table} $\ast$ {\bfseries proc\+Table}\label{class_p_k_b_ab1749778e546e4965f3aa53beec4fab2}
+
+\item 
+\hypertarget{class_p_k_b_a393ce116950905f2f09f011ca53dd4c8}{}\hyperlink{class_stmt_table}{Stmt\+Table} $\ast$ {\bfseries stmt\+Table}\label{class_p_k_b_a393ce116950905f2f09f011ca53dd4c8}
+
+\item 
+\hypertarget{class_p_k_b_a86534b4efd10fb4c0f041810511f6ad5}{}\hyperlink{class_constant_table}{Constant\+Table} $\ast$ {\bfseries constant\+Table}\label{class_p_k_b_a86534b4efd10fb4c0f041810511f6ad5}
+
+\item 
+\hypertarget{class_p_k_b_a865a4c2354d06e86e7e0123504d70efb}{}\hyperlink{class_modifies_table}{Modifies\+Table} $\ast$ {\bfseries modifies\+Table}\label{class_p_k_b_a865a4c2354d06e86e7e0123504d70efb}
+
+\item 
+\hypertarget{class_p_k_b_ae04313707aeeccf9697e7002e1895288}{}\hyperlink{class_uses_table}{Uses\+Table} $\ast$ {\bfseries uses\+Table}\label{class_p_k_b_ae04313707aeeccf9697e7002e1895288}
+
+\item 
+\hypertarget{class_p_k_b_ad1d0ea0caa5aea23c847fdb6b46dba6d}{}\hyperlink{class_follows_table}{Follows\+Table} $\ast$ {\bfseries follows\+Table}\label{class_p_k_b_ad1d0ea0caa5aea23c847fdb6b46dba6d}
+
+\item 
+\hypertarget{class_p_k_b_a518af23a1669d8d20b18ca3327febdb0}{}\hyperlink{class_parent_table}{Parent\+Table} $\ast$ {\bfseries parent\+Table}\label{class_p_k_b_a518af23a1669d8d20b18ca3327febdb0}
+
+\item 
+\hypertarget{class_p_k_b_a67f42d345eff2c10725c2121ed1a5789}{}\hyperlink{class_a_s_t}{A\+S\+T} $\ast$ {\bfseries ast}\label{class_p_k_b_a67f42d345eff2c10725c2121ed1a5789}
+
+\item 
+\hypertarget{class_p_k_b_a03ab425e8425299d1400dd823e80a0fc}{}unordered\+\_\+map$<$ int, \hyperlink{class_t_node}{T\+Node} $\ast$ $>$ {\bfseries node\+Table}\label{class_p_k_b_a03ab425e8425299d1400dd823e80a0fc}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/P\+K\+B.\+h\item 
+source/P\+K\+B.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,83 @@
+\hypertarget{class_constant_table}{}\section{Constant\+Table Class Reference}
+\label{class_constant_table}\index{Constant\+Table@{Constant\+Table}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{class_constant_table_a64f5ef38a9a6f8c814dc3ddfdc77db5d}{insert\+Constant} (int constant, int stmt\+Num)
+\item 
+int \hyperlink{class_constant_table_a87f4b8e04c2710a59376731cb18c7226}{get\+Size} ()
+\item 
+int \hyperlink{class_constant_table_ab29a735ffdd5548e64a43bb057282f06}{get\+Constant} (int index)
+\item 
+int \hyperlink{class_constant_table_a3d491d5407767dc696beb853644425e8}{get\+Constant\+Index} (int constant)
+\item 
+vector$<$ int $>$ \hyperlink{class_constant_table_abcd14361d6fb48620957aabb85f95b3e}{get\+Stmt\+Num} (int constant)
+\item 
+bool \hyperlink{class_constant_table_a3b484e396c58809b71edc989c9ad556b}{is\+Constant} (int number)
+\item 
+vector$<$ int $>$ \hyperlink{class_constant_table_acf69016d728309cbcfe413176f09d4ac}{get\+All\+Constant} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_constant_table_acf69016d728309cbcfe413176f09d4ac}{}\index{Constant\+Table@{Constant\+Table}!get\+All\+Constant@{get\+All\+Constant}}
+\index{get\+All\+Constant@{get\+All\+Constant}!Constant\+Table@{Constant\+Table}}
+\subsubsection[{get\+All\+Constant}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Constant\+Table\+::get\+All\+Constant (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_constant_table_acf69016d728309cbcfe413176f09d4ac}
+Returns the list of all the constant in the \hyperlink{class_constant_table}{Constant\+Table}. \hypertarget{class_constant_table_ab29a735ffdd5548e64a43bb057282f06}{}\index{Constant\+Table@{Constant\+Table}!get\+Constant@{get\+Constant}}
+\index{get\+Constant@{get\+Constant}!Constant\+Table@{Constant\+Table}}
+\subsubsection[{get\+Constant}]{\setlength{\rightskip}{0pt plus 5cm}int Constant\+Table\+::get\+Constant (
+\begin{DoxyParamCaption}
+\item[{int}]{index}
+\end{DoxyParamCaption}
+)}\label{class_constant_table_ab29a735ffdd5548e64a43bb057282f06}
+Return the constant in the \hyperlink{class_constant_table}{Constant\+Table} with the given index. If index is out of range, return an empty string. \hypertarget{class_constant_table_a3d491d5407767dc696beb853644425e8}{}\index{Constant\+Table@{Constant\+Table}!get\+Constant\+Index@{get\+Constant\+Index}}
+\index{get\+Constant\+Index@{get\+Constant\+Index}!Constant\+Table@{Constant\+Table}}
+\subsubsection[{get\+Constant\+Index}]{\setlength{\rightskip}{0pt plus 5cm}int Constant\+Table\+::get\+Constant\+Index (
+\begin{DoxyParamCaption}
+\item[{int}]{constant}
+\end{DoxyParamCaption}
+)}\label{class_constant_table_a3d491d5407767dc696beb853644425e8}
+Returns the index of a constant in \hyperlink{class_constant_table}{Constant\+Table} using the constant as the key. \hypertarget{class_constant_table_a87f4b8e04c2710a59376731cb18c7226}{}\index{Constant\+Table@{Constant\+Table}!get\+Size@{get\+Size}}
+\index{get\+Size@{get\+Size}!Constant\+Table@{Constant\+Table}}
+\subsubsection[{get\+Size}]{\setlength{\rightskip}{0pt plus 5cm}int Constant\+Table\+::get\+Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_constant_table_a87f4b8e04c2710a59376731cb18c7226}
+Return the total number of constants in the the \hyperlink{class_constant_table}{Constant\+Table}. \hypertarget{class_constant_table_abcd14361d6fb48620957aabb85f95b3e}{}\index{Constant\+Table@{Constant\+Table}!get\+Stmt\+Num@{get\+Stmt\+Num}}
+\index{get\+Stmt\+Num@{get\+Stmt\+Num}!Constant\+Table@{Constant\+Table}}
+\subsubsection[{get\+Stmt\+Num}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Constant\+Table\+::get\+Stmt\+Num (
+\begin{DoxyParamCaption}
+\item[{int}]{constant}
+\end{DoxyParamCaption}
+)}\label{class_constant_table_abcd14361d6fb48620957aabb85f95b3e}
+Returns the statement number the constant is in the \hyperlink{class_constant_table}{Constant\+Table}. \hypertarget{class_constant_table_a64f5ef38a9a6f8c814dc3ddfdc77db5d}{}\index{Constant\+Table@{Constant\+Table}!insert\+Constant@{insert\+Constant}}
+\index{insert\+Constant@{insert\+Constant}!Constant\+Table@{Constant\+Table}}
+\subsubsection[{insert\+Constant}]{\setlength{\rightskip}{0pt plus 5cm}bool Constant\+Table\+::insert\+Constant (
+\begin{DoxyParamCaption}
+\item[{int}]{constant, }
+\item[{int}]{stmt\+Num}
+\end{DoxyParamCaption}
+)}\label{class_constant_table_a64f5ef38a9a6f8c814dc3ddfdc77db5d}
+If constant is not in the \hyperlink{class_constant_table}{Constant\+Table}, inserts it into the \hyperlink{class_constant_table}{Constant\+Table} with the given statement number stmt\+Num and return its index. Otherwise, return its I\+N\+D\+E\+X and the table remains unchanged. 
+\begin{DoxyExceptions}{Exceptions}
+{\em if} & constant is empty or stmt\+Num is negative or 0. \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{class_constant_table_a3b484e396c58809b71edc989c9ad556b}{}\index{Constant\+Table@{Constant\+Table}!is\+Constant@{is\+Constant}}
+\index{is\+Constant@{is\+Constant}!Constant\+Table@{Constant\+Table}}
+\subsubsection[{is\+Constant}]{\setlength{\rightskip}{0pt plus 5cm}bool Constant\+Table\+::is\+Constant (
+\begin{DoxyParamCaption}
+\item[{int}]{number}
+\end{DoxyParamCaption}
+)}\label{class_constant_table_a3b484e396c58809b71edc989c9ad556b}
+Check if it is a constant in the \hyperlink{class_constant_table}{Constant\+Table}. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Constant\+Table.\+h\item 
+source/Constant\+Table.\+cpp\end{DoxyCompactItemize}

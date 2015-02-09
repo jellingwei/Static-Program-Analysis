@@ -1,0 +1,79 @@
+\hypertarget{class_var_table}{}\section{Var\+Table Class Reference}
+\label{class_var_table}\index{Var\+Table@{Var\+Table}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{class_var_table_ae9a87d6c60d9b9a7f8a78a0a6d15ad31}{insert\+Var} (string var\+Name, int stmt\+Num)
+\item 
+int \hyperlink{class_var_table_aec373c403bc7709de10fd8252f4564bb}{get\+Var\+Table\+Size} ()
+\item 
+string \hyperlink{class_var_table_abb871ef914a6c317f883492cb9b2e203}{get\+Var\+Name} (int index)
+\item 
+int \hyperlink{class_var_table_a60eae804b656bb114d77418012cba944}{get\+Var\+Index} (string var\+Name)
+\item 
+int \hyperlink{class_var_table_a0288ad4bb4e80126974d162fdf8a3986}{get\+Stmt\+Num} (string var\+Name)
+\item 
+vector$<$ int $>$ \hyperlink{class_var_table_a801bd6c6a49162e1141ec3eada867598}{get\+All\+Var\+Index} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_var_table_a801bd6c6a49162e1141ec3eada867598}{}\index{Var\+Table@{Var\+Table}!get\+All\+Var\+Index@{get\+All\+Var\+Index}}
+\index{get\+All\+Var\+Index@{get\+All\+Var\+Index}!Var\+Table@{Var\+Table}}
+\subsubsection[{get\+All\+Var\+Index}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Var\+Table\+::get\+All\+Var\+Index (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_var_table_a801bd6c6a49162e1141ec3eada867598}
+Return all the index of the variables in the the \hyperlink{class_var_table}{Var\+Table}. If there is no answer, return an empty list. \hypertarget{class_var_table_a0288ad4bb4e80126974d162fdf8a3986}{}\index{Var\+Table@{Var\+Table}!get\+Stmt\+Num@{get\+Stmt\+Num}}
+\index{get\+Stmt\+Num@{get\+Stmt\+Num}!Var\+Table@{Var\+Table}}
+\subsubsection[{get\+Stmt\+Num}]{\setlength{\rightskip}{0pt plus 5cm}int Var\+Table\+::get\+Stmt\+Num (
+\begin{DoxyParamCaption}
+\item[{string}]{var\+Name}
+\end{DoxyParamCaption}
+)}\label{class_var_table_a0288ad4bb4e80126974d162fdf8a3986}
+Return the statement number of the variable in the \hyperlink{class_var_table}{Var\+Table} with the given var\+Name. Otherwise, return -\/1 to indicate there is no such statement number. If there is no answer or if “var\+Name” is empty or null, return an empty list. \hypertarget{class_var_table_a60eae804b656bb114d77418012cba944}{}\index{Var\+Table@{Var\+Table}!get\+Var\+Index@{get\+Var\+Index}}
+\index{get\+Var\+Index@{get\+Var\+Index}!Var\+Table@{Var\+Table}}
+\subsubsection[{get\+Var\+Index}]{\setlength{\rightskip}{0pt plus 5cm}int Var\+Table\+::get\+Var\+Index (
+\begin{DoxyParamCaption}
+\item[{string}]{var\+Name}
+\end{DoxyParamCaption}
+)}\label{class_var_table_a60eae804b656bb114d77418012cba944}
+If var\+Name is in the \hyperlink{class_var_table}{Var\+Table}, return its index. Otherwise, return -\/1 to indicate there is no such variable in the the \hyperlink{class_var_table}{Var\+Table}. If var\+Name is empty or null, -\/1 is returned. 
+\begin{DoxyExceptions}{Exceptions}
+{\em if} & var\+Name is empty \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{class_var_table_abb871ef914a6c317f883492cb9b2e203}{}\index{Var\+Table@{Var\+Table}!get\+Var\+Name@{get\+Var\+Name}}
+\index{get\+Var\+Name@{get\+Var\+Name}!Var\+Table@{Var\+Table}}
+\subsubsection[{get\+Var\+Name}]{\setlength{\rightskip}{0pt plus 5cm}string Var\+Table\+::get\+Var\+Name (
+\begin{DoxyParamCaption}
+\item[{int}]{index}
+\end{DoxyParamCaption}
+)}\label{class_var_table_abb871ef914a6c317f883492cb9b2e203}
+Return the name of the variable in the \hyperlink{class_var_table}{Var\+Table} with the given index. If index is out of range, return an empty string. \hypertarget{class_var_table_aec373c403bc7709de10fd8252f4564bb}{}\index{Var\+Table@{Var\+Table}!get\+Var\+Table\+Size@{get\+Var\+Table\+Size}}
+\index{get\+Var\+Table\+Size@{get\+Var\+Table\+Size}!Var\+Table@{Var\+Table}}
+\subsubsection[{get\+Var\+Table\+Size}]{\setlength{\rightskip}{0pt plus 5cm}int Var\+Table\+::get\+Var\+Table\+Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_var_table_aec373c403bc7709de10fd8252f4564bb}
+Return the total number of variables in the the \hyperlink{class_var_table}{Var\+Table}. \hypertarget{class_var_table_ae9a87d6c60d9b9a7f8a78a0a6d15ad31}{}\index{Var\+Table@{Var\+Table}!insert\+Var@{insert\+Var}}
+\index{insert\+Var@{insert\+Var}!Var\+Table@{Var\+Table}}
+\subsubsection[{insert\+Var}]{\setlength{\rightskip}{0pt plus 5cm}int Var\+Table\+::insert\+Var (
+\begin{DoxyParamCaption}
+\item[{string}]{var\+Name, }
+\item[{int}]{stmt\+Num}
+\end{DoxyParamCaption}
+)}\label{class_var_table_ae9a87d6c60d9b9a7f8a78a0a6d15ad31}
+If var\+Name is not in the \hyperlink{class_var_table}{Var\+Table}, inserts it into the \hyperlink{class_var_table}{Var\+Table} with the given statement number stmt\+Num and return its index. Otherwise, return its I\+N\+D\+E\+X and the table remains unchanged. 
+\begin{DoxyExceptions}{Exceptions}
+{\em if} & var\+Name is empty or stmt\+Num is negative or 0. \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Var\+Table.\+h\item 
+source/Var\+Table.\+cpp\end{DoxyCompactItemize}

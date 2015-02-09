@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Group 5 SPA: ParentTable Class Reference</title>
+<title>SPA: ParentTable Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,9 +22,8 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">Group 5 SPA
+   <div id="projectname">SPA
    </div>
   </td>
  </tr>
@@ -39,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -96,15 +96,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a274893df34a659252722e2fb2d551ade"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a274893df34a659252722e2fb2d551ade"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>setParent</b> (<a class="el" href="class_t_node.html">TNode</a> *stmtNum1, <a class="el" href="class_t_node.html">TNode</a> *stmtNum2)</td></tr>
 <tr class="separator:a274893df34a659252722e2fb2d551ade"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adec10f8e468b19a0dbb485153920097b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adec10f8e468b19a0dbb485153920097b"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getParent</b> (int stmtNum2)</td></tr>
-<tr class="separator:adec10f8e468b19a0dbb485153920097b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ca18614071259a2c9a3875065a0e6b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3ca18614071259a2c9a3875065a0e6b9"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getChild</b> (int stmtNum1)</td></tr>
-<tr class="separator:a3ca18614071259a2c9a3875065a0e6b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac828dbbbe857cea1a96dde7c5d004324"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac828dbbbe857cea1a96dde7c5d004324"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isParent</b> (int stmtNum1, int stmtNum2)</td></tr>
-<tr class="separator:ac828dbbbe857cea1a96dde7c5d004324"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a702c5f8628c0e8ca7605a57bd443dbb9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a702c5f8628c0e8ca7605a57bd443dbb9"></a>
+vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getParent</b> (int stmtNum2, bool transitiveClosure)</td></tr>
+<tr class="separator:a702c5f8628c0e8ca7605a57bd443dbb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6f52e1a7a84b630aec234a251ca6430"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab6f52e1a7a84b630aec234a251ca6430"></a>
+vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getChild</b> (int stmtNum1, bool transitiveClosure)</td></tr>
+<tr class="separator:ab6f52e1a7a84b630aec234a251ca6430"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84ba14e3f44d02b55cf2ddbb4b7a5d28"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a84ba14e3f44d02b55cf2ddbb4b7a5d28"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isParent</b> (int stmtNum1, int stmtNum2, bool transitiveClosure)</td></tr>
+<tr class="separator:a84ba14e3f44d02b55cf2ddbb4b7a5d28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49b772e294779b9309cfc2268faa8cc7"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_parent_table.html#a49b772e294779b9309cfc2268faa8cc7">getAllParentPairs</a> (bool transitiveClosure)</td></tr>
 <tr class="separator:a49b772e294779b9309cfc2268faa8cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -133,7 +133,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isParent</b> (int stm
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 15 2015 16:51:19 for Group 5 SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 9 2015 10:09:20 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

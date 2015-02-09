@@ -1,0 +1,35 @@
+\hypertarget{class_parent_table}{}\section{Parent\+Table Class Reference}
+\label{class_parent_table}\index{Parent\+Table@{Parent\+Table}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_parent_table_a274893df34a659252722e2fb2d551ade}{}bool {\bfseries set\+Parent} (\hyperlink{class_t_node}{T\+Node} $\ast$stmt\+Num1, \hyperlink{class_t_node}{T\+Node} $\ast$stmt\+Num2)\label{class_parent_table_a274893df34a659252722e2fb2d551ade}
+
+\item 
+\hypertarget{class_parent_table_a702c5f8628c0e8ca7605a57bd443dbb9}{}vector$<$ int $>$ {\bfseries get\+Parent} (int stmt\+Num2, bool transitive\+Closure)\label{class_parent_table_a702c5f8628c0e8ca7605a57bd443dbb9}
+
+\item 
+\hypertarget{class_parent_table_ab6f52e1a7a84b630aec234a251ca6430}{}vector$<$ int $>$ {\bfseries get\+Child} (int stmt\+Num1, bool transitive\+Closure)\label{class_parent_table_ab6f52e1a7a84b630aec234a251ca6430}
+
+\item 
+\hypertarget{class_parent_table_a84ba14e3f44d02b55cf2ddbb4b7a5d28}{}bool {\bfseries is\+Parent} (int stmt\+Num1, int stmt\+Num2, bool transitive\+Closure)\label{class_parent_table_a84ba14e3f44d02b55cf2ddbb4b7a5d28}
+
+\item 
+pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ \hyperlink{class_parent_table_a49b772e294779b9309cfc2268faa8cc7}{get\+All\+Parent\+Pairs} (bool transitive\+Closure)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_parent_table_a49b772e294779b9309cfc2268faa8cc7}{}\index{Parent\+Table@{Parent\+Table}!get\+All\+Parent\+Pairs@{get\+All\+Parent\+Pairs}}
+\index{get\+All\+Parent\+Pairs@{get\+All\+Parent\+Pairs}!Parent\+Table@{Parent\+Table}}
+\subsubsection[{get\+All\+Parent\+Pairs}]{\setlength{\rightskip}{0pt plus 5cm}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ Parent\+Table\+::get\+All\+Parent\+Pairs (
+\begin{DoxyParamCaption}
+\item[{bool}]{transitive\+Closure}
+\end{DoxyParamCaption}
+)}\label{class_parent_table_a49b772e294779b9309cfc2268faa8cc7}
+Returns all pairs of statements, $<$s1, s2$>$, where Parent(s1, s2) is satisfied 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Parent\+Table.\+h\item 
+source/Parent\+Table.\+cpp\end{DoxyCompactItemize}

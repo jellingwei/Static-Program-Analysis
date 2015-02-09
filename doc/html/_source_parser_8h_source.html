@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Group 5 SPA: source/SourceParser.h Source File</title>
+<title>SPA: source/SourceParser.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,9 +22,8 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">Group 5 SPA
+   <div id="projectname">SPA
    </div>
   </td>
  </tr>
@@ -39,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -96,15 +96,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespace_parser.html">Parser</a> {</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="namespace_parser.html#a7ae4f148b0d9ca3f5320ff1abbf99c40">initParser</a>(<span class="keywordtype">string</span>);</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="namespace_parser.html#a30783d5cc07500f4fbd9ea7807478e3e">parseProgram</a>();</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;}</div>
-<div class="ttc" id="namespace_parser_html"><div class="ttname"><a href="namespace_parser.html">Parser</a></div><div class="ttdoc">Namespace containing functions for parsing the source SIMPLE file. </div><div class="ttdef"><b>Definition:</b> Parser.cpp:30</div></div>
-<div class="ttc" id="namespace_parser_html_a30783d5cc07500f4fbd9ea7807478e3e"><div class="ttname"><a href="namespace_parser.html#a30783d5cc07500f4fbd9ea7807478e3e">Parser::parseProgram</a></div><div class="ttdeci">bool parseProgram()</div><div class="ttdef"><b>Definition:</b> Parser.cpp:547</div></div>
-<div class="ttc" id="namespace_parser_html_a7ae4f148b0d9ca3f5320ff1abbf99c40"><div class="ttname"><a href="namespace_parser.html#a7ae4f148b0d9ca3f5320ff1abbf99c40">Parser::initParser</a></div><div class="ttdeci">bool initParser(string filename)</div><div class="ttdef"><b>Definition:</b> Parser.cpp:48</div></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    <span class="keywordtype">string</span> <a class="code" href="namespace_parser.html#a7a1347b54d0cd28f146ece8d08637d12">matchOperator</a>(<span class="keywordtype">string</span> token);</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    <span class="keywordtype">string</span> <a class="code" href="namespace_parser.html#a35e8f86210f5615cfefd8769138b1e5f">matchName</a>(<span class="keywordtype">string</span> token);</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keywordtype">string</span> <a class="code" href="namespace_parser.html#a79c52f03c3b8a1a1cc287fdb6b3ebc41">matchInteger</a>(<span class="keywordtype">string</span> token);</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;}</div>
+<div class="ttc" id="namespace_parser_html_a7a1347b54d0cd28f146ece8d08637d12"><div class="ttname"><a href="namespace_parser.html#a7a1347b54d0cd28f146ece8d08637d12">Parser::matchOperator</a></div><div class="ttdeci">string matchOperator(string token)</div><div class="ttdef"><b>Definition:</b> Parser.cpp:670</div></div>
+<div class="ttc" id="namespace_parser_html_a35e8f86210f5615cfefd8769138b1e5f"><div class="ttname"><a href="namespace_parser.html#a35e8f86210f5615cfefd8769138b1e5f">Parser::matchName</a></div><div class="ttdeci">string matchName(string token)</div><div class="ttdef"><b>Definition:</b> Parser.cpp:650</div></div>
+<div class="ttc" id="namespace_parser_html"><div class="ttname"><a href="namespace_parser.html">Parser</a></div><div class="ttdoc">Namespace containing functions for parsing the source SIMPLE file as well as utility functions to par...</div><div class="ttdef"><b>Definition:</b> Parser.cpp:27</div></div>
+<div class="ttc" id="namespace_parser_html_a79c52f03c3b8a1a1cc287fdb6b3ebc41"><div class="ttname"><a href="namespace_parser.html#a79c52f03c3b8a1a1cc287fdb6b3ebc41">Parser::matchInteger</a></div><div class="ttdeci">string matchInteger(string token)</div><div class="ttdef"><b>Definition:</b> Parser.cpp:660</div></div>
+<div class="ttc" id="namespace_parser_html_a30783d5cc07500f4fbd9ea7807478e3e"><div class="ttname"><a href="namespace_parser.html#a30783d5cc07500f4fbd9ea7807478e3e">Parser::parseProgram</a></div><div class="ttdeci">bool parseProgram()</div><div class="ttdef"><b>Definition:</b> Parser.cpp:680</div></div>
+<div class="ttc" id="namespace_parser_html_a7ae4f148b0d9ca3f5320ff1abbf99c40"><div class="ttname"><a href="namespace_parser.html#a7ae4f148b0d9ca3f5320ff1abbf99c40">Parser::initParser</a></div><div class="ttdeci">bool initParser(string filename)</div><div class="ttdef"><b>Definition:</b> Parser.cpp:54</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 15 2015 16:51:19 for Group 5 SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 9 2015 10:09:19 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

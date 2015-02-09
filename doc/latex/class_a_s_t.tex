@@ -1,0 +1,96 @@
+\hypertarget{class_a_s_t}{}\section{A\+S\+T Class Reference}
+\label{class_a_s_t}\index{A\+S\+T@{A\+S\+T}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_a_s_t_a69486adb9b58e648972d5a2730b940a7}{}\hyperlink{class_t_node}{T\+Node} $\ast$ {\bfseries create\+T\+Node} (T\+N\+O\+D\+E\+\_\+\+T\+Y\+P\+E ast\+\_\+node\+\_\+type, int stmt\+No, int idx)\label{class_a_s_t_a69486adb9b58e648972d5a2730b940a7}
+
+\item 
+\hypertarget{class_a_s_t_af92138be77648aa0c6bea999a6c1bf24}{}\hyperlink{class_t_node}{T\+Node} $\ast$ {\bfseries get\+Root} ()\label{class_a_s_t_af92138be77648aa0c6bea999a6c1bf24}
+
+\item 
+\hypertarget{class_a_s_t_aebde341b46387da09c308484ed66fa5f}{}bool {\bfseries create\+Link} (L\+I\+N\+K\+\_\+\+T\+Y\+P\+E link, \hyperlink{class_t_node}{T\+Node} $\ast$from\+Node, \hyperlink{class_t_node}{T\+Node} $\ast$to\+Node)\label{class_a_s_t_aebde341b46387da09c308484ed66fa5f}
+
+\item 
+\hypertarget{class_a_s_t_a05f6555b15bd47ab73cf35d450858095}{}int {\bfseries get\+Children\+Size} (\hyperlink{class_t_node}{T\+Node} $\ast$parent)\label{class_a_s_t_a05f6555b15bd47ab73cf35d450858095}
+
+\item 
+\hypertarget{class_a_s_t_a1e6ce07473e97be9e99785e3ffcdaa46}{}vector$<$ \hyperlink{class_t_node}{T\+Node} $\ast$ $>$ $\ast$ {\bfseries get\+Children\+Node} (\hyperlink{class_t_node}{T\+Node} $\ast$parent)\label{class_a_s_t_a1e6ce07473e97be9e99785e3ffcdaa46}
+
+\item 
+\hypertarget{class_a_s_t_a7b81dd32e82c1b6e8229d4160f4bf078}{}bool {\bfseries is\+Child\+Node} (\hyperlink{class_t_node}{T\+Node} $\ast$parent, \hyperlink{class_t_node}{T\+Node} $\ast$child)\label{class_a_s_t_a7b81dd32e82c1b6e8229d4160f4bf078}
+
+\item 
+\hypertarget{class_a_s_t_ad802d5d3a47c0141f1fed4a3f175248c}{}bool {\bfseries is\+Exists} (\hyperlink{class_t_node}{T\+Node} $\ast$node)\label{class_a_s_t_ad802d5d3a47c0141f1fed4a3f175248c}
+
+\item 
+\hypertarget{class_a_s_t_ae9054f5e82d9968444fc3f609bdb2107}{}\hyperlink{class_t_node}{T\+Node} $\ast$ {\bfseries get\+Last\+Impt} ()\label{class_a_s_t_ae9054f5e82d9968444fc3f609bdb2107}
+
+\item 
+\hypertarget{class_a_s_t_a85d388f62041b3799b584d29687f09c3}{}int {\bfseries get\+Size} ()\label{class_a_s_t_a85d388f62041b3799b584d29687f09c3}
+
+\item 
+vector$<$ int $>$ \hyperlink{class_a_s_t_abb89402dfd9a6115fdcbc2916b6b34fa}{pattern\+Match\+Assign} (string R\+H\+S)
+\item 
+vector$<$ int $>$ \hyperlink{class_a_s_t_ac482ed39b89268f77eadc6674f440984}{pattern\+Match\+While} (string L\+H\+S)
+\item 
+int \hyperlink{class_a_s_t_a28bf426d4ccdcbe6002f98fc6636d495}{get\+Control\+Variable} (int stmt\+Num)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_a_s_t_a28bf426d4ccdcbe6002f98fc6636d495}{}\index{A\+S\+T@{A\+S\+T}!get\+Control\+Variable@{get\+Control\+Variable}}
+\index{get\+Control\+Variable@{get\+Control\+Variable}!A\+S\+T@{A\+S\+T}}
+\subsubsection[{get\+Control\+Variable}]{\setlength{\rightskip}{0pt plus 5cm}int A\+S\+T\+::get\+Control\+Variable (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num}
+\end{DoxyParamCaption}
+)}\label{class_a_s_t_a28bf426d4ccdcbe6002f98fc6636d495}
+Obtain the index of control variable of a while loop. 
+\begin{DoxyParams}{Parameters}
+{\em stmt\+Num} & the statement number of the while loop \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+-\/1 if 1. an invalid statement number is provided.
+\begin{DoxyEnumerate}
+\item the statement indicated by the stmt\+Num is not a While statement
+\item the \hyperlink{class_a_s_t}{A\+S\+T} is poorly formed and the while loop\textquotesingle{}s node is in an invalid state Otherwise, return the index of the control variable. 
+\end{DoxyEnumerate}
+\end{DoxyReturn}
+\hypertarget{class_a_s_t_abb89402dfd9a6115fdcbc2916b6b34fa}{}\index{A\+S\+T@{A\+S\+T}!pattern\+Match\+Assign@{pattern\+Match\+Assign}}
+\index{pattern\+Match\+Assign@{pattern\+Match\+Assign}!A\+S\+T@{A\+S\+T}}
+\subsubsection[{pattern\+Match\+Assign}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ A\+S\+T\+::pattern\+Match\+Assign (
+\begin{DoxyParamCaption}
+\item[{string}]{R\+H\+S}
+\end{DoxyParamCaption}
+)}\label{class_a_s_t_abb89402dfd9a6115fdcbc2916b6b34fa}
+Pattern matching for assign statements. \begin{DoxyReturn}{Returns}
+a vector of statement numbers which are assign stmts, and uses the input R\+H\+S as its right substree. 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em R\+H\+S} & to match the expression query with a suitable subtree. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_a_s_t_ac482ed39b89268f77eadc6674f440984}{}\index{A\+S\+T@{A\+S\+T}!pattern\+Match\+While@{pattern\+Match\+While}}
+\index{pattern\+Match\+While@{pattern\+Match\+While}!A\+S\+T@{A\+S\+T}}
+\subsubsection[{pattern\+Match\+While}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ A\+S\+T\+::pattern\+Match\+While (
+\begin{DoxyParamCaption}
+\item[{string}]{L\+H\+S}
+\end{DoxyParamCaption}
+)}\label{class_a_s_t_ac482ed39b89268f77eadc6674f440984}
+Pattern matching for while statements. \begin{DoxyReturn}{Returns}
+a vector of statement numbers which are while loops, and uses the input L\+H\+S as its control variable. 
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em L\+H\+S} & the name of the variable that acts as the control variable for the while statements we are interested in. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/A\+S\+T.\+h\item 
+source/A\+S\+T.\+cpp\end{DoxyCompactItemize}

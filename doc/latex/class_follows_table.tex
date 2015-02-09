@@ -1,0 +1,49 @@
+\hypertarget{class_follows_table}{}\section{Follows\+Table Class Reference}
+\label{class_follows_table}\index{Follows\+Table@{Follows\+Table}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_follows_table_a9a35439952bc7b7c6b74bf2bf1cc5ae6}{}bool {\bfseries set\+Follows} (\hyperlink{class_t_node}{T\+Node} $\ast$stmt1, \hyperlink{class_t_node}{T\+Node} $\ast$stmt\+Num2)\label{class_follows_table_a9a35439952bc7b7c6b74bf2bf1cc5ae6}
+
+\item 
+vector$<$ int $>$ \hyperlink{class_follows_table_aad4ac1a173cf874fc63b54f517b2c217}{get\+Stmt\+Followed\+To} (int stmt\+Num2, bool transitive\+Closure)
+\item 
+vector$<$ int $>$ \hyperlink{class_follows_table_a7e1b0324d400cf2736bc8b36df148e4c}{get\+Stmt\+Followed\+From} (int stmt\+Num1, bool transitive\+Closure)
+\item 
+\hypertarget{class_follows_table_a2d23303a2ad8597ef203653b8708f0ee}{}bool {\bfseries is\+Follows} (int stmt\+Num1, int stmt\+Num2, bool transitive\+Closure)\label{class_follows_table_a2d23303a2ad8597ef203653b8708f0ee}
+
+\item 
+pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ \hyperlink{class_follows_table_a763e4e7eb22a7420a0107f3380527516}{get\+All\+Follows\+Pairs} (bool transitive\+Closure)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_follows_table_a763e4e7eb22a7420a0107f3380527516}{}\index{Follows\+Table@{Follows\+Table}!get\+All\+Follows\+Pairs@{get\+All\+Follows\+Pairs}}
+\index{get\+All\+Follows\+Pairs@{get\+All\+Follows\+Pairs}!Follows\+Table@{Follows\+Table}}
+\subsubsection[{get\+All\+Follows\+Pairs}]{\setlength{\rightskip}{0pt plus 5cm}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ Follows\+Table\+::get\+All\+Follows\+Pairs (
+\begin{DoxyParamCaption}
+\item[{bool}]{transitive\+Closure}
+\end{DoxyParamCaption}
+)}\label{class_follows_table_a763e4e7eb22a7420a0107f3380527516}
+Returns all (stmt1, stmt2) such that Follows(stmt1, stmt2) holds. If transitive\+Closure is true, returns all (stmt1, stmt2) such that Follows$\ast$(stmt1, stmt2) holds. \hypertarget{class_follows_table_a7e1b0324d400cf2736bc8b36df148e4c}{}\index{Follows\+Table@{Follows\+Table}!get\+Stmt\+Followed\+From@{get\+Stmt\+Followed\+From}}
+\index{get\+Stmt\+Followed\+From@{get\+Stmt\+Followed\+From}!Follows\+Table@{Follows\+Table}}
+\subsubsection[{get\+Stmt\+Followed\+From}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Follows\+Table\+::get\+Stmt\+Followed\+From (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num1, }
+\item[{bool}]{transitive\+Closure}
+\end{DoxyParamCaption}
+)}\label{class_follows_table_a7e1b0324d400cf2736bc8b36df148e4c}
+Given stmt1 as input, returns a vector of int of possible stmt2 such that Follows(stmt1, stmt2) is satisfied. If there is no answer, returns an empty vector \hypertarget{class_follows_table_aad4ac1a173cf874fc63b54f517b2c217}{}\index{Follows\+Table@{Follows\+Table}!get\+Stmt\+Followed\+To@{get\+Stmt\+Followed\+To}}
+\index{get\+Stmt\+Followed\+To@{get\+Stmt\+Followed\+To}!Follows\+Table@{Follows\+Table}}
+\subsubsection[{get\+Stmt\+Followed\+To}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Follows\+Table\+::get\+Stmt\+Followed\+To (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num2, }
+\item[{bool}]{transitive\+Closure}
+\end{DoxyParamCaption}
+)}\label{class_follows_table_aad4ac1a173cf874fc63b54f517b2c217}
+Given stmt2 as input, returns a vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied. If there is no answer, return an empty vector 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Follows\+Table.\+h\item 
+source/Follows\+Table.\+cpp\end{DoxyCompactItemize}
