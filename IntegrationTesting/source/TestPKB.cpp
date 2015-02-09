@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "TestPKB.h"
 #include "SourceParser.h"
+#include "FrontEndController.h"
 #include "PKB.h"
 #include "ConstantTable.h"
 #include "PatternMatch.h"
@@ -25,16 +26,14 @@ void PKBTest::tearDown()
 void PKBTest::testPKB()
 {
 	cout << "TestPKB" << endl;
-	// Test Parser
-	Parser::initParser("test/i_src.txt");
-	bool parse = Parser::parseProgram();
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parsed source file", parse, true);
+	FrontEndController controller;
+	controller.constructPkb("test/i_src.txt");
 
 	PKB pkb = PKB::getInstance();
 	
 	// ProcTable
 	cout << "Proc Table" << endl;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of procedures", 1, pkb.getProcTableSize());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of procedures", 4, pkb.getProcTableSize());
 
 	// ConstantTable
 	cout << "Constant Table" << endl;
@@ -47,10 +46,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Get invalid variable", -1, pkb.getVarIndex("z"));
 
 	// statements
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of statements", 15, (int)pkb.getStmtNumForType("stmt").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of assign", 10, (int)pkb.getStmtNumForType("assign").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of if", 2, (int)pkb.getStmtNumForType("if").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 3, (int)pkb.getStmtNumForType("while").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of statements", 26, (int)pkb.getStmtNumForType("stmt").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of assign", 12, (int)pkb.getStmtNumForType("assign").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of if", 4, (int)pkb.getStmtNumForType("if").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 6, (int)pkb.getStmtNumForType("while").size());
 
 	// Test Design Extractor
 
@@ -65,7 +64,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(8, s)", 9, pkb.getChild(8).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(7, s)", 8, pkb.getChild(7).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(5, s)", 0, (int)pkb.getChild(5).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(13, s)", 2, (int)pkb.getChild(13).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(13, s)", 3, (int)pkb.getChild(13).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(7, 9)", false, pkb.isParent(7,9));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(8, 9)", true, pkb.isParent(8,9));
@@ -88,8 +87,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(7, s)", 3, (int)pkb.getChildS(7).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(8, s)", 1, (int)pkb.getChildS(8).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(9, s)", 0, (int)pkb.getChildS(9).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, s)", 3, (int)pkb.getChildS(12).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(13, s)", 2, (int)pkb.getChildS(13).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, s)", 4, (int)pkb.getChildS(12).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(13, s)", 3, (int)pkb.getChildS(13).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(0, 1)", false, pkb.isParentS(0, 1));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(1, 2)", false, pkb.isParentS(1, 2));
@@ -164,9 +163,13 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 0", 6, (int)pkb.getUsesVarForProc(0).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 1", 0, (int)pkb.getUsesVarForProc(1).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'a')", 0, pkb.getUsesProcIndex(pkb.getVarIndex("a")).front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'a')", 1, (int)pkb.getUsesProcIndex(pkb.getVarIndex("a")).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 1", 3, (int)pkb.getUsesVarForProc(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 2", 3, (int)pkb.getUsesVarForProc(2).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 3", 3, (int)pkb.getUsesVarForProc(3).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 100", 0, (int)pkb.getUsesVarForProc(100).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'a')", 4, (int)pkb.getUsesProcIndex(pkb.getVarIndex("a")).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'c')", 4, (int)pkb.getUsesProcIndex(pkb.getVarIndex("c")).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'd')", 1, (int)pkb.getUsesProcIndex(pkb.getVarIndex("d")).size());
 
 	// Modifies
 	cout << "Modifies" << endl;
@@ -182,9 +185,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(11, v)", (string)"a", pkb.getVarName(pkb.getModVarForStmt(11).front()));
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 0", 6, (int)pkb.getModVarForProc(0).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 1", 0, (int)pkb.getModVarForProc(1).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 0, pkb.getModProcIndex(pkb.getVarIndex("a")).front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 1, (int)pkb.getModProcIndex(pkb.getVarIndex("a")).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 1", 1, (int)pkb.getModVarForProc(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 4, (int)pkb.getModProcIndex(pkb.getVarIndex("a")).size());
 
 	// Pattern
 	cout << "Pattern" << endl;
@@ -193,7 +195,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'a + f'_)", 6, pkb.patternMatchAssign("_\"a + f\"_").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'d + e'_)", 0, (int)pkb.patternMatchAssign("_\"d + e\"_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'1'_)", 1, pkb.patternMatchAssign("_\"1\"_").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 10, (int)pkb.patternMatchAssign("_").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 12, (int)pkb.patternMatchAssign("_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'a + f')", 6, (int)pkb.patternMatchAssign("a + f").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '2')", 4, pkb.patternMatchAssign("2").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '2')", 2, (int)pkb.patternMatchAssign("2").size());
@@ -253,15 +255,15 @@ void PKBTest::testPKB()
 
 	// All pairs for Follows
 	pair<vector<int>, vector<int>> allFollows = pkb.getAllFollowsPairs(false);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows pairs size", 8, (int)allFollows.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows pairs size", 10, (int)allFollows.first.size());
 	allFollows = pkb.getAllFollowsPairs(true);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows* pairs size", 29, (int)allFollows.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows* pairs size", 30, (int)allFollows.first.size());
 
 	// All pairs for parent
 	pair<vector<int>, vector<int>> allParent = pkb.getAllParentPairs(false);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent pairs size", 7, (int)allParent.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent pairs size", 13, (int)allParent.first.size());
 
 	allParent = pkb.getAllParentPairs(true);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent* pairs size", 10, (int)allParent.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent* pairs size", 23, (int)allParent.first.size());
 }
 

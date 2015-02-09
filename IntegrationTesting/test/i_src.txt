@@ -16,8 +16,41 @@ procedure Test {
        a = 2;  \\14
     } else {
 
-       a = a + 3;} \\15
+       a = a + 3; \\15
+       call Test2;
+    	}  \\16
   }
+  
 }
 
 
+procedure Test2 {
+  call Test3;  \\ 17
+  while a {    \\18
+    if b then{   \\19
+    	call Test4; \\20
+    }
+  }
+
+}
+
+procedure Test3 {
+  while c {    \\21
+    if  a then{ \\22
+      a = 1;    \\23
+    } else 
+    {
+      while c {   \\24
+         a = a * a - b;   \\25
+      }
+    }
+
+  } 
+
+}
+
+
+procedure Test4 {
+  call Test3;   \\26
+
+}
