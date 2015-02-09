@@ -6,7 +6,10 @@ void FrontEndController::constructPkb(std::string filename)
 {
 	try {
 		Parser::initParser(filename);
-		Parser::parseProgram();
+		bool status = Parser::parseProgram();
+		if (!status) {
+			throw exception("parsing failed");
+		}
 
 		cout<<"Design Extractor"<<std::endl;
 		DesignExtractor extractor;

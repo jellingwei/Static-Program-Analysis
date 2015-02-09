@@ -344,7 +344,7 @@ pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClo
 			for (size_t i = 0; i < childrenList->size(); ++i) 
 			{
 				TNode* childNode = childrenList->at(i);
-				if (childNode->getNodeType() != Assign && childNode->getNodeType() != While && childNode->getNodeType() != If) 
+				if (childNode->getNodeType() != Assign && childNode->getNodeType() != While && childNode->getNodeType() != If  && childNode->getNodeType() != Call) 
 				{
 					continue;
 				}
