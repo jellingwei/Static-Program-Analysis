@@ -35,6 +35,8 @@ namespace ResultProjector {
 		switch (type) {
 		case VARIABLE:
 			return pkb.getVarName(value);
+		case PROCEDURE:
+			return pkb.getProcName(value);
 		default:
 			return to_string(static_cast<long long>(value));
 		}

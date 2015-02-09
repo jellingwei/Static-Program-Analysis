@@ -449,6 +449,8 @@ namespace IntermediateValuesHandler
 				synonymValues = pkb.getAllVarIndex();
 			} else if (type == "constant") {
 				synonymValues = pkb.getAllConstant();
+			} else if (type == "procedure") {
+				synonymValues = pkb.getAllProcIndex();
 			} else {
 				synonymValues = pkb.getStmtNumForType(type);
 			}
