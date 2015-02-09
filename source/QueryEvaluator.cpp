@@ -286,21 +286,43 @@ namespace QueryEvaluator
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
-			pair<vector<int>, vector<int>> allUsesPair = pkb.getAllUsesPair();
-			pair<vector<int>, vector<int>> filteredUsesPair = 
-				filterPairWithSynonymType(allUsesPair, arg1Type, arg2Type);
+			//Use LHS temporarily
+			pair<vector<int>, vector<int>> usesPair = evaluateUsesByLHS(arg1);
 
-			if (filteredUsesPair.first.size() == 0 || filteredUsesPair.second.size() == 0) {
+			if (usesPair.first.size() == 0 || usesPair.second.size() == 0) {
 				return false;
 			}
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredUsesPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredUsesPair.second);
+			Synonym LHS(arg1Type, arg1.getName(), usesPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), usesPair.second);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
 
+	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS)
+	{
+		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
+		vector<int> valuesRHS;
+		
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts = pkb.getUsesVarForStmt(valuesLHS[i]);
+			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
+	}
+	
+	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym RHS)
+	{
+		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
+		vector<int> valuesLHS;
+		
+		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+			vector<int> stmts = pkb.getUsesStmtNum(valuesRHS[i]);
+			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
+	}
 	
 	inline bool processParent(Synonym arg1, Synonym arg2) 
 	{
@@ -342,21 +364,42 @@ namespace QueryEvaluator
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
-			pair<vector<int>, vector<int>> allParentsPair = pkb.getAllParentPairs(isTrans);  //false for non transitive closure
-			pair<vector<int>, vector<int>> filteredParentsPair = 
-				filterPairWithSynonymType(allParentsPair, arg1Type, arg2Type);
+			pair<vector<int>, vector<int>> parentsPair = evaluateParentByLHS(arg1, isTrans);
 
-			if (filteredParentsPair.first.size() == 0 || filteredParentsPair.second.size() == 0) {
+			if (parentsPair.first.size() == 0 || parentsPair.second.size() == 0) {
 				return false;
 			}
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredParentsPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredParentsPair.second);
+			Synonym LHS(arg1Type, arg1.getName(), parentsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), parentsPair.second);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
 	}
 
+	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, bool isTrans)
+	{
+		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
+		vector<int> valuesRHS;
+		
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts = pkb.getChild(valuesLHS[i], isTrans);
+			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
+	}
+	
+	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym RHS, bool isTrans)
+	{
+		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
+		vector<int> valuesLHS;
+		
+		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+			vector<int> stmts = pkb.getParent(valuesRHS[i], isTrans);
+			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
+	}
 	
 	inline bool processFollows(Synonym arg1, Synonym arg2) 
 	{
@@ -400,19 +443,41 @@ namespace QueryEvaluator
 			Synonym synonym(arg1Type, arg1.getName(), stmt);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
-			pair<vector<int>, vector<int>> allFollowsPair = pkb.getAllFollowsPairs(isTrans);  //false for non transitive closure
-			pair<vector<int>, vector<int>> filteredFollowsPair = 
-				filterPairWithSynonymType(allFollowsPair, arg1Type, arg2Type);
+			pair<vector<int>, vector<int>> followsPair = evaluateFollowsByLHS(arg1, isTrans);
 
-			if (filteredFollowsPair.first.size() == 0 || filteredFollowsPair.second.size() == 0) {
+			if (followsPair.first.size() == 0 || followsPair.second.size() == 0) {
 				return false;
 			}
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredFollowsPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredFollowsPair.second);
+			Synonym LHS(arg1Type, arg1.getName(), followsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), followsPair.second);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
+	}
+
+	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, bool isTrans)
+	{
+		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
+		vector<int> valuesRHS;
+		
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts = pkb.getStmtFollowedFrom(valuesLHS[i], isTrans);
+			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
+	}
+	
+	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym RHS, bool isTrans)
+	{
+		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
+		vector<int> valuesLHS;
+		
+		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+			vector<int> stmts = pkb.getStmtFollowedTo(valuesRHS[i], isTrans);
+			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
 	}
 
 	inline bool processCalls(Synonym arg1, Synonym arg2)
@@ -451,19 +516,41 @@ namespace QueryEvaluator
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else {
-			pair<vector<int>, vector<int>> allCallsPair = pkb.getAllCallsPairs(isTrans);
-			pair<vector<int>, vector<int>> filteredCallsPair = 
-				filterPairWithSynonymType(allCallsPair, arg1Type, arg2Type);
+			pair<vector<int>, vector<int>> callsPair = evaluateCallsByLHS(arg1, isTrans);
 
-			if (filteredCallsPair.first.size() == 0 || filteredCallsPair.second.size() == 0) {
+			if (callsPair.first.size() == 0 || callsPair.second.size() == 0) {
 				return false;
 			}
 
-			Synonym LHS(arg1Type, arg1.getName(), filteredCallsPair.first);
-			Synonym RHS(arg2Type, arg2.getName(), filteredCallsPair.second);
+			Synonym LHS(arg1Type, arg1.getName(), callsPair.first);
+			Synonym RHS(arg2Type, arg2.getName(), callsPair.second);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
 		return true;
+	}
+
+	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, bool isTrans)
+	{
+		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
+		vector<int> valuesRHS;
+		
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts = pkb.getProcsCalledBy(valuesLHS[i], isTrans);
+			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
+	}
+	
+	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym RHS, bool isTrans)
+	{
+		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
+		vector<int> valuesLHS;
+		
+		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+			vector<int> stmts = pkb.getProcsCalling(valuesRHS[i], isTrans);
+			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+		}
+		return make_pair(valuesLHS, valuesRHS);
 	}
 
 	/**
