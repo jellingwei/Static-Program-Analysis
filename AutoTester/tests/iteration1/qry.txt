@@ -90,23 +90,23 @@ none
 5000
 19 - Q
 call c; assign a;
-Select c such that Follow(a, c)
+Select c such that Follows(a, c)
 8
 5000
 20 - Q
-;
+stmt s;
 Select BOOLEAN such that Calls*("A", "C")
 TRUE
 5000
 21 - Q
 assign a;
 Select BOOLEAN such that pattern a(_, "a + b")
-TRUE
+none
 5000
 22 - Q
 assign a;
 Select BOOLEAN such that pattern a(_, _"a + b"_)
-FALSE
+none
 5000
 23 - Q
 procedure a, b;
@@ -130,7 +130,7 @@ TRUE
 5000
 27 - Q
 procedure p;
-Select p;
+Select p
 A,B,C
 5000
 28 - Q
