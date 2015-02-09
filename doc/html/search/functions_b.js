@@ -2,10 +2,11 @@ var searchData=
 [
   ['setcalls',['setCalls',['../class_p_k_b.html#a86d20d1a0c97c18255ec28f215486cbc',1,'PKB']]],
   ['setchild',['setChild',['../class_q_node.html#a39ef3abafa6774e3e8ddbd1574363ba3',1,'QNode']]],
+  ['setfollows',['setFollows',['../class_p_k_b.html#a083ab5baff586b190352d31112cd2dda',1,'PKB']]],
   ['setmodifies',['setModifies',['../class_p_k_b.html#a5e20c40fe38f091d852db45244b9fad5',1,'PKB']]],
   ['setmodifiesforcallstatements',['setModifiesForCallStatements',['../class_design_extractor.html#ae2c76011f9507532abb6e198bbc89870',1,'DesignExtractor']]],
   ['setmodifiesproc',['setModifiesProc',['../class_p_k_b.html#a84f5d7afb27b755004ce3c51a06ca541',1,'PKB']]],
-  ['setparent',['setParent',['../class_q_node.html#a09b45baa3195be5e02292a614a6e0fcc',1,'QNode::setParent()'],['../class_t_node.html#a268a84ac70bea458a3fb9cc4d3e2c27e',1,'TNode::setParent()']]],
+  ['setparent',['setParent',['../class_p_k_b.html#a7948dec07e7b413b6940b9fefc06969a',1,'PKB::setParent()'],['../class_q_node.html#a09b45baa3195be5e02292a614a6e0fcc',1,'QNode::setParent()'],['../class_t_node.html#a268a84ac70bea458a3fb9cc4d3e2c27e',1,'TNode::setParent()']]],
   ['setsynonymsmap',['setSynonymsMap',['../class_query_tree.html#a04fd2f5937ce1781d884432592cea7ef',1,'QueryTree']]],
   ['setuses',['setUses',['../class_p_k_b.html#a93cc07428451daccf6536f17993e547f',1,'PKB']]],
   ['setusesforcallstatements',['setUsesForCallStatements',['../class_design_extractor.html#a950d23ed5d28df67c0d2577f55d04c2b',1,'DesignExtractor']]],

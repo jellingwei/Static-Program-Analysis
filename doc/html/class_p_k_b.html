@@ -86,7 +86,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_p_k_b-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">PKB Class Reference</div>  </div>
@@ -161,17 +160,22 @@ vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>patter
 <tr class="separator:a8296de3e1adf78db4c8b498649477947"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a86d20d1a0c97c18255ec28f215486cbc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a86d20d1a0c97c18255ec28f215486cbc">setCalls</a> (int procIndex1, int procIndex2)</td></tr>
 <tr class="separator:a86d20d1a0c97c18255ec28f215486cbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a994bee2c3a85302742fa2a758b590532"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a994bee2c3a85302742fa2a758b590532">isCalls</a> (int procIndex1, int procIndex2, bool transitiveClosure)</td></tr>
-<tr class="separator:a994bee2c3a85302742fa2a758b590532"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a325424a62c27dca3be60db6224c1fc50"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a325424a62c27dca3be60db6224c1fc50"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getProcsCalling</b> (int procIndex2, bool transitiveClosure)</td></tr>
-<tr class="separator:a325424a62c27dca3be60db6224c1fc50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2dc5943a6ffb2111425c06182f9f89e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2dc5943a6ffb2111425c06182f9f89e"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getProcsCalledBy</b> (int procIndex1, bool transitiveClosure)</td></tr>
-<tr class="separator:ad2dc5943a6ffb2111425c06182f9f89e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2c520074b8bd6d6c4f7be2033d16b59"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2c520074b8bd6d6c4f7be2033d16b59"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllCallsPairs</b> (bool transitiveClosure)</td></tr>
-<tr class="separator:af2c520074b8bd6d6c4f7be2033d16b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8af31b99d47f2d0d5efd1d0628f208ba"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a8af31b99d47f2d0d5efd1d0628f208ba">isCalls</a> (int procIndex1, int procIndex2, bool transitiveClosure=false)</td></tr>
+<tr class="separator:a8af31b99d47f2d0d5efd1d0628f208ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe56b7d5912985540dd7a5cd63897b55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#afe56b7d5912985540dd7a5cd63897b55">isCallsS</a> (int procIndex1, int procIndex2)</td></tr>
+<tr class="separator:afe56b7d5912985540dd7a5cd63897b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad283dc7e14769439abd1f4fd77f8ac78"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#ad283dc7e14769439abd1f4fd77f8ac78">getProcsCalling</a> (int procIndex2, bool transitiveClosure=false)</td></tr>
+<tr class="separator:ad283dc7e14769439abd1f4fd77f8ac78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a99da3ef53eecb88a9594a2a5db8f5c"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a6a99da3ef53eecb88a9594a2a5db8f5c">getProcsCallingS</a> (int procIndex2)</td></tr>
+<tr class="separator:a6a99da3ef53eecb88a9594a2a5db8f5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af405b29125195031aeab9fc801f06d0b"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#af405b29125195031aeab9fc801f06d0b">getProcsCalledBy</a> (int procIndex1, bool transitiveClosure=false)</td></tr>
+<tr class="separator:af405b29125195031aeab9fc801f06d0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7afb9dc5e07b540dd7e28e06a9143a9"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#aa7afb9dc5e07b540dd7e28e06a9143a9">getProcsCalledByS</a> (int procIndex1)</td></tr>
+<tr class="separator:aa7afb9dc5e07b540dd7e28e06a9143a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23f69be81ec4a277c0e8feadbd8de700"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a23f69be81ec4a277c0e8feadbd8de700">getAllCallsPairs</a> (bool transitiveClosure=false)</td></tr>
+<tr class="separator:a23f69be81ec4a277c0e8feadbd8de700"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd8042dfea7ab0f9443716bf7318ee49"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#acd8042dfea7ab0f9443716bf7318ee49">getAllCallsPairsS</a> ()</td></tr>
+<tr class="separator:acd8042dfea7ab0f9443716bf7318ee49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad25761f60476280fdec6823a3dd86ca3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#ad25761f60476280fdec6823a3dd86ca3">insertStmt</a> (int, string)</td></tr>
 <tr class="separator:ad25761f60476280fdec6823a3dd86ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27b7b2b9de7323cc6091346266232498"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a27b7b2b9de7323cc6091346266232498">getType</a> (int)</td></tr>
@@ -188,60 +192,42 @@ pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memI
 <tr class="separator:a4ade20066ce3ff591d1861dc5695569b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab570be45efa7bf5cc83c2ed8708c25de"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#ab570be45efa7bf5cc83c2ed8708c25de">getStmtTableSize</a> ()</td></tr>
 <tr class="separator:ab570be45efa7bf5cc83c2ed8708c25de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7948dec07e7b413b6940b9fefc06969a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7948dec07e7b413b6940b9fefc06969a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setParent</b> (<a class="el" href="class_t_node.html">TNode</a> *stmtNum1, <a class="el" href="class_t_node.html">TNode</a> *stmtNum2)</td></tr>
+<tr class="memitem:a7948dec07e7b413b6940b9fefc06969a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a7948dec07e7b413b6940b9fefc06969a">setParent</a> (<a class="el" href="class_t_node.html">TNode</a> *stmtNum1, <a class="el" href="class_t_node.html">TNode</a> *stmtNum2)</td></tr>
 <tr class="separator:a7948dec07e7b413b6940b9fefc06969a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4358e4d65d46f2eea2ae0a6349ed39aa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4358e4d65d46f2eea2ae0a6349ed39aa"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getParent</b> (int stmtNum2, bool transitiveClosure=false)</td></tr>
+<tr class="memitem:a4358e4d65d46f2eea2ae0a6349ed39aa"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a4358e4d65d46f2eea2ae0a6349ed39aa">getParent</a> (int stmtNum2, bool transitiveClosure=false)</td></tr>
 <tr class="separator:a4358e4d65d46f2eea2ae0a6349ed39aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0395c724a3d4059910d6944fb04b33d7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0395c724a3d4059910d6944fb04b33d7"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getParentS</b> (int stmtNum2)</td></tr>
+<tr class="memitem:a0395c724a3d4059910d6944fb04b33d7"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a0395c724a3d4059910d6944fb04b33d7">getParentS</a> (int stmtNum2)</td></tr>
 <tr class="separator:a0395c724a3d4059910d6944fb04b33d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab801de5e6f32d627bbd0e95c482e82e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aab801de5e6f32d627bbd0e95c482e82e"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getChild</b> (int stmtNum1, bool transitiveClosure=false)</td></tr>
+<tr class="memitem:aab801de5e6f32d627bbd0e95c482e82e"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#aab801de5e6f32d627bbd0e95c482e82e">getChild</a> (int stmtNum1, bool transitiveClosure=false)</td></tr>
 <tr class="separator:aab801de5e6f32d627bbd0e95c482e82e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37f1e902a818d98f6d69b183977ac91d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a37f1e902a818d98f6d69b183977ac91d"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getChildS</b> (int stmtNum1)</td></tr>
+<tr class="memitem:a37f1e902a818d98f6d69b183977ac91d"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a37f1e902a818d98f6d69b183977ac91d">getChildS</a> (int stmtNum1)</td></tr>
 <tr class="separator:a37f1e902a818d98f6d69b183977ac91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad3599251f1d8110a4ca107197c944829"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3599251f1d8110a4ca107197c944829"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isParent</b> (int stmtNum1, int stmtNum2, bool transitiveClosure=false)</td></tr>
+<tr class="memitem:ad3599251f1d8110a4ca107197c944829"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#ad3599251f1d8110a4ca107197c944829">isParent</a> (int stmtNum1, int stmtNum2, bool transitiveClosure=false)</td></tr>
 <tr class="separator:ad3599251f1d8110a4ca107197c944829"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7df8d85b8745c159332e594f85ee44a7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7df8d85b8745c159332e594f85ee44a7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isParentS</b> (int stmtNum1, int stmtNum2)</td></tr>
+<tr class="memitem:a7df8d85b8745c159332e594f85ee44a7"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a7df8d85b8745c159332e594f85ee44a7">isParentS</a> (int stmtNum1, int stmtNum2)</td></tr>
 <tr class="separator:a7df8d85b8745c159332e594f85ee44a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaffa0700682bdcf059fab3f2ba05668e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaffa0700682bdcf059fab3f2ba05668e"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllParentPairs</b> (bool transitiveClosure=false)</td></tr>
+<tr class="memitem:aaffa0700682bdcf059fab3f2ba05668e"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#aaffa0700682bdcf059fab3f2ba05668e">getAllParentPairs</a> (bool transitiveClosure=false)</td></tr>
 <tr class="separator:aaffa0700682bdcf059fab3f2ba05668e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0246cf74d3a109563e461e2813407eda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0246cf74d3a109563e461e2813407eda"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllParentPairsS</b> ()</td></tr>
+<tr class="memitem:a0246cf74d3a109563e461e2813407eda"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a0246cf74d3a109563e461e2813407eda">getAllParentPairsS</a> ()</td></tr>
 <tr class="separator:a0246cf74d3a109563e461e2813407eda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a083ab5baff586b190352d31112cd2dda"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a083ab5baff586b190352d31112cd2dda"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setFollows</b> (<a class="el" href="class_t_node.html">TNode</a> *stmt1, <a class="el" href="class_t_node.html">TNode</a> *stmt2)</td></tr>
+<tr class="memitem:a083ab5baff586b190352d31112cd2dda"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a083ab5baff586b190352d31112cd2dda">setFollows</a> (<a class="el" href="class_t_node.html">TNode</a> *stmt1, <a class="el" href="class_t_node.html">TNode</a> *stmt2)</td></tr>
 <tr class="separator:a083ab5baff586b190352d31112cd2dda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a627a83a6ca91a599fac3efe928a49d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4a627a83a6ca91a599fac3efe928a49d"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getStmtFollowedTo</b> (int stmtNum2, bool transitiveClosure=false)</td></tr>
+<tr class="memitem:a4a627a83a6ca91a599fac3efe928a49d"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a4a627a83a6ca91a599fac3efe928a49d">getStmtFollowedTo</a> (int stmtNum2, bool transitiveClosure=false)</td></tr>
 <tr class="separator:a4a627a83a6ca91a599fac3efe928a49d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6140e8a103913b65086ad203804054a9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6140e8a103913b65086ad203804054a9"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getStmtFollowedToS</b> (int stmtNum2)</td></tr>
+<tr class="memitem:a6140e8a103913b65086ad203804054a9"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a6140e8a103913b65086ad203804054a9">getStmtFollowedToS</a> (int stmtNum2)</td></tr>
 <tr class="separator:a6140e8a103913b65086ad203804054a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96e3ea5fdcb5f7beefa1c8ba69e7bf44"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a96e3ea5fdcb5f7beefa1c8ba69e7bf44"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getStmtFollowedFrom</b> (int stmtNum1, bool transitiveClosure=false)</td></tr>
+<tr class="memitem:a96e3ea5fdcb5f7beefa1c8ba69e7bf44"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a96e3ea5fdcb5f7beefa1c8ba69e7bf44">getStmtFollowedFrom</a> (int stmtNum1, bool transitiveClosure=false)</td></tr>
 <tr class="separator:a96e3ea5fdcb5f7beefa1c8ba69e7bf44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31949bbf77cb4fbb25ba61df9089c3cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a31949bbf77cb4fbb25ba61df9089c3cf"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getStmtFollowedFromS</b> (int stmtNum1)</td></tr>
+<tr class="memitem:a31949bbf77cb4fbb25ba61df9089c3cf"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a31949bbf77cb4fbb25ba61df9089c3cf">getStmtFollowedFromS</a> (int stmtNum1)</td></tr>
 <tr class="separator:a31949bbf77cb4fbb25ba61df9089c3cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1383cdcf44c16742f7fac193d1be88b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1383cdcf44c16742f7fac193d1be88b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isFollows</b> (int stmtNum1, int stmtNum2, bool transitiveClosure=false)</td></tr>
+<tr class="memitem:ad1383cdcf44c16742f7fac193d1be88b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#ad1383cdcf44c16742f7fac193d1be88b">isFollows</a> (int stmtNum1, int stmtNum2, bool transitiveClosure=false)</td></tr>
 <tr class="separator:ad1383cdcf44c16742f7fac193d1be88b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad068fa67294fffe6956a58faff7d7060"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad068fa67294fffe6956a58faff7d7060"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isFollowsS</b> (int stmtNum1, int stmtNum2)</td></tr>
+<tr class="memitem:ad068fa67294fffe6956a58faff7d7060"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#ad068fa67294fffe6956a58faff7d7060">isFollowsS</a> (int stmtNum1, int stmtNum2)</td></tr>
 <tr class="separator:ad068fa67294fffe6956a58faff7d7060"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2cbd8cb8db3c3cad69b4070fde46a26"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae2cbd8cb8db3c3cad69b4070fde46a26"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllFollowsPairs</b> (bool transitiveClosure=false)</td></tr>
+<tr class="memitem:ae2cbd8cb8db3c3cad69b4070fde46a26"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#ae2cbd8cb8db3c3cad69b4070fde46a26">getAllFollowsPairs</a> (bool transitiveClosure=false)</td></tr>
 <tr class="separator:ae2cbd8cb8db3c3cad69b4070fde46a26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe5c1609a12ca53ef704780354695c6a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abe5c1609a12ca53ef704780354695c6a"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllFollowsPairsS</b> ()</td></tr>
-<tr class="separator:abe5c1609a12ca53ef704780354695c6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e7ba3068ef713a7d40dabc492f74d0d"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a9e7ba3068ef713a7d40dabc492f74d0d">getAllFollowsPairsS</a> ()</td></tr>
+<tr class="separator:a9e7ba3068ef713a7d40dabc492f74d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e20c40fe38f091d852db45244b9fad5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a5e20c40fe38f091d852db45244b9fad5">setModifies</a> (int stmtNum, int varIndex)</td></tr>
 <tr class="separator:a5e20c40fe38f091d852db45244b9fad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f0ae22beb83a19c9a830e2257c9bc93"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_p_k_b.html#a4f0ae22beb83a19c9a830e2257c9bc93">isModifies</a> (int stmtNum, int varIndex)</td></tr>
@@ -288,45 +274,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af2a7def736f28e61707ae72d608d2caf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af2a7def736f28e61707ae72d608d2caf"></a>
 static <a class="el" href="class_p_k_b.html">PKB</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getInstance</b> ()</td></tr>
 <tr class="separator:af2a7def736f28e61707ae72d608d2caf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:ac3fb1c4fc89ccee70b53768c56557052"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac3fb1c4fc89ccee70b53768c56557052"></a>
-<a class="el" href="class_var_table.html">VarTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>varTable</b></td></tr>
-<tr class="separator:ac3fb1c4fc89ccee70b53768c56557052"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1749778e546e4965f3aa53beec4fab2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab1749778e546e4965f3aa53beec4fab2"></a>
-<a class="el" href="class_proc_table.html">ProcTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>procTable</b></td></tr>
-<tr class="separator:ab1749778e546e4965f3aa53beec4fab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a393ce116950905f2f09f011ca53dd4c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a393ce116950905f2f09f011ca53dd4c8"></a>
-<a class="el" href="class_stmt_table.html">StmtTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>stmtTable</b></td></tr>
-<tr class="separator:a393ce116950905f2f09f011ca53dd4c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86534b4efd10fb4c0f041810511f6ad5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a86534b4efd10fb4c0f041810511f6ad5"></a>
-<a class="el" href="class_constant_table.html">ConstantTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>constantTable</b></td></tr>
-<tr class="separator:a86534b4efd10fb4c0f041810511f6ad5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f167d58f3b8c3e613e2c75ed61b05cd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f167d58f3b8c3e613e2c75ed61b05cd"></a>
-<a class="el" href="class_calls_table.html">CallsTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>callsTable</b></td></tr>
-<tr class="separator:a3f167d58f3b8c3e613e2c75ed61b05cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a865a4c2354d06e86e7e0123504d70efb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a865a4c2354d06e86e7e0123504d70efb"></a>
-<a class="el" href="class_modifies_table.html">ModifiesTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>modifiesTable</b></td></tr>
-<tr class="separator:a865a4c2354d06e86e7e0123504d70efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae04313707aeeccf9697e7002e1895288"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae04313707aeeccf9697e7002e1895288"></a>
-<a class="el" href="class_uses_table.html">UsesTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>usesTable</b></td></tr>
-<tr class="separator:ae04313707aeeccf9697e7002e1895288"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1d0ea0caa5aea23c847fdb6b46dba6d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1d0ea0caa5aea23c847fdb6b46dba6d"></a>
-<a class="el" href="class_follows_table.html">FollowsTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>followsTable</b></td></tr>
-<tr class="separator:ad1d0ea0caa5aea23c847fdb6b46dba6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a518af23a1669d8d20b18ca3327febdb0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a518af23a1669d8d20b18ca3327febdb0"></a>
-<a class="el" href="class_parent_table.html">ParentTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parentTable</b></td></tr>
-<tr class="separator:a518af23a1669d8d20b18ca3327febdb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67f42d345eff2c10725c2121ed1a5789"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a67f42d345eff2c10725c2121ed1a5789"></a>
-<a class="el" href="class_a_s_t.html">AST</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>ast</b></td></tr>
-<tr class="separator:a67f42d345eff2c10725c2121ed1a5789"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a03ab425e8425299d1400dd823e80a0fc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a03ab425e8425299d1400dd823e80a0fc"></a>
-unordered_map&lt; int, <a class="el" href="class_t_node.html">TNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>nodeTable</b></td></tr>
-<tr class="separator:a03ab425e8425299d1400dd823e80a0fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7df2dfe043b8d65ce1029096c273fdeb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7df2dfe043b8d65ce1029096c273fdeb"></a>
-unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>stmtToProcMap</b></td></tr>
-<tr class="separator:a7df2dfe043b8d65ce1029096c273fdeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a class="anchor" id="a0c1c1c5a588f2a14f89d7bc3a6925650"></a>
@@ -407,6 +354,51 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
+<a class="anchor" id="a23f69be81ec4a277c0e8feadbd8de700"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt; PKB::getAllCallsPairs </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">procIndex1</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of procedures indexes that proxIndex1 calls </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="acd8042dfea7ab0f9443716bf7318ee49"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt; PKB::getAllCallsPairsS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">procIndex1</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of procedures indexes that proxIndex1 calls transitively </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a8296de3e1adf78db4c8b498649477947"></a>
 <div class="memitem">
 <div class="memproto">
@@ -420,6 +412,39 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the list of all the constant in the <a class="el" href="class_constant_table.html">ConstantTable</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae2cbd8cb8db3c3cad69b4070fde46a26"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt; PKB::getAllFollowsPairs </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all pairs of stmtNum1, stmtNum2 where Follows(stmtNum1, stmtNum2) is satisfied. </p>
+
+</div>
+</div>
+<a class="anchor" id="a9e7ba3068ef713a7d40dabc492f74d0d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt; PKB::getAllFollowsPairsS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all pairs of stmtNum1, stmtNum2 where Follows*(stmtNum1, stmtNum2) is satisfied. </p>
 
 </div>
 </div>
@@ -452,6 +477,39 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
       </table>
 </div><div class="memdoc">
 <p>Return a pair of lists of procedure indexes and variable indexes, which correspond to the entire set of pairs of procedures and variables satisfying Modifies(procIndex, varIndex). The first value of the pair(procIndex) is contained in the first list in the pair, and the second value of the pair(varIndex) is contained in the second list in the pair. If there is no such pair, a pair containing 2 empty lists is returned. </p>
+
+</div>
+</div>
+<a class="anchor" id="aaffa0700682bdcf059fab3f2ba05668e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt; PKB::getAllParentPairs </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all pairs of stmtNum1, stmtNum2 where Parent(stmtNum1, stmtNum2) is satisfied </p>
+
+</div>
+</div>
+<a class="anchor" id="a0246cf74d3a109563e461e2813407eda"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt; PKB::getAllParentPairsS </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get all pairs of stmtNum1, stmtNum2 where Parent*(stmtNum1, stmtNum2) is satisfied </p>
 
 </div>
 </div>
@@ -535,6 +593,33 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
+<a class="anchor" id="aab801de5e6f32d627bbd0e95c482e82e"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getChild </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a vector of stmtNums of the child of stmtNum1, based on the Parent relation, if transitiveClosure is false, otherwise, a vector of ancestors of stmtNum2 </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a7c1cb3bc60d600e86d3da40a488b39db"></a>
 <div class="memitem">
 <div class="memproto">
@@ -578,6 +663,23 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a37f1e902a818d98f6d69b183977ac91d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getChildS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a vector of descendants of stmtNum2, based on the Parent relation. </dd></dl>
 
 </div>
 </div>
@@ -726,6 +828,50 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
+<a class="anchor" id="a4358e4d65d46f2eea2ae0a6349ed39aa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getParent </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a vector of stmtNums of the parent of stmtNum2, based on the Parent relation, if transitiveClosure is false, otherwise, a vector of ancestors of stmtNum2 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a0395c724a3d4059910d6944fb04b33d7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getParentS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a vector of ancestors of stmtNum2, based on the Parent relation. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="add62df2581040be477cf0a9345b2b924"></a>
 <div class="memitem">
 <div class="memproto">
@@ -765,6 +911,118 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
+<a class="anchor" id="af405b29125195031aeab9fc801f06d0b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getProcsCalledBy </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>procIndex1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">procIndex1</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of procedures indexes that proxIndex1 calls </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa7afb9dc5e07b540dd7e28e06a9143a9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getProcsCalledByS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>procIndex1</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">procIndex1</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of procedures indexes that proxIndex1 calls </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad283dc7e14769439abd1f4fd77f8ac78"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getProcsCalling </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>procIndex2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">procIndex2</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of procedures indexes that call procIndex2 </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6a99da3ef53eecb88a9594a2a5db8f5c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getProcsCallingS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>procIndex2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">procIndex2</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of procedures indexes that transitively call procIndex2 </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a4eab92c4a163ff90280ca717d0cd61c2"></a>
 <div class="memitem">
 <div class="memproto">
@@ -794,6 +1052,118 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>the root node of the <a class="el" href="class_a_s_t.html">AST</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a96e3ea5fdcb5f7beefa1c8ba69e7bf44"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getStmtFollowedFrom </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stmtNum1</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of stmtNum, where Follows(stmtNum1, stmtNum) is satisfied. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a31949bbf77cb4fbb25ba61df9089c3cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getStmtFollowedFromS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stmtNum1</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of stmtNum, where Follows*(stmtNum1, stmtNum) is satisfied. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4a627a83a6ca91a599fac3efe928a49d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getStmtFollowedTo </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stmtNum2</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of stmtNum, where Follows(stmtNum, stmtNum2) is satisfied. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6140e8a103913b65086ad203804054a9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; int &gt; PKB::getStmtFollowedToS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stmtNum2</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of stmtNum, where Follows*(stmtNum, stmtNum2) is satisfied. </dd></dl>
 
 </div>
 </div>
@@ -1166,7 +1536,7 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
-<a class="anchor" id="a994bee2c3a85302742fa2a758b590532"></a>
+<a class="anchor" id="a8af31b99d47f2d0d5efd1d0628f208ba"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -1186,7 +1556,7 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>transitiveClosure</em>&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1195,7 +1565,34 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return TRUE if the Calls or Calls* relationship holds between 2 procedures, p and q. If procIndex1 or procIndex2 is negative, return FALSE. </p>
+<p>Return TRUE if the Calls relationship holds between 2 procedures, p and q. If procIndex1 or procIndex2 is negative, return FALSE. </p>
+
+</div>
+</div>
+<a class="anchor" id="afe56b7d5912985540dd7a5cd63897b55"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PKB::isCallsS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>procIndex1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>procIndex2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Return TRUE if the Calls* relationship holds between 2 procedures, p and q. If procIndex1 or procIndex2 is negative, return FALSE. </p>
 
 </div>
 </div>
@@ -1272,6 +1669,66 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
+<a class="anchor" id="ad1383cdcf44c16742f7fac193d1be88b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PKB::isFollows </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>TRUE if Follows(stmtNum1, stmtNum2) is satisfied </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ad068fa67294fffe6956a58faff7d7060"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PKB::isFollowsS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>TRUE if Follows*(stmtNum1, stmtNum2) is satisfied </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a2680ef88cc17edf2b5f7a4cc0234327d"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1340,6 +1797,66 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
       </table>
 </div><div class="memdoc">
 <p>Return TRUE if the Modifies relationship holds between procedure index and the variable index. If stmtNum or varIndex is negative, return FALSE. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad3599251f1d8110a4ca107197c944829"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PKB::isParent </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>transitiveClosure</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>TRUE if Parent(stmtNum1, stmtNum2) holds </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a7df8d85b8745c159332e594f85ee44a7"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PKB::isParentS </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>stmtNum2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>TRUE if Parent*(stmtNum1, stmtNum2) holds </dd></dl>
 
 </div>
 </div>
@@ -1492,6 +2009,38 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 
 </div>
 </div>
+<a class="anchor" id="a083ab5baff586b190352d31112cd2dda"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PKB::setFollows </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
+          <td class="paramname"><em>stmt1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
+          <td class="paramname"><em>stmt2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the Follows relation. Return TRUE if the <a class="el" href="class_a_s_t.html">AST</a> is updated accordingly. Otherwise, return FALSE. If stmtNum1 and stmtNum2 were already previously set, the <a class="el" href="class_a_s_t.html">AST</a> will not be updated. </p><dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">if</td><td>stmtNum is negative or 0, or stmtNum2 is negative. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a5e20c40fe38f091d852db45244b9fad5"></a>
 <div class="memitem">
 <div class="memproto">
@@ -1550,6 +2099,39 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 <p>Return TRUE if the <a class="el" href="class_modifies_table.html">ModifiesTable</a> is updated accordingly. Otherwise, return FALSE. If procIndex and varIndex are already present in the <a class="el" href="class_modifies_table.html">ModifiesTable</a> and are previously set, the <a class="el" href="class_modifies_table.html">ModifiesTable</a> will not be updated. </p><dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
     <tr><td class="paramname">if</td><td>procIndex or varIndex is negative. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a7948dec07e7b413b6940b9fefc06969a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool PKB::setParent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
+          <td class="paramname"><em>stmtNum1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
+          <td class="paramname"><em>stmtNum2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the parent relation. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the <a class="el" href="class_a_s_t.html">AST</a> is updated accordingly. Otherwise, return FALSE. If stmtNum1 and stmtNum2 were already previously set, the <a class="el" href="class_a_s_t.html">AST</a> will not be updated. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">if</td><td>stmtNum is negative or 0, or stmtNum2 is negative. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1627,7 +2209,7 @@ unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="botto
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 9 2015 10:09:20 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 9 2015 10:12:47 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
