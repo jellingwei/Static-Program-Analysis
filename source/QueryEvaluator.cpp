@@ -23,7 +23,7 @@ using std::pair;
 namespace QueryEvaluator 
 {
 	//Private functions to evaluate the query tree
-	vector<Synonym> processResultNode(QNode* resultNode);
+	vector<Synonym> processResultNode(QNode* resultNode, bool isValid);
 	bool processSuchThatNode(QNode* suchThatNode);
 	bool processPatternNode(QNode* patternNode);
 	bool processWithNode(QNode* withNode);
@@ -63,22 +63,17 @@ namespace QueryEvaluator
 		vector<Synonym> synonymResult;
 
 		bool isValid = processSuchThatNode(qTreeRoot->getSuchThatNode());
-		if (!isValid) {
-			return synonymResult;  //Return empty vector
+
+		if (isValid) {
+			isValid = processPatternNode(qTreeRoot->getPatternNode());
 		}
 
-		isValid = processPatternNode(qTreeRoot->getPatternNode());
-		if (!isValid) {
-			return synonymResult;  //Return empty vector
-		}
-
-		isValid = processWithNode(qTreeRoot->getWithNode());
-		if (!isValid) {
-			return synonymResult;  //Return empty vector
+		if (isValid) {
+			isValid = processWithNode(qTreeRoot->getWithNode());
 		}
 
 		//All clauses are valid
-		synonymResult = processResultNode(qTreeRoot->getResultNode());
+		synonymResult = processResultNode(qTreeRoot->getResultNode(), isValid);
 		return synonymResult;
 	}
 
@@ -86,7 +81,7 @@ namespace QueryEvaluator
 	* Processes the result node in the query tree
 	* Returns the wanted synonym in a vector
 	*/
-	vector<Synonym> processResultNode(QNode* resultNode) 
+	vector<Synonym> processResultNode(QNode* resultNode, bool isValid) 
 	{
 		vector<Synonym> result;
 
@@ -96,9 +91,15 @@ namespace QueryEvaluator
 		for (int i = 0; i < numberOfSynonyms; i++) {
 			Synonym wantedSynonym = resultChildNode->getArg1();
 
-			if (wantedSynonym.getType() == BOOLEAN) {
-				Synonym s(BOOLEAN, "true");
+			if (wantedSynonym.getType() == BOOLEAN && isValid) {
+				Synonym s(BOOLEAN, "TRUE");
 				result.push_back(s);
+				return result;
+			} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
+				Synonym s(BOOLEAN, "FALSE");
+				result.push_back(s);
+				return result;
+			} else if (!isValid) {
 				return result;
 			}
 
@@ -449,16 +450,16 @@ namespace QueryEvaluator
 		SYNONYM_TYPE arg2Type = arg2.getType();
 
 		if (arg1Type == STRING && arg2Type == STRING) {
-			return pkb.isCalls(stoi(arg1.getName()), stoi(arg2.getName()), false);
+			return pkb.isCalls(pkb.getProcIndex(arg1.getName()), pkb.getProcIndex(arg2.getName()), false);
 		} else if (arg1Type == STRING) {
-			vector<int> stmt = pkb.getProcsCalledBy(stoi(arg1.getName()), false);
+			vector<int> stmt = pkb.getProcsCalledBy(pkb.getProcIndex(arg1.getName()), false);
 			if (stmt.size() == 0) {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == STRING) {
-			vector<int> stmt = pkb.getProcsCalling(stoi(arg2.getName()), false);
+			vector<int> stmt = pkb.getProcsCalling(pkb.getProcIndex(arg2.getName()), false);
 			if (stmt.size() == 0) {
 				return false;
 			}
@@ -490,16 +491,16 @@ namespace QueryEvaluator
 		SYNONYM_TYPE arg2Type = arg2.getType();
 
 		if (arg1Type == STRING && arg2Type == STRING) {
-			return pkb.isCalls(stoi(arg1.getName()), stoi(arg2.getName()), true);
+			return pkb.isCalls(pkb.getProcIndex(arg1.getName()), pkb.getProcIndex(arg2.getName()), true);
 		} else if (arg1Type == STRING) {
-			vector<int> stmt = pkb.getProcsCalledBy(stoi(arg1.getName()), true);
+			vector<int> stmt = pkb.getProcsCalledBy(pkb.getProcIndex(arg1.getName()), true);
 			if (stmt.size() == 0) {
 				return false;
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg2Type == STRING) {
-			vector<int> stmt = pkb.getProcsCalling(stoi(arg2.getName()), true);
+			vector<int> stmt = pkb.getProcsCalling(pkb.getProcIndex(arg2.getName()), true);
 			if (stmt.size() == 0) {
 				return false;
 			}
@@ -678,8 +679,8 @@ namespace QueryEvaluator
 			int firstElement = allPairs.first[i];
 			int secondElement = allPairs.second[i];
 
-			if (arg1Type == STMT || arg1Type == PROG_LINE || arg1Type == UNDEFINED) {
-				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED) {
+			if (arg1Type == STMT || arg1Type == PROG_LINE || arg1Type == UNDEFINED || arg1Type == PROCEDURE) {
+				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED || arg2Type == PROCEDURE) {
 					return allPairs;
 				} else if (arg2Type == CONSTANT && pkb.isConstant(secondElement)) {
 					//The constant table has been probed and arg2 constant value exists
