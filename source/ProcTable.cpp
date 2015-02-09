@@ -11,12 +11,6 @@
 using namespace std;
 using namespace stdext;
 
-
-/**
- * If procName is not in the ProcTable, inserts it into the ProcTable and 
- * return its index. Otherwise, return its INDEX and the table remains unchanged.
- * @exception if procName is empty.
- */
 int ProcTable::insertProc(string procName) 
 {
 
@@ -38,18 +32,13 @@ int ProcTable::insertProc(string procName)
 	
 }
 
-/**
- * Return the total number of procedures in the the ProcTable.
- */
+
 int ProcTable::getProcTableSize() 
 {
 	return procMap.size();
 }
 
-/**
- * Return the name of the procedure in the ProcTable with the given index.
- * If index is out of range, return an empty string.
- */
+
 string ProcTable::getProcName(int index) 
 {
 	if (index < 0) {
@@ -58,12 +47,6 @@ string ProcTable::getProcName(int index)
 	return (procMap.size() > index) ? procMap.at(index) : "";
 }
 
-/**
- * If procName is in the ProcTable, return its index. Otherwise, return -1 to
- * indicate there is no such procedure in the the ProcTable. If procName is empty or null, -1 is
- * returned.
- * @exception if procName is empty
- */
 int ProcTable::getProcIndex(string procName) 
 {
 	if (procName.empty()) {
@@ -73,3 +56,14 @@ int ProcTable::getProcIndex(string procName)
 	return (indexMap.count(procName) > 0) ? indexMap.at(procName) : -1;
 }
 
+
+vector<int> ProcTable::getAllProcIndex() 
+{
+	vector<int> allKeys;
+
+	for(int i = 0; i< procMap.size();i++) {
+		allKeys.push_back(i);
+	}
+
+	return allKeys;
+}

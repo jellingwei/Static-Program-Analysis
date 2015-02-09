@@ -1,0 +1,66 @@
+\hypertarget{class_modifies_table}{}\section{Modifies\+Table Class Reference}
+\label{class_modifies_table}\index{Modifies\+Table@{Modifies\+Table}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{class_modifies_table_aeccc2fe670352ca1e3043af0d6a52284}{set\+Modifies} (int stmt\+Num, int var\+Index)
+\item 
+bool \hyperlink{class_modifies_table_a1830e5f7525cdbb557470eb553cb2d73}{is\+Modifies} (int stmt\+Num, int var\+Index)
+\item 
+vector$<$ int $>$ \hyperlink{class_modifies_table_ae6dda09ee78a13475749a9b68572f9b0}{get\+Mod\+Stmt\+Num} (int var\+Index)
+\item 
+vector$<$ int $>$ \hyperlink{class_modifies_table_a2702eaf38ac7b12edd86b034a786e861}{get\+Mod\+Var\+For\+Stmt} (int stmt\+Num)
+\item 
+pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ \hyperlink{class_modifies_table_aeecd96e0e86184391c3a1e3feca5267a}{get\+All\+Mod\+Pair} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_modifies_table_aeecd96e0e86184391c3a1e3feca5267a}{}\index{Modifies\+Table@{Modifies\+Table}!get\+All\+Mod\+Pair@{get\+All\+Mod\+Pair}}
+\index{get\+All\+Mod\+Pair@{get\+All\+Mod\+Pair}!Modifies\+Table@{Modifies\+Table}}
+\subsubsection[{get\+All\+Mod\+Pair}]{\setlength{\rightskip}{0pt plus 5cm}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ Modifies\+Table\+::get\+All\+Mod\+Pair (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_modifies_table_aeecd96e0e86184391c3a1e3feca5267a}
+Return a pair of lists of statements and variable indexes, which correspond to the entire set of pairs of statements and variables satisfying Modifies(stmt\+Num, var\+Index). The first value of the pair(stmt\+Num) is contained in the first list in the pair, and the second value of the pair(var\+Index) is contained in the second list in the pair. If there is no such pair, a pair containing 2 empty lists is returned. \hypertarget{class_modifies_table_ae6dda09ee78a13475749a9b68572f9b0}{}\index{Modifies\+Table@{Modifies\+Table}!get\+Mod\+Stmt\+Num@{get\+Mod\+Stmt\+Num}}
+\index{get\+Mod\+Stmt\+Num@{get\+Mod\+Stmt\+Num}!Modifies\+Table@{Modifies\+Table}}
+\subsubsection[{get\+Mod\+Stmt\+Num}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Modifies\+Table\+::get\+Mod\+Stmt\+Num (
+\begin{DoxyParamCaption}
+\item[{int}]{var\+Index}
+\end{DoxyParamCaption}
+)}\label{class_modifies_table_ae6dda09ee78a13475749a9b68572f9b0}
+Return the list of all the statements that modifies the variable of index “var\+Index”. If there is no answer, or if var\+Index is invalid, return an empty list. \hypertarget{class_modifies_table_a2702eaf38ac7b12edd86b034a786e861}{}\index{Modifies\+Table@{Modifies\+Table}!get\+Mod\+Var\+For\+Stmt@{get\+Mod\+Var\+For\+Stmt}}
+\index{get\+Mod\+Var\+For\+Stmt@{get\+Mod\+Var\+For\+Stmt}!Modifies\+Table@{Modifies\+Table}}
+\subsubsection[{get\+Mod\+Var\+For\+Stmt}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Modifies\+Table\+::get\+Mod\+Var\+For\+Stmt (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num}
+\end{DoxyParamCaption}
+)}\label{class_modifies_table_a2702eaf38ac7b12edd86b034a786e861}
+Return the list of all the variables that is modified by the statement number “stmt\+Num”. If there is no answer, or if stmt\+Num is negative or 0, return an empty list. \hypertarget{class_modifies_table_a1830e5f7525cdbb557470eb553cb2d73}{}\index{Modifies\+Table@{Modifies\+Table}!is\+Modifies@{is\+Modifies}}
+\index{is\+Modifies@{is\+Modifies}!Modifies\+Table@{Modifies\+Table}}
+\subsubsection[{is\+Modifies}]{\setlength{\rightskip}{0pt plus 5cm}bool Modifies\+Table\+::is\+Modifies (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num, }
+\item[{int}]{var\+Index}
+\end{DoxyParamCaption}
+)}\label{class_modifies_table_a1830e5f7525cdbb557470eb553cb2d73}
+Return T\+R\+U\+E if the Modifies relationship holds between statement number and the variable index. If stmt\+Num is negative or 0, or var\+Index is negative, return F\+A\+L\+S\+E. \hypertarget{class_modifies_table_aeccc2fe670352ca1e3043af0d6a52284}{}\index{Modifies\+Table@{Modifies\+Table}!set\+Modifies@{set\+Modifies}}
+\index{set\+Modifies@{set\+Modifies}!Modifies\+Table@{Modifies\+Table}}
+\subsubsection[{set\+Modifies}]{\setlength{\rightskip}{0pt plus 5cm}bool Modifies\+Table\+::set\+Modifies (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num, }
+\item[{int}]{var\+Index}
+\end{DoxyParamCaption}
+)}\label{class_modifies_table_aeccc2fe670352ca1e3043af0d6a52284}
+Return T\+R\+U\+E if the \hyperlink{class_modifies_table}{Modifies\+Table} is updated accordingly. Otherwise, return F\+A\+L\+S\+E. If stmt\+Num and var\+Index are already present in the \hyperlink{class_modifies_table}{Modifies\+Table} and are previously set, the \hyperlink{class_modifies_table}{Modifies\+Table} will not be updated. 
+\begin{DoxyExceptions}{Exceptions}
+{\em if} & stmt\+Num is negative or 0, or var\+Index is negative. \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Modifies\+Table.\+h\item 
+source/Modifies\+Table.\+cpp\end{DoxyCompactItemize}

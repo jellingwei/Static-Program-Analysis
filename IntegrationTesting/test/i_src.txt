@@ -10,7 +10,7 @@ procedure Test {
     while c { \\8
       f = e + 1; }  \\9
     e = f + 2; }  \\10
-  a = 3;  \\11
+  a = e + 3 * b + f; \\11
   if b then {  \\12
     if c then {  \\13
        a = 2;  \\14

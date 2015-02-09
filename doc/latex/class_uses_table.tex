@@ -1,0 +1,61 @@
+\hypertarget{class_uses_table}{}\section{Uses\+Table Class Reference}
+\label{class_uses_table}\index{Uses\+Table@{Uses\+Table}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{class_uses_table_a83f8c0f13cb360bac8b9f0c0a4be118c}{set\+Uses} (int stmt\+Num, int var\+Index)
+\item 
+bool \hyperlink{class_uses_table_a4054adafe737adddd3bad0716d6d8bbf}{is\+Uses} (int stmt\+Num, int var\+Index)
+\item 
+vector$<$ int $>$ \hyperlink{class_uses_table_a4ce133440d9e22735fa50a2c53f9a257}{get\+Uses\+Stmt\+Num} (int var\+Index)
+\item 
+vector$<$ int $>$ \hyperlink{class_uses_table_a26b6353a456525e15f0cdc3a40d3b30e}{get\+Uses\+Var\+For\+Stmt} (int stmt\+Num)
+\item 
+pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ \hyperlink{class_uses_table_a509e26d2e3f69dbae1ab89cf64bf15a4}{get\+All\+Uses\+Pair} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_uses_table_a509e26d2e3f69dbae1ab89cf64bf15a4}{}\index{Uses\+Table@{Uses\+Table}!get\+All\+Uses\+Pair@{get\+All\+Uses\+Pair}}
+\index{get\+All\+Uses\+Pair@{get\+All\+Uses\+Pair}!Uses\+Table@{Uses\+Table}}
+\subsubsection[{get\+All\+Uses\+Pair}]{\setlength{\rightskip}{0pt plus 5cm}pair$<$ vector$<$ int $>$, vector$<$ int $>$ $>$ Uses\+Table\+::get\+All\+Uses\+Pair (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_uses_table_a509e26d2e3f69dbae1ab89cf64bf15a4}
+Returns a pair of vectors, where Uses(stmt\#, var index) holds. The first vector returned consists of stmt numbers, the second vector consists of variable indexes. \hypertarget{class_uses_table_a4ce133440d9e22735fa50a2c53f9a257}{}\index{Uses\+Table@{Uses\+Table}!get\+Uses\+Stmt\+Num@{get\+Uses\+Stmt\+Num}}
+\index{get\+Uses\+Stmt\+Num@{get\+Uses\+Stmt\+Num}!Uses\+Table@{Uses\+Table}}
+\subsubsection[{get\+Uses\+Stmt\+Num}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Uses\+Table\+::get\+Uses\+Stmt\+Num (
+\begin{DoxyParamCaption}
+\item[{int}]{var\+Index}
+\end{DoxyParamCaption}
+)}\label{class_uses_table_a4ce133440d9e22735fa50a2c53f9a257}
+Returns a list of statement number that Uses the variable. \hypertarget{class_uses_table_a26b6353a456525e15f0cdc3a40d3b30e}{}\index{Uses\+Table@{Uses\+Table}!get\+Uses\+Var\+For\+Stmt@{get\+Uses\+Var\+For\+Stmt}}
+\index{get\+Uses\+Var\+For\+Stmt@{get\+Uses\+Var\+For\+Stmt}!Uses\+Table@{Uses\+Table}}
+\subsubsection[{get\+Uses\+Var\+For\+Stmt}]{\setlength{\rightskip}{0pt plus 5cm}vector$<$ int $>$ Uses\+Table\+::get\+Uses\+Var\+For\+Stmt (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num}
+\end{DoxyParamCaption}
+)}\label{class_uses_table_a26b6353a456525e15f0cdc3a40d3b30e}
+Returns a list of variables used by the statement number. \hypertarget{class_uses_table_a4054adafe737adddd3bad0716d6d8bbf}{}\index{Uses\+Table@{Uses\+Table}!is\+Uses@{is\+Uses}}
+\index{is\+Uses@{is\+Uses}!Uses\+Table@{Uses\+Table}}
+\subsubsection[{is\+Uses}]{\setlength{\rightskip}{0pt plus 5cm}bool Uses\+Table\+::is\+Uses (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num, }
+\item[{int}]{var\+Index}
+\end{DoxyParamCaption}
+)}\label{class_uses_table_a4054adafe737adddd3bad0716d6d8bbf}
+Returns true if the statement number Uses the variable. \hypertarget{class_uses_table_a83f8c0f13cb360bac8b9f0c0a4be118c}{}\index{Uses\+Table@{Uses\+Table}!set\+Uses@{set\+Uses}}
+\index{set\+Uses@{set\+Uses}!Uses\+Table@{Uses\+Table}}
+\subsubsection[{set\+Uses}]{\setlength{\rightskip}{0pt plus 5cm}bool Uses\+Table\+::set\+Uses (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num, }
+\item[{int}]{var\+Index}
+\end{DoxyParamCaption}
+)}\label{class_uses_table_a83f8c0f13cb360bac8b9f0c0a4be118c}
+Returns true if \hyperlink{class_uses_table}{Uses\+Table} updated. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Uses\+Table.\+h\item 
+source/Uses\+Table.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,116 @@
+\hypertarget{class_expression_parser}{}\section{Expression\+Parser Class Reference}
+\label{class_expression_parser}\index{Expression\+Parser@{Expression\+Parser}}
+
+
+{\ttfamily \#include $<$Expression\+Parser.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_expression_parser_a70117d42814cea52435d25644246aaf0}{Expression\+Parser} (\hyperlink{class_var_table}{Var\+Table} $\ast$var\+Table)
+\item 
+\hyperlink{class_expression_parser_a12a5380920220c77bc102728625bc64f}{$\sim$\+Expression\+Parser} ()
+\item 
+void \hyperlink{class_expression_parser_ab41d2f89de4b1b03200ec1e599eb7805}{update\+Buffer} (vector$<$ string $>$, int skip=0)
+\item 
+void \hyperlink{class_expression_parser_acf2f40b1bf8182c5238f141779afd354}{update\+Stmt\+Num} (int)
+\item 
+\hyperlink{class_t_node}{T\+Node} $\ast$ \hyperlink{class_expression_parser_ab8d08e5f3891b2f4962938a236505136}{parse} (int binding\+Level=0)
+\item 
+\hyperlink{class_t_node}{T\+Node} $\ast$ \hyperlink{class_expression_parser_a030aa282ff031de607fe37e354204ee0}{parse\+Expression} (vector$<$ string $>$)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{namespace_parser}{Parser} to create a tree from a math expression. Based on Pratt \hyperlink{namespace_parser}{Parser}. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_expression_parser_a70117d42814cea52435d25644246aaf0}{}\index{Expression\+Parser@{Expression\+Parser}!Expression\+Parser@{Expression\+Parser}}
+\index{Expression\+Parser@{Expression\+Parser}!Expression\+Parser@{Expression\+Parser}}
+\subsubsection[{Expression\+Parser}]{\setlength{\rightskip}{0pt plus 5cm}Expression\+Parser\+::\+Expression\+Parser (
+\begin{DoxyParamCaption}
+\item[{{\bf Var\+Table} $\ast$}]{var\+Table}
+\end{DoxyParamCaption}
+)}\label{class_expression_parser_a70117d42814cea52435d25644246aaf0}
+Constructor. For use in testing, to avoid potential problems with using a global pkb singleton that may interfere with other tests. \hypertarget{class_expression_parser_a12a5380920220c77bc102728625bc64f}{}\index{Expression\+Parser@{Expression\+Parser}!````~Expression\+Parser@{$\sim$\+Expression\+Parser}}
+\index{````~Expression\+Parser@{$\sim$\+Expression\+Parser}!Expression\+Parser@{Expression\+Parser}}
+\subsubsection[{$\sim$\+Expression\+Parser}]{\setlength{\rightskip}{0pt plus 5cm}Expression\+Parser\+::$\sim$\+Expression\+Parser (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_expression_parser_a12a5380920220c77bc102728625bc64f}
+used during testing, to not involve the entire pkb singleton 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_expression_parser_ab8d08e5f3891b2f4962938a236505136}{}\index{Expression\+Parser@{Expression\+Parser}!parse@{parse}}
+\index{parse@{parse}!Expression\+Parser@{Expression\+Parser}}
+\subsubsection[{parse}]{\setlength{\rightskip}{0pt plus 5cm}{\bf T\+Node} $\ast$ Expression\+Parser\+::parse (
+\begin{DoxyParamCaption}
+\item[{int}]{binding\+Level = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{class_expression_parser_ab8d08e5f3891b2f4962938a236505136}
+Method to parse an expression. Returns the root of a tree. For example, given an expression x + (y + z), the following tree is the output.
+\begin{DoxyItemize}
+\item $<$-\/ root / \textbackslash{} x + / \textbackslash{} y z 
+\begin{DoxyParams}{Parameters}
+{\em binding\+Level} & Leave empty for normal usage. Used internally during parsing. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{class_expression_parser_ab41d2f89de4b1b03200ec1e599eb7805}{Expression\+Parser\+::update\+Buffer} 
+
+\hyperlink{class_expression_parser_acf2f40b1bf8182c5238f141779afd354}{Expression\+Parser\+::update\+Stmt\+Num} 
+\end{DoxySeeAlso}
+
+\end{DoxyItemize}\hypertarget{class_expression_parser_a030aa282ff031de607fe37e354204ee0}{}\index{Expression\+Parser@{Expression\+Parser}!parse\+Expression@{parse\+Expression}}
+\index{parse\+Expression@{parse\+Expression}!Expression\+Parser@{Expression\+Parser}}
+\subsubsection[{parse\+Expression}]{\setlength{\rightskip}{0pt plus 5cm}{\bf T\+Node} $\ast$ Expression\+Parser\+::parse\+Expression (
+\begin{DoxyParamCaption}
+\item[{vector$<$ string $>$}]{buffer}
+\end{DoxyParamCaption}
+)}\label{class_expression_parser_a030aa282ff031de607fe37e354204ee0}
+Method to parse an expression. Returns the root of a tree. For example, given an expression x + y + z, the following tree is the output.
+\begin{DoxyItemize}
+\item $<$-\/ root / \textbackslash{}
+\end{DoxyItemize}
+
+z / \textbackslash{} x y 
+\begin{DoxyParams}{Parameters}
+{\em buffer} & A vector containing the tokenized right side of expression. e.\+g. For \char`\"{}a = x + y;\char`\"{} , a vector containing \mbox{[}\char`\"{}x\char`\"{}, \char`\"{}+\char`\"{}, \char`\"{}y\char`\"{}, \char`\"{};\char`\"{}\mbox{]} should be passed in \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{class_expression_parser_ab41d2f89de4b1b03200ec1e599eb7805}{Expression\+Parser\+::update\+Buffer} 
+
+\hyperlink{class_expression_parser_acf2f40b1bf8182c5238f141779afd354}{Expression\+Parser\+::update\+Stmt\+Num} 
+\end{DoxySeeAlso}
+\hypertarget{class_expression_parser_ab41d2f89de4b1b03200ec1e599eb7805}{}\index{Expression\+Parser@{Expression\+Parser}!update\+Buffer@{update\+Buffer}}
+\index{update\+Buffer@{update\+Buffer}!Expression\+Parser@{Expression\+Parser}}
+\subsubsection[{update\+Buffer}]{\setlength{\rightskip}{0pt plus 5cm}void Expression\+Parser\+::update\+Buffer (
+\begin{DoxyParamCaption}
+\item[{vector$<$ string $>$}]{new\+Buffer, }
+\item[{int}]{skip = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{class_expression_parser_ab41d2f89de4b1b03200ec1e599eb7805}
+Before calling parse, call this function to initialise the buffer in the expression parser.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Buffer} & A vector containing the tokenized right side of expression. e.\+g. For \char`\"{}a = x + y;\char`\"{} , a vector containing \mbox{[}\char`\"{}x\char`\"{}, \char`\"{}+\char`\"{}, \char`\"{}y\char`\"{}, \char`\"{};\char`\"{}\mbox{]} should be passed in. Alternatively, \mbox{[}\char`\"{}x\char`\"{}, \char`\"{}+\char`\"{}, \char`\"{}y\char`\"{}\mbox{]} can be passed in as well. \\
+\hline
+{\em skip} & optional. The number of tokens to skip in the new\+Buffer. Use if the buffer contains other tokens in front. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_expression_parser_acf2f40b1bf8182c5238f141779afd354}{}\index{Expression\+Parser@{Expression\+Parser}!update\+Stmt\+Num@{update\+Stmt\+Num}}
+\index{update\+Stmt\+Num@{update\+Stmt\+Num}!Expression\+Parser@{Expression\+Parser}}
+\subsubsection[{update\+Stmt\+Num}]{\setlength{\rightskip}{0pt plus 5cm}void Expression\+Parser\+::update\+Stmt\+Num (
+\begin{DoxyParamCaption}
+\item[{int}]{stmt\+Num}
+\end{DoxyParamCaption}
+)}\label{class_expression_parser_acf2f40b1bf8182c5238f141779afd354}
+Updates the stmt\+Num of the expression. For parsing queries, there is no need to call this. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Expression\+Parser.\+h\item 
+source/Expression\+Parser.\+cpp\end{DoxyCompactItemize}

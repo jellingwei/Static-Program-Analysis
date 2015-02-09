@@ -1,0 +1,71 @@
+\hypertarget{namespace_parser}{}\section{Parser Namespace Reference}
+\label{namespace_parser}\index{Parser@{Parser}}
+
+
+Namespace containing functions for parsing the source S\+I\+M\+P\+L\+E file.  
+
+
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{namespace_parser_a7ae4f148b0d9ca3f5320ff1abbf99c40}{init\+Parser} (string filename)
+\item 
+string \hyperlink{namespace_parser_a35e8f86210f5615cfefd8769138b1e5f}{match\+Name} (string token)
+\item 
+string \hyperlink{namespace_parser_a79c52f03c3b8a1a1cc287fdb6b3ebc41}{match\+Integer} (string token)
+\item 
+string \hyperlink{namespace_parser_a7a1347b54d0cd28f146ece8d08637d12}{match\+Operator} (string token)
+\item 
+bool \hyperlink{namespace_parser_a30783d5cc07500f4fbd9ea7807478e3e}{parse\+Program} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Namespace containing functions for parsing the source S\+I\+M\+P\+L\+E file. 
+
+\subsection{Function Documentation}
+\hypertarget{namespace_parser_a7ae4f148b0d9ca3f5320ff1abbf99c40}{}\index{Parser@{Parser}!init\+Parser@{init\+Parser}}
+\index{init\+Parser@{init\+Parser}!Parser@{Parser}}
+\subsubsection[{init\+Parser}]{\setlength{\rightskip}{0pt plus 5cm}bool Parser\+::init\+Parser (
+\begin{DoxyParamCaption}
+\item[{string}]{filename}
+\end{DoxyParamCaption}
+)}\label{namespace_parser_a7ae4f148b0d9ca3f5320ff1abbf99c40}
+Initialise the parser with a filename \hypertarget{namespace_parser_a79c52f03c3b8a1a1cc287fdb6b3ebc41}{}\index{Parser@{Parser}!match\+Integer@{match\+Integer}}
+\index{match\+Integer@{match\+Integer}!Parser@{Parser}}
+\subsubsection[{match\+Integer}]{\setlength{\rightskip}{0pt plus 5cm}string Parser\+::match\+Integer (
+\begin{DoxyParamCaption}
+\item[{string}]{token}
+\end{DoxyParamCaption}
+)}\label{namespace_parser_a79c52f03c3b8a1a1cc287fdb6b3ebc41}
+Matches integers \begin{DoxyReturn}{Returns}
+true if the given token follows the naming convention for I\+N\+T\+E\+G\+E\+R, as per S\+I\+M\+P\+L\+E grammar 
+\end{DoxyReturn}
+\hypertarget{namespace_parser_a35e8f86210f5615cfefd8769138b1e5f}{}\index{Parser@{Parser}!match\+Name@{match\+Name}}
+\index{match\+Name@{match\+Name}!Parser@{Parser}}
+\subsubsection[{match\+Name}]{\setlength{\rightskip}{0pt plus 5cm}string Parser\+::match\+Name (
+\begin{DoxyParamCaption}
+\item[{string}]{token}
+\end{DoxyParamCaption}
+)}\label{namespace_parser_a35e8f86210f5615cfefd8769138b1e5f}
+Matches names \begin{DoxyReturn}{Returns}
+true if the given token follows the naming convention for N\+A\+M\+E, as per the given grammar 
+\end{DoxyReturn}
+\hypertarget{namespace_parser_a7a1347b54d0cd28f146ece8d08637d12}{}\index{Parser@{Parser}!match\+Operator@{match\+Operator}}
+\index{match\+Operator@{match\+Operator}!Parser@{Parser}}
+\subsubsection[{match\+Operator}]{\setlength{\rightskip}{0pt plus 5cm}string Parser\+::match\+Operator (
+\begin{DoxyParamCaption}
+\item[{string}]{token}
+\end{DoxyParamCaption}
+)}\label{namespace_parser_a7a1347b54d0cd28f146ece8d08637d12}
+Matches operators \begin{DoxyReturn}{Returns}
+true if the given token is an operator 
+\end{DoxyReturn}
+\hypertarget{namespace_parser_a30783d5cc07500f4fbd9ea7807478e3e}{}\index{Parser@{Parser}!parse\+Program@{parse\+Program}}
+\index{parse\+Program@{parse\+Program}!Parser@{Parser}}
+\subsubsection[{parse\+Program}]{\setlength{\rightskip}{0pt plus 5cm}bool Parser\+::parse\+Program (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{namespace_parser_a30783d5cc07500f4fbd9ea7807478e3e}
+Main function to parse program. Call after using \hyperlink{namespace_parser_a7ae4f148b0d9ca3f5320ff1abbf99c40}{init\+Parser}. 

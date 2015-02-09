@@ -19,6 +19,7 @@ public:
 	bool linkNode(QNode* parent_node, QNode* child_node);
 	QNode* getRoot();
 	QNode* getResultNode();
+	QNode* getWithNode();
 	QNode* getSuchThatNode();
 	QNode* getPatternNode();
 	void printTree();
@@ -30,6 +31,7 @@ private:
 	void printNode(QNode* node);
 	QNode _root;
 	QNode _result;
+	QNode _with;
 	QNode _such_that;
 	QNode _pattern;
 	unordered_map<string, string> _synonymsMap;

@@ -14,6 +14,7 @@ public:
 	int getProcTableSize();
 	string getProcName(int index);
 	int getProcIndex(string varName);
+	vector<int> getAllProcIndex();
 
 private: 
 	vector<string> procMap; 

@@ -106,8 +106,8 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, v)", 0, (int)evaluate("variable v; Select v such that Uses(1, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(2, v)", 2, (int)evaluate("variable v; Select v such that Uses(2, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(7, v)", 4, (int)evaluate("variable v; Select v such that Uses(7, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<a>, v)", 6, (int)evaluate("assign a; variable v; Select a such that Uses(a, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<s>, v)", 11, (int)evaluate("stmt s; variable v; Select s such that Uses(s, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<a>, v)", 7, (int)evaluate("assign a; variable v; Select a such that Uses(a, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<s>, v)", 12, (int)evaluate("stmt s; variable v; Select s such that Uses(s, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(w, <v>)", 5, (int)evaluate("variable v; while w; Select v such that Uses(w, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(l, <v>)", 6, (int)evaluate("prog_line l; variable v; Select v such that Uses(l, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Uses(1, 'a')", 0, (int)evaluate("prog_line l; Select l such that Uses(1, \"a\")").size());
@@ -116,9 +116,9 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a; Uses(5, 'd')", 10, (int)evaluate("assign a; Select a such that Uses(5, \"d\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Uses(7, 'e')", 3, (int)evaluate("while w; Select w such that Uses(7, \"e\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Uses(a, v)", 15, (int)evaluate("stmt s; assign a; variable v; Select s such that Uses(a, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(a, _)", 6, (int)evaluate("assign a; Select a such that Uses(a,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(a, _)", 7, (int)evaluate("assign a; Select a such that Uses(a,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(w, _)", 3, (int)evaluate("while w; Select w such that Uses(w, _)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, _)", 11, (int)evaluate("stmt s; Select s such that Uses(s, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, _)", 12, (int)evaluate("stmt s; Select s such that Uses(s, _)").size());
 
 	// Modifies
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(a, 'a')", 4, (int)evaluate("assign a; Select a such that Modifies(a, \"a\")").size());
@@ -192,7 +192,7 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('e', _)", 2, (int)evaluate("assign a; Select a pattern a(\"e\", _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('b', _)", (string)"4", evaluate("assign a; Select a pattern a(\"b\", _)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'f+2')", (string)"10", evaluate("assign a; Select a pattern a(_, \"f +2\")").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '3')", (string)"11", evaluate("assign a; Select a pattern a(_, \"3\")").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '1')", (string)"1", evaluate("assign a; Select a pattern a(_, \"1\")").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '1 + 2 + 3 + a')", 0, (int)evaluate("assign a; Select a pattern a(_, \"1+2+3+a\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 10, (int)evaluate("assign a; Select a pattern a(_, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('e', '_f_')", 2, (int)evaluate("assign a; Select a pattern a(\"e\", _\"f\"_)").size());

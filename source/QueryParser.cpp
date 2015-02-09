@@ -35,7 +35,7 @@ namespace QueryParser
 {
 	enum REF_TYPE
 	{
-		entRef, stmtRef, lineRef, varRef
+		entRef, stmtRef, lineRef, varRef, ref
 	};
 
 	ifstream inputFile;
@@ -43,12 +43,14 @@ namespace QueryParser
 	vector<string>::iterator bufferIter;
 	string currentParsedLine;
 
+	string attrName[] = {"procName", "varName", "value", "stmt#"};
 	string designEntities[] = {"procedure", "stmtLst", "stmt","assign", "call", "while", "if", "variable","constant","prog_line", "plus", "minus", "times"};
 	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*", "Calls", "Calls*"};
 	QueryTree* myQueryTree;
 	unordered_map<string, string> synonymsMap; //key: synonyms
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
 	unordered_map<string, tuple<REF_TYPE, REF_TYPE>> relRefMap; //key: relRef
+	unordered_map<string, SYNONYM_ATTRIBUTE> attrNameMap; //key: synonyms
 	QueryValidator* myQueryV;
 
 
@@ -76,7 +78,7 @@ namespace QueryParser
 		std::tr1::sregex_token_iterator rs(query.begin(), query.end(), separatorRegex, -1);
 
 		// tokenise words and operators
-		string operators = "([\\w\\d\\*]+|[_+;,(\\)\"])";
+		string operators = "([\\w\\d\\*\\#]+|[.=_+;,(\\)\"])";
 		std::regex operRegex(operators);
 
 		for (; rs != reg_end; ++rs){
@@ -128,8 +130,10 @@ namespace QueryParser
 	void testingQueryParser()
 	{
 		string nxtToken = parseToken();
-		while (nxtToken.compare("")!= 0)
+		while (nxtToken.compare("")!= 0){
+			cout<<"nextToken : "<<nxtToken<<endl;
 			nxtToken = parseToken();
+		}
 		cout<<endl;
 	}
 	/**************************************************************/
@@ -137,6 +141,9 @@ namespace QueryParser
 	/**************************************************************/
 	string peekInToTheNextToken()
 	{
+		if(buffer.size()==0 || bufferIter == buffer.end()) // if there is no next token
+			return "";
+
 		return (*(bufferIter));
 	}
 
@@ -147,6 +154,9 @@ namespace QueryParser
 	 */
 	string peekBackwards(int steps)
 	{
+		if((steps==-1) && (buffer.size()==0 || bufferIter == buffer.end())) // if there is no next token
+			return "";
+
 		return (*(bufferIter-1-steps));
 	}
 
@@ -164,6 +174,7 @@ namespace QueryParser
 		synonymsMap.clear();
 		nodetypeMap.clear();
 		relRefMap.clear();
+		attrNameMap.clear();
 
 		//populate nodetypeMap
 		pair<string,QNODE_TYPE> pairNodeType1 ("Modifies", QNODE_TYPE(Modifies));
@@ -188,6 +199,7 @@ namespace QueryParser
 		auto node1 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(entRef));
 		auto node2 = make_tuple(REF_TYPE(entRef), REF_TYPE(entRef));
 		auto node3 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(stmtRef));
+		auto node4 = make_tuple(REF_TYPE(ref), REF_TYPE(ref));
 
 		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode1 ("Modifies", node1);
 		relRefMap.insert(pairRelNode1);
@@ -205,6 +217,18 @@ namespace QueryParser
 		relRefMap.insert(pairRelNode7);
 		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode8 ("Follows*", node3);
 		relRefMap.insert(pairRelNode8);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode9 ("attrCompare", node4);
+		relRefMap.insert(pairRelNode9);
+
+		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType1 ("procName", SYNONYM_ATTRIBUTE(procName));
+		attrNameMap.insert(pairAttrNameType1);
+		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType2 ("varName", SYNONYM_ATTRIBUTE(varName));
+		attrNameMap.insert(pairAttrNameType2);
+		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType3 ("value", SYNONYM_ATTRIBUTE(value));
+		attrNameMap.insert(pairAttrNameType3);
+		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType4 ("stmt#", SYNONYM_ATTRIBUTE(stmtNo));
+		attrNameMap.insert(pairAttrNameType4);
+
 	}
 
 	/**
@@ -284,7 +308,43 @@ namespace QueryParser
 	{
 		return (token.compare("_") == 0);
 	}
+	
+	bool matchAttrName(string token)
+	{
+		for(int i=0; i<(sizeof(attrName)/sizeof(*attrName)); i++){
+			if(attrName[i].compare(token) == 0)
+				return true;
+		}
 
+
+		#ifdef DEBUG
+			cout<< "QueryParser error : at matchAttrName."<<endl;
+		#endif
+		return false;
+	}
+
+	/**
+	 * @siling
+	 * Matches if has "synonym.attrName" syntax
+	 **/
+	bool matchAttrRef(string token)
+	{
+
+		if(!matchSynonymAndIdent(peekBackwards(2), false)){
+			cout<<"error synonymn "<<endl;
+			return false;
+		}
+		if (peekBackwards(1).compare(".") != 0){
+			cout<<"error in . "<<endl;
+			return false;
+		}
+		if(!matchAttrName(peekBackwards(0))){
+			cout<<"error attrName "<<endl;
+			return false;
+		}
+
+		return true;
+	}
 	/**
 	 * Matches if the given token follows the naming convention of stmt reference.
 	 */
@@ -321,6 +381,28 @@ namespace QueryParser
 
 		return false;
 	}
+
+
+	/**
+	 * Matches if the given token follows the naming convention of a reference.
+	 */
+	 bool matchRef(string token)
+	 {
+	 	if(matchSynonymAndIdent(token, false))  
+	 		return true;
+	 	else if(matchSynonymAndIdent(token, true))
+	 		return true;
+	 	else if(matchInteger(token))
+			return true;
+		else if(matchAttrRef(token))
+			return true;
+
+		#ifdef DEBUG
+			cout<<"QueryParser error : at matchRef"<<endl;
+		#endif
+
+		return false;
+	 }
 
 	/**
 	 * Matches if the given token follows the naming convention of design entity reference.
@@ -410,6 +492,33 @@ namespace QueryParser
 
 		return matchEntRef(nextToken) ? returnToken: "";
 	}
+
+	/**
+	 * Parses the next token and check if is a reference. 
+	 * Supporting method for parsing with clause. 
+	 */
+	 string parseRef()
+	 {
+	 	string nextToken = "";
+		string returnToken = "";
+
+		if(parseApostrophe()){
+			nextToken = peekBackwards(0);
+			nextToken += parseToken();
+			returnToken = peekBackwards(0);
+			nextToken += parseToken();
+		}else{
+			nextToken = peekBackwards(0);
+			if(peekInToTheNextToken().compare(".")==0){
+				nextToken += parseToken();
+				nextToken += parseToken();
+			}
+			returnToken = nextToken;
+		}
+
+	 	return matchRef(nextToken) ? returnToken: "";
+
+	 }
 
 	/**
 	 * Parses the next token and check if is a factor
@@ -581,6 +690,7 @@ namespace QueryParser
 	{
 		string DE_type;
 		REF_TYPE node;
+		SYNONYM_ATTRIBUTE attribute;
 		std::regex apostrophe("[\"]");
 
 		auto nodeTuple = relRefMap.at(relRef);
@@ -604,6 +714,9 @@ namespace QueryParser
 				return Synonym();  //error type mismatch
 			}
 
+			//build Synonym and return 
+			return Synonym(Synonym::convertToEnum(DE_type),value);
+
 		}else if(node==REF_TYPE(entRef)){
 
 			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
@@ -616,9 +729,49 @@ namespace QueryParser
 			else{
 				return Synonym();  //error type mismatch
 			}
+
+			//build Synonym and return
+			return Synonym(Synonym::convertToEnum(DE_type),value);
+
+		}else if(node==REF_TYPE(ref)){
+			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
+				DE_type = "string";
+			}else if(synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value);
+			}else if(matchInteger(value)){
+				DE_type = "string";
+			}else{
+				// it must be an attrRef
+				if(synonymsMap.count(peekBackwards(2)) > 0)
+					DE_type = synonymsMap.at(peekBackwards(2));
+				else{
+					#ifdef DEBUG
+						cout<<"####error no such synonym ##### "	<<endl;
+						cout<<"synonym can't be found : " <<peekBackwards(2)<<endl;
+					#endif
+					return Synonym();  //error no such synonym
+				}
+				value = peekBackwards(2);
+
+				if(attrNameMap.count(peekBackwards(0)) > 0)
+					attribute = attrNameMap.at(peekBackwards(0));
+				else{
+					#ifdef DEBUG
+						cout<<"####error no such attrName ##### "	<<endl;
+						cout<<"attrName can't be found : " <<peekBackwards(0)<<endl;
+					#endif
+					return Synonym();  //error no such attrName
+				}
+
+				return Synonym(Synonym::convertToEnum(DE_type),value, attribute);
+			}
+
+
+			//build Synonym and return
+			return Synonym(Synonym::convertToEnum(DE_type),value,SYNONYM_ATTRIBUTE());
 		}
 
-		return Synonym(Synonym::convertToEnum(DE_type),value);
+		return Synonym(); //wont reach here
 
 	}
 
@@ -860,6 +1013,45 @@ namespace QueryParser
 		return true;
 	}
 
+	bool parseAttrCompare()
+	{
+		string ref1 = parseRef();
+		if(ref1.compare("")==0){
+			
+			#ifdef DEBUG
+				cout<<"QueryParser parseAttrCompare error: parseRef argument 1 "<<endl;
+			#endif
+			return false;
+		}
+		Synonym s1 = createSynonym("attrCompare", ref1, 1);
+
+		bool res = parse("=");
+		if(!res) {return false;}
+
+		string ref2 = parseRef();
+		if(ref2.compare("")==0){
+
+			#ifdef DEBUG
+				cout<<"QueryParser parseAttrCompare error: parseRef argument 2 "<<endl;
+			#endif
+			return false;}
+		Synonym s2 = createSynonym("attrCompare", ref2, 2);
+
+		//build query tree
+		QNode* withQueryNode = myQueryTree->createQNode(WITH,Synonym(),s1,s2);
+		myQueryTree->linkNode(myQueryTree->getWithNode(), withQueryNode);
+
+		return  true;
+	}
+	bool parseWithClause()
+	{
+		bool res = parse("with");
+		if(!res) {return false;}
+
+		res = parseAttrCompare();
+		return res;
+	}
+
 	bool parseOptionalClauses()
 	{
 
@@ -870,6 +1062,8 @@ namespace QueryParser
 			if (!res){return false;}
 		}else if(peekInToTheNextToken().compare("pattern")==0){
 			res = parsePatternClause();
+		}else if(peekInToTheNextToken().compare("with")==0){
+			res = parseWithClause();
 		}else{
 			
 			#ifdef DEBUG
@@ -1049,7 +1243,6 @@ namespace QueryParser
 		myQueryV->initTable(); //propagate relationships data onto table
 
 		initQueryTreeAndSymbolsTable();
-
 
 		bool res = parseQuerySelectClause();
 		//if there's an error in parsing the queries, return an empty query tree

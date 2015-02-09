@@ -27,7 +27,7 @@ class StmtTable;
 
 class PKB {
 public:
-	// @Todo make all tables private so that PKB is a real facade
+	// @cond todo
 	VarTable* varTable; 
 	ProcTable* procTable;
 	StmtTable* stmtTable;
@@ -38,6 +38,8 @@ public:
 	FollowsTable* followsTable;
 	ParentTable* parentTable;
 	AST* ast;
+
+	// @endcond
 
 	static PKB& getInstance();
 
@@ -70,6 +72,7 @@ public:
 	int getProcTableSize();
 	string getProcName(int index);
 	int getProcIndex(string procName);
+	vector<int> getAllProcIndex();
 
 	// ConstantTable methods
 	bool insertConstant(int constant, int stmtNum);
@@ -82,10 +85,14 @@ public:
 
 	// CallsTable methods
 	bool setCalls(int procIndex1, int procIndex2);
-	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure);
-	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure);
-	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure);
-	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
+	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure = false);
+	bool isCallsS(int procIndex1, int procIndex2);
+	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure = false);
+	vector<int> getProcsCallingS(int procIndex2);
+	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure = false);
+	vector<int> getProcsCalledByS(int procIndex1);
+	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure = false);
+	pair<vector<int>, vector<int>> getAllCallsPairsS();
 
 	// StmtTable methods
 	bool insertStmt(int, string);
@@ -147,8 +154,10 @@ public:
 
 
 	//@todo move to somewhere in pkb? discuss with kenson
+	// @cond todo
 	unordered_map<int, TNode*> nodeTable;
 	unordered_map<int, int> stmtToProcMap;  // a temporary structure for convenience
+	// @endcond
 
 private:
 	PKB();

@@ -1,0 +1,58 @@
+\hypertarget{class_query_validator}{}\section{Query\+Validator Class Reference}
+\label{class_query_validator}\index{Query\+Validator@{Query\+Validator}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_query_validator_a9d70eeb0ba5385ca1e15c099cda41225}{}void {\bfseries init\+Table} ()\label{class_query_validator_a9d70eeb0ba5385ca1e15c099cda41225}
+
+\item 
+bool \hyperlink{class_query_validator_a0b8a89b0af3a6a1654b03b37e01ccb87}{validate\+Such\+That\+Queries} (Q\+N\+O\+D\+E\+\_\+\+T\+Y\+P\+E type, \hyperlink{class_synonym}{Synonym} arg1, \hyperlink{class_synonym}{Synonym} arg2)
+\item 
+\hypertarget{class_query_validator_ac77e452de4e51323728e8507ef5e8e58}{}bool {\bfseries validate\+Pattern\+Queries} (\hyperlink{class_synonym}{Synonym} arg0, \hyperlink{class_synonym}{Synonym} arg1, \hyperlink{class_synonym}{Synonym} arg2)\label{class_query_validator_ac77e452de4e51323728e8507ef5e8e58}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_query_validator_a890cac207bf194b813c5737ea0910922}{}bool {\bfseries validate\+Modifies\+Or\+Uses\+Args} (\hyperlink{class_synonym}{Synonym} arg1, \hyperlink{class_synonym}{Synonym} arg2)\label{class_query_validator_a890cac207bf194b813c5737ea0910922}
+
+\item 
+\hypertarget{class_query_validator_a5fa1b6d7f39876ee537737fca0ba8364}{}bool {\bfseries validate\+Parent\+Args} (\hyperlink{class_synonym}{Synonym} arg1, \hyperlink{class_synonym}{Synonym} arg2)\label{class_query_validator_a5fa1b6d7f39876ee537737fca0ba8364}
+
+\item 
+\hypertarget{class_query_validator_aca252eb590c5dde784abe8204ddfbeb4}{}bool {\bfseries validate\+Follows\+Args} (\hyperlink{class_synonym}{Synonym} arg1, \hyperlink{class_synonym}{Synonym} arg2)\label{class_query_validator_aca252eb590c5dde784abe8204ddfbeb4}
+
+\item 
+\hypertarget{class_query_validator_a9307e2b18213199f7784675a384394a0}{}bool {\bfseries validate\+Assign\+Pattern} (\hyperlink{class_synonym}{Synonym} arg0, \hyperlink{class_synonym}{Synonym} arg1, \hyperlink{class_synonym}{Synonym} arg2)\label{class_query_validator_a9307e2b18213199f7784675a384394a0}
+
+\item 
+\hypertarget{class_query_validator_a6168a1a0e930d4459dc5fda460b7db58}{}bool {\bfseries validate\+While\+Pattern} (\hyperlink{class_synonym}{Synonym} arg0, \hyperlink{class_synonym}{Synonym} arg1, \hyperlink{class_synonym}{Synonym} arg2)\label{class_query_validator_a6168a1a0e930d4459dc5fda460b7db58}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_query_validator_a55d7e52c4e3d94089dfae299f3af3118}{}std\+::tr1\+::unordered\+\_\+map$<$ Q\+N\+O\+D\+E\+\_\+\+T\+Y\+P\+E, vector$<$ string $>$ $>$ {\bfseries relationship\+Arg1\+Map}\label{class_query_validator_a55d7e52c4e3d94089dfae299f3af3118}
+
+\item 
+\hypertarget{class_query_validator_a3d760432e1436aa810966279998d6e60}{}std\+::tr1\+::unordered\+\_\+map$<$ Q\+N\+O\+D\+E\+\_\+\+T\+Y\+P\+E, vector$<$ string $>$ $>$ {\bfseries relationship\+Arg2\+Map}\label{class_query_validator_a3d760432e1436aa810966279998d6e60}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_query_validator_a0b8a89b0af3a6a1654b03b37e01ccb87}{}\index{Query\+Validator@{Query\+Validator}!validate\+Such\+That\+Queries@{validate\+Such\+That\+Queries}}
+\index{validate\+Such\+That\+Queries@{validate\+Such\+That\+Queries}!Query\+Validator@{Query\+Validator}}
+\subsubsection[{validate\+Such\+That\+Queries}]{\setlength{\rightskip}{0pt plus 5cm}bool Query\+Validator\+::validate\+Such\+That\+Queries (
+\begin{DoxyParamCaption}
+\item[{Q\+N\+O\+D\+E\+\_\+\+T\+Y\+P\+E}]{type, }
+\item[{{\bf Synonym}}]{arg1, }
+\item[{{\bf Synonym}}]{arg2}
+\end{DoxyParamCaption}
+)}\label{class_query_validator_a0b8a89b0af3a6a1654b03b37e01ccb87}
+Method to validate the arguments of all such that clause Returns true if the arguments are valid, false otherwise 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Query\+Validator.\+h\item 
+source/Query\+Validator.\+cpp\end{DoxyCompactItemize}

@@ -62,7 +62,7 @@ vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set
 /**
  * Return the called procedures in topological order
  */
-vector<int> DesignExtractor::getCallsInTopologicalOrder() {
+vector<int> getCallsInTopologicalOrder() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 	
@@ -104,26 +104,31 @@ private:
 };
 
 
-vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder(vector<int> topologicalOrder) {
-	// sort all call statements 
+vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
+	vector<int> topologicalOrder = getCallsInTopologicalOrder();
+
 	PKB pkb = PKB::getInstance();
 
 	vector<int> allCallStatementsNum = pkb.getStmtNumForType("call");
-	vector<TNode*> allCallStatementNodes;
-
+	
+	// obtain every call statement node
+	vector<TNode*> callStatementNodes;
 	for (auto iter = allCallStatementsNum.begin(); iter != allCallStatementsNum.end(); ++iter) {
 		TNode* node = pkb.nodeTable.at(*iter);
-		allCallStatementNodes.push_back(node);
+		callStatementNodes.push_back(node);
 	}
 
+	// sort all call statements 
 	CallComparator compare(topologicalOrder);
-	sort(allCallStatementNodes.begin(), allCallStatementNodes.end(), compare);
+	sort(callStatementNodes.begin(), callStatementNodes.end(), compare);
 	
-	return allCallStatementNodes;
+	return callStatementNodes;
 }
 
 /**
  * For the input call statements nodes, set Modifies for them as well as all their ancestors
+ * This function writes into the PKB
+ * @param callStmt a vector of sorted TNodes in order of setting Modifies on them
  */
 void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
 	PKB pkb = PKB::getInstance();
@@ -162,7 +167,9 @@ void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
 }
 
 /**
- * For the input call statements nodes, set Uses for them as well as all their ancestors
+ * For the input call statements nodes, set Uses for them as well as all their ancestors.
+ * This function writes into the PKB
+ * @param callStmt a vector of sorted TNodes in order of setting Uses on them
  */
 void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
 
@@ -205,5 +212,9 @@ void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
  * Build Control Flow Graph
  */
 bool DesignExtractor::constructCfg() {
+	throw exception("Not implemented yet");
+}
+
+void DesignExtractor::constructStatisticsTable() {
 	throw exception("Not implemented yet");
 }

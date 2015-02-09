@@ -26,7 +26,7 @@ none
 6 - Q3
 stmt s; 
 Select s such that Parent (8, s)
-8, 9, 10, 13, 14, 15, 16
+9, 10, 13, 14, 15, 16
 5000
 7 - Q3
 stmt s; 

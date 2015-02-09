@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Group 5 SPA: ExpressionParser Class Reference</title>
+<title>SPA: ExpressionParser Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,9 +22,8 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
-  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">Group 5 SPA
+   <div id="projectname">SPA
    </div>
   </td>
  </tr>
@@ -39,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -95,71 +95,115 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa4b365d933d934d6c42e7a06cf267351"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expression_parser.html#aa4b365d933d934d6c42e7a06cf267351">updateBuffer</a> (vector&lt; string &gt;, int skip)</td></tr>
-<tr class="separator:aa4b365d933d934d6c42e7a06cf267351"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70117d42814cea52435d25644246aaf0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expression_parser.html#a70117d42814cea52435d25644246aaf0">ExpressionParser</a> (<a class="el" href="class_var_table.html">VarTable</a> *varTable)</td></tr>
+<tr class="separator:a70117d42814cea52435d25644246aaf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12a5380920220c77bc102728625bc64f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expression_parser.html#a12a5380920220c77bc102728625bc64f">~ExpressionParser</a> ()</td></tr>
+<tr class="separator:a12a5380920220c77bc102728625bc64f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf2f40b1bf8182c5238f141779afd354"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expression_parser.html#acf2f40b1bf8182c5238f141779afd354">updateStmtNum</a> (int)</td></tr>
 <tr class="separator:acf2f40b1bf8182c5238f141779afd354"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8d08e5f3891b2f4962938a236505136"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expression_parser.html#ab8d08e5f3891b2f4962938a236505136">parse</a> (int bindingLevel=0)</td></tr>
-<tr class="separator:ab8d08e5f3891b2f4962938a236505136"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a357c6c0bccefb3b2039a0f912032d021"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a357c6c0bccefb3b2039a0f912032d021"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>updateProcIndex</b> (int)</td></tr>
+<tr class="separator:a357c6c0bccefb3b2039a0f912032d021"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a463c8a72ac470207bcaf4e5b0017ffc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expression_parser.html#a463c8a72ac470207bcaf4e5b0017ffc6">parseExpressionForAST</a> (vector&lt; string &gt;)</td></tr>
+<tr class="separator:a463c8a72ac470207bcaf4e5b0017ffc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1ff1f952cc27a8b079e61b56b39c055"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_expression_parser.html#ae1ff1f952cc27a8b079e61b56b39c055">parseExpressionForQuerying</a> (vector&lt; string &gt;)</td></tr>
+<tr class="separator:ae1ff1f952cc27a8b079e61b56b39c055"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="namespace_parser.html" title="Namespace containing functions for parsing the source SIMPLE file. ">Parser</a> to create a tree from a math expression. Based on Pratt <a class="el" href="namespace_parser.html" title="Namespace containing functions for parsing the source SIMPLE file. ">Parser</a>. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="ab8d08e5f3891b2f4962938a236505136"></a>
+<div class="textblock"><p><a class="el" href="namespace_parser.html" title="Namespace containing functions for parsing the source SIMPLE file as well as utility functions to par...">Parser</a> to create a tree from a math expression. Based on Pratt <a class="el" href="namespace_parser.html" title="Namespace containing functions for parsing the source SIMPLE file as well as utility functions to par...">Parser</a>. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a70117d42814cea52435d25644246aaf0"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_t_node.html">TNode</a> * ExpressionParser::parse </td>
+          <td class="memname">ExpressionParser::ExpressionParser </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>bindingLevel</em> = <code>0</code></td><td>)</td>
+          <td class="paramtype"><a class="el" href="class_var_table.html">VarTable</a> *&#160;</td>
+          <td class="paramname"><em>varTable</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Method to parse an expression. Returns a tree. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">bindingLevel</td><td>leave empty for normal usage. Used internally during parsing. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section see"><dt>See also</dt><dd>::updateBuffer </dd>
-<dd>
-::updateStmtNum </dd></dl>
+<p>Constructor. Only for use in unit testing, to avoid potential problems with using a global pkb singleton that may interfere with other unit tests. </p>
 
 </div>
 </div>
-<a class="anchor" id="aa4b365d933d934d6c42e7a06cf267351"></a>
+<a class="anchor" id="a12a5380920220c77bc102728625bc64f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void ExpressionParser::updateBuffer </td>
+          <td class="memname">ExpressionParser::~ExpressionParser </td>
           <td>(</td>
-          <td class="paramtype">vector&lt; string &gt;&#160;</td>
-          <td class="paramname"><em>newBuffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>skip</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Before calling parse, call this function to initialise the buffer in the expression parser </p><dl class="params"><dt>Parameters</dt><dd>
+<p>used during testing, to not involve the entire pkb singleton </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a463c8a72ac470207bcaf4e5b0017ffc6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_t_node.html">TNode</a> * ExpressionParser::parseExpressionForAST </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; string &gt;&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to parse an expression. Returns the root of a tree. This function writes data to the pkb (<a class="el" href="class_uses_table.html">UsesTable</a> and <a class="el" href="class_var_table.html">VarTable</a>).</p>
+<p>For example, given an expression x + y + z, the following tree is the output.</p><ul>
+<li>&lt;- root / \</li>
+</ul>
+<p>z / \ x y </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">newBuffer</td><td>A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in </td></tr>
-    <tr><td class="paramname">skip</td><td>optional. The number of tokens to skip in the newBuffer. Use if the buffer contains garbage in front. </td></tr>
+    <tr><td class="paramname">buffer</td><td>A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd>ExpressionParser::updateBuffer </dd>
+<dd>
+<a class="el" href="class_expression_parser.html#acf2f40b1bf8182c5238f141779afd354">ExpressionParser::updateStmtNum</a> </dd>
+<dd>
+<a class="el" href="class_expression_parser.html#ae1ff1f952cc27a8b079e61b56b39c055">ExpressionParser::parseExpressionForQuerying</a> </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae1ff1f952cc27a8b079e61b56b39c055"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_t_node.html">TNode</a> * ExpressionParser::parseExpressionForQuerying </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; string &gt;&#160;</td>
+          <td class="paramname"><em>buffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to parse an expression. Returns the root of a tree. This method differs from parseExpressionForAST as it does not write data to the <a class="el" href="class_p_k_b.html">PKB</a>. For example, given an expression x + y + z, the following tree is the output.</p><ul>
+<li>&lt;- root / \</li>
+</ul>
+<p>z / \ x y </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buffer</td><td>A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y"] should be passed in </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd>ExpressionParser::updateBuffer </dd>
+<dd>
+<a class="el" href="class_expression_parser.html#acf2f40b1bf8182c5238f141779afd354">ExpressionParser::updateStmtNum</a> </dd>
+<dd>
+<a class="el" href="class_expression_parser.html#a463c8a72ac470207bcaf4e5b0017ffc6">ExpressionParser::parseExpressionForAST</a> </dd></dl>
 
 </div>
 </div>
@@ -176,7 +220,7 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Updates the stmtNum of the expression. If the expression parser is used to parse the query, there is no need to call this. </p>
+<p>Updates the stmtNum of the expression. For parsing queries, there is no need to call this. </p>
 
 </div>
 </div>
@@ -187,7 +231,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 15 2015 16:51:19 for Group 5 SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Feb 9 2015 10:12:44 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

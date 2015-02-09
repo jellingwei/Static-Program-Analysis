@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['stmttable',['StmtTable',['../class_stmt_table.html',1,'']]],
-  ['synonym',['Synonym',['../class_synonym.html',1,'']]]
+  ['qnode',['QNode',['../class_q_node.html',1,'']]],
+  ['querytree',['QueryTree',['../class_query_tree.html',1,'']]],
+  ['queryvalidator',['QueryValidator',['../class_query_validator.html',1,'']]]
 ];

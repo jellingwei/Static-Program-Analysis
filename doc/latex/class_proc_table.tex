@@ -1,0 +1,60 @@
+\hypertarget{class_proc_table}{}\section{Proc\+Table Class Reference}
+\label{class_proc_table}\index{Proc\+Table@{Proc\+Table}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{class_proc_table_a974a9775e2502a97aa4446a2822f3d69}{insert\+Proc} (string proc\+Name)
+\item 
+int \hyperlink{class_proc_table_a5ea423b62bb45fdd8bf6e761c4ee618f}{get\+Proc\+Table\+Size} ()
+\item 
+string \hyperlink{class_proc_table_adb00cfaecc1fe623a6592d9758c364c1}{get\+Proc\+Name} (int index)
+\item 
+int \hyperlink{class_proc_table_a1a2eb04f78eada991870c563d53b5367}{get\+Proc\+Index} (string var\+Name)
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_proc_table_a1a2eb04f78eada991870c563d53b5367}{}\index{Proc\+Table@{Proc\+Table}!get\+Proc\+Index@{get\+Proc\+Index}}
+\index{get\+Proc\+Index@{get\+Proc\+Index}!Proc\+Table@{Proc\+Table}}
+\subsubsection[{get\+Proc\+Index}]{\setlength{\rightskip}{0pt plus 5cm}int Proc\+Table\+::get\+Proc\+Index (
+\begin{DoxyParamCaption}
+\item[{string}]{proc\+Name}
+\end{DoxyParamCaption}
+)}\label{class_proc_table_a1a2eb04f78eada991870c563d53b5367}
+If proc\+Name is in the \hyperlink{class_proc_table}{Proc\+Table}, return its index. Otherwise, return -\/1 to indicate there is no such procedure in the the \hyperlink{class_proc_table}{Proc\+Table}. If proc\+Name is empty or null, -\/1 is returned. 
+\begin{DoxyExceptions}{Exceptions}
+{\em if} & proc\+Name is empty \\
+\hline
+\end{DoxyExceptions}
+\hypertarget{class_proc_table_adb00cfaecc1fe623a6592d9758c364c1}{}\index{Proc\+Table@{Proc\+Table}!get\+Proc\+Name@{get\+Proc\+Name}}
+\index{get\+Proc\+Name@{get\+Proc\+Name}!Proc\+Table@{Proc\+Table}}
+\subsubsection[{get\+Proc\+Name}]{\setlength{\rightskip}{0pt plus 5cm}string Proc\+Table\+::get\+Proc\+Name (
+\begin{DoxyParamCaption}
+\item[{int}]{index}
+\end{DoxyParamCaption}
+)}\label{class_proc_table_adb00cfaecc1fe623a6592d9758c364c1}
+Return the name of the procedure in the \hyperlink{class_proc_table}{Proc\+Table} with the given index. If index is out of range, return an empty string. \hypertarget{class_proc_table_a5ea423b62bb45fdd8bf6e761c4ee618f}{}\index{Proc\+Table@{Proc\+Table}!get\+Proc\+Table\+Size@{get\+Proc\+Table\+Size}}
+\index{get\+Proc\+Table\+Size@{get\+Proc\+Table\+Size}!Proc\+Table@{Proc\+Table}}
+\subsubsection[{get\+Proc\+Table\+Size}]{\setlength{\rightskip}{0pt plus 5cm}int Proc\+Table\+::get\+Proc\+Table\+Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_proc_table_a5ea423b62bb45fdd8bf6e761c4ee618f}
+Return the total number of procedures in the the \hyperlink{class_proc_table}{Proc\+Table}. \hypertarget{class_proc_table_a974a9775e2502a97aa4446a2822f3d69}{}\index{Proc\+Table@{Proc\+Table}!insert\+Proc@{insert\+Proc}}
+\index{insert\+Proc@{insert\+Proc}!Proc\+Table@{Proc\+Table}}
+\subsubsection[{insert\+Proc}]{\setlength{\rightskip}{0pt plus 5cm}int Proc\+Table\+::insert\+Proc (
+\begin{DoxyParamCaption}
+\item[{string}]{proc\+Name}
+\end{DoxyParamCaption}
+)}\label{class_proc_table_a974a9775e2502a97aa4446a2822f3d69}
+If proc\+Name is not in the \hyperlink{class_proc_table}{Proc\+Table}, inserts it into the \hyperlink{class_proc_table}{Proc\+Table} and return its index. Otherwise, return its I\+N\+D\+E\+X and the table remains unchanged. 
+\begin{DoxyExceptions}{Exceptions}
+{\em if} & proc\+Name is empty. \\
+\hline
+\end{DoxyExceptions}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+source/Proc\+Table.\+h\item 
+source/Proc\+Table.\+cpp\end{DoxyCompactItemize}

@@ -12,12 +12,6 @@ using namespace std;
 using namespace stdext;
 
 
-/**
- * If constant is not in the ConstantTable, inserts it into the ConstantTable with the
- * given statement number stmtNum and return its index. Otherwise, return its STATUS
- * and the table remains unchanged.
- * @exception if constant is empty or stmtNum is negative or 0.
- */
 bool ConstantTable::insertConstant(int constant, int stmtNum) 
 {
 	if (stmtNum <= 0) {
@@ -51,26 +45,19 @@ bool ConstantTable::insertConstant(int constant, int stmtNum)
 	return true; 
 }
 
-/**
- * Return the total number of constants in the the ConstantTable.
- */
+
 int ConstantTable::getSize() 
 {
 	return stmtMap.size();
 }
 
-/**
- * Return the constant in the ConstantTable with the given index.
- * If index is out of range, return an empty string.
- */
+
 int ConstantTable::getConstant(int index) 
 {
 	return (constantMap.count(index) > 0) ? constantMap.at(index) : -1;
 }
 
-/**
-* Returns the index of a constant in ConstantTable using the constant as the key.
-*/
+
 int ConstantTable::getConstantIndex(int constant) 
 {
 	if (constant < 0) {
@@ -80,9 +67,7 @@ int ConstantTable::getConstantIndex(int constant)
 	return (indexMap.count(constant) > 0) ? indexMap.at(constant) : -1;
 }
 
-/**
-* Returns the statement number the constant is in the ConstantTable.
-*/
+
 vector<int> ConstantTable::getStmtNum(int constant) 
 {
 	if (constant < 0) {
@@ -92,9 +77,7 @@ vector<int> ConstantTable::getStmtNum(int constant)
 	return (stmtMap.count(constant) > 0) ? stmtMap.at(constant) : vector<int>();
 }
 
-/**
-* Check if it is a constant in the ConstantTable.
-*/
+
 bool ConstantTable::isConstant(int number) 
 {
 	if (number < 0) {
@@ -108,9 +91,6 @@ bool ConstantTable::isConstant(int number)
 	return false;
 }
 
-/**
-* Returns the list of all the constant in the ConstantTable.
-*/
 vector<int> ConstantTable::getAllConstant() 
 {
 	vector<int> allValues;
