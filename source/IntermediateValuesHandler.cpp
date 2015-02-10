@@ -255,7 +255,6 @@ namespace IntermediateValuesHandler
 		swap(allIntermediateValues, acceptedValues);
 	}
 	
-	//@todo Now can process varName. Need procName also.
 	bool filterEqualValue(Synonym synonym, string wantedValue)
 	{
 		int synonymIndex = findIntermediateSynonymIndex(synonym.getName());
@@ -296,6 +295,7 @@ namespace IntermediateValuesHandler
 				}
 			}
 		} else {
+			//This synonym is in the intermediate values table
 			int value;
 
 			if (synonym.getType() == VARIABLE) {
@@ -306,6 +306,7 @@ namespace IntermediateValuesHandler
 				value = stoi(wantedValue);
 			}
 		
+			//Do the comparison
 			for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
 				if (allIntermediateValues[i][synonymIndex] == value) {
 					acceptedValues.push_back(allIntermediateValues[i]);
