@@ -1,8 +1,7 @@
-//TODO: What if no while loops and query asks for while
-//TODO: With clauses
-//TODO: if patterns
-//TODO: Use one side to probe instead of finding all pairs
-//TODO: Calls table for calls relation
+//@TODO: What if no while loops and query asks for while
+//@TODO: if patterns
+//@TODO: Use one side to probe instead of finding all pairs
+//@TODO: For pairs, have to filter according to synonym type also
 
 #include <vector>
 #include <string>
@@ -232,25 +231,35 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
-		vector<int> valuesRHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			vector<int> stmts = pkb.getModVarForStmt(valuesLHS[i]);
-			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym RHS)
 	{
 		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
-		vector<int> valuesLHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
 			vector<int> stmts = pkb.getModVarForStmt(valuesRHS[i]);
-			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -303,25 +312,35 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
-		vector<int> valuesRHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			vector<int> stmts = pkb.getUsesVarForStmt(valuesLHS[i]);
-			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym RHS)
 	{
 		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
-		vector<int> valuesLHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
 			vector<int> stmts = pkb.getUsesStmtNum(valuesRHS[i]);
-			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
 	inline bool processParent(Synonym arg1, Synonym arg2) 
@@ -380,25 +399,35 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
-		vector<int> valuesRHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			vector<int> stmts = pkb.getChild(valuesLHS[i], isTrans);
-			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
 	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
-		vector<int> valuesLHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
 			vector<int> stmts = pkb.getParent(valuesRHS[i], isTrans);
-			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
 	inline bool processFollows(Synonym arg1, Synonym arg2) 
@@ -459,25 +488,35 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
-		vector<int> valuesRHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			vector<int> stmts = pkb.getStmtFollowedFrom(valuesLHS[i], isTrans);
-			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
 	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
-		vector<int> valuesLHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
 			vector<int> stmts = pkb.getStmtFollowedTo(valuesRHS[i], isTrans);
-			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	inline bool processCalls(Synonym arg1, Synonym arg2)
@@ -532,25 +571,35 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
-		vector<int> valuesRHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			vector<int> stmts = pkb.getProcsCalledBy(valuesLHS[i], isTrans);
-			valuesRHS.insert(valuesRHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
 	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValues();
-		vector<int> valuesLHS;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
 		
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
 			vector<int> stmts = pkb.getProcsCalling(valuesRHS[i], isTrans);
-			valuesLHS.insert(valuesLHS.end(), stmts.begin(), stmts.end());
+			
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
+			}
 		}
-		return make_pair(valuesLHS, valuesRHS);
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -691,66 +740,6 @@ namespace QueryEvaluator
 			IntermediateValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 			return true;
 		}
-	}
-
-	/**
-	* Helper method to filter the paired synonym values
-	* Because the getAllPairs function from the various tables does not distinguish between the types,
-	* this function filters only the requested types from all the pairs
-	* Returns the filtered pair of values
-	*/
-	pair<vector<int>, vector<int>> filterPairWithSynonymType(pair<vector<int>, vector<int>> allPairs, 
-		SYNONYM_TYPE arg1Type, SYNONYM_TYPE arg2Type)
-	{
-		vector<int> filteredFirstElements;
-		vector<int> filteredSecondElements;
-
-		//Just have to loop for one of the pairs since the number of pairs must be the same
-		for (unsigned int i = 0; i < allPairs.first.size(); i++) {
-			int firstElement = allPairs.first[i];
-			int secondElement = allPairs.second[i];
-
-			if (arg1Type == STMT || arg1Type == PROG_LINE || arg1Type == UNDEFINED || arg1Type == PROCEDURE) {
-				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED || arg2Type == PROCEDURE) {
-					return allPairs;
-				} else if (arg2Type == CONSTANT && pkb.isConstant(secondElement)) {
-					//The constant table has been probed and arg2 constant value exists
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				} else if (arg2Type == Synonym::convertToEnum(pkb.getType(secondElement))) {
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				}
-			} else if (arg1Type == CONSTANT && pkb.isConstant(firstElement)) {
-				//The constant table has been probed and arg1 constant value exists
-				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED) {
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				} else if (arg2Type == CONSTANT && pkb.isConstant(secondElement)) {
-					//The constant table has been probed and arg2 constant value exists
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				} else if (arg2Type == Synonym::convertToEnum(pkb.getType(secondElement))) {
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				}
-			} else if (arg1Type == Synonym::convertToEnum(pkb.getType(firstElement))) {
-				if (arg2Type == STMT || arg2Type == PROG_LINE || arg2Type == VARIABLE || arg2Type == UNDEFINED) {
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				} else if (arg2Type == CONSTANT && pkb.isConstant(secondElement)) {
-					//The constant table has been probed and arg2 constant value exists
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				} else if (arg2Type == Synonym::convertToEnum(pkb.getType(secondElement))) {
-					filteredFirstElements.push_back(firstElement);
-					filteredSecondElements.push_back(secondElement);
-				}
-			}
-		}
-
-		pair<vector<int>, vector<int>> filteredPairs(filteredFirstElements, filteredSecondElements);
-		return filteredPairs;
 	}
 
 	bool processWithNode(QNode* withNode) 
