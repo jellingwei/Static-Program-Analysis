@@ -109,22 +109,25 @@ vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure)
 		return vector<int>();
 	}
 
-	vector<int> intermediateValues = procIndex1Map.at(procIndex2);
+	vector<int> intermediateValues;
+	vector<int> result;
+	deque<int> frontier;
+	unordered_set<int> visited;
 
-	if (intermediateValues.empty()) {
-		return vector<int>();
-	}
-	
-	queue<int> frontier(std::deque<int>(intermediateValues.begin(), intermediateValues.end()));
-	//@todo optimise by not storing as set first
-	unordered_set<int> result(intermediateValues.begin(), intermediateValues.end()); // store as set first to prevent duplicates
+	frontier.push_back(procIndex2);
 		
-	while (frontier.empty()) {
-		int curProc = frontier.front(); frontier.pop();
+	while (!frontier.empty()) {
+		int curProc = frontier.back(); frontier.pop_back();
+		visited.insert(curProc);
+
 		intermediateValues = getProcsCalling(curProc, false);
 		for (auto iter = intermediateValues.begin(); iter != intermediateValues.end(); ++iter) {
-			frontier.push(*iter);
-			result.insert(*iter);
+			if (visited.count(*iter) != 0 || find(frontier.begin(), frontier.end(), *iter) != frontier.end()) {
+				// skip if already visited, or if already in the frontier
+				continue;
+			}
+			frontier.push_back(*iter);
+			result.push_back(*iter);
 		}
 	}
 		
@@ -147,21 +150,25 @@ vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure)
 		return vector<int>();
 	}
 
-	vector<int> intermediateValues = procIndex2Map.at(procIndex1);
+	vector<int> intermediateValues;
+	vector<int> result;
+	deque<int> frontier;
+	unordered_set<int> visited;
 
-	if (intermediateValues.empty()) {
-		return vector<int>();
-	}
-	queue<int> frontier(std::deque<int>(intermediateValues.begin(), intermediateValues.end()));
-	//@todo optimise by not storing as set first
-	unordered_set<int> result(intermediateValues.begin(), intermediateValues.end()); // store as set first to prevent duplicates
+	frontier.push_back(procIndex1);
 		
-	while (frontier.empty()) {
-		int curProc = frontier.front(); frontier.pop();
+	while (!frontier.empty()) {
+		int curProc = frontier.back(); frontier.pop_back();
+		visited.insert(curProc);
+
 		intermediateValues = getProcsCalledBy(curProc, false);
 		for (auto iter = intermediateValues.begin(); iter != intermediateValues.end(); ++iter) {
-			frontier.push(*iter);
-			result.insert(*iter);
+			if (visited.count(*iter) != 0 || find(frontier.begin(), frontier.end(), *iter) != frontier.end()) {
+				// skip if already visited, or if already in the frontier
+				continue;
+			}
+			frontier.push_back(*iter);
+			result.push_back(*iter);
 		}
 	}
 		
