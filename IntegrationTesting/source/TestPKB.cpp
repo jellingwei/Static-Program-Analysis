@@ -284,5 +284,16 @@ void PKBTest::testPKB()
 
 	allParent = pkb.getAllParentPairs(true);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent* pairs size", 23, (int)allParent.first.size());
+
+
+	// Calls Table
+	cout << "Calls table" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("calls(0, p)", 1, (int)pkb.getProcsCalledBy(0).size());
+	//CPPUNIT_ASSERT_EQUAL_MESSAGE("calls*(0, p)", 4, (int)pkb.getProcsCalledByS(0).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("calls(p, 2)", 2, (int)pkb.getProcsCalling(2).size());
+
+	cout << "Proc table" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test"), pkb.getProcName(0));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test2"), pkb.getProcName(1));
 }
 
