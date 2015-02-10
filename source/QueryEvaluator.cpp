@@ -1,7 +1,7 @@
 //@TODO: What if no while loops and query asks for while
 //@TODO: if patterns
 //@TODO: Use one side to probe instead of finding all pairs
-//@TODO: For pairs, have to filter according to synonym type also
+//@TODO: For pairs, have to consider having "_" as the parameters
 
 #include <vector>
 #include <string>
