@@ -161,7 +161,7 @@ namespace Parser
 				bool res = parseLine();
 				if (!res) 
 				{
-					return inputFile.eof()? "" : parseToken();
+					return inputFile.eof()? "" : peekToken();
 				} else {
 					bufferIter = buffer.begin();
 					return *(bufferIter);
@@ -352,7 +352,6 @@ namespace Parser
 			ASTParent.push_back(stmtlistNode);
 			// parse inner stmt list
 			parseStmtList();
-
 			// remove the stmtList node from ASTParent
 			ASTParent.erase(ASTParent.end() - 1); 
 
@@ -372,10 +371,9 @@ namespace Parser
 				if (!res) return false;
 				
 				parseStmtList();
-
 				// remove the stmtList node from ASTParent
 				ASTParent.erase(ASTParent.end() - 1);
-			}
+			} 
 
 			callPkb("Uses", std::to_string(static_cast<long long>(ifStmtNum)), varName);
 		
@@ -499,6 +497,8 @@ namespace Parser
 			int calledProcIndex = pkb.getProcIndex(procName);
 			callPkb("CallsTable", std::to_string(static_cast<long long>(currentProcIndex)), std::to_string(static_cast<long long>(calledProcIndex)));
 	
+			string nextToken = parseToken();
+			match(nextToken, ";");
 			return true;
 		}
 
@@ -550,16 +550,17 @@ namespace Parser
 					return false; 
 				}
 			
-				nextToken = parseToken();			
+				nextToken = parseToken(); 
 			
 				isEndOfStmtList = (nextToken.compare("}") == 0) ;
 			}
+			
 			return true;
 		}
 
 		bool parseProcedure() 
 		{	
-			bool res;
+			bool res; 
 
 			res = parse("procedure");
 			if (!res) return false;
@@ -575,6 +576,7 @@ namespace Parser
 			res = parse("{");
 			if (!res) return false;
 		
+			// attach procedure to root, make stmtlist node
 			TNode* root = pkb.getRoot();
 			int procIndex = pkb.getProcIndex(procName);
 			TNode* procNode = pkb.createTNode(Procedure, 0, procIndex);
@@ -584,7 +586,7 @@ namespace Parser
 		
 			ASTParent.push_back(stmtListNode);
 
-			res = parseStmtList();
+			res = parseStmtList();  
 
 			// remove the stmtlist node from ASTParent
 			ASTParent.erase(ASTParent.end() - 1); 
