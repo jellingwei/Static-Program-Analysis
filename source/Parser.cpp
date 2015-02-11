@@ -39,7 +39,7 @@ namespace Parser
 		string currentParsedLine;
 	
 		vector<int> stmtListParent;
-		vector<TNode*> ASTParent;
+		vector<TNode*> astParent;
 
 		int stmtNum;
 		int progLineNum;
@@ -170,8 +170,7 @@ namespace Parser
 
 		}
 
-		bool isEof() 
-		{
+		bool isEof() {
 			if (peekToken().empty()) {
 				return inputFile.eof();
 			} else {
@@ -180,36 +179,29 @@ namespace Parser
 		}
 
 
-		TNode* currentASTParent() 
-		{
-			return ASTParent[ASTParent.size() - 1];
+		TNode* currentASTParent() {
+			return astParent[astParent.size() - 1];
 		}
 
-		bool callPkb(string designEntity, string LHS, string RHS) 
-		{
+		bool callPkb(string designEntity, string LHS, string RHS) {
 			PKB pkb = PKB::getInstance();
-			if (designEntity.compare("VarTable") == 0) 
-			{
+			if (designEntity.compare("VarTable") == 0) {
 				pkb.insertVar(RHS, atoi(LHS.c_str()));
 	
 				return true;
-			} else if (designEntity.compare("StmtTable") == 0) 
-			{
+			} else if (designEntity.compare("StmtTable") == 0) {
 				pkb.insertStmt(atoi(LHS.c_str()), RHS);
 	
 				return true;
-			} else if (designEntity.compare("Modifies") == 0) 
-			{
+			} else if (designEntity.compare("Modifies") == 0) {
 				int modifiedVarIndex = pkb.getVarIndex(RHS);
 				int statement = atoi(LHS.c_str());
 				pkb.setModifies(statement, modifiedVarIndex);
 
 
-				while (pkb.getParent(statement).size()) 
-				{
+				while (pkb.getParent(statement).size()) {
 					statement = pkb.getParent(statement).at(0);
-					if (statement > 0) 
-					{
+					if (statement > 0) {
 						pkb.setModifies(statement, modifiedVarIndex);	
 					}
 				}
@@ -217,26 +209,22 @@ namespace Parser
 				pkb.setModifiesProc(currentProcIndex, modifiedVarIndex);
 			
 				return true;
-			} else if (designEntity.compare("Uses") == 0) 
-			{
+			} else if (designEntity.compare("Uses") == 0) {
 				int statement = atoi(LHS.c_str());
 				int usedVarIndex = pkb.getVarIndex(RHS);
 			
 				pkb.setUses(statement, usedVarIndex);
 			
-				while (pkb.getParent(statement).size()) 
-				{
+				while (pkb.getParent(statement).size()) {
 					statement = pkb.getParent(statement).at(0);
-					if (statement > 0) 
-					{
+					if (statement > 0) {
 						pkb.setUses(statement, usedVarIndex);	
 					}
 				}
 
 				pkb.setUsesProc(currentProcIndex, usedVarIndex);
 				return true;
-			} else if (designEntity.compare("ConstantTable") == 0) 
-			{
+			} else if (designEntity.compare("ConstantTable") == 0) {
 				pkb.insertConstant(atoi(RHS.c_str()), atoi(LHS.c_str()));
 			
 				return true;
@@ -258,14 +246,12 @@ namespace Parser
 		/**
 		 * Parses the next token and check if it is equal to the given target
 		 */
-		bool parse(string target) 
-		{
+		bool parse(string target) {
 			string nextToken = parseToken();
 			return nextToken.compare(target) == 0;
 		}
 
-		bool match(string token, string target) 
-		{
+		bool match(string token, string target) {
 			return token.compare(target) == 0;
 		}
 
@@ -277,8 +263,7 @@ namespace Parser
 		 * Assumptions: LHS = RHS => [LHS] and [=] took up 2 tokens in the buffer, and has already been parsed
 		 *              The expression only consists of factors and '+'
 		 */
-		bool parseExpr(TNode* exprRoot) 
-		{
+		bool parseExpr(TNode* exprRoot) {
 			bool res = true;
 			const int alreadyParsed = 2;
 			
@@ -299,14 +284,12 @@ namespace Parser
 			return res;
 		}
 
-		string parseName() 
-		{
+		string parseName() {
 			string token = parseToken();
 			return matchName(token);
 		}
 
-		bool parseIf(string token) 
-		{
+		bool parseIf(string token) {
 			// match if
 			bool res = match(token, "if"); 
 			if (!res) return false;
@@ -340,8 +323,7 @@ namespace Parser
 
 			// Follows from prev stmt in the stmt list
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
-			if (prevStmtInStmtList != NULL) 
-			{
+			if (prevStmtInStmtList != NULL) {
 				pkb.setFollows(prevStmtInStmtList, node);
 			}
 
@@ -349,30 +331,29 @@ namespace Parser
 			pkb.setParent(currentASTParent(), node);
 
 			int ifStmtNum = stmtNum;
-			ASTParent.push_back(stmtlistNode);
+			astParent.push_back(stmtlistNode);
 			// parse inner stmt list
 			parseStmtList();
 			// remove the stmtList node from ASTParent
-			ASTParent.erase(ASTParent.end() - 1); 
+			astParent.erase(astParent.end() - 1); 
 
 			// parse optional "else"
 			string nextToken = peekToken();
 			bool optionalElse = match(nextToken, "else");
-			if (optionalElse) 
-			{
+			if (optionalElse) {
 				res = parse("else");
 				
 				TNode* stmtlist2Node = pkb.createTNode(StmtLst, ifStmtNum, -1);
 				// 2nd stmtList node as third child
 				pkb.createLink(Child, node, stmtlist2Node); 
-				ASTParent.push_back(stmtlist2Node);
+				astParent.push_back(stmtlist2Node);
 
 				res = parse("{");
 				if (!res) return false;
 				
 				parseStmtList();
 				// remove the stmtList node from ASTParent
-				ASTParent.erase(ASTParent.end() - 1);
+				astParent.erase(astParent.end() - 1);
 			} 
 
 			callPkb("Uses", std::to_string(static_cast<long long>(ifStmtNum)), varName);
@@ -380,8 +361,7 @@ namespace Parser
 			return res;
 		}
 
-		bool parseWhile(string token) 
-		{
+		bool parseWhile(string token) {
 			bool res = match(token, "while"); 
 			if (!res) return false;
 
@@ -411,8 +391,7 @@ namespace Parser
 
 			// Follows from prev stmt in the stmt list
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
-			if (prevStmtInStmtList != NULL) 
-			{
+			if (prevStmtInStmtList != NULL) {
 				pkb.setFollows(prevStmtInStmtList, node);
 			}
 
@@ -420,20 +399,19 @@ namespace Parser
 			pkb.setParent(currentASTParent(), node);
 
 			int whileStmtNum = stmtNum;
-			ASTParent.push_back(stmtlistNode);
+			astParent.push_back(stmtlistNode);
 			// parse inner stmt list
 			parseStmtList();
 		
 			// remove the while node from ASTParent
-			ASTParent.erase(ASTParent.end() - 1); 
+			astParent.erase(astParent.end() - 1); 
 		
 			callPkb("Uses", std::to_string(static_cast<long long>(whileStmtNum)), varName);
 		
 			return res;
 		}
 
-		bool parseAssign(string firstToken) 
-		{
+		bool parseAssign(string firstToken) {
 			string varName = matchName(firstToken);
 
 			if (varName.size() == 0) return false;
@@ -460,8 +438,7 @@ namespace Parser
 
 
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
-			if (prevStmtInStmtList) 
-			{
+			if (prevStmtInStmtList) {
 				PKB::getInstance().setFollows(prevStmtInStmtList, node);
 			}
 			PKB::getInstance().setParent(currentASTParent(), node);
@@ -506,8 +483,7 @@ namespace Parser
 		/**
 		 * Matches a statement.
 		 */
-		bool matchStmt(string firstToken) 
-		{
+		bool matchStmt(string firstToken) {
 			bool res = true;
 			if (currentParsedLine.find("=") == string::npos && firstToken != "while" && firstToken != "if" && firstToken != "call") {
 				return true;
@@ -537,14 +513,12 @@ namespace Parser
 			return res;
 		}
 
-		bool parseStmtList() 
-		{
+		bool parseStmtList() {
 			string nextToken = parseToken();
 			bool res;
 
 			bool isEndOfStmtList = nextToken.compare("}") == 0;
-			while (!isEndOfStmtList) 
-			{
+			while (!isEndOfStmtList) {
 				res = matchStmt(nextToken);
 				if (!res) {
 					return false; 
@@ -558,8 +532,7 @@ namespace Parser
 			return true;
 		}
 
-		bool parseProcedure() 
-		{	
+		bool parseProcedure() {	
 			bool res; 
 
 			res = parse("procedure");
@@ -584,25 +557,21 @@ namespace Parser
 			TNode* stmtListNode = pkb.createTNode(StmtLst, 0, 0);
 			pkb.createLink(Child, procNode, stmtListNode);
 		
-			ASTParent.push_back(stmtListNode);
+			astParent.push_back(stmtListNode);
 
 			res = parseStmtList();  
 
 			// remove the stmtlist node from ASTParent
-			ASTParent.erase(ASTParent.end() - 1); 
+			astParent.erase(astParent.end() - 1); 
 
 			return res;
 		}
 
-		void traverseAndPrintTree(TNode* root) 
-		{
+		void traverseAndPrintTree(TNode* root) {
 			vector<TNode*> nodeQueue;
 
 			nodeQueue.push_back(root);
-			while (!nodeQueue.empty()) 
-			{
-			
-			
+			while (!nodeQueue.empty()) {
 				bool isConstant = (nodeQueue.front()->getNodeType() == Constant);
 				bool isVariable = (nodeQueue.front()->getNodeType() == Variable);
 				bool isPlus = (nodeQueue.front()->getNodeType() == Plus);
@@ -612,28 +581,23 @@ namespace Parser
 				cout << *(nodeQueue.front()) << endl;
 				cout << " isConstant: " << isConstant << " isVariable:" << isVariable << " isPlus: " << isPlus << " isAssign: " << isAssign << " isStmtLst" << isStmtLst << endl;
 				
-				if (nodeQueue.front()->getParent() != NULL)
-				{
+				if (nodeQueue.front()->getParent() != NULL){
 					cout << "  parent: " << nodeQueue.front()->getParent()->getNodeValueIdx() << " from stmt " << nodeQueue.front()->getParent()->getStmtNumber() << endl;
 				}
 			
 				vector<TNode*>* children = nodeQueue.front()->getChildren();
-				if (nodeQueue.front()->hasChild()) 
-				{
+				if (nodeQueue.front()->hasChild()) {
 					cout << " has child" << endl;
 					cout << "  has " << (int)children->size() << " children" << endl;
-					for (int i =0; i < (int)children->size(); ++i) 
-					{
+					for (int i =0; i < (int)children->size(); ++i) {
 						TNode* node = children->at(i);
-						if (node->getNodeType() != Plus) 
-						{
+						if (node->getNodeType() != Plus && node->getNodeType() != Times && node->getNodeType() != Minus) {
 							nodeQueue.push_back(node);
 						}
 					}
 				}
 
-				if (isAssign) 
-				{
+				if (isAssign) {
 					// print out the expression
 					cout << "assignment expression is " << *(children->at(1)) << endl;
 				}
@@ -649,8 +613,7 @@ namespace Parser
 	 * Matches names
 	 * @return true if the given token follows the naming convention for NAME, as per the given grammar
 	 */
-	string matchName(string token) 
-	{
+	string matchName(string token) {
 		regex nameRegex("[A-Za-z][\\w]*");
 		return regex_match(token, nameRegex) ? token : "";
 	}
@@ -659,8 +622,7 @@ namespace Parser
 	 * Matches integers
 	 *  @return true if the given token follows the naming convention for INTEGER, as per SIMPLE grammar
 	 */
-	string matchInteger(string token) 
-	{
+	string matchInteger(string token) {
 		regex intRegex("\\d+");
 		return (regex_match(token,intRegex)) ? token : "";
 	}
@@ -669,8 +631,7 @@ namespace Parser
 	 * Matches operators
 	 * @return true if the given token is an operator
 	 */
-	string matchOperator(string token) 
-	{
+	string matchOperator(string token) {
 		regex operRegex("[;\\+-\\*=]");
 		return (regex_match(token, operRegex)) ? token: "";
 	}
@@ -679,8 +640,7 @@ namespace Parser
 	 * Parses the program and populate data structures in the PKB. 
 	 * Return TRUE if the program can successfully be parsed according to the SIMPLE grammar. Otherwise, return FALSE. 
 	 */
-	bool parseProgram() 
-	{
+	bool parseProgram() {
 		using util::isEof;
 
 		bool isParseSuccessful = true;
