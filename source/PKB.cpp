@@ -706,6 +706,14 @@ pair<vector<int>, vector<int>> PKB::getAllModPair()
 	return modifiesTable->getAllModPair();
 }
 
+vector<int> PKB::getModifiesLhs() {
+	return modifiesTable->getLhs();
+}
+
+vector<int> PKB::getModifiesRhs() {
+	return modifiesTable->getRhs();
+}
+
 /**
 * Return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex and varIndex are already present in the ModifiesTable and are previously set, the ModifiesTable will not be updated.

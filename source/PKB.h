@@ -136,6 +136,8 @@ public:
 	vector<int> getModStmtNum(int varIndex);
 	vector<int> getModVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllModPair();
+	vector<int> getModifiesLhs();
+	vector<int> getModifiesRhs();
 
 	bool setModifiesProc(int procIndex, int varIndex);
 	bool isModifiesProc(int procIndex, int varIndex);

@@ -209,6 +209,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(8, v)", (string)"f", pkb.getVarName(pkb.getModVarForStmt(8).front()));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(11, v)", (string)"a", pkb.getVarName(pkb.getModVarForStmt(11).front()));
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(_, )", 26 , (int)pkb.getModifiesLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(, _)", 6, (int)pkb.getModifiesRhs().size());
+
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 0", 6, (int)pkb.getModVarForProc(0).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 1", 1, (int)pkb.getModVarForProc(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(p, 'a')", 4, (int)pkb.getModProcIndex(pkb.getVarIndex("a")).size());
