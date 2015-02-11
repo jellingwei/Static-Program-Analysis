@@ -114,6 +114,8 @@ public:
 	bool isParentS(int stmtNum1, int stmtNum2);
 	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllParentPairsS();
+	vector<int> getAllParents();  // get LHS of Parent(_, _)
+	vector<int> getAllChildren(); // get RHS of Parent(_, _)
 
 	// Follow Table methods
 	bool setFollows(TNode* stmt1, TNode* stmt2);

@@ -463,6 +463,22 @@ pair<vector<int>, vector<int>> PKB::getAllParentPairsS()
 }
 
 /**
+ * @return all stmt numbers where Parent(stmt, _) is true
+ */
+vector<int> PKB::getAllParents()
+{
+	return parentTable->getAllParents();
+}
+
+/**
+ * @return all stmt numbers where Parent(_, stmt) is true
+ */
+vector<int> PKB::getAllChildren()
+{
+	return parentTable->getAllChildren();
+}
+
+/**
 * Sets the Follows relation.
 * Return TRUE if the AST is updated accordingly. Otherwise, return FALSE. 
 * If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
