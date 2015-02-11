@@ -26,6 +26,8 @@ QueryValidator::~QueryValidator() {
  */
 void QueryValidator::initTable()
 {
+	/* such that queries */
+
 	//Modifies argument 1
 	string list1array[] = { "stmt", "assign", "while", "prog_line", "string-int" };
 	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 5);
@@ -81,6 +83,22 @@ void QueryValidator::initTable()
 	//CallsS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsS), list6));
 
+
+	/* patterns queries */
+	//assign/while patterns argument 1
+	string list7array[] = {"string","variable", "_"};
+	vector<string> list7; list7.insert(list7.begin(), list7array, list7array + 3);
+	patternsArg1Map.insert(make_pair("assign", list7));  
+	patternsArg1Map.insert(make_pair("while", list7));
+
+	vector<string> list8; //empty vector means no restrictions on arg2 of pattern assign.
+	patternsArg2Map.insert(make_pair("assign", list8)); 
+
+	//while patterns argument 2
+	string list9array[] = {"_"};
+	vector<string> list9; list9.insert(list9.begin(), list9array, list9array + 1);
+	patternsArg2Map.insert(make_pair("while", list9));
+
 }
 
 /**
@@ -98,9 +116,6 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		listArg2 = relationshipArg2Map.at(type); 
 	
 	}catch (const std::out_of_range& oor){
-		#ifdef DEBUG
-			cout<< "QueryValidator error: out of range"<<endl;
-		#endif
 
 		throw exception("QueryValidator error: Out of Range");
 	}
@@ -176,46 +191,51 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
  */
 bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
 {
+	vector<string> listArg1;
+	vector<string> listArg2;
+	
+	// can only be 'assign' or 'while' pattern type
 	string patternType = Synonym::convertToString(arg0.getType());
-
-	if(patternType == "assign"){
-		return validateAssignPattern(arg0, arg1, arg2);
-	}else if(patternType == "while"){
-		return validateWhilePattern(arg0, arg1, arg2);
+	
+	try {
+		//if string is not found it throws an out of range exception. 
+		listArg1 = patternsArg1Map.at(patternType);
+		listArg2 = patternsArg2Map.at(patternType); 
+	
+	}catch (const std::out_of_range& oor){
+		throw exception("QueryValidator error: Out of Range");
 	}
 
-	return true;
-}
 
-/**
- * Supporting function for validating pattern queries. 
- * It handles assign pattern type. 
- */
-bool QueryValidator::validateAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2)
-{
+
 	string arg1Type = Synonym::convertToString(arg1.getType());
-	if (arg1Type != "string" && arg1Type != "variable" && arg1Type != "_"){
+	string arg2Type = Synonym::convertToString(arg2.getType());
+
+	#ifdef DEBUG
+		cout<<"arg1Type : "<<arg1Type<<endl;
+		cout<<"arg2Type : "<<arg2Type<<endl;
+	#endif
+
+
+
+	if(!listArg1.empty()){ // if there are restrictions place on argument 1
+		
+		auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
+	
+		if(result1 == std::end(listArg1)){ // not inside list of type of argument 1
 			return false;
-	}
-	return true;
-}
-
-/**
- * Supporting function for validating pattern queries. 
- * It handles while pattern type. 
- */
-bool QueryValidator::validateWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2)
-{
-	string arg1Type = Synonym::convertToString(arg1.getType());
-	if (arg1Type != "string" && arg1Type != "variable" && arg1Type != "_"){
-		return false;  //arg1 can only be a constant string or a variable synonym or "_"
+		}
 	}
 
-	if (arg2.getName() != "_"){
-		return false;  //arg2 must be "_"
+	if(!listArg2.empty()){ // if there are restrictions place on argument 2
+
+		auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
+
+		if(result2 == std::end(listArg2)){ // not inside list of type of argument 2
+			return false;
+		}
 	}
+
 
 	return true;
 }
-
-

@@ -886,8 +886,8 @@ namespace QueryParser
 	 */
 	bool parsePatternClause()
 	{
+		string DE_type, DE_type2;
 		bool whilePatternExp = false;
-		string DE_type;
 
 		bool res = parse("pattern");
 		if (!res){
@@ -993,10 +993,16 @@ namespace QueryParser
 			return false;
 		} 
 
+		if(pattern_patterns.compare("_")==0)
+			DE_type2 = "_";
+		else
+			DE_type2 = "string";
+
+
 		//Build Query Tree
 		Synonym pattern_var(Synonym::convertToEnum(DE_type), pattern_variable);
-		Synonym pattern_pattern(SYNONYM_TYPE(STRING), pattern_patterns);
-
+		Synonym pattern_pattern(Synonym::convertToEnum(DE_type2), pattern_patterns);
+		
 		res = myQueryV->validatePatternQueries(pattern_arg0, pattern_var, pattern_pattern);
 		if(!res){
 			#ifdef DEBUG
@@ -1004,7 +1010,6 @@ namespace QueryParser
 			#endif
 			return false;
 		}
-
 
 		QNode* patternQueryNode = myQueryTree->createQNode(Pattern,pattern_arg0, pattern_var, pattern_pattern);
 		myQueryTree->linkNode(myQueryTree->getPatternNode(), patternQueryNode);

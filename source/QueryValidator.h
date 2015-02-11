@@ -30,8 +30,8 @@ protected:
 	bool validateParentArgs(Synonym arg1, Synonym arg2);//Validates the inputs for parent
 	bool validateFollowsArgs(Synonym arg1, Synonym arg2);//Validates the inputs for follows
 
-	bool validateAssignPattern(Synonym arg0, Synonym arg1, Synonym arg2);//Validates the inputs for assign pattern queries
-	bool validateWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2);//Validates the inputs for while pattern queries
 	std::tr1::unordered_map<QNODE_TYPE, vector<string>> relationshipArg1Map; //maps the relationship to its type of argument 1
 	std::tr1::unordered_map<QNODE_TYPE, vector<string>> relationshipArg2Map; //maps the relationship to its type of argument 2
+	std::tr1::unordered_map<string, vector<string>> patternsArg1Map; //maps the relationship to its type of argument 1
+	std::tr1::unordered_map<string, vector<string>> patternsArg2Map; //maps the relationship to its type of argument 2
 };
