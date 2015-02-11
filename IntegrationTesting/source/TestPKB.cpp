@@ -182,6 +182,9 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(20, _)", 3, (int)pkb.getUsesVarForStmt(20).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(_, )", 22, (int)pkb.getUsesLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(, _)", 6, (int)pkb.getUsesRhs().size());
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 0", 6, (int)pkb.getUsesVarForProc(0).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 1", 3, (int)pkb.getUsesVarForProc(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 2", 3, (int)pkb.getUsesVarForProc(2).size());

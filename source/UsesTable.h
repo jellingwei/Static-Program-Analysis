@@ -16,6 +16,8 @@ public:
 	vector<int> getUsesStmtNum(int varIndex);
 	vector<int> getUsesVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllUsesPair();
+	vector<int> getLhs();
+	vector<int> getRhs();
 
 	// for procedures 
 	bool setUsesProc(int procIndex, int varIndex);

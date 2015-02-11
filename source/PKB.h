@@ -151,6 +151,8 @@ public:
 	vector<int> getUsesStmtNum(int varIndex);
 	vector<int> getUsesVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllUsesPair();
+	vector<int> getUsesLhs();
+	vector<int> getUsesRhs();
 
 	bool setUsesProc(int procIndex, int varIndex);
 	bool isUsesProc(int procIndex, int varIndex);

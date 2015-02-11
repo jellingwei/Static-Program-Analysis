@@ -815,7 +815,13 @@ pair<vector<int>, vector<int>> PKB::getAllUsesPair()
 	return usesTable->getAllUsesPair();
 }
 
+vector<int> PKB::getUsesLhs() {
+	return usesTable->getLhs();
+}
 
+vector<int> PKB::getUsesRhs() {
+	return usesTable->getRhs();
+}
 /**
 * Return TRUE if the UsesTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex and varIndex are already present in the UsesTable and are previously set, the UsesTable will not be updated.
