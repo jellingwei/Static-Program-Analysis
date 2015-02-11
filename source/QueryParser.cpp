@@ -45,7 +45,7 @@ namespace QueryParser
 
 	string attrName[] = {"procName", "varName", "value", "stmt#"};
 	string designEntities[] = {"procedure", "stmtLst", "stmt","assign", "call", "while", "if", "variable","constant","prog_line", "plus", "minus", "times"};
-	string relRef[] = {"Modifies", "Uses", "Parent", "Parent*", "Follows", "Follows*", "Calls", "Calls*"};
+	string relRef[] = {"Modifies", "Uses","Calls", "Calls*", "Parent", "Parent*", "Follows", "Follows*", "Next", "Next*", "Affects", "Affects*"};
 	QueryTree* myQueryTree;
 	unordered_map<string, string> synonymsMap; //key: synonyms
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
@@ -181,25 +181,35 @@ namespace QueryParser
 		nodetypeMap.insert(pairNodeType1);
 		pair<string,QNODE_TYPE> pairNodeType2 ("Uses",QNODE_TYPE(Uses));
 		nodetypeMap.insert(pairNodeType2);
-		pair<string,QNODE_TYPE> pairNodeType3 ("Parent",QNODE_TYPE(Parent));
+		pair<string,QNODE_TYPE> pairNodeType3 ("Calls",QNODE_TYPE(Calls));
 		nodetypeMap.insert(pairNodeType3);
-		pair<string,QNODE_TYPE> pairNodeType4 ("Parent*",QNODE_TYPE(ParentS));
+		pair<string,QNODE_TYPE> pairNodeType4 ("Calls*",QNODE_TYPE(CallsS));
 		nodetypeMap.insert(pairNodeType4);
-		pair<string,QNODE_TYPE> pairNodeType5 ("Follows",QNODE_TYPE(Follows));
+		pair<string,QNODE_TYPE> pairNodeType5 ("Parent",QNODE_TYPE(Parent));
 		nodetypeMap.insert(pairNodeType5);
-		pair<string,QNODE_TYPE> pairNodeType6 ("Follows*",QNODE_TYPE(FollowsS));
+		pair<string,QNODE_TYPE> pairNodeType6 ("Parent*",QNODE_TYPE(ParentS));
 		nodetypeMap.insert(pairNodeType6);
-		pair<string,QNODE_TYPE> pairNodeType7 ("Calls",QNODE_TYPE(Calls));
+		pair<string,QNODE_TYPE> pairNodeType7 ("Follows",QNODE_TYPE(Follows));
 		nodetypeMap.insert(pairNodeType7);
-		pair<string,QNODE_TYPE> pairNodeType8 ("Calls*",QNODE_TYPE(CallsS));
+		pair<string,QNODE_TYPE> pairNodeType8 ("Follows*",QNODE_TYPE(FollowsS));
 		nodetypeMap.insert(pairNodeType8);
+		pair<string,QNODE_TYPE> pairNodeType9 ("Next",QNODE_TYPE(Next));
+		nodetypeMap.insert(pairNodeType9);
+		pair<string,QNODE_TYPE> pairNodeType10 ("Next*",QNODE_TYPE(NextS));
+		nodetypeMap.insert(pairNodeType10);
+		pair<string,QNODE_TYPE> pairNodeType11 ("Affects",QNODE_TYPE(Affects));
+		nodetypeMap.insert(pairNodeType11);
+		pair<string,QNODE_TYPE> pairNodeType12 ("Affects*",QNODE_TYPE(AffectsS));
+		nodetypeMap.insert(pairNodeType12);
+
 
 		//populate relRefMap
 		
 		auto node1 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(entRef));
 		auto node2 = make_tuple(REF_TYPE(entRef), REF_TYPE(entRef));
 		auto node3 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(stmtRef));
-		auto node4 = make_tuple(REF_TYPE(ref), REF_TYPE(ref));
+		auto node4 = make_tuple(REF_TYPE(lineRef), REF_TYPE(lineRef));
+		auto node5 = make_tuple(REF_TYPE(ref), REF_TYPE(ref));
 
 		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode1 ("Modifies", node1);
 		relRefMap.insert(pairRelNode1);
@@ -217,8 +227,16 @@ namespace QueryParser
 		relRefMap.insert(pairRelNode7);
 		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode8 ("Follows*", node3);
 		relRefMap.insert(pairRelNode8);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode9 ("attrCompare", node4);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode9 ("Next", node4);
 		relRefMap.insert(pairRelNode9);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode10 ("Next*", node4);
+		relRefMap.insert(pairRelNode10);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode11 ("Affects", node3);
+		relRefMap.insert(pairRelNode11);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode12 ("Affects*", node3);
+		relRefMap.insert(pairRelNode12);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode13 ("attrCompare", node5);
+		relRefMap.insert(pairRelNode13);
 
 		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType1 ("procName", SYNONYM_ATTRIBUTE(procName));
 		attrNameMap.insert(pairAttrNameType1);

@@ -72,6 +72,19 @@ void QueryValidator::initTable()
 	//FollowsS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
 
+	//Affects argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Affects), list5));
+
+	//Affects argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Affects), list5));
+	
+	//AffectsS argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(AffectsS), list5));
+
+	//AffectsS argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsS), list5));
+
+
 	//Calls argument 1
 	string list6array[] = { "procedure","string-char", "_"};
 	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 3);
