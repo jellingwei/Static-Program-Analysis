@@ -84,33 +84,45 @@ void QueryValidator::initTable()
 	//AffectsS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsS), list5));
 
+	//Next
+	string list6array[] = { "prog_line","string-int", "_"};
+	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 3);
+	//Next argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Next), list6));
+	//Next argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Next), list6));
+	//NextS argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(NextS), list6));
+	//NextS argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(NextS), list6));
+
 
 	//Calls argument 1
-	string list6array[] = { "procedure","string-char", "_"};
-	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 3);
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Calls), list6));
+	string list7array[] = { "procedure","string-char", "_"};
+	vector<string> list7; list7.insert(list7.begin(), list7array, list7array + 3);
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Calls), list7));
 	//Calls argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Calls), list6));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Calls), list7));
 	//CallsS argument 1
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(CallsS), list6));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(CallsS), list7));
 	//CallsS argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsS), list6));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsS), list7));
 
 
 	/* patterns queries */
 	//assign/while patterns argument 1
-	string list7array[] = {"string","variable", "_"};
-	vector<string> list7; list7.insert(list7.begin(), list7array, list7array + 3);
-	patternsArg1Map.insert(make_pair("assign", list7));  
-	patternsArg1Map.insert(make_pair("while", list7));
+	string list8array[] = {"string","variable", "_"};
+	vector<string> list8; list8.insert(list8.begin(), list8array, list8array + 3);
+	patternsArg1Map.insert(make_pair("assign", list8));  
+	patternsArg1Map.insert(make_pair("while", list8));
 
-	vector<string> list8; //empty vector means no restrictions on arg2 of pattern assign.
-	patternsArg2Map.insert(make_pair("assign", list8)); 
+	vector<string> list9; //empty vector means no restrictions on arg2 of pattern assign.
+	patternsArg2Map.insert(make_pair("assign", list9)); 
 
 	//while patterns argument 2
-	string list9array[] = {"_"};
-	vector<string> list9; list9.insert(list9.begin(), list9array, list9array + 1);
-	patternsArg2Map.insert(make_pair("while", list9));
+	string list10array[] = {"_"};
+	vector<string> list10; list10.insert(list10.begin(), list10array, list10array + 1);
+	patternsArg2Map.insert(make_pair("while", list10));
 
 }
 
@@ -172,27 +184,43 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 
 
 	if(result1 == std::end(listArg1)){ // not inside list of type of argument 1
+		#ifdef DEBUG
+			throw exception("QueryValidator error: not inside list of type of argument 1.");
+		#endif
+		
 		return false;
 	}
 	if(result2 == std::end(listArg2)){ // not inside list of type of argument 2
+		#ifdef DEBUG
+			throw exception("QueryValidator error: not inside list of type of argument 2.");
+		#endif
 		return false;
 	}
 
-	//Since the two are constant strings, they must be digits by the checks above
-	if ((arg1Type == "string-int" && arg2Type == "string-int") &&
-		(stoi(arg1.getName()) >= stoi(arg2.getName())) ){
+	if((type != QNODE_TYPE(Next)) && (type != QNODE_TYPE(NextS))){
+		//Since the two are constant strings, they must be digits by the checks above
+		if ((arg1Type == "string-int" && arg2Type == "string-int") &&
+			(stoi(arg1.getName()) >= stoi(arg2.getName())) ){
 
-		return false;  //arg1 must be smaller than arg2 or else it is false
-	}	
-	if(arg1Type!="string-int" && arg2Type!="string-int" &&
-		arg1Type!="string-char" && arg2Type!="string-char" && 
-		arg1Type!="_" && arg2Type!="_" &&
-		arg1.getName() == arg2.getName()){
-
-		return false; //arg1 and arg2 cannot have the same names if they are synoyms
-	}
+			#ifdef DEBUG
+				throw exception("QueryValidator error: arg1 must be smaller than arg2 or else it is false.");
+			#endif
+			return false;  //arg1 must be smaller than arg2 or else it is false
+		
+		}	
 	
+		if(arg1Type!="string-int" && arg2Type!="string-int" &&
+			arg1Type!="string-char" && arg2Type!="string-char" && 
+			arg1Type!="_" && arg2Type!="_" &&
+			arg1.getName() == arg2.getName()){
 
+			#ifdef DEBUG
+				throw exception("QueryValidator error:arg1 and arg2 cannot have the same names if they are synonyms.");
+			#endif
+			return false; //arg1 and arg2 cannot have the same names if they are synonyms
+		
+		}
+	}
 
 	return true;
 

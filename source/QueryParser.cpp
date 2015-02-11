@@ -349,24 +349,30 @@ namespace QueryParser
 	{
 
 		if(!matchSynonymAndIdent(peekBackwards(2), false)){
-			cout<<"error synonymn "<<endl;
+			#ifdef DEBUG
+				throw exception("QueryParser error: matchAttrRef(), error in synonymn.");
+			#endif
 			return false;
 		}
 		if (peekBackwards(1).compare(".") != 0){
-			cout<<"error in . "<<endl;
+			#ifdef DEBUG
+				throw exception("QueryParser error: matchAttrRef(), error in '.'");
+			#endif
 			return false;
 		}
 		if(!matchAttrName(peekBackwards(0))){
-			cout<<"error attrName "<<endl;
+			#ifdef DEBUG
+				throw exception("QueryParser error: matchAttrRef(), error in attrName ");
+			#endif
 			return false;
 		}
 
 		return true;
 	}
 	/**
-	 * Matches if the given token follows the naming convention of stmt reference.
+	 * Matches if the given token follows the naming convention of stmt reference or line reference.
 	 */
-	bool matchStmtRef(string token)
+	bool matchStmtOrLineRef(string token)
 	{
 		if(matchSynonymAndIdent(token,false))
 			return true;
@@ -376,7 +382,7 @@ namespace QueryParser
 			return true;
 
 		#ifdef DEBUG
-			throw exception("QueryParser error: at matchStmtRef");
+			throw exception("QueryParser error: at matchStmtOrLineRef");
 		#endif
 		return false;
 	}
@@ -480,13 +486,14 @@ namespace QueryParser
 	}
 
 	/**
-	 * Parses the next token and check if is a stmt reference.
+	 * It's able to parse both stmtRef anf lineRef
+	 * Parses the next token and check if is a stmt reference or line reference.
 	 * @return an empty string if parsing fails
 	 */
-	string parseStmtRef()
+	string parseStmtOrLineRef()
 	{
 		string nextToken = parseToken();
-		return matchStmtRef(nextToken) ? nextToken: "";
+		return matchStmtOrLineRef(nextToken) ? nextToken: "";
 	}
 
 	/**
@@ -695,7 +702,12 @@ namespace QueryParser
 
 		//validate the query
 		res = myQueryV->validateSuchThatQueries(nodeType, s1, s2);
-		if(!res){return false;}
+		if(!res){
+			#ifdef DEBUG
+				throw exception("QueryParser error: validateSuchThatQueries error");
+			#endif
+			return false;
+		}
 
 		//build the tree
 		QNode* childNode = myQueryTree->createQNode(nodeType, Synonym(), s1, s2);
@@ -720,7 +732,7 @@ namespace QueryParser
 			return Synonym(); //arg can only be 1 or 2 
 
 
-		if(node==REF_TYPE(stmtRef)){
+		if(node==REF_TYPE(stmtRef) || node==REF_TYPE(lineRef)){
 
 			if (synonymsMap.count(value) > 0){
 				DE_type = synonymsMap.at(value); 
@@ -814,9 +826,9 @@ namespace QueryParser
 		else
 			return ""; //arg can only be 1 or 2 
 		
-		if(node==REF_TYPE(stmtRef)){
+		if(node==REF_TYPE(stmtRef) || node==REF_TYPE(lineRef)){
 
-			entRef_value = parseStmtRef();
+			entRef_value = parseStmtOrLineRef();
 			
 		}else if(node==REF_TYPE(entRef)){
 
@@ -882,8 +894,6 @@ namespace QueryParser
 
 
 				/***Parsing is done. Building Query Tree ***/
-
-
 				res = buildQueryTree(relRef[i], s1, s2);
 				if(!res){
 					#ifdef DEBUG
