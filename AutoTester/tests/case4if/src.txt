@@ -16,7 +16,7 @@ procedure Test4 {
 	}
 	cancer = eat + fries;		\\10								
 	guacamole = cancer - duck;								\\11				
-    call Test4a												\\12
+    call Test4a;												\\12
 }procedure Test4a {
 	while guacamole {											\\13
 		guacamole = guacamole * 2;							\\14		
