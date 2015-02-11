@@ -557,6 +557,13 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS()
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
+vector<int> PKB::getFollowsLhs() {
+	return followsTable->getLhs();
+}
+
+vector<int> PKB::getFollowsRhs() {
+	return followsTable->getRhs();
+}
 
 // CallsTable methods
 

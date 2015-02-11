@@ -12,6 +12,10 @@ using namespace stdext;
 
 
 class FollowsTable {
+private:
+	vector<int> lhs;
+	vector<int> rhs;
+
 public:
 	bool setFollows(TNode* stmt1, TNode* stmtNum2);
 	
@@ -24,7 +28,7 @@ public:
 	bool isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure);
 
 	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure);
-
-
+	vector<int> getLhs();
+	vector<int> getRhs();
 
 };

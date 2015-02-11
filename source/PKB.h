@@ -127,6 +127,8 @@ public:
 	bool isFollowsS(int stmtNum1, int stmtNum2);
 	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllFollowsPairsS();
+	vector<int> getFollowsLhs();
+	vector<int> getFollowsRhs();
 
 	// ModifiesTable methods
 	bool setModifies(int stmtNum, int varIndex);

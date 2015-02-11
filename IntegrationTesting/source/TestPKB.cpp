@@ -126,6 +126,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(14, s)", 0, (int)pkb.getStmtFollowedFrom(14).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9999, 10000)", false, pkb.isFollows(9999,10000));
 
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(_, )", 10, (int)pkb.getFollowsLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(, _)", 10, (int)pkb.getFollowsRhs().size());
+
 	// Follows*
 	cout << "Follows*" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(s, 1)", 0, (int)pkb.getStmtFollowedToS(1).size());
