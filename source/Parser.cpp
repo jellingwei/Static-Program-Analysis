@@ -196,7 +196,7 @@ namespace Parser
 			} else if (designEntity.compare("Modifies") == 0) {
 				int modifiedVarIndex = pkb.getVarIndex(RHS);
 				int statement = atoi(LHS.c_str());
-				pkb.setModifies(statement, modifiedVarIndex);
+				/*pkb.setModifies(statement, modifiedVarIndex);
 
 
 				while (pkb.getParent(statement).size()) {
@@ -204,7 +204,7 @@ namespace Parser
 					if (statement > 0) {
 						pkb.setModifies(statement, modifiedVarIndex);	
 					}
-				}
+				}*/
 
 				pkb.setModifiesProc(currentProcIndex, modifiedVarIndex);
 			
@@ -213,14 +213,14 @@ namespace Parser
 				int statement = atoi(LHS.c_str());
 				int usedVarIndex = pkb.getVarIndex(RHS);
 			
-				pkb.setUses(statement, usedVarIndex);
+				/*pkb.setUses(statement, usedVarIndex);
 			
 				while (pkb.getParent(statement).size()) {
 					statement = pkb.getParent(statement).at(0);
 					if (statement > 0) {
 						pkb.setUses(statement, usedVarIndex);	
 					}
-				}
+				}*/
 
 				pkb.setUsesProc(currentProcIndex, usedVarIndex);
 				return true;

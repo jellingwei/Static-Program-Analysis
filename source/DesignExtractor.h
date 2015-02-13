@@ -11,6 +11,9 @@ class DesignExtractor {
 		vector<TNode*> obtainCallStatementsInTopologicalOrder();
 		void setModifiesForCallStatements(vector<TNode*>);
 		void setUsesForCallStatements(vector<TNode*>);
+		void setModifiesForAssignmentStatements();
+		void setUsesForAssignmentStatements();
+		void setUsesForContainerStatements();
 		
 		bool constructCfg();
 		void constructStatisticsTable();

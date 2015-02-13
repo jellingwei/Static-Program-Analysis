@@ -218,3 +218,127 @@ bool DesignExtractor::constructCfg() {
 void DesignExtractor::constructStatisticsTable() {
 	throw exception("Not implemented yet");
 }
+
+void DesignExtractor::setModifiesForAssignmentStatements() {
+
+	PKB pkb = PKB::getInstance();
+
+	vector<int> assignStmts = pkb.getStmtNumForType("assign");
+	for (auto iter = assignStmts.begin(); iter != assignStmts.end(); ++iter) {
+		int stmtNumber = *iter;
+
+		// find variable modified
+		TNode* node = pkb.nodeTable.at(stmtNumber);
+		assert(node->getChildren()->size() == 2);
+
+		int varIndex = node->getChildren()->at(0)->getNodeValueIdx();
+		pkb.setModifies(stmtNumber, varIndex);
+
+		// for ancestors, set (parent, all variable)
+		while (pkb.getParent(stmtNumber).size()) 
+		{
+			stmtNumber = pkb.getParent(stmtNumber).at(0);
+			if (stmtNumber <= 0) {
+				continue;
+			}
+			
+			pkb.setModifies(stmtNumber, varIndex);
+			
+		}
+
+	}
+
+}
+
+vector<int> obtainVarUsedInExpression(TNode* node) {
+	vector<int> varUsed;
+
+	deque<TNode*> frontier;
+	frontier.push_back(node->getChildren()->at(1));
+	TNode* curNode;
+	while (!frontier.empty()) {
+		curNode = frontier.back(); frontier.pop_back();
+
+		if (curNode->hasChild()) {
+			vector<TNode*>* children = curNode->getChildren();
+
+			for (auto iter = children->begin(); iter != children->end(); ++iter) {
+				frontier.push_back(*iter);
+			}
+		}
+
+		if (curNode->getNodeType() == Variable) {
+			varUsed.push_back(curNode->getNodeValueIdx());
+		}
+	}
+	return varUsed;
+}
+
+void DesignExtractor::setUsesForAssignmentStatements() {
+
+	PKB pkb = PKB::getInstance();
+
+	vector<int> assignStmts = pkb.getStmtNumForType("assign");
+	for (auto iter = assignStmts.begin(); iter != assignStmts.end(); ++iter) {
+		int stmtNumber = *iter;
+		cout << "going to set uses for assignment at stmt " << stmtNumber << endl;
+
+		// find variable used
+		TNode* node = pkb.nodeTable.at(stmtNumber);
+		vector<int> varIndexesUsed = obtainVarUsedInExpression(node);
+		for (auto varIter = varIndexesUsed.begin(); varIter != varIndexesUsed.end(); ++varIter) {
+			pkb.setUses(stmtNumber, *varIter);
+		}
+
+		// for ancestors, set (parent, all variable)
+		while (pkb.getParent(stmtNumber).size()) 
+		{
+			stmtNumber = pkb.getParent(stmtNumber).at(0);
+			if (stmtNumber <= 0) {
+				continue;
+			}
+			for (auto varIter = varIndexesUsed.begin(); varIter != varIndexesUsed.end(); ++varIter) {
+				pkb.setUses(stmtNumber, *varIter);
+			}	
+			
+		}
+
+	}
+
+}
+
+void DesignExtractor::setUsesForContainerStatements() {
+	PKB pkb = PKB::getInstance();
+
+	vector<int> containerStmts = pkb.getStmtNumForType("if");
+	vector<int> whileStmts = pkb.getStmtNumForType("while");
+
+	containerStmts.insert(containerStmts.end(), whileStmts.begin(), whileStmts.end());
+
+	for (auto iter = containerStmts.begin(); iter != containerStmts.end(); ++iter) {
+		int stmtNumber = *iter;
+		cout << "going to set uses for container at stmt " << stmtNumber << endl;
+
+		// find variable used
+		TNode* node = pkb.nodeTable.at(stmtNumber);
+		assert(node->getChildren()->size() == 2 || node->getChildren()->size() == 3);
+
+		int varIndex = node->getChildren()->at(0)->getNodeValueIdx();
+		pkb.setUses(stmtNumber, varIndex);
+
+		// for ancestors, set (parent, all variable)
+		while (pkb.getParent(stmtNumber).size()) 
+		{
+			stmtNumber = pkb.getParent(stmtNumber).at(0);
+			if (stmtNumber <= 0) {
+				continue;
+			}
+			
+			pkb.setUses(stmtNumber, varIndex);
+			
+			
+		}
+
+	}
+
+}

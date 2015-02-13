@@ -13,6 +13,10 @@ void FrontEndController::constructPkb(std::string filename)
 
 		cout<<"Design Extractor"<<std::endl;
 		DesignExtractor extractor;
+		extractor.setModifiesForAssignmentStatements();
+		extractor.setUsesForAssignmentStatements();
+		extractor.setUsesForContainerStatements();
+
 		vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder();
 		extractor.setModifiesForCallStatements(callNodes);
 		extractor.setUsesForCallStatements(callNodes);
