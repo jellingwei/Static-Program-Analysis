@@ -2,6 +2,7 @@
 //@TODO: if patterns
 //@TODO: Use one side to probe instead of finding all pairs
 //@TODO: For pairs, have to consider having "_" as the parameters
+//@TODO: Special handling for relation(_, _) if this does not exist
 
 #include <vector>
 #include <string>
@@ -176,6 +177,10 @@ namespace QueryEvaluator
 			return processCalls(arg1, arg2);
 		case CallsS:
 			return processCallsS(arg1, arg2);
+		case Next:
+		case NextS:
+		case Affects:
+		case AffectsS:
 		default:
 			return false;
 		}
@@ -213,7 +218,15 @@ namespace QueryEvaluator
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
-		} else if (arg1Type == UNDEFINED || arg2Type == UNDEFINED) {
+		} else if (arg1Type == UNDEFINED && arg2Type == UNDEFINED) {
+			return true;
+		} else if (arg1Type == UNDEFINED) {
+			Synonym RHS(arg2Type, arg2.getName(), pkb.getModifiesRhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
+			return true;
+		} else if (arg2Type == UNDEFINED) {
+			Synonym LHS(arg1Type, arg1.getName(), pkb.getModifiesLhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 			return true;
 		} else {
 			//Use LHS temporarily
@@ -304,6 +317,16 @@ namespace QueryEvaluator
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg1Type == UNDEFINED && arg2Type != UNDEFINED) {
 			//@todo Try to find variables that have been modified
+			return true;
+		} else if (arg1Type == UNDEFINED && arg2Type == UNDEFINED) {
+			return true;
+		} else if (arg1Type == UNDEFINED) {
+			Synonym RHS(arg2Type, arg2.getName(), pkb.getUsesRhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
+			return true;
+		} else if (arg2Type == UNDEFINED) {
+			Synonym LHS(arg1Type, arg1.getName(), pkb.getUsesLhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 			return true;
 		} else {
 			//Use LHS temporarily
@@ -399,7 +422,15 @@ namespace QueryEvaluator
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmts);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
-		} else if (arg1Type == UNDEFINED || arg2Type == UNDEFINED) {
+		} else if (arg1Type == UNDEFINED && arg2Type == UNDEFINED) {
+			return true;
+		} else if (arg1Type == UNDEFINED) {
+			//Synonym RHS(arg2Type, arg2.getName(), pkb.getParentRhs());
+			//IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
+			return true;
+		} else if (arg2Type == UNDEFINED) {
+			//Synonym LHS(arg1Type, arg1.getName(), pkb.getParentLhs());
+			//IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 			return true;
 		} else {
 			pair<vector<int>, vector<int>> parentsPair = evaluateParentByLHS(arg1, arg2, isTrans);
@@ -496,7 +527,15 @@ namespace QueryEvaluator
 			}
 			Synonym synonym(arg1Type, arg1.getName(), stmt);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
-		} else if (arg1Type == UNDEFINED || arg2Type == UNDEFINED) {
+		} else if (arg1Type == UNDEFINED && arg2Type == UNDEFINED) {
+			return true;
+		} else if (arg1Type == UNDEFINED) {
+			Synonym RHS(arg2Type, arg2.getName(), pkb.getFollowsRhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
+			return true;
+		} else if (arg2Type == UNDEFINED) {
+			Synonym LHS(arg1Type, arg1.getName(), pkb.getFollowsLhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 			return true;
 		} else {
 			pair<vector<int>, vector<int>> followsPair = evaluateFollowsByLHS(arg1, arg2, isTrans);
@@ -587,7 +626,15 @@ namespace QueryEvaluator
 			}
 			Synonym synonym(arg2Type, arg2.getName(), stmt);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
-		} else if (arg1Type == UNDEFINED || arg2Type == UNDEFINED) {
+		} else if (arg1Type == UNDEFINED && arg2Type == UNDEFINED) {
+			return true;
+		} else if (arg1Type == UNDEFINED) {
+			//Synonym RHS(arg2Type, arg2.getName(), pkb.getCallsRhs());
+			//IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
+			return true;
+		} else if (arg2Type == UNDEFINED) {
+			//Synonym LHS(arg1Type, arg1.getName(), pkb.getCallsLhs());
+			//IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 			return true;
 		} else {
 			pair<vector<int>, vector<int>> callsPair = evaluateCallsByLHS(arg1, arg2, isTrans);
