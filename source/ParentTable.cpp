@@ -16,7 +16,6 @@ using namespace std;
 using namespace stdext;
 
 
-
 bool ParentTable::setParent(TNode* stmt1, TNode* stmt2) 
 {
 	if (stmt1 == NULL || stmt2 == NULL) 
@@ -378,4 +377,44 @@ pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClo
 	}
 
 	return result;
+}
+
+/**
+ * @return all stmt numbers where Parent(stmt, _) is true
+ */
+vector<int> ParentTable::getAllParents() {
+	// obtain all while and if stmts
+	PKB pkb = PKB::getInstance();
+	vector<int> stmts = pkb.getStmtNumForType("if");
+	vector<int> whileStmts = pkb.getStmtNumForType("while");
+
+	stmts.reserve(stmts.size() + whileStmts.size());
+	stmts.insert(stmts.end(), whileStmts.begin(), whileStmts.end());
+
+	return stmts;
+}
+
+/**
+ * @return all stmt numbers where Parent(_, stmt) is true
+ */
+vector<int> ParentTable::getAllChildren() {  // can be optimised further if needed, 
+	// obtain all while and if stmts... 
+	PKB pkb = PKB::getInstance();
+	vector<int> ifStmts = pkb.getStmtNumForType("if");
+	vector<int> whileStmts = pkb.getStmtNumForType("while");
+	vector<int> stmts;
+
+	for (auto iter = ifStmts.begin(); iter != ifStmts.end(); ++iter) {
+		vector<int> children = pkb.getChild(*iter);
+		stmts.reserve(stmts.size() + children.size());
+		stmts.insert(stmts.end(), children.begin(), children.end());
+	}
+	
+	for (auto iter = whileStmts.begin(); iter != whileStmts.end(); ++iter) {
+		vector<int> children = pkb.getChild(*iter);
+		stmts.reserve(stmts.size() + children.size());
+		stmts.insert(stmts.end(), children.begin(), children.end());
+	}
+
+	return stmts;
 }

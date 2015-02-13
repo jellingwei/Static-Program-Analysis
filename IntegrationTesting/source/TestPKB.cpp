@@ -100,6 +100,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, 14)", true, pkb.isParentS(12, 14));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(21, 25)", true, pkb.isParentS(21, 25));
 	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, )", 10, (int)pkb.getAllParents().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(, _)", 14, (int)pkb.getAllChildren().size());
 
 	// Follows
 	cout << "Follows" << endl;
@@ -123,6 +125,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(13, s)", 0, (int)pkb.getStmtFollowedFrom(13).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(14, s)", 0, (int)pkb.getStmtFollowedFrom(14).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9999, 10000)", false, pkb.isFollows(9999,10000));
+
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(_, )", 10, (int)pkb.getFollowsLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(, _)", 10, (int)pkb.getFollowsRhs().size());
 
 	// Follows*
 	cout << "Follows*" << endl;
@@ -176,6 +182,9 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(20, _)", 3, (int)pkb.getUsesVarForStmt(20).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(_, )", 22, (int)pkb.getUsesLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(, _)", 6, (int)pkb.getUsesRhs().size());
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 0", 6, (int)pkb.getUsesVarForProc(0).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 1", 3, (int)pkb.getUsesVarForProc(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses for procIndex 2", 3, (int)pkb.getUsesVarForProc(2).size());
@@ -202,6 +211,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(7, v)", 2, (int)pkb.getModVarForStmt(7).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(8, v)", (string)"f", pkb.getVarName(pkb.getModVarForStmt(8).front()));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(11, v)", (string)"a", pkb.getVarName(pkb.getModVarForStmt(11).front()));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(_, )", 26 , (int)pkb.getModifiesLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(, _)", 6, (int)pkb.getModifiesRhs().size());
+
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 0", 6, (int)pkb.getModVarForProc(0).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies for proc index 1", 1, (int)pkb.getModVarForProc(1).size());

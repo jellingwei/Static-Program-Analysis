@@ -114,6 +114,8 @@ public:
 	bool isParentS(int stmtNum1, int stmtNum2);
 	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllParentPairsS();
+	vector<int> getAllParents();  // get LHS of Parent(_, _)
+	vector<int> getAllChildren(); // get RHS of Parent(_, _)
 
 	// Follow Table methods
 	bool setFollows(TNode* stmt1, TNode* stmt2);
@@ -125,6 +127,8 @@ public:
 	bool isFollowsS(int stmtNum1, int stmtNum2);
 	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllFollowsPairsS();
+	vector<int> getFollowsLhs();
+	vector<int> getFollowsRhs();
 
 	// ModifiesTable methods
 	bool setModifies(int stmtNum, int varIndex);
@@ -132,6 +136,8 @@ public:
 	vector<int> getModStmtNum(int varIndex);
 	vector<int> getModVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllModPair();
+	vector<int> getModifiesLhs();
+	vector<int> getModifiesRhs();
 
 	bool setModifiesProc(int procIndex, int varIndex);
 	bool isModifiesProc(int procIndex, int varIndex);
@@ -145,6 +151,8 @@ public:
 	vector<int> getUsesStmtNum(int varIndex);
 	vector<int> getUsesVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllUsesPair();
+	vector<int> getUsesLhs();
+	vector<int> getUsesRhs();
 
 	bool setUsesProc(int procIndex, int varIndex);
 	bool isUsesProc(int procIndex, int varIndex);

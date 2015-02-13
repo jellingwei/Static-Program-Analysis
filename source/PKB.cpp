@@ -463,6 +463,22 @@ pair<vector<int>, vector<int>> PKB::getAllParentPairsS()
 }
 
 /**
+ * @return all stmt numbers where Parent(stmt, _) is true
+ */
+vector<int> PKB::getAllParents()
+{
+	return parentTable->getAllParents();
+}
+
+/**
+ * @return all stmt numbers where Parent(_, stmt) is true
+ */
+vector<int> PKB::getAllChildren()
+{
+	return parentTable->getAllChildren();
+}
+
+/**
 * Sets the Follows relation.
 * Return TRUE if the AST is updated accordingly. Otherwise, return FALSE. 
 * If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
@@ -541,6 +557,13 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS()
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
+vector<int> PKB::getFollowsLhs() {
+	return followsTable->getLhs();
+}
+
+vector<int> PKB::getFollowsRhs() {
+	return followsTable->getRhs();
+}
 
 // CallsTable methods
 
@@ -683,6 +706,14 @@ pair<vector<int>, vector<int>> PKB::getAllModPair()
 	return modifiesTable->getAllModPair();
 }
 
+vector<int> PKB::getModifiesLhs() {
+	return modifiesTable->getLhs();
+}
+
+vector<int> PKB::getModifiesRhs() {
+	return modifiesTable->getRhs();
+}
+
 /**
 * Return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex and varIndex are already present in the ModifiesTable and are previously set, the ModifiesTable will not be updated.
@@ -784,7 +815,13 @@ pair<vector<int>, vector<int>> PKB::getAllUsesPair()
 	return usesTable->getAllUsesPair();
 }
 
+vector<int> PKB::getUsesLhs() {
+	return usesTable->getLhs();
+}
 
+vector<int> PKB::getUsesRhs() {
+	return usesTable->getRhs();
+}
 /**
 * Return TRUE if the UsesTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex and varIndex are already present in the UsesTable and are previously set, the UsesTable will not be updated.

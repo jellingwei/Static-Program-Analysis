@@ -18,5 +18,7 @@ public:
 	bool isParent(int stmtNum1, int stmtNum2, bool transitiveClosure);
 
 	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure);
+	vector<int> getAllChildren();
+	vector<int> getAllParents();
 
 };

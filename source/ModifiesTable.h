@@ -16,6 +16,8 @@ public:
 	vector<int> getModStmtNum(int varIndex);
 	vector<int> getModVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllModPair();
+	vector<int> getLhs();
+	vector<int> getRhs();
 
 	//for procedures
 	bool setModifiesProc(int procIndex, int varIndex);

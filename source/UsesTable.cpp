@@ -15,8 +15,7 @@ using namespace std;
 using namespace stdext;
 
 
-bool UsesTable::setUses(int stmtNum, int varIndex) 
-{
+bool UsesTable::setUses(int stmtNum, int varIndex) {
 	if (stmtNum <= 0 || varIndex <= 0) {
 		throw exception("UsesTable error: Negative statement number or varIndex");
 	}
@@ -67,8 +66,7 @@ bool UsesTable::setUses(int stmtNum, int varIndex)
 }
 
 
-bool UsesTable::isUses(int stmtNum, int varIndex) 
-{
+bool UsesTable::isUses(int stmtNum, int varIndex) {
 	if (stmtNum <= 0 || varIndex <= 0) {
 		return false;
 	}
@@ -87,8 +85,7 @@ bool UsesTable::isUses(int stmtNum, int varIndex)
 }
 
 
-vector<int> UsesTable::getUsesStmtNum(int varIndex) 
-{
+vector<int> UsesTable::getUsesStmtNum(int varIndex) {
 	if (varIndex <= 0) {
 		return vector<int>();
 	}
@@ -103,8 +100,7 @@ vector<int> UsesTable::getUsesStmtNum(int varIndex)
 }
 
 
-vector<int> UsesTable::getUsesVarForStmt(int stmtNum) 
-{
+vector<int> UsesTable::getUsesVarForStmt(int stmtNum) {
 	if (stmtNum <= 0) {
 		return vector<int>();
 	}
@@ -119,8 +115,7 @@ vector<int> UsesTable::getUsesVarForStmt(int stmtNum)
 }
 
 
-pair<vector<int>, vector<int>> UsesTable::getAllUsesPair() 
-{
+pair<vector<int>, vector<int>> UsesTable::getAllUsesPair() {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
 		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
@@ -135,8 +130,7 @@ pair<vector<int>, vector<int>> UsesTable::getAllUsesPair()
 
 // for procedures
 
-bool UsesTable::setUsesProc(int procIndex, int varIndex) 
-{
+bool UsesTable::setUsesProc(int procIndex, int varIndex) {
 	if (procIndex < 0 || varIndex <= 0) {
 		throw exception("UsesTable error: Negative procedure index or varIndex");
 	}
@@ -187,8 +181,7 @@ bool UsesTable::setUsesProc(int procIndex, int varIndex)
 }
 
 
-bool UsesTable::isUsesProc(int procIndex, int varIndex) 
-{
+bool UsesTable::isUsesProc(int procIndex, int varIndex) {
 	if (procIndex < 0 || varIndex <= 0) {
 		return false;
 	}
@@ -208,8 +201,7 @@ bool UsesTable::isUsesProc(int procIndex, int varIndex)
 
 
 
-vector<int> UsesTable::getUsesProcIndex(int varIndex) 
-{
+vector<int> UsesTable::getUsesProcIndex(int varIndex) {
 	if (varIndex <= 0) {
 		return vector<int>();
 	}
@@ -225,8 +217,7 @@ vector<int> UsesTable::getUsesProcIndex(int varIndex)
 
 
 
-vector<int> UsesTable::getUsesVarForProc(int procIndex) 
-{
+vector<int> UsesTable::getUsesVarForProc(int procIndex) {
 	if (procIndex < 0) {
 		return vector<int>();
 	}
@@ -242,8 +233,7 @@ vector<int> UsesTable::getUsesVarForProc(int procIndex)
 
 
 
-pair<vector<int>, vector<int>> UsesTable::getAllUsesProcPair() 
-{
+pair<vector<int>, vector<int>> UsesTable::getAllUsesProcPair() {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = procVarIndexMap.begin(); iter != procVarIndexMap.end(); ++iter) {
 		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
@@ -253,5 +243,21 @@ pair<vector<int>, vector<int>> UsesTable::getAllUsesProcPair()
 		
 	}
 
+	return result;
+}
+
+vector<int> UsesTable::getLhs() {
+	vector<int> result;
+	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
+		result.push_back(iter->first);
+	}
+	return result;
+}
+
+vector<int> UsesTable::getRhs() {
+	vector<int> result;
+	for (auto iter = stmtNumMap.begin(); iter != stmtNumMap.end(); ++iter) {
+		result.push_back(iter->first);
+	}
 	return result;
 }
