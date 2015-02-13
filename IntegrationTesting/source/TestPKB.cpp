@@ -100,8 +100,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, 14)", true, pkb.isParentS(12, 14));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(21, 25)", true, pkb.isParentS(21, 25));
 	
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, )", 10, (int)pkb.getAllParents().size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(, _)", 14, (int)pkb.getAllChildren().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, )", 10, (int)pkb.getParentLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(, _)", 14, (int)pkb.getParentRhs().size());
 
 	// Follows
 	cout << "Follows" << endl;
