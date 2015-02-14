@@ -220,6 +220,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '2')", 2, (int)pkb.patternMatchAssign("2").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'd')", 0, (int)pkb.patternMatchAssign("d").size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e + 3 * b'_)", 11, pkb.patternMatchAssign("_\"e + 3 * b\"_").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'3 * b'_)", 11, pkb.patternMatchAssign("_\"3 * b\"_").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e + 1'_)", 9, pkb.patternMatchAssign("_\"e + 1\"_").front());
+
 	// New Pattern Design
 	cout << "new pattern design" << endl;
 	const char* args[] = {"d", "+", "f"};
@@ -246,8 +250,7 @@ void PKBTest::testPKB()
 	vector<string> argVector4(args4, args4 + 3);
 	TNode* top4 = exprParser.parseExpressionForQuerying(argVector4);
 	// partial match from 3 * b
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 1, (int)pattern.PatternMatchAssign(top4, ",").size());
-
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 1, (int)pattern.PatternMatchAssign(top4, ",").size());
 
 	// Pattern for while
 	cout << "Pattern for while" << endl;
