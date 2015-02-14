@@ -653,6 +653,14 @@ pair<vector<int>, vector<int>> PKB::getAllCallsPairsS()
 	return callsTable->getAllCallsPairs(transitiveClosure);
 }
 
+vector<int> PKB::getCallsLhs() {
+	return callsTable->getLhs();
+}
+
+vector<int> PKB::getCallsRhs() {
+	return callsTable->getRhs();
+}
+
 
 
 // ModifiesTable methods
