@@ -107,18 +107,8 @@ int matchVariable(string value, int stmtNum, int procIndex, VarTable* varTable =
 		pkb.insertVar(value, stmtNum);
 		varIndx = pkb.getVarIndex(value);
 
-		// update pkb 
-		// @todo this really should not be done here
-		//pkb.setUses(stmtNum, varIndx);
-		pkb.setUsesProc(procIndex, varIndx);
+	//	pkb.setUsesProc(procIndex, varIndx);
 	
-		// propagate Uses to parent nodes
-		/*while (pkb.getParent(stmtNum).size())  {
-			stmtNum = pkb.getParent(stmtNum).at(0);
-			if (stmtNum > 0) {
-				pkb.setUses(stmtNum, varIndx);	
-			}
-		}*/
 	} else {
 		varTable->insertVar(value, stmtNum);
 		varIndx = varTable->getVarIndex(value);

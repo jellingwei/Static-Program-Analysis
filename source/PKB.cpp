@@ -672,7 +672,11 @@ vector<int> PKB::getCallsRhs() {
 */
 bool PKB::setModifies(int stmtNum, int varIndex) 
 {
-	return modifiesTable->setModifies(stmtNum, varIndex);
+	int procIndex = stmtToProcMap.at(stmtNum);
+	
+	bool updatedProc = modifiesTable->setModifiesProc(procIndex, varIndex);
+	bool updatedStmt = modifiesTable->setModifies(stmtNum, varIndex);
+	return updatedStmt || updatedProc;
 }
 
 /**
@@ -781,7 +785,11 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair()
 */
 bool PKB::setUses(int stmtNum, int varIndex) 
 {
-	return usesTable->setUses(stmtNum, varIndex);
+	int procIndex = stmtToProcMap.at(stmtNum);
+
+	bool updateProc = usesTable->setUsesProc(procIndex, varIndex);
+	bool updateStmt = usesTable->setUses(stmtNum, varIndex);
+	return updateStmt || updateProc;
 }
 
 /**
