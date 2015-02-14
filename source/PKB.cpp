@@ -465,7 +465,7 @@ pair<vector<int>, vector<int>> PKB::getAllParentPairsS()
 /**
  * @return all stmt numbers where Parent(stmt, _) is true
  */
-vector<int> PKB::getAllParents()
+vector<int> PKB::getParentLhs()
 {
 	return parentTable->getAllParents();
 }
@@ -473,7 +473,7 @@ vector<int> PKB::getAllParents()
 /**
  * @return all stmt numbers where Parent(_, stmt) is true
  */
-vector<int> PKB::getAllChildren()
+vector<int> PKB::getParentRhs()
 {
 	return parentTable->getAllChildren();
 }
