@@ -425,12 +425,12 @@ namespace QueryEvaluator
 		} else if (arg1Type == UNDEFINED && arg2Type == UNDEFINED) {
 			return true;
 		} else if (arg1Type == UNDEFINED) {
-			//Synonym RHS(arg2Type, arg2.getName(), pkb.getParentRhs());
-			//IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
+			Synonym RHS(arg2Type, arg2.getName(), pkb.getParentRhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
 			return true;
 		} else if (arg2Type == UNDEFINED) {
-			//Synonym LHS(arg1Type, arg1.getName(), pkb.getParentLhs());
-			//IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
+			Synonym LHS(arg1Type, arg1.getName(), pkb.getParentLhs());
+			IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 			return true;
 		} else {
 			pair<vector<int>, vector<int>> parentsPair = evaluateParentByLHS(arg1, arg2, isTrans);
