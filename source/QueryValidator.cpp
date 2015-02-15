@@ -121,9 +121,11 @@ void QueryValidator::initTable()
 	vector<string> list8; list8.insert(list8.begin(), list8array, list8array + 3);
 	patternsArg1Map.insert(make_pair("assign", list8));  
 	patternsArg1Map.insert(make_pair("while", list8));
+	patternsArg1Map.insert(make_pair("if", list8));
 
 	vector<string> list9; //empty vector means no restrictions on arg2 of pattern assign.
 	patternsArg2Map.insert(make_pair("assign", list9)); 
+	patternsArg2Map.insert(make_pair("if", list9)); 
 
 	//while patterns argument 2
 	string list10array[] = {"_"};
