@@ -30,12 +30,14 @@ void PQLTest::tearDown()
 void PQLTest::testPQL()
 {
 	// Select
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all a", 12, (int)evaluate("assign a; Select a").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all s", 26, (int)evaluate("stmt s; Select s").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all v", 6, (int)evaluate("variable v; Select v").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all w", 6, (int)evaluate("while w; Select w").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all c", 3, (int)evaluate("constant c; Select c").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all l", 26, (int)evaluate("prog_line l; Select l").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all assign", 12, (int)evaluate("assign a; Select a").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all stmt", 26, (int)evaluate("stmt s; Select s").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all var", 6, (int)evaluate("variable v; Select v").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all while", 6, (int)evaluate("while w; Select w").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all constant", 3, (int)evaluate("constant c; Select c").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all prog_line", 26, (int)evaluate("prog_line l; Select l").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all call", 4, (int)evaluate("call c; Select c").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all if", 4, (int)evaluate("if ifStmt; Select ifStmt").size());
 
 	// Parent
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, 4)", (string)"3", evaluate("stmt s; Select s such that Parent(s, 4)").front());
