@@ -54,6 +54,14 @@ namespace QueryParser
 	QueryValidator* myQueryV;
 
 
+	/*@siling temporary declare here.
+	  Private functions to parse patterns */
+	bool parseExpressionSpec();
+	bool parseExpr();
+	bool parseTerm();
+	bool parseFactor();
+
+
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
 	 * @return TRUE if the query parser have been initialized. Otherwise, return FALSE.
@@ -145,6 +153,15 @@ namespace QueryParser
 			return "";
 
 		return (*(bufferIter));
+	}
+
+	/**
+	 * @To-do merge with peekInToTheNextToken
+	 * @return the next , next token from the current token. 
+	 */
+	string peekInToTheNextNextToken()
+	{
+		return (*(bufferIter+1));
 	}
 
 	/**
@@ -287,6 +304,7 @@ namespace QueryParser
 	bool matchFactor(string token)
 	{
 		if(!(matchInteger(token) || matchName(token))){
+
 			#ifdef DEBUG
 				throw exception("QueryParser error: at matchFactor.");
 			#endif
@@ -550,138 +568,116 @@ namespace QueryParser
 	 */
 	bool parseFactor()
 	{
+		bool res;
 		string nextToken = parseToken();
-		return matchFactor(nextToken);
-	}
 
-	/**
-	 * Parses the next token and check if is an expression for patterns.
-	 * @todo merge this with ExpressionParser and build an expressions 
-	 * query tree.
-	 */
-	bool parseExpressionSpec(bool whilePatternExp)
-	{
+		if(nextToken.compare("(")==0){
+			res = parseExpr();
+			if(!res) {return false;}
 
-		bool underscorePresent = false;
-
-		bool res = parse("_");
-		
-		if (res){
-			underscorePresent = true;
+			res = parse(")");
+			if(!res) {return false;}
 		}else{
 
-			if(peekBackwards(0).compare("\"")!=0){
-
-				#ifdef DEBUG
-					throw exception("QueryParser error: parsePatternClause(), expression starting have to be _ or \", or error in expression");
-				#endif
-
-				return false;
-			}
-			if(whilePatternExp){
-
-				#ifdef DEBUG
-					throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec while missing _ .");
-				#endif
-
-				return false;
-			}
-		}
-
-		if (peekInToTheNextToken().compare(")") == 0){
-			//for while patterns
-			if(underscorePresent == true && whilePatternExp){
-				return true;
-			}
-
-			// for assign patterns with second parameter as _
-			if(underscorePresent){
-				return true;
-			}
-			//if the second parameter is " only
-			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec second parameter can't be \" only");
-			#endif
-				
-			return false;
-		}else{
-
-			if(whilePatternExp){
-
-				#ifdef DEBUG
-					throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec while pattern arg2 invalid.");
-				#endif
-
-				return false;
-			}
-
-			if(underscorePresent){
-
-				res = parseApostrophe();
-				if(!res){
-					#ifdef DEBUG
-						throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec \" is missing.");
-					#endif
-					return false;
-				}
-			}
-
-
-			//reads in the expression
-			if(isFactor(peekInToTheNextToken())){
-				
-				do{
-					res = parseFactor();
-
-					if(!res){
-						#ifdef DEBUG
-							throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec factor missing.");
-						#endif
-						return false;
-					}
-
-					res = parse("+");
-					if(!res && peekBackwards(0).compare("\"")!=0){
-						#ifdef DEBUG
-							throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec invalid expression.");
-						#endif
-						return false;
-					}
-
-				}while( res );
-			}else{
-
-				res = parseApostrophe();
-
-				if(!res){
-					#ifdef DEBUG
-						throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec \" is missing .");
-					#endif
-					return false;
-				}
-			}
-
-			//check the _ in pattern arg2
-			if(underscorePresent && peekInToTheNextToken().compare("_") != 0){
-				#ifdef DEBUG
-					throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec _ missing.");
-				#endif
-
-				return false;
-			}else if(peekInToTheNextToken().compare("_") == 0 && !underscorePresent){
-				#ifdef DEBUG
-					throw exception("QueryParser error: parsePatternClause(), parseExpressionSpec _ missing earlier.");
-				#endif
-
-				return false;
-			}else if(peekInToTheNextToken().compare("_") == 0){
-				parse("_");
-			}		
-
+			res = matchFactor(nextToken);
+			if(!res) {return false;}
 		}
 
 		return true;
 	}
+
+	/**
+	 * @Siling
+	 */
+	bool parseTerm()
+	{
+
+		bool res = parseFactor();
+		if(!res) {return false;}
+
+		while(peekInToTheNextToken().compare("*")==0){
+			parse("*");
+
+			res = parseFactor();
+			if(!res) {return false;}
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * @Siling
+	 */
+	bool parseExpr()
+	{
+		string peekToken;
+		bool res;
+		int isMinus, isPlus; 
+
+		res = parseTerm();
+		if(!res) {return false;}
+
+		peekToken = peekInToTheNextToken();
+		isMinus = peekToken.compare("-");
+		isPlus = peekToken.compare("+");
+
+		while(isMinus==0 || isPlus==0){
+			
+			//parse - or +
+			if(isMinus==0){
+				parse("-");
+			}else if(isPlus==0){
+				parse("+");
+			}
+
+			res = parseTerm();
+			if(!res) {return false;}
+
+			peekToken = peekInToTheNextToken();
+			isMinus = peekToken.compare("-");
+			isPlus = peekToken.compare("+");
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * @Siling
+	 */
+	bool parseExpressionSpec()
+	{
+		bool res;
+		bool underscorePresent = false;
+
+		if(peekInToTheNextToken().compare("_")==0){
+
+			underscorePresent = true;
+			res = parse("_");
+		
+		}
+
+		res = parseApostrophe();
+		if(!res) {return false;}
+
+		res = parseExpr();
+		if(!res) {return false;}
+
+		res = parseApostrophe();
+		if(!res) {return false;}
+
+		
+
+		if(underscorePresent){
+
+			res = parse("_");
+			if(!res) {return false;}
+		}
+
+		return true;
+	}
+
 
 	/**
 	 *	Helper function for parse such that clause
@@ -992,15 +988,21 @@ namespace QueryParser
 			return false;
 		} 
 
-		res = parseExpressionSpec(whilePatternExp);
-		if (!res){
-			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), invalid expression arg2");
-			#endif
+		if(whilePatternExp){
+			res = parse("_");
+			if (!res) {return false;}
+		}else{
 
-			return false;
-		} 
+			//an assign pattern 
+			if((peekInToTheNextToken().compare("_")==0) && (peekInToTheNextNextToken().compare(")")==0)){
 
+				res = parse("_"); //dont need to check res, checked in the if stmts. 
+
+			}else{
+				res = parseExpressionSpec();
+				if (!res) {return false;} 
+			}
+		}
 
 
 		//Build Query Tree

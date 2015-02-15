@@ -49,6 +49,8 @@ void QueryValidator::initTable()
 
 	string list4array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "string-int", "_" };
 	vector<string> list4; list4.insert(list4.begin(), list4array, list4array + 8);
+	
+	//constant is invalid for Parent
 	//Parent argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Parent), list3));
 
