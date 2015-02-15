@@ -23,7 +23,7 @@ procedure One {
     else {
       if z then {             \\15
         call Three;           \\16
-        call Four;            \\17
+        call Five;            \\17
       }
       else {  
         while x {                   \\18
@@ -34,29 +34,45 @@ procedure One {
       }
     }
   }
-  y = a + b * c;      \\22
-  x = x * x;        \\23
+  y = a + b * c;      \\21
+  x = x * x;        \\22
 }
 
 procedure Two {
-  b = a - b;        \\24
-  c = 0;            \\25
+  b = a - b;        \\23
+  c = 0;            \\24
 }
 
 procedure Three {
-  while c {       \\26
-    call Four;      \\27
-    while z {       \\28
-      y = x - ((y - y) + z * (a * c));      \\29
+  while c {       \\25a,b
+    call Four;      \\26
+    while z {       \\27
+      y = x - ((y - y) + z * (a * c));      \\28
     }
-    z = x + y + z;      \\30
+    z = x + y + z;      \\29
   }
 }
 
 procedure Four {
-  if b then {             \\31
-    z = z - (b + 1);      \\32
+  if b then {             \\30
+    z = z - (b + 1);      \\31
   } else {
-    z = a * 10 - b - c;     \\33
+    z = a * 10 - b - c;     \\32
+  }
+}
+
+procedure Five {
+  f = 1 + 2 + 3;          \\33
+  call Six;       \\34
+}
+
+procedure Six {
+  f = y * (z * c);    \\35
+  call Two;             \\36
+}
+
+procedure Seven {   
+  while a {           \\37
+    x = x - 1;        \\38
   }
 }

@@ -146,7 +146,7 @@ none
 40 - 
 assign a; variable v;
 Select v pattern a(v, _)
-a,b,c,z,x,y
+a,b,c,z,x,y,f
 5000
 41 - 
 assign a, a1;
@@ -156,24 +156,24 @@ none
 42 - 
 assign a, a1;
 Select a pattern a1("b", _"b + 1"_)
-3, 4, 6, 7, 11, 12, 13,14,20,21,22,23,24,28,29,31,32
+3, 4, 6, 7, 11, 12, 13,14,20,21,22,23,24,28,29,31,32,33,35,38
 5000
 43 - 
 assign a; 
 Select a pattern a1(_, _)
-3, 4, 6, 7, 11, 12, 13,14,20,21,22,23,24,28,29,31,32
+3, 4, 6, 7, 11, 12, 13,14,20,21,22,23,24,28,29,31,32,33,35,38
 5000
 44 - 
 assign a1; 
 Select a1 pattern a1(_, _)
-3, 4, 6, 7, 11, 12, 13,14,20,21,22,23,24,28,29,31,32
+3, 4, 6, 7, 11, 12, 13,14,20,21,22,23,24,28,29,31,32,33,35,38
 5000
 45 - 
-assign a;  variable v;s
+assign a1;  variable v;
 Select v pattern a1(v, _)
-a,b,c,x,y,z
+a,b,c,x,y,z, f
 5000
-46 - IF PATTERN
+60 - IF PATTERN
 if i;
 Select i pattern i(_, _)
 1, 5, 10, 15, 30
@@ -204,7 +204,7 @@ Select i pattern i1(v, _)
 x, y, c, z, b
 5000
 52 - 
-if i; variable v, v1;
+if i1; variable v, v1;
 Select v1 pattern i1(v, _)
 x, y, c, z, b, a
 5000
