@@ -5,6 +5,7 @@ using std::sort;
 
 Synonym::Synonym()
 {
+	_isEmpty = true;
 }
 
 Synonym::~Synonym()
@@ -16,6 +17,7 @@ Synonym::~Synonym()
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name)
 {
+	_isEmpty = false;
 	_type = type;
 	_name = name;
 }
@@ -25,6 +27,7 @@ Synonym::Synonym(SYNONYM_TYPE type, string name)
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
 {
+	_isEmpty = false;
 	_type = type;
 	_name = name;
 	_attribute = attribute;
@@ -35,6 +38,7 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
  */
 Synonym::Synonym(SYNONYM_TYPE type, int name)
 {
+	_isEmpty = false;
 	_type = type;
 	_name = to_string(static_cast<long long>(name));
 }
@@ -45,6 +49,7 @@ Synonym::Synonym(SYNONYM_TYPE type, int name)
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
 {
+	_isEmpty = false;
 	_type = type;
 	_name = name;
 	
@@ -59,6 +64,7 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 {
+	_isEmpty = false;
 	_type = type;
 	_name = name;
 	_values = values;
@@ -70,6 +76,7 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 {
+	_isEmpty = false;
 	_type = type;
 	_name = name;
 	
@@ -77,6 +84,11 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 	{
 		_values.push_back(*itr);
 	}
+}
+
+bool Synonym::isEmpty()
+{
+	return _isEmpty;
 }
 
 void Synonym::setValues(vector<int> values)

@@ -430,7 +430,7 @@ namespace QueryParser
 	 */
 	 bool matchRef(string token)
 	 {
-	 	if(matchSynonymAndIdent(token, false))  
+		if(matchSynonymAndIdent(token, false))
 	 		return true;
 	 	else if(matchSynonymAndIdent(token, true))
 	 		return true;
@@ -712,6 +712,9 @@ namespace QueryParser
 		return res;
 	}
 
+	/**
+	 * @return Synonym() if it is unable to create a Synonym.
+	 */
 	Synonym createSynonym(string relRef,string value, int arg)
 	{
 		string DE_type;
@@ -760,6 +763,7 @@ namespace QueryParser
 			return Synonym(Synonym::convertToEnum(DE_type),value);
 
 		}else if(node==REF_TYPE(ref)){
+
 			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
 				DE_type = "string";
 			}else if(synonymsMap.count(value) > 0){
@@ -767,10 +771,12 @@ namespace QueryParser
 			}else if(matchInteger(value)){
 				DE_type = "string";
 			}else{
+
 				// it must be an attrRef
 				if(synonymsMap.count(peekBackwards(2)) > 0)
 					DE_type = synonymsMap.at(peekBackwards(2));
 				else{
+
 					#ifdef DEBUG
 						cout<<"####error no such synonym ##### "	<<endl;
 						cout<<"synonym can't be found : " <<peekBackwards(2)<<endl;
@@ -782,6 +788,7 @@ namespace QueryParser
 				if(attrNameMap.count(peekBackwards(0)) > 0)
 					attribute = attrNameMap.at(peekBackwards(0));
 				else{
+					
 					#ifdef DEBUG
 						cout<<"####error no such attrName ##### "	<<endl;
 						cout<<"attrName can't be found : " <<peekBackwards(0)<<endl;
@@ -789,6 +796,7 @@ namespace QueryParser
 					return Synonym();  //error no such attrName
 				}
 
+				
 				return Synonym(Synonym::convertToEnum(DE_type),value, attribute);
 			}
 
@@ -868,6 +876,8 @@ namespace QueryParser
 
 				//create synonym s1
 				Synonym s1 = createSynonym(relRef[i], entRef_value1, 1);
+				if(s1.isEmpty()){ //unable to create synonym
+					return false;}
 
 				res = parse(",");
 				if (!res){return false;} 
@@ -883,6 +893,8 @@ namespace QueryParser
 
 				//create synonym s2
 				Synonym s2 = createSynonym(relRef[i], entRef_value2, 2);
+				if(s2.isEmpty()){ //unable to create synonym
+					return false;}
 				
 				res = parse(")");
 				if (!res){ return false;} 
@@ -1073,6 +1085,8 @@ namespace QueryParser
 			return false;
 		}
 		Synonym s1 = createSynonym("attrCompare", ref1, 1);
+		if(s1.isEmpty()){ //unable to create synonym
+			return false;}
 
 		bool res = parse("=");
 		if(!res) {return false;}
@@ -1085,6 +1099,8 @@ namespace QueryParser
 			#endif
 			return false;}
 		Synonym s2 = createSynonym("attrCompare", ref2, 2);
+		if(s2.isEmpty()){ //unable to create synonym
+			return false;}
 
 		//build query tree
 		QNode* withQueryNode = myQueryTree->createQNode(WITH,Synonym(),s1,s2);

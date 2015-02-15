@@ -45,6 +45,7 @@ public:
 	string getName();
 	vector<int> getValues();
 	set<int> getValuesSet();
+	bool isEmpty(); //Check if Synonym() is created. ie an empty Synonym
 	
 	static string convertToString(SYNONYM_TYPE synonymType);
 	static SYNONYM_TYPE convertToEnum(string synonymType);
@@ -54,4 +55,5 @@ private:
 	string _name;  //Name of synonym (Name of constant if type is "string" e.g. "v") (also store "true" or "false")
 	vector<int> _values;  //Values or index that this synonym takes (empty if type is "string" or "boolean")
 	SYNONYM_ATTRIBUTE _attribute;  //Used for "with" clauses
+	bool _isEmpty;
 };
