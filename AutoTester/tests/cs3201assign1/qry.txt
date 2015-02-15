@@ -394,7 +394,7 @@ Select a pattern a ("x", "z * x")
 none
 5000
 80 - Q29
-assign a;
+assign a; while w;
 Select a pattern a ("y", _) such that Follows (w, a)
 27
 5000
