@@ -31,7 +31,7 @@ FALSE
 165 - 
 assign a;
 Select BOOLEAN with a.stmt# = "HOHOHO"
-FALSE
+none
 5000
 166 - 
 stmt s;
@@ -61,7 +61,7 @@ none
 171 - 
 procedure p;
 Select BOOLEAN with p.procName = One
-FALSE
+none
 5000
 172 - 
 procedure p;
@@ -101,7 +101,7 @@ none
 178 - 
 call c;
 Select BOOLEAN with c.stmt# = -1
-FALSE
+none
 5000
 178 - 
 call c;
