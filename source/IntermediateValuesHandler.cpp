@@ -12,6 +12,9 @@ using std::stoi;
 
 namespace IntermediateValuesHandler 
 {
+	//Private functions
+	bool filterEqualPairByString(Synonym LHS, Synonym RHS);
+	string convertIndexToString(int index, SYNONYM_TYPE type);
 
 	//Private attributes
 	vector<vector<int>> allIntermediateValues;
@@ -19,7 +22,7 @@ namespace IntermediateValuesHandler
 	unordered_map<string, string> synonymMap;
 	unordered_map<string, int> allIntermediateNamesMap;  //@todo change to map
 	PKB pkb = PKB::getInstance();
-	
+
 	void initialize(unordered_map<string, string> synonymsMap) 
 	{
 		allIntermediateValues.clear();
@@ -53,7 +56,7 @@ namespace IntermediateValuesHandler
 		} else if (type == PROCEDURE) {
 			return pkb.getAllProcIndex();
 		} else {
-			return pkb.getStmtNumForType(Synonym::convertToString(type));
+			return pkb.getStmtNumForType(type);
 		}
 	}
 
@@ -254,7 +257,7 @@ namespace IntermediateValuesHandler
 
 		swap(allIntermediateValues, acceptedValues);
 	}
-	
+
 	bool filterEqualValue(Synonym synonym, string wantedValue)
 	{
 		int synonymIndex = findIntermediateSynonymIndex(synonym.getName());
@@ -264,9 +267,9 @@ namespace IntermediateValuesHandler
 		if (synonymIndex == -1) {
 			SYNONYM_TYPE type = synonym.getType();
 			vector<int> allValues = getDefaultValues(type);
-			
+
 			for (unsigned int i = 0; i < allValues.size(); i++) {
-				if (type == PROCEDURE && synonym.getAttribute() == procName) {
+				if (type == PROCEDURE) {
 					string name = pkb.getProcName(allValues[i]);
 					if (name == wantedValue) {
 						vector<int> temp;
@@ -278,6 +281,15 @@ namespace IntermediateValuesHandler
 				} else if (type == VARIABLE) {
 					string var = pkb.getVarName(allValues[i]);
 					if (var == wantedValue) {
+						vector<int> temp;
+						temp.push_back(allValues[i]);
+						synonym.setValues(temp);
+						joinWithExistingValues(synonym);
+						return (allIntermediateValues.size() != 0);
+					}
+				} else if (type == CALL && synonym.getAttribute() == procName) {
+					string name = pkb.getProcNameCalledByStatement(allValues[i]);
+					if (name == wantedValue) {
 						vector<int> temp;
 						temp.push_back(allValues[i]);
 						synonym.setValues(temp);
@@ -305,32 +317,45 @@ namespace IntermediateValuesHandler
 			} else {
 				value = stoi(wantedValue);
 			}
-		
+
 			//Do the comparison
 			for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
 				if (allIntermediateValues[i][synonymIndex] == value) {
 					acceptedValues.push_back(allIntermediateValues[i]);
 				}
 			}
-		
+
 			swap(allIntermediateValues, acceptedValues);
 			return (allIntermediateValues.size() != 0);
 		}
 		return (allIntermediateValues.size() != 0);
 	}
-	
+
 	//Assume that varIndex and int cannot be compared
 	//Assume that process with clauses last
 	//@todo special handling for comparison between varName and procName
+	//@todo special handling for comparison between p.procName and call.procName
 	bool filterEqualPair(Synonym LHS, Synonym RHS)
 	{
+		SYNONYM_TYPE arg1Type = LHS.getType();
+		SYNONYM_TYPE arg2Type = RHS.getType();
+
+		if (((arg1Type == PROCEDURE || arg1Type == VARIABLE) || (arg1Type == CALL && LHS.getAttribute() == procName))
+			&& (arg2Type == PROCEDURE || arg2Type == VARIABLE || (arg2Type == CALL && RHS.getAttribute() == procName))) {
+				return filterEqualPairByString(LHS, RHS);
+		} else if (((arg1Type == PROCEDURE || arg1Type == VARIABLE) || (arg1Type == CALL && LHS.getAttribute() == procName))
+			|| (arg2Type == PROCEDURE || arg2Type == VARIABLE || (arg2Type == CALL && RHS.getAttribute() == procName))) {
+				return false;  //Cannot compare between numbers and strings
+		}
+
 		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
 		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
-		
+
+		//Assumes that comparisons are between numbers
 		if (indexLHS == -1 && indexRHS == -1) {
 			vector<int> valuesLHS = getDefaultValues(LHS.getType());
 			vector<int> valuesRHS = getDefaultValues(RHS.getType());
-			
+
 			vector<int> finalValuesLHS;
 			vector<int> finalValuesRHS;
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
@@ -357,13 +382,94 @@ namespace IntermediateValuesHandler
 			return (allIntermediateValues.size() != 0);
 		} else {
 			vector<vector<int>> acceptedValues;
-		
+
 			for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
 				if (allIntermediateValues[i][indexLHS] == allIntermediateValues[i][indexRHS]) {
 					acceptedValues.push_back(allIntermediateValues[i]);
 				}
 			}
-		
+
+			swap(allIntermediateValues, acceptedValues);
+			return (allIntermediateValues.size() != 0);
+		}
+	}
+
+	bool filterEqualPairByString(Synonym LHS, Synonym RHS)
+	{
+		SYNONYM_TYPE arg1Type = LHS.getType();
+		SYNONYM_TYPE arg2Type = RHS.getType();
+		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
+		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
+
+		if (indexLHS == -1 && indexRHS == -1) {
+			vector<int> valuesLHS = getDefaultValues(LHS.getType());
+			vector<int> valuesRHS = getDefaultValues(RHS.getType());
+
+			vector<int> finalValuesLHS;
+			vector<int> finalValuesRHS;
+			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+				for (unsigned int j = 0; j < valuesRHS.size(); j++) {
+					string stringLHS = convertIndexToString(valuesLHS[i], arg1Type);
+					string stringRHS = convertIndexToString(valuesRHS[j], arg2Type);
+					if (stringLHS == stringRHS) {
+						finalValuesLHS.push_back(valuesLHS[i]);
+						finalValuesRHS.push_back(valuesRHS[j]);
+					}
+				}
+			}
+			LHS.setValues(finalValuesLHS);
+			RHS.setValues(finalValuesRHS);
+			joinWithExistingValues(LHS, RHS);
+			return (allIntermediateValues.size() != 0);
+		} else if (indexLHS == -1) {
+			vector<int> valuesLHS = getDefaultValues(LHS.getType());
+			set<int> valuesRHS = getIntermediateValuesSet(indexRHS);
+			vector<int> finalLHS;
+			vector<int> finalRHS;
+			for (set<int>::iterator itr = valuesRHS.begin(); itr != valuesRHS.end(); ++itr) {
+				for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+					string stringLHS = convertIndexToString(valuesLHS[i], arg1Type);
+					string stringRHS = convertIndexToString(*itr, arg2Type);
+					if (stringLHS == stringRHS) {
+						finalLHS.push_back(valuesLHS[i]);
+						finalRHS.push_back(*itr);
+					}
+				}
+			}
+			LHS.setValues(finalLHS);
+			RHS.setValues(finalRHS);
+			intersectAndJoinWithExistingValues(indexRHS, RHS, LHS);
+			return (allIntermediateValues.size() != 0);
+		} else if (indexRHS == -1) {
+			vector<int> valuesRHS = getDefaultValues(RHS.getType());
+			set<int> valuesLHS = getIntermediateValuesSet(indexLHS);
+			vector<int> finalLHS;
+			vector<int> finalRHS;
+			for (set<int>::iterator itr = valuesLHS.begin(); itr != valuesLHS.end(); ++itr) {
+				for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+					string stringLHS = convertIndexToString(*itr, arg1Type);
+					string stringRHS = convertIndexToString(valuesRHS[i], arg2Type);
+					if (stringLHS == stringRHS) {
+						finalRHS.push_back(valuesRHS[i]);
+						finalLHS.push_back(*itr);
+					}
+				}
+			}
+			LHS.setValues(finalLHS);
+			RHS.setValues(finalRHS);
+			intersectAndJoinWithExistingValues(indexLHS, LHS, RHS);
+			return (allIntermediateValues.size() != 0);
+		} else {
+			vector<vector<int>> acceptedValues;
+
+			for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
+				string LHS = convertIndexToString(allIntermediateValues[i][indexLHS], arg1Type);
+				string RHS = convertIndexToString(allIntermediateValues[i][indexRHS], arg2Type);
+				if (LHS == RHS) {
+					acceptedValues.push_back(allIntermediateValues[i]);
+				}
+			}
+
 			swap(allIntermediateValues, acceptedValues);
 			return (allIntermediateValues.size() != 0);
 		}
@@ -390,6 +496,20 @@ namespace IntermediateValuesHandler
 		} else {
 			Synonym synonym(Synonym::convertToEnum(type), name, getIntermediateValuesSet(synonymIndex));
 			return synonym;
+		}
+	}
+
+	string convertIndexToString(int index, SYNONYM_TYPE type)
+	{
+		switch (type) {
+		case VARIABLE:
+			return pkb.getVarName(index);
+		case PROCEDURE:
+			return pkb.getProcName(index);
+		case CALL:
+			return pkb.getProcNameCalledByStatement(index);
+		default:
+			return to_string(static_cast<long long>(index));
 		}
 	}
 

@@ -169,7 +169,7 @@ bool is_number(const std::string& s)
  * @param RHS to match the expression query with a suitable subtree.
  */
 vector<int> AST::patternMatchAssign(string RHS) {
-cout << "PQL gives " << RHS << endl;
+//cout << "gives " << RHS << endl;
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());		//remove whitespaces
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), '\"'), RHS.end());		//remove ""
 
@@ -199,23 +199,28 @@ cout << "PQL gives " << RHS << endl;
 	}
 
 	//int count = 0;
-	int oper_ator = (int)RHS.find_first_of("+-*");
+	int oper_ator = (int)RHS.find_first_of("+-*()");
 
 	while(oper_ator!=string::npos) {
+//cout << "operand " << RHS.substr(0, oper_ator) << endl;
+//cout << "operator " << RHS.substr(oper_ator, 1) << endl;
 		vRHS.push_back(RHS.substr(0, oper_ator));
 		vRHS.push_back(RHS.substr(oper_ator, 1));
 		RHS.erase(0, oper_ator+1);
-		oper_ator = (int)RHS.find_first_of("+-*");
+		//RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());	
+//cout << "RHS now " << RHS << endl;
+		oper_ator = (int)RHS.find_first_of("+-*()");
 	}
 
+	//@todo remove whitespaces for ()
 	vRHS.push_back(RHS);
 
 /*	cout << "=======" << endl;
 	cout << "inside vRHS " << endl;
 	for (int i=0; i<vRHS.size();i++)
-		cout << vRHS[i] << " ";
-	cout << " " << endl;*/
-//cout << "myvector has " << vRHS.size() << " elements" << endl;
+		cout << "[" << vRHS[i] << "]" << " ";
+	cout << " " << endl;
+cout << "myvector has " << vRHS.size() << " elements" << endl;*/
 
 	ExpressionParser exprParser;
 	TNode* top = exprParser.parseExpressionForQuerying(vRHS);
