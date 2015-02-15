@@ -148,3 +148,28 @@ if i; assign a;
 Select i such that Parent(i, a) pattern a(_, "4")  with a.stmt# = 4 
 1
 5000
+329 - 
+assign a1; variable v;
+Select a1 pattern a1(v, _) with v.varName = f
+35, 33
+5000
+330 - 
+if i; variable v;
+Select i pattern i(v, _, _) with v.varName = f
+none
+5000
+331 - 
+if i; variable v;
+Select i pattern i(v, _, _) with v.varName = f
+none
+5000
+332 - CRASH HERE VECTOR ERROR
+assign a, a1;
+Select a1 pattern a("y", _) with a.stmt# = a1.stmt#
+21, 28
+5000
+333 - 
+assign a, a1;
+Select a1 pattern a(_, "1 + 3 + 2") with a.stmt# = a1.stmt#
+none
+5000
