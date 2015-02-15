@@ -34,16 +34,11 @@ Select w
 25, 27,18,19,8,2,37
 5000
 8 - 
-if_stat i; 
-Select i
-none
-5000
-9 - 
 if i; 
 Select i
 1, 5, 10, 15, 30
 5000
-10 -
+9 -
 call c;
 Select c
 9, 16, 17, 26,34,36
