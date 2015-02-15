@@ -11,6 +11,8 @@ using namespace std;
 #include "AST.h"
 #include "TNode.h"
 #include "PKB.h"
+#include "ExpressionParser.h"
+#include "PatternMatch.h"
 
 AST::AST() {
 	//*TNode* nullNode = createTNode(Procedure, 0, 0);
@@ -168,10 +170,6 @@ bool is_number(const std::string& s)
  */
 vector<int> AST::patternMatchAssign(string RHS) {
 
-	//==========================================//
-	//==== Stage 0 - Tidy query & matchExact ===//
-	//==========================================//
-
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());		//remove whitespaces
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), '\"'), RHS.end());		//remove ""
 
@@ -187,330 +185,51 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		}
 	}
 
-	char buffer[200];
-	int length, subString;
-	vector<string> pseudoAST;
-	string bufferS;
-
-
-	//=========================================//
-	//==== Stage 1 - Build Pesudo-AST array ===//
-	//=========================================//
-
-	int	plusSign = RHS.rfind('+');
-	// query contains AT LEAST a + operator
-	if(plusSign != -1) {						
-		if(plusSign != RHS.size()-1) {
-			if(RHS.size() > 1) {
-				length = RHS.size() - plusSign;						// means got Right factor next to last + operator "... + y"
-				subString = RHS.copy(buffer, length, plusSign+1);	// copy whole factor up to 200chars long
-				buffer[subString]='\0';
-				bufferS = buffer;
-				pseudoAST.push_back("+");
-				pseudoAST.push_back(buffer);
-				RHS.erase(plusSign, length);
-			} else { 
-				// query contains only Single + operator
-				pseudoAST.push_back("+");
-				RHS.erase(plusSign, 1);
-			}
-
-		} else {
-			// special case: "x + y +" ending with a +
-			pseudoAST.push_back("+");
-			pseudoAST.push_back("");
-			RHS.erase(plusSign, 1);
-		}
-
-		while(RHS.size() >= 1) {
-			if(plusSign > 0) {			//means got L factor next to old +
-				plusSign = RHS.rfind('+');
-				if(plusSign != -1) {		 //-1 means not found, no more +	
-					if(plusSign != RHS.size()-1) {
-						length = RHS.size() - plusSign; //means got R factor next to current +
-						subString = RHS.copy(buffer, length, plusSign+1);
-						buffer[subString]='\0';
-						bufferS = buffer;
-						pseudoAST.push_back("+");
-						pseudoAST.push_back(buffer);
-						RHS.erase(plusSign, length);
-					}
-				}
-			} else if(plusSign == 0) {
-				pseudoAST.push_back("+");
-				RHS.erase(plusSign, 1);
-			} else if(plusSign == -1) {
-				length = RHS.size();
-				subString = RHS.copy(buffer, length, 0);
-				buffer[subString]='\0';
-				bufferS = buffer;
-				pseudoAST.push_back(buffer);
-				RHS.erase(0, length);
-			}
-			plusSign = RHS.rfind('+');
-		} // end while
-
-
-	} else {
-		// query contains only Single factor
-		pseudoAST.push_back(RHS);
-	}
-
-
-	//============================================//
-	//==== Stage 2 - Scour AST Assign Subtrees ===//
-	//============================================//
-
-	vector<int> assignTable = PKB::getInstance().getStmtNumForType("assign");
-
-	TNode *assignN, *firstChildNode, *rightChildNode, *leftChildNode, *nextPlus;
-	vector<TNode*> *childrenList;
-	vector<int> results, tempResults;
-	TNODE_TYPE assignType = Assign, plusType = Plus, constType = Constant, varType = Variable;
-	bool rightY = false, leftY = false, isNum, useFirstPlus = false;
-	unsigned int current = 0;
-	string tempHolder;
+	//@todo - change to boolean
+	string isExact;
+	if(matchExact) isExact = "*";
+	else isExact = ",";
 	
-	// Special case: Query is "_" => All Stmts Returned
-	if(pseudoAST.size()==1 && pseudoAST.at(0)=="") {
-		return assignTable;
+	vector<string> vRHS;
+	vector<int> results;
+
+	if(RHS.empty()) {
+		results = PKB::getInstance().getStmtNumForType("assign");
+		return results;
 	}
 
-	// For each assign stmt
-	for(size_t i=0; i<assignTable.size(); i++) {
-		assignN = PKB::getInstance().nodeTable.at(assignTable.at(i));
-		current = 0;
+	//int count = 0;
+	int oper_ator = (int)RHS.find_first_of("+-*");
 
-		if(assignType == assignN->getNodeType()) {
+	while(oper_ator!=string::npos) {
+		vRHS.push_back(RHS.substr(0, oper_ator));
+		vRHS.push_back(RHS.substr(oper_ator, 1));
+		RHS.erase(0, oper_ator+1);
+		oper_ator = (int)RHS.find_first_of("+-*");
+	}
 
-			// Begin from last '+' operator in pseudo-AST
-			if(pseudoAST.at(0) == "+") {	
+	vRHS.push_back(RHS);
 
-				childrenList = assignN->getChildren();					// Children of Assign Node in AST
-				firstChildNode = childrenList->at(1);					// '+' Node is Right Child
+/*	cout << "=======" << endl;
+	cout << "inside vRHS " << endl;
+	for (int i=0; i<vRHS.size();i++)
+		cout << vRHS[i] << " ";
+	cout << " " << endl;*/
+//cout << "myvector has " << vRHS.size() << " elements" << endl;
 
-				if(plusType == firstChildNode->getNodeType()) {		
-					current+=1;
-
-					while(current < pseudoAST.size()) {
-						childrenList = firstChildNode->getChildren();
-
-						// Check '+' operator contains 2 children => contains Left and Right Child Nodes
-						if(childrenList->size() == 2) {
-							rightChildNode = childrenList->at(1);
-							leftChildNode = childrenList->at(0);
-
-							// Left & Right Child Nodes can be either Variable or Constant Type
-							if((varType==rightChildNode->getNodeType() || constType==rightChildNode->getNodeType()) 
-											&& (varType==leftChildNode->getNodeType() || constType==leftChildNode->getNodeType())) {
-
-								// **Final Check: PseudoAST left just last 2 factors to parse (eg. psuedoAST size 3; index is 1)
-								if(current == pseudoAST.size()-2) {
-
-									// Check Right Node Type and Value
-									if(varType==rightChildNode->getNodeType()) {
-										rightY = rightChildNode->getNodeValueIdx() == PKB::getInstance().getVarIndex(pseudoAST.at(current));
-									} else if(constType==rightChildNode->getNodeType()) {
-										isNum = is_number(pseudoAST.at(current));
-										if(isNum) {
-											rightY = rightChildNode->getNodeValueIdx() == stoi(pseudoAST.at(current));
-										}
-									}
-
-									// Check Left Node Type and Value
-									if(varType==leftChildNode->getNodeType()) {
-										leftY = leftChildNode->getNodeValueIdx() == PKB::getInstance().getVarIndex(pseudoAST.at(current+1));
-									} else if(constType==leftChildNode->getNodeType()) {
-										isNum = is_number(pseudoAST.at(current+1));
-										if(isNum) {
-											leftY = leftChildNode->getNodeValueIdx() == stoi(pseudoAST.at(current+1));
-										}
-									}
-									
-									// Both Left & Right are Valid and value matches pattern => **ADD Stmt No to Returned List
-									if(rightY && leftY) {
-										results.push_back(assignN->getStmtNumber());
-									}
-									rightY = leftY = false;
-									break;
-
-								} else {
-									rightY = leftY = false;
-									break;
-								}
-
-							// Left Child Node IS '+' operator and Right Child Nodes can be either Variable or Constant Type
-							} else if((varType == rightChildNode->getNodeType() || constType==rightChildNode->getNodeType()) 
-																					&& plusType == leftChildNode->getNodeType()) {
-
-								if(varType==rightChildNode->getNodeType()) {
-									rightY = rightChildNode->getNodeValueIdx() == PKB::getInstance().getVarIndex(pseudoAST.at(current));
-								} else if(constType==rightChildNode->getNodeType()) {
-									isNum = is_number(pseudoAST.at(current));
-									if(isNum) {
-										rightY = rightChildNode->getNodeValueIdx() == stoi(pseudoAST.at(current));
-									}
-								}
-								
-
-								// *Takes note of the first-next Plus Node after the top Plus Node, for subsequent reference
-								if(!useFirstPlus) {
-									nextPlus = leftChildNode;
-									useFirstPlus = true;
-								}
-
-								// Eg: If pseudo-AST is size 5, index[0-4] and index is 1 => remains 2 other factors for checking
-								if(rightY && current<=pseudoAST.size()-4) {
-
-									// *No more factors for checking 
-									// => Hence, restart search from with first-next Plus Node ref & restart from top in PseudoAST
-									if(matchExact==false && current==pseudoAST.size()-2) {
-										firstChildNode = nextPlus;
-										useFirstPlus = false;
-										current = 1;
-										rightY = leftY = false;
-									} else {
-										// Remains 2 other factors for checking => Update Current idx in pseudoAST
-										firstChildNode = leftChildNode;
-										current+=2;
-										rightY = leftY = false;
-									}
-
-								} else if(rightY==false && matchExact==false && current<=pseudoAST.size()-4) {
-									// Restart from top in PseudoAST, Update to next Plus Node in AST
-									firstChildNode = leftChildNode;
-									current = 1;
-									rightY = leftY = false;
-
-								} else {
-									if(rightY) {
-										// *Restart search from with first-next Plus Node ref & restart from top in PseudoAST
-										// Eg: When reached end of Pseudo-AST, but AST still contains Node => Hence restart from first-next Plus Node
-										firstChildNode = nextPlus;
-										useFirstPlus = false;
-										current = 1;
-										rightY = leftY = false;
-									} else {
-										rightY = leftY = false;
-										break;
-									}
-								}
-
-							} else {
-								rightY = leftY = false;
-								break;
-							}
-						}
-					} // End While
-
-
-				}			
-
-			} else {	
-				// Pseudo-AST does not contain any '+' operator => Single factor
-				childrenList = assignN->getChildren();
-				firstChildNode = childrenList->at(1);		// Variable/Constant is Right Child Node
-
-				// MatchExact is True
-				//		Right Child Node is Variable Type
-				if(matchExact==true && varType == firstChildNode->getNodeType()) { 
-					if(firstChildNode->getNodeValueIdx() == PKB::getInstance().getVarIndex(pseudoAST.at(0))) {
-						results.push_back(assignN->getStmtNumber());
-					}
-				} 
-
-				//		Right Child Node is Constant Type
-				else if(matchExact==true && constType == firstChildNode->getNodeType()) {
-					isNum = is_number(pseudoAST.at(0));
-					if(isNum && (firstChildNode->getNodeValueIdx()==stoi(pseudoAST.at(0)))) {
-						results.push_back(assignN->getStmtNumber());
-					}
-				} 
-
-				// *MatchExact is False
-				else {	
-					isNum = is_number(pseudoAST.at(0));
-					if(!isNum) {
-						// Right Child Node is Variable Type
-						UsesTable* usesTable = PKB::getInstance().usesTable;
-						if(matchExact == false) {
-							tempResults = usesTable->getUsesStmtNum(PKB::getInstance().getVarIndex(pseudoAST.at(0)));
-							for(size_t i=0; i<tempResults.size(); i++) {
-								if(PKB::getInstance().isAssign(tempResults.at(i))) {
-									results.push_back(tempResults.at(i));
-								}
-							}
-							break;
-						}
-					} else {
-						// Right Child Node is Constant Type
-						if(matchExact == false && PKB::getInstance().isConstant(stoi(pseudoAST.at(0)))) {
-							tempResults = PKB::getInstance().getStmtNum(stoi(pseudoAST.at(0)));
-							for(size_t i=0; i<tempResults.size(); i++) {
-								if(PKB::getInstance().isAssign(tempResults.at(i))) {
-									results.push_back(tempResults.at(i));
-								}
-							}
-						}
-					}
-				}
-			} // End Else Single Factor
-		} // End If assign
-	} // End for
-
+	ExpressionParser exprParser;
+	TNode* top = exprParser.parseExpressionForQuerying(vRHS);
+	PatternMatch pattern;
+//cout << "rQ is " << top->getNodeType() << endl;
+	//vector<int> temp = pattern.PatternMatchAssign(top, isExact);
+	
+	results = pattern.PatternMatchAssign(top, isExact);
+/*cout << "ok " << endl;
+	for(int i =0; i< results.size(); i++)
+		cout << "[" << results[i] << "] ";
+	cout << " " << endl;
+	cout << "=======" << endl;*/
 	return results;
-}
-
-
-/**
- * Pattern matching for while or if statements.
- * @return a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable.
- * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
- * @param type the type of statement to match, either While or If
- */
-vector<int> patternMatchParentStmt(string LHS, TNODE_TYPE type) {
-	// strip leading and trailing space
-	LHS.erase(0, LHS.find_first_not_of(" "));
-	LHS.erase(LHS.find_last_not_of(" ") + 1);
-	
-	if (LHS.empty()) {
-		vector<int> emptyVector;
-		return emptyVector;
-	}
-
-	int varIndex = PKB::getInstance().getVarIndex(LHS);
-	if (varIndex <= 0) {
-		vector<int> emptyVector;
-		return emptyVector;
-	}
-	
-	// Get statements using the variable
-	vector<int> candidateList = PKB::getInstance().getUsesStmtNum(varIndex);
-
-	// Filter non-matching types from these statements
-	vector<int> result;
-	for (auto stmt = candidateList.begin(); stmt != candidateList.end(); ++stmt) {
-		bool isCorrectType = type == While ? 
-							 PKB::getInstance().isWhile(*stmt) : 
-							 PKB::getInstance().isIf(*stmt); ;
-		if (!isCorrectType) {
-			continue;
-		}
-
-		TNode* stmtNode = PKB::getInstance().nodeTable.at(*stmt);
-
-		assert(stmtNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
-		if (stmtNode->getChildren()->size() < 1) {
-			continue;
-		}
-
-		int controlVariable = stmtNode->getChildren()->at(0)->getNodeValueIdx();
-		if (controlVariable == varIndex) {
-			result.push_back(*stmt);
-		}
-	}
-
-	return result;
 }
 
 /**
@@ -549,7 +268,12 @@ int AST::getControlVariable(int stmtNum) {
  * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
  */
 vector<int> AST::patternMatchWhile(string LHS) {
-	return patternMatchParentStmt(LHS, While);
+	
+	PatternMatch pattern;
+	vector<int> result;
+	result = pattern.patternMatchParentStmt(LHS, While);
+
+	return result;
 }
 /**
  * Pattern matching for if statements.
@@ -557,5 +281,10 @@ vector<int> AST::patternMatchWhile(string LHS) {
  * @param LHS  the name of the variable that acts as the control variable for the if statements we are interested in.
  */
 vector<int> AST::patternMatchIf(string LHS) {
-	return patternMatchParentStmt(LHS, If);
+
+	PatternMatch pattern;
+	vector<int> result;
+	result = pattern.patternMatchParentStmt(LHS, If);
+
+	return result;
 }

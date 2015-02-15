@@ -17,8 +17,9 @@ class PatternMatch
 public:
 	PatternMatch();
 	vector<int> PatternMatchAssign(TNode *queryASTroot, string isExact);
-	vector<int> PatternMatchWhile(string LHS);
-	vector<int> PatternMatchIf(string LHS);
+	vector<int> patternMatchParentStmt(string LHS, TNODE_TYPE type);
+	~PatternMatch();
+
 private:
 	
 };

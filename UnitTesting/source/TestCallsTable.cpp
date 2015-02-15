@@ -219,19 +219,38 @@ void CallsTableTest::testGetProcsCalling() {
 
 void CallsTableTest::testGetProcsCalledBy() {
 	CallsTable callsTable;
-	callsTable.setCalls(2, 2);
+	
+	callsTable.setCalls(0, 1);
+	callsTable.setCalls(2, 3);
+	callsTable.setCalls(1, 2);
 
 	vector<int> result = callsTable.getProcsCalledBy(3, false);
 	CPPUNIT_ASSERT(result.empty());
 
 	result = callsTable.getProcsCalledBy(2, false);
 	CPPUNIT_ASSERT_EQUAL(1, (int)result.size());
+	CPPUNIT_ASSERT(find(result.begin(), result.end(), 3) != result.end());
+
+	result = callsTable.getProcsCalledBy(2, true);
+	CPPUNIT_ASSERT_EQUAL(1, (int)result.size());
+	CPPUNIT_ASSERT(find(result.begin(), result.end(), 3) != result.end());
+
+	result = callsTable.getProcsCalledBy(1, false);
+	CPPUNIT_ASSERT_EQUAL(1, (int)result.size());
 	CPPUNIT_ASSERT(find(result.begin(), result.end(), 2) != result.end());
 
-	callsTable.setCalls(2, 3);
-	result = callsTable.getProcsCalledBy(2, false);
+	result = callsTable.getProcsCalledBy(1, true);
 	CPPUNIT_ASSERT_EQUAL(2, (int)result.size());
 	CPPUNIT_ASSERT(find(result.begin(), result.end(), 2) != result.end());
 	CPPUNIT_ASSERT(find(result.begin(), result.end(), 3) != result.end());
 
+	result = callsTable.getProcsCalledBy(0, false);
+	CPPUNIT_ASSERT_EQUAL(1, (int)result.size());
+	CPPUNIT_ASSERT(find(result.begin(), result.end(), 1) != result.end());
+
+	result = callsTable.getProcsCalledBy(0, true);
+	CPPUNIT_ASSERT_EQUAL(3, (int)result.size());
+	CPPUNIT_ASSERT(find(result.begin(), result.end(), 1) != result.end());
+	CPPUNIT_ASSERT(find(result.begin(), result.end(), 2) != result.end());
+	CPPUNIT_ASSERT(find(result.begin(), result.end(), 3) != result.end());
 }

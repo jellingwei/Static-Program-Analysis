@@ -394,8 +394,8 @@ Select a pattern a ("x", "z * x")
 none
 5000
 80 - Q29
-assign a;
-Select a pattern a ("y, _") such that Follows (w, a)
+assign a; while w;
+Select a pattern a ("y", _) such that Follows (w, a)
 27
 5000
 81 - Q30
@@ -415,7 +415,7 @@ none
 5000
 84 - Q33
 assign a;
-Select a pattern a (_, _"z * x + m"_)
+Select a pattern a (_, _"z * x + m")
 none
 5000
 85 - Q34

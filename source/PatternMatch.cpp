@@ -11,6 +11,7 @@ using namespace std;
 bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact);
 bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact);
 vector<int> SingleVariableConstant(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact);
+bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, string isExact);
 
 PatternMatch::PatternMatch()
 {}
@@ -32,15 +33,28 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
 	{
 		_currentAssign = PKB::getInstance().nodeTable.at(assignTable.at(i));
 		_rightChildNodeA = _currentAssign->getChildren()->at(1);
-		if(checkPatternMatchAssign(_rightChildNodeA, _rootNodeQ, isExact))
-		{
-			results.push_back(_rightChildNodeA->getStmtNumber());
-		}
-
+//cout << " " << endl;
+//cout << "assign " << _currentAssign->getStmtNumber() << endl;
 		if((_rootNodeQ->getNodeType() == Constant) || (_rootNodeQ->getNodeType() == Variable))
 		{
 			vector<int> tempResults = SingleVariableConstant(_rightChildNodeA, _rootNodeQ, isExact);
 			results.insert( results.end(), tempResults.begin(), tempResults.end() );
+			
+			if(isExact.compare("*") != 0) break;
+		}
+		else {
+			if(checkPatternMatchAssign(_rightChildNodeA, _rootNodeQ, isExact))
+			{
+	//cout << "PUSH" << endl;
+				results.push_back(_rightChildNodeA->getStmtNumber());
+			}
+			else 
+			{
+				if(isExact.compare("*") != 0 && _rightChildNodeA->getChildren()->size() > 0) {
+					if(recurseChecking(_rightChildNodeA->getChildren(), _rootNodeQ, isExact))
+						results.push_back(_rightChildNodeA->getStmtNumber());
+				}
+			}
 		}
 	}
 
@@ -81,7 +95,7 @@ bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, string 
 bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
 {
 	TNode* _currentNodeQ; TNode* _currentNodeA;
-	int currentChild;
+	int currentChild = 0;
 	
 	queue<TNode*> queueQ;
 	queue<TNode*> queueA;
@@ -91,20 +105,6 @@ bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
 
 	queueQ.push(_rootNodeQ);
 	queueA.push(_rightChildNodeA);
-
-	TNode* _GrandChildNodeAA = NULL;
-	TNode* _GrandChildNodeAB = NULL;
-	vector<TNode*> *GrandChildrenList = _rightChildNodeA->getChildren();
-
-
-	if((GrandChildrenList->at(0)->getNodeType() == Plus) || (GrandChildrenList->at(0)->getNodeType() == Minus) || (GrandChildrenList->at(0)->getNodeType() == Times))
-	{
-		_GrandChildNodeAA = GrandChildrenList->at(0);
-	}
-	else if((GrandChildrenList->at(1)->getNodeType() == Plus) || (GrandChildrenList->at(1)->getNodeType() == Minus) || (GrandChildrenList->at(1)->getNodeType() == Times))
-	{
-		_GrandChildNodeAB = GrandChildrenList->at(1);
-	}
 
 	int cqSize = 0, caSize = 0;
 
@@ -121,7 +121,7 @@ bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
 			_currentNodeA = queueA.front();
 			queueA.pop();
 		} 
-		currentChild = 0;
+		
 		cqSize = (_currentNodeQ->getChildren())->size();
 		caSize = (_currentNodeA->getChildren())->size();
 
@@ -133,53 +133,90 @@ bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
 				queueA.push(_currentNodeA->getChildren()->at(currentChild));
 				cqSize--;
 				caSize--;
+				currentChild++;
 			}
 			else
 			{
-				if(isExact != "*")
-				{
-					if(_GrandChildNodeAA != NULL)
-					{
-						return checkPatternMatchAssign(_GrandChildNodeAA, _rootNodeQ, isExact);
-					}
-					if(_GrandChildNodeAB != NULL)
-					{
-						return checkPatternMatchAssign(_GrandChildNodeAB, _rootNodeQ, isExact);
-					}
-					return false;
+				if(isExact.compare("*") != 0) {
+					return recurseChecking(_rightChildNodeA->getChildren(), _rootNodeQ, isExact);
 				}
-				else
-				{
-					return false;
-				}
+				return false; 
+			}
+		}
+		currentChild = 0;
+
+		//**Important**//
+		if(cqSize==0 || caSize==0) {
+			if(!((_currentNodeQ->getNodeType() == _currentNodeA->getNodeType()) && (_currentNodeQ->getNodeValueIdx() == _currentNodeA->getNodeValueIdx())))
+			{
+				return false;;
 			}
 		}
 	}
-		if(cqSize>0 && queueAEmpty)
-		{
-			return false;
-		}
-		else if(caSize>0 && queueQEmpty)
-		{
-			if(isExact != "*")
-			{
-				if((_currentNodeQ->getNodeType() == _currentNodeA->getNodeType()) && (_currentNodeQ->getNodeValueIdx() == _currentNodeA->getNodeValueIdx()))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-		else if(cqSize==0 && caSize==0)
+
+	if(cqSize>0 && queueAEmpty)
+	{
+		return false;
+	}
+	else if(caSize>0 && queueQEmpty)
+	{
+		if(isExact.compare("*") != 0)
 		{
 			if((_currentNodeQ->getNodeType() == _currentNodeA->getNodeType()) && (_currentNodeQ->getNodeValueIdx() == _currentNodeA->getNodeValueIdx()))
 			{
 				return true;
 			}
-			return false;
 		}
-		else {
-			return false;
+		return false;
+	}
+	else if(cqSize==0 && caSize==0)
+	{
+		if((_currentNodeQ->getNodeType() == _currentNodeA->getNodeType()) && (_currentNodeQ->getNodeValueIdx() == _currentNodeA->getNodeValueIdx()))
+		{
+			return true;
+		}
+		return false;
+	}
+	else {
+		return false;
+	}
+
+	return false;
+}
+
+/**
+ * Auxilliary method for Non-Exact Pattern Match, recursively checks subtrees to find a matching pattern.
+ * @return true if Assignment contains Pattern
+ * @param Children nodes of current Root node in a Vector<>, Root node of the query tree build for the expression and a flag for exact or non-exact matching
+ */
+bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, string isExact) {
+
+		TNode* _GrandChildNodeAA = NULL;
+		TNode* _GrandChildNodeAB = NULL;
+		bool found = false;
+		if(GrandChildrenList->size() > 0 ) {
+			if((GrandChildrenList->at(0)->getNodeType() == Plus) || (GrandChildrenList->at(0)->getNodeType() == Minus) || (GrandChildrenList->at(0)->getNodeType() == Times)) {
+				_GrandChildNodeAA = GrandChildrenList->at(0);
+				found = checkPatternMatchAssign(_GrandChildNodeAA, _rootNodeQ, isExact);
+			}
+			
+			if((found==false) && ((GrandChildrenList->at(1)->getNodeType() == Plus) || (GrandChildrenList->at(1)->getNodeType() == Minus) || (GrandChildrenList->at(1)->getNodeType() == Times))) {
+				_GrandChildNodeAB = GrandChildrenList->at(1);
+				found = checkPatternMatchAssign(_GrandChildNodeAB, _rootNodeQ, isExact);
+			}
+
+			if(found)
+				return true;
+			else {
+				//** Important **//
+				if(_GrandChildNodeAA != NULL) {
+					found = recurseChecking(_GrandChildNodeAA->getChildren(), _rootNodeQ, isExact);
+				}
+				if(found==false && _GrandChildNodeAB != NULL) {
+					found = recurseChecking(_GrandChildNodeAB->getChildren(), _rootNodeQ, isExact);
+				}
+				return found;
+			}
 		}
 
 	return false;
@@ -195,9 +232,8 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, s
 	vector<int> tempResults, results;
 
 	//Short-hand check by ExpressionParser if particular node in _rootNodeQ already exist in AST while building queryAST
-	if(isExact == "*")
+	if(isExact.compare("*") == 0)
 	{
-		//No difference for Variable or Constant
 		if(_rightChildNodeA->getNodeType()==Constant && _rootNodeQ->getNodeType()==Constant)
 		{
 			if(_rightChildNodeA->getNodeValueIdx() == _rootNodeQ->getNodeValueIdx())
@@ -236,14 +272,13 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, s
 	return results;
 }
 
-
-
 /**
- * Pattern matching for while statements.
- * @return a vector of statement numbers which are while loops, and uses the input LHS as its control variable.
+ * Pattern matching for while or if statements.
+ * @return a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable.
  * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
+ * @param type the type of statement to match, either While or If
  */
-vector<int> PatternMatch::PatternMatchWhile(string LHS) {
+vector<int> PatternMatch::patternMatchParentStmt(string LHS, TNODE_TYPE type) {
 	// strip leading and trailing space
 	LHS.erase(0, LHS.find_first_not_of(" "));
 	LHS.erase(LHS.find_last_not_of(" ") + 1);
@@ -262,32 +297,36 @@ vector<int> PatternMatch::PatternMatchWhile(string LHS) {
 	// Get statements using the variable
 	vector<int> candidateList = PKB::getInstance().getUsesStmtNum(varIndex);
 
-	// Filter non-while statements from these statements
+	// Filter non-matching types from these statements
 	vector<int> result;
 	for (auto stmt = candidateList.begin(); stmt != candidateList.end(); ++stmt) {
-		bool isWhile = PKB::getInstance().isWhile(*stmt); 
-		if (isWhile) {
-			TNode* stmtNode = PKB::getInstance().nodeTable.at(*stmt);
+		bool isCorrectType = type == While ? 
+							 PKB::getInstance().isWhile(*stmt) : 
+							 PKB::getInstance().isIf(*stmt); ;
+		if (!isCorrectType) {
+			continue;
+		}
 
-			assert(stmtNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
-			if (stmtNode->getChildren()->size() < 1) {
-				continue;
-			}
-			int controlVariable = stmtNode->getChildren()->at(0)->getNodeValueIdx();
+		TNode* stmtNode = PKB::getInstance().nodeTable.at(*stmt);
 
-			if (controlVariable == varIndex) {
-				result.push_back(*stmt);
-			}
+		assert(stmtNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
+		if (stmtNode->getChildren()->size() < 1) {
+			continue;
+		}
+
+		int controlVariable = stmtNode->getChildren()->at(0)->getNodeValueIdx();
+		if (controlVariable == varIndex) {
+			result.push_back(*stmt);
 		}
 	}
 
 	return result;
 }
 
-/**
- * Pattern matching for if statements.
- * @return a vector of statement numbers which are if statements, and uses the input LHS as its control variable.
- * @param LHS the name of the variable that acts as the control variable for the if statements we are interested in.
- */
-//vector<int> PatternMatch::PatternMatchIf(string LHS) {
-//}
+PatternMatch::~PatternMatch() 
+{
+	/*if (varTable) 
+	{
+		delete varTable;
+	}*/
+}
