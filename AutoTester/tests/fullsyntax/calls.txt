@@ -1,0 +1,130 @@
+100 - CALLS
+procedure p, q; 
+Select p such that Calls(p, q)
+One, Three, Five, Six
+5000
+101 - CALLS
+procedure p, q; 
+Select q such that Calls(p, q)
+Two, Three, Four, Five, Six
+5000
+102 - 
+procedure p; 
+Select p such that Calls(p, "One")
+none
+5000
+103 - 
+procedure p; 
+Select p such that Calls(p, "Two")
+One, Six
+5000
+104 - 
+procedure p; variable v; 
+Select v such that Calls(p, "Two")
+a,b,c,f,x,y,z
+5000
+105 - 
+procedure p; 
+Select p such that Calls("One", p)
+Two, Three, Five
+5000
+106 - 
+procedure p; 
+Select p such that Calls("Two", p)
+none
+5000
+107 - 
+procedure p; 
+Select p such that Calls("Three", p)
+Four
+5000
+108 - 
+stmt s; 
+Select s such that Calls("One", "Six")
+none
+5000
+109 - 
+assign a; 
+Select a such that Calls("One", "Three")
+3, 4, 6, 7, 11, 12, 13,14,20,21,22,23,24,28,29,31,32,33,35,38
+5000
+110 - 
+assign a; 
+Select a such that Calls("One", "Seven")
+none
+5000
+111 - 
+prog_line l; 
+Select l such that Calls("Two", "One")
+none
+5000
+130 - CALLS*
+procedure p, q;
+Select p such that Calls*(p, q)
+One, Three, Five, Six
+5000
+131 -
+procedure p, q;
+Select q such that Calls*(p, q)
+Two, Three, Four, Five, Six
+5000
+132 - 
+procedure p;
+Select p such that Calls*(p, "Two")
+One, Six, Five
+5000
+133 - 
+procedure p;
+Select p such that Calls*(p, "Three")
+One
+5000
+134 - 
+procedure p;
+Select p such that Calls*(p, "Four")
+One, Three
+5000
+135 - 
+procedure p;
+Select p such that Calls*(p, "Six")
+One, Five
+5000
+136 - 
+procedure p;
+Select p such that Calls*(p, "Sevens")
+none
+5000
+137 - 
+procedure p;
+Select p such that Calls*("One", p)
+Two, Three, Five, Six, Four
+5000
+138 - 
+procedure p;
+Select p such that Calls*("Two", p)
+none
+5000
+139 - 
+procedure p;
+Select p such that Calls*("Five", p)
+Six, Two
+5000
+140 - 
+variable v;
+Select v such that Calls*("One", "Six")
+a,b,c,f,x,y,z
+5000
+141 - 
+stmt s;
+Select s such that Calls*("One", "Seven")
+none
+5000
+142 - 
+assign a;
+Select a such that Calls*("Three", "Five")
+none
+5000
+143 - 
+prog_line l;
+Select a such that Calls*("Two", "One")
+none
+5000
