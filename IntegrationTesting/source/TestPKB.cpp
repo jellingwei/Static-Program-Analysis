@@ -74,6 +74,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(0, 1)", false, pkb.isParent(0,1));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(21, 25)", false, pkb.isParent(21, 25));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(13, 15)", true, pkb.isParent(13,15));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(19, 20)", true, pkb.isParent(19,20));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(9999, 10000)", false, pkb.isParent(9999,10000));
 	
 
@@ -98,6 +99,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(7, 8)", true, pkb.isParentS(7, 8));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(7, 9)", true, pkb.isParentS(7, 9));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, 13)", true, pkb.isParentS(12, 13));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(19, 20)", true, pkb.isParentS(19, 20));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(13, 16)", true, pkb.isParentS(13, 16));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(12, 14)", true, pkb.isParentS(12, 14));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(21, 25)", true, pkb.isParentS(21, 25));
 	
