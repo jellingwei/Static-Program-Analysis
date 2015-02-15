@@ -204,8 +204,7 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('c', '_d+f+e_')", 0, (int)evaluate("assign a; Select a pattern a(\"c\", \"_d + f +e_\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('v', _)", 0, (int)evaluate("assign a; Select a pattern a(\"v\", _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v; pattern a(v, _'d'_)", 2, (int)evaluate("variable v; assign a; Select v pattern a(v, _\"d\"_)").size());
-	//@todo - query validator failed case
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _''_)'", 12, (int)evaluate("assign a; Select a pattern a(_, _\"\"_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _''_)'", 0, (int)evaluate("assign a; Select a pattern a(_, _\"\"_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)'", 12, (int)evaluate("assign a; Select a pattern a(_, _)").size());
 
 	//@todo - query validator failed case

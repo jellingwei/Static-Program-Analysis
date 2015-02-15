@@ -86,7 +86,7 @@ namespace QueryParser
 		std::tr1::sregex_token_iterator rs(query.begin(), query.end(), separatorRegex, -1);
 
 		// tokenise words and operators
-		string operators = "([\\w\\d\\*\\#]+|[.=_+;,(\\)\"])";
+		string operators = "([\\w\\d\\*\\#\\-]+|[.=_+;,(\\)\"])";
 		std::regex operRegex(operators);
 
 		for (; rs != reg_end; ++rs){
