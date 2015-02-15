@@ -173,38 +173,38 @@ assign a1;  variable v;
 Select v pattern a1(v, _)
 a,b,c,x,y,z, f
 5000
-60 - IF PATTERN
+46 - IF PATTERN
 if i;
-Select i pattern i(_, _)
+Select i pattern i(_, _, _)
 1, 5, 10, 15, 30
 5000
 47 - 
 if i;
-Select i pattern i("x", _)
+Select i pattern i("x", _, _)
 1
 5000
 48 - 
 if i; variable v;
-Select v pattern i(v, _)
+Select v pattern i(v, _, _)
 x, y, c, z, b
 5000
 49 - 
 if i; variable v;
-Select v pattern i("a", _)
+Select v pattern i("a", _, _)
 none
 5000
 50 - 
 if i;
-Select i pattern i("a", _)
+Select i pattern i("a", _, _)
 none
 5000
 51 - 
 if i, i1; variable v;
-Select i pattern i1(v, _)
+Select i pattern i1(v, _, _)
 x, y, c, z, b
 5000
 52 - 
 if i1; variable v, v1;
-Select v1 pattern i1(v, _)
+Select v1 pattern i1(v, _, _)
 x, y, c, z, b, a
 5000
