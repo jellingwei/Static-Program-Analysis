@@ -665,6 +665,10 @@ pair<vector<int>, vector<int>> PKB::getAllCallsPairsS()
 	return callsTable->getAllCallsPairs(transitiveClosure);
 }
 
+string PKB::getProcNameCalledByStatement(int stmtNum) {
+	return callsTable->getProcNameCalledByStatement(stmtNum);
+}
+
 vector<int> PKB::getCallsLhs() {
 	return callsTable->getLhs();
 }

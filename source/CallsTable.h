@@ -25,6 +25,8 @@ public:
 
 	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
 
+	string getProcNameCalledByStatement(int);
+
 	vector<int> getLhs();
 	vector<int> getRhs();
 
