@@ -911,7 +911,7 @@ namespace QueryParser
 	bool parsePatternClause()
 	{
 		string DE_type, DE_type2;
-		bool whilePatternExp = false;
+		bool whilePatternExp = false, ifPatternExp = false;
 
 		bool res = parse("pattern");
 		if (!res){
@@ -932,16 +932,19 @@ namespace QueryParser
 			return false;
 		}
 
-		if(DE_type.compare("assign")!= 0 && DE_type.compare("while") != 0){
+		if(DE_type.compare("while") == 0){
+			whilePatternExp = true;
+		}else if(DE_type.compare("if") == 0){
+			ifPatternExp = true;
+		}else if(DE_type.compare("assign")!= 0){
+			//patterns can only be either while, if or assign.
 			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), synonym not 'assign' or 'while' type. ");
+				throw exception("QueryParser error: parsePatternClause(), synonym not 'assign' or 'while' or 'if' type. ");
 			#endif
 
 			return false;
 		}
-		if(DE_type.compare("while") == 0){
-			whilePatternExp = true;
-		}
+
 		Synonym pattern_arg0(Synonym::convertToEnum(DE_type), peekBackwards(0)); 
 		
 
@@ -989,8 +992,19 @@ namespace QueryParser
 		} 
 
 		if(whilePatternExp){
+
 			res = parse("_");
 			if (!res) {return false;}
+		
+		}else if(ifPatternExp){
+
+			res = parse("_");
+			if (!res) {return false;}
+			res = parse(",");
+			if (!res) {return false;}
+			res = parse("_");
+			if (!res) {return false;}
+		
 		}else{
 
 			//an assign pattern 
