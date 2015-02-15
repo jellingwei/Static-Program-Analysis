@@ -176,6 +176,22 @@ vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure)
 	return resultList;
 }
 
+vector<int> CallsTable::getLhs() {
+	vector<int> result;
+	for (auto iter = procIndex2Map.begin(); iter != procIndex2Map.end(); ++iter) {
+		result.push_back(iter->first);
+	}
+	return result;
+}
+
+vector<int> CallsTable::getRhs() {
+	vector<int> result;
+	for (auto iter = procIndex1Map.begin(); iter != procIndex1Map.end(); ++iter) {
+		result.push_back(iter->first);
+	}
+	return result;
+}
+
 
 pair<vector<int>, vector<int>> CallsTable::getAllCallsPairs(bool transitiveClosure) 
 {

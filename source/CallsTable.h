@@ -25,6 +25,9 @@ public:
 
 	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
 
+	vector<int> getLhs();
+	vector<int> getRhs();
+
 private: 
 
 	unordered_map<int, vector<int>> procIndex1Map; // key is procIndex2

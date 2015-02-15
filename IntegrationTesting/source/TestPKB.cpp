@@ -305,6 +305,9 @@ void PKBTest::testPKB()
 	//CPPUNIT_ASSERT_EQUAL_MESSAGE("calls*(0, p)", 4, (int)pkb.getProcsCalledByS(0).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("calls(p, 2)", 2, (int)pkb.getProcsCalling(2).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Calls(_, )", 3, (int)pkb.getCallsLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Calls(, _)", 3, (int)pkb.getCallsRhs().size());
+
 	cout << "Proc table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test"), pkb.getProcName(0));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test2"), pkb.getProcName(1));

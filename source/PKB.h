@@ -93,6 +93,8 @@ public:
 	vector<int> getProcsCalledByS(int procIndex1);
 	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllCallsPairsS();
+	vector<int> getCallsLhs();
+	vector<int> getCallsRhs();
 
 	// StmtTable methods
 	bool insertStmt(int, string);
