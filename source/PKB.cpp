@@ -9,6 +9,7 @@ using namespace std;
 
 #include "PKB.h"
 #include "TNode.h"
+#include "Synonym.h"
 
 
 PKB::PKB() 
@@ -330,11 +331,22 @@ string PKB::getType(int stmtNum)
 /**
  * @return all the statement number of the statement type in the the StmtTable. 
  * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+ * @todo remove this
 */
 vector<int> PKB::getStmtNumForType(string type) 
 {
 	return stmtTable->getStmtNumForType(type);
 }
+
+/**
+ * @return all the statement number of the statement type in the the StmtTable. 
+ * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+*/
+vector<int> PKB::getStmtNumForType(SYNONYM_TYPE type) 
+{
+	return stmtTable->getStmtNumForType(Synonym::convertToString(type));
+}
+
 /**
 * @return TRUE if stmtNo is of Assignment Type. Otherwise, return FALSE. 
 * If stmtNo is out of range, return FALSE.
@@ -463,6 +475,22 @@ pair<vector<int>, vector<int>> PKB::getAllParentPairsS()
 }
 
 /**
+ * @return all stmt numbers where Parent(stmt, _) is true
+ */
+vector<int> PKB::getParentLhs()
+{
+	return parentTable->getAllParents();
+}
+
+/**
+ * @return all stmt numbers where Parent(_, stmt) is true
+ */
+vector<int> PKB::getParentRhs()
+{
+	return parentTable->getAllChildren();
+}
+
+/**
 * Sets the Follows relation.
 * Return TRUE if the AST is updated accordingly. Otherwise, return FALSE. 
 * If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
@@ -541,6 +569,13 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS()
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
+vector<int> PKB::getFollowsLhs() {
+	return followsTable->getLhs();
+}
+
+vector<int> PKB::getFollowsRhs() {
+	return followsTable->getRhs();
+}
 
 // CallsTable methods
 
@@ -630,6 +665,18 @@ pair<vector<int>, vector<int>> PKB::getAllCallsPairsS()
 	return callsTable->getAllCallsPairs(transitiveClosure);
 }
 
+string PKB::getProcNameCalledByStatement(int stmtNum) {
+	return callsTable->getProcNameCalledByStatement(stmtNum);
+}
+
+vector<int> PKB::getCallsLhs() {
+	return callsTable->getLhs();
+}
+
+vector<int> PKB::getCallsRhs() {
+	return callsTable->getRhs();
+}
+
 
 
 // ModifiesTable methods
@@ -641,7 +688,11 @@ pair<vector<int>, vector<int>> PKB::getAllCallsPairsS()
 */
 bool PKB::setModifies(int stmtNum, int varIndex) 
 {
-	return modifiesTable->setModifies(stmtNum, varIndex);
+	int procIndex = stmtToProcMap.at(stmtNum);
+	
+	bool updatedProc = modifiesTable->setModifiesProc(procIndex, varIndex);
+	bool updatedStmt = modifiesTable->setModifies(stmtNum, varIndex);
+	return updatedStmt || updatedProc;
 }
 
 /**
@@ -681,6 +732,14 @@ vector<int> PKB::getModVarForStmt(int stmtNum)
 pair<vector<int>, vector<int>> PKB::getAllModPair() 
 {
 	return modifiesTable->getAllModPair();
+}
+
+vector<int> PKB::getModifiesLhs() {
+	return modifiesTable->getLhs();
+}
+
+vector<int> PKB::getModifiesRhs() {
+	return modifiesTable->getRhs();
 }
 
 /**
@@ -742,7 +801,11 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair()
 */
 bool PKB::setUses(int stmtNum, int varIndex) 
 {
-	return usesTable->setUses(stmtNum, varIndex);
+	int procIndex = stmtToProcMap.at(stmtNum);
+
+	bool updateProc = usesTable->setUsesProc(procIndex, varIndex);
+	bool updateStmt = usesTable->setUses(stmtNum, varIndex);
+	return updateStmt || updateProc;
 }
 
 /**
@@ -784,7 +847,13 @@ pair<vector<int>, vector<int>> PKB::getAllUsesPair()
 	return usesTable->getAllUsesPair();
 }
 
+vector<int> PKB::getUsesLhs() {
+	return usesTable->getLhs();
+}
 
+vector<int> PKB::getUsesRhs() {
+	return usesTable->getRhs();
+}
 /**
 * Return TRUE if the UsesTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex and varIndex are already present in the UsesTable and are previously set, the UsesTable will not be updated.

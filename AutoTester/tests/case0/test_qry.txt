@@ -721,7 +721,7 @@ none
 145 - Pattern (uses nothing)
 assign a;
 Select a pattern a(_,"")
-1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 13, 14, 16, 17, 18, 19
+none
 5000
 146 - Pattern (uses nothing)
 assign a;

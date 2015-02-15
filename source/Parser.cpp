@@ -196,33 +196,10 @@ namespace Parser
 			} else if (designEntity.compare("Modifies") == 0) {
 				int modifiedVarIndex = pkb.getVarIndex(RHS);
 				int statement = atoi(LHS.c_str());
-				pkb.setModifies(statement, modifiedVarIndex);
-
-
-				while (pkb.getParent(statement).size()) {
-					statement = pkb.getParent(statement).at(0);
-					if (statement > 0) {
-						pkb.setModifies(statement, modifiedVarIndex);	
-					}
-				}
-
-				pkb.setModifiesProc(currentProcIndex, modifiedVarIndex);
-			
 				return true;
 			} else if (designEntity.compare("Uses") == 0) {
 				int statement = atoi(LHS.c_str());
 				int usedVarIndex = pkb.getVarIndex(RHS);
-			
-				pkb.setUses(statement, usedVarIndex);
-			
-				while (pkb.getParent(statement).size()) {
-					statement = pkb.getParent(statement).at(0);
-					if (statement > 0) {
-						pkb.setUses(statement, usedVarIndex);	
-					}
-				}
-
-				pkb.setUsesProc(currentProcIndex, usedVarIndex);
 				return true;
 			} else if (designEntity.compare("ConstantTable") == 0) {
 				pkb.insertConstant(atoi(RHS.c_str()), atoi(LHS.c_str()));
@@ -356,7 +333,7 @@ namespace Parser
 				astParent.erase(astParent.end() - 1);
 			} 
 
-			callPkb("Uses", std::to_string(static_cast<long long>(ifStmtNum)), varName);
+			//callPkb("Uses", std::to_string(static_cast<long long>(ifStmtNum)), varName);
 		
 			return res;
 		}
@@ -406,7 +383,7 @@ namespace Parser
 			// remove the while node from ASTParent
 			astParent.erase(astParent.end() - 1); 
 		
-			callPkb("Uses", std::to_string(static_cast<long long>(whileStmtNum)), varName);
+			//callPkb("Uses", std::to_string(static_cast<long long>(whileStmtNum)), varName);
 		
 			return res;
 		}
@@ -445,7 +422,7 @@ namespace Parser
 		
 			res = parseExpr(RHSNode);
 		
-			callPkb("Modifies", std::to_string(static_cast<long long>(stmtNum)), varName);
+			//callPkb("Modifies", std::to_string(static_cast<long long>(stmtNum)), varName);
 		
 			return res;
 		}
@@ -488,7 +465,9 @@ namespace Parser
 			if (currentParsedLine.find("=") == string::npos && firstToken != "while" && firstToken != "if" && firstToken != "call") {
 				return true;
 			}
+
 			stmtNum += 1;
+			PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
 
 			if (currentParsedLine.find("=") != string::npos) {
 				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "assign");
@@ -508,7 +487,6 @@ namespace Parser
 				int parent = stmtListParent[stmtListParent.size() - 1];
 				callPkb("Parent", std::to_string(static_cast<long long>(parent)), std::to_string(static_cast<long long>(stmtNum)));
 			}
-			PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
 
 			return res;
 		}

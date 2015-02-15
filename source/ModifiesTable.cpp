@@ -245,6 +245,21 @@ pair<vector<int>, vector<int>> ModifiesTable::getAllModProcPair()
 }
 
 
+vector<int> ModifiesTable::getLhs() {
+	// returns statement numbers  // is this just all statements?
+	vector<int> result;
+	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
+		result.push_back(iter->first);
+	}
+	return result;
+}
 
 
-
+vector<int> ModifiesTable::getRhs() {
+	// returns variables
+	vector<int> result;
+	for (auto iter = stmtNumMap.begin(); iter != stmtNumMap.end(); ++iter) {
+		result.push_back(iter->first);
+	}
+	return result;
+}

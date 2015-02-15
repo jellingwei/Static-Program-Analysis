@@ -71,20 +71,11 @@ namespace IntermediateValuesHandler
 			//get all the default values, intersect and join
 
 			SYNONYM_TYPE type = synonym.getType();
-			vector<int> allValues;
 			set<int> intermediateValues = synonym.getValuesSet();
 			set<int> finalValues;
 
 			//Get the default values
-			if (type == VARIABLE) {
-				allValues = pkb.getAllVarIndex();
-			} else if (type == CONSTANT) {
-				allValues = pkb.getAllConstant();
-			} else if (type == PROCEDURE) {
-				allValues = pkb.getAllProcIndex();
-			} else {
-				allValues = pkb.getStmtNumForType(Synonym::convertToString(type));
-			}
+			vector<int> allValues = getDefaultValues(type);
 
 			//Intersection
 			for (unsigned int i = 0; i < allValues.size(); i++) {
@@ -264,7 +255,6 @@ namespace IntermediateValuesHandler
 		swap(allIntermediateValues, acceptedValues);
 	}
 	
-	//@todo Now can process varName. Need procName also.
 	bool filterEqualValue(Synonym synonym, string wantedValue)
 	{
 		int synonymIndex = findIntermediateSynonymIndex(synonym.getName());
@@ -273,18 +263,7 @@ namespace IntermediateValuesHandler
 		//Get all the values from the synonyms map and do the comparison
 		if (synonymIndex == -1) {
 			SYNONYM_TYPE type = synonym.getType();
-			vector<int> allValues;
-			
-			//Get the default values
-			if (type == VARIABLE) {
-				allValues = pkb.getAllVarIndex();
-			} else if (type == CONSTANT) {
-				allValues = pkb.getAllConstant();
-			} else if (type == PROCEDURE) {
-				allValues = pkb.getAllProcIndex();
-			} else {
-				allValues = pkb.getStmtNumForType(Synonym::convertToString(type));
-			}
+			vector<int> allValues = getDefaultValues(type);
 			
 			for (unsigned int i = 0; i < allValues.size(); i++) {
 				if (type == PROCEDURE && synonym.getAttribute() == procName) {
@@ -316,6 +295,7 @@ namespace IntermediateValuesHandler
 				}
 			}
 		} else {
+			//This synonym is in the intermediate values table
 			int value;
 
 			if (synonym.getType() == VARIABLE) {
@@ -326,6 +306,7 @@ namespace IntermediateValuesHandler
 				value = stoi(wantedValue);
 			}
 		
+			//Do the comparison
 			for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
 				if (allIntermediateValues[i][synonymIndex] == value) {
 					acceptedValues.push_back(allIntermediateValues[i]);
@@ -347,28 +328,8 @@ namespace IntermediateValuesHandler
 		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
 		
 		if (indexLHS == -1 && indexRHS == -1) {
-			vector<int> valuesLHS;
-			vector<int> valuesRHS;
-			
-			if (LHS.getType() == VARIABLE) {
-				valuesLHS = pkb.getAllVarIndex();
-			} else if (LHS.getType() == CONSTANT) {
-				valuesLHS = pkb.getAllConstant();
-			} else if (LHS.getType() == PROCEDURE) {
-				valuesLHS = pkb.getAllProcIndex();
-			} else {
-				valuesLHS = pkb.getStmtNumForType(Synonym::convertToString(LHS.getType()));
-			}
-			
-			if (RHS.getType() == VARIABLE) {
-				valuesRHS = pkb.getAllVarIndex();
-			} else if (RHS.getType() == CONSTANT) {
-				valuesRHS = pkb.getAllConstant();
-			} else if (RHS.getType() == PROCEDURE) {
-				valuesRHS = pkb.getAllProcIndex();
-			} else {
-				valuesRHS = pkb.getStmtNumForType(Synonym::convertToString(RHS.getType()));
-			}
+			vector<int> valuesLHS = getDefaultValues(LHS.getType());
+			vector<int> valuesRHS = getDefaultValues(RHS.getType());
 			
 			vector<int> finalValuesLHS;
 			vector<int> finalValuesRHS;
@@ -385,32 +346,12 @@ namespace IntermediateValuesHandler
 			joinWithExistingValues(LHS, RHS);
 			return (allIntermediateValues.size() != 0);
 		} else if (indexLHS == -1) {
-			vector<int> valuesLHS;
-			
-			if (LHS.getType() == VARIABLE) {
-				valuesLHS = pkb.getAllVarIndex();
-			} else if (LHS.getType() == CONSTANT) {
-				valuesLHS = pkb.getAllConstant();
-			} else if (LHS.getType() == PROCEDURE) {
-				valuesLHS = pkb.getAllProcIndex();
-			} else {
-				valuesLHS = pkb.getStmtNumForType(Synonym::convertToString(LHS.getType()));
-			}
+			vector<int> valuesLHS = getDefaultValues(LHS.getType());
 			LHS.setValues(valuesLHS);
 			intersectAndJoinWithExistingValues(indexRHS, RHS, LHS);
 			return (allIntermediateValues.size() != 0);
 		} else if (indexRHS == -1) {
-			vector<int> valuesRHS;
-			
-			if (RHS.getType() == VARIABLE) {
-				valuesRHS = pkb.getAllVarIndex();
-			} else if (RHS.getType() == CONSTANT) {
-				valuesRHS = pkb.getAllConstant();
-			} else if (RHS.getType() == PROCEDURE) {
-				valuesRHS = pkb.getAllProcIndex();
-			} else {
-				valuesRHS = pkb.getStmtNumForType(Synonym::convertToString(RHS.getType()));
-			}
+			vector<int> valuesRHS = getDefaultValues(RHS.getType());
 			LHS.setValues(valuesRHS);
 			intersectAndJoinWithExistingValues(indexLHS, LHS, RHS);
 			return (allIntermediateValues.size() != 0);
@@ -443,18 +384,7 @@ namespace IntermediateValuesHandler
 		int synonymIndex = findIntermediateSynonymIndex(name);
 
 		if (synonymIndex == -1) {
-			vector<int> synonymValues;
-
-			if (type == "variable") {
-				synonymValues = pkb.getAllVarIndex();
-			} else if (type == "constant") {
-				synonymValues = pkb.getAllConstant();
-			} else if (type == "procedure") {
-				synonymValues = pkb.getAllProcIndex();
-			} else {
-				synonymValues = pkb.getStmtNumForType(type);
-			}
-
+			vector<int> synonymValues = getDefaultValues(Synonym::convertToEnum(type));
 			Synonym synonym(Synonym::convertToEnum(type), name, synonymValues);
 			return synonym;
 		} else {

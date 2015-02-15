@@ -21,6 +21,8 @@ namespace IntermediateValuesHandler
 	Synonym getSynonymWithName(string wantedName);
 	bool filterEqualValue(Synonym synonym, string wantedValue);
 	bool filterEqualPair(Synonym LHS, Synonym RHS);
+	inline bool isValueExist(set<int> setToSearch, int value);
+	vector<int> getDefaultValues(SYNONYM_TYPE type);
 
 	//Functions made public for testing purposes
 	void clear();
@@ -32,5 +34,4 @@ namespace IntermediateValuesHandler
 	int findIntermediateSynonymIndex(string synonymName);
 	set<int> getIntermediateValuesSet(int synonymIndex);
 	vector<int> getIntermediateValues(int synonymIndex);
-	inline bool isValueExist(set<int> setToSearch, int value);
 }

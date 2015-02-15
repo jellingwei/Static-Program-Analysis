@@ -1,0 +1,120 @@
+160 - WITH QUERIES
+variable v; 
+Select v with v.varName = "a"
+a
+5000
+161 - 
+variable v; 
+Select v with v.varName = "YOLO"
+none
+5000
+162 - 
+variable v; 
+Select v with v.varName = 10
+none
+5000
+162 - 
+assign a;
+Select a with a.stmt# = 1
+none
+5000
+163 - 
+assign a;
+Select BOOLEAN with a.stmt# = 4
+TRUE
+5000
+164 - 
+assign a;
+Select BOOLEAN with a.stmt# = 16
+FALSE
+5000
+165 - 
+assign a;
+Select BOOLEAN with a.stmt# = "HOHOHO"
+FALSE
+5000
+166 - 
+stmt s;
+Select BOOLEAN with s.stmt# = 25
+TRUE
+5000
+167 - 
+variable v; stmt s;
+Select v with s.stmt# = -1
+none
+5000
+168 - 
+stmt s;
+Select s with s.stmt# = "stmt"
+none
+5000
+169 - 
+procedure p;
+Select p with p.procName = "Seven"
+Seven
+5000
+170 - 
+procedure p;
+Select p with p.procName = "Eight"
+none
+5000
+171 - 
+procedure p;
+Select BOOLEAN with p.procName = One
+FALSE
+5000
+172 - 
+procedure p;
+Select BOOLEAN with p.procName = "ONE"
+FALSE
+5000
+173 - 
+call c;
+Select c with c.procName = "Two"
+9
+5000
+174 - 
+call c;
+Select c with c.procName = "-One"
+none
+5000
+175 - 
+call c;
+Select c with c.procName = -1
+none
+5000
+175 - 
+call c;
+Select BOOLEAN with c.procName = "Seven"
+FALSE
+5000
+176 - 
+call c;
+Select c with c.stmt# = 9
+9
+5000
+177 - 
+call c;
+Select c with c.stmt# = "9"
+none
+5000
+178 - 
+call c;
+Select BOOLEAN with c.stmt# = -1
+FALSE
+5000
+178 - 
+call c;
+Select BOOLEAN with c.stmt# = 15
+FALSE
+5000
+179 - 
+call c; procedure p;
+Select BOOLEAN with c.procName = p.procName
+TRUE
+5000
+180 - 
+call c; variable v;
+Select BOOLEAN with c.procName = v.varName
+FALSE
+5000

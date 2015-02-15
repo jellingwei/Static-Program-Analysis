@@ -29,8 +29,8 @@ void QueryValidator::initTable()
 	/* such that queries */
 
 	//Modifies argument 1
-	string list1array[] = { "stmt", "assign", "while", "prog_line", "string-int" };
-	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 5);
+	string list1array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "string-int" };
+	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 7);
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Modifies), list1));
 
 	//Modifies arguement 2
@@ -43,14 +43,18 @@ void QueryValidator::initTable()
 	//Uses argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Uses), list2));
 
+
+	string list3array[] = { "if", "while", "stmt", "prog_line", "string-int", "_" };
+	vector<string> list3; list3.insert(list3.begin(), list3array, list3array + 6);
+
+	string list4array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "string-int", "_" };
+	vector<string> list4; list4.insert(list4.begin(), list4array, list4array + 8);
+	
+	//constant is invalid for Parent
 	//Parent argument 1
-	string list3array[] = { "stmt", "while", "prog_line", "string-int", "_" };
-	vector<string> list3; list3.insert(list3.begin(), list3array, list3array + 5);
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Parent), list3));
 
 	//Parent argument 2
-	string list4array[] = { "stmt", "assign", "while", "prog_line", "string-int", "_" };
-	vector<string> list4; list4.insert(list4.begin(), list4array, list4array + 6);
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Parent), list4));
 
 	//ParentS argument 1
@@ -59,18 +63,20 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(ParentS), list4));
 
 	//Follows argument 1
-	string list5array[] = { "stmt", "assign", "while", "prog_line", "string-int", "_" };
-	vector<string> list5; list5.insert(list5.begin(), list5array, list5array + 6);
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Follows), list5));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Follows), list4));
 
 	//Follows argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Follows), list5));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Follows), list4));
 
 	//FollowsS argument 1
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(FollowsS), list4));
 
 	//FollowsS argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list4));
+
+
+	string list5array[] = { "assign", "stmt", "prog_line", "string-int", "_" };
+	vector<string> list5; list5.insert(list5.begin(), list5array, list5array + 5);
 
 	//Affects argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Affects), list5));
@@ -115,9 +121,11 @@ void QueryValidator::initTable()
 	vector<string> list8; list8.insert(list8.begin(), list8array, list8array + 3);
 	patternsArg1Map.insert(make_pair("assign", list8));  
 	patternsArg1Map.insert(make_pair("while", list8));
+	patternsArg1Map.insert(make_pair("if", list8));
 
 	vector<string> list9; //empty vector means no restrictions on arg2 of pattern assign.
 	patternsArg2Map.insert(make_pair("assign", list9)); 
+	patternsArg2Map.insert(make_pair("if", list9)); 
 
 	//while patterns argument 2
 	string list10array[] = {"_"};

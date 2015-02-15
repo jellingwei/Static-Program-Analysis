@@ -15,6 +15,7 @@
 #include "CallsTable.h"
 #include "AST.h"
 #include "TNode.h"
+#include "Synonym.h"
 
 using namespace std;
 typedef short PROC;
@@ -93,11 +94,15 @@ public:
 	vector<int> getProcsCalledByS(int procIndex1);
 	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllCallsPairsS();
+	string getProcNameCalledByStatement(int);
+	vector<int> getCallsLhs();
+	vector<int> getCallsRhs();
 
 	// StmtTable methods
 	bool insertStmt(int, string);
 	string getType(int);
 	vector<int> getStmtNumForType(string);
+	vector<int> getStmtNumForType(SYNONYM_TYPE);
 	bool isAssign(int);
 	bool isWhile(int);
 	bool isIf(int);
@@ -114,6 +119,8 @@ public:
 	bool isParentS(int stmtNum1, int stmtNum2);
 	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllParentPairsS();
+	vector<int> getParentLhs();  // get LHS of Parent(_, _)
+	vector<int> getParentRhs(); // get RHS of Parent(_, _)
 
 	// Follow Table methods
 	bool setFollows(TNode* stmt1, TNode* stmt2);
@@ -125,6 +132,8 @@ public:
 	bool isFollowsS(int stmtNum1, int stmtNum2);
 	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure = false);
 	pair<vector<int>, vector<int>> getAllFollowsPairsS();
+	vector<int> getFollowsLhs();
+	vector<int> getFollowsRhs();
 
 	// ModifiesTable methods
 	bool setModifies(int stmtNum, int varIndex);
@@ -132,6 +141,8 @@ public:
 	vector<int> getModStmtNum(int varIndex);
 	vector<int> getModVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllModPair();
+	vector<int> getModifiesLhs();
+	vector<int> getModifiesRhs();
 
 	bool setModifiesProc(int procIndex, int varIndex);
 	bool isModifiesProc(int procIndex, int varIndex);
@@ -145,6 +156,8 @@ public:
 	vector<int> getUsesStmtNum(int varIndex);
 	vector<int> getUsesVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllUsesPair();
+	vector<int> getUsesLhs();
+	vector<int> getUsesRhs();
 
 	bool setUsesProc(int procIndex, int varIndex);
 	bool isUsesProc(int procIndex, int varIndex);

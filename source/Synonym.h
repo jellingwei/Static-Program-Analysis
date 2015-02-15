@@ -10,7 +10,8 @@ using std::to_string;
 
 enum SYNONYM_TYPE
 {
-	PROCEDURE, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE, STRING,
+	PROCEDURE, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE, 
+	STRING,    //Used for constant args
 	BOOLEAN,   //Used for select boolean clauses
 	UNDEFINED  //Used to denote "_"
 };
