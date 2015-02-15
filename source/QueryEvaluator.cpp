@@ -30,7 +30,7 @@ namespace QueryEvaluator
 	bool processWithNode(QNode* withNode);
 
 	//Functions to process clauses
-	bool processSuchThatClause(QNode* clauseNode);
+	inline bool processSuchThatClause(QNode* clauseNode);
 	bool processModifies(Synonym arg1, Synonym arg2);
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS);
@@ -39,20 +39,14 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS);
 	
-	inline bool processParent(Synonym arg1, Synonym arg2);
-	inline bool processParentS(Synonym arg1, Synonym arg2);
 	bool processParentT(Synonym arg1, Synonym arg2, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, bool isTrans);
 	
-	inline bool processFollows(Synonym arg1, Synonym arg2);
-	inline bool processFollowsS(Synonym arg1, Synonym arg2);
 	bool processFollowsT(Synonym arg1, Synonym arg2, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
 	
-	inline bool processCalls(Synonym arg1, Synonym arg2);
-	inline bool processCallsS(Synonym arg1, Synonym arg2);
 	bool processCallsT(Synonym arg1, Synonym arg2, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
@@ -73,7 +67,6 @@ namespace QueryEvaluator
 	/**
 	* Processes the query tree given a query tree node.
 	* Return an empty vector if the Such That or Pattern clauses are invalid.
-	* @todo A more efficient way of organizing this function
 	*/
 	vector<Synonym> processQueryTree(QueryTree* qTreeRoot) 
 	{
@@ -154,7 +147,7 @@ namespace QueryEvaluator
 	* Method to processes each such that clause from the such that node
 	* Returns true if a clause is valid, false otherwise
 	*/
-	bool processSuchThatClause(QNode* clauseNode) 
+	inline bool processSuchThatClause(QNode* clauseNode) 
 	{
 		QNODE_TYPE qnode_type = clauseNode->getNodeType();
 		Synonym arg1 = clauseNode->getArg1();
@@ -166,17 +159,17 @@ namespace QueryEvaluator
 		case Uses:
 			return processUses(arg1, arg2);
 		case Parent:
-			return processParent(arg1, arg2);
+			return processParentT(arg1, arg2, false);
 		case ParentS:
-			return processParentS(arg1, arg2);
+			return processParentT(arg1, arg2, true);
 		case Follows:
-			return processFollows(arg1, arg2);
+			return processFollowsT(arg1, arg2, false);
 		case FollowsS:
-			return processFollowsS(arg1, arg2);
+			return processFollowsT(arg1, arg2, true);
 		case Calls:
-			return processCalls(arg1, arg2);
+			return processCallsT(arg1, arg2, false);
 		case CallsS:
-			return processCallsS(arg1, arg2);
+			return processCallsT(arg1, arg2, true);
 		case Next:
 		case NextS:
 		case Affects:
@@ -383,16 +376,6 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
-	inline bool processParent(Synonym arg1, Synonym arg2) 
-	{
-		return processParentT(arg1, arg2, false);
-	}
-
-	inline bool processParentS(Synonym arg1, Synonym arg2) 
-	{
-		return processParentT(arg1, arg2, true);
-	}
-
 	/**
 	* Method to processes the parent clause
 	* Returns true if this clause is valid, false otherwise
@@ -486,16 +469,6 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
-	inline bool processFollows(Synonym arg1, Synonym arg2) 
-	{
-		return processFollowsT(arg1, arg2, false);
-	}
-
-	inline bool processFollowsS(Synonym arg1, Synonym arg2) 
-	{
-		return processFollowsT(arg1, arg2, true);
-	}
-	
 	/**
 	* Method to processes the follows clause
 	* Returns true if this clause is valid, false otherwise
@@ -591,16 +564,6 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
-	inline bool processCalls(Synonym arg1, Synonym arg2)
-	{
-		return processCallsT(arg1, arg2, false);
-	}
-
-	inline bool processCallsS(Synonym arg1, Synonym arg2)
-	{
-		return processCallsT(arg1, arg2, true);
-	}
-	
 	bool processCallsT(Synonym arg1, Synonym arg2, bool isTrans)
 	{
 		if (AbstractWrapper::GlobalStop) {
@@ -624,7 +587,7 @@ namespace QueryEvaluator
 			if (stmt.size() == 0) {
 				return false;
 			}
-			Synonym synonym(arg2Type, arg2.getName(), stmt);
+			Synonym synonym(arg1Type, arg1.getName(), stmt);
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(synonym);
 		} else if (arg1Type == UNDEFINED && arg2Type == UNDEFINED) {
 			return true;
