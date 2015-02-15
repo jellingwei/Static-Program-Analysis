@@ -3,6 +3,7 @@
 //@TODO: Use one side to probe instead of finding all pairs
 //@TODO: For pairs, have to consider having "_" as the parameters
 //@TODO: Special handling for relation(_, _) if this does not exist
+//@TODO: With clauses for v.varName = p.procName
 
 #include <vector>
 #include <string>
@@ -811,8 +812,6 @@ namespace QueryEvaluator
 		return true;
 	}
 
-	//@todo call.procName and call.stmtNo
-	//@todo with clauses for constant strings
 	bool processWithClause(QNode* withClause)
 	{
 		//Assume that var and int cannot be compared (should be checked by the query validator)
