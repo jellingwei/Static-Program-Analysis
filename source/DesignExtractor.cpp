@@ -85,7 +85,9 @@ vector<int> getCallsInTopologicalOrder() {
 
 class CallComparator {
 public:
-	CallComparator(vector<int> topoOrder) {this->topoOrder = topoOrder; }
+	CallComparator(vector<int> topoOrder) {
+		this->topoOrder = topoOrder; 
+	}
 
 	bool operator() (TNode* i, TNode* j) { 
 		assert(i->getNodeType() == Call);
@@ -109,7 +111,7 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 
 	PKB pkb = PKB::getInstance();
 
-	vector<int> allCallStatementsNum = pkb.getStmtNumForType("call");
+	vector<int> allCallStatementsNum = pkb.getStmtNumForType(CALL);
 	
 	// obtain every call statement node
 	vector<TNode*> callStatementNodes;
@@ -158,9 +160,9 @@ void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
 		}
 
 		// for the current proc, set modifies
-		for (auto iter = varModifiedByProcCalled.begin(); iter != varModifiedByProcCalled.end(); ++iter) {
-			pkb.setModifiesProc(currentProc, *iter);
-		}
+		//for (auto iter = varModifiedByProcCalled.begin(); iter != varModifiedByProcCalled.end(); ++iter) {
+		//	pkb.setModifiesProc(currentProc, *iter);
+		//}
 		
 	}
 
@@ -199,10 +201,9 @@ void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
 			}			
 		}
 
-		// for the current proc, set uses
-		for (auto iter = varUsedByProcCalled.begin(); iter != varUsedByProcCalled.end(); ++iter) {
-			pkb.setUsesProc(currentProc, *iter);
-		}
+		//for (auto iter = varUsedByProcCalled.begin(); iter != varUsedByProcCalled.end(); ++iter) {
+		//	pkb.setUsesProc(currentProc, *iter);
+		//}
 		
 	}
 
@@ -223,7 +224,7 @@ void DesignExtractor::setModifiesForAssignmentStatements() {
 
 	PKB pkb = PKB::getInstance();
 
-	vector<int> assignStmts = pkb.getStmtNumForType("assign");
+	vector<int> assignStmts = pkb.getStmtNumForType(ASSIGN);
 	for (auto iter = assignStmts.begin(); iter != assignStmts.end(); ++iter) {
 		int stmtNumber = *iter;
 
@@ -241,13 +242,9 @@ void DesignExtractor::setModifiesForAssignmentStatements() {
 			if (stmtNumber <= 0) {
 				continue;
 			}
-			
-			pkb.setModifies(stmtNumber, varIndex);
-			
+			pkb.setModifies(stmtNumber, varIndex);	
 		}
-
 	}
-
 }
 
 vector<int> obtainVarUsedInExpression(TNode* node) {
@@ -278,10 +275,9 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 
 	PKB pkb = PKB::getInstance();
 
-	vector<int> assignStmts = pkb.getStmtNumForType("assign");
+	vector<int> assignStmts = pkb.getStmtNumForType(ASSIGN);
 	for (auto iter = assignStmts.begin(); iter != assignStmts.end(); ++iter) {
 		int stmtNumber = *iter;
-		cout << "going to set uses for assignment at stmt " << stmtNumber << endl;
 
 		// find variable used
 		TNode* node = pkb.nodeTable.at(stmtNumber);
@@ -299,25 +295,21 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 			}
 			for (auto varIter = varIndexesUsed.begin(); varIter != varIndexesUsed.end(); ++varIter) {
 				pkb.setUses(stmtNumber, *varIter);
-			}	
-			
+			}		
 		}
-
 	}
-
 }
 
 void DesignExtractor::setUsesForContainerStatements() {
 	PKB pkb = PKB::getInstance();
 
-	vector<int> containerStmts = pkb.getStmtNumForType("if");
-	vector<int> whileStmts = pkb.getStmtNumForType("while");
+	vector<int> containerStmts = pkb.getStmtNumForType(IF);
+	vector<int> whileStmts = pkb.getStmtNumForType(WHILE);
 
 	containerStmts.insert(containerStmts.end(), whileStmts.begin(), whileStmts.end());
 
 	for (auto iter = containerStmts.begin(); iter != containerStmts.end(); ++iter) {
 		int stmtNumber = *iter;
-		cout << "going to set uses for container at stmt " << stmtNumber << endl;
 
 		// find variable used
 		TNode* node = pkb.nodeTable.at(stmtNumber);
@@ -335,10 +327,6 @@ void DesignExtractor::setUsesForContainerStatements() {
 			}
 			
 			pkb.setUses(stmtNumber, varIndex);
-			
-			
 		}
-
 	}
-
 }
