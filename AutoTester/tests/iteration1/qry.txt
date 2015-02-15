@@ -46,7 +46,7 @@ none
 10 - Q
 if i; assign a;
 Select a such that Parent (i, a)
-6, 8
+6, 7
 5000
 11 - Q
 while w; assign a;
@@ -71,7 +71,7 @@ A, B
 15 - Q
 procedure p;
 Select p such that Calls(_, "C")
-A, B
+A, B, C
 5000
 16 - Q
 procedure p;
@@ -81,7 +81,7 @@ A
 17 - Q
 procedure p; stmt s;
 Select p such that Calls("A", p) with s.stmt# = 3
-none
+B, C
 5000
 18 - Q
 constant c; while w;
