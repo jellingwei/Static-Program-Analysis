@@ -128,6 +128,9 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(8, s)", 10, pkb.getStmtFollowedFrom(8).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(13, s)", 0, (int)pkb.getStmtFollowedFrom(13).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(14, s)", 0, (int)pkb.getStmtFollowedFrom(14).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(17, s)", 1, (int)pkb.getStmtFollowedFrom(17).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(21, s)", 0, (int)pkb.getStmtFollowedFrom(21).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(26, s)", 0, (int)pkb.getStmtFollowedFrom(26).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(9999, 10000)", false, pkb.isFollows(9999,10000));
 
 
@@ -186,6 +189,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'f')", 5, (int)pkb.getUsesStmtNum(pkb.getVarIndex("f")).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, _)", 0, (int)pkb.getUsesVarForStmt(1).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(20, _)", 3, (int)pkb.getUsesVarForStmt(20).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(26, _)", 3, (int)pkb.getUsesVarForStmt(26).size());
 	
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(_, )", 22, (int)pkb.getUsesLhs().size());
@@ -320,5 +324,7 @@ void PKBTest::testPKB()
 	cout << "Proc table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test"), pkb.getProcName(0));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test2"), pkb.getProcName(1));
+
+	cout << "End TestPkb" << endl;
 }
 
