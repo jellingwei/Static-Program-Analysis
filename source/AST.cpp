@@ -169,7 +169,7 @@ bool is_number(const std::string& s)
  * @param RHS to match the expression query with a suitable subtree.
  */
 vector<int> AST::patternMatchAssign(string RHS) {
-
+cout << "PQL gives " << RHS << endl;
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());		//remove whitespaces
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), '\"'), RHS.end());		//remove ""
 
