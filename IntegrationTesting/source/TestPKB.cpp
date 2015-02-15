@@ -46,10 +46,11 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Get invalid variable", -1, pkb.getVarIndex("z"));
 
 	// statements
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of statements", 26, (int)pkb.getStmtNumForType("stmt").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of assign", 12, (int)pkb.getStmtNumForType("assign").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of if", 4, (int)pkb.getStmtNumForType("if").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 6, (int)pkb.getStmtNumForType("while").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of statements", 26, (int)pkb.getStmtNumForType(STMT).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of assign", 12, (int)pkb.getStmtNumForType(ASSIGN).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of if", 4, (int)pkb.getStmtNumForType(IF).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 6, (int)pkb.getStmtNumForType(WHILE).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of call", 4, (int)pkb.getStmtNumForType(CALL).size());
 
 	// Test Design Extractor
 

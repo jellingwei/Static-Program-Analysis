@@ -9,6 +9,7 @@ using namespace std;
 
 #include "PKB.h"
 #include "TNode.h"
+#include "Synonym.h"
 
 
 PKB::PKB() 
@@ -330,11 +331,22 @@ string PKB::getType(int stmtNum)
 /**
  * @return all the statement number of the statement type in the the StmtTable. 
  * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+ * @todo remove this
 */
 vector<int> PKB::getStmtNumForType(string type) 
 {
 	return stmtTable->getStmtNumForType(type);
 }
+
+/**
+ * @return all the statement number of the statement type in the the StmtTable. 
+ * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+*/
+vector<int> PKB::getStmtNumForType(SYNONYM_TYPE type) 
+{
+	return stmtTable->getStmtNumForType(Synonym::convertToString(type));
+}
+
 /**
 * @return TRUE if stmtNo is of Assignment Type. Otherwise, return FALSE. 
 * If stmtNo is out of range, return FALSE.

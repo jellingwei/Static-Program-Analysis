@@ -15,6 +15,7 @@
 #include "CallsTable.h"
 #include "AST.h"
 #include "TNode.h"
+#include "Synonym.h"
 
 using namespace std;
 typedef short PROC;
@@ -100,6 +101,7 @@ public:
 	bool insertStmt(int, string);
 	string getType(int);
 	vector<int> getStmtNumForType(string);
+	vector<int> getStmtNumForType(SYNONYM_TYPE);
 	bool isAssign(int);
 	bool isWhile(int);
 	bool isIf(int);
