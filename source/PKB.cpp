@@ -160,6 +160,7 @@ int PKB::getVarTableSize()
 {
 	return varTable->getVarTableSize();
 }
+
 /**
  * @return the name of the variable in the VarTable with the given index.
  * If index is out of range, return an empty string.
@@ -206,6 +207,7 @@ vector<int> PKB::getAllVarIndex()
 /**
  * If procName is not in the ProcTable, inserts it into the ProcTable and 
  * return its index. Otherwise, return its INDEX and the table remains unchanged.
+ * @return index of procedure
  * @exception if procName is empty.
  */
 int PKB::insertProc(string procName) 
@@ -214,7 +216,7 @@ int PKB::insertProc(string procName)
 }
 
 /**
- * Return the total number of procedures in the the ProcTable.
+ * @return the total number of procedures in the the ProcTable.
  */
 int PKB::getProcTableSize() 
 {
@@ -222,7 +224,7 @@ int PKB::getProcTableSize()
 }
 
 /**
- * Return the name of the procedure in the ProcTable with the given index.
+ * @return the name of the procedure in the ProcTable with the given index.
  * If index is out of range, return an empty string.
  */
 string PKB::getProcName(int index) 
@@ -234,6 +236,7 @@ string PKB::getProcName(int index)
  * If procName is in the ProcTable, return its index. Otherwise, return -1 to
  * indicate there is no such procedure in the the ProcTable. If procName is empty or null, -1 is
  * returned.
+ * @return index of procedure or -1 if procName is empty or null
  * @exception if procName is empty
  */
 int PKB::getProcIndex(string procName) 
@@ -242,7 +245,7 @@ int PKB::getProcIndex(string procName)
 }
 
 /**
- * Return all the index of the variables in the the ProcTable.
+ * @return all the index of the variables in the the ProcTable.
  * If there is no answer, return an empty list.
  */
 vector<int> PKB::getAllProcIndex() 
@@ -270,6 +273,7 @@ int PKB::getConstantTableSize()
 {
 	return constantTable->getSize();
 }
+
 /**
  * @return the constant in the ConstantTable with the given index.
  * If index is out of range, return an empty string.
@@ -278,6 +282,7 @@ int PKB::getConstant(int index)
 {
 	return constantTable->getConstant(index);
 }
+
 /**
 * @return the index of a constant in ConstantTable using the constant as the key.
 */
@@ -285,6 +290,7 @@ int PKB::getConstantIndex(int constant)
 {
 	return constantTable->getConstantIndex(constant);
 }
+
 /**
 * @return the statement number the constant is in the ConstantTable.
 */
@@ -292,6 +298,7 @@ vector<int> PKB::getStmtNum(int constant)
 {
 	return constantTable->getStmtNum(constant);
 }
+
 /**
 * Check if it is a constant in the ConstantTable.
 * @return TRUE if number is a constant in the ConstantTable, otherwise FALSE
@@ -310,15 +317,18 @@ vector<int> PKB::getAllConstant()
 }
 
 // StmtTable
+
 /**
-* @return TRUE if the StmtTable is updated accordingly. Otherwise, return FALSE. 
-* If stmtNum and type are already present in the StmtTable and are previously set, the StmtTable will not be updated.
-* @exception if stmtNum is negative or 0, or type is not while/assign/if.
-*/
+ * If stmtNum is not in the StmtTable, inserts it into the StmtTable with the
+ * given type.
+ * @return TRUE if constantTable got updated. Otherwise, return FALSE.
+ * @exception if stmtNum is negative or 0, or type is not while/assign/if.
+ */
 bool PKB::insertStmt(int stmtNum, string type) 
 {
 	return stmtTable->insertStmt(stmtNum, type);
 }
+
 /**
  * @return the statement type in the StmtTable with the given statement number.
  * If stmtNum is out of range, return an empty string.
@@ -328,9 +338,11 @@ string PKB::getType(int stmtNum)
 {
 	return stmtTable->getType(stmtNum);
 }
+
 /**
  * @return all the statement number of the statement type in the the StmtTable. 
  * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+ * @exception if type is not while/assign/if.
  * @todo remove this
 */
 vector<int> PKB::getStmtNumForType(string type) 
@@ -355,6 +367,7 @@ bool PKB::isAssign(int stmtNum)
 {
 	return stmtTable->isAssign(stmtNum);
 }
+
 /**
 * @return TRUE if stmtNo is of While Type. Otherwise, return FALSE. 
 * If stmtNo is out of range, return FALSE.
@@ -407,7 +420,7 @@ bool PKB::setParent(TNode* stmtNum1, TNode* stmtNum2)
 
 /**
 * @return a vector of stmtNums of the parent of stmtNum2, based on the Parent relation, if transitiveClosure is false,
-*		  otherwise, a vector of ancestors of stmtNum2
+*		  otherwise, a vector of ancestors of stmtNum2.
 */
 vector<int> PKB::getParent(int stmtNum2, bool transitiveClosure) 
 {
@@ -425,7 +438,7 @@ vector<int> PKB::getParentS(int stmtNum2)
 
 /**
 * @return a vector of stmtNums of the child of stmtNum1, based on the Parent relation, if transitiveClosure is false,
-*		  otherwise, a vector of ancestors of stmtNum2
+*		  otherwise, a vector of ancestors of stmtNum2.
 */
 vector<int> PKB::getChild(int stmtNum1, bool transitiveClosure) 
 {
@@ -442,14 +455,15 @@ vector<int> PKB::getChildS(int stmtNum1)
 }
 
 /**
- * @return TRUE if Parent(stmtNum1, stmtNum2) holds
+ * @return TRUE if Parent(stmtNum1, stmtNum2) holds.
  */
 bool PKB::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
+
 /**
- * @return TRUE if Parent*(stmtNum1, stmtNum2) holds
+ * @return TRUE if Parent*(stmtNum1, stmtNum2) holds.
  */
 bool PKB::isParentS(int stmtNum1, int stmtNum2) 
 {
@@ -458,7 +472,7 @@ bool PKB::isParentS(int stmtNum1, int stmtNum2)
 }
 
 /**
-* Get all pairs of stmtNum1, stmtNum2 where Parent(stmtNum1, stmtNum2) is satisfied
+* @return all pairs of stmtNum1, stmtNum2 where Parent(stmtNum1, stmtNum2) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllParentPairs(bool transitiveClosure) 
 {
@@ -466,7 +480,7 @@ pair<vector<int>, vector<int>> PKB::getAllParentPairs(bool transitiveClosure)
 }
 
 /**
-* Get all pairs of stmtNum1, stmtNum2 where Parent*(stmtNum1, stmtNum2) is satisfied
+* @return all pairs of stmtNum1, stmtNum2 where Parent*(stmtNum1, stmtNum2) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllParentPairsS() 
 {
@@ -475,7 +489,7 @@ pair<vector<int>, vector<int>> PKB::getAllParentPairsS()
 }
 
 /**
- * @return all stmt numbers where Parent(stmt, _) is true
+ * @return all stmt numbers where Parent(stmt, _) is true.
  */
 vector<int> PKB::getParentLhs()
 {
@@ -483,16 +497,18 @@ vector<int> PKB::getParentLhs()
 }
 
 /**
- * @return all stmt numbers where Parent(_, stmt) is true
+ * @return all stmt numbers where Parent(_, stmt) is true.
  */
 vector<int> PKB::getParentRhs()
 {
 	return parentTable->getAllChildren();
 }
 
+// FollowsTable 
+
 /**
 * Sets the Follows relation.
-* Return TRUE if the AST is updated accordingly. Otherwise, return FALSE. 
+* @return TRUE if the AST is updated accordingly. Otherwise, return FALSE. 
 * If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
 * @exception if stmtNum is negative or 0, or stmtNum2 is negative.
 */
@@ -509,6 +525,7 @@ vector<int> PKB::getStmtFollowedTo(int stmtNum2, bool transitiveClosure)
 {
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
+
 /**
 * @param stmtNum2
 * @return a vector of stmtNum, where Follows*(stmtNum, stmtNum2) is satisfied.
@@ -518,6 +535,7 @@ vector<int> PKB::getStmtFollowedToS(int stmtNum2)
 	bool transitiveClosure = true;
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
+
 /**
 * @param stmtNum1
 * @return a vector of stmtNum, where Follows(stmtNum1, stmtNum) is satisfied.
@@ -526,6 +544,7 @@ vector<int> PKB::getStmtFollowedFrom(int stmtNum1 , bool transitiveClosure)
 {
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
+
 /**
 * @param stmtNum1
 * @return a vector of stmtNum, where Follows*(stmtNum1, stmtNum) is satisfied.
@@ -553,7 +572,7 @@ bool PKB::isFollowsS(int stmtNum1, int stmtNum2)
 }
 
 /**
-* Get all pairs of stmtNum1, stmtNum2 where Follows(stmtNum1, stmtNum2) is satisfied.
+* @return all pairs of stmtNum1, stmtNum2 where Follows(stmtNum1, stmtNum2) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure) 
 {
@@ -561,7 +580,7 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure)
 }
 
 /**
-* Get all pairs of stmtNum1, stmtNum2 where Follows*(stmtNum1, stmtNum2) is satisfied.
+* @return all pairs of stmtNum1, stmtNum2 where Follows*(stmtNum1, stmtNum2) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS() 
 {
@@ -569,10 +588,16 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS()
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
+/**
+* @return a vector of statement numbers, stmtNum1, that follows stmtNum2.
+*/
 vector<int> PKB::getFollowsLhs() {
 	return followsTable->getLhs();
 }
 
+/**
+* @return a vector of statement numbers, stmtNum2, that stmtNum1 follows.
+*/
 vector<int> PKB::getFollowsRhs() {
 	return followsTable->getRhs();
 }
@@ -580,7 +605,8 @@ vector<int> PKB::getFollowsRhs() {
 // CallsTable methods
 
 /**
-* Return TRUE if the CallsTable is updated accordingly. Otherwise, return FALSE. 
+* Sets the Calls relation.
+* @return TRUE if the CallsTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex1 and procIndex2 are already present in the CallsTable and are previously set, the CallsTable will not be updated.
 * @exception if procIndex1 or procIndex2 is negative.
 */
@@ -590,7 +616,7 @@ bool PKB::setCalls(int procIndex1, int procIndex2)
 }
 
 /**
-* Return TRUE if the Calls relationship holds between 2 procedures, p and q.
+* @return TRUE if the Calls relationship holds between 2 procedures, p and q.
 * If procIndex1 or procIndex2 is negative, return FALSE.
 */
 bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) 
@@ -599,7 +625,7 @@ bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure)
 }
 
 /**
-* Return TRUE if the Calls* relationship holds between 2 procedures, p and q.
+* @return TRUE if the Calls* relationship holds between 2 procedures, p and q.
 * If procIndex1 or procIndex2 is negative, return FALSE.
 */
 bool PKB::isCallsS(int procIndex1, int procIndex2) 
@@ -610,7 +636,8 @@ bool PKB::isCallsS(int procIndex1, int procIndex2)
 
 /**
  * @param procIndex2
- * @return a vector of procedures indexes that call procIndex2
+ * @return a vector of procedures indexes that call procIndex2.
+ * @exception if procIndex2 is negative.
  */
 vector<int> PKB::getProcsCalling(int procIndex2, bool transitiveClosure) 
 {
@@ -619,7 +646,8 @@ vector<int> PKB::getProcsCalling(int procIndex2, bool transitiveClosure)
 
 /**
  * @param procIndex2
- * @return a vector of procedures indexes that transitively call procIndex2
+ * @return a vector of procedures indexes that transitively call procIndex2.
+ * @exception if procIndex2 is negative.
  */
 vector<int> PKB::getProcsCallingS(int procIndex2) 
 {
@@ -629,7 +657,8 @@ vector<int> PKB::getProcsCallingS(int procIndex2)
 
 /**
  * @param procIndex1
- * @return a vector of procedures indexes that proxIndex1 calls
+ * @return a vector of procedures indexes that proxIndex1 calls.
+ * @exception if procIndex1 is negative.
  */
 vector<int> PKB::getProcsCalledBy(int procIndex1, bool transitiveClosure) 
 {
@@ -638,7 +667,8 @@ vector<int> PKB::getProcsCalledBy(int procIndex1, bool transitiveClosure)
 
 /**
  * @param procIndex1
- * @return a vector of procedures indexes that proxIndex1 calls
+ * @return a vector of procedures indexes that proxIndex1 calls.
+ * @exception if procIndex1 is negative.
  */
 vector<int> PKB::getProcsCalledByS(int procIndex1) 
 {
@@ -665,24 +695,34 @@ pair<vector<int>, vector<int>> PKB::getAllCallsPairsS()
 	return callsTable->getAllCallsPairs(transitiveClosure);
 }
 
+/**
+ * @return the procedure name that is called by the statement number stmtNum.
+ * @exception if stmtNum is negative or 0.
+ */
 string PKB::getProcNameCalledByStatement(int stmtNum) {
 	return callsTable->getProcNameCalledByStatement(stmtNum);
 }
 
+/**
+* @return a vector of procedure index, procIndex1, that calls procIndex2.
+*/
 vector<int> PKB::getCallsLhs() {
 	return callsTable->getLhs();
 }
 
+/**
+* @return a vector of procedure index, procIndex2, that procIndex1 calls.
+*/
 vector<int> PKB::getCallsRhs() {
 	return callsTable->getRhs();
 }
 
 
-
 // ModifiesTable methods
 
 /**
-* Return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
+* Sets the Modifies relation.
+* @return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
 * If stmtNum and varIndex are already present in the ModifiesTable and are previously set, the ModifiesTable will not be updated.
 * @exception if stmtNum is negative or 0, or varIndex is negative.
 */
@@ -696,8 +736,8 @@ bool PKB::setModifies(int stmtNum, int varIndex)
 }
 
 /**
-* Return TRUE if the Modifies relationship holds between statement number
-* and the variable index.
+* @return TRUE if the Modifies relationship holds between statement number stmtNum
+* and the variable index varIndex.
 * If stmtNum is negative or 0, or varIndex is negative, return FALSE.
 */
 bool PKB::isModifies(int stmtNum, int varIndex) 
@@ -706,7 +746,7 @@ bool PKB::isModifies(int stmtNum, int varIndex)
 }
 
 /**
-* Return the list of all the statements that modifies the variable index. 
+* @return the list of all the statements that modifies the variable index. 
 * If there is no answer, or if varIndex is invalid, return an empty list.
 */
 vector<int> PKB::getModStmtNum(int varIndex) 
@@ -715,7 +755,7 @@ vector<int> PKB::getModStmtNum(int varIndex)
 }
 
 /**
-* Return the list of all the variables that is modified by the statement number. 
+* @return the list of all the variables that is modified by the statement number. 
 * If there is no answer, or if stmtNum is negative or 0, return an empty list.
 */
 vector<int> PKB::getModVarForStmt(int stmtNum) 
@@ -724,26 +764,30 @@ vector<int> PKB::getModVarForStmt(int stmtNum)
 }
 
 /**
-* Return a pair of lists of statements and variable indexes, which correspond to the entire set of pairs of statements 
-* and variables satisfying Modifies(stmtNum, varIndex). The first value of the pair(stmtNum) is contained in the first 
-* list in the pair, and the second value of the pair(varIndex) is contained in the second list in the pair. 
-* If there is no such pair, a pair containing 2 empty lists is returned.
+* @return all pairs of stmtNum, varIndex where Modifies(stmtNum, varIndex) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllModPair() 
 {
 	return modifiesTable->getAllModPair();
 }
 
+/**
+* @return a vector of statement numbers, stmtNum, that modifies variable varIndex.
+*/
 vector<int> PKB::getModifiesLhs() {
 	return modifiesTable->getLhs();
 }
 
+/**
+* @return a vector of variable index, varIndex, that is being modified by statement number stmtNum.
+*/
 vector<int> PKB::getModifiesRhs() {
 	return modifiesTable->getRhs();
 }
 
 /**
-* Return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
+* Sets the Modifies relation.
+* @return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex and varIndex are already present in the ModifiesTable and are previously set, the ModifiesTable will not be updated.
 * @exception if procIndex or varIndex is negative.
 */
@@ -753,7 +797,7 @@ bool PKB::setModifiesProc(int procIndex, int varIndex)
 }
 
 /**
-* Return TRUE if the Modifies relationship holds between procedure index
+* @return TRUE if the Modifies relationship holds between procedure index
 * and the variable index.
 * If stmtNum or varIndex is negative, return FALSE.
 */
@@ -763,7 +807,7 @@ bool PKB::isModifiesProc(int procIndex, int varIndex)
 }
 
 /**
-* Return the list of all the procedure indexes that modifies the variable index. 
+* @return the list of all the procedure indexes that modifies the variable index. 
 * If there is no answer, or if varIndex is invalid, return an empty list.
 */
 vector<int> PKB::getModProcIndex(int varIndex) 
@@ -772,7 +816,7 @@ vector<int> PKB::getModProcIndex(int varIndex)
 }
 
 /**
-* Return the list of all the variables that is modified by the procedure index. 
+* @return the list of all the variables that is modified by the procedure index. 
 * If there is no answer, or if procIndex is negative, return an empty list.
 */
 vector<int> PKB::getModVarForProc(int procIndex) 
@@ -781,10 +825,7 @@ vector<int> PKB::getModVarForProc(int procIndex)
 }
 
 /**
-* Return a pair of lists of procedure indexes and variable indexes, which correspond to the entire set of pairs of procedures 
-* and variables satisfying Modifies(procIndex, varIndex). The first value of the pair(procIndex) is contained in the first 
-* list in the pair, and the second value of the pair(varIndex) is contained in the second list in the pair. 
-* If there is no such pair, a pair containing 2 empty lists is returned.
+* @return all pairs of procIndex, varIndex where Modifies(procIndex, varIndex) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllModProcPair() 
 {
@@ -795,7 +836,8 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair()
 // UsesTable methods
 
 /**
-* Return TRUE if the UsesTable is updated accordingly. Otherwise, return FALSE. 
+* Sets the Uses relation.
+* @return TRUE if the UsesTable is updated accordingly. Otherwise, return FALSE. 
 * If stmtNum and varIndex are already present in the UsesTable and are previously set, the UsesTable will not be updated.
 * @exception if stmtNum is negative or 0, or varIndex is negative.
 */
@@ -809,7 +851,7 @@ bool PKB::setUses(int stmtNum, int varIndex)
 }
 
 /**
-* Return TRUE if the Uses relationship holds between statement number
+* @return TRUE if the Uses relationship holds between statement number
 * and the variable index.
 * If stmtNum is negative or 0, or varIndex is negative, return FALSE.
 */
@@ -819,7 +861,7 @@ bool PKB::isUses(int stmtNum, int varIndex)
 }
 
 /**
-* Return the list of all the statements that uses the variable index. 
+* @return the list of all the statements that uses the variable index. 
 * If there is no answer, or if varIndex is invalid, return an empty list.
 */
 vector<int> PKB::getUsesStmtNum(int varIndex) 
@@ -828,7 +870,7 @@ vector<int> PKB::getUsesStmtNum(int varIndex)
 }
 
 /**
-* Return the list of all the variables that is used by the statement number. 
+* @return the list of all the variables that is used by the statement number. 
 * If there is no answer, or if stmtNum is negative or 0, return an empty list.
 */
 vector<int> PKB::getUsesVarForStmt(int stmtNum) 
@@ -837,25 +879,31 @@ vector<int> PKB::getUsesVarForStmt(int stmtNum)
 }
 
 /**
-* Return a pair of lists of statements and variable indexes, which correspond to the entire set of pairs of statements 
-* and variables satisfying Uses(stmtNum, varIndex). The first value of the pair(stmtNum) is contained in the first 
-* list in the pair, and the second value of the pair(varIndex) is contained in the second list in the pair. 
-* If there is no such pair, a pair containing 2 empty lists is returned.
+* @return all pairs of stmtNum, varIndex where Uses(stmtNum, varIndex) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllUsesPair() 
 {
 	return usesTable->getAllUsesPair();
 }
 
+/**
+* @return a vector of statement numbers, stmtNum, that uses variable varIndex.
+*/
 vector<int> PKB::getUsesLhs() {
 	return usesTable->getLhs();
 }
 
+/**
+* @return a vector of variable index, varIndex, that is used by the statement number stmtNum.
+*/
 vector<int> PKB::getUsesRhs() {
 	return usesTable->getRhs();
 }
+
+
 /**
-* Return TRUE if the UsesTable is updated accordingly. Otherwise, return FALSE. 
+* Sets the Uses relation.
+* @return TRUE if the UsesTable is updated accordingly. Otherwise, return FALSE. 
 * If procIndex and varIndex are already present in the UsesTable and are previously set, the UsesTable will not be updated.
 * @exception if procIndex or varIndex is negative.
 */
@@ -865,7 +913,7 @@ bool PKB::setUsesProc(int procIndex, int varIndex)
 }
 
 /**
-* Return TRUE if the Uses relationship holds between procedure index
+* @return TRUE if the Uses relationship holds between procedure index
 * and the variable index.
 * If procIndex or varIndex is negative, return FALSE.
 */
@@ -875,7 +923,7 @@ bool PKB::isUsesProc(int procIndex, int varIndex)
 }
 
 /**
-* Return the list of all the procedures that uses the variable index. 
+* @return the list of all the procedures that uses the variable index. 
 * If there is no answer, or if varIndex is invalid, return an empty list.
 */
 vector<int> PKB::getUsesProcIndex(int varIndex) 
@@ -884,7 +932,7 @@ vector<int> PKB::getUsesProcIndex(int varIndex)
 }
 
 /**
-* Return the list of all the variables that is used by the procedure. 
+* @return the list of all the variables that is used by the procedure. 
 * If there is no answer, or if procIndex is negative, return an empty list.
 */
 vector<int> PKB::getUsesVarForProc(int procIndex) 
@@ -893,10 +941,7 @@ vector<int> PKB::getUsesVarForProc(int procIndex)
 }
 
 /**
-* Return a pair of lists of procedure indexes and variable indexes, which correspond to the entire set of pairs of procedures 
-* and variables satisfying Uses(procIndex, varIndex). The first value of the pair(procIndex) is contained in the first 
-* list in the pair, and the second value of the pair(varIndex) is contained in the second list in the pair. 
-* If there is no such pair, a pair containing 2 empty lists is returned.
+* @return all pairs of procIndex, varIndex where Uses(procIndex, varIndex) is satisfied.
 */
 pair<vector<int>, vector<int>> PKB::getAllUsesProcPair() 
 {
