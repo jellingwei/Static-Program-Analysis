@@ -69,7 +69,7 @@ bool AST::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
 		case Left_Sibling: {
 			TNode& temp = *fromNode;
 			temp.addLeftSibling(toNode);
-			TNode temp2 = *toNode;
+			TNode& temp2 = *toNode;
 			temp2.addRightSibling(fromNode);
 			return true; }
 
@@ -198,29 +198,37 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		return results;
 	}
 
-	//int count = 0;
-	int oper_ator = (int)RHS.find_first_of("+-*()");
+	// remove blocks of multiple whitespace
+	string multipleSpaces = "[\\s]+";
+	regex separatorRegex(multipleSpaces);
+	sregex_token_iterator reg_end;
+	sregex_token_iterator rs(RHS.begin(), RHS.end(), separatorRegex, -1);
+	
+	// tokenise words and operators
+	string operators = "([\\w\\d]+|[*\\-+=;{}\\(\\)])";
+	regex operRegex(operators);
 
-	while(oper_ator!=string::npos) {
-//cout << "operand " << RHS.substr(0, oper_ator) << endl;
-//cout << "operator " << RHS.substr(oper_ator, 1) << endl;
-		vRHS.push_back(RHS.substr(0, oper_ator));
-		vRHS.push_back(RHS.substr(oper_ator, 1));
-		RHS.erase(0, oper_ator+1);
-		//RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());	
-//cout << "RHS now " << RHS << endl;
-		oper_ator = (int)RHS.find_first_of("+-*()");
+	for (; rs != reg_end; ++rs) 
+	{
+		std::smatch match;
+		string res(rs->str());
+		while (std::regex_search(res, match, operRegex)) 
+		{
+			if (match.empty()) 
+			{
+				break;
+			}
+			vRHS.push_back(match[0]);
+			res = match.suffix().str();
+		} 
 	}
 
-	//@todo remove whitespaces for ()
-	vRHS.push_back(RHS);
-
-/*	cout << "=======" << endl;
-	cout << "inside vRHS " << endl;
+	/*cout << "inside vRHS " << endl;
 	for (int i=0; i<vRHS.size();i++)
 		cout << "[" << vRHS[i] << "]" << " ";
 	cout << " " << endl;
-cout << "myvector has " << vRHS.size() << " elements" << endl;*/
+cout << "myvector has " << vRHS.size() << " elements" << endl;
+cout << "=======" << endl;	*/
 
 	ExpressionParser exprParser;
 	TNode* top = exprParser.parseExpressionForQuerying(vRHS);
