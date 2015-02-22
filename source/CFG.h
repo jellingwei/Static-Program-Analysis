@@ -15,7 +15,7 @@ class CFG {
 
 	public:
 		CFG(TNode* procNode);														
-		CNode* createCNode(CNODE_TYPE cfg_node_type, int stmtNo, CNode* header, TNode* ast);						
+		CNode* createCNode(CNODE_TYPE cfg_node_type, int procLineNo, CNode* header, TNode* ast);						
 		CNode* getProcRoot();
 		bool createLink(CLINK_TYPE link, CNode* currNode, CNode* toNode);
 		
@@ -47,4 +47,6 @@ class CFG {
 		TNode* getASTref(CNode* node);
 
 		void setEndNode(CNode* CFGlast);
+
+		static CNODE_TYPE convertTNodeTypeToCNodeType(TNODE_TYPE tNodeType);
 };

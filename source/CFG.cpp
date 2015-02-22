@@ -14,7 +14,7 @@ CFG::CFG(TNode* procNode) {
 	_procNode = new CNode(Proc_C, 0, NULL, procNode);
 	//allNodes.push_back(_procNode);
 
-	_endNode = new CNode(End_C, 0, NULL, NULL);
+	_endNode = new CNode(EndProc_C, 0, NULL, NULL);
 	_endNode->setEnd();
 }
 
@@ -209,4 +209,23 @@ TNode* CFG::getASTref(CNode* node) {
 
 void CFG::setEndNode(CNode* CFGlast) {
 	CFGlast->addAfter(_endNode);
+}
+
+CNODE_TYPE CFG::convertTNodeTypeToCNodeType(TNODE_TYPE type) {
+	switch(type) {
+	case Assign:
+		return Assign_C;
+		break;
+	case While:
+		return While_C;
+		break;
+	case If:
+		return If_C;
+		break;
+	case Procedure:
+		return Proc_C;
+		break;
+	default:
+		throw logic_error("CFG::convertTNodeTypeToCNodeType does not support the TNODE_TYPE passed in. ");
+	}
 }
