@@ -13,6 +13,7 @@
 #include "ParentTable.h"
 #include "ConstantTable.h"
 #include "CallsTable.h"
+#include "CFG.h"
 #include "AST.h"
 #include "TNode.h"
 #include "Synonym.h"
@@ -165,11 +166,15 @@ public:
 	vector<int> getUsesVarForProc(int procIndex);
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
+	// cfg
+	vector<CFG*> CfgTable;
+
 
 	//@todo move to somewhere in pkb? discuss with kenson
 	// @cond todo
 	unordered_map<int, TNode*> nodeTable;
 	unordered_map<int, int> stmtToProcMap;  // a temporary structure for convenience
+	unordered_map<int, int> stmtNumToProcLineMap; // a temporary structure for mapping proc lines to stmt num
 	// @endcond
 
 private:
