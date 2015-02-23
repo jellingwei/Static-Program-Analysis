@@ -205,44 +205,60 @@ bool procNodesCompare(TNode* node1, TNode* node2) {
 	return node1->getNodeValueIdx() < node2->getNodeValueIdx();
 }
 
+
+CNode* createNextNode(TNode* nextStmt, CFG* cfg) {
+	PKB pkb = PKB::getInstance();
+	CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmt->getNodeType());
+	CNode* nextCNode = cfg->createCNode(cNodeType, 
+										pkb.stmtNumToProcLineMap.at(nextStmt->getStmtNumber()),
+										NULL, nextStmt);
+	return nextCNode;
+}
+
 /**
  * Construct cfg for a stmtlist. 
+ * 
  * @param cfg a cfg that will be modified in this function.
  * @return the last CNode created in the stmtlist
  */
 CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg) {
 	PKB pkb = PKB::getInstance();
+	assert(stmtListNode->getNodeType() == StmtLst);
+
+	// link startCNode to the first node in the stmtlist
 	TNode* curStmt = stmtListNode->getChildren()->at(0);
-
 	CNode* curCNode = startCNode;
+	CNode* firstCNode = createNextNode(curStmt, cfg);
+    cfg->createLink(After, curCNode, firstCNode);
 
+	curCNode = firstCNode;
+
+	// iterate over all stmts in the stmtlist
 	while (curStmt != NULL) {
 		if (curStmt->getNodeType() == Assign || curStmt->getNodeType() == Call) {
+			// for assign and call statements,
+			// just create nodes and link together
 			TNode* nextStmt = curStmt->getRightSibling();
-		
 			if (!nextStmt) {
 				break;
 			}
 
-			CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmt->getNodeType());
-			CNode* nextCNode = cfg->createCNode(cNodeType, 
-												pkb.stmtToProcMap.at(nextStmt->getStmtNumber()),
-												NULL, nextStmt);
-			cfg->createLink(After, curCNode, nextCNode);
+			CNode* nextCNode = createNextNode(nextStmt, cfg);
+			cfg->createLink(After, curCNode, nextCNode);  
 
 
 			curStmt = nextStmt;
 			curCNode = nextCNode;
 
 		} else if (curStmt->getNodeType() == If) {
-			TNode* ifStmtListNode = curStmt->getChildren()->at(0);
 			// create cnodes for the statements in the ifthen stmtlist
+			TNode* ifStmtListNode = curStmt->getChildren()->at(1);
 			CNode* lastNodeInIf = constructCfgForStmtList(ifStmtListNode, curCNode, cfg);
 
 			// create cnodes for the statements in the else stmtlist
-			CNode* lastNodeInElse;
-			if (curStmt->getChildren()->size() == 2) {
-				TNode* elseStmtListNode = curStmt->getChildren()->at(1);
+			CNode* lastNodeInElse = NULL;
+			if (curStmt->getChildren()->size() == 3) {
+				TNode* elseStmtListNode = curStmt->getChildren()->at(2);
 				lastNodeInElse = constructCfgForStmtList(elseStmtListNode, curCNode, cfg);
 			}
 
@@ -264,23 +280,20 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg)
 			assert(IfEndNode->getBefore()->size() == 2);
 
 			// link the dummy end node to the next stmt, if it exist
-			TNode* nextStmtNode = curStmt->getRightSibling();
+			TNode* nextStmtNode = curStmt->getRightSibling(); 
 			if (!nextStmtNode) {
 				curCNode = IfEndNode;
 				break;
 			}
-			
-			CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmtNode->getNodeType());
-			CNode* nextCNode = cfg->createCNode(cNodeType, 
-												pkb.stmtToProcMap.at(nextStmtNode->getStmtNumber()),
-												NULL, nextStmtNode);
+			CNode* nextCNode = createNextNode(nextStmtNode, cfg);
 			cfg->createLink(After, IfEndNode, nextCNode);
 
 			curStmt = nextStmtNode;
 			curCNode = nextCNode;
+
 		} else if (curStmt->getNodeType() == While) {
-			TNode* whileStmtListNode = curStmt->getChildren()->at(0);
 			// create cnodes for the statements in the while stmtlist
+			TNode* whileStmtListNode = curStmt->getChildren()->at(1);
 			CNode* lastNodeInWhile = constructCfgForStmtList(whileStmtListNode, curCNode, cfg);
 
 			// link last node back to original While stmt
@@ -291,14 +304,11 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg)
 			if (!nextStmtNode) {
 				break;
 			}
-
-			
-			CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmtNode->getNodeType());
-			CNode* nextCNode = cfg->createCNode(cNodeType, 
-												pkb.stmtToProcMap.at(nextStmtNode->getStmtNumber()),
-												NULL, nextStmtNode);
+			CNode* nextCNode = createNextNode(nextStmtNode, cfg);
 			cfg->createLink(After, curCNode, nextCNode);
-			curStmt = nextStmtNode;
+			
+
+			curStmt = nextStmtNode;   
 			curCNode = nextCNode;
 		}
 	}
@@ -323,10 +333,11 @@ bool DesignExtractor::constructCfg() {
 	for (auto procNode = procNodes->begin(); procNode != procNodes->end(); ++procNode) {
 		CFG* cfg = new CFG(*procNode);
 		TNode* procStmtListNode = (*procNode)->getChildren()->at(0);
+		assert(procStmtListNode->getNodeType() == StmtLst);
 
 		constructCfgForStmtList(procStmtListNode, cfg->getProcRoot(), cfg);
 		
-		pkb.CfgTable.push_back(cfg);
+		pkb.cfgTable.push_back(cfg);
 	}
 
 	return true;

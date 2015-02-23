@@ -167,7 +167,7 @@ public:
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
 	// cfg
-	vector<CFG*> CfgTable;
+	vector<CFG*> cfgTable;
 
 
 	//@todo move to somewhere in pkb? discuss with kenson

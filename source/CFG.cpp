@@ -225,6 +225,9 @@ CNODE_TYPE CFG::convertTNodeTypeToCNodeType(TNODE_TYPE type) {
 	case Procedure:
 		return Proc_C;
 		break;
+	case Call:
+		return Call_C;
+		break;
 	default:
 		throw logic_error("CFG::convertTNodeTypeToCNodeType does not support the TNODE_TYPE passed in. ");
 	}

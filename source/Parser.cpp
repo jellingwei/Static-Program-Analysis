@@ -83,6 +83,7 @@ namespace Parser
 
 			string line;
 			getline(inputFile, line);
+			progLineNum += 1;
 
 			// drop everything after 2 backslash
 			int pos;
@@ -100,7 +101,7 @@ namespace Parser
 				}
 				return parseLine();
 			}
-			progLineNum += 1;
+			
 			currentParsedLine = line;
 
 			// remove blocks of multiple whitespace
