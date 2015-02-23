@@ -282,6 +282,7 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg)
 			TNode* whileStmtListNode = curStmt->getChildren()->at(0);
 			// create cnodes for the statements in the while stmtlist
 			CNode* lastNodeInWhile = constructCfgForStmtList(whileStmtListNode, curCNode, cfg);
+
 			// link last node back to original While stmt
 			cfg->createLink(After, lastNodeInWhile, curCNode);
 
