@@ -136,6 +136,7 @@ public:
 	vector<int> getFollowsRhs();
 
 	// ModifiesTable methods
+	bool initModifiesTable();
 	bool setModifies(int stmtNum, int varIndex);
 	bool isModifies(int stmtNum, int varIndex);
 	vector<int> getModStmtNum(int varIndex);
@@ -151,6 +152,7 @@ public:
 	pair<vector<int>, vector<int>> getAllModProcPair();
 
 	// UsesTable methods
+	bool initUsesTable(int numVariables);
 	bool setUses(int stmtNum, int varIndex);
 	bool isUses(int stmtNum, int varIndex);
 	vector<int> getUsesStmtNum(int varIndex);

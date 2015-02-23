@@ -19,8 +19,8 @@ PKB::PKB()
 	stmtTable = new StmtTable();
 	constantTable = new ConstantTable();
 	callsTable = new CallsTable();
-	modifiesTable = new ModifiesTable();
-	usesTable = new UsesTable();
+	//modifiesTable = new ModifiesTable();
+	//usesTable = new UsesTable();
 	followsTable = new FollowsTable();
 	parentTable = new ParentTable();
 	ast = new AST();
@@ -720,6 +720,11 @@ vector<int> PKB::getCallsRhs() {
 
 // ModifiesTable methods
 
+bool PKB::initModifiesTable() {
+
+	return false;
+}
+
 /**
 * Sets the Modifies relation.
 * @return TRUE if the ModifiesTable is updated accordingly. Otherwise, return FALSE. 
@@ -834,6 +839,14 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair()
 
 
 // UsesTable methods
+
+bool PKB::initUsesTable(int numVariables) {
+	if (numVariables <= 0) {
+		throw runtime_error("initUsesTable: invalid number of variables");
+	}
+	usesTable = new UsesTable(numVariables);
+	return true;
+}
 
 /**
 * Sets the Uses relation.

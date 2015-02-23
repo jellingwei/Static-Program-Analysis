@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <bitset>         // std::bitset
 
 #include "UsesTable.h"
 #include "ParentTable.h"
@@ -14,34 +15,37 @@
 using namespace std;
 using namespace stdext;
 
+UsesTable::UsesTable(int numVariables) {
+	this->numVariables = numVariables;
+}
 
 bool UsesTable::setUses(int stmtNum, int varIndex) {
 	if (stmtNum <= 0 || varIndex <= 0) {
 		throw exception("UsesTable error: Negative statement number or varIndex");
 	}
 
-	vector<int> newVarList;
-	vector<int> varIndexList;
-
 	//check if varIndexMap key stmtNum contains the variable
 	if (varIndexMap.count(stmtNum) > 0) {
+		vector<bool> varIndexList;
+
 		varIndexList = varIndexMap.at(stmtNum);
 
-		auto result = find(begin(varIndexList), end(varIndexList), varIndex);
-		
-		if (result != end(varIndexList)) { // varIndex can be found already
-		
+		bool result = varIndexList.at(varIndex);
+		if (result) { // varIndex can be found already
+		   //@todo
 		} else {
-			varIndexList.push_back(varIndex);
+			varIndexList[varIndex] = true;
 			varIndexMap.erase(stmtNum);
-			varIndexMap.insert(pair<int, vector<int>> (stmtNum, varIndexList));
+			varIndexMap.insert(pair<int, vector<bool>> (stmtNum, varIndexList));
 		}
 
 	} else {
-		newVarList.push_back(varIndex);
-		varIndexMap.insert(pair<int, vector<int>> (stmtNum, newVarList));
-		
+		vector<bool> varIndexList(this->numVariables);
+		auto position = varIndexList[varIndex];
+		position = true;
+		varIndexMap.insert(pair<int, vector<bool>> (stmtNum, varIndexList));
 	}
+
 
 	vector<int> newStmtList;
 	vector<int> stmtList;
@@ -71,7 +75,7 @@ bool UsesTable::isUses(int stmtNum, int varIndex) {
 		return false;
 	}
 
-	vector<int> varIndexList;
+	vector<bool> varIndexList;
 
 	if (varIndexMap.count(stmtNum) > 0) {
 		varIndexList = varIndexMap.at(stmtNum);
@@ -79,9 +83,9 @@ bool UsesTable::isUses(int stmtNum, int varIndex) {
 		return false;
 	}
 
-	auto result = find(begin(varIndexList), end(varIndexList), varIndex);
+	bool result = varIndexMap.at(stmtNum).at(varIndex);
 	// TRUE if varindex is new in the table
-	return result != end(varIndexList);
+	return result; 
 }
 
 
@@ -110,17 +114,24 @@ vector<int> UsesTable::getUsesVarForStmt(int stmtNum) {
 		return result;
 	}
 
-	vector<int> varIndexList = varIndexMap.at(stmtNum);
-	return varIndexList;
+	vector<bool> varIndexList = varIndexMap.at(stmtNum);
+
+	vector<int> result;
+	for (int i = 0; i < numVariables; i++) {
+		if (varIndexList.at(i)) {
+			result.push_back(i);
+		}
+	}
+	return result;
 }
 
 
 pair<vector<int>, vector<int>> UsesTable::getAllUsesPair() {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
-		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
+		for (unsigned int i = 0; i < iter->second.size(); i++) {
 			result.first.push_back(iter->first);
-			result.second.push_back(*varListIter);
+			result.second.push_back(iter->second.at(i));
 		}
 		
 	}
