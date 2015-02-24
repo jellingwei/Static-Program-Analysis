@@ -13,6 +13,7 @@
 #include "ParentTable.h"
 #include "ConstantTable.h"
 #include "CallsTable.h"
+#include "NextTable.h"
 #include "CFG.h"
 #include "AST.h"
 #include "TNode.h"
@@ -136,7 +137,7 @@ public:
 	vector<int> getFollowsLhs();
 	vector<int> getFollowsRhs();
 
-	// ModifiesTable methods
+	// Modifies Table methods
 	bool setModifies(int stmtNum, int varIndex);
 	bool isModifies(int stmtNum, int varIndex);
 	vector<int> getModStmtNum(int varIndex);
@@ -151,7 +152,7 @@ public:
 	vector<int> getModVarForProc(int procIndex);
 	pair<vector<int>, vector<int>> getAllModProcPair();
 
-	// UsesTable methods
+	// Uses Table methods
 	bool setUses(int stmtNum, int varIndex);
 	bool isUses(int stmtNum, int varIndex);
 	vector<int> getUsesStmtNum(int varIndex);
@@ -167,17 +168,26 @@ public:
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
 	// cfg
+	vector<int> getNextAfter(int progLine1);
+	vector<int> getNextBefore(int progLine2);
+	bool isNext(int progLine1, int progLine2);
+	vector<int> getNextAfterS(int progLine1);
+	vector<int> getNextBeforeS(int progLine2);
+	bool isNextS(int progLine1, int progLine2);
+
 	vector<CFG*> cfgTable;
 
 
 	//@todo move to somewhere in pkb? discuss with kenson
 	// @cond todo
-	unordered_map<int, TNode*> nodeTable;
-	unordered_map<int, int> stmtToProcMap;  // a temporary structure for convenience
-	unordered_map<int, int> stmtNumToProcLineMap; // a temporary structure for mapping proc lines to stmt num
+	unordered_map<int, CNode*> cfgNodeTable; //@todo nextTable?
+	unordered_map<int, TNode*> nodeTable;   // @todo stmtTable
+	unordered_map<int, int> stmtToProcMap;  // a temporary structure for convenience @todo move into either procTable or stmtTable
+	unordered_map<int, int> stmtNumToProcLineMap; // a temporary structure for mapping proc lines to stmt num @todo move into stmtTable
 	// @endcond
 
 private:
+	NextTable* nextTable;
 	PKB();
 	
 	

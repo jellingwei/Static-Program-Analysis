@@ -207,11 +207,23 @@ bool procNodesCompare(TNode* node1, TNode* node2) {
 
 
 CNode* createNextNode(TNode* nextStmt, CFG* cfg) {
-	PKB pkb = PKB::getInstance();
+	PKB& pkb = PKB::getInstance();
+
 	CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmt->getNodeType());
+	int progLine = pkb.stmtNumToProcLineMap.at(nextStmt->getStmtNumber());
 	CNode* nextCNode = cfg->createCNode(cNodeType, 
-										pkb.stmtNumToProcLineMap.at(nextStmt->getStmtNumber()),
+										progLine,
 										NULL, nextStmt);
+
+	
+	if (cNodeType == While_C || cNodeType == If_C || 
+	cNodeType == Assign_C || cNodeType == Call_C) {
+
+		pair<int, CNode*> progLineToNodePair(progLine, nextCNode);
+		pkb.cfgNodeTable.insert(progLineToNodePair);
+		
+	}
+
 	return nextCNode;
 }
 
