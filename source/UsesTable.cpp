@@ -15,13 +15,20 @@
 using namespace std;
 using namespace stdext;
 
-UsesTable::UsesTable(int numVariables) {
+bool UsesTable::init(int numVariables) {
+	if (this->numVariables == numVariables) {
+		return false;
+	}
 	this->numVariables = numVariables;
+	return true;
 }
 
 bool UsesTable::setUses(int stmtNum, int varIndex) {
+	if (this->numVariables == 0) {
+		throw logic_error("init usesTable first");
+	}
 	if (stmtNum <= 0 || varIndex <= 0) {
-		throw exception("UsesTable error: Negative statement number or varIndex");
+		throw logic_error("UsesTable error: Negative statement number or varIndex");
 	}
 
 	//check if varIndexMap key stmtNum contains the variable

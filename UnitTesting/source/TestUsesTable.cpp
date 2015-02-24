@@ -19,7 +19,7 @@ UsesTableTest::tearDown() {
 }
 
 void UsesTableTest::testInit() {
-	UsesTable usesTable(10);
+	UsesTable usesTable;
 
 	pair<vector<int>, vector<int>> result = usesTable.getAllUsesPair();
 	CPPUNIT_ASSERT_EQUAL((int)result.first.size(), 0);
@@ -32,7 +32,7 @@ void UsesTableTest::testInit() {
 void UsesTableTest::testInsert() {
 
 	// case : insert valid values
-	UsesTable usesTable(10);
+	UsesTable usesTable;
 
 	CPPUNIT_ASSERT(!usesTable.isUses(1, 2));
 
@@ -66,7 +66,7 @@ void UsesTableTest::testInsert() {
 
 
 void UsesTableTest::testAllPairs() {
-	UsesTable usesTable(10);
+	UsesTable usesTable;
 
 	usesTable.setUses(1, 1);
 	usesTable.setUses(1, 2);
@@ -90,7 +90,7 @@ void UsesTableTest::testAllPairs() {
 
 
 void UsesTableTest::testIsUses() {
-	UsesTable usesTable(10);
+	UsesTable usesTable;
 
 	usesTable.setUses(2, 3);
 	// test valid case, success
@@ -109,7 +109,7 @@ void UsesTableTest::testIsUses() {
 }
 
 void UsesTableTest::testGetUsesStmtNum() {
-	UsesTable usesTable(10);
+	UsesTable usesTable;
 	usesTable.setUses(2, 3);
 
 	vector<int> result = usesTable.getUsesStmtNum(2);
@@ -127,7 +127,7 @@ void UsesTableTest::testGetUsesStmtNum() {
 }
 
 void UsesTableTest::testGetUsesVarForStmt() {
-	UsesTable usesTable(10);
+	UsesTable usesTable;
 	usesTable.setUses(2, 2);
 
 	vector<int> result = usesTable.getUsesVarForStmt(3);

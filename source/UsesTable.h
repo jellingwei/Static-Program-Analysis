@@ -10,7 +10,8 @@ using namespace std;
 
 class UsesTable {
 public:
-	UsesTable(int numVariables);
+	
+	bool init(int numVariables);
 	// for statement numbers
 	bool setUses(int stmtNum, int varIndex);
 	bool isUses(int stmtNum, int varIndex);

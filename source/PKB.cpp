@@ -19,8 +19,8 @@ PKB::PKB()
 	stmtTable = new StmtTable();
 	constantTable = new ConstantTable();
 	callsTable = new CallsTable();
-	//modifiesTable = new ModifiesTable();
-	//usesTable = new UsesTable();
+	modifiesTable = new ModifiesTable();
+	usesTable = new UsesTable();
 	followsTable = new FollowsTable();
 	parentTable = new ParentTable();
 	ast = new AST();
@@ -844,8 +844,7 @@ bool PKB::initUsesTable(int numVariables) {
 	if (numVariables <= 0) {
 		throw runtime_error("initUsesTable: invalid number of variables");
 	}
-	usesTable = new UsesTable(numVariables);
-	return true;
+	return usesTable->init(numVariables);
 }
 
 /**
