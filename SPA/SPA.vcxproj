@@ -32,6 +32,7 @@
     <ClCompile Include="..\source\QueryTree.cpp" />
     <ClCompile Include="..\source\QueryValidator.cpp" />
     <ClCompile Include="..\source\ResultProjector.cpp" />
+    <ClCompile Include="..\source\StatisticsTable.cpp" />
     <ClCompile Include="..\source\StmtTable.cpp" />
     <ClCompile Include="..\source\Synonym.cpp" />
     <ClCompile Include="..\source\TNode.cpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="..\source\QueryValidator.h" />
     <ClInclude Include="..\source\ResultProjector.h" />
     <ClInclude Include="..\source\SourceParser.h" />
+    <ClInclude Include="..\source\StatisticsTable.h" />
     <ClInclude Include="..\source\StmtTable.h" />
     <ClInclude Include="..\source\Synonym.h" />
     <ClInclude Include="..\source\TNode.h" />
