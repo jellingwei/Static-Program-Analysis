@@ -327,11 +327,12 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("get procName of call statement", string("Test3"), pkb.getProcNameCalledByStatement(17));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("get procName of call statement", string("Test2"), pkb.getProcNameCalledByStatement(16));
 	
-
+	// ProcTable
 	cout << "Proc table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test"), pkb.getProcName(0));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test2"), pkb.getProcName(1));
 
+	// NextTable
 	cout << "CFG" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(2,3)", true, pkb.isNext(2, 3));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(5,6)", true, pkb.isNext(5, 6));
@@ -342,6 +343,9 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(15,16)", true, pkb.isNext(15, 16));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(15,19)", true, pkb.isNext(15, 19));
 
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(5, _)", 2, (int)pkb.getNextAfter(5).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(14, _)", 1, (int)pkb.getNextAfter(14).size());
 	cout << "End TestPkb" << endl;
 }
 
