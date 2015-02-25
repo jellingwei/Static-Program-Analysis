@@ -22,6 +22,7 @@
     <ClCompile Include="..\source\FrontEndController.cpp" />
     <ClCompile Include="..\source\IntermediateValuesHandler.cpp" />
     <ClCompile Include="..\source\ModifiesTable.cpp" />
+    <ClCompile Include="..\source\NextTable.cpp" />
     <ClCompile Include="..\source\ParentTable.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\PatternMatch.cpp" />
@@ -53,6 +54,7 @@
     <ClInclude Include="..\source\InputQueryParser.h" />
     <ClInclude Include="..\source\IntermediateValuesHandler.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
+    <ClInclude Include="..\source\NextTable.h" />
     <ClInclude Include="..\source\ParentTable.h" />
     <ClInclude Include="..\source\PatternMatch.h" />
     <ClInclude Include="..\source\PKB.h" />
