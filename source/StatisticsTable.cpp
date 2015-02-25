@@ -3,6 +3,11 @@
 #include "StatisticsTable.h"
 
 //TODO think of storing methods
+void tabulateWeights();
+void tabulateFollows();
+void tabulateParent();
+void tabulateModifies();
+void tabulateUses();
 
 StatisticsTable::StatisticsTable()
 {
@@ -25,8 +30,8 @@ void tabulateWeights()
 
 void tabulateFollows()
 {
-	PKB pkb = PKB.getInstance();
-	
+	PKB pkb = PKB::getInstance();
+
 	// Follows
 	int totalNumberOfStmts = pkb.getStmtTableSize();
 	int numberOfIf = pkb.getStmtNumForType("if").size();
@@ -55,7 +60,7 @@ void tabulateFollows()
 
 void tabulateParent()
 {
-	PKB pkb = PKB.getInstance();
+	PKB pkb = PKB::getInstance();
 	vector<int> parent = pkb.getParentLhs();
 	vector<int> child = pkb.getParentRhs();
 
@@ -100,7 +105,7 @@ void tabulateParent()
 
 void tabulateModifies()
 {
-	PKB pkb = pkb.getInstance();
+	PKB pkb = PKB::getInstance();
 
 	vector<int> stmtsThatModifies = pkb.getModifiesLhs();
 	vector<int> variableThatIsModified = pkb.getModifiesRhs();
@@ -141,7 +146,7 @@ void tabulateModifies()
 
 void tabulateUses()
 {
-	PKB pkb = pkb.getInstance();
+	PKB pkb = PKB::getInstance();
 
 
 }
