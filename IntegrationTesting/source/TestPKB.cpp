@@ -333,7 +333,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test2"), pkb.getProcName(1));
 
 	// NextTable
-	cout << "CFG" << endl;
+	cout << "Next" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(1,2)", true, pkb.isNext(1, 2));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(3,4), test that the stmt in while is next after while", true, pkb.isNext(3, 4));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(3,5), test the the stmt following while is next after while", true, pkb.isNext(3, 5));

@@ -897,16 +897,16 @@ pair<vector<int>, vector<int>> PKB::getAllUsesProcPair() {
 	return usesTable->getAllUsesProcPair();
 }
 
-vector<int> PKB::getNextAfter(int progLine1) {
-	return nextTable->getNextAfter(progLine1);
+vector<int> PKB::getNextAfter(int progLine1, bool transitiveClosure) {
+	return nextTable->getNextAfter(progLine1, transitiveClosure);
 }
 
-vector<int> PKB::getNextBefore(int progLine2) {
-	return nextTable->getNextBefore(progLine2);
+vector<int> PKB::getNextBefore(int progLine2, bool transitiveClosure) {
+	return nextTable->getNextBefore(progLine2, transitiveClosure);
 }
 
-bool PKB::isNext(int progLine1, int progLine2) {
-	return nextTable->isNext(progLine1, progLine2);
+bool PKB::isNext(int progLine1, int progLine2, bool transitiveClosure) {
+	return nextTable->isNext(progLine1, progLine2, transitiveClosure);
 }
 
 vector<int> PKB::getNextAfterS(int progLine1) {

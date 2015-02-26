@@ -168,9 +168,9 @@ public:
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
 	// cfg
-	vector<int> getNextAfter(int progLine1);
-	vector<int> getNextBefore(int progLine2);
-	bool isNext(int progLine1, int progLine2);
+	vector<int> getNextAfter(int progLine1, bool transitiveClosure = false);
+	vector<int> getNextBefore(int progLine2, bool transitiveClosure = false);
+	bool isNext(int progLine1, int progLine2, bool transitiveClosure = false);
 	vector<int> getNextAfterS(int progLine1);
 	vector<int> getNextBeforeS(int progLine2);
 	bool isNextS(int progLine1, int progLine2);
