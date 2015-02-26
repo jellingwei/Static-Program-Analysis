@@ -332,6 +332,16 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test"), pkb.getProcName(0));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test2"), pkb.getProcName(1));
 
+	cout << "CFG" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(2,3)", true, pkb.isNext(2, 3));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(5,6)", true, pkb.isNext(5, 6));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(5,7)", true, pkb.isNext(5, 7));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(2,6)", false, pkb.isNext(2, 6));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(9,10)", true, pkb.isNext(9, 10));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(13,14)", true, pkb.isNext(13, 14));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(15,16)", true, pkb.isNext(15, 16));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(15,19)", true, pkb.isNext(15, 19));
+
 	cout << "End TestPkb" << endl;
 }
 

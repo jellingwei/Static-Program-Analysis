@@ -83,6 +83,7 @@ namespace Parser
 
 			string line;
 			getline(inputFile, line);
+			progLineNum += 1;
 
 			// drop everything after 2 backslash
 			int pos;
@@ -100,7 +101,7 @@ namespace Parser
 				}
 				return parseLine();
 			}
-			progLineNum += 1;
+			
 			currentParsedLine = line;
 
 			// remove blocks of multiple whitespace
@@ -452,8 +453,7 @@ namespace Parser
 			callPkb("CallsTable", std::to_string(static_cast<long long>(currentProcIndex)), std::to_string(static_cast<long long>(calledProcIndex)));
 	
 			string nextToken = parseToken();
-			match(nextToken, ";");
-			return true;
+			return match(nextToken, ";");
 		}
 
 
@@ -468,6 +468,7 @@ namespace Parser
 
 			stmtNum += 1;
 			PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
+			PKB::getInstance().stmtNumToProcLineMap.insert(make_pair<int, int>(stmtNum, progLineNum));
 
 			if (currentParsedLine.find("=") != string::npos) {
 				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "assign");
