@@ -343,9 +343,25 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(15,16)", true, pkb.isNext(15, 16));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(15,19)", true, pkb.isNext(15, 19));
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(6,6)", true, pkb.isNextS(6, 6));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(6,6)", false, pkb.isNext(6, 6));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(11,10)", true, pkb.isNextS(11, 10));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(11,10)", true, pkb.isNext(11, 10));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(12,10)", true, pkb.isNextS(12, 10));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(10,12)", true, pkb.isNext(10, 12));
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(5, _)", 2, (int)pkb.getNextAfter(5).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(14, _)", 1, (int)pkb.getNextAfter(14).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(14, _)", 15, pkb.getNextAfter(14).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 15)", 14, pkb.getNextBefore(15).front());
+
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(6, _)", 14, (int)pkb.getNextAfterS(6).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(2, _)", 15, (int)pkb.getNextAfterS(2).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 14)", 12, (int)pkb.getNextBeforeS(14).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 20)", 15, (int)pkb.getNextBeforeS(20).size());
+	
+
 	cout << "End TestPkb" << endl;
 }
 
