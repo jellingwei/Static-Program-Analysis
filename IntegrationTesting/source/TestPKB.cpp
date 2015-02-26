@@ -366,6 +366,9 @@ void PKBTest::testPKB()
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(23, 24)", false, pkb.isNext(23, 24));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(23, 24)", true, pkb.isNextS(23, 24));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(22, _)", 2, (int)pkb.getNextAfter(22).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(23, _)", 1, (int)pkb.getNextAfter(23).size());
 	
 
 	cout << "End TestPkb" << endl;
