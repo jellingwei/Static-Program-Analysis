@@ -210,7 +210,8 @@ CNode* createNextNode(TNode* nextStmt, CFG* cfg) {
 	PKB& pkb = PKB::getInstance();
 
 	CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmt->getNodeType());
-	int progLine = pkb.stmtNumToProcLineMap.at(nextStmt->getStmtNumber());
+	//int progLine = pkb.stmtNumToProcLineMap.at(nextStmt->getStmtNumber());
+	int progLine = nextStmt->getStmtNumber(); //@todo change after asking jin
 	CNode* nextCNode = cfg->createCNode(cNodeType, 
 										progLine,
 										NULL, nextStmt);

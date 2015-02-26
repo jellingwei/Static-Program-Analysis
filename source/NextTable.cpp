@@ -34,6 +34,9 @@ vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
 
 		vector<CNode*>* nextNodes = curNode->getAfter();
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
+			if ((*iter)->getNodeType() == Proc_C || (*iter)->getNodeType() == EndProc_C) {
+				continue;
+			}
 			if (visited.count((*iter)->getProcLineNumber()) == 0 || (*iter)->getNodeType() == EndIf_C) {
 				frontier.push_back(*iter);
 				if ((*iter)->getNodeType() != EndIf_C){
@@ -69,6 +72,10 @@ vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
 
 		vector<CNode*>* nextNodes = curNode->getBefore();
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
+			if ((*iter)->getNodeType() == Proc_C || (*iter)->getNodeType() == EndProc_C) {
+				continue;
+			}
+
 			if (visited.count((*iter)->getProcLineNumber()) == 0 || (*iter)->getNodeType() == EndIf_C) {
 				frontier.push_back(*iter);
 				if ((*iter)->getNodeType() != EndIf_C){
