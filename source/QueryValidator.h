@@ -24,6 +24,7 @@ public:
 	void initTable(); //creates a program design entity relationships table
 	bool validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2);//Validates all such that queries based on relationship table initialised. 
 	bool validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2);//Validates all pattern queries based on relationship table initialised. 
+	bool validateWithQueries(Synonym arg1, Synonym arg2);
 
 protected:
 	bool validateModifiesOrUsesArgs(Synonym arg1, Synonym arg2);//Validates the inputs for modifies and uses
@@ -34,4 +35,6 @@ protected:
 	std::tr1::unordered_map<QNODE_TYPE, vector<string>> relationshipArg2Map; //maps the relationship to its type of argument 2
 	std::tr1::unordered_map<string, vector<string>> patternsArg1Map; //maps the relationship to its type of argument 1
 	std::tr1::unordered_map<string, vector<string>> patternsArg2Map; //maps the relationship to its type of argument 2
+	std::tr1::unordered_map<SYNONYM_ATTRIBUTE, vector<SYNONYM_TYPE>> withAttrRefMap;
+	
 };
