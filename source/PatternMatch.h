@@ -21,5 +21,4 @@ public:
 	~PatternMatch();
 
 private:
-	
 };

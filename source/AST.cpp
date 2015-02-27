@@ -192,9 +192,10 @@ vector<int> AST::patternMatchAssign(string RHS) {
 	
 	vector<string> vRHS;
 	vector<int> results;
+	PKB pkb = PKB::getInstance();
 
 	if(RHS.empty()) {
-		results = PKB::getInstance().getStmtNumForType("assign");
+		results = pkb.getStmtNumForType("assign");
 		return results;
 	}
 
@@ -258,10 +259,12 @@ int AST::getControlVariable(int stmtNum) {
 		return -1;
 	}
 
-	if (PKB::getInstance().nodeTable.count(stmtNum) <= 0) {
+	PKB pkb = PKB::getInstance();
+
+	if (pkb.nodeTable.count(stmtNum) <= 0) {
 		return -1;
 	}
-	TNode* node = PKB::getInstance().nodeTable.at(stmtNum);
+	TNode* node = pkb.nodeTable.at(stmtNum);
 	if (node->getNodeType() != While && node->getNodeType() != If) {
 		return -1;
 	}
