@@ -6,7 +6,6 @@
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
-#include <bitset>         // std::bitset
 
 #include "UsesTable.h"
 #include "ParentTable.h"
