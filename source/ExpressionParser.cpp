@@ -20,8 +20,7 @@ void ExpressionParser::init() {
 	this->readOnly = false;
 }
 
-ExpressionParser::ExpressionParser() 
-{
+ExpressionParser::ExpressionParser() {
 	varTable = NULL;
 	init();
 }
@@ -36,8 +35,7 @@ ExpressionParser::ExpressionParser(VarTable* varTable) : varTable(varTable)  {
 
 ExpressionParser::~ExpressionParser() 
 {
-	if (varTable) 
-	{
+	if (varTable) {
 		delete varTable;
 	}
 }
@@ -87,14 +85,15 @@ int matchConstant(string value, int stmtNum, VarTable* varTable = NULL, bool rea
 	return constant;
 }
 
-int matchVariable(string value, int stmtNum, int procIndex, VarTable* varTable = NULL, bool readOnly = false)  
-{
+int matchVariable(string value, int stmtNum, int procIndex, VarTable* varTable = NULL, bool readOnly = false)  {
 	PKB pkb = PKB::getInstance();
 	int varIndx;
 
 	// prevent writing to pkb when parsing expression on the query side
 	if (readOnly) {
-		varIndx = varTable == NULL? pkb.getVarIndex(value) : varTable->getVarIndex(value);
+		varIndx = varTable == NULL ? 
+			      pkb.getVarIndex(value) : 
+		          varTable->getVarIndex(value);
 		if (varIndx == -1) {
 			throw runtime_error("ExpressionParser: variable '" + value + "' is not found in varTable!");
 		}
@@ -106,9 +105,6 @@ int matchVariable(string value, int stmtNum, int procIndex, VarTable* varTable =
 	if (!isUnderTest) {
 		pkb.insertVar(value, stmtNum);
 		varIndx = pkb.getVarIndex(value);
-
-	//	pkb.setUsesProc(procIndex, varIndx);
-	
 	} else {
 		varTable->insertVar(value, stmtNum);
 		varIndx = varTable->getVarIndex(value);
@@ -118,8 +114,7 @@ int matchVariable(string value, int stmtNum, int procIndex, VarTable* varTable =
 	return varIndx;
 }
 
-int parseConstantOrVariable(string value, int stmtNum, int procIndex, VarTable* varTable = NULL, bool readOnly = false) 
-{
+int parseConstantOrVariable(string value, int stmtNum, int procIndex, VarTable* varTable = NULL, bool readOnly = false) {
 	string constant = Parser::matchInteger(value);
 	if (constant.empty()) 
 	{ 
@@ -130,8 +125,7 @@ int parseConstantOrVariable(string value, int stmtNum, int procIndex, VarTable* 
 	}
 }
 
-int ExpressionParser::getOperatorPrecedence(string token) 
-{
+int ExpressionParser::getOperatorPrecedence(string token) {
 	if (operPrecedence.count(token)) 
 	{
 		return operPrecedence[token];
@@ -140,8 +134,7 @@ int ExpressionParser::getOperatorPrecedence(string token)
 	}
 }
 
-TNode* ExpressionParser::operatorAdd(TNode* left) 
-{
+TNode* ExpressionParser::operatorAdd(TNode* left) {
 	TNode* right = parse(operPrecedence["+"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Plus, stmtNum, -2);
@@ -153,8 +146,7 @@ TNode* ExpressionParser::operatorAdd(TNode* left)
 }
 
 
-TNode* ExpressionParser::operatorMultiply(TNode* left) 
-{
+TNode* ExpressionParser::operatorMultiply(TNode* left) {
 	TNode* right = parse(operPrecedence["*"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Times, stmtNum, -2);
@@ -165,8 +157,7 @@ TNode* ExpressionParser::operatorMultiply(TNode* left)
 	return top;
 }
 
-TNode* ExpressionParser::operatorSubtract(TNode* left) 
-{
+TNode* ExpressionParser::operatorSubtract(TNode* left) {
 	TNode* right = parse(operPrecedence["-"]);
 	PKB pkb = PKB::getInstance();
 	TNode* top = pkb.createTNode(Minus, stmtNum, -2);
@@ -190,8 +181,7 @@ TNode* ExpressionParser::operatorSubtract(TNode* left)
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
  */
-TNode* ExpressionParser::parse(int bindingLevel) 
-{
+TNode* ExpressionParser::parse(int bindingLevel) {
 	PKB pkb = PKB::getInstance();
 
 	string prevToken = token;
@@ -199,8 +189,7 @@ TNode* ExpressionParser::parse(int bindingLevel)
 	token = *(bufferIter ++);
 
 	TNode* leftNode;
-	if (prevToken.compare("(") == 0) 
-	{
+	if (prevToken.compare("(") == 0) {
 		leftNode = parse();
 		
 		if (token != ")") {
@@ -218,20 +207,16 @@ TNode* ExpressionParser::parse(int bindingLevel)
 	}
 
 	
-	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") != 0)) 
-	{
+	while (bindingLevel < getOperatorPrecedence(token) && (token.compare(";") != 0)) {
 		prevToken = token;
 
 		token = *(bufferIter ++);
 		
-		if (prevToken.compare("+") == 0) 
-		{
+		if (prevToken.compare("+") == 0) {
 			leftNode = operatorAdd(leftNode);
-		} else if (prevToken.compare("*") == 0) 
-		{
+		} else if (prevToken.compare("*") == 0) {
 			leftNode = operatorMultiply(leftNode);
-		} else if (prevToken.compare("-") == 0) 
-		{
+		} else if (prevToken.compare("-") == 0) {
 			leftNode = operatorSubtract(leftNode);
 		}
 	}

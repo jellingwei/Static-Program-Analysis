@@ -327,10 +327,49 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("get procName of call statement", string("Test3"), pkb.getProcNameCalledByStatement(17));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("get procName of call statement", string("Test2"), pkb.getProcNameCalledByStatement(16));
 	
-
+	// ProcTable
 	cout << "Proc table" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test"), pkb.getProcName(0));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("proc name", string("Test2"), pkb.getProcName(1));
+
+	// NextTable
+	cout << "Next" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(1,2)", true, pkb.isNext(1, 2));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(3,4), test that the stmt in while is next after while", true, pkb.isNext(3, 4));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(3,5), test the the stmt following while is next after while", true, pkb.isNext(3, 5));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(1,4)", false, pkb.isNext(1, 4));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(7,8)", true, pkb.isNext(7, 8));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(11,12)", true, pkb.isNext(11, 12));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(13,14), stmt in if-then is Next after if", true, pkb.isNext(13, 14));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(13,15), stmt in if-else is Next after if", true, pkb.isNext(13, 15));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(4,4), stmt in while loop is Next* of itself", true, pkb.isNextS(4, 4));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(4,4), stmt in while loop is not Next after itself", false, pkb.isNext(4, 4));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(9,8), while stmt is Next after stmt in while loop ", true, pkb.isNextS(9, 8));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(9,8)", true, pkb.isNext(9, 8));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(10,8), two stmts in while loop", true, pkb.isNextS(10, 8));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(8,10)", true, pkb.isNext(8, 10));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(3, _)", 2, (int)pkb.getNextAfter(3).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(12, _)", 1, (int)pkb.getNextAfter(12).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(12, _)", 13, pkb.getNextAfter(12).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 13)", 12, pkb.getNextBefore(13).front());
+
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(4, _)", 14, (int)pkb.getNextAfterS(4).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(1, _)", 15, (int)pkb.getNextAfterS(1).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(_, 12)", 11, (int)pkb.getNextBeforeS(12).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(_, 16)", 14, (int)pkb.getNextBeforeS(16).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(17, _)", 3, (int)pkb.getNextAfterS(17).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(_, 25)", 5, (int)pkb.getNextBeforeS(25).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(23, 24)", false, pkb.isNext(23, 24));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(23, 24)", true, pkb.isNextS(23, 24));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(22, _)", 2, (int)pkb.getNextAfter(22).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(23, _)", 1, (int)pkb.getNextAfter(23).size());
+	
 
 	cout << "End TestPkb" << endl;
 }

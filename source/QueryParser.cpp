@@ -796,7 +796,7 @@ namespace QueryParser
 					return Synonym();  //error no such attrName
 				}
 
-				
+
 				return Synonym(Synonym::convertToEnum(DE_type),value, attribute);
 			}
 
@@ -1101,6 +1101,15 @@ namespace QueryParser
 		Synonym s2 = createSynonym("attrCompare", ref2, 2);
 		if(s2.isEmpty()){ //unable to create synonym
 			return false;}
+
+		//Validate attrCompare: ref = ref, to check that both ref is valid
+		res = myQueryV->validateWithQueries(s1,s2);
+		if(!res){
+			#ifdef DEBUG
+				throw exception("QueryParser error: validateWithQueries(), returns error ");
+			#endif
+			return false;
+		}
 
 		//build query tree
 		QNode* withQueryNode = myQueryTree->createQNode(WITH,Synonym(),s1,s2);

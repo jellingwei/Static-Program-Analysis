@@ -13,7 +13,7 @@ using namespace std;
 
 enum CNODE_TYPE
 {
-	Assign_C, While_C, If_C, Call_C, Proc_C, End_C
+	Assign_C, While_C, If_C, Call_C, Proc_C, EndProc_C, EndIf_C
 };
 
 enum CLINK_TYPE

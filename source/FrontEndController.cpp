@@ -21,7 +21,7 @@ void FrontEndController::constructPkb(std::string filename)
 		extractor.setModifiesForCallStatements(callNodes);
 		extractor.setUsesForCallStatements(callNodes);
 
-		//extractor.constructCfg();
+		extractor.constructCfg();
 		//extractor.constructStatisticsTable();
 	} catch (exception e) {
 		cout << "Failed to construct PKB" << e.what() << endl;
