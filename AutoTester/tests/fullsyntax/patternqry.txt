@@ -21,7 +21,7 @@ none
 15 -
 assign a;
 Select a pattern a(_, _"y - y"_)
-29
+28
 5000
 16 -
 assign a;
@@ -60,87 +60,87 @@ Select a pattern a("y", _)
 5000
 23 -
 assign a;
-Select a pattern a(_, "x * y * y + x");
+Select a pattern a(_, "x * y * y + x")
 none
 5000
 24 -
 assign a;
-Select a pattern a(_, _"x * y * y + x"_);
+Select a pattern a(_, _"x * y * y + x"_)
 none
 5000
 25 -
 assign a;
-Select a pattern a(_, _"x * y * (y + x )"_);
+Select a pattern a(_, _"x * y * (y + x )"_)
 20
 5000
 26 -
 assign a;
-Select a pattern a(_, _"x - (y + z)"_);
+Select a pattern a(_, _"x - (y + z)"_)
 none
 5000
 27 - 
 assign a;
-Select a pattern a(_, _"x * a"_);
+Select a pattern a(_, _"x * a"_)
 none
 5000
 28 - NOT SURE
 assign a;
-Select a pattern a(_, _"x * y"_);
+Select a pattern a(_, _"x * y"_)
 20
 5000
 29 - 
 assign a;
-Select a pattern a(_, "0");
-25
+Select a pattern a(_, "0")
+24
 5000
 30 - 
 assign a;
-Select a pattern a(_, "a - b");
-24
+Select a pattern a(_, "a - b")
+23
 5000
 31 - 
 assign a;
-Select a pattern a(_, _"z - b"_);
+Select a pattern a(_, _"z - b"_)
 none
 5000
 32 - 
 assign a;
-Select a pattern a(_, _"b + 1"_);
-32, 3
+Select a pattern a(_, _"b + 1"_)
+31, 3
 5000
 33 - 
 assign a;
-Select a pattern a(_, _"10 - b - c"_);
+Select a pattern a(_, _"10 - b - c"_)
 none
 5000
 34 - 
 assign a;
-Select a pattern a(_, _"a * 10 - b"_);
-33
+Select a pattern a(_, _"a * 10 - b"_)
+32
 5000
 35 - 
 assign a; variable v;
-Select v pattern a(v, _"a * 10 - b"_);
+Select v pattern a(v, _"a * 10 - b"_)
 z
 5000
 36 - 
 assign a; variable v;
-Select v pattern a(v, _"a * c"_);
-29
+Select v pattern a(v, _"a * c"_)
+28
 5000
 37 - 
 assign a; variable v;
-Select v pattern a(v, "y - y");
+Select v pattern a(v, "y - y")
 none
 5000
 38 - 
 assign a; variable v;
-Select a pattern a(v, "0");
-25
+Select a pattern a(v, "0")
+24
 5000
 39 - 
 assign a;
-Select a pattern a("b", "5 * c + x * b");
+Select a pattern a("b", "5 * c + x * b")
 none
 5000
 40 - 
