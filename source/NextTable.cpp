@@ -10,10 +10,17 @@
 
 using namespace std;
 
-
 NextTable::NextTable() {
-	
-	
+}
+
+void updateStateOfBfs(set<int>& visited, CNode* nextNode, deque<CNode*>& frontier, vector<int>& result) {
+	if (visited.count(nextNode->getProcLineNumber()) == 0) {
+		frontier.push_back(nextNode);
+		if (nextNode->getNodeType() != EndIf_C){
+			result.push_back(nextNode->getProcLineNumber());
+		}
+		visited.insert(nextNode->getProcLineNumber());
+	}
 }
 
 vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
@@ -34,35 +41,26 @@ vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
 
 		vector<CNode*>* nextNodes = curNode->getAfter();
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
-			if ((*iter)->getNodeType() == Proc_C || (*iter)->getNodeType() == EndProc_C) {
+			CNode* node = *iter;
+			if (node->getNodeType() == Proc_C || node->getNodeType() == EndProc_C) {
 				continue;
 			}
 
-			//@todo clean up tmr
 			// if the previous node is a dummy end_if node,
 			// skip it and go to its "after" nodes directly
-			if ((*iter)->getNodeType() == EndIf_C) {
-				assert((*iter)->getAfter()->size() == 1 || (*iter)->getAfter()->size() == 0);
-				if ((*iter)->getAfter()->size() == 0) { // if is the last stmt in the stmtlist
+			if (node->getNodeType() == EndIf_C) {
+				assert(node->getAfter()->size() <= 1);
+
+				if (node->getAfter()->size() == 0) { // if is the last progline
 					continue;
 				}
-				CNode* nextNodeAfterEndIf = (*iter)->getAfter()->at(0);
+				CNode* nextNodeAfterEndIf = node->getAfter()->at(0);
+				
 
-				if (visited.count(nextNodeAfterEndIf->getProcLineNumber()) == 0) {
-					frontier.push_back(nextNodeAfterEndIf);
-					if (nextNodeAfterEndIf->getNodeType() != EndIf_C){
-						result.push_back(nextNodeAfterEndIf->getProcLineNumber());
-					}
-					visited.insert(nextNodeAfterEndIf->getProcLineNumber());
-				}
-
-			} else if (visited.count((*iter)->getProcLineNumber()) == 0) {
-				frontier.push_back(*iter);
-				if ((*iter)->getNodeType() != EndIf_C){
-					result.push_back((*iter)->getProcLineNumber());
-				}
-				visited.insert((*iter)->getProcLineNumber());
-			}
+				node = nextNodeAfterEndIf;
+			} 
+			updateStateOfBfs(visited, node, frontier, result);
+			
 		}
 
 		// break after the first iteration if we are not finding transitive closure
@@ -91,43 +89,25 @@ vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
 
 		vector<CNode*>* nextNodes = curNode->getBefore();
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
-			if ((*iter)->getNodeType() == Proc_C || (*iter)->getNodeType() == EndProc_C) {
+			CNode* node = *iter;
+			if (node->getNodeType() == Proc_C || node->getNodeType() == EndProc_C) {
 				continue;
 			}
 
 			// if the previous node is a dummy end_if node,
 			// skip it and go to its "before" nodes directly
-			if ((*iter)->getNodeType() == EndIf_C) {
-				assert((*iter)->getBefore()->size() == 2);
-				CNode* nextNodeAfterEndIf = (*iter)->getBefore()->at(0);
-				CNode* nextNodeAfterEndIf1 = (*iter)->getBefore()->at(1);
+			if (node->getNodeType() == EndIf_C) {
+				// jump to the next node immediately as an EndIf_C node should never be considered
+				assert(node->getBefore()->size() == 2);
 
-				if (visited.count(nextNodeAfterEndIf->getProcLineNumber()) == 0) {
-					frontier.push_back(nextNodeAfterEndIf);
-				
-					if (nextNodeAfterEndIf->getNodeType() != EndIf_C){
-						result.push_back(nextNodeAfterEndIf->getProcLineNumber());
-					}
-				
-					visited.insert(nextNodeAfterEndIf->getProcLineNumber());
-				} 
-				if (visited.count(nextNodeAfterEndIf1->getProcLineNumber()) == 0) {
-					frontier.push_back(nextNodeAfterEndIf1);
-				
-					if (nextNodeAfterEndIf1->getNodeType() != EndIf_C){
-						result.push_back(nextNodeAfterEndIf1->getProcLineNumber());
-					}
-				
-					visited.insert(nextNodeAfterEndIf1->getProcLineNumber());
-				} 
+				CNode* nextNodeBeforeEndIf = node->getBefore()->at(0);
+				CNode* nextNodeBeforeEndIf1 = node->getBefore()->at(1);
 
+				updateStateOfBfs(visited, nextNodeBeforeEndIf, frontier, result);
+				updateStateOfBfs(visited, nextNodeBeforeEndIf1, frontier, result);
 
-			} else if (visited.count((*iter)->getProcLineNumber()) == 0) {
-				frontier.push_back(*iter);
-				if ((*iter)->getNodeType() != EndIf_C){
-					result.push_back((*iter)->getProcLineNumber());
-				}
-				visited.insert((*iter)->getProcLineNumber());
+			} else  {
+				updateStateOfBfs(visited, node, frontier, result);
 			}
 		}
 
@@ -161,29 +141,19 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 		
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* node = *iter;
-			if ((*iter)->getNodeType() == EndIf_C) {
-				assert((*iter)->getAfter()->size() == 1 || (*iter)->getAfter()->size() == 0);
-				if ((*iter)->getAfter()->size() == 0) { // if is the last stmt in the stmtlist
+			if (node->getNodeType() == EndIf_C) { 
+				// jump to the next node immediately as an EndIf_C node should never be considered
+				assert(node->getAfter()->size() == 1 || node->getAfter()->size() == 0);
+
+				if (node->getAfter()->size() == 0) { // if is the last stmt in the stmtlist
 					continue;
 				}
-				CNode* nextNodeAfterEndIf = (*iter)->getAfter()->at(0);
 
-				if (visited.count(nextNodeAfterEndIf->getProcLineNumber()) == 0) {
-					frontier.push_back(nextNodeAfterEndIf);
-					if (nextNodeAfterEndIf->getNodeType() != EndIf_C){
-						result.push_back(nextNodeAfterEndIf->getProcLineNumber());
-					}
-					visited.insert(nextNodeAfterEndIf->getProcLineNumber());
-				}
+				CNode* nextNodeAfterEndIf = node->getAfter()->at(0);
+				node = nextNodeAfterEndIf;
+			} 
 
-			} else if (visited.count(node->getProcLineNumber()) == 0 ) {
-				frontier.push_back(node);
-				if ((*iter)->getNodeType() != EndIf_C){
-					result.push_back((*iter)->getProcLineNumber());
-				}
-				visited.insert(node->getProcLineNumber());
-		
-			}
+			updateStateOfBfs(visited, node, frontier, result);	
 
 			if (node->getProcLineNumber() == progLine2) {
 				return true;
@@ -195,7 +165,6 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 			break;
 		}
 	}
-	
 
 	return false;
 }

@@ -364,12 +364,18 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(17, _)", 3, (int)pkb.getNextAfterS(17).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(_, 25)", 5, (int)pkb.getNextBeforeS(25).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(20, 18)", true, pkb.isNext(20, 18));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(20, 19)", true, pkb.isNextS(20, 19));
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(23, 24)", false, pkb.isNext(23, 24));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(23, 24)", true, pkb.isNextS(23, 24));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(23, 25), proglines in if-then and if-else nested in while loop", true, pkb.isNextS(23, 25)); 
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(22, _)", 2, (int)pkb.getNextAfter(22).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(23, _)", 1, (int)pkb.getNextAfter(23).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(23, 21), nested last stmt in stmtlst links back to while", true, pkb.isNext(23, 21));
 	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(16, 17), lines in different procedures", false, pkb.isNextS(16, 17));
 
 	cout << "End TestPkb" << endl;
 }
