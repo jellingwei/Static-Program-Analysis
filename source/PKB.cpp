@@ -720,9 +720,9 @@ vector<int> PKB::getCallsRhs() {
 
 // ModifiesTable methods
 
-bool PKB::initModifiesTable() {
-
-	return false;
+bool PKB::initModifiesTable(int numVariables) {
+	modifiesTable->init(numVariables);
+	return true ;
 }
 
 /**

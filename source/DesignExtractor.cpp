@@ -24,6 +24,7 @@ DesignExtractor::DesignExtractor() {
 	assert(pkb.getRoot()->getChildren()->size() == pkb.getProcTableSize());
 
 	pkb.initUsesTable(pkb.getAllVarIndex().size() + 1);
+	pkb.initModifiesTable(pkb.getAllVarIndex().size() + 1);
 }
 
 vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set<int>* visited) {

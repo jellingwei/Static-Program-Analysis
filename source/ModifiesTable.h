@@ -10,6 +10,7 @@ using namespace std;
 
 class ModifiesTable {
 public:
+	void init(int);
 	//for statement numbers
 	bool setModifies(int stmtNum, int varIndex);
 	bool isModifies(int stmtNum, int varIndex);
@@ -27,9 +28,11 @@ public:
 	pair<vector<int>, vector<int>> getAllModProcPair();
 
 private: 
-	unordered_map<int, vector<int>> varIndexMap; // key is stmtNum 
+	unordered_map<int, vector<bool>> varIndexMap; // key is stmtNum 
 	unordered_map<int, vector<int>> stmtNumMap; // key is variable index
 
 	unordered_map<int, vector<int>> procVarIndexMap; // key is procedure index 
 	unordered_map<int, vector<int>> procIndexMap; // key is variable index
+
+	int numVariables;
 };
