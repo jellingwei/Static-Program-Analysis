@@ -248,6 +248,11 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e + (3 * (2 + f))'_)", 0, (int)pkb.patternMatchAssign("_\"e + (3 * (2 + f))\"_").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'3 * b'_)", 11, pkb.patternMatchAssign("_\"3 * b\"_").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e + 1'_)", 9, pkb.patternMatchAssign("_\"e + 1\"_").front());
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'u + (4 * z)'_) - Variable Dont Exist", 0, (int)pkb.patternMatchAssign("_\"u + (4 * z)\"_").size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '')", 12, (int)pkb.patternMatchAssign("\"\"").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _''_)", 12, (int)pkb.patternMatchAssign("_\"\"_").size());
 
 	// New Pattern Design
 	cout << "new pattern design" << endl;
