@@ -14,6 +14,9 @@ NextTable::NextTable() {
 }
 
 void updateStateOfBfs(set<int>& visited, CNode* nextNode, deque<CNode*>& frontier, vector<int>& result) {
+	if (nextNode->getNodeType() == Proc_C || nextNode->getNodeType() == EndProc_C) {
+		return;
+	}
 	if (visited.count(nextNode->getProcLineNumber()) == 0) {
 		frontier.push_back(nextNode);
 		if (nextNode->getNodeType() != EndIf_C){
@@ -42,13 +45,10 @@ vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
 		vector<CNode*>* nextNodes = curNode->getAfter();
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* node = *iter;
-			if (node->getNodeType() == Proc_C || node->getNodeType() == EndProc_C) {
-				continue;
-			}
 
 			// if the previous node is a dummy end_if node,
 			// skip it and go to its "after" nodes directly
-			if (node->getNodeType() == EndIf_C) {
+			while (node->getNodeType() == EndIf_C) {
 				assert(node->getAfter()->size() <= 1);
 
 				if (node->getAfter()->size() == 0) { // if is the last progline
@@ -59,6 +59,8 @@ vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
 
 				node = nextNodeAfterEndIf;
 			} 
+
+
 			updateStateOfBfs(visited, node, frontier, result);
 			
 		}
@@ -97,6 +99,7 @@ vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
 			// if the previous node is a dummy end_if node,
 			// skip it and go to its "before" nodes directly
 			if (node->getNodeType() == EndIf_C) {
+				
 				// jump to the next node immediately as an EndIf_C node should never be considered
 				assert(node->getBefore()->size() == 2);
 
@@ -105,6 +108,7 @@ vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
 
 				updateStateOfBfs(visited, nextNodeBeforeEndIf, frontier, result);
 				updateStateOfBfs(visited, nextNodeBeforeEndIf1, frontier, result);
+				
 
 			} else  {
 				updateStateOfBfs(visited, node, frontier, result);
@@ -141,7 +145,7 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 		
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* node = *iter;
-			if (node->getNodeType() == EndIf_C) { 
+			while (node->getNodeType() == EndIf_C) { 
 				// jump to the next node immediately as an EndIf_C node should never be considered
 				assert(node->getAfter()->size() == 1 || node->getAfter()->size() == 0);
 
@@ -167,4 +171,52 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 	}
 
 	return false;
+}
+
+
+vector<int> NextTable::getLhs() {
+	//@todo change after asking jin what is proglines. might be able to do it faster depending on which definition
+
+	PKB pkb = PKB::getInstance();
+	vector<int> result;
+
+	for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
+		CNode* node = iter->second;
+
+		vector<CNode*>* after = node->getAfter();
+		bool isLastNode;
+
+		// first handle special case for dummy node (End of if statement)
+		while (after->size() == 1 && after->at(0)->getNodeType() == EndIf_C) {
+			after = after->at(0)->getAfter();	
+		}
+
+		isLastNode = (after->size() == 1 && after->at(0)->getNodeType() == EndProc_C);
+		
+		if (!isLastNode) {
+			result.push_back(node->getProcLineNumber());
+		}
+	}
+
+	return result;
+}
+
+vector<int> NextTable::getRhs() {
+	//@todo change after asking jin what is proglines. might be able to do it faster depending on which definition
+
+	PKB pkb = PKB::getInstance();
+	vector<int> result;
+
+	for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
+		CNode* node = iter->second;
+
+		vector<CNode*>* before = node->getBefore();
+		bool isFirstNode = (before->size() == 1 && before->at(0)->getNodeType() == Proc_C);
+		
+		if (!isFirstNode) {
+			result.push_back(node->getProcLineNumber());
+		}
+	}
+
+	return result;
 }

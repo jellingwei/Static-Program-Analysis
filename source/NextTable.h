@@ -13,5 +13,7 @@ public:
 	vector<int> getNextBefore(int progLine2, bool transitiveClosure = false);
 
 	bool isNext(int progLine1, int progLine2, bool transitiveClosure = false);
+	vector<int> getLhs();
+	vector<int> getRhs();
 
 };

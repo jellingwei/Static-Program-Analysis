@@ -174,6 +174,8 @@ public:
 	vector<int> getNextAfterS(int progLine1);
 	vector<int> getNextBeforeS(int progLine2);
 	bool isNextS(int progLine1, int progLine2);
+	vector<int> getNextLhs();
+	vector<int> getNextRhs();
 
 	vector<CFG*> cfgTable;
 

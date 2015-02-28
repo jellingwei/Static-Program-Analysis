@@ -348,7 +348,8 @@ bool DesignExtractor::constructCfg() {
 		TNode* procStmtListNode = (*procNode)->getChildren()->at(0);
 		assert(procStmtListNode->getNodeType() == StmtLst);
 
-		constructCfgForStmtList(procStmtListNode, cfg->getProcRoot(), cfg);
+		CNode* lastNode = constructCfgForStmtList(procStmtListNode, cfg->getProcRoot(), cfg);
+		cfg->setEndNode(lastNode);
 		
 		pkb.cfgTable.push_back(cfg);
 	}

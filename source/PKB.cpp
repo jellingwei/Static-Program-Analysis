@@ -938,6 +938,14 @@ bool PKB::isNextS(int progLine1, int progLine2) {
 	return nextTable->isNext(progLine1, progLine2, transClosure);
 }
 
+vector<int> PKB::getNextLhs() {
+	return nextTable->getLhs();
+}
+
+vector<int> PKB::getNextRhs() {
+	return nextTable->getRhs();
+}
+
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
 */
