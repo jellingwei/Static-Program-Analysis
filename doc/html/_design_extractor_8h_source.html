@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>SPA: source/DesignExtractor.h Source File</title>
+<title>CS3202 Minions SPA: source/DesignExtractor.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,8 +22,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">SPA
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -38,7 +39,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
@@ -102,18 +102,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        vector&lt;TNode*&gt; obtainCallStatementsInTopologicalOrder();</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#ae2c76011f9507532abb6e198bbc89870">setModifiesForCallStatements</a>(vector&lt;TNode*&gt;);</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a950d23ed5d28df67c0d2577f55d04c2b">setUsesForCallStatements</a>(vector&lt;TNode*&gt;);</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">constructCfg</a>();</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">void</span> constructStatisticsTable();</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;};</div>
-<div class="ttc" id="class_design_extractor_html_a950d23ed5d28df67c0d2577f55d04c2b"><div class="ttname"><a href="class_design_extractor.html#a950d23ed5d28df67c0d2577f55d04c2b">DesignExtractor::setUsesForCallStatements</a></div><div class="ttdeci">void setUsesForCallStatements(vector&lt; TNode * &gt;)</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:174</div></div>
-<div class="ttc" id="class_design_extractor_html_a30ba4c59ea8642e2267ff0caa11c8356"><div class="ttname"><a href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">DesignExtractor::constructCfg</a></div><div class="ttdeci">bool constructCfg()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:214</div></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keywordtype">void</span> setModifiesForAssignmentStatements();</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">void</span> setUsesForAssignmentStatements();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">void</span> setUsesForContainerStatements();</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">constructCfg</a>();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keywordtype">void</span> constructStatisticsTable();</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;};</div>
+<div class="ttc" id="class_design_extractor_html_a950d23ed5d28df67c0d2577f55d04c2b"><div class="ttname"><a href="class_design_extractor.html#a950d23ed5d28df67c0d2577f55d04c2b">DesignExtractor::setUsesForCallStatements</a></div><div class="ttdeci">void setUsesForCallStatements(vector&lt; TNode * &gt;)</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:168</div></div>
+<div class="ttc" id="class_design_extractor_html_a30ba4c59ea8642e2267ff0caa11c8356"><div class="ttname"><a href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">DesignExtractor::constructCfg</a></div><div class="ttdeci">bool constructCfg()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:335</div></div>
 <div class="ttc" id="class_design_extractor_html"><div class="ttname"><a href="class_design_extractor.html">DesignExtractor</a></div><div class="ttdef"><b>Definition:</b> DesignExtractor.h:8</div></div>
-<div class="ttc" id="class_design_extractor_html_ae2c76011f9507532abb6e198bbc89870"><div class="ttname"><a href="class_design_extractor.html#ae2c76011f9507532abb6e198bbc89870">DesignExtractor::setModifiesForCallStatements</a></div><div class="ttdeci">void setModifiesForCallStatements(vector&lt; TNode * &gt;)</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:133</div></div>
+<div class="ttc" id="class_design_extractor_html_ae2c76011f9507532abb6e198bbc89870"><div class="ttname"><a href="class_design_extractor.html#ae2c76011f9507532abb6e198bbc89870">DesignExtractor::setModifiesForCallStatements</a></div><div class="ttdeci">void setModifiesForCallStatements(vector&lt; TNode * &gt;)</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:134</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 9 2015 10:12:44 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 1 2015 00:16:49 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

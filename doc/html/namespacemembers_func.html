@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>SPA: Namespace Members</title>
+<title>CS3202 Minions SPA: Namespace Members</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,8 +22,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">SPA
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -38,7 +39,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li class="current"><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -75,6 +75,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow4" class="tabs3">
     <ul class="tablist">
       <li><a href="#index_b"><span>b</span></a></li>
+      <li><a href="#index_c"><span>c</span></a></li>
       <li><a href="#index_g"><span>g</span></a></li>
       <li><a href="#index_i"><span>i</span></a></li>
       <li><a href="#index_m"><span>m</span></a></li>
@@ -103,6 +104,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h3><a class="anchor" id="index_b"></a>- b -</h3><ul>
 <li>buildQueryTree()
 : <a class="el" href="namespace_query_parser.html#a1795dca9d5c4eea2572c49dd837b4c5d">QueryParser</a>
+</li>
+</ul>
+
+
+<h3><a class="anchor" id="index_c"></a>- c -</h3><ul>
+<li>createSynonym()
+: <a class="el" href="namespace_query_parser.html#ae070b472d43818e0f75a39bb04b96a01">QueryParser</a>
 </li>
 </ul>
 
@@ -155,8 +163,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>matchRef()
 : <a class="el" href="namespace_query_parser.html#a1d31f5404d49bc43f5e42b035d3db9b4">QueryParser</a>
 </li>
-<li>matchStmtRef()
-: <a class="el" href="namespace_query_parser.html#ab93adb92a99b7e2722f39d0901588075">QueryParser</a>
+<li>matchStmtOrLineRef()
+: <a class="el" href="namespace_query_parser.html#a72f511211eaba419b80468c624026e8d">QueryParser</a>
 </li>
 <li>matchSynonymAndIdent()
 : <a class="el" href="namespace_query_parser.html#ab745bcedc1eeb38fc78b26234fc8ce3b">QueryParser</a>
@@ -186,8 +194,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>parseEntRef()
 : <a class="el" href="namespace_query_parser.html#afabf50863297361eb5ca78a61a444981">QueryParser</a>
 </li>
+<li>parseExpr()
+: <a class="el" href="namespace_query_parser.html#a6a06ca9f77121261afa2001bc76a46e6">QueryParser</a>
+</li>
 <li>parseExpressionSpec()
-: <a class="el" href="namespace_query_parser.html#af1bfc6324b9a31d7ec59fa5174ef213d">QueryParser</a>
+: <a class="el" href="namespace_query_parser.html#af142109469cfc339ddcc131a58e04dc9">QueryParser</a>
 </li>
 <li>parseFactor()
 : <a class="el" href="namespace_query_parser.html#a8adca420d10b8046d3fddd0cd930a957">QueryParser</a>
@@ -210,8 +221,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>parseSelect()
 : <a class="el" href="namespace_query_parser.html#a10eb2082e6a22583bbc471f0d5cbb125">QueryParser</a>
 </li>
-<li>parseStmtRef()
-: <a class="el" href="namespace_query_parser.html#a28f23de2a54179b900ce88129bacab67">QueryParser</a>
+<li>parseStmtOrLineRef()
+: <a class="el" href="namespace_query_parser.html#a76c405104de9173f1f101f191e20c209">QueryParser</a>
 </li>
 <li>parseSuchThatClause()
 : <a class="el" href="namespace_query_parser.html#aac66bee40525432005477036f13660c3">QueryParser</a>
@@ -219,11 +230,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>parseSynonymns()
 : <a class="el" href="namespace_query_parser.html#ab4f21535ae6c224a362448f580571ee5">QueryParser</a>
 </li>
+<li>parseTerm()
+: <a class="el" href="namespace_query_parser.html#a3efc5cf27f8d6d6e7eb0df22876cec67">QueryParser</a>
+</li>
 <li>parseToken()
 : <a class="el" href="namespace_query_parser.html#acddbca0a59ef29e0ca847f6d9fe2c310">QueryParser</a>
 </li>
 <li>peekBackwards()
 : <a class="el" href="namespace_query_parser.html#a451cb9acc0ba2a61b4285288172ba569">QueryParser</a>
+</li>
+<li>peekInToTheNextNextToken()
+: <a class="el" href="namespace_query_parser.html#ade8e386e4cebd609a523cb8bd634e5a9">QueryParser</a>
 </li>
 <li>peekInToTheNextToken()
 : <a class="el" href="namespace_query_parser.html#a4d81e9851792b1a9de748e20cbe4f1a4">QueryParser</a>
@@ -239,7 +256,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 9 2015 10:12:48 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 1 2015 00:16:50 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>
