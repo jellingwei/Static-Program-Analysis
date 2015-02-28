@@ -11,11 +11,6 @@
 
 using namespace std;
 
-/**
-* Return TRUE if the StmtTable is updated accordingly. Otherwise, return FALSE. 
-* If stmtNum and type are already present in the StmtTable and are previously set, the StmtTable will not be updated.
-* @exception if stmtNum is negative or 0, or type is not while/assign/if/call.
-*/
 bool StmtTable::insertStmt(int stmtNum, string type) 
 {
 	if(stmtNum <= 0) {
@@ -54,12 +49,6 @@ bool StmtTable::insertStmt(int stmtNum, string type)
 	} 
 }
 
-
-/**
- * Return the statement type in the StmtTable with the given statement number.
- * If stmtNum is out of range, return an empty string.
- * @exception if stmtNum is negative or 0.
- */
 string StmtTable::getType(int stmtNum) 
 {
 	if(stmtNum <= 0) {
@@ -72,10 +61,6 @@ string StmtTable::getType(int stmtNum)
 	return "";
 }
 
-/**
- * Return all the statement number of the statement type in the the StmtTable. 
- * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
-*/
 vector<int> StmtTable::getStmtNumForType(string type) 
 {
 
@@ -116,10 +101,6 @@ vector<int> StmtTable::getStmtNumForType(string type)
 	}
 }
 
-/**
-* Return TRUE if stmtNo is of Assignment Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
 bool StmtTable::isAssign(int stmtNo) 
 {
 	if(stmtNo <= 0) {

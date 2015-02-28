@@ -12,7 +12,6 @@ class ConstantTable {
 public:
 	bool insertConstant(int constant, int stmtNum);
 	int getSize();
-	int getConstant(int index);
 	int getConstantIndex(int constant);
 	vector<int> getStmtNum(int constant);
 	bool isConstant(int number);
