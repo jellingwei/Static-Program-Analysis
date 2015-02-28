@@ -79,9 +79,6 @@ vector<int> ParentTable::getParent(int stmtNum2, bool transitiveClosure)
 	return result;
 }
 
-/**
- * Returns the transitive Closure of getChild. 
- */
 vector<int> getChildDfs(TNode* node1, TNode* node2) 
 {
 	vector<int> result;
@@ -309,9 +306,6 @@ void generateTransitiveParentPairs(vector<int> parentList, TNode* curNode, vecto
 }
 
 
-/**
- * Returns all pairs of statements, <s1, s2>, where Parent(s1, s2) is satisfied
- */
 pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClosure) 
 {
 	pair<vector<int>, vector<int> > result;
@@ -379,9 +373,6 @@ pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClo
 	return result;
 }
 
-/**
- * @return all stmt numbers where Parent(stmt, _) is true
- */
 vector<int> ParentTable::getAllParents() {
 	// obtain all while and if stmts
 	PKB pkb = PKB::getInstance();
@@ -394,9 +385,6 @@ vector<int> ParentTable::getAllParents() {
 	return stmts;
 }
 
-/**
- * @return all stmt numbers where Parent(_, stmt) is true
- */
 vector<int> ParentTable::getAllChildren() {  // can be optimised further if needed, 
 	// obtain all while and if stmts... 
 	PKB pkb = PKB::getInstance();

@@ -110,10 +110,6 @@ bool StmtTable::isAssign(int stmtNo)
 	return stmtNumMap.at(stmtNo) == "assign";
 }
 
-/**
-* Return TRUE if stmtNo is of While Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
 bool StmtTable::isWhile(int stmtNo) 
 {
 	if(stmtNo <= 0) {
@@ -124,10 +120,6 @@ bool StmtTable::isWhile(int stmtNo)
 	
 }
 
-/**
-* Return TRUE if stmtNo is of If Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
 bool StmtTable::isIf(int stmtNo) 
 {
 	if(stmtNo <= 0) {
@@ -138,10 +130,6 @@ bool StmtTable::isIf(int stmtNo)
 	
 }
 
-/**
-* Return TRUE if stmtNo is of call Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
 bool StmtTable::isCall(int stmtNo) 
 {
 	if(stmtNo <= 0) {
@@ -152,9 +140,6 @@ bool StmtTable::isCall(int stmtNo)
 	
 }
 
-/**
- * Return the total number of statements in the the StmtTable.
- */
 int StmtTable::getSize() 
 {
 	return stmtNumMap.size();

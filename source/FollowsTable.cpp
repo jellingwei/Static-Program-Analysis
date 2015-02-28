@@ -25,11 +25,6 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
 	return PKB::getInstance().createLink(Right_Sibling, stmt1, stmt2);
 }
 
-/**
- * Given stmt2 as input, returns a vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied.
- * If there is no answer, return an empty vector
- * @return vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied
- */
 vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
 	vector<int> result;
 
@@ -56,10 +51,6 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 	return result;
 }
 
-/**
- * Given stmt1 as input, returns a vector of int of possible stmt2 such that Follows(stmt1, stmt2) is satisfied.
- * If there is no answer, returns an empty vector
- */
 vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosure) {
 	vector<int> result;
 	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
@@ -126,10 +117,6 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 	}
 }
 
-
-/**
- * Recursively find all pairs of statements which satisfy the condition Follows(stmt1, stmt2) in each stmtlist.
- */
 void generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector<int>* result1, vector<int>* result2) {
 	vector<TNode*> nextLayer;
 
@@ -180,10 +167,6 @@ void generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector
 	return ;
 }
 
-/**
- * Returns all (stmt1, stmt2) such that Follows(stmt1, stmt2) holds. If transitiveClosure is true,
- * returns all (stmt1, stmt2) such that Follows*(stmt1, stmt2) holds.
- */
 pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(bool transitiveClosure) {
 	pair<vector<int>, vector<int>> results;
 	TNode* root = PKB::getInstance().getRoot(); 
