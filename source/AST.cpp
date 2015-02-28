@@ -22,17 +22,10 @@ AST::AST() {
 
 }
 
-/**
-* @return the root node of the AST.
-*/
 TNode* AST::getRoot() {
 	return _rootNode;
 }
 
-/**
-* @return a TNode for the given design entity together with its statement number and index. 
-* @exception if stmtNo is negative or 0 or index is negative.
-*/
 TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 
 	if(stmtNo < 0) {
@@ -144,9 +137,6 @@ bool AST::isExists(TNode* node) {
 	else return false;
 }
 
-TNode* AST::getLastImpt() {
-	return _lastImpt;
-}
 
 /**
  * @return the total number of nodes in the the AST.

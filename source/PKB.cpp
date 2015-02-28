@@ -28,12 +28,15 @@ PKB::PKB()
 }
 
 /**
-* @return a TNode for the given design entity together with its statement number and index. 
-* @exception if stmtNo is negative or 0 or index is negative.
+* @param astNodeType  the node type which can be Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant, Minus, Times, Program, Call
+* @param stmtNum  the statement number of the TNode
+* @param value  the value of the TNode
+* @return a TNode for the given design entity together with its statement number and value. 
+* @exception exception if stmtNum is negative or 0 or value is negative.
 */
-TNode* PKB::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) 
+TNode* PKB::createTNode(TNODE_TYPE astNodeType, int stmtNo, int value) 
 {
-	return ast->createTNode(ast_node_type, stmtNo, idx);
+	return ast->createTNode(astNodeType, stmtNo, value);
 }
 
 /**
@@ -45,8 +48,12 @@ TNode* PKB::getRoot()
 }
 
 /**
-* @return TRUE if the link between the fromNode to toNode is created successfully. Otherwise, return FALSE. 
-* @exception if link is invalid, or fromNode and toNode is NULL.
+* @param link  the relationship which can be Parent, Right_Sibling, Left_Sibling, Child
+* @param fromNode  the node that connects to another node
+* @param toNode  the node that receives a connection from another node
+* @return TRUE if the link between the fromNode to toNode is created successfully. 
+*		  FALSE if the link between the fromNode to toNode is not created successfully.
+* @exception exception if link is invalid, or fromNode and toNode is NULL.
 */
 bool PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) 
 {
@@ -54,8 +61,9 @@ bool PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode)
 }
 
 /**
+* @param parent  a node which may or may not have children nodes
 * @return the total number of children the parent TNode has. 
-* @exception if parent is NULL.
+* @exception exception if parent is NULL.
 */
 int PKB::getChildrenSize(TNode* parent) 
 {
@@ -63,9 +71,10 @@ int PKB::getChildrenSize(TNode* parent)
 }
 
 /**
+* @param parent  a node which may or may not have children nodes
 * @return the list of all the children nodes the parent TNode has.
-* If there is no answer, return an empty list.
-* @exception if parent is NULL.
+* If there are no children nodes, return an empty list.
+* @exception exception if parent is NULL.
 */
 vector<TNode*>* PKB::getChildrenNode(TNode* parent) 
 {
@@ -73,8 +82,11 @@ vector<TNode*>* PKB::getChildrenNode(TNode* parent)
 }
 
 /**
-* @return TRUE if child TNode is a child node of parent TNode. Otherwise, return FALSE.
-* @exception if parent or child is NULL.
+* @param parent  a node which may or may not have the 'child' node
+* @param child  a node whose parent node may or may not be the 'parent' node 
+* @return TRUE if child TNode is a child node of parent TNode. 
+*		  FALSE if child TNode is not a child node of parent TNode.
+* @exception exception if parent or child is NULL.
 */
 bool PKB::isChildNode(TNode* parent, TNode* child) 
 {
@@ -82,16 +94,14 @@ bool PKB::isChildNode(TNode* parent, TNode* child)
 }
 
 /**
-* @return TRUE if node exists. Otherwise, return FALSE.
-* @exception if node is NULL.
+* @param node  an AST node
+* @return TRUE if node exists. 
+		  FALSE if node does not exist.
+* @exception exception if node is NULL.
 */
 bool PKB::isExists(TNode* node) 
 {
 	return ast->isExists(node);
-}
-TNode* PKB::getLastImpt() 
-{
-	return ast->getLastImpt();
 }
 
 /**
@@ -104,8 +114,8 @@ int PKB::getASTSize()
 
 /**
  * Pattern matching for assign statements.
+ * @param RHS  the expression query with a suitable subtree
  * @return a vector of statement numbers which are assign stmts, and uses the input RHS as its right substree.
- * @param RHS to match the expression query with a suitable subtree.
  */
 vector<int> PKB::patternMatchAssign(string RHS) 
 {
@@ -114,14 +124,19 @@ vector<int> PKB::patternMatchAssign(string RHS)
 
 /**
  * Pattern matching for while statements.
- * @return a vector of statement numbers which are while loops, and uses the input LHS as its control variable.
- * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in
+ * @return a vector of statement numbers which are while statements, and uses the input LHS as its control variable.
  */
 vector<int> PKB::patternMatchWhile(string LHS) 
 {
 	return ast->patternMatchWhile(LHS);
 }
 
+/**
+ * Pattern matching for if statements.
+ * @param LHS  the name of the variable that acts as the control variable for the if statements we are interested in
+ * @return a vector of statement numbers which are in if statements, and uses the input LHS as its control variable.
+ */
 vector<int> PKB::patternMatchIf(string LHS) 
 {
 	return ast->patternMatchIf(LHS);
@@ -129,8 +144,9 @@ vector<int> PKB::patternMatchIf(string LHS)
 
 /**
  * Obtain the index of control variable of a while loop. 
- * @param stmtNum the statement number of the while loop
- * @return -1 if 1. an invalid statement number is provided.
+ * @param stmtNum  the statement number of the while loop
+ * @return -1 if any of the following conditions hold: 
+ *	   1. an invalid statement number is provided
  *     2. the statement indicated by the stmtNum is not a While statement
  *     3. the AST is poorly formed and the while loop's node is in an invalid state
  * Otherwise, return the index of the control variable.
@@ -146,8 +162,10 @@ int PKB::getControlVariable(int stmtNum)
  * If varName is not in the VarTable, inserts it into the VarTable with the
  * given statement number stmtNum and return its index. Otherwise, return its INDEX
  * and the table remains unchanged.
- * @return index of variable
- * @exception if varName is empty or stmtNum is negative or 0.
+ * @param varName  the name of the variable
+ * @param stmtNum  the statement number the variable belongs to
+ * @return index of variable.
+ * @exception exception if varName is empty or stmtNum is negative or 0.
  */
 int PKB::insertVar(string varName, int stmtNum) 
 {
@@ -163,6 +181,7 @@ int PKB::getVarTableSize()
 }
 
 /**
+ * @param index  the index of the variable
  * @return the name of the variable in the VarTable with the given index.
  * If index is out of range, return an empty string.
  */
@@ -173,24 +192,16 @@ string PKB::getVarName(int index)
 
 /**
  * If varName is in the VarTable, return its index. Otherwise, return -1 to
- * indicate there is no such variable in the the VarTable. If varName is empty or null, -1 is
- * returned.
- * @return index of variable or -1 if varName is empty or null
- * @exception if varName is empty
+ * indicate there is no such variable in the the VarTable or if the varName is empty or null
+ * @param varName  the name of the variable
+ * @return index of variable or -1 if the following conditions hold:
+ *			1. varName is empty or null
+ *			2. there is no such variable in the the VarTable
+ * @exception exception if varName is empty
  */
 int PKB::getVarIndex(string varName) 
 {
 	return varTable->getVarIndex(varName);
-}
-
-/**
- * @return the statement number of the variable in the VarTable with the given
- * varName. Otherwise, return -1 to indicate there is no such statement number.
- * If there is no answer or if “varName” is empty or null, return an empty list.
- */
-int PKB::getStmtNum(string varName) 
-{
-	return varTable->getStmtNum(varName);
 }
 
 /**
@@ -208,8 +219,9 @@ vector<int> PKB::getAllVarIndex()
 /**
  * If procName is not in the ProcTable, inserts it into the ProcTable and 
  * return its index. Otherwise, return its INDEX and the table remains unchanged.
+ * @param procName  the name of the procedure
  * @return index of procedure
- * @exception if procName is empty.
+ * @exception exception if procName is empty.
  */
 int PKB::insertProc(string procName) 
 {
@@ -225,6 +237,7 @@ int PKB::getProcTableSize()
 }
 
 /**
+ * @param index  the index of the procedure
  * @return the name of the procedure in the ProcTable with the given index.
  * If index is out of range, return an empty string.
  */
@@ -235,10 +248,11 @@ string PKB::getProcName(int index)
 
 /**
  * If procName is in the ProcTable, return its index. Otherwise, return -1 to
- * indicate there is no such procedure in the the ProcTable. If procName is empty or null, -1 is
- * returned.
- * @return index of procedure or -1 if procName is empty or null
- * @exception if procName is empty
+ * indicate there is no such procedure in the the ProcTable or if procName is empty or null.
+ * @return index of procedure or -1 if the following conditions hold:
+ *			1. procName is empty or null
+ *			2. there is no such procedure in the the ProcTable
+ * @exception exception if procName is empty
  */
 int PKB::getProcIndex(string procName) 
 {
@@ -260,7 +274,7 @@ vector<int> PKB::getAllProcIndex()
  * If constant is not in the ConstantTable, inserts it into the ConstantTable with the
  * given statement number stmtNum.
  * @return TRUE if constantTable got updated.
- * @exception if constant is empty or stmtNum is negative or 0.
+ * @exception exception if constant is empty or stmtNum is negative or 0.
  */
 bool PKB::insertConstant(int constant, int stmtNum) 
 {

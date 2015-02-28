@@ -79,20 +79,6 @@ int VarTable::getVarIndex(string varName)
 }
 
 /**
- * Return the statement number of the variable in the VarTable with the given
- * varName. Otherwise, return -1 to indicate there is no such statement number.
- * If there is no answer or if “varName” is empty or null, return an empty list.
- */
-int VarTable::getStmtNum(string varName) 
-{
-	if (varName.empty()) {
-		throw exception("varTable error: Empty variable name");
-	}
-
-	return (stmtMap.count(varName) > 0) ? stmtMap.at(varName) : -1;
-}
-
-/**
  * Return all the index of the variables in the the VarTable.
  * If there is no answer, return an empty list.
  */

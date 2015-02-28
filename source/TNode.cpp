@@ -11,12 +11,12 @@ TNode::TNode()
 
 /**
  * Return a TNode with parameters as follows, node type, the corresponding statement number and the corresponding value. 
- * If ast_node_type is Variable, then value is the INDEX of the variable in the VarTable. 
- * If ast_node_type is Constant, then value is the value of the CONSTANT. 
- * If ast_node_type is neither Variable nor Constant, then value is not a meaningful value.
+ * If astNodeType is Variable, then value is the INDEX of the variable in the VarTable. 
+ * If astNodeType is Constant, then value is the value of the CONSTANT. 
+ * If astNodeType is neither Variable nor Constant, then value is not a meaningful value.
  * @exception if stmtNo is negative or 0.
  */
-TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value) 
+TNode::TNode(TNODE_TYPE astNodeType, int stmtNo, int value) 
 {
 	/*if(stmtNo <= 0) 
 	{
@@ -29,7 +29,7 @@ TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value)
 		throw exception("TNode error: Invalid TNode_Type");
 	}*/
 
-	_nodeType = ast_node_type;
+	_nodeType = astNodeType;
 	_stmtNumber = stmtNo;
 	_nodeValueIdx = value;
 	_leftSibling = _rightSibling = NULL;
@@ -38,15 +38,15 @@ TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value)
 
 /**
  * Return a TNode with parameters as follows, node type, the corresponding statement number and the corresponding parent TNode. 
- * If ast_node_type is Variable, then value is the INDEX of the variable in the VarTable. 
- * If ast_node_type is Constant, then value is the value of the CONSTANT. 
- * If ast_node_type is neither Variable nor Constant, then value is not a meaningful value.
+ * If astNodeType is Variable, then value is the INDEX of the variable in the VarTable. 
+ * If astNodeType is Constant, then value is the value of the CONSTANT. 
+ * If astNodeType is neither Variable nor Constant, then value is not a meaningful value.
  * @exception if stmtNo is negative or 0.
  */
-TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value, TNode* parent) 
+TNode::TNode(TNODE_TYPE astNodeType, int stmtNo, int value, TNode* parent) 
 {
 
-	_nodeType = ast_node_type;
+	_nodeType = astNodeType;
 	_stmtNumber = stmtNo;
 	_nodeValueIdx = value;
 	_parent = parent;

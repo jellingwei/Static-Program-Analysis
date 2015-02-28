@@ -14,7 +14,6 @@ public:
 	int getVarTableSize();
 	string getVarName(int index);
 	int getVarIndex(string varName);
-	int getStmtNum(string varName);
 	vector<int> getAllVarIndex();
 
 private: 
