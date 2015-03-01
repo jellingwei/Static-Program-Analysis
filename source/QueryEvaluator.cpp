@@ -690,7 +690,7 @@ namespace QueryEvaluator
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(arg1);
 			return true;
 		} else {
-			pair<vector<int>, vector<int>> callsPair = evaluateCallsByLHS(arg1, arg2, isTrans);
+			pair<vector<int>, vector<int>> callsPair = evaluateNextByLHS(arg1, arg2, isTrans);
 
 			if (callsPair.first.size() == 0 || callsPair.second.size() == 0) {
 				return false;
@@ -780,7 +780,7 @@ namespace QueryEvaluator
 			IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 			return true;
 		} else {
-			pair<vector<int>, vector<int>> callsPair = evaluateCallsByLHS(arg1, arg2, isTrans);
+			pair<vector<int>, vector<int>> callsPair = evaluateAffectsByLHS(arg1, arg2, isTrans);
 
 			if (callsPair.first.size() == 0 || callsPair.second.size() == 0) {
 				return false;
