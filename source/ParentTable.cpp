@@ -34,12 +34,12 @@ vector<int> ParentTable::getParent(int stmtNum2, bool transitiveClosure)
 {
 	vector<int> result;
 
-	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) 
+	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) 
 	{
 		// no such statement
 		return vector<int>();
 	}
-	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
+	TNode* node2 = PKB::getInstance().getNodeForStmt(stmtNum2);
 
 	if (!node2) 
 	{ 
@@ -143,33 +143,33 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 	vector<int> result;
 
 	// return an empty vector if the node for the stmtNum cannot be found
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
+	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) 
 	{
 		return vector<int>();
 	}
 
 
 	PKB pkb = PKB::getInstance();
-	TNODE_TYPE stmtType = pkb.nodeTable.at(stmtNum1)->getNodeType();
+	TNODE_TYPE stmtType = pkb.getNodeForStmt(stmtNum1)->getNodeType();
 	TNode* node1 = NULL;
 	TNode* node2 = NULL;
 
 	if (stmtType == If) 
 	{
 		// handle stmt under "if"
-		node1 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(1); 
+		node1 = pkb.getNodeForStmt(stmtNum1)->getChildren()->at(1); 
 		assert(node1->getNodeType() == StmtLst);
 
 		// handle stmts under "else"
-		if (pkb.nodeTable.at(stmtNum1)->getChildren()->size() > 2) 
+		if (pkb.getNodeForStmt(stmtNum1)->getChildren()->size() > 2) 
 		{
-			node2 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(2); 
+			node2 = pkb.getNodeForStmt(stmtNum1)->getChildren()->at(2); 
 			assert(node2->getNodeType() == StmtLst);
 		}
 		
 	} else if (stmtType == While) 
 	{
-		node1 = pkb.nodeTable.at(stmtNum1)->getChildren()->at(1); //@Todo refactor
+		node1 = pkb.getNodeForStmt(stmtNum1)->getChildren()->at(1); //@Todo refactor
 
 		assert(node1->getNodeType() == StmtLst);
 	} else 
@@ -216,16 +216,16 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 
 bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
-	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) 
+	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) 
 	{
 		return false;
 	}
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
+	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) 
 	{
 		return false;
 	}
 
-	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
+	TNode* node2 = PKB::getInstance().getNodeForStmt(stmtNum2);
 
 	if (!transitiveClosure) 
 	{
@@ -242,7 +242,7 @@ bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure)
 	}
 	else 
 	{
-		TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
+		TNode* node1 = PKB::getInstance().getNodeForStmt(stmtNum1);
 		if (!node1 || !node2) 
 		{
 			return false;
@@ -312,10 +312,10 @@ pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClo
 
 	if (!transitiveClosure) 
 	{
-		//@Todo make smarter
-		for (auto iter = PKB::getInstance().nodeTable.begin(); iter != PKB::getInstance().nodeTable.end(); ++iter) 
+		vector<int> parentStmtNum = getAllParents();
+		for (auto iter = parentStmtNum.begin(); iter != parentStmtNum.end(); ++iter) 
 		{
-			TNode* node = iter->second;
+			TNode* node = PKB::getInstance().getNodeForStmt(*iter);
 			if (!node->hasChild() || node->getStmtNumber() <= 0) 
 			{
 				continue;

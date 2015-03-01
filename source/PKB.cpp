@@ -337,13 +337,15 @@ vector<int> PKB::getAllConstant()
  * given type.
  * @param stmtNum  the statement number 
  * @param type  the type of statement which can be While, Assign, If, Call
+ * @param node  the TNode in the ast that corresponds to this statement
+ * @param procIndex  the index of the procedure that this statement is in
  * @return TRUE if StmtTable is updated successfully. 
 		   FALSE if StmtTable is not updated successfully.
  * @exception exception if stmtNum is negative or 0, or type is not while/assign/if/call.
  */
-bool PKB::insertStmt(int stmtNum, string type) 
+bool PKB::insertStmt(int stmtNum, string type, TNode* node, int procIndex) 
 {
-	return stmtTable->insertStmt(stmtNum, type);
+	return stmtTable->insertStmt(stmtNum, type, node, procIndex);
 }
 
 /**
@@ -429,6 +431,14 @@ bool PKB::isCall(int stmtNum) {
  */
 int PKB::getStmtTableSize() {
 	return stmtTable->getSize();
+}
+
+/**
+ * @return the TNode in the AST for the statement number
+ * @param stmtNum  the statement number to retrieve the TNode for
+ */
+TNode* PKB::getNodeForStmt(int stmtNum) {
+	return stmtTable->getNodeForStmt(stmtNum);
 }
 
 // Parent

@@ -101,7 +101,7 @@ public:
 	vector<int> getCallsRhs();
 
 	// StmtTable methods
-	bool insertStmt(int, string);
+	bool insertStmt(int, string, TNode*, int);
 	string getType(int);
 	vector<int> getStmtNumForType(string);
 	vector<int> getStmtNumForType(SYNONYM_TYPE);
@@ -110,6 +110,7 @@ public:
 	bool isIf(int);
 	bool isCall(int);
 	int getStmtTableSize();
+	TNode* getNodeForStmt(int);
 
 	// Parent Table methods
 	bool setParent(TNode* stmtNum1, TNode* stmtNum2);

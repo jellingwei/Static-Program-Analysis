@@ -257,10 +257,10 @@ int AST::getControlVariable(int stmtNum) {
 
 	PKB pkb = PKB::getInstance();
 
-	if (pkb.nodeTable.count(stmtNum) <= 0) {
+	if (pkb.getNodeForStmt(stmtNum) == NULL) {
 		return -1;
 	}
-	TNode* node = pkb.nodeTable.at(stmtNum);
+	TNode* node = pkb.getNodeForStmt(stmtNum);
 	if (node->getNodeType() != While && node->getNodeType() != If) {
 		return -1;
 	}

@@ -202,10 +202,10 @@ pair<vector<int>, vector<int>> CallsTable::getAllCallsPairs(bool transitiveClosu
 
 string CallsTable::getProcNameCalledByStatement(int stmtNum) {
 	PKB pkb = PKB::getInstance();
-	TNode* node = pkb.nodeTable.at(stmtNum);
+	TNode* node = pkb.getNodeForStmt(stmtNum);
 
-	if (node->getNodeType() != Call) {
-		throw logic_error("CallsTable error: stmtNum passed in is not a call statement");
+	if (node == NULL || node->getNodeType() != Call) {
+		throw logic_error("CallsTable error: stmtNum does not have a node in AST or is not a call statement");
 	}
 	int procIndex = node->getNodeValueIdx();
 

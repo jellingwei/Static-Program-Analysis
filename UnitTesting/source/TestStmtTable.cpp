@@ -28,8 +28,8 @@ void StmtTableTest::testInit() {
 void StmtTableTest::testInsert() {
 	StmtTable stmtTable;
 	
-	stmtTable.insertStmt(1, "assign");
-	stmtTable.insertStmt(2, "while");
+	stmtTable.insertStmt(1, "assign", NULL, NULL);
+	stmtTable.insertStmt(2, "while", NULL, NULL);
 	CPPUNIT_ASSERT_EQUAL(2, stmtTable.getSize());
 
 	CPPUNIT_ASSERT(stmtTable.isAssign(1));
@@ -43,24 +43,24 @@ void StmtTableTest::testInsert() {
 void StmtTableTest::testGetStmtNumForType() {
 	StmtTable stmtTable;
 
-	stmtTable.insertStmt(1, "assign");
-	stmtTable.insertStmt(2, "assign");
+	stmtTable.insertStmt(1, "assign", NULL, NULL);
+	stmtTable.insertStmt(2, "assign", NULL, NULL);
 
 	vector<int> result = stmtTable.getStmtNumForType("assign");
 	CPPUNIT_ASSERT_EQUAL(2, (int)result.size());
 
 
-	stmtTable.insertStmt(3, "while");
-	stmtTable.insertStmt(4, "while");
-	stmtTable.insertStmt(5, "while");
+	stmtTable.insertStmt(3, "while", NULL, NULL);
+	stmtTable.insertStmt(4, "while", NULL, NULL);
+	stmtTable.insertStmt(5, "while", NULL, NULL);
 
 	result = stmtTable.getStmtNumForType("while");
 	CPPUNIT_ASSERT_EQUAL(3, (int)result.size());
 	result = stmtTable.getStmtNumForType("assign");
 	CPPUNIT_ASSERT_EQUAL(2, (int)result.size());
 
-	stmtTable.insertStmt(6, "while");
-	stmtTable.insertStmt(7, "assign");
+	stmtTable.insertStmt(6, "while", NULL, NULL);
+	stmtTable.insertStmt(7, "assign", NULL, NULL);
 
 	result = stmtTable.getStmtNumForType("while");
 	CPPUNIT_ASSERT_EQUAL(4, (int)result.size());
@@ -68,8 +68,8 @@ void StmtTableTest::testGetStmtNumForType() {
 	CPPUNIT_ASSERT_EQUAL(3, (int)result.size());
 
 	// inserting a previously inserted stmt# should not cause any changes
-	stmtTable.insertStmt(7, "while");
-	stmtTable.insertStmt(7, "assign");
+	stmtTable.insertStmt(7, "while", NULL, NULL);
+	stmtTable.insertStmt(7, "assign", NULL, NULL);
 
 	result = stmtTable.getStmtNumForType("while");
 	CPPUNIT_ASSERT_EQUAL(4, (int)result.size());

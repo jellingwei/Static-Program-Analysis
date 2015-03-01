@@ -55,14 +55,10 @@ vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
 					continue;
 				}
 				CNode* nextNodeAfterEndIf = node->getAfter()->at(0);
-				
-
 				node = nextNodeAfterEndIf;
-			} 
+			}
 
-
-			updateStateOfBfs(visited, node, frontier, result);
-			
+			updateStateOfBfs(visited, node, frontier, result);			
 		}
 
 		// break after the first iteration if we are not finding transitive closure

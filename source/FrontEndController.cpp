@@ -13,13 +13,23 @@ void FrontEndController::constructPkb(std::string filename)
 
 		cout<<"Design Extractor"<<std::endl;
 		DesignExtractor extractor;
-		extractor.setModifiesForAssignmentStatements();
-		extractor.setUsesForAssignmentStatements();
-		extractor.setUsesForContainerStatements();
+		try {
+			extractor.setModifiesForAssignmentStatements();
+			extractor.setUsesForAssignmentStatements();
+			extractor.setUsesForContainerStatements();
+		} catch (exception e) {
+			cout << "failure during design extraction of assignment and container statements" << endl;
+			throw e;
+		}
 
-		vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder();
-		extractor.setModifiesForCallStatements(callNodes);
-		extractor.setUsesForCallStatements(callNodes);
+		try {
+			vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder();
+			extractor.setModifiesForCallStatements(callNodes);
+			extractor.setUsesForCallStatements(callNodes);
+		} catch (exception e) {
+			cout << "failure during design extraction for call statements" << endl;
+			throw e;
+		}
 
 		extractor.constructCfg();
 		//extractor.constructStatisticsTable();

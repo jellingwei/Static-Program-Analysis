@@ -32,7 +32,7 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
 
 	for(size_t i=0; i<assignTable.size(); i++) 
 	{
-		_currentAssign = pkb.nodeTable.at(assignTable.at(i));
+		_currentAssign = pkb.getNodeForStmt(assignTable.at(i));
 		_rightChildNodeA = _currentAssign->getChildren()->at(1);
 
 		if((_rootNodeQ->getNodeType() == Constant) || (_rootNodeQ->getNodeType() == Variable))
@@ -309,7 +309,7 @@ vector<int> PatternMatch::patternMatchParentStmt(string LHS, TNODE_TYPE type) {
 			continue;
 		}
 
-		TNode* stmtNode = pkb.nodeTable.at(*stmt);
+		TNode* stmtNode = pkb.getNodeForStmt(*stmt);
 
 		assert(stmtNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
 		if (stmtNode->getChildren()->size() < 1) {

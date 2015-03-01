@@ -88,6 +88,9 @@ public:
 		this->topoOrder = topoOrder; 
 	}
 
+	/**
+	 * Sorts the call statements by the order given in the constructor
+	 */
 	bool operator() (TNode* i, TNode* j) { 
 		assert(i->getNodeType() == Call);
 		assert(j->getNodeType() == Call);
@@ -104,7 +107,9 @@ private:
 	vector<int> topoOrder;
 };
 
-
+/**
+ * Sorts the call statements in topological ordering
+ */
 vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 	vector<int> topologicalOrder = getCallsInTopologicalOrder();
 
@@ -115,7 +120,7 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 	// obtain every call statement node
 	vector<TNode*> callStatementNodes;
 	for (auto iter = allCallStatementsNum.begin(); iter != allCallStatementsNum.end(); ++iter) {
-		TNode* node = pkb.nodeTable.at(*iter);
+		TNode* node = pkb.getNodeForStmt(*iter);  assert(node != NULL);
 		callStatementNodes.push_back(node);
 	}
 
@@ -361,6 +366,9 @@ void DesignExtractor::constructStatisticsTable() {
 	throw exception("Not implemented yet");
 }
 
+/**
+ * Sets Modifies for assignment statements, and propagate the changes to their ancestors
+ */
 void DesignExtractor::setModifiesForAssignmentStatements() {
 
 	PKB pkb = PKB::getInstance();
@@ -370,7 +378,8 @@ void DesignExtractor::setModifiesForAssignmentStatements() {
 		int stmtNumber = *iter;
 
 		// find variable modified
-		TNode* node = pkb.nodeTable.at(stmtNumber);
+		TNode* node = pkb.getNodeForStmt(stmtNumber);
+		assert(node != NULL);
 		assert(node->getChildren()->size() == 2);
 
 		int varIndex = node->getChildren()->at(0)->getNodeValueIdx();
@@ -412,6 +421,9 @@ vector<int> obtainVarUsedInExpression(TNode* node) {
 	return varUsed;
 }
 
+/**
+ * Sets Uses for assignment statements, and propagate the changes to their ancestors
+ */
 void DesignExtractor::setUsesForAssignmentStatements() {
 
 	PKB pkb = PKB::getInstance();
@@ -421,7 +433,8 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 		int stmtNumber = *iter;
 
 		// find variable used
-		TNode* node = pkb.nodeTable.at(stmtNumber);
+		TNode* node = pkb.getNodeForStmt(stmtNumber);
+		assert(node != NULL);
 		vector<int> varIndexesUsed = obtainVarUsedInExpression(node);
 		for (auto varIter = varIndexesUsed.begin(); varIter != varIndexesUsed.end(); ++varIter) {
 			pkb.setUses(stmtNumber, *varIter);
@@ -440,6 +453,9 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 	}
 }
 
+/**
+ * Sets Uses for While and If statements, and propagate the changes to their ancestors
+ */
 void DesignExtractor::setUsesForContainerStatements() {
 	PKB pkb = PKB::getInstance();
 
@@ -452,7 +468,8 @@ void DesignExtractor::setUsesForContainerStatements() {
 		int stmtNumber = *iter;
 
 		// find variable used
-		TNode* node = pkb.nodeTable.at(stmtNumber);
+		TNode* node = pkb.getNodeForStmt(stmtNumber);
+		assert(node != NULL);
 		assert(node->getChildren()->size() == 2 || node->getChildren()->size() == 3);
 
 		int varIndex = node->getChildren()->at(0)->getNodeValueIdx();

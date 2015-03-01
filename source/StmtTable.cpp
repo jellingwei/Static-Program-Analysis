@@ -8,11 +8,12 @@
 #include <algorithm>
 
 #include "StmtTable.h"
+#include "TNode.h"
+#include "PKB.h"
 
 using namespace std;
 
-bool StmtTable::insertStmt(int stmtNum, string type) 
-{
+bool StmtTable::insertStmt(int stmtNum, string type, TNode* node, int procIndex) {
 	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
 	} else if(!(type=="while" || type=="assign" || type=="if" || type=="call")) {
@@ -43,6 +44,9 @@ bool StmtTable::insertStmt(int stmtNum, string type)
 			ifStmt.push_back(stmtNum);
 		}
 		
+		pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+		nodeTable.insert(stmtNumToNodePair);
+
 		return true;
 	} else {
 		return false;
@@ -143,4 +147,12 @@ bool StmtTable::isCall(int stmtNo)
 int StmtTable::getSize() 
 {
 	return stmtNumMap.size();
+}
+
+TNode* StmtTable::getNodeForStmt(int stmtNum) {
+	if (nodeTable.count(stmtNum) > 0) {
+		return nodeTable.at(stmtNum);
+	} else {
+		return NULL;
+	}
 }

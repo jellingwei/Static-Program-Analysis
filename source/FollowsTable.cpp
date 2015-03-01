@@ -28,10 +28,10 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
 vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
 	vector<int> result;
 
-	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) {
+	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) {
 		return vector<int>();
 	}
-	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
+	TNode* node2 = PKB::getInstance().getNodeForStmt(stmtNum2);
 
 	if (!node2) {
 		return vector<int>();
@@ -53,10 +53,10 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 
 vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosure) {
 	vector<int> result;
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
+	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) {
 		return vector<int>();
 	}
-	TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
+	TNode* node1 = PKB::getInstance().getNodeForStmt(stmtNum1);
 
 	if (!node1) {
 		//throw exception("FollowsTable exception: invalid stmtNum provided");
@@ -79,12 +79,12 @@ vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosu
 
 bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
+	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) 
 	{
 		return false;
 	}
 
-	TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
+	TNode* node1 = PKB::getInstance().getNodeForStmt(stmtNum1);
 
 	if (!transitiveClosure) 
 	{
@@ -98,7 +98,8 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 		return possibleStmt2 == stmtNum2;
 
 	} else {
-		TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
+		TNode* node2 = PKB::getInstance().getNodeForStmt(stmtNum2);
+		assert(node2 != NULL);
 		// First, check that they are in the first stmt list
 		if (node1->getParent()->getStmtNumber() != node2->getParent()->getStmtNumber()) {
 			// If the stmts are not in the same stmtlist, just return false
