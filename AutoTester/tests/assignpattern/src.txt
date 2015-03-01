@@ -1,0 +1,18 @@
+procedure Assign {
+  a = 0;  \\1
+  b = 1;  \\2
+  a = b + c;  \\3
+  z = 1 - 0;  \\4
+  x = a * b;  \\5
+  y = a + banana + 2 + d + e + f + g;   \\6
+  o = apple - b - c - d - 5 - f - g;   \\7
+  g = a * b * c * 1 * e * fruit * 6;  \\8
+  b = e * a - 2 + c * e + a - b;  \\9
+  f = b + u * f * f - e - 7;      \\10
+  p = h + a * h - a * h * a;      \\11
+  s = a + b - (a - b) * grapes - k;      \\12
+  e = ((x * idiot - a * 0) + (longan + (o - n * g)) - (b - a) * o);    \\13
+  p = ((f - (r * e) * n) - c + h) + (f - (r * i + e) * s);    \\14
+  z = c * ((h + i - c) * (k + e - n));        \\15
+  z = s;  \\16
+}
