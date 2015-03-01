@@ -14,5 +14,5 @@ procedure Assign {
   e = ((x * idiot - a * 0) + (longan + (o - n * g)) - (b - a) * o);    \\13
   p = ((f - (r * e) * n) - c + h) + (f - (r * i + e) * s);    \\14
   z = c * ((h + i - c) * (k + e - n));        \\15
-  z = s;  \\16
+  z = xiaolongbao;  \\16
 }
