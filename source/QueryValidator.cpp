@@ -29,8 +29,8 @@ void QueryValidator::initTable()
 	/* such that queries */
 
 	//Modifies argument 1
-	string list1array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "string-int" };
-	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 7);
+	string list1array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "procedure", "string-int" };
+	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 8);
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Modifies), list1));
 
 	//Modifies arguement 2
@@ -91,8 +91,8 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsS), list5));
 
 	//Next
-	string list6array[] = { "prog_line","string-int", "_"};
-	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 3);
+	string list6array[] = { "assign", "call", "if", "stmt", "while", "prog_line","string-int", "_"};
+	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 8);
 	//Next argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Next), list6));
 	//Next argument 2
