@@ -5,14 +5,12 @@ QueryTree::QueryTree()
 	Synonym empty;
 	_root = QNode(ROOT,empty, empty, empty);
 	_result = QNode(RESULT,empty, empty, empty);
-	_such_that = QNode(SUCHTHAT,empty, empty, empty);
-	_pattern = QNode(PATTERN, empty, empty, empty);
-	_with = QNode(WITH, empty, empty, empty);
+	_clauses = QNode(CLAUSES, empty, empty, empty);
+
 	linkNode(&_root, &_result);
-	linkNode(&_root, &_such_that);
-	linkNode(&_root, &_pattern);
-	linkNode(&_root, &_with);
-	unordered_map<string, string> _synonymsMap; 
+	linkNode(&_root, &_clauses);
+	
+	unordered_map<string, SYNONYM_TYPE> _synonymsMap; 
 	_synonymsMap.clear();
 }
 
@@ -54,27 +52,11 @@ QNode* QueryTree::getResultNode()
 }
 
 /**
- * @return the head of the pattern nodes.
+ * @return the head of the clauses nodes.
  */
-QNode* QueryTree::getPatternNode()
+QNode* QueryTree::getClausesNode()
 {
-	return &_pattern;
-}
-
-/**
- * @return the head of the such that nodes.
- */
-QNode* QueryTree::getSuchThatNode()
-{
-	return &_such_that;
-}
-
-/**
- * @return the head of the with nodes.
- */
-QNode* QueryTree::getWithNode()
-{
-	return &_with;
+	return &_clauses;
 }
 
 /**
@@ -83,7 +65,7 @@ QNode* QueryTree::getWithNode()
  * @return a synonym map if the query is successfully parsed and there is no syntax error.
  * Otherwise, it returns an empty synonym map .
  */
-unordered_map<string, string> QueryTree::getSynonymsMap()
+unordered_map<string, SYNONYM_TYPE> QueryTree::getSynonymsMap()
 {
 	return _synonymsMap;
 }
@@ -92,7 +74,7 @@ unordered_map<string, string> QueryTree::getSynonymsMap()
  * Set the synonym map in the query tree. This overwrites the current
  * synonym map in the query tree.
  */
-void QueryTree::setSynonymsMap(unordered_map<string, string> synonymsMap)
+void QueryTree::setSynonymsMap(unordered_map<string, SYNONYM_TYPE> synonymsMap)
 {
 	_synonymsMap = synonymsMap;
 }
@@ -104,17 +86,9 @@ void QueryTree::printTree()
 	for(int i=0; i<_result.getNumberOfChildren(); i++) {
 		printNode(_result.getChild(i));
 	}
-	cout << "Such That: " << endl;
-	for(int i=0; i<_such_that.getNumberOfChildren(); i++) {
-		printNode(_such_that.getChild(i));
-	}
-	cout << "With: " << endl;
-	for(int i=0; i<_with.getNumberOfChildren(); i++) {
-		printNode(_with.getChild(i));
-	}
-	cout << "Pattern: " << endl;
-	for(int i=0; i<_pattern.getNumberOfChildren(); i++) {
-		printNode(_pattern.getChild(i));
+	cout << "Clauses: " << endl;
+	for(int i=0; i<_clauses.getNumberOfChildren(); i++) {
+		printNode(_clauses.getChild(i));
 	}
 	cout << "#################### Print Tree ####################" << endl << endl;
 }
@@ -170,7 +144,7 @@ void QueryTree::printNode(QNode* node)
 	case Pattern:
 		type = "Pattern";
 		break;
-	case WITH:
+	case With:
 		type = "With";
 		break;
 	default:

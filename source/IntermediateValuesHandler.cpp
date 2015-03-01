@@ -18,33 +18,33 @@ namespace IntermediateValuesHandler
 
 	//Private attributes
 	vector<vector<int>> allIntermediateValues;
-	vector<string> allIntermediateNames;
-	unordered_map<string, string> synonymMap;
-	unordered_map<string, int> allIntermediateNamesMap;  //@todo change to map
+	unordered_map<string, SYNONYM_TYPE> synonymMap;
+	unordered_map<string, int> allIntermediateNamesMap;
 	PKB pkb = PKB::getInstance();
 
-	void initialize(unordered_map<string, string> synonymsMap) 
+	void initialize(unordered_map<string, SYNONYM_TYPE> synonymsMap) 
 	{
 		allIntermediateValues.clear();
-		allIntermediateNames.clear();
+		allIntermediateNamesMap.clear();
 		synonymMap = synonymsMap;
 	}
 
 	void clear()
 	{
 		allIntermediateValues.clear();
-		allIntermediateNames.clear();
+		allIntermediateNamesMap.clear();
 		synonymMap.clear();
 	}
 
 	int findIntermediateSynonymIndex(string synonymName)
 	{
-		for (unsigned int i = 0; i < allIntermediateNames.size(); i++) {
-			if (synonymName == allIntermediateNames[i]) {
-				return i;
-			}
+		auto itr = allIntermediateNamesMap.find(synonymName);
+
+		if (itr == allIntermediateNamesMap.end()) {
+			return -1;
+		} else {
+			return itr->second;
 		}
-		return -1;
 	}
 
 	vector<int> getDefaultValues(SYNONYM_TYPE type) 
@@ -141,15 +141,15 @@ namespace IntermediateValuesHandler
 		vector<int> synonymValues = synonym.getValues();
 		vector<vector<int>> acceptedValues;
 
-		allIntermediateNames.push_back(synonym.getName());
-
 		if (allIntermediateValues.size() == 0) {
+			allIntermediateNamesMap[synonym.getName()] = 0;
 			for (vector<int>::iterator itr = synonymValues.begin(); itr != synonymValues.end(); ++itr) {
 				vector<int> newRow;
 				newRow.push_back(*itr);
 				acceptedValues.push_back(newRow);
 			}
 		} else {
+			allIntermediateNamesMap[synonym.getName()] = allIntermediateValues[0].size();
 			for (vector<int>::iterator itr = synonymValues.begin(); itr != synonymValues.end(); ++itr) {
 				for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
 					vector<int> newRow(allIntermediateValues[i]);
@@ -172,11 +172,10 @@ namespace IntermediateValuesHandler
 		vector<int> valuesRHS = RHS.getValues();
 		vector<vector<int>> acceptedValues;
 
-		allIntermediateNames.push_back(LHS.getName());
-		allIntermediateNames.push_back(RHS.getName());
-
 		//Insert the values if there is nothing in the intermediate values table
 		if (allIntermediateValues.size() == 0) {
+			allIntermediateNamesMap[LHS.getName()] = 0;
+			allIntermediateNamesMap[RHS.getName()] = 1;
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 				vector<int> newRow;
 				newRow.push_back(valuesLHS[i]);
@@ -184,6 +183,8 @@ namespace IntermediateValuesHandler
 				acceptedValues.push_back(newRow);
 			}
 		} else {
+			allIntermediateNamesMap[LHS.getName()] = allIntermediateValues[0].size();
+			allIntermediateNamesMap[RHS.getName()] = allIntermediateValues[0].size() + 1;
 			//If there are values in the table, do a cartesian product
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 				for (unsigned int j = 0; j < allIntermediateValues.size(); j++) {
@@ -241,7 +242,7 @@ namespace IntermediateValuesHandler
 		vector<int> probeValues = probe.getValues();
 		vector<int> newValues = newSynonym.getValues();
 
-		allIntermediateNames.push_back(newSynonym.getName());
+		allIntermediateNamesMap[newSynonym.getName()] = allIntermediateValues[0].size();
 
 		for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
 			for (unsigned int j = 0; j < probeValues.size(); j++) {
@@ -483,18 +484,18 @@ namespace IntermediateValuesHandler
 	*/
 	Synonym getSynonymWithName(string wantedName) 
 	{
-		unordered_map<string, string>::iterator itr = synonymMap.find(wantedName);
+		unordered_map<string, SYNONYM_TYPE>::iterator itr = synonymMap.find(wantedName);
 
 		string name = itr->first;
-		string type = itr->second;		
+		SYNONYM_TYPE type = itr->second;		
 		int synonymIndex = findIntermediateSynonymIndex(name);
 
 		if (synonymIndex == -1) {
-			vector<int> synonymValues = getDefaultValues(Synonym::convertToEnum(type));
-			Synonym synonym(Synonym::convertToEnum(type), name, synonymValues);
+			vector<int> synonymValues = getDefaultValues(type);
+			Synonym synonym(type, name, synonymValues);
 			return synonym;
 		} else {
-			Synonym synonym(Synonym::convertToEnum(type), name, getIntermediateValuesSet(synonymIndex));
+			Synonym synonym(type, name, getIntermediateValuesSet(synonymIndex));
 			return synonym;
 		}
 	}
