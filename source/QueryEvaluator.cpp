@@ -656,7 +656,6 @@ namespace QueryEvaluator
 
 	bool processNextT(Synonym arg1, Synonym arg2, bool isTrans)
 	{
-		return false;
 		if (AbstractWrapper::GlobalStop) {
 			return false;
 		}
