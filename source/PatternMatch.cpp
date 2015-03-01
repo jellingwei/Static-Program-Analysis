@@ -251,15 +251,21 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, s
 	}
 	else
 	{
-		if(_rootNodeQ->getNodeType() == Variable)
-		{
-			UsesTable* usesTable = pkb.usesTable;
-			string NodeValue = pkb.varTable->getVarName(_rootNodeQ->getNodeValueIdx());
-			tempResults = usesTable->getUsesStmtNum(PKB::getInstance().getVarIndex(NodeValue));
-		}
-		else
-		{
-			tempResults = pkb.getStmtNum(PKB::getInstance().getConstantIndex(_rootNodeQ->getNodeValueIdx()));
+		try{
+			if(_rootNodeQ->getNodeType() == Variable)
+			{
+				UsesTable* usesTable = pkb.usesTable;
+				string NodeValue = pkb.varTable->getVarName(_rootNodeQ->getNodeValueIdx());
+				tempResults = usesTable->getUsesStmtNum(PKB::getInstance().getVarIndex(NodeValue));
+			}
+			else
+			{
+				tempResults = pkb.getStmtNum(pkb.getConstantIndex(_rootNodeQ->getNodeValueIdx()));
+			}
+		} catch (const invalid_argument& e) {
+			return results;
+		} catch (const exception& e) {
+			return results;
 		}
 		
 		for(size_t i=0; i<tempResults.size(); i++) {
