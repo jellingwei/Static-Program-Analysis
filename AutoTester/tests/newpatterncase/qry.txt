@@ -193,6 +193,11 @@ assign a;
 Select a pattern a (,)
 none
 5000
+1033 - No inputs
+assign a;
+Select a pattern a(_, _""_)
+none
+5000
 2001 - wild card if
 if i;
 Select i pattern i(_,_,_)
