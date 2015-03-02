@@ -14,6 +14,7 @@ namespace IntermediateValuesHandler
 {
 	//Private functions
 	bool filterEqualPairByString(Synonym LHS, Synonym RHS);
+	bool filterEqualPairByNumber(Synonym LHS, Synonym RHS);
 	string convertIndexToString(int index, SYNONYM_TYPE type);
 
 	//Private attributes
@@ -341,14 +342,19 @@ namespace IntermediateValuesHandler
 		SYNONYM_TYPE arg1Type = LHS.getType();
 		SYNONYM_TYPE arg2Type = RHS.getType();
 
-		if (((arg1Type == PROCEDURE || arg1Type == VARIABLE) || (arg1Type == CALL && LHS.getAttribute() == procName))
-			&& (arg2Type == PROCEDURE || arg2Type == VARIABLE || (arg2Type == CALL && RHS.getAttribute() == procName))) {
+		if ((LHS.getAttribute() == procName || LHS.getAttribute() == varName) 
+			&& (RHS.getAttribute() == varName || RHS.getAttribute() == procName)) {
 				return filterEqualPairByString(LHS, RHS);
-		} else if (((arg1Type == PROCEDURE || arg1Type == VARIABLE) || (arg1Type == CALL && LHS.getAttribute() == procName))
-			|| (arg2Type == PROCEDURE || arg2Type == VARIABLE || (arg2Type == CALL && RHS.getAttribute() == procName))) {
-				return false;  //Cannot compare between numbers and strings
+		} else if ((LHS.getAttribute() == stmtNo || LHS.getAttribute() == value) 
+			&& (RHS.getAttribute() == stmtNo || RHS.getAttribute() == value)) {
+				return filterEqualPairByNumber(LHS, RHS);
+		} else {
+			return false;  //Cannot compare between numbers and strings
 		}
+	}
 
+	bool filterEqualPairByNumber(Synonym LHS, Synonym RHS)
+	{
 		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
 		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
 
