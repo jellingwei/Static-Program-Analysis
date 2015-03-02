@@ -348,9 +348,14 @@ namespace QueryEvaluator
 		set<int> valuesRHS = IntermediateValuesHandler::getSynonymWithName(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
+		vector<int> stmts;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getUsesVarForStmt(valuesLHS[i]);
+			if (LHS.getType() == PROCEDURE) {
+				stmts = pkb.getUsesVarForProc(valuesLHS[i]);
+			} else {
+				stmts = pkb.getUsesVarForStmt(valuesLHS[i]);
+			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				if (IntermediateValuesHandler::isValueExist(valuesRHS, stmts[j])) {
