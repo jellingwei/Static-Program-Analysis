@@ -373,13 +373,38 @@ namespace IntermediateValuesHandler
 			return (allIntermediateValues.size() != 0);
 		} else if (indexLHS == -1) {
 			vector<int> valuesLHS = getDefaultValues(LHS.getType());
-			LHS.setValues(valuesLHS);
-			intersectAndJoinWithExistingValues(indexRHS, RHS, LHS);
+			vector<vector<int>> acceptedValues;
+
+			for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
+				for (unsigned int j = 0; j < valuesLHS.size(); j++) {
+					if (allIntermediateValues[i][indexRHS] == valuesLHS[j]) {
+						vector<int> row = allIntermediateValues[i];
+						row.push_back(valuesLHS[j]);
+						acceptedValues.push_back(row);
+					}
+				}
+			}
+
+			allIntermediateNamesMap[LHS.getName()] = allIntermediateValues[0].size();
+			swap(acceptedValues, allIntermediateValues);
 			return (allIntermediateValues.size() != 0);
 		} else if (indexRHS == -1) {
 			vector<int> valuesRHS = getDefaultValues(RHS.getType());
-			LHS.setValues(valuesRHS);
-			intersectAndJoinWithExistingValues(indexLHS, LHS, RHS);
+			
+			vector<vector<int>> acceptedValues;
+
+			for (unsigned int i = 0; i < allIntermediateValues.size(); i++) {
+				for (unsigned int j = 0; j < valuesRHS.size(); j++) {
+					if (allIntermediateValues[i][indexLHS] == valuesRHS[j]) {
+						vector<int> row = allIntermediateValues[i];
+						row.push_back(valuesRHS[j]);
+						acceptedValues.push_back(row);
+					}
+				}
+			}
+
+			allIntermediateNamesMap[RHS.getName()] = allIntermediateValues[0].size();
+			swap(acceptedValues, allIntermediateValues);
 			return (allIntermediateValues.size() != 0);
 		} else {
 			vector<vector<int>> acceptedValues;
