@@ -260,7 +260,7 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, s
 			}
 			else
 			{
-				tempResults = pkb.getStmtNum(pkb.getConstantIndex(_rootNodeQ->getNodeValueIdx()));
+				tempResults = pkb.getStmtNum(_rootNodeQ->getNodeValueIdx());
 			}
 		} catch (const invalid_argument& e) {
 			return results;
