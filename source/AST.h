@@ -24,7 +24,6 @@ class AST {
 		bool isChildNode(TNode* parent, TNode* child);
 
 		bool isExists(TNode* node);
-		TNode* getLastImpt();
 		int getSize();
 
 		vector<int> patternMatchAssign(string RHS);

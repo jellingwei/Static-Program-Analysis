@@ -23,7 +23,8 @@ PatternMatch::PatternMatch()
  */
 vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
 {
-	vector<int> assignTable = PKB::getInstance().getStmtNumForType("assign");
+	PKB pkb = PKB::getInstance();
+	vector<int> assignTable = pkb.getStmtNumForType("assign");
 	
 	TNode* _currentAssign; TNode* _rightChildNodeA;
 	vector<int> results;
@@ -31,10 +32,9 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
 
 	for(size_t i=0; i<assignTable.size(); i++) 
 	{
-		_currentAssign = PKB::getInstance().nodeTable.at(assignTable.at(i));
+		_currentAssign = pkb.getNodeForStmt(assignTable.at(i));
 		_rightChildNodeA = _currentAssign->getChildren()->at(1);
-//cout << " " << endl;
-//cout << "assign " << _currentAssign->getStmtNumber() << endl;
+
 		if((_rootNodeQ->getNodeType() == Constant) || (_rootNodeQ->getNodeType() == Variable))
 		{
 			vector<int> tempResults = SingleVariableConstant(_rightChildNodeA, _rootNodeQ, isExact);
@@ -45,7 +45,6 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
 		else {
 			if(checkPatternMatchAssign(_rightChildNodeA, _rootNodeQ, isExact))
 			{
-	//cout << "PUSH" << endl;
 				results.push_back(_rightChildNodeA->getStmtNumber());
 			}
 			else 
@@ -230,6 +229,7 @@ bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, strin
 vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, string isExact) {
 	TNODE_TYPE constType = Constant, varType = Variable;
 	vector<int> tempResults, results;
+	PKB pkb = PKB::getInstance();
 
 	//Short-hand check by ExpressionParser if particular node in _rootNodeQ already exist in AST while building queryAST
 	if(isExact.compare("*") == 0)
@@ -253,17 +253,17 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, s
 	{
 		if(_rootNodeQ->getNodeType() == Variable)
 		{
-			UsesTable* usesTable = PKB::getInstance().usesTable;
-			string NodeValue = PKB::getInstance().varTable->getVarName(_rootNodeQ->getNodeValueIdx());
+			UsesTable* usesTable = pkb.usesTable;
+			string NodeValue = pkb.varTable->getVarName(_rootNodeQ->getNodeValueIdx());
 			tempResults = usesTable->getUsesStmtNum(PKB::getInstance().getVarIndex(NodeValue));
 		}
 		else
 		{
-			tempResults = PKB::getInstance().getStmtNum(PKB::getInstance().getConstantIndex(_rootNodeQ->getNodeValueIdx()));
+			tempResults = pkb.getStmtNum(PKB::getInstance().getConstantIndex(_rootNodeQ->getNodeValueIdx()));
 		}
 		
 		for(size_t i=0; i<tempResults.size(); i++) {
-			if(PKB::getInstance().isAssign(tempResults.at(i))) 
+			if(pkb.isAssign(tempResults.at(i))) 
 			{
 				results.push_back(tempResults.at(i));
 			}
@@ -283,31 +283,33 @@ vector<int> PatternMatch::patternMatchParentStmt(string LHS, TNODE_TYPE type) {
 	LHS.erase(0, LHS.find_first_not_of(" "));
 	LHS.erase(LHS.find_last_not_of(" ") + 1);
 	
+	PKB pkb = PKB::getInstance();
+
 	if (LHS.empty()) {
 		vector<int> emptyVector;
 		return emptyVector;
 	}
 
-	int varIndex = PKB::getInstance().getVarIndex(LHS);
+	int varIndex = pkb.getVarIndex(LHS);
 	if (varIndex <= 0) {
 		vector<int> emptyVector;
 		return emptyVector;
 	}
 	
 	// Get statements using the variable
-	vector<int> candidateList = PKB::getInstance().getUsesStmtNum(varIndex);
+	vector<int> candidateList = pkb.getUsesStmtNum(varIndex);
 
 	// Filter non-matching types from these statements
 	vector<int> result;
 	for (auto stmt = candidateList.begin(); stmt != candidateList.end(); ++stmt) {
 		bool isCorrectType = type == While ? 
-							 PKB::getInstance().isWhile(*stmt) : 
-							 PKB::getInstance().isIf(*stmt); ;
+							 pkb.isWhile(*stmt) : 
+							 pkb.isIf(*stmt); ;
 		if (!isCorrectType) {
 			continue;
 		}
 
-		TNode* stmtNode = PKB::getInstance().nodeTable.at(*stmt);
+		TNode* stmtNode = pkb.getNodeForStmt(*stmt);
 
 		assert(stmtNode->getChildren()->size() >= 2); // < 2 children is an invalid state for a while node
 		if (stmtNode->getChildren()->size() < 1) {
@@ -324,9 +326,4 @@ vector<int> PatternMatch::patternMatchParentStmt(string LHS, TNODE_TYPE type) {
 }
 
 PatternMatch::~PatternMatch() 
-{
-	/*if (varTable) 
-	{
-		delete varTable;
-	}*/
-}
+{}

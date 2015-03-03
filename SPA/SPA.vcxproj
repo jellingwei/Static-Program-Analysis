@@ -13,6 +13,8 @@
   <ItemGroup>
     <ClCompile Include="..\source\AST.cpp" />
     <ClCompile Include="..\source\CallsTable.cpp" />
+    <ClCompile Include="..\source\CFG.cpp" />
+    <ClCompile Include="..\source\CNode.cpp" />
     <ClCompile Include="..\source\ConstantTable.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\ExpressionParser.cpp" />
@@ -20,6 +22,7 @@
     <ClCompile Include="..\source\FrontEndController.cpp" />
     <ClCompile Include="..\source\IntermediateValuesHandler.cpp" />
     <ClCompile Include="..\source\ModifiesTable.cpp" />
+    <ClCompile Include="..\source\NextTable.cpp" />
     <ClCompile Include="..\source\ParentTable.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\PatternMatch.cpp" />
@@ -41,6 +44,8 @@
   <ItemGroup>
     <ClInclude Include="..\source\AST.h" />
     <ClInclude Include="..\source\CallsTable.h" />
+    <ClInclude Include="..\source\CFG.h" />
+    <ClInclude Include="..\source\CNode.h" />
     <ClInclude Include="..\source\ConstantTable.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExpressionParser.h" />
@@ -49,6 +54,7 @@
     <ClInclude Include="..\source\InputQueryParser.h" />
     <ClInclude Include="..\source\IntermediateValuesHandler.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
+    <ClInclude Include="..\source\NextTable.h" />
     <ClInclude Include="..\source\ParentTable.h" />
     <ClInclude Include="..\source\PatternMatch.h" />
     <ClInclude Include="..\source\PKB.h" />

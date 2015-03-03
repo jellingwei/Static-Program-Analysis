@@ -29,8 +29,8 @@ void QueryValidator::initTable()
 	/* such that queries */
 
 	//Modifies argument 1
-	string list1array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "string-int" };
-	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 7);
+	string list1array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "procedure", "string-int" };
+	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 8);
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Modifies), list1));
 
 	//Modifies arguement 2
@@ -91,8 +91,8 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsS), list5));
 
 	//Next
-	string list6array[] = { "prog_line","string-int", "_"};
-	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 3);
+	string list6array[] = { "assign", "call", "if", "stmt", "while", "prog_line","string-int", "_"};
+	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 8);
 	//Next argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Next), list6));
 	//Next argument 2
@@ -131,6 +131,31 @@ void QueryValidator::initTable()
 	string list10array[] = {"_"};
 	vector<string> list10; list10.insert(list10.begin(), list10array, list10array + 1);
 	patternsArg2Map.insert(make_pair("while", list10));
+
+
+
+
+	/* init withAttrRefMap */
+	//procName
+	SYNONYM_TYPE with1array[] = {SYNONYM_TYPE(PROCEDURE),SYNONYM_TYPE(CALL)};
+	vector<SYNONYM_TYPE> with1; with1.insert(with1.begin(), with1array, with1array + 2);
+	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(procName), with1));
+
+	//varName
+	SYNONYM_TYPE with2array[] = {SYNONYM_TYPE(VARIABLE)};
+	vector<SYNONYM_TYPE> with2; with2.insert(with2.begin(), with2array, with2array + 1);
+	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(varName), with2));
+
+	//value
+	SYNONYM_TYPE with3array[] = {SYNONYM_TYPE(CONSTANT)};
+	vector<SYNONYM_TYPE> with3; with3.insert(with3.begin(), with3array, with3array + 1);
+	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(value), with3));
+
+	//stmt#
+	SYNONYM_TYPE with4array[] = {SYNONYM_TYPE(STMT), SYNONYM_TYPE(ASSIGN), SYNONYM_TYPE(IF), 
+								SYNONYM_TYPE(WHILE), SYNONYM_TYPE(CALL)};
+	vector<SYNONYM_TYPE> with4; with4.insert(with4.begin(), with4array, with4array + 5);
+	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(stmtNo), with4));
 
 }
 
@@ -284,6 +309,150 @@ bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym 
 			return false;
 		}
 	}
+
+
+	return true;
+}
+
+
+/**
+ *	Ensures that both left and right hand side types are consistent. 
+ *  @return false if one side is INTEGER and the other side is character string. 
+ */
+bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
+{
+	
+	bool LHS_integer; // true if it is integer type. false if it is char type. 
+	bool RHS_integer;
+	vector<SYNONYM_TYPE> listArg1;
+	vector<SYNONYM_TYPE> listArg2;
+
+
+	SYNONYM_TYPE arg1Type = arg1.getType();
+	SYNONYM_ATTRIBUTE arg1Attr = arg1.getAttribute();
+	SYNONYM_TYPE arg2Type = arg2.getType();
+	SYNONYM_ATTRIBUTE arg2Attr = arg2.getAttribute();
+
+
+	/* LHS */
+	if (arg1Type == SYNONYM_TYPE(STRING)){
+
+		char arg1Value = arg1.getName()[0];  //Get the value of arg1
+		
+		if (isdigit(arg1Value)){
+
+			LHS_integer = true;         //INTEGER
+
+		}else if (isalpha(arg1Value)){
+
+			LHS_integer = false;        //"IDENT"
+		
+		}else{
+			LHS_integer = false;	    //"IDENT"
+		}
+
+	}else{
+
+		listArg1 = withAttrRefMap.at(arg1Attr);
+
+		//case 1: synonym.attrName
+		if(!listArg1.empty()){ // if there are restrictions place on argument 1
+			
+			auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
+		
+			if(result1 == std::end(listArg1)){ // not inside list of type of argument 1
+				return false;
+			}
+
+
+			//label if LHS is int type
+			if(arg1Attr == SYNONYM_ATTRIBUTE(procName) || arg1Attr == SYNONYM_ATTRIBUTE(varName)){
+
+				LHS_integer = false;
+			}else{
+				LHS_integer = true; //stmt#, value
+			}	
+
+
+		}else{
+		//case 2: synonym
+
+			if(arg1Type == SYNONYM_TYPE(PROG_LINE)){
+
+				LHS_integer = true;
+			
+			}else{
+
+				cout<<"arg1Attr, ref is a synonym, and synonym can only be prog_line"<<endl;
+				return false; //error. ref is a synonym, and synonym can only be prog_line
+			
+			}
+		}
+	}
+
+
+
+
+	/* RHS */
+	if (arg2Type == SYNONYM_TYPE(STRING)){
+
+		char arg2Value = arg2.getName()[0];  //Get the value of arg2
+		
+		if (isdigit(arg2Value)){
+
+			RHS_integer = true;         //INTEGER
+
+		}else if (isalpha(arg2Value)){
+
+			RHS_integer = false;        //"IDENT"
+		
+		}else{
+			RHS_integer = false;	    //"IDENT"
+		}
+	}else{
+
+		listArg2 = withAttrRefMap.at(arg2Attr);
+
+		//synonym.attrName
+		if(!listArg2.empty()){ // if there are restrictions place on argument 2
+			
+			auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
+		
+			if(result2 == std::end(listArg2)){ // not inside list of type of argument 2
+				return false;
+			}
+
+
+			//label if LHS is int type
+			if(arg2Attr == SYNONYM_ATTRIBUTE(procName) || arg2Attr == SYNONYM_ATTRIBUTE(varName)){
+
+				RHS_integer = false;
+			}else{
+				RHS_integer = true; //stmt#, value
+			}	
+
+
+		}else{
+		//synonym
+
+			if(arg2Type == SYNONYM_TYPE(PROG_LINE)){
+
+				RHS_integer = true;
+			
+			}else{
+				
+				cout<<"arg2Attr, ref is a synonym, and synonym can only be prog_line"<<endl;
+				return false; //error. ref is a synonym, and synonym can only be prog_line
+			
+			}
+		}
+	}
+
+
+	if(!LHS_integer && RHS_integer)
+		return false;
+	else if(LHS_integer && !RHS_integer)
+		return false;
 
 
 	return true;

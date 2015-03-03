@@ -34,11 +34,11 @@ void QueryTreeTest::testSynonym()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test Syn2 getName", syn2.getName(), (string)"name");
 	//CPPUNIT_ASSERT_EQUAL_MESSAGE("Test Syn2 getValue", syn2.getValues().at(0), 1);
 
-	vector<string> s_vec; s_vec.push_back("1");
+	/*vector<string> s_vec; s_vec.push_back("1");
 	Synonym syn3(Synonym::convertToEnum("type"), "name", s_vec);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test Syn3 getType", syn3.getType(), SYNONYM_TYPE(UNDEFINED));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test Syn3 getName", syn3.getName(), (string)"name");
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("Test Syn3 getValue",syn3.getValues().at(0), 1);
+	//CPPUNIT_ASSERT_EQUAL_MESSAGE("Test Syn3 getValue",syn3.getValues().at(0), 1);*/
 }
 
 void QueryTreeTest::testQNode()
@@ -46,30 +46,30 @@ void QueryTreeTest::testQNode()
 	// Test QNode Constructor and Setters and Getters
 	Synonym syn1(Synonym::convertToEnum("type1"), "name1");
 	Synonym syn2(Synonym::convertToEnum("type2"), "name2");
-	QNode suchThatNode(SUCHTHAT, Synonym(), syn1, syn2);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getNodeType", suchThatNode.getNodeType(), SUCHTHAT);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg1", suchThatNode.getArg1().getName(), (string) "name1");
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg2", suchThatNode.getArg2().getType(), SYNONYM_TYPE(UNDEFINED));
+	QNode clausesNode(CLAUSES, Synonym(), syn1, syn2);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getNodeType", clausesNode.getNodeType(), CLAUSES);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg1", clausesNode.getArg1().getName(), (string) "name1");
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg2", clausesNode.getArg2().getType(), SYNONYM_TYPE(UNDEFINED));
 	
 	// Test QNode Parent and Child Relations
 	QNode followsQueryNode(Follows, Synonym(), syn1, syn1);
 	QNode usesQueryNode(Uses, Synonym(), syn2, syn2);
-	suchThatNode.setChild(&followsQueryNode);
-	suchThatNode.setChild(&usesQueryNode);
-	followsQueryNode.setParent(&suchThatNode);
-	usesQueryNode.setParent(&suchThatNode);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test followsNode getParent", followsQueryNode.getParent()->getNodeType(), SUCHTHAT);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test usesNode getParent", usesQueryNode.getParent()->getNodeType(), SUCHTHAT);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getNumOfChildren", suchThatNode.getNumberOfChildren(), 2);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getChild (First Child)", suchThatNode.getChild()->getNodeType(), Follows);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getNextChild", suchThatNode.getNextChild()->getNodeType(), Uses);
+	clausesNode.setChild(&followsQueryNode);
+	clausesNode.setChild(&usesQueryNode);
+	followsQueryNode.setParent(&clausesNode);
+	usesQueryNode.setParent(&clausesNode);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test followsNode getParent", followsQueryNode.getParent()->getNodeType(), CLAUSES);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test usesNode getParent", usesQueryNode.getParent()->getNodeType(), CLAUSES);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getNumOfChildren", clausesNode.getNumberOfChildren(), 2);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getChild (First Child)", clausesNode.getChild()->getNodeType(), Follows);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getNextChild", clausesNode.getNextChild()->getNodeType(), Uses);
 	// Test suchThatNode getNextChild with no next child
-	CPPUNIT_ASSERT(suchThatNode.getNextChild() == NULL);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getPreviousChild", suchThatNode.getPreviousChild()->getNodeType(), Follows);
+	CPPUNIT_ASSERT(clausesNode.getNextChild() == NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getPreviousChild", clausesNode.getPreviousChild()->getNodeType(), Follows);
 	// Test suchThatNode getPrevious with no previous child
-	CPPUNIT_ASSERT(suchThatNode.getPreviousChild() == NULL);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getChild(Index)", suchThatNode.getChild(1)->getNodeType(), Uses);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode Indexing after getChild(Index)", suchThatNode.getPreviousChild()->getNodeType(), Follows);
+	CPPUNIT_ASSERT(clausesNode.getPreviousChild() == NULL);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getChild(Index)", clausesNode.getChild(1)->getNodeType(), Uses);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode Indexing after getChild(Index)", clausesNode.getPreviousChild()->getNodeType(), Follows);
 }
 
 void QueryTreeTest::testQueryTree()
@@ -78,8 +78,7 @@ void QueryTreeTest::testQueryTree()
 	QueryTree* qT = new QueryTree();
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Root Node", qT->getRoot()->getNodeType(), ROOT);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Result Node", qT->getResultNode()->getNodeType(), RESULT);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT SuchThat Node", qT->getSuchThatNode()->getNodeType(), SUCHTHAT);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Pattern Node", qT->getPatternNode()->getNodeType(), PATTERN);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Clauses Node", qT->getClausesNode()->getNodeType(), CLAUSES);
 	
 	// Test Query Tree Link Node
 	Synonym syn(Synonym::convertToEnum("type"), "name");
@@ -89,9 +88,9 @@ void QueryTreeTest::testQueryTree()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Link Node (parent)", select.getParent()->getNodeType(), RESULT);
 
 	// Test Synonyms Map
-	unordered_map<string,string> testMap;
-	std::pair<string,string> p("key","value");
+	unordered_map<string,SYNONYM_TYPE> testMap;
+	std::pair<string,SYNONYM_TYPE> p("key",PROCEDURE);
 	testMap.emplace(p);
 	qT->setSynonymsMap(testMap);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Synonyms Map", qT->getSynonymsMap().at("key"), (string)"value");
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Synonyms Map", qT->getSynonymsMap().at("key"), PROCEDURE);
 }

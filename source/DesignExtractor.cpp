@@ -70,8 +70,7 @@ vector<int> getCallsInTopologicalOrder() {
 	
 	int startProc = 0;
 
-	vector<int> allProcs(pkb.getProcTableSize()); // used to check which procs hasn't been included
-	std::iota (begin(allProcs), end(allProcs), 0);  // assumes that procedures are numbered from 0 to size-1
+	vector<int> allProcs = pkb.getAllProcIndex();; // used to check which procs hasn't been included
 	unordered_set<int> visited;
 
 	result = dfsForProcedures(startProc, &allProcs, &visited);
@@ -91,6 +90,9 @@ public:
 		this->topoOrder = topoOrder; 
 	}
 
+	/**
+	 * Sorts the call statements by the order given in the constructor
+	 */
 	bool operator() (TNode* i, TNode* j) { 
 		assert(i->getNodeType() == Call);
 		assert(j->getNodeType() == Call);
@@ -107,7 +109,9 @@ private:
 	vector<int> topoOrder;
 };
 
-
+/**
+ * Sorts the call statements in topological ordering
+ */
 vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 	vector<int> topologicalOrder = getCallsInTopologicalOrder();
 
@@ -118,7 +122,7 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 	// obtain every call statement node
 	vector<TNode*> callStatementNodes;
 	for (auto iter = allCallStatementsNum.begin(); iter != allCallStatementsNum.end(); ++iter) {
-		TNode* node = pkb.nodeTable.at(*iter);
+		TNode* node = pkb.getNodeForStmt(*iter);  assert(node != NULL);
 		callStatementNodes.push_back(node);
 	}
 
@@ -160,14 +164,7 @@ void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
 				pkb.setModifies(stmtNumber, *iter);
 			}			
 		}
-
-		// for the current proc, set modifies
-		//for (auto iter = varModifiedByProcCalled.begin(); iter != varModifiedByProcCalled.end(); ++iter) {
-		//	pkb.setModifiesProc(currentProc, *iter);
-		//}
-		
 	}
-
 }
 
 /**
@@ -192,8 +189,7 @@ void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
 		}
 		
 		// for ancestors, set (parent, all variabled modified by the function called)
-		while (pkb.getParent(stmtNumber).size()) 
-		{
+		while (pkb.getParent(stmtNumber).size()) {
 			stmtNumber = pkb.getParent(stmtNumber).at(0);
 			if (stmtNumber <= 0) {
 				continue;
@@ -202,26 +198,179 @@ void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
 				pkb.setUses(stmtNumber, *iter);
 			}			
 		}
+	}
+}
 
-		//for (auto iter = varUsedByProcCalled.begin(); iter != varUsedByProcCalled.end(); ++iter) {
-		//	pkb.setUsesProc(currentProc, *iter);
-		//}
+/**
+ * Comparator function for sorting procedure nodes in ascending order
+ */
+bool procNodesCompare(TNode* node1, TNode* node2) {
+	assert(node1->getNodeType() == Procedure);
+	assert(node2->getNodeType() == Procedure);
+
+	// node value of proc nodes is its proc index
+	return node1->getNodeValueIdx() < node2->getNodeValueIdx();
+}
+
+
+CNode* createNextNode(TNode* nextStmt, CFG* cfg) {
+	PKB& pkb = PKB::getInstance();
+
+	CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmt->getNodeType());
+	//int progLine = pkb.stmtNumToProcLineMap.at(nextStmt->getStmtNumber());
+	int progLine = nextStmt->getStmtNumber(); //@todo change after asking jin
+	CNode* nextCNode = cfg->createCNode(cNodeType, 
+										progLine,
+										NULL, nextStmt);
+
+	
+	if (cNodeType == While_C || cNodeType == If_C || 
+	cNodeType == Assign_C || cNodeType == Call_C) {
+
+		pair<int, CNode*> progLineToNodePair(progLine, nextCNode);
+		pkb.cfgNodeTable.insert(progLineToNodePair);
 		
 	}
 
+	return nextCNode;
+}
+
+/**
+ * Construct cfg for a stmtlist. 
+ * 
+ * @param cfg a cfg that will be modified in this function.
+ * @return the last CNode created in the stmtlist
+ */
+CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg) {
+	PKB pkb = PKB::getInstance();
+	assert(stmtListNode->getNodeType() == StmtLst);
+
+	// link startCNode to the first node in the stmtlist
+	TNode* curStmt = stmtListNode->getChildren()->at(0);
+	CNode* curCNode = startCNode;
+	CNode* firstCNode = createNextNode(curStmt, cfg);
+    cfg->createLink(After, curCNode, firstCNode);
+
+	curCNode = firstCNode;
+
+	// iterate over all stmts in the stmtlist
+	while (curStmt != NULL) {
+		if (curStmt->getNodeType() == Assign || curStmt->getNodeType() == Call) {
+			// for assign and call statements,
+			// just create nodes and link together
+			TNode* nextStmt = curStmt->getRightSibling();
+			if (!nextStmt) {
+				break;
+			}
+
+			CNode* nextCNode = createNextNode(nextStmt, cfg);
+			cfg->createLink(After, curCNode, nextCNode);  
+
+
+			curStmt = nextStmt;
+			curCNode = nextCNode;
+
+		} else if (curStmt->getNodeType() == If) {
+			// create cnodes for the statements in the ifthen stmtlist
+			TNode* ifStmtListNode = curStmt->getChildren()->at(1);
+			CNode* lastNodeInIf = constructCfgForStmtList(ifStmtListNode, curCNode, cfg);
+
+			// create cnodes for the statements in the else stmtlist
+			CNode* lastNodeInElse = NULL;
+			if (curStmt->getChildren()->size() == 3) {
+				TNode* elseStmtListNode = curStmt->getChildren()->at(2);
+				lastNodeInElse = constructCfgForStmtList(elseStmtListNode, curCNode, cfg);
+			}
+
+			// create a dummy CNode to terminate the if statement with.
+			// this is to keep things predictable and not allow any node to have too many nodes "before" it
+			CNode* IfEndNode = cfg->createCNode(EndIf_C, 
+												NULL,
+												NULL, ifStmtListNode);
+
+			
+			cfg->createLink(After, lastNodeInIf, IfEndNode);
+			if (lastNodeInElse) {
+				// link the last node in the else stmtlist, if it exists
+				cfg->createLink(After, lastNodeInElse, IfEndNode);
+			} else {
+				// otherwise, link the if node itself
+				cfg->createLink(After, curCNode, IfEndNode);
+			}
+			assert(IfEndNode->getBefore()->size() == 2);
+
+			// link the dummy end node to the next stmt, if it exist
+			TNode* nextStmtNode = curStmt->getRightSibling(); 
+			if (!nextStmtNode) {
+				curCNode = IfEndNode;
+				break;
+			}
+			CNode* nextCNode = createNextNode(nextStmtNode, cfg);
+			cfg->createLink(After, IfEndNode, nextCNode);
+
+			curStmt = nextStmtNode;
+			curCNode = nextCNode;
+
+		} else if (curStmt->getNodeType() == While) {
+			// create cnodes for the statements in the while stmtlist
+			TNode* whileStmtListNode = curStmt->getChildren()->at(1);
+			CNode* lastNodeInWhile = constructCfgForStmtList(whileStmtListNode, curCNode, cfg);
+
+			// link last node back to original While stmt
+			cfg->createLink(After, lastNodeInWhile, curCNode);
+
+			// link the dummy end node to the next stmt, if it exist
+			TNode* nextStmtNode = curStmt->getRightSibling();
+			if (!nextStmtNode) {
+				break;
+			}
+			CNode* nextCNode = createNextNode(nextStmtNode, cfg);
+			cfg->createLink(After, curCNode, nextCNode);
+			
+
+			curStmt = nextStmtNode;   
+			curCNode = nextCNode;
+		}
+	}
+	// return the last node created
+	return curCNode;
 }
 
 /**
  * Build Control Flow Graph
  */
 bool DesignExtractor::constructCfg() {
-	throw exception("Not implemented yet");
+	// make a CFG(?) for every procedure
+	PKB pkb = PKB::getInstance();
+	
+	TNode* rootNode = pkb.getRoot();
+	assert(rootNode->getNodeType() == Program);
+
+	vector<TNode*>* procNodes = rootNode->getChildren(); // all procedure nodes are children of the root program node
+	  
+	// construct cfg for every procedures in order of increasing procIndex
+	sort(procNodes->begin(), procNodes->end(), procNodesCompare);
+	for (auto procNode = procNodes->begin(); procNode != procNodes->end(); ++procNode) {
+		CFG* cfg = new CFG(*procNode);
+		TNode* procStmtListNode = (*procNode)->getChildren()->at(0);
+		assert(procStmtListNode->getNodeType() == StmtLst);
+
+		CNode* lastNode = constructCfgForStmtList(procStmtListNode, cfg->getProcRoot(), cfg);
+		cfg->setEndNode(lastNode);
+		
+		pkb.cfgTable.push_back(cfg);
+	}
+
+	return true;
 }
 
 void DesignExtractor::constructStatisticsTable() {
 	throw exception("Not implemented yet");
 }
 
+/**
+ * Sets Modifies for assignment statements, and propagate the changes to their ancestors
+ */
 void DesignExtractor::setModifiesForAssignmentStatements() {
 
 	PKB pkb = PKB::getInstance();
@@ -231,15 +380,15 @@ void DesignExtractor::setModifiesForAssignmentStatements() {
 		int stmtNumber = *iter;
 
 		// find variable modified
-		TNode* node = pkb.nodeTable.at(stmtNumber);
+		TNode* node = pkb.getNodeForStmt(stmtNumber);
+		assert(node != NULL);
 		assert(node->getChildren()->size() == 2);
 
 		int varIndex = node->getChildren()->at(0)->getNodeValueIdx();
 		pkb.setModifies(stmtNumber, varIndex);
 
 		// for ancestors, set (parent, all variable)
-		while (pkb.getParent(stmtNumber).size()) 
-		{
+		while (pkb.getParent(stmtNumber).size()) {
 			stmtNumber = pkb.getParent(stmtNumber).at(0);
 			if (stmtNumber <= 0) {
 				continue;
@@ -255,17 +404,18 @@ vector<int> obtainVarUsedInExpression(TNode* node) {
 	deque<TNode*> frontier;
 	frontier.push_back(node->getChildren()->at(1));
 	TNode* curNode;
+	// bfs
 	while (!frontier.empty()) {
 		curNode = frontier.back(); frontier.pop_back();
 
 		if (curNode->hasChild()) {
 			vector<TNode*>* children = curNode->getChildren();
-
+			// add new nodes to frontier
 			for (auto iter = children->begin(); iter != children->end(); ++iter) {
 				frontier.push_back(*iter);
 			}
 		}
-
+		// add any variables encountered to varUsed
 		if (curNode->getNodeType() == Variable) {
 			varUsed.push_back(curNode->getNodeValueIdx());
 		}
@@ -273,6 +423,9 @@ vector<int> obtainVarUsedInExpression(TNode* node) {
 	return varUsed;
 }
 
+/**
+ * Sets Uses for assignment statements, and propagate the changes to their ancestors
+ */
 void DesignExtractor::setUsesForAssignmentStatements() {
 
 	PKB pkb = PKB::getInstance();
@@ -282,15 +435,15 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 		int stmtNumber = *iter;
 
 		// find variable used
-		TNode* node = pkb.nodeTable.at(stmtNumber);
+		TNode* node = pkb.getNodeForStmt(stmtNumber);
+		assert(node != NULL);
 		vector<int> varIndexesUsed = obtainVarUsedInExpression(node);
 		for (auto varIter = varIndexesUsed.begin(); varIter != varIndexesUsed.end(); ++varIter) {
 			pkb.setUses(stmtNumber, *varIter);
 		}
 
 		// for ancestors, set (parent, all variable)
-		while (pkb.getParent(stmtNumber).size()) 
-		{
+		while (pkb.getParent(stmtNumber).size()) {
 			stmtNumber = pkb.getParent(stmtNumber).at(0);
 			if (stmtNumber <= 0) {
 				continue;
@@ -302,6 +455,9 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 	}
 }
 
+/**
+ * Sets Uses for While and If statements, and propagate the changes to their ancestors
+ */
 void DesignExtractor::setUsesForContainerStatements() {
 	PKB pkb = PKB::getInstance();
 
@@ -314,15 +470,15 @@ void DesignExtractor::setUsesForContainerStatements() {
 		int stmtNumber = *iter;
 
 		// find variable used
-		TNode* node = pkb.nodeTable.at(stmtNumber);
+		TNode* node = pkb.getNodeForStmt(stmtNumber);
+		assert(node != NULL);
 		assert(node->getChildren()->size() == 2 || node->getChildren()->size() == 3);
 
 		int varIndex = node->getChildren()->at(0)->getNodeValueIdx();
 		pkb.setUses(stmtNumber, varIndex);
 
 		// for ancestors, set (parent, all variable)
-		while (pkb.getParent(stmtNumber).size()) 
-		{
+		while (pkb.getParent(stmtNumber).size()) {
 			stmtNumber = pkb.getParent(stmtNumber).at(0);
 			if (stmtNumber <= 0) {
 				continue;

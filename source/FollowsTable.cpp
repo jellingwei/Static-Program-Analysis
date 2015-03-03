@@ -25,18 +25,13 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
 	return PKB::getInstance().createLink(Right_Sibling, stmt1, stmt2);
 }
 
-/**
- * Given stmt2 as input, returns a vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied.
- * If there is no answer, return an empty vector
- * @return vector of int of possible stmt1 such that Follows(stmt1, stmt2) is satisfied
- */
 vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
 	vector<int> result;
 
-	if (PKB::getInstance().nodeTable.count(stmtNum2) == 0) {
+	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) {
 		return vector<int>();
 	}
-	TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
+	TNode* node2 = PKB::getInstance().getNodeForStmt(stmtNum2);
 
 	if (!node2) {
 		return vector<int>();
@@ -56,16 +51,12 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 	return result;
 }
 
-/**
- * Given stmt1 as input, returns a vector of int of possible stmt2 such that Follows(stmt1, stmt2) is satisfied.
- * If there is no answer, returns an empty vector
- */
 vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosure) {
 	vector<int> result;
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) {
+	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) {
 		return vector<int>();
 	}
-	TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
+	TNode* node1 = PKB::getInstance().getNodeForStmt(stmtNum1);
 
 	if (!node1) {
 		//throw exception("FollowsTable exception: invalid stmtNum provided");
@@ -88,12 +79,12 @@ vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosu
 
 bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) 
 {
-	if (PKB::getInstance().nodeTable.count(stmtNum1) == 0) 
+	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) 
 	{
 		return false;
 	}
 
-	TNode* node1 = PKB::getInstance().nodeTable.at(stmtNum1);
+	TNode* node1 = PKB::getInstance().getNodeForStmt(stmtNum1);
 
 	if (!transitiveClosure) 
 	{
@@ -107,7 +98,8 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 		return possibleStmt2 == stmtNum2;
 
 	} else {
-		TNode* node2 = PKB::getInstance().nodeTable.at(stmtNum2);
+		TNode* node2 = PKB::getInstance().getNodeForStmt(stmtNum2);
+		assert(node2 != NULL);
 		// First, check that they are in the first stmt list
 		if (node1->getParent()->getStmtNumber() != node2->getParent()->getStmtNumber()) {
 			// If the stmts are not in the same stmtlist, just return false
@@ -126,10 +118,6 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 	}
 }
 
-
-/**
- * Recursively find all pairs of statements which satisfy the condition Follows(stmt1, stmt2) in each stmtlist.
- */
 void generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector<int>* result1, vector<int>* result2) {
 	vector<TNode*> nextLayer;
 
@@ -180,10 +168,6 @@ void generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector
 	return ;
 }
 
-/**
- * Returns all (stmt1, stmt2) such that Follows(stmt1, stmt2) holds. If transitiveClosure is true,
- * returns all (stmt1, stmt2) such that Follows*(stmt1, stmt2) holds.
- */
 pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(bool transitiveClosure) {
 	pair<vector<int>, vector<int>> results;
 	TNode* root = PKB::getInstance().getRoot(); 

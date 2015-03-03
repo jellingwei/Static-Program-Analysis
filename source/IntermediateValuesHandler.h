@@ -15,7 +15,7 @@ using std::swap;
 namespace IntermediateValuesHandler 
 {
 	//Public functions to be used
-	void initialize(unordered_map<string, string> synonymMap);
+	void initialize(unordered_map<string, SYNONYM_TYPE> synonymMap);
 	void addAndProcessIntermediateSynonym(Synonym synonym);
 	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
 	Synonym getSynonymWithName(string wantedName);

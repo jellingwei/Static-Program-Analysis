@@ -47,7 +47,7 @@ Synonym::Synonym(SYNONYM_TYPE type, int name)
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
  */
-Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
+/*Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
 {
 	_isEmpty = false;
 	_type = type;
@@ -57,7 +57,7 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
 	{
 		_values.push_back(std::stoi(values[i]));
 	}
-}
+}*/
 
 /**
  * Set the synonym type and name to the given type and name respectively.
@@ -79,11 +79,7 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 	_isEmpty = false;
 	_type = type;
 	_name = name;
-	
-	for (set<int>::iterator itr = values.begin(); itr != values.end(); ++itr)
-	{
-		_values.push_back(*itr);
-	}
+	_valuesSet = values;
 }
 
 bool Synonym::isEmpty()
@@ -94,16 +90,13 @@ bool Synonym::isEmpty()
 void Synonym::setValues(vector<int> values)
 {
 	_values = values;
+	_valuesSet.clear();
 }
 
 void Synonym::setValues(set<int> values)
 {
+	_valuesSet = values;
 	_values.clear();
-
-	for (set<int>::iterator itr = values.begin(); itr != values.end(); ++itr)
-	{
-		_values.push_back(*itr);
-	}
 }
 
 /**
@@ -133,18 +126,26 @@ string Synonym::getName()
  */
 vector<int> Synonym::getValues()
 {
+	if (_values.size() != 0) {
+		return _values;
+	} else if (_valuesSet.size() != 0) {
+		for (auto itr = _valuesSet.begin(); itr != _valuesSet.end(); ++itr) {
+			_values.push_back(*itr);
+		}
+	}
 	return _values;
 }
 
 set<int> Synonym::getValuesSet()
 {
-	set<int> returnValues;
-	
-	for (unsigned int i = 0; i < _values.size(); i++)
-	{
-		returnValues.insert(_values[i]);
+	if (_valuesSet.size() != 0) {
+		return _valuesSet;
+	} else if (_values.size() != 0) {
+		for (unsigned int i = 0; i < _values.size(); i++) {
+			_valuesSet.insert(_values[i]);
+		}
 	}
-	return returnValues;
+	return _valuesSet;
 }
 
 string Synonym::convertToString(SYNONYM_TYPE synonymType)

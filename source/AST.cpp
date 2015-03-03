@@ -22,17 +22,10 @@ AST::AST() {
 
 }
 
-/**
-* @return the root node of the AST.
-*/
 TNode* AST::getRoot() {
 	return _rootNode;
 }
 
-/**
-* @return a TNode for the given design entity together with its statement number and index. 
-* @exception if stmtNo is negative or 0 or index is negative.
-*/
 TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 
 	if(stmtNo < 0) {
@@ -144,9 +137,6 @@ bool AST::isExists(TNode* node) {
 	else return false;
 }
 
-TNode* AST::getLastImpt() {
-	return _lastImpt;
-}
 
 /**
  * @return the total number of nodes in the the AST.
@@ -169,7 +159,7 @@ bool is_number(const std::string& s)
  * @param RHS to match the expression query with a suitable subtree.
  */
 vector<int> AST::patternMatchAssign(string RHS) {
-//cout << "gives " << RHS << endl;
+//cout << "received [" << RHS << "]" << endl;
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());		//remove whitespaces
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), '\"'), RHS.end());		//remove ""
 
@@ -192,9 +182,10 @@ vector<int> AST::patternMatchAssign(string RHS) {
 	
 	vector<string> vRHS;
 	vector<int> results;
-
+	PKB pkb = PKB::getInstance();
+//cout << "[" << RHS << "]" << endl;
 	if(RHS.empty()) {
-		results = PKB::getInstance().getStmtNumForType("assign");
+		results = pkb.getStmtNumForType("assign");
 		return results;
 	}
 
@@ -228,15 +219,21 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		cout << "[" << vRHS[i] << "]" << " ";
 	cout << " " << endl;
 cout << "myvector has " << vRHS.size() << " elements" << endl;
-cout << "=======" << endl;	*/
+cout << "=======" << endl;*/
 
-	ExpressionParser exprParser;
-	TNode* top = exprParser.parseExpressionForQuerying(vRHS);
-	PatternMatch pattern;
+	try {
+		ExpressionParser exprParser;
+		TNode* top = exprParser.parseExpressionForQuerying(vRHS);
+		PatternMatch pattern;
+		results = pattern.PatternMatchAssign(top, isExact);
+	} catch(const runtime_error& e) {
+		return results;
+	}
+	
 //cout << "rQ is " << top->getNodeType() << endl;
 	//vector<int> temp = pattern.PatternMatchAssign(top, isExact);
 	
-	results = pattern.PatternMatchAssign(top, isExact);
+	
 /*cout << "ok " << endl;
 	for(int i =0; i< results.size(); i++)
 		cout << "[" << results[i] << "] ";
@@ -258,10 +255,12 @@ int AST::getControlVariable(int stmtNum) {
 		return -1;
 	}
 
-	if (PKB::getInstance().nodeTable.count(stmtNum) <= 0) {
+	PKB pkb = PKB::getInstance();
+
+	if (pkb.getNodeForStmt(stmtNum) == NULL) {
 		return -1;
 	}
-	TNode* node = PKB::getInstance().nodeTable.at(stmtNum);
+	TNode* node = pkb.getNodeForStmt(stmtNum);
 	if (node->getNodeType() != While && node->getNodeType() != If) {
 		return -1;
 	}
