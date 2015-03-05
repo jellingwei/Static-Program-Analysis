@@ -169,8 +169,12 @@ string Synonym::convertToString(SYNONYM_TYPE synonymType)
 		return "constant";
 	case PROG_LINE:
 		return "prog_line";
-	case STRING:
-		return "string";
+	case STRING_CHAR:
+		return "string_char";
+	case STRING_INT:
+		return "string_int";
+	case STRING_PATTERNS:
+		return "string_patterns";
 	case BOOLEAN:
 		return "boolean";
 	case UNDEFINED:
@@ -200,9 +204,13 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return CONSTANT;
 	} else if (synonymType == "prog_line") {
 		return PROG_LINE;
-	} else if (synonymType == "string") {
-		return STRING;
-	} else if (synonymType == "boolean") {
+	} else if (synonymType == "string_char") {
+		return STRING_CHAR; 
+	} else if (synonymType == "string_int") {
+		return STRING_INT;
+	} else if (synonymType == "string_patterns") {
+		return STRING_PATTERNS;
+	}else if (synonymType == "boolean") {
 		return BOOLEAN;
 	} else {
 		return UNDEFINED;
