@@ -213,16 +213,15 @@ bool procNodesCompare(TNode* node1, TNode* node2) {
 }
 
 
-CNode* createNextNode(TNode* nextStmt, CFG* cfg) {
+CNode* createNextNode(TNode* nextStmt, CFG* cfg, CNode* header = NULL) {
 	PKB& pkb = PKB::getInstance();
 
 	CNODE_TYPE cNodeType = CFG::convertTNodeTypeToCNodeType(nextStmt->getNodeType());
 	//int progLine = pkb.stmtNumToProcLineMap.at(nextStmt->getStmtNumber());
-	int progLine = nextStmt->getStmtNumber(); //@todo change after asking jin
+	int progLine = nextStmt->getStmtNumber(); 
 	CNode* nextCNode = cfg->createCNode(cNodeType, 
 										progLine,
-										NULL, nextStmt);
-
+										header, nextStmt);
 	
 	if (cNodeType == While_C || cNodeType == If_C || 
 	cNodeType == Assign_C || cNodeType == Call_C) {
@@ -235,26 +234,50 @@ CNode* createNextNode(TNode* nextStmt, CFG* cfg) {
 	return nextCNode;
 }
 
+CNode* createDummyEndIfNode(CFG* cfg, TNode* ifStmtListNode, CNode* lastNodeInIf, CNode* lastNodeInElse, CNode* curCNode) {
+	CNode* IfEndNode = cfg->createCNode(EndIf_C, 
+										NULL,
+										NULL, ifStmtListNode);
+
+			
+	cfg->createLink(After, lastNodeInIf, IfEndNode);
+	if (lastNodeInElse) {
+		// link the last node in the else stmtlist, if it exists
+		cfg->createLink(After, lastNodeInElse, IfEndNode);
+	} else {
+		// otherwise, link the if node itself
+		cfg->createLink(After, curCNode, IfEndNode);
+	}
+	return IfEndNode;
+}
+
 /**
  * Construct cfg for a stmtlist. 
  * 
  * @param cfg a cfg that will be modified in this function.
  * @return the last CNode created in the stmtlist
  */
-CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg) {
+CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg, bool isInsideElse = false) {
 	PKB pkb = PKB::getInstance();
 	assert(stmtListNode->getNodeType() == StmtLst);
+
+	// based on CNode, use Inside2 if is inside Else.
+	// @todo think about if distinguishing between if and else is really needed
+	CLINK_TYPE typeOfLinkToContainer = (isInsideElse)? Inside2 : Inside;
 
 	// link startCNode to the first node in the stmtlist
 	TNode* curStmt = stmtListNode->getChildren()->at(0);
 	CNode* curCNode = startCNode;
 	CNode* firstCNode = createNextNode(curStmt, cfg);
+
     cfg->createLink(After, curCNode, firstCNode);
-
+	cfg->createLink(typeOfLinkToContainer, curCNode, firstCNode);
+	
 	curCNode = firstCNode;
-
 	// iterate over all stmts in the stmtlist
 	while (curStmt != NULL) {
+		cfg->createLink(typeOfLinkToContainer, curCNode, firstCNode);
+
 		if (curStmt->getNodeType() == Assign || curStmt->getNodeType() == Call) {
 			// for assign and call statements,
 			// just create nodes and link together
@@ -263,13 +286,11 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg)
 				break;
 			}
 
-			CNode* nextCNode = createNextNode(nextStmt, cfg);
+			CNode* nextCNode = createNextNode(nextStmt, cfg, startCNode);
 			cfg->createLink(After, curCNode, nextCNode);  
-
 
 			curStmt = nextStmt;
 			curCNode = nextCNode;
-
 		} else if (curStmt->getNodeType() == If) {
 			// create cnodes for the statements in the ifthen stmtlist
 			TNode* ifStmtListNode = curStmt->getChildren()->at(1);
@@ -279,24 +300,14 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg)
 			CNode* lastNodeInElse = NULL;
 			if (curStmt->getChildren()->size() == 3) {
 				TNode* elseStmtListNode = curStmt->getChildren()->at(2);
-				lastNodeInElse = constructCfgForStmtList(elseStmtListNode, curCNode, cfg);
+				bool isProgLinesInElse = true;
+				lastNodeInElse = constructCfgForStmtList(elseStmtListNode, curCNode, cfg, isProgLinesInElse);
 			}
 
 			// create a dummy CNode to terminate the if statement with.
 			// this is to keep things predictable and not allow any node to have too many nodes "before" it
-			CNode* IfEndNode = cfg->createCNode(EndIf_C, 
-												NULL,
-												NULL, ifStmtListNode);
-
-			
-			cfg->createLink(After, lastNodeInIf, IfEndNode);
-			if (lastNodeInElse) {
-				// link the last node in the else stmtlist, if it exists
-				cfg->createLink(After, lastNodeInElse, IfEndNode);
-			} else {
-				// otherwise, link the if node itself
-				cfg->createLink(After, curCNode, IfEndNode);
-			}
+			// can also be used to store additional information
+			CNode* IfEndNode = createDummyEndIfNode(cfg, ifStmtListNode, lastNodeInIf, lastNodeInElse, curCNode);
 			assert(IfEndNode->getBefore()->size() == 2);
 
 			// link the dummy end node to the next stmt, if it exist
@@ -305,12 +316,11 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg)
 				curCNode = IfEndNode;
 				break;
 			}
-			CNode* nextCNode = createNextNode(nextStmtNode, cfg);
+			CNode* nextCNode = createNextNode(nextStmtNode, cfg, startCNode);
 			cfg->createLink(After, IfEndNode, nextCNode);
 
 			curStmt = nextStmtNode;
 			curCNode = nextCNode;
-
 		} else if (curStmt->getNodeType() == While) {
 			// create cnodes for the statements in the while stmtlist
 			TNode* whileStmtListNode = curStmt->getChildren()->at(1);
@@ -319,15 +329,14 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg)
 			// link last node back to original While stmt
 			cfg->createLink(After, lastNodeInWhile, curCNode);
 
-			// link the dummy end node to the next stmt, if it exist
+			// link the end node to the next stmt, if it exist
 			TNode* nextStmtNode = curStmt->getRightSibling();
 			if (!nextStmtNode) {
 				break;
 			}
-			CNode* nextCNode = createNextNode(nextStmtNode, cfg);
+			CNode* nextCNode = createNextNode(nextStmtNode, cfg, startCNode);
 			cfg->createLink(After, curCNode, nextCNode);
 			
-
 			curStmt = nextStmtNode;   
 			curCNode = nextCNode;
 		}
