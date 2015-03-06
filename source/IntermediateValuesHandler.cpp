@@ -64,7 +64,7 @@ namespace IntermediateValuesHandler
 	bool addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
 		if (synonym.getType() == UNDEFINED) {
-			return allIntermediateValues.size() != 0;;
+			return allIntermediateValues.size() != 0;
 		}
 
 		string name = synonym.getName();

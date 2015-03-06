@@ -1,16 +1,13 @@
 //@TODO: if patterns
-//@TODO: For pairs, have to consider having "_" as the parameters
 //@TODO: Special handling for relation(_, _) if this does not exist
 
 #include <vector>
 #include <string>
 #include <set>
-#include <cctype>  //For isdigit and isalpha
 using std::set;
 using std::vector;
 using std::string;
 using std::stoi;  //String to integer
-using std::swap;
 using std::pair;
 using std::make_pair;
 
@@ -605,16 +602,16 @@ namespace QueryEvaluator
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
 
-		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
+		if (typeLHS == STRING_CHAR && typeRHS == STRING_CHAR) {
 			return pkb.isCalls(pkb.getProcIndex(nameLHS), pkb.getProcIndex(nameRHS), isTrans);
-		} else if (typeLHS == STRING_INT) {
+		} else if (typeLHS == STRING_CHAR) {
 			vector<int> stmt = pkb.getProcsCalledBy(pkb.getProcIndex(nameLHS), isTrans);
 			if (stmt.size() == 0) {
 				return false;
 			}
 			RHS.setValues(stmt);
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
-		} else if (typeRHS == STRING_INT) {
+		} else if (typeRHS == STRING_CHAR) {
 			vector<int> stmt = pkb.getProcsCalling(pkb.getProcIndex(nameRHS), isTrans);
 			if (stmt.size() == 0) {
 				return false;
