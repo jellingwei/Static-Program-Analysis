@@ -29,13 +29,13 @@ void QueryValidator::initTable()
 	/* such that queries */
 
 	//Modifies argument 1
-	string list1array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "procedure", "string-int" };
-	vector<string> list1; list1.insert(list1.begin(), list1array, list1array + 8);
+	SYNONYM_TYPE list1array[] = { ASSIGN, CALL, IF, WHILE, STMT, PROG_LINE, PROCEDURE, STRING_INT };
+	vector<SYNONYM_TYPE> list1; list1.insert(list1.begin(), list1array, list1array + 8);
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Modifies), list1));
 
 	//Modifies arguement 2
-	string list2array[] = { "variable", "string-char", "_" };
-	vector<string> list2; list2.insert(list2.begin(), list2array, list2array + 3);
+	SYNONYM_TYPE list2array[] = { VARIABLE, STRING_CHAR, UNDEFINED }; 
+	vector<SYNONYM_TYPE> list2; list2.insert(list2.begin(), list2array, list2array + 3);
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Modifies), list2));
 
 	//Uses argument 1
@@ -44,11 +44,11 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Uses), list2));
 
 
-	string list3array[] = { "if", "while", "stmt", "prog_line", "string-int", "_" };
-	vector<string> list3; list3.insert(list3.begin(), list3array, list3array + 6);
+	SYNONYM_TYPE list3array[] = { IF, WHILE, STMT, PROG_LINE, STRING_INT, UNDEFINED };
+	vector<SYNONYM_TYPE> list3; list3.insert(list3.begin(), list3array, list3array + 6);
 
-	string list4array[] = { "assign", "call", "if", "while", "stmt", "prog_line", "string-int", "_" };
-	vector<string> list4; list4.insert(list4.begin(), list4array, list4array + 8);
+	SYNONYM_TYPE list4array[] = { ASSIGN, CALL, IF, WHILE, STMT, PROG_LINE, STRING_INT, UNDEFINED }; 
+	vector<SYNONYM_TYPE> list4; list4.insert(list4.begin(), list4array, list4array + 8);
 	
 	//constant is invalid for Parent
 	//Parent argument 1
@@ -75,8 +75,8 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list4));
 
 
-	string list5array[] = { "assign", "stmt", "prog_line", "string-int", "_" };
-	vector<string> list5; list5.insert(list5.begin(), list5array, list5array + 5);
+	SYNONYM_TYPE list5array[] = { ASSIGN, STMT, PROG_LINE, STRING_INT, UNDEFINED };
+	vector<SYNONYM_TYPE> list5; list5.insert(list5.begin(), list5array, list5array + 5);
 
 	//Affects argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Affects), list5));
@@ -91,8 +91,8 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsS), list5));
 
 	//Next
-	string list6array[] = { "assign", "call", "if", "stmt", "while", "prog_line","string-int", "_"};
-	vector<string> list6; list6.insert(list6.begin(), list6array, list6array + 8);
+	SYNONYM_TYPE list6array[] = { ASSIGN, CALL, IF, STMT, WHILE, PROG_LINE, STRING_INT, UNDEFINED };
+	vector<SYNONYM_TYPE> list6; list6.insert(list6.begin(), list6array, list6array + 8);
 	//Next argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Next), list6));
 	//Next argument 2
@@ -104,8 +104,8 @@ void QueryValidator::initTable()
 
 
 	//Calls argument 1
-	string list7array[] = { "procedure","string-char", "_"};
-	vector<string> list7; list7.insert(list7.begin(), list7array, list7array + 3);
+	SYNONYM_TYPE list7array[] = { PROCEDURE, STRING_CHAR, UNDEFINED }; 
+	vector<SYNONYM_TYPE> list7; list7.insert(list7.begin(), list7array, list7array + 3);
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Calls), list7));
 	//Calls argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Calls), list7));
@@ -117,43 +117,42 @@ void QueryValidator::initTable()
 
 	/* patterns queries */
 	//assign/while patterns argument 1
-	string list8array[] = {"string","variable", "_"};
-	vector<string> list8; list8.insert(list8.begin(), list8array, list8array + 3);
-	patternsArg1Map.insert(make_pair("assign", list8));  
-	patternsArg1Map.insert(make_pair("while", list8));
-	patternsArg1Map.insert(make_pair("if", list8));
+	SYNONYM_TYPE list8array[] = { STRING_CHAR, VARIABLE, UNDEFINED };
+	vector<SYNONYM_TYPE> list8; list8.insert(list8.begin(), list8array, list8array + 3);
+	patternsArg1Map.insert(make_pair(ASSIGN, list8));  
+	patternsArg1Map.insert(make_pair(WHILE, list8));
+	patternsArg1Map.insert(make_pair(IF, list8));
 
-	vector<string> list9; //empty vector means no restrictions on arg2 of pattern assign.
-	patternsArg2Map.insert(make_pair("assign", list9)); 
-	patternsArg2Map.insert(make_pair("if", list9)); 
+	vector<SYNONYM_TYPE> list9; //empty vector means no restrictions on arg2 of pattern assign.
+	patternsArg2Map.insert(make_pair(ASSIGN, list9)); 
+	patternsArg2Map.insert(make_pair(IF, list9)); 
 
 	//while patterns argument 2
-	string list10array[] = {"_"};
-	vector<string> list10; list10.insert(list10.begin(), list10array, list10array + 1);
-	patternsArg2Map.insert(make_pair("while", list10));
+	SYNONYM_TYPE list10array[] = { UNDEFINED };
+	vector<SYNONYM_TYPE> list10; list10.insert(list10.begin(), list10array, list10array + 1);
+	patternsArg2Map.insert(make_pair(WHILE, list10));
 
 
 
 
 	/* init withAttrRefMap */
 	//procName
-	SYNONYM_TYPE with1array[] = {SYNONYM_TYPE(PROCEDURE),SYNONYM_TYPE(CALL)};
+	SYNONYM_TYPE with1array[] = { PROCEDURE, CALL };
 	vector<SYNONYM_TYPE> with1; with1.insert(with1.begin(), with1array, with1array + 2);
 	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(procName), with1));
 
 	//varName
-	SYNONYM_TYPE with2array[] = {SYNONYM_TYPE(VARIABLE)};
+	SYNONYM_TYPE with2array[] = { VARIABLE };
 	vector<SYNONYM_TYPE> with2; with2.insert(with2.begin(), with2array, with2array + 1);
 	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(varName), with2));
 
 	//value
-	SYNONYM_TYPE with3array[] = {SYNONYM_TYPE(CONSTANT)};
+	SYNONYM_TYPE with3array[] = { CONSTANT };
 	vector<SYNONYM_TYPE> with3; with3.insert(with3.begin(), with3array, with3array + 1);
 	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(value), with3));
 
 	//stmt#
-	SYNONYM_TYPE with4array[] = {SYNONYM_TYPE(STMT), SYNONYM_TYPE(ASSIGN), SYNONYM_TYPE(IF), 
-								SYNONYM_TYPE(WHILE), SYNONYM_TYPE(CALL)};
+	SYNONYM_TYPE with4array[] = { STMT, ASSIGN, IF, WHILE, CALL };
 	vector<SYNONYM_TYPE> with4; with4.insert(with4.begin(), with4array, with4array + 5);
 	withAttrRefMap.insert(make_pair(SYNONYM_ATTRIBUTE(stmtNo), with4));
 
@@ -165,8 +164,8 @@ void QueryValidator::initTable()
  */
 bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
 {	
-	vector<string> listArg1;
-	vector<string> listArg2;
+	vector<SYNONYM_TYPE> listArg1;
+	vector<SYNONYM_TYPE> listArg2;
 
 	try {
 		//if enum QNODE_TYPE is not found it throws an out of range exception
@@ -178,35 +177,9 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		throw exception("QueryValidator error: Out of Range");
 	}
 
-	string arg1Type = Synonym::convertToString(arg1.getType());
-	string arg2Type = Synonym::convertToString(arg2.getType());
+	SYNONYM_TYPE arg1Type = arg1.getType();
+	SYNONYM_TYPE arg2Type = arg2.getType();
 	
-	if (arg1Type == "string"){
-
-		char arg1Value = arg1.getName()[0];  //Get the value of arg1
-		
-		if (isdigit(arg1Value)){
-			arg1Type = "string-int";
-		}else if (isalpha(arg1Value)){
-			arg1Type = "string-char";
-		}else{
-			arg1Type = "string-mix";	
-		}
-	}
-
-	if (arg2Type == "string"){
-
-		char arg2Value = arg2.getName()[0];  //Get the value of arg2
-		
-		if (isdigit(arg2Value)){
-			arg2Type = "string-int";
-		}else if (isalpha(arg2Value)){
-			arg2Type = "string-char";
-		}else{
-			arg2Type = "string-mix";	
-		}
-	}
-
 	auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
 	auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
 
@@ -230,9 +203,10 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		return false;
 	}
 
+
 	if((type != QNODE_TYPE(Next)) && (type != QNODE_TYPE(NextS))){
 		//Since the two are constant strings, they must be digits by the checks above
-		if ((arg1Type == "string-int" && arg2Type == "string-int") &&
+		if ((arg1Type == STRING_INT && arg2Type == STRING_INT) &&
 			(stoi(arg1.getName()) >= stoi(arg2.getName())) ){
 
 			#ifdef DEBUG
@@ -242,9 +216,9 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		
 		}	
 	
-		if(arg1Type!="string-int" && arg2Type!="string-int" &&
-			arg1Type!="string-char" && arg2Type!="string-char" && 
-			arg1Type!="_" && arg2Type!="_" &&
+		if(arg1Type != STRING_INT && arg2Type != STRING_INT &&
+			arg1Type != STRING_CHAR && arg2Type != STRING_CHAR && 
+			arg1Type != UNDEFINED && arg2Type != UNDEFINED &&
 			arg1.getName() == arg2.getName()){
 
 			#ifdef DEBUG
@@ -265,11 +239,11 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
  */
 bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
 {
-	vector<string> listArg1;
-	vector<string> listArg2;
+	vector<SYNONYM_TYPE> listArg1;
+	vector<SYNONYM_TYPE> listArg2;
 	
 	// can only be 'assign' or 'while' pattern type
-	string patternType = Synonym::convertToString(arg0.getType());
+	SYNONYM_TYPE patternType = arg0.getType();
 	
 	try {
 		//if string is not found it throws an out of range exception. 
@@ -280,16 +254,14 @@ bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym 
 		throw exception("QueryValidator error: Out of Range");
 	}
 
+	SYNONYM_TYPE arg1Type = arg1.getType();
+	SYNONYM_TYPE arg2Type = arg2.getType();
 
-
-	string arg1Type = Synonym::convertToString(arg1.getType());
-	string arg2Type = Synonym::convertToString(arg2.getType());
 
 	#ifdef DEBUG
 		cout<<"arg1Type : "<<arg1Type<<endl;
 		cout<<"arg2Type : "<<arg2Type<<endl;
 	#endif
-
 
 
 	if(!listArg1.empty()){ // if there are restrictions place on argument 1
@@ -335,21 +307,13 @@ bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 
 
 	/* LHS */
-	if (arg1Type == SYNONYM_TYPE(STRING)){
+	if (arg1Type == SYNONYM_TYPE(STRING_INT)){
 
-		char arg1Value = arg1.getName()[0];  //Get the value of arg1
-		
-		if (isdigit(arg1Value)){
+		LHS_integer = true;         //INTEGER
 
-			LHS_integer = true;         //INTEGER
+	}else if(arg1Type == SYNONYM_TYPE(STRING_CHAR)){
 
-		}else if (isalpha(arg1Value)){
-
-			LHS_integer = false;        //"IDENT"
-		
-		}else{
-			LHS_integer = false;	    //"IDENT"
-		}
+		LHS_integer = false;        //"IDENT"
 
 	}else{
 
@@ -394,21 +358,14 @@ bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 
 
 	/* RHS */
-	if (arg2Type == SYNONYM_TYPE(STRING)){
+	if (arg2Type == SYNONYM_TYPE(STRING_INT)){
 
-		char arg2Value = arg2.getName()[0];  //Get the value of arg2
-		
-		if (isdigit(arg2Value)){
+		RHS_integer = true;         //INTEGER
 
-			RHS_integer = true;         //INTEGER
+	}else if (arg2Type == SYNONYM_TYPE(STRING_CHAR)){
 
-		}else if (isalpha(arg2Value)){
+		RHS_integer = false;        //"IDENT"
 
-			RHS_integer = false;        //"IDENT"
-		
-		}else{
-			RHS_integer = false;	    //"IDENT"
-		}
 	}else{
 
 		listArg2 = withAttrRefMap.at(arg2Attr);

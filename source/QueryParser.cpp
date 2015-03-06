@@ -738,7 +738,7 @@ namespace QueryParser
 			}else if(value.compare("_")==0){
 				DE_type = UNDEFINED;   //Used to denote "_"
 			}else if(matchInteger(value)){
-				DE_type = STRING;
+				DE_type = STRING_INT;
 			}else{
 				return Synonym();  //error type mismatch
 			}
@@ -749,7 +749,7 @@ namespace QueryParser
 		}else if(node==REF_TYPE(entRef)){
 
 			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
-				DE_type = STRING;
+				DE_type = STRING_CHAR;
 			}else if(value.compare("_")==0){
 				DE_type = UNDEFINED;
 			}else if(synonymsMap.count(value) > 0){
@@ -765,11 +765,11 @@ namespace QueryParser
 		}else if(node==REF_TYPE(ref)){
 
 			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
-				DE_type = STRING;
+				DE_type = STRING_CHAR;
 			}else if(synonymsMap.count(value) > 0){
 				DE_type = synonymsMap.at(value);
 			}else if(matchInteger(value)){
-				DE_type = STRING;
+				DE_type = STRING_INT;
 			}else{
 
 				// it must be an attrRef
@@ -970,7 +970,7 @@ namespace QueryParser
 		//Build Query Tree
 		std::regex apostrophe("[\"]");
 		if (std::regex_match(peekBackwards(0),apostrophe)){
-			DE_type = STRING;
+			DE_type = STRING_CHAR;
 		}else if(pattern_variable.compare("_")==0){
 			DE_type = UNDEFINED;
 		}else if(synonymsMap.count(pattern_variable) > 0){
@@ -1040,7 +1040,7 @@ namespace QueryParser
 		if(pattern_patterns.compare("_")==0)
 			DE_type2 = UNDEFINED; //Used to denote "_"
 		else
-			DE_type2 = STRING;
+			DE_type2 = STRING_PATTERNS;
 
 
 		//Build Query Tree

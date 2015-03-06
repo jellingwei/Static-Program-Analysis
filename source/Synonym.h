@@ -11,7 +11,7 @@ using std::to_string;
 enum SYNONYM_TYPE
 {
 	PROCEDURE, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE, 
-	STRING,    //Used for constant args
+	STRING_CHAR, STRING_INT, STRING_PATTERNS, //Used to represent IDENT, INTEGER and expression-spec respectively
 	BOOLEAN,   //Used for select boolean clauses
 	UNDEFINED  //Used to denote "_"
 };

@@ -121,7 +121,7 @@ Five
 324 - 
 variable v; assign a;
 Select a such that Calls*("One", "Six") pattern a(v,_""_) with v.varName = "a"
-6, 12, 20
+none
 5000
 325 - 
 stmt s1, s2; assign a;
