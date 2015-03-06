@@ -266,7 +266,6 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
-	//TODO: Check for proc on LHS
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -275,7 +274,12 @@ namespace QueryEvaluator
 		vector<int> acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getModVarForStmt(valuesRHS[i]);
+			vector<int> stmts;
+			if (LHS.getType() == PROCEDURE) {
+				stmts = pkb.getModProcIndex(valuesRHS[i]);
+			} else {
+				stmts = pkb.getModStmtNum(valuesRHS[i]);
+			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				if (IntermediateValuesHandler::isValueExist(valuesLHS, stmts[j])) {
@@ -381,7 +385,12 @@ namespace QueryEvaluator
 		vector<int> acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getUsesStmtNum(valuesRHS[i]);
+			vector<int> stmts;
+			if (LHS.getType() == PROCEDURE) {
+				stmts = pkb.getUsesProcIndex(valuesRHS[i]);
+			} else {
+				stmts = pkb.getUsesStmtNum(valuesRHS[i]);
+			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				if (IntermediateValuesHandler::isValueExist(valuesLHS, stmts[j])) {
