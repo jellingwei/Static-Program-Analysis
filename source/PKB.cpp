@@ -789,9 +789,11 @@ vector<int> PKB::getCallsRhs() {
 
 // ModifiesTable methods
 
-bool PKB::initModifiesTable(int numVariables) {
+void PKB::initModifiesTable(int numVariables) {
+	if (numVariables <= 0) {
+		throw runtime_error("initModifiesTable: invalid number of variables");
+	}
 	modifiesTable->init(numVariables);
-	return true ;
 }
 
 /**
@@ -911,11 +913,11 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair() {
 
 // UsesTable methods
 
-bool PKB::initUsesTable(int numVariables) {
+void PKB::initUsesTable(int numVariables) {
 	if (numVariables <= 0) {
 		throw runtime_error("initUsesTable: invalid number of variables");
 	}
-	return usesTable->init(numVariables);
+	usesTable->init(numVariables);
 }
 
 /**

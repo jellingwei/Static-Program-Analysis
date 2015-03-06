@@ -14,12 +14,9 @@
 using namespace std;
 using namespace stdext;
 
-bool UsesTable::init(int numVariables) {
-	if (this->numVariables == numVariables) {
-		return false;
-	}
+//@todo change to bool
+void UsesTable::init(int numVariables) {
 	this->numVariables = numVariables;
-	return true;
 }
 
 bool UsesTable::setUses(int stmtNum, int varIndex) {
@@ -32,24 +29,24 @@ bool UsesTable::setUses(int stmtNum, int varIndex) {
 
 	//check if varIndexMap key stmtNum contains the variable
 	if (varIndexMap.count(stmtNum) > 0) {
-		vector<bool> varIndexList;
+		boost::dynamic_bitset<> varIndexList;
 
 		varIndexList = varIndexMap.at(stmtNum);
 
-		bool result = varIndexList.at(varIndex);
+		bool result = varIndexList[varIndex];
 		if (result) { // varIndex can be found already
 		   //@todo
 		} else {
 			varIndexList[varIndex] = true;
 			varIndexMap.erase(stmtNum);
-			varIndexMap.insert(pair<int, vector<bool>> (stmtNum, varIndexList));
+			varIndexMap.insert(pair<int, boost::dynamic_bitset<>> (stmtNum, varIndexList));
 		}
 
 	} else {
-		vector<bool> varIndexList(this->numVariables);
+		boost::dynamic_bitset<> varIndexList(this->numVariables);
 		auto position = varIndexList[varIndex];
 		position = true;
-		varIndexMap.insert(pair<int, vector<bool>> (stmtNum, varIndexList));
+		varIndexMap.insert(pair<int, boost::dynamic_bitset<>> (stmtNum, varIndexList));
 	}
 
 
@@ -81,7 +78,7 @@ bool UsesTable::isUses(int stmtNum, int varIndex) {
 		return false;
 	}
 
-	vector<bool> varIndexList;
+	boost::dynamic_bitset<> varIndexList;
 
 	if (varIndexMap.count(stmtNum) > 0) {
 		varIndexList = varIndexMap.at(stmtNum);
@@ -89,7 +86,7 @@ bool UsesTable::isUses(int stmtNum, int varIndex) {
 		return false;
 	}
 
-	bool result = varIndexMap.at(stmtNum).at(varIndex);
+	bool result = varIndexMap.at(stmtNum)[varIndex];
 	// TRUE if varindex is new in the table
 	return result; 
 }
@@ -120,11 +117,11 @@ vector<int> UsesTable::getUsesVarForStmt(int stmtNum) {
 		return result;
 	}
 
-	vector<bool> varIndexList = varIndexMap.at(stmtNum);
+	boost::dynamic_bitset<> varIndexList = varIndexMap.at(stmtNum);
 
 	vector<int> result;
 	for (int i = 0; i < numVariables; i++) {
-		if (varIndexList.at(i)) {
+		if (varIndexList[i]) {
 			result.push_back(i);
 		}
 	}
@@ -137,7 +134,7 @@ pair<vector<int>, vector<int>> UsesTable::getAllUsesPair() {
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
 		for (unsigned int i = 0; i < iter->second.size(); i++) {
 			result.first.push_back(iter->first);
-			result.second.push_back(iter->second.at(i));
+			result.second.push_back(iter->second[i]);
 		}
 		
 	}

@@ -14,7 +14,7 @@
 using namespace std;
 using namespace stdext;
 
-//@todo cange to bool
+//@todo change to bool
 void ModifiesTable::init(int numVariables) {
 	this->numVariables = numVariables;
 }

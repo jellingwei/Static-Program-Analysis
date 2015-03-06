@@ -12,7 +12,7 @@ using namespace std;
 
 class ModifiesTable {
 public:
-	void init(int);
+	void init(int numVariables);
 	//for statement numbers
 	bool setModifies(int stmtNum, int varIndex);
 	bool isModifies(int stmtNum, int varIndex);
