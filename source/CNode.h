@@ -14,6 +14,7 @@ using std::string;
 using namespace std;
 
 typedef boost::dynamic_bitset<> VARIABLES ;
+typedef unordered_map<int, int> VAR_TO_STATEMENT_MAP ;
 
 enum CNODE_TYPE
 {
@@ -35,6 +36,8 @@ public:
 	int getProcLineNumber();
 	CNODE_TYPE getNodeType();
 	bool isDummy();
+	VAR_TO_STATEMENT_MAP getReachingDefinitions();
+	VAR_TO_STATEMENT_MAP getFirstUseOfVariable();
 	
 	vector<CNode*>* getBefore();
 	void addBefore(CNode* node);
@@ -76,4 +79,7 @@ private:
 
 	TNode* _ASTref;
 	bool isEnd;
+
+	VAR_TO_STATEMENT_MAP _reachingDefinitions;
+	VAR_TO_STATEMENT_MAP _firstUseOfVariable;
 };
