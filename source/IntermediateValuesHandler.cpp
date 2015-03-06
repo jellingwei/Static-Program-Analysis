@@ -61,10 +61,10 @@ namespace IntermediateValuesHandler
 		}
 	}
 
-	void addAndProcessIntermediateSynonym(Synonym synonym) 
+	bool addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
 		if (synonym.getType() == UNDEFINED) {
-			return;
+			return allIntermediateValues.size() != 0;;
 		}
 
 		string name = synonym.getName();
@@ -96,18 +96,19 @@ namespace IntermediateValuesHandler
 			//Just do intersection with the existing intermediate values
 			intersectWithExistingValues(synonymIndex, synonym.getValues());
 		}
+		return allIntermediateValues.size() != 0;
 	}
 
-	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
+	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
 	{
 		if (LHS.getType() == UNDEFINED && RHS.getType() == UNDEFINED) {
-			return;
+			return allIntermediateValues.size() != 0;
 		} else if (LHS.getType() == UNDEFINED) {
 			addAndProcessIntermediateSynonym(RHS);
-			return;
+			return allIntermediateValues.size() != 0;
 		} else if (RHS.getType() == UNDEFINED) {
 			addAndProcessIntermediateSynonym(LHS);
-			return;
+			return allIntermediateValues.size() != 0;
 		}
 
 		//If it reaches here, it is two proper synonyms that require handling
@@ -131,6 +132,7 @@ namespace IntermediateValuesHandler
 			//Use both the values to intersect with the table
 			intersectWithExistingValues(indexLHS, LHS.getValues(), indexRHS, RHS.getValues());
 		}
+		return allIntermediateValues.size() != 0;
 	}
 
 
