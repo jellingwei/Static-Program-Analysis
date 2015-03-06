@@ -382,6 +382,10 @@ void PKBTest::testPKB()
 	
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(16, 17), lines in different procedures", false, pkb.isNextS(16, 17));
 
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next lhs", 23, (int)pkb.getNextLhs().size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next rhs", 23, (int)pkb.getNextRhs().size());
+
 	cout << "End TestPkb" << endl;
 }
 

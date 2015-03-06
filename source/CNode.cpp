@@ -24,6 +24,11 @@ CNode::CNode(CNODE_TYPE cfgNodeType, int procLineNum, CNode* header, TNode* ast)
 	_ASTref = ast;
 }
 
+
+bool CNode::isDummy() {
+	return _nodeType == EndIf_C;
+}
+
 /**
  * @return the program line number of the corresponding CNode.
  */

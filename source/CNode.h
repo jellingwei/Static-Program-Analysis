@@ -6,10 +6,14 @@
 #include <string>
 #include <utility>
 
+#include <boost\dynamic_bitset.hpp>
+
 #include "TNode.h"
 
 using std::string;
 using namespace std;
+
+typedef boost::dynamic_bitset<> VARIABLES ;
 
 enum CNODE_TYPE
 {
@@ -30,13 +34,16 @@ public:
 	
 	int getProcLineNumber();
 	CNODE_TYPE getNodeType();
+	bool isDummy();
 	
 	vector<CNode*>* getBefore();
 	void addBefore(CNode* node);
 	bool hasBefore();
+	VARIABLES getVariablesBefore();
 	vector<CNode*>* getAfter();
 	void addAfter(CNode* node);
 	bool hasAfter();
+	VARIABLES getVariablesAfter();
 
 	void setHeader(CNode* header);
 	CNode* getHeader();
@@ -45,10 +52,12 @@ public:
 	vector<CNode*>* getInside();
 	void addInside(CNode* node);
 	bool hasInside();
+	VARIABLES getVariablesInside();
 	//for If Else StmtLst
 	vector<CNode*>* getInside2();
 	void addInside2(CNode* node);
 	bool hasInside2();
+	VARIABLES getVariablesInside2();
 
 	TNode* getASTref();
 	void setEnd();
