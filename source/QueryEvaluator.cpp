@@ -215,7 +215,13 @@ namespace QueryEvaluator
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_CHAR) {
 			//RHS is the variable that is modified, find the statements
-			vector<int> stmts = pkb.getModStmtNum(pkb.getVarIndex(nameRHS));
+			vector<int> stmts;
+			if (typeLHS == PROCEDURE) {
+				stmts = pkb.getModProcIndex(pkb.getVarIndex(nameRHS));
+			} else {
+				stmts = pkb.getModStmtNum(pkb.getVarIndex(nameRHS));
+			}
+
 			if (stmts.size() == 0) {
 				return false;
 			}
@@ -327,7 +333,12 @@ namespace QueryEvaluator
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_CHAR) {
 			//RHS is the variable that is used, find the statements that uses it
-			vector<int> stmts = pkb.getUsesStmtNum(pkb.getVarIndex(nameRHS));
+			vector<int> stmts;
+			if (typeLHS == PROCEDURE) {
+				stmts = pkb.getUsesProcIndex(pkb.getVarIndex(nameRHS));
+			} else {
+				stmts = pkb.getUsesStmtNum(pkb.getVarIndex(nameRHS));
+			}
 			if (stmts.size() == 0) {
 				return false;
 			}
@@ -377,7 +388,6 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
-	//TODO: Check for proc on LHS
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -1035,10 +1045,14 @@ namespace QueryEvaluator
 			string arg1Value = LHS.getName();
 			string arg2Value = RHS.getName();
 			return arg1Value == arg2Value;
-		} else if (typeLHS == STRING_CHAR) {
+		} else if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
+			string arg1Value = LHS.getName();
+			string arg2Value = RHS.getName();
+			return arg1Value == arg2Value;
+		} else if (typeLHS == STRING_CHAR || typeLHS == STRING_INT) {
 			string arg1Value = LHS.getName();
 			return IntermediateValuesHandler::filterEqualValue(RHS, arg1Value);
-		} else if (typeRHS == STRING_PATTERNS) {
+		} else if (typeRHS == STRING_CHAR || typeRHS == STRING_INT) {
 			string arg2Value = RHS.getName();
 			return IntermediateValuesHandler::filterEqualValue(LHS, arg2Value);
 		} else {
