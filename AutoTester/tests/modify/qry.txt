@@ -88,47 +88,87 @@ stmt s; variable v;
 Select v such that Modifies(s, v)
 b,d,pork,chicken,duckrice,charsiew,a,beef,f,x,c,fries,buffet
 5000
-1010 - Valid assign that modify
+1010 - Valid assign that modify variable v
+assign a;
+Select a such that Modifies(a, "a")
+8,14
+5000
+1011 - Valid variable modified by assign n
+variable v;
+Select v such that Modifies(24, v)
+x
+5000
+1012 - Valid assign that modify
 assign a; variable v;
 Select a such that Modifies(a,v)
 1,12,13,14,16,17,2,21,23,24,26,3,30,31,33,34,35,37,39,40,5,6,8,9
 5000
-1011 - Valid variable that is modified by assign
+1013 - Valid variable that is modified by assign
 assign a; variable v;
 Select v such that Modifies(a,v)
 b,d,pork,chicken,duckrice,charsiew,a,beef,f,x,c,fries,buffet
 5000
-1012 - Valid if that modifies
+1014 - Valid if that modify variable v
+if i;
+Select i such that Modifies(i, "fries")
+27,28,20,10
+5000
+1015 - Valid variable modified by if n nest
+variable v;
+Select v such that Modifies(27, v)
+fries, b, buffet, pork, d, f, duckrice
+5000
+1016 - Valid if that modifies
 if i; variable v;
 Select i such that Modifies(i, v)
 10,20,27,28,32,36
 5000
-1013 - Valid variables modified by if nest
-variable v;
-Select v such that Modifies(27, v)
-fries,b,buffet,pork, d,f,duckrice
+1017 - Valid variables modified by if 
+variable v; if i;
+Select v such that Modifies(i, v)
+a,b,beef,buffet,c,charsiew,d,duckrice,f,fries,pork,x
 5000
-1014 - Valid while that modifies
+1018 - Valid while that modify variable v
+while w;
+Select w such that Modifies(w, "fries")
+29,18,19,4
+5000
+1019 - Valid variable modified by while n nest
+variable v;
+Select v such that Modifies(18, v)
+f, pork,x,c,fries, b, buffet, d, duckrice
+5000
+1020 - Valid while that modifies
 while w; variable v;
 Select w such that Modifies(w, v)
 18,19,22,29,38,4
 5000
-1015 - Valid variables modified by while nest
+1021 - Valid variables modified by while 
 variable v;
 Select v such that Modifies(18, v)
-f,pork,x,c,fries, buffet,d,duckrice,b
+b,buffet,c,d,duckrice,f,fries,pork,x
 5000
-1016 - Valid prog_line that modifies variable
+1022 - Valid prog_line that modify variable v
+prog_line l;
+Select l such that Modifies(l, "b")
+31,1,16,10,11,15,18,19,20,25,27,28,4,7
+5000
+1023 - Valid variable modified by prog_line n 
+variable v;
+Select v such that Modifies(22, v)
+pork,x
+5000
+1024 - Valid prog_line that modifies variable
 prog_line l; variable v;
 Select l such that Modifies(l, v)
 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40
 5000
-1017 - Valid variables modified by prog_line
+1025 - Valid variables modified by prog_line
 prog_line l; variable v;
 Select v such that Modifies(l, v)
 b,d,pork,chicken,duckrice,charsiew,a,beef,f,x,c,fries,buffet
 5000
-1018 - Valid stmt wild card variable
+1026 - Valid stmt wild card variable
 stmt s;
 Select s such that Modifies(s, _)
 1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,5,6,7,8,9
