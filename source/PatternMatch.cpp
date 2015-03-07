@@ -8,10 +8,10 @@
 #include "PatternMatch.h"
 
 using namespace std;
-bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact);
-bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact);
-vector<int> SingleVariableConstant(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact);
-bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, string isExact);
+bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact);
+bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact);
+vector<int> SingleVariableConstant(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact);
+bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, bool isExact);
 
 PatternMatch::PatternMatch()
 {}
@@ -21,7 +21,7 @@ PatternMatch::PatternMatch()
  * @return a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node.
  * @param Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
-vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
+vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact)
 {
 	PKB pkb = PKB::getInstance();
 	vector<int> assignTable = pkb.getStmtNumForType("assign");
@@ -40,7 +40,7 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
 			vector<int> tempResults = SingleVariableConstant(_rightChildNodeA, _rootNodeQ, isExact);
 			results.insert( results.end(), tempResults.begin(), tempResults.end() );
 			
-			if(isExact.compare("*") != 0) break;
+			if(!isExact) break;
 		}
 		else {
 			if(checkPatternMatchAssign(_rightChildNodeA, _rootNodeQ, isExact))
@@ -49,7 +49,7 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
 			}
 			else 
 			{
-				if(isExact.compare("*") != 0 && _rightChildNodeA->getChildren()->size() > 0) {
+				if(!isExact && _rightChildNodeA->getChildren()->size() > 0) {
 					if(recurseChecking(_rightChildNodeA->getChildren(), _rootNodeQ, isExact))
 						results.push_back(_rightChildNodeA->getStmtNumber());
 				}
@@ -65,7 +65,7 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, string isExact)
  * @return true if Assignment contains Pattern
  * @param Root Node of Assignment sub-tree, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
-bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
+bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact)
 {
 	TNODE_TYPE plusType = Plus, minusType = Minus, timesType = Times;
 	
@@ -91,7 +91,7 @@ bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, string 
  * @return true if a valid "path" (nodes of same value and type) in both AST and queryAST is found
  * @param Root Node of Assignment sub-tree, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
-bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
+bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact)
 {
 	TNode* _currentNodeQ; TNode* _currentNodeA;
 	int currentChild = 0;
@@ -136,7 +136,7 @@ bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
 			}
 			else
 			{
-				if(isExact.compare("*") != 0) {
+				if(!isExact) {
 					return recurseChecking(_rightChildNodeA->getChildren(), _rootNodeQ, isExact);
 				}
 				return false; 
@@ -159,7 +159,7 @@ bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
 	}
 	else if(caSize>0 && queueQEmpty)
 	{
-		if(isExact.compare("*") != 0)
+		if(!isExact)
 		{
 			if((_currentNodeQ->getNodeType() == _currentNodeA->getNodeType()) && (_currentNodeQ->getNodeValueIdx() == _currentNodeA->getNodeValueIdx()))
 			{
@@ -188,7 +188,7 @@ bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, string isExact)
  * @return true if Assignment contains Pattern
  * @param Children nodes of current Root node in a Vector<>, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
-bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, string isExact) {
+bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, bool isExact) {
 
 		TNode* _GrandChildNodeAA = NULL;
 		TNode* _GrandChildNodeAB = NULL;
@@ -226,13 +226,13 @@ bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, strin
  * @return a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node.
  * @param Root Node of Assignment sub-tree, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
-vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, string isExact) {
+vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, bool isExact) {
 	TNODE_TYPE constType = Constant, varType = Variable;
 	vector<int> tempResults, results;
 	PKB pkb = PKB::getInstance();
 
 	//Short-hand check by ExpressionParser if particular node in _rootNodeQ already exist in AST while building queryAST
-	if(isExact.compare("*") == 0)
+	if(isExact)
 	{
 		if(_rightChildNodeA->getNodeType()==Constant && _rootNodeQ->getNodeType()==Constant)
 		{

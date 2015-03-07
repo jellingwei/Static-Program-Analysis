@@ -159,8 +159,7 @@ bool is_number(const std::string& s)
  * @param RHS to match the expression query with a suitable subtree.
  */
 vector<int> AST::patternMatchAssign(string RHS) {
-//cout << "received [" << RHS << "]" << endl;
-	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());		//remove whitespaces
+	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());			//remove whitespaces
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), '\"'), RHS.end());		//remove ""
 
 	int underscore = RHS.find('_');
@@ -176,14 +175,14 @@ vector<int> AST::patternMatchAssign(string RHS) {
 	}
 
 	//@todo - change to boolean
-	string isExact;
-	if(matchExact) isExact = "*";
-	else isExact = ",";
+	bool isExact;
+	if(matchExact) isExact = true;
+	else isExact = false;
 	
 	vector<string> vRHS;
 	vector<int> results;
 	PKB pkb = PKB::getInstance();
-//cout << "[" << RHS << "]" << endl;
+
 	if(RHS.empty()) {
 		results = pkb.getStmtNumForType("assign");
 		return results;
@@ -214,13 +213,6 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		} 
 	}
 
-	/*cout << "inside vRHS " << endl;
-	for (int i=0; i<vRHS.size();i++)
-		cout << "[" << vRHS[i] << "]" << " ";
-	cout << " " << endl;
-cout << "myvector has " << vRHS.size() << " elements" << endl;
-cout << "=======" << endl;*/
-
 	try {
 		ExpressionParser exprParser;
 		TNode* top = exprParser.parseExpressionForQuerying(vRHS);
@@ -230,15 +222,6 @@ cout << "=======" << endl;*/
 		return results;
 	}
 	
-//cout << "rQ is " << top->getNodeType() << endl;
-	//vector<int> temp = pattern.PatternMatchAssign(top, isExact);
-	
-	
-/*cout << "ok " << endl;
-	for(int i =0; i< results.size(); i++)
-		cout << "[" << results[i] << "] ";
-	cout << " " << endl;
-	cout << "=======" << endl;*/
 	return results;
 }
 
