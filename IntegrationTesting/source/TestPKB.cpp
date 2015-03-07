@@ -252,9 +252,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'u + (4 * z)'_) - Variable Dont Exist", 0, (int)pkb.patternMatchAssign("_\"u + (4 * z)\"_").size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '')", 12, (int)pkb.patternMatchAssign("\"\"").size());
+	// Query Validator will check
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _''_)", 12, (int)pkb.patternMatchAssign("_\"\"_").size());
 
-	// New Pattern Design
+	// PatternMatch
 	cout << "new pattern design" << endl;
 	const char* args[] = {"d", "+", "f"};
 	vector<string> argVector(args, args + 3);
@@ -297,13 +298,13 @@ void PKBTest::testPKB()
 
 	// Pattern for if 
 	cout << "pattern for if" << endl;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _)", 12, pkb.patternMatchIf(" b ").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('c', _)", 13, pkb.patternMatchIf("c").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('unusedvar', _)", 0, (int)pkb.patternMatchIf("unusedvar").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _, _)", 12, pkb.patternMatchIf(" b ").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('c', _, _)", 13, pkb.patternMatchIf("c").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('unusedvar', _, _)", 0, (int)pkb.patternMatchIf("unusedvar").size());
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 12", pkb.getVarIndex("b"), pkb.getControlVariable(12));
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 8", pkb.getVarIndex("c"), pkb.getControlVariable(13));
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum which is not a if statement", -1, pkb.getControlVariable(14));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _, _) given stmtnum 12", pkb.getVarIndex("b"), pkb.getControlVariable(12));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _, _) given stmtnum 8", pkb.getVarIndex("c"), pkb.getControlVariable(13));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _, _) given stmtnum which is not a if statement", -1, pkb.getControlVariable(14));
 
 	// All pairs for Follows
 	pair<vector<int>, vector<int>> allFollows = pkb.getAllFollowsPairs(false);
