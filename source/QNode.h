@@ -17,7 +17,7 @@ enum QNODE_TYPE
 	// Query QNODE_TYPEs
 	Affects, AffectsS,
 	Next, NextS,
-	Modifies,
+	Modifies, ModifiesS,
 	Calls, CallsS,
 	Uses, UsesS, 
 	Parent, ParentS, 

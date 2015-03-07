@@ -43,9 +43,9 @@ namespace QueryParser
 	vector<string>::iterator bufferIter;
 	string currentParsedLine;
 
-	string attrName[] = {"procName", "varName", "value", "stmt#"};
-	string designEntities[] = {"procedure", "stmtLst", "stmt","assign", "call", "while", "if", "variable","constant","prog_line", "plus", "minus", "times"};
-	string relRef[] = {"Modifies", "Uses","Calls", "Calls*", "Parent", "Parent*", "Follows", "Follows*", "Next", "Next*", "Affects", "Affects*"};
+	string attrName[] = { "procName", "varName", "value", "stmt#" };
+	string designEntities[] = { "procedure", "stmtLst", "stmt", "assign", "call", "while", "if", "variable", "constant", "prog_line", "plus", "minus", "times"};
+	string relRef[] = { "Modifies", "Modifies*", "Uses", "Uses*", "Calls", "Calls*", "Parent", "Parent*", "Follows", "Follows*", "Next", "Next*", "Affects", "Affects*"};
 	QueryTree* myQueryTree;
 	unordered_map<string, SYNONYM_TYPE> synonymsMap; //key: synonyms
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
@@ -196,64 +196,72 @@ namespace QueryParser
 		//populate nodetypeMap
 		pair<string,QNODE_TYPE> pairNodeType1 ("Modifies", QNODE_TYPE(Modifies));
 		nodetypeMap.insert(pairNodeType1);
-		pair<string,QNODE_TYPE> pairNodeType2 ("Uses",QNODE_TYPE(Uses));
+		pair<string,QNODE_TYPE> pairNodeType2 ("Modifies*", QNODE_TYPE(ModifiesS));
 		nodetypeMap.insert(pairNodeType2);
-		pair<string,QNODE_TYPE> pairNodeType3 ("Calls",QNODE_TYPE(Calls));
+		pair<string,QNODE_TYPE> pairNodeType3 ("Uses",QNODE_TYPE(Uses));
 		nodetypeMap.insert(pairNodeType3);
-		pair<string,QNODE_TYPE> pairNodeType4 ("Calls*",QNODE_TYPE(CallsS));
+		pair<string,QNODE_TYPE> pairNodeType4 ("Uses*",QNODE_TYPE(UsesS));
 		nodetypeMap.insert(pairNodeType4);
-		pair<string,QNODE_TYPE> pairNodeType5 ("Parent",QNODE_TYPE(Parent));
+		pair<string,QNODE_TYPE> pairNodeType5 ("Calls",QNODE_TYPE(Calls));
 		nodetypeMap.insert(pairNodeType5);
-		pair<string,QNODE_TYPE> pairNodeType6 ("Parent*",QNODE_TYPE(ParentS));
+		pair<string,QNODE_TYPE> pairNodeType6 ("Calls*",QNODE_TYPE(CallsS));
 		nodetypeMap.insert(pairNodeType6);
-		pair<string,QNODE_TYPE> pairNodeType7 ("Follows",QNODE_TYPE(Follows));
+		pair<string,QNODE_TYPE> pairNodeType7 ("Parent",QNODE_TYPE(Parent));
 		nodetypeMap.insert(pairNodeType7);
-		pair<string,QNODE_TYPE> pairNodeType8 ("Follows*",QNODE_TYPE(FollowsS));
+		pair<string,QNODE_TYPE> pairNodeType8 ("Parent*",QNODE_TYPE(ParentS));
 		nodetypeMap.insert(pairNodeType8);
-		pair<string,QNODE_TYPE> pairNodeType9 ("Next",QNODE_TYPE(Next));
+		pair<string,QNODE_TYPE> pairNodeType9 ("Follows",QNODE_TYPE(Follows));
 		nodetypeMap.insert(pairNodeType9);
-		pair<string,QNODE_TYPE> pairNodeType10 ("Next*",QNODE_TYPE(NextS));
+		pair<string,QNODE_TYPE> pairNodeType10 ("Follows*",QNODE_TYPE(FollowsS));
 		nodetypeMap.insert(pairNodeType10);
-		pair<string,QNODE_TYPE> pairNodeType11 ("Affects",QNODE_TYPE(Affects));
+		pair<string,QNODE_TYPE> pairNodeType11 ("Next",QNODE_TYPE(Next));
 		nodetypeMap.insert(pairNodeType11);
-		pair<string,QNODE_TYPE> pairNodeType12 ("Affects*",QNODE_TYPE(AffectsS));
+		pair<string,QNODE_TYPE> pairNodeType12 ("Next*",QNODE_TYPE(NextS));
 		nodetypeMap.insert(pairNodeType12);
+		pair<string,QNODE_TYPE> pairNodeType13 ("Affects",QNODE_TYPE(Affects));
+		nodetypeMap.insert(pairNodeType13);
+		pair<string,QNODE_TYPE> pairNodeType14 ("Affects*",QNODE_TYPE(AffectsS));
+		nodetypeMap.insert(pairNodeType14);
 
 
 		//populate relRefMap
-		
-		auto node1 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(entRef));
-		auto node2 = make_tuple(REF_TYPE(entRef), REF_TYPE(entRef));
+		auto node1 = make_tuple(REF_TYPE(entRef), REF_TYPE(entRef)); 
+		auto node2 = make_tuple(REF_TYPE(lineRef), REF_TYPE(lineRef)); 
 		auto node3 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(stmtRef));
-		auto node4 = make_tuple(REF_TYPE(lineRef), REF_TYPE(lineRef));
-		auto node5 = make_tuple(REF_TYPE(ref), REF_TYPE(ref));
+		auto node4 = make_tuple(REF_TYPE(entRef), REF_TYPE(varRef));  
+		auto node5 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(varRef)); 
+		auto node6 = make_tuple(REF_TYPE(ref), REF_TYPE(ref));
 
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode1 ("Modifies", node1);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode1 ("Modifies", node4);
 		relRefMap.insert(pairRelNode1);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode2 ("Uses", node1);
-		relRefMap.insert(pairRelNode2);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode3 ("Calls", node2);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode2 ("Modifies*", node5);
+		relRefMap.insert(pairRelNode2); 
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode3 ("Uses", node4);
 		relRefMap.insert(pairRelNode3);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode4 ("Calls*", node2);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode4 ("Uses*", node5);
 		relRefMap.insert(pairRelNode4);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode5 ("Parent", node3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode5 ("Calls", node1);
 		relRefMap.insert(pairRelNode5);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode6 ("Parent*", node3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode6 ("Calls*", node1);
 		relRefMap.insert(pairRelNode6);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode7 ("Follows", node3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode7 ("Parent", node3);
 		relRefMap.insert(pairRelNode7);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode8 ("Follows*", node3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode8 ("Parent*", node3);
 		relRefMap.insert(pairRelNode8);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode9 ("Next", node4);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode9 ("Follows", node3);
 		relRefMap.insert(pairRelNode9);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode10 ("Next*", node4);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode10 ("Follows*", node3);
 		relRefMap.insert(pairRelNode10);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode11 ("Affects", node3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode11 ("Next", node2);
 		relRefMap.insert(pairRelNode11);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode12 ("Affects*", node3);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode12 ("Next*", node2);
 		relRefMap.insert(pairRelNode12);
-		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode13 ("attrCompare", node5);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode13 ("Affects", node3);
 		relRefMap.insert(pairRelNode13);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode14 ("Affects*", node3);
+		relRefMap.insert(pairRelNode14);
+		pair<string,tuple<REF_TYPE,REF_TYPE>> pairRelNode15 ("attrCompare", node6);
+		relRefMap.insert(pairRelNode15);
 
 		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType1 ("procName", SYNONYM_ATTRIBUTE(procName));
 		attrNameMap.insert(pairAttrNameType1);
@@ -416,6 +424,8 @@ namespace QueryParser
 			return true;
 		else if(matchSynonymAndIdent(token, true))
 			return true;
+		else if(matchInteger(token))
+			return true;  
 	
 		#ifdef DEBUG
 			throw exception("QueryParser error: at matchEntRef");
@@ -424,6 +434,24 @@ namespace QueryParser
 		return false;
 	}
 
+	/**
+	 * Matches if the given token follows the naming convention of entity reference.
+	 */
+	bool matchVarRef(string token)
+	{
+		if(matchSynonymAndIdent(token, false))
+			return true;
+		else if(matchUnderscore(token))
+			return true;
+		else if(matchSynonymAndIdent(token, true))
+			return true;
+	
+		#ifdef DEBUG
+			throw exception("QueryParser error: at matchEntRef");
+		#endif
+
+		return false;
+	}
 
 	/**
 	 * Matches if the given token follows the naming convention of a reference.
@@ -534,6 +562,28 @@ namespace QueryParser
 		}
 
 		return matchEntRef(nextToken) ? returnToken: "";
+	}
+
+	/**
+	 * Parses the next token and check if is a variable reference.
+	 * @return an empty string if parsing fails
+	 */
+	string parseVarRef()
+	{
+		string nextToken = "";
+		string returnToken = "";
+
+		if(parseApostrophe()){
+			nextToken = peekBackwards(0);
+			nextToken += parseToken();
+			returnToken = peekBackwards(0);
+			nextToken += parseToken();
+		}else{
+			nextToken = peekBackwards(0);
+			returnToken = nextToken;
+		}
+
+		return matchVarRef(nextToken) ? returnToken: "";
 	}
 
 	/**
@@ -693,6 +743,9 @@ namespace QueryParser
 		if (nodetypeMap.count(relRef) > 0){
 			nodeType = nodetypeMap.at(relRef);
 		}else{
+			#ifdef DEBUG
+				throw exception("QueryParser error: buildQueryTree, nodeTypeMap error");
+			#endif
 			return false;
 		}
 
@@ -754,8 +807,24 @@ namespace QueryParser
 				DE_type = UNDEFINED;
 			}else if(synonymsMap.count(value) > 0){
 				DE_type = synonymsMap.at(value);
+			}else if(matchInteger(value)){
+				DE_type = STRING_INT;
+			}else{
+				return Synonym();  //error type mismatch
 			}
-			else{
+
+			//build Synonym and return
+			return Synonym(DE_type,value);
+
+		}else if(node==REF_TYPE(varRef)){
+
+			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
+				DE_type = STRING_CHAR;
+			}else if(value.compare("_")==0){
+				DE_type = UNDEFINED;
+			}else if(synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value);
+			}else{
 				return Synonym();  //error type mismatch
 			}
 
@@ -838,6 +907,10 @@ namespace QueryParser
 
 			entRef_value = parseEntRef();
 		
+		}else if(node==REF_TYPE(varRef)){
+
+			entRef_value = parseVarRef();  
+
 		}//else do nothing and an empty string is passed.
 
 
@@ -957,7 +1030,7 @@ namespace QueryParser
 			return false;
 		} 
 
-		string pattern_variable = parseEntRef();
+		string pattern_variable = parseVarRef();
 		if (pattern_variable.compare("")==0){
 			#ifdef DEBUG
 				throw exception("QueryParser error: parsePatternClause(), invalid entRef arg1.");
@@ -1124,7 +1197,8 @@ namespace QueryParser
 			if (!res){return false;}
 
 			res = parseSuchThatClause();
-			if (!res){return false;}
+			if (!res){
+				return false;}
 
 			while(peekInToTheNextToken().compare("and")==0){
 				
