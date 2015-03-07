@@ -12,7 +12,6 @@ using namespace std;
 
 CFG::CFG(TNode* procNode) {
 	_procNode = new CNode(Proc_C, 0, NULL, procNode);
-	//allNodes.push_back(_procNode);
 
 	_endNode = new CNode(EndProc_C, 0, NULL, NULL);
 	_endNode->setEnd();
@@ -144,7 +143,7 @@ bool CFG::isInsideNode(CNode* header, CNode* inside) {
 * @param header  the container statement for if statement
 * @return TRUE if header has a stmtLst. FALSE if header does not have a stmtLst. 
 */
-bool CFG::hasInside2(CNode* header){
+bool CFG::hasInsideElse(CNode* header){
 	return header->hasInside2();
 }
 
@@ -154,7 +153,7 @@ bool CFG::hasInside2(CNode* header){
 * @return the total number of CNodes inside the 'else' section of the if statement header.
 * @exception exception if header is NULL.
 */
-int CFG::getInside2Size(CNode* header) {
+int CFG::getInsideElseSize(CNode* header) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -170,7 +169,7 @@ int CFG::getInside2Size(CNode* header) {
 * @return a list of all the CNodes inside the 'else' section of the if statement header.
 * @exception exception if header is NULL.
 */
-vector<CNode*>* CFG::getInside2Nodes(CNode* header) {
+vector<CNode*>* CFG::getInsideElseNodes(CNode* header) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -185,7 +184,7 @@ vector<CNode*>* CFG::getInside2Nodes(CNode* header) {
 * @return TRUE if the if statement, header, contains the CNode, inside. 
 *		  FALSE if the if statement, header, does not contain the CNode, inside.
 */
-bool CFG::isInside2Node(CNode* header, CNode* inside) {
+bool CFG::isInsideElseNode(CNode* header, CNode* inside) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}

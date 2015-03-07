@@ -25,10 +25,10 @@ class CFG {
 		bool isInsideNode(CNode* parent, CNode* child);
 
 		//use for If Else StmtLst
-		bool hasInside2(CNode* header);
-		int getInside2Size(CNode* header);	
-		vector<CNode*>* getInside2Nodes(CNode* header);
-		bool isInside2Node(CNode* parent, CNode* child);
+		bool hasInsideElse(CNode* header);
+		int getInsideElseSize(CNode* header);	
+		vector<CNode*>* getInsideElseNodes(CNode* header);
+		bool isInsideElseNode(CNode* parent, CNode* child);
 
 		bool hasBefore(CNode* curr);
 		int getBeforeSize(CNode* curr);	
@@ -41,8 +41,6 @@ class CFG {
 		bool isAfterNode(CNode* curr, CNode* after);
 
 		bool isExists(CNode* node);
-		//CNode* getLastImpt();
-		//int getSize();
 
 		TNode* getASTref(CNode* node);
 

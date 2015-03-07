@@ -15,11 +15,7 @@ using namespace std;
 #include "PatternMatch.h"
 
 AST::AST() {
-	//*TNode* nullNode = createTNode(Procedure, 0, 0);
-	//*_rootNode = createTNode(StmtLst, 0, 0);
-	//*createLink(Child, nullNode, _rootNode);
 	_rootNode = createTNode(Program, 0, 0);
-
 }
 
 TNode* AST::getRoot() {
@@ -35,7 +31,7 @@ TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 	}
 
 	TNode* temp = new TNode(ast_node_type, stmtNo, idx);
-	//if (ast_node_type == Assign || ast_node_type == StmtLst || ast_node_type == While) _lastImpt = temp;
+
 	allNodes.push_back(temp);
 	return temp;
 }
@@ -87,7 +83,6 @@ int AST::getChildrenSize(TNode* parent) {
 	}
 
 	TNode& temp = *parent;
-	//return temp.TNode::getChildren().size();
 	vector<TNode*> *pq = temp.getChildren();
 	return pq->size();
 }
@@ -102,7 +97,6 @@ vector<TNode*>* AST::getChildrenNode(TNode* parent) {
 		throw exception("AST error: TNode* not referenced");
 	}
 
-	//TNode& par = *parent;
 	return parent->getChildren();
 }
 
@@ -174,7 +168,6 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		}
 	}
 
-	//@todo - change to boolean
 	bool isExact;
 	if(matchExact) isExact = true;
 	else isExact = false;
