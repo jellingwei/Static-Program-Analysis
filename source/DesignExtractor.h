@@ -5,6 +5,11 @@ using std::string;
 using std::vector;
 #include "TNode.h"
 
+/**
+ * The DesignExtractor handles the setting of information that could not be set during parsing.
+ * For the functions in the DesignExtractor, at any point where a failure occurs, an exception will be thrown
+ * therefore the functions for modifying data in the PKB should not return any value.
+ */
 class DesignExtractor {
 	public:
 		DesignExtractor();
@@ -16,5 +21,7 @@ class DesignExtractor {
 		void setUsesForContainerStatements();
 		
 		bool constructCfg();
+		void precomputeInformationForAffects();
 		void constructStatisticsTable();
+
 };

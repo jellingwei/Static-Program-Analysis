@@ -21,6 +21,7 @@
 
 using namespace std;
 typedef short PROC;
+typedef int STMT;
 
 class TNode;
 
@@ -104,7 +105,7 @@ public:
 	bool insertStmt(int, string, TNode*, int);
 	string getType(int);
 	vector<int> getStmtNumForType(string);
-	vector<int> getStmtNumForType(SYNONYM_TYPE);
+	vector<STMT> getStmtNumForType(SYNONYM_TYPE);
 	bool isAssign(int);
 	bool isWhile(int);
 	bool isIf(int);
@@ -148,6 +149,8 @@ public:
 	pair<vector<int>, vector<int>> getAllModPair();
 	vector<int> getModifiesLhs();
 	vector<int> getModifiesRhs();
+
+	boost::dynamic_bitset<> getModVarInBitvectorForStmt(int stmtNum);
 
 	bool setModifiesProc(int procIndex, int varIndex);
 	bool isModifiesProc(int procIndex, int varIndex);

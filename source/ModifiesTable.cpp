@@ -130,6 +130,14 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum) {
 	return result;
 }
 
+boost::dynamic_bitset<> ModifiesTable::getModVarInBitvectorForStmt(int stmtNum) {
+
+	if (varIndexMap.count(stmtNum) == 0) {
+		throw logic_error("ModifiesTable: stmt is not a key in ModifiesTable");
+	}
+
+	return varIndexMap.at(stmtNum);
+}
 
 pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() {
 	pair<vector<int>, vector<int>> result;

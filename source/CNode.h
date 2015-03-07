@@ -37,16 +37,18 @@ public:
 	CNODE_TYPE getNodeType();
 	bool isDummy();
 	VAR_TO_STATEMENT_MAP getReachingDefinitions();
+	void setReachingDefinitions(VAR_TO_STATEMENT_MAP);
 	VAR_TO_STATEMENT_MAP getFirstUseOfVariable();
+	void setFirstUseOfVariable(VAR_TO_STATEMENT_MAP);
 	
 	vector<CNode*>* getBefore();
 	void addBefore(CNode* node);
 	bool hasBefore();
-	VARIABLES getVariablesBefore();
+	
 	vector<CNode*>* getAfter();
 	void addAfter(CNode* node);
 	bool hasAfter();
-	VARIABLES getVariablesAfter();
+	
 
 	void setHeader(CNode* header);
 	CNode* getHeader();
@@ -56,11 +58,14 @@ public:
 	void addInside(CNode* node);
 	bool hasInside();
 	VARIABLES getVariablesInside();
+	void setVariablesInside(VARIABLES);
+
 	//for If Else StmtLst
 	vector<CNode*>* getInside2();
 	void addInside2(CNode* node);
 	bool hasInside2();
 	VARIABLES getVariablesInside2();
+	void setVariablesInside2(VARIABLES);
 
 	TNode* getASTref();
 	void setEnd();
@@ -82,4 +87,6 @@ private:
 
 	VAR_TO_STATEMENT_MAP _reachingDefinitions;
 	VAR_TO_STATEMENT_MAP _firstUseOfVariable;
+	VARIABLES _variablesInside;
+	VARIABLES _variablesInside2;
 };

@@ -839,6 +839,10 @@ vector<int> PKB::getModVarForStmt(int stmtNum) {
 	return modifiesTable->getModVarForStmt(stmtNum);
 }
 
+boost::dynamic_bitset<> PKB::getModVarInBitvectorForStmt(int stmtNum) {
+	return modifiesTable->getModVarInBitvectorForStmt(stmtNum);
+}
+
 /**
 * @return all pairs of statement numbers, stmtNum, and variable indexes, varIndex, where Modifies(stmtNum, varIndex) is satisfied.
 */

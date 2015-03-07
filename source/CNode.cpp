@@ -161,3 +161,31 @@ bool CNode::getEnd()
 {
 	return isEnd;
 }
+
+VARIABLES CNode::getVariablesInside2() {
+	return _variablesInside2;
+}
+void CNode::setVariablesInside2(VARIABLES variables) {
+	_variablesInside2 = variables;
+}
+
+VARIABLES CNode::getVariablesInside() {
+	return _variablesInside;
+}
+void CNode::setVariablesInside(VARIABLES variables) {
+	_variablesInside = variables;
+}
+
+VAR_TO_STATEMENT_MAP CNode::getReachingDefinitions() {
+	return _reachingDefinitions;
+}
+void CNode::setReachingDefinitions(VAR_TO_STATEMENT_MAP varStmtMap) {
+	_reachingDefinitions = varStmtMap;
+}
+
+VAR_TO_STATEMENT_MAP CNode::getFirstUseOfVariable() {
+	return _firstUseOfVariable;
+}
+void CNode::setFirstUseOfVariable(VAR_TO_STATEMENT_MAP varStmtMap) {
+	_firstUseOfVariable = varStmtMap;
+}

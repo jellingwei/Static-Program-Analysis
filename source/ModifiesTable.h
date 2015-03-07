@@ -18,6 +18,7 @@ public:
 	bool isModifies(int stmtNum, int varIndex);
 	vector<int> getModStmtNum(int varIndex);
 	vector<int> getModVarForStmt(int stmtNum);
+	boost::dynamic_bitset<> getModVarInBitvectorForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllModPair();
 	vector<int> getLhs();
 	vector<int> getRhs();

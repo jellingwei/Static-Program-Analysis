@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <numeric>
 #include <algorithm>
+#include <queue>
 #include <cassert>
 
 #include "DesignExtractor.h"
@@ -26,6 +27,7 @@ DesignExtractor::DesignExtractor() {
 	pkb.initUsesTable(pkb.getAllVarIndex().size() + 1);
 	pkb.initModifiesTable(pkb.getAllVarIndex().size() + 1);
 }
+
 
 vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set<int>* visited) {
 	PKB pkb = PKB::getInstance();
@@ -61,6 +63,7 @@ vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set
 	return result;
 }
 
+
 /**
  * Return the called procedures in topological order
  */
@@ -83,6 +86,7 @@ vector<int> getCallsInTopologicalOrder() {
 
 	return result;
 }
+
 
 class CallComparator {
 public:
@@ -109,6 +113,7 @@ private:
 	vector<int> topoOrder;
 };
 
+
 /**
  * Sorts the call statements in topological ordering
  */
@@ -132,6 +137,7 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 	
 	return callStatementNodes;
 }
+
 
 /**
  * For the input call statements nodes, set Modifies for them as well as all their ancestors
@@ -166,6 +172,7 @@ void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
 		}
 	}
 }
+
 
 /**
  * For the input call statements nodes, set Uses for them as well as all their ancestors.
@@ -234,6 +241,7 @@ CNode* createNextNode(TNode* nextStmt, CFG* cfg, CNode* header = NULL) {
 	return nextCNode;
 }
 
+
 CNode* createDummyEndIfNode(CFG* cfg, TNode* ifStmtListNode, CNode* lastNodeInIf, CNode* lastNodeInElse, CNode* curCNode) {
 	CNode* IfEndNode = cfg->createCNode(EndIf_C, 
 										NULL,
@@ -250,6 +258,7 @@ CNode* createDummyEndIfNode(CFG* cfg, TNode* ifStmtListNode, CNode* lastNodeInIf
 	}
 	return IfEndNode;
 }
+
 
 /**
  * Construct cfg for a stmtlist. 
@@ -345,6 +354,7 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg,
 	return curCNode;
 }
 
+
 /**
  * Build Control Flow Graph
  */
@@ -373,9 +383,11 @@ bool DesignExtractor::constructCfg() {
 	return true;
 }
 
+
 void DesignExtractor::constructStatisticsTable() {
 	throw exception("Not implemented yet");
 }
+
 
 /**
  * Sets Modifies for assignment statements, and propagate the changes to their ancestors
@@ -407,6 +419,7 @@ void DesignExtractor::setModifiesForAssignmentStatements() {
 	}
 }
 
+
 vector<int> obtainVarUsedInExpression(TNode* node) {
 	vector<int> varUsed;
 
@@ -431,6 +444,7 @@ vector<int> obtainVarUsedInExpression(TNode* node) {
 	}
 	return varUsed;
 }
+
 
 /**
  * Sets Uses for assignment statements, and propagate the changes to their ancestors
@@ -464,6 +478,7 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 	}
 }
 
+
 /**
  * Sets Uses for While and If statements, and propagate the changes to their ancestors
  */
@@ -496,4 +511,95 @@ void DesignExtractor::setUsesForContainerStatements() {
 			pkb.setUses(stmtNumber, varIndex);
 		}
 	}
+}
+
+class CompareProglines {
+    public:
+    bool operator() (CNode& node1, CNode& node2) { 
+       return node1.getProcLineNumber() < node1.getProcLineNumber(); 
+    }
+}
+
+class ReverseCompareProglines {
+    public:
+    bool operator() (CNode& node1, CNode& node2) { 
+       return node1.getProcLineNumber() > node1.getProcLineNumber(); 
+    }
+}
+
+/**
+ * Traverse through the cfg using dijkstra, with progline numbers as priority, while maintaining the values for the definitions.
+ */
+void traverseThroughCfg(CNode startNode) {
+	PKB pkb = PKB::getInstance();
+	vector<int> result;
+	
+	priority_queue<CNode, vector<CNode>, CompareProglines> frontier;
+ 
+	set<int> visited;
+	frontier.push(startNode);
+
+	while (!frontier.empty()) {
+		CNode curNode = frontier.top(); frontier.pop();
+		result.push_back(curNode.getProcLineNumber());
+
+		// add to frontier
+		vector<int> intermediateNodes = pkb.getNextAfter(curNode.getProcLineNumber(), false);
+		for (auto iter = intermediateNodes.begin(); iter != intermediateNodes.end(); ++iter) {
+			CNode* nextNode = pkb.cfgNodeTable.at(*iter);
+			if (visited.count(*iter) != 0 ) {
+				// skip if already visited, or if already in the frontier
+				continue;
+			}
+			visited.insert(*iter);
+			frontier.push(*nextNode);
+		}
+	}
+}
+
+void DesignExtractor::precomputeInformationForAffects() {
+	// set variables inside..
+	PKB& pkb = PKB::getInstance();
+	CFG* firstProcCfg = pkb.cfgTable.at(0); // can just get any cfg, since only using functions without needing state
+	
+	vector<STMT> containerStmt = pkb.getStmtNumForType(IF);
+	vector<STMT> whileStmt = pkb.getStmtNumForType(WHILE);
+	containerStmt.insert(containerStmt.end(), whileStmt.begin(), whileStmt.end());
+
+	//@todo can be optimised very significantly... although there is no need
+	for (auto iter = containerStmt.begin(); iter != containerStmt.end(); ++iter) {
+		STMT container = *iter;
+
+		CNode* containerNode = pkb.cfgNodeTable.at(container);
+		vector<STMT> descendants = pkb.getChild(container, true);
+		for (auto childrenIter = descendants.begin(); childrenIter != descendants.end(); ++childrenIter) {
+			STMT descendant = *childrenIter;
+			VARIABLES variables = pkb.getModVarInBitvectorForStmt(descendant);
+
+			CNode* node = pkb.cfgNodeTable.at(descendant);
+			if (firstProcCfg->isInsideNode(containerNode, node)) {
+				containerNode->setVariablesInside(variables);
+			} 
+			if (firstProcCfg->isInside2Node(containerNode, node)) {
+				containerNode->setVariablesInside2(variables);
+			} 
+
+		}
+	}
+
+	// set definitions reaching the dummy nodes
+	for (int i = 0; i < pkb.cfgTable.size(); i++) {
+		CFG* cfg = pkb.cfgTable.at(i); 
+
+		// will traverse from the start
+
+
+
+	}
+
+
+
+	// set first use of variables in container nodes
+
+
 }
