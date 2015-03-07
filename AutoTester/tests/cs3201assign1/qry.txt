@@ -461,80 +461,80 @@ Select s with s.stmt# = co.value
 94 - Q42
 while w; constant co;
 Select BOOLEAN pattern w ("m", _) with co.value = 2
-true
+TRUE
 5000
 95 - Q43
 prog_line n;
 Select BOOLEAN such that Next (1, 2)
-true
+TRUE
 5000
 96 - Q43
 prog_line n;
 Select BOOLEAN such that Next (6, 8)
-false
+FALSE
 5000
 97 - Q43
 prog_line n;
 Select BOOLEAN such that Next (8, 9)
-true
+TRUE
 5000
 98 - Q43
 prog_line n;
 Select BOOLEAN such that Next (10, 11)
-true
+TRUE
 5000
 99 - Q43
 prog_line n;
 Select BOOLEAN such that Next (12, 10)
-true
+TRUE
 5000
 100 - Q43
 prog_line n;
 Select BOOLEAN such that Next (12, 11)
-false
+FALSE
 5000
 101 - Q43
 prog_line n;
 Select BOOLEAN such that Next (13, 14)
-false
+FALSE
 5000
 102 - Q43
 prog_line n;
 Select BOOLEAN such that Next (16, 17)
-true
+TRUE
 5000
 103 - Q43
 prog_line n;
 Select BOOLEAN such that Next (17, 18)
-false
+FALSE
 5000
 104 - Q43
 prog_line n;
 Select BOOLEAN such that Next (23, 27)
-true
+TRUE
 5000
 105 - Q43
 prog_line n;
 Select BOOLEAN such that Next (26, 27)
-false
+FALSE
 5000
 106 - Q44
 prog_line n;
 Select BOOLEAN such that Next* (9, 9)
-false
+FALSE
 5000
 107 - Q44
 prog_line n;
 Select BOOLEAN such that Next (13, 13)
-false
+FALSE
 5000
 108 - Q44
 prog_line n;
 Select BOOLEAN such that Next (18, 18)
-true
+TRUE
 5000
 109 - Q44
 prog_line n;
 Select BOOLEAN such that Next (26, 26)
-true
+TRUE
 5000
