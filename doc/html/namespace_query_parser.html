@@ -162,6 +162,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>matchAttrName</b> (st
 <tr class="separator:a72f511211eaba419b80468c624026e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a481b9c15f9ac08c193f241fdaaa0c591"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a481b9c15f9ac08c193f241fdaaa0c591">matchEntRef</a> (string token)</td></tr>
 <tr class="separator:a481b9c15f9ac08c193f241fdaaa0c591"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36007e40d467e2fbebf63b5774bfd6ab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a36007e40d467e2fbebf63b5774bfd6ab">matchVarRef</a> (string token)</td></tr>
+<tr class="separator:a36007e40d467e2fbebf63b5774bfd6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d31f5404d49bc43f5e42b035d3db9b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a1d31f5404d49bc43f5e42b035d3db9b4">matchRef</a> (string token)</td></tr>
 <tr class="separator:a1d31f5404d49bc43f5e42b035d3db9b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c5229777e999d101fe20839f04dc5cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a2c5229777e999d101fe20839f04dc5cc">matchDesignEntity</a> (string token)</td></tr>
@@ -178,14 +180,19 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>matchAttrName</b> (st
 <tr class="separator:a76c405104de9173f1f101f191e20c209"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afabf50863297361eb5ca78a61a444981"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#afabf50863297361eb5ca78a61a444981">parseEntRef</a> ()</td></tr>
 <tr class="separator:afabf50863297361eb5ca78a61a444981"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3c9af040bafdfa687f51fafdb6cc5b5"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#ad3c9af040bafdfa687f51fafdb6cc5b5">parseVarRef</a> ()</td></tr>
+<tr class="separator:ad3c9af040bafdfa687f51fafdb6cc5b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5dfb4b47430cef5ea1477f104ca31d5"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#aa5dfb4b47430cef5ea1477f104ca31d5">parseRef</a> ()</td></tr>
 <tr class="separator:aa5dfb4b47430cef5ea1477f104ca31d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1795dca9d5c4eea2572c49dd837b4c5d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a1795dca9d5c4eea2572c49dd837b4c5d">buildQueryTree</a> (string relRef, <a class="el" href="class_synonym.html">Synonym</a> s1, <a class="el" href="class_synonym.html">Synonym</a> s2)</td></tr>
-<tr class="separator:a1795dca9d5c4eea2572c49dd837b4c5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae070b472d43818e0f75a39bb04b96a01"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#ae070b472d43818e0f75a39bb04b96a01">createSynonym</a> (string relRef, string value, int arg)</td></tr>
-<tr class="separator:ae070b472d43818e0f75a39bb04b96a01"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d925c0aa30978ab0f56282e47121f3d"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a1d925c0aa30978ab0f56282e47121f3d">parseArg</a> (string relRef, int arg)</td></tr>
-<tr class="separator:a1d925c0aa30978ab0f56282e47121f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01817234839fb23def84cf2e94347000"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a01817234839fb23def84cf2e94347000">buildQueryTree</a> (QNODE_TYPE relRef, <a class="el" href="class_synonym.html">Synonym</a> s1, <a class="el" href="class_synonym.html">Synonym</a> s2)</td></tr>
+<tr class="separator:a01817234839fb23def84cf2e94347000"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33504cee8640f003bbe781734afa46d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a33504cee8640f003bbe781734afa46d8">createSynonym</a> (QNODE_TYPE relRef, string value, int arg)</td></tr>
+<tr class="separator:a33504cee8640f003bbe781734afa46d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a031532b2f8d489d6dce01a18b68e31cb"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a031532b2f8d489d6dce01a18b68e31cb">parseArg</a> (QNODE_TYPE relRef, int arg)</td></tr>
+<tr class="separator:a031532b2f8d489d6dce01a18b68e31cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5d01d641c223948b9598cb6fb22b0ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5d01d641c223948b9598cb6fb22b0ed"></a>
+QNODE_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>convertIntoEnum</b> (string relRef)</td></tr>
+<tr class="separator:ab5d01d641c223948b9598cb6fb22b0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac66bee40525432005477036f13660c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#aac66bee40525432005477036f13660c3">parseSuchThatClause</a> ()</td></tr>
 <tr class="separator:aac66bee40525432005477036f13660c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabeabe5c2342d1a614b5fa223cf05a51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#aabeabe5c2342d1a614b5fa223cf05a51">parsePatternClause</a> ()</td></tr>
@@ -224,26 +231,26 @@ vector&lt; string &gt;::iterator&#160;</td><td class="memItemRight" valign="bott
 string&#160;</td><td class="memItemRight" valign="bottom"><b>currentParsedLine</b></td></tr>
 <tr class="separator:adfc285ef668e3f79bfe98558c804a5d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a294e6da37f4c1994b4b8a37b50c8fcc0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a294e6da37f4c1994b4b8a37b50c8fcc0"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>attrName</b> [] = {&quot;procName&quot;, &quot;varName&quot;, &quot;value&quot;, &quot;stmt#&quot;}</td></tr>
+string&#160;</td><td class="memItemRight" valign="bottom"><b>attrName</b> [] = { &quot;procName&quot;, &quot;varName&quot;, &quot;value&quot;, &quot;stmt#&quot; }</td></tr>
 <tr class="separator:a294e6da37f4c1994b4b8a37b50c8fcc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a161c575740ff412042d18ae21f1400cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a161c575740ff412042d18ae21f1400cf"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>designEntities</b> [] = {&quot;procedure&quot;, &quot;stmtLst&quot;, &quot;stmt&quot;,&quot;assign&quot;, &quot;call&quot;, &quot;while&quot;, &quot;if&quot;, &quot;variable&quot;,&quot;constant&quot;,&quot;prog_line&quot;, &quot;plus&quot;, &quot;minus&quot;, &quot;times&quot;}</td></tr>
+string&#160;</td><td class="memItemRight" valign="bottom"><b>designEntities</b> [] = { &quot;procedure&quot;, &quot;stmtLst&quot;, &quot;stmt&quot;, &quot;assign&quot;, &quot;call&quot;, &quot;while&quot;, &quot;if&quot;, &quot;variable&quot;, &quot;constant&quot;, &quot;prog_line&quot;, &quot;plus&quot;, &quot;minus&quot;, &quot;times&quot;}</td></tr>
 <tr class="separator:a161c575740ff412042d18ae21f1400cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4c3b0e37a72c90f29e1e910baa8d803"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4c3b0e37a72c90f29e1e910baa8d803"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>relRef</b> [] = {&quot;Modifies&quot;, &quot;Uses&quot;,&quot;Calls&quot;, &quot;Calls*&quot;, &quot;Parent&quot;, &quot;Parent*&quot;, &quot;Follows&quot;, &quot;Follows*&quot;, &quot;Next&quot;, &quot;Next*&quot;, &quot;Affects&quot;, &quot;Affects*&quot;}</td></tr>
+string&#160;</td><td class="memItemRight" valign="bottom"><b>relRef</b> [] = { &quot;Modifies&quot;, &quot;Uses&quot;, &quot;Calls&quot;, &quot;Calls*&quot;, &quot;Parent&quot;, &quot;Parent*&quot;, &quot;Follows&quot;, &quot;Follows*&quot;, &quot;Next&quot;, &quot;Next*&quot;, &quot;Affects&quot;, &quot;Affects*&quot;}</td></tr>
 <tr class="separator:ae4c3b0e37a72c90f29e1e910baa8d803"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80ef52aed314a073d054f952f3d48ca3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80ef52aed314a073d054f952f3d48ca3"></a>
 <a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>myQueryTree</b></td></tr>
 <tr class="separator:a80ef52aed314a073d054f952f3d48ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4bf432a2ad50dcb01d6030919b241c4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae4bf432a2ad50dcb01d6030919b241c4"></a>
-unordered_map&lt; string, string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>synonymsMap</b></td></tr>
-<tr class="separator:ae4bf432a2ad50dcb01d6030919b241c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a987b4cdec1d7a3c50cb6ac055f8c5fd8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a987b4cdec1d7a3c50cb6ac055f8c5fd8"></a>
+unordered_map&lt; string, SYNONYM_TYPE &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>synonymsMap</b></td></tr>
+<tr class="separator:a987b4cdec1d7a3c50cb6ac055f8c5fd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e8c6391210a1ffb02244e91d68bef27"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e8c6391210a1ffb02244e91d68bef27"></a>
 unordered_map&lt; string, QNODE_TYPE &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>nodetypeMap</b></td></tr>
 <tr class="separator:a1e8c6391210a1ffb02244e91d68bef27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a759864c2cbfc1311bbf5888ec7f17607"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a759864c2cbfc1311bbf5888ec7f17607"></a>
-unordered_map&lt; string, tuple&lt; REF_TYPE, REF_TYPE &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>relRefMap</b></td></tr>
-<tr class="separator:a759864c2cbfc1311bbf5888ec7f17607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac1798dd9e7edcb4adcca49f33e955b1c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1798dd9e7edcb4adcca49f33e955b1c"></a>
+unordered_map&lt; QNODE_TYPE, tuple&lt; REF_TYPE, REF_TYPE &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>relRefMap</b></td></tr>
+<tr class="separator:ac1798dd9e7edcb4adcca49f33e955b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12e45d7763d4eacff07a356ead5f7517"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a12e45d7763d4eacff07a356ead5f7517"></a>
 unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>attrNameMap</b></td></tr>
 <tr class="separator:a12e45d7763d4eacff07a356ead5f7517"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -254,14 +261,14 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Namespace containing functions for parsing PQL queries. <a class="el" href="namespace_query_parser.html" title="Namespace containing functions for parsing PQL queries. QueryParser checks the query input to see if ...">QueryParser</a> checks the query input to see if it matches with PQL grammar and builds a query tree. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a1795dca9d5c4eea2572c49dd837b4c5d"></a>
+<a class="anchor" id="a01817234839fb23def84cf2e94347000"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">bool QueryParser::buildQueryTree </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">QNODE_TYPE&#160;</td>
           <td class="paramname"><em>relRef</em>, </td>
         </tr>
         <tr>
@@ -287,14 +294,14 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
 
 </div>
 </div>
-<a class="anchor" id="ae070b472d43818e0f75a39bb04b96a01"></a>
+<a class="anchor" id="a33504cee8640f003bbe781734afa46d8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_synonym.html">Synonym</a> QueryParser::createSynonym </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">QNODE_TYPE&#160;</td>
           <td class="paramname"><em>relRef</em>, </td>
         </tr>
         <tr>
@@ -566,6 +573,23 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
 
 </div>
 </div>
+<a class="anchor" id="a36007e40d467e2fbebf63b5774bfd6ab"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QueryParser::matchVarRef </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Matches if the given token follows the naming convention of entity reference. </p>
+
+</div>
+</div>
 <a class="anchor" id="a2a89e634d0a58eda43bd59faddab40c1"></a>
 <div class="memitem">
 <div class="memproto">
@@ -599,14 +623,14 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
 
 </div>
 </div>
-<a class="anchor" id="a1d925c0aa30978ab0f56282e47121f3d"></a>
+<a class="anchor" id="a031532b2f8d489d6dce01a18b68e31cb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">string QueryParser::parseArg </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">QNODE_TYPE&#160;</td>
           <td class="paramname"><em>relRef</em>, </td>
         </tr>
         <tr>
@@ -885,6 +909,22 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
 
 </div>
 </div>
+<a class="anchor" id="ad3c9af040bafdfa687f51fafdb6cc5b5"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string QueryParser::parseVarRef </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parses the next token and check if is a variable reference. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a451cb9acc0ba2a61b4285288172ba569"></a>
 <div class="memitem">
 <div class="memproto">
@@ -953,7 +993,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 1 2015 00:16:49 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 8 2015 22:30:02 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

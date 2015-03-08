@@ -10,5 +10,6 @@ var searchData=
   ['matchref',['matchRef',['../namespace_query_parser.html#a1d31f5404d49bc43f5e42b035d3db9b4',1,'QueryParser']]],
   ['matchstmtorlineref',['matchStmtOrLineRef',['../namespace_query_parser.html#a72f511211eaba419b80468c624026e8d',1,'QueryParser']]],
   ['matchsynonymandident',['matchSynonymAndIdent',['../namespace_query_parser.html#ab745bcedc1eeb38fc78b26234fc8ce3b',1,'QueryParser']]],
-  ['matchunderscore',['matchUnderscore',['../namespace_query_parser.html#a31f3f7e29eede9c7fad24a6cbcf9da0b',1,'QueryParser']]]
+  ['matchunderscore',['matchUnderscore',['../namespace_query_parser.html#a31f3f7e29eede9c7fad24a6cbcf9da0b',1,'QueryParser']]],
+  ['matchvarref',['matchVarRef',['../namespace_query_parser.html#a36007e40d467e2fbebf63b5774bfd6ab',1,'QueryParser']]]
 ];
