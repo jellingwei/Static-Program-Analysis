@@ -53,7 +53,7 @@ void QueryTreeTest::testQNode()
 	
 	// Test QNode Parent and Child Relations
 	QNode followsQueryNode(Follows, Synonym(), syn1, syn1);
-	QNode usesQueryNode(Uses, Synonym(), syn2, syn2);
+	QNode usesQueryNode(UsesP, Synonym(), syn2, syn2);
 	clausesNode.setChild(&followsQueryNode);
 	clausesNode.setChild(&usesQueryNode);
 	followsQueryNode.setParent(&clausesNode);
@@ -62,13 +62,13 @@ void QueryTreeTest::testQNode()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test usesNode getParent", usesQueryNode.getParent()->getNodeType(), CLAUSES);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getNumOfChildren", clausesNode.getNumberOfChildren(), 2);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getChild (First Child)", clausesNode.getChild()->getNodeType(), Follows);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getNextChild", clausesNode.getNextChild()->getNodeType(), Uses);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getNextChild", clausesNode.getNextChild()->getNodeType(), UsesP);
 	// Test suchThatNode getNextChild with no next child
 	CPPUNIT_ASSERT(clausesNode.getNextChild() == NULL);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getPreviousChild", clausesNode.getPreviousChild()->getNodeType(), Follows);
 	// Test suchThatNode getPrevious with no previous child
 	CPPUNIT_ASSERT(clausesNode.getPreviousChild() == NULL);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getChild(Index)", clausesNode.getChild(1)->getNodeType(), Uses);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode getChild(Index)", clausesNode.getChild(1)->getNodeType(), UsesP);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test suchThatNode Indexing after getChild(Index)", clausesNode.getPreviousChild()->getNodeType(), Follows);
 }
 

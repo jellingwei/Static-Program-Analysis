@@ -144,29 +144,31 @@ namespace QueryEvaluator
 		Synonym RHS = clauseNode->getArg2();
 
 		switch (qnode_type) {
-		case Modifies:
+		case ModifiesP:
+		case ModifiesS:
 			return processModifies(LHS, RHS);
-		case Uses:
+		case UsesP:
+		case UsesS:
 			return processUses(LHS, RHS);
 		case Parent:
 			return processParentT(LHS, RHS, false);
-		case ParentS:
+		case ParentT:
 			return processParentT(LHS, RHS, true);
 		case Follows:
 			return processFollowsT(LHS, RHS, false);
-		case FollowsS:
+		case FollowsT:
 			return processFollowsT(LHS, RHS, true);
 		case Calls:
 			return processCallsT(LHS, RHS, false);
-		case CallsS:
+		case CallsT:
 			return processCallsT(LHS, RHS, true);
 		case Next:
 			return processNextT(LHS, RHS, false);
-		case NextS:
+		case NextT:
 			return processNextT(LHS, RHS, true);
 		case Affects:
 			return processAffectsT(LHS, RHS, false);
-		case AffectsS:
+		case AffectsT:
 			return processAffectsT(LHS, RHS, true);
 		case Pattern:
 			return processPatternClause(clauseNode);
