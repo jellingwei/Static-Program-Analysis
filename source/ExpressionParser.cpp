@@ -27,7 +27,7 @@ ExpressionParser::ExpressionParser() {
 
 
 /**
- * Constructor. Only for use in unit testing, to avoid potential problems with using a global pkb singleton that may interfere with other unit tests.
+ * Constructor. Only for use in unit testing, so that the expression parser directly reads from the vartable.
  */
 ExpressionParser::ExpressionParser(VarTable* varTable) : varTable(varTable)  {
 	init();  

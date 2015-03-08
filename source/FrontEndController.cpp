@@ -32,7 +32,7 @@ void FrontEndController::constructPkb(std::string filename)
 		}
 
 		extractor.constructCfg();
-		extractor.precomputeInformationForAffects();
+		//extractor.precomputeInformationForAffects();
 		//extractor.constructStatisticsTable();
 	} catch (exception e) {
 		cout << "Failed to construct PKB" << e.what() << endl;
