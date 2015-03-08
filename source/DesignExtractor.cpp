@@ -523,17 +523,11 @@ class CompareProglines {
     }
 };
 
-class ReverseCompareProglines {
-    public:
-    bool operator() (CNode* node1, CNode* node2) { 
-       return node1->getProcLineNumber() > node1->getProcLineNumber(); 
-    }
-};
 
-void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variablesModified, unordered_map<int, int>& reachingDefinitions) {
+void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variables, unordered_map<int, int>& reachingDefinitions) {
 	int startingVarIndex = 1;
-	for (int i = startingVarIndex; i < variablesModified.size(); i++) {		
-		if (variablesModified[i] == 1) {
+	for (int i = startingVarIndex; i < variables.size(); i++) {		
+		if (variables[i] == 1) {
 			reachingDefinitions[i] = progLineNum;
 		}
 	}

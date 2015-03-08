@@ -312,6 +312,7 @@ vector<int> PKB::getStmtNum(int constant)
 	return constantTable->getStmtNum(constant);
 }
 
+
 /**
 * Check if the number is a constant in the ConstantTable.
 * @return TRUE if number is a constant in the ConstantTable.
@@ -371,6 +372,15 @@ vector<int> PKB::getStmtNumForType(string type)
 {
 	 // @todo remove the whole function
 	return stmtTable->getStmtNumForType(type);
+}
+
+/**
+ * Get the proc index that the statement is in
+ * @param stmtNo  the statement number
+ * @return the procIndex that the statement is in
+ */
+int PKB::getProcIndexForStmt(int stmtNo) {
+	return stmtTable->getProcIndexForStmt(stmtNo);
 }
 
 /**
@@ -1120,6 +1130,14 @@ vector<int> PKB::getNextLhs() {
 */
 vector<int> PKB::getNextRhs() {
 	return nextTable->getRhs();
+}
+
+/**
+* @param progLine the program line
+* @return the CNode for the progline
+*/
+CNode* PKB::getCNodeForProgLine(int progLine) {
+	return nextTable->getCNodeForProgLine(progLine);
 }
 
 /*

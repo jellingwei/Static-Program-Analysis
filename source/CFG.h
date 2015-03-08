@@ -17,6 +17,7 @@ class CFG {
 		CFG(TNode* procNode);														
 		CNode* createCNode(CNODE_TYPE cfg_node_type, int procLineNo, CNode* header, TNode* ast);						
 		CNode* getProcRoot();
+		CNode* getProcEnd();
 		bool createLink(CLINK_TYPE link, CNode* currNode, CNode* toNode);
 		
 		bool hasInside(CNode* header);

@@ -105,6 +105,10 @@ vector<int> StmtTable::getStmtNumForType(string type)
 	}
 }
 
+int StmtTable::getProcIndexForStmt(int stmtNo) {
+	throw exception("not implemented yet");
+}
+
 bool StmtTable::isAssign(int stmtNo) 
 {
 	if(stmtNo <= 0) {

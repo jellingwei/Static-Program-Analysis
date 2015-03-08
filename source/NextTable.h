@@ -16,4 +16,6 @@ public:
 	vector<int> getLhs();
 	vector<int> getRhs();
 
+	CNode* getCNodeForProgLine(int);
+
 };

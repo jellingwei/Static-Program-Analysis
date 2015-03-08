@@ -103,8 +103,11 @@ public:
 	// StmtTable methods
 	bool insertStmt(int, string, TNode*, int);
 	string getType(int);
+	// @cond todo
 	vector<int> getStmtNumForType(string);
+	// @endcond todo
 	vector<int> getStmtNumForType(SYNONYM_TYPE);
+	int getProcIndexForStmt(int stmtNo);
 	bool isAssign(int);
 	bool isWhile(int);
 	bool isIf(int);
@@ -182,11 +185,12 @@ public:
 	bool isNextS(int progLine1, int progLine2);
 	vector<int> getNextLhs();
 	vector<int> getNextRhs();
+	CNode* getCNodeForProgLine(int progLine);
 
 	vector<CFG*> cfgTable;
 
 
-	//@todo move to somewhere in pkb? discuss with kenson
+	//@todo 
 	// @cond todo
 	unordered_map<int, CNode*> cfgNodeTable; //@todo nextTable?
 	unordered_map<int, TNode*> nodeTable;   // @todo stmtTable

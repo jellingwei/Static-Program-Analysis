@@ -40,6 +40,13 @@ CNode* CFG::getProcRoot() {
 }
 
 /**
+* @return the end node of the cfg
+*/
+CNode* CFG::getProcEnd() {
+	return _endNode;
+}
+
+/**
 * @param link  the type of connection between CNodes which can be Before, After, Inside, Inside2
 * @param currNode  the node that connects to toNode
 * @param toNode  the node that receives a connection from currNode

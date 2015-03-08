@@ -216,3 +216,7 @@ vector<int> NextTable::getRhs() {
 
 	return result;
 }
+
+CNode* NextTable::getCNodeForProgLine(int progLine) {
+	throw exception("not implemented yet");
+}
