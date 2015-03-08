@@ -6,10 +6,14 @@
 #include <vector>
 #include <unordered_map>
 
+#include <boost/dynamic_bitset.hpp>
+
 using namespace std;
 
 class UsesTable {
 public:
+	
+	void init(int numVariables);
 	// for statement numbers
 	bool setUses(int stmtNum, int varIndex);
 	bool isUses(int stmtNum, int varIndex);
@@ -26,10 +30,12 @@ public:
 	vector<int> getUsesVarForProc(int procIndex);
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
-private: 
-	unordered_map<int, vector<int>> varIndexMap; // key is stmtNum 
+private:  
+	unordered_map<int, boost::dynamic_bitset<>> varIndexMap; // key is stmtNum 
 	unordered_map<int, vector<int>> stmtNumMap; // key is variable index
 
 	unordered_map<int, vector<int>> procVarIndexMap; // key is procedure index 
 	unordered_map<int, vector<int>> procIndexMap; // key is variable index
+
+	int numVariables;
 };

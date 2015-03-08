@@ -789,6 +789,13 @@ vector<int> PKB::getCallsRhs() {
 
 // ModifiesTable methods
 
+void PKB::initModifiesTable(int numVariables) {
+	if (numVariables <= 0) {
+		throw runtime_error("initModifiesTable: invalid number of variables");
+	}
+	modifiesTable->init(numVariables);
+}
+
 /**
 * Sets the Modifies relation for statements.
 * @param stmtNum  the statement number that modifies a particular variable
@@ -905,6 +912,13 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair() {
 
 
 // UsesTable methods
+
+void PKB::initUsesTable(int numVariables) {
+	if (numVariables <= 0) {
+		throw runtime_error("initUsesTable: invalid number of variables");
+	}
+	usesTable->init(numVariables);
+}
 
 /**
 * Sets the Uses relation for statements.
