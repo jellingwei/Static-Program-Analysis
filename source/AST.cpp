@@ -15,11 +15,7 @@ using namespace std;
 #include "PatternMatch.h"
 
 AST::AST() {
-	//*TNode* nullNode = createTNode(Procedure, 0, 0);
-	//*_rootNode = createTNode(StmtLst, 0, 0);
-	//*createLink(Child, nullNode, _rootNode);
 	_rootNode = createTNode(Program, 0, 0);
-
 }
 
 TNode* AST::getRoot() {
@@ -35,7 +31,7 @@ TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 	}
 
 	TNode* temp = new TNode(ast_node_type, stmtNo, idx);
-	//if (ast_node_type == Assign || ast_node_type == StmtLst || ast_node_type == While) _lastImpt = temp;
+
 	allNodes.push_back(temp);
 	return temp;
 }
@@ -87,7 +83,6 @@ int AST::getChildrenSize(TNode* parent) {
 	}
 
 	TNode& temp = *parent;
-	//return temp.TNode::getChildren().size();
 	vector<TNode*> *pq = temp.getChildren();
 	return pq->size();
 }
@@ -102,7 +97,6 @@ vector<TNode*>* AST::getChildrenNode(TNode* parent) {
 		throw exception("AST error: TNode* not referenced");
 	}
 
-	//TNode& par = *parent;
 	return parent->getChildren();
 }
 
@@ -159,8 +153,7 @@ bool is_number(const std::string& s)
  * @param RHS to match the expression query with a suitable subtree.
  */
 vector<int> AST::patternMatchAssign(string RHS) {
-//cout << "received [" << RHS << "]" << endl;
-	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());		//remove whitespaces
+	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());			//remove whitespaces
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), '\"'), RHS.end());		//remove ""
 
 	int underscore = RHS.find('_');
@@ -175,15 +168,14 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		}
 	}
 
-	//@todo - change to boolean
-	string isExact;
-	if(matchExact) isExact = "*";
-	else isExact = ",";
+	bool isExact;
+	if(matchExact) isExact = true;
+	else isExact = false;
 	
 	vector<string> vRHS;
 	vector<int> results;
 	PKB pkb = PKB::getInstance();
-//cout << "[" << RHS << "]" << endl;
+
 	if(RHS.empty()) {
 		results = pkb.getStmtNumForType("assign");
 		return results;
@@ -214,13 +206,6 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		} 
 	}
 
-	/*cout << "inside vRHS " << endl;
-	for (int i=0; i<vRHS.size();i++)
-		cout << "[" << vRHS[i] << "]" << " ";
-	cout << " " << endl;
-cout << "myvector has " << vRHS.size() << " elements" << endl;
-cout << "=======" << endl;*/
-
 	try {
 		ExpressionParser exprParser;
 		TNode* top = exprParser.parseExpressionForQuerying(vRHS);
@@ -230,15 +215,6 @@ cout << "=======" << endl;*/
 		return results;
 	}
 	
-//cout << "rQ is " << top->getNodeType() << endl;
-	//vector<int> temp = pattern.PatternMatchAssign(top, isExact);
-	
-	
-/*cout << "ok " << endl;
-	for(int i =0; i< results.size(); i++)
-		cout << "[" << results[i] << "] ";
-	cout << " " << endl;
-	cout << "=======" << endl;*/
 	return results;
 }
 

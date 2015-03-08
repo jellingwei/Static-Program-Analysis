@@ -190,8 +190,6 @@ void PQLTest::testPQL()
 	// Assign Pattern
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('c', 'd+f')", (string)"2", evaluate("assign a; Select a pattern a(\"c\", \"d + f\")").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('d', 'd')", 0, (int)evaluate("assign a; Select a pattern a(\"d\", \"d\")").size());
-	//@todo - throw var not present exception from Expression Parser
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('f', 'woot')", 0, (int)evaluate("assign a; Select a pattern a(\"f\", \"woot\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('e', _)", 2, (int)evaluate("assign a; Select a pattern a(\"e\", _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('b', _)", (string)"4", evaluate("assign a; Select a pattern a(\"b\", _)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'f+2')", (string)"10", evaluate("assign a; Select a pattern a(_, \"f +2\")").front());
@@ -206,9 +204,9 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v; pattern a(v, _'d'_)", 2, (int)evaluate("variable v; assign a; Select v pattern a(v, _\"d\"_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _''_)'", 0, (int)evaluate("assign a; Select a pattern a(_, _\"\"_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)'", 12, (int)evaluate("assign a; Select a pattern a(_, _)").size());
-
-	//@todo - query validator failed case
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e+3*b'_)", 1, (int)evaluate("assign a; Select a pattern a(_, _\"e+3*b\"_)").size());
+	// exception handler
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('f', 'woot')", 0, (int)evaluate("assign a; Select a pattern a(\"f\", \"woot\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e+3*b'_)", 0, (int)evaluate("assign a; Select a pattern a(_, _\"e+3*b\"_)").size());
 	
 	// while pattern
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('a', _)", (string)"3", evaluate("while w; Select w pattern w(\"a\", _)").front());

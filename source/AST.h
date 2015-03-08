@@ -10,7 +10,6 @@ using namespace std;
 class AST {
 	private:		
 		vector<TNode*> allNodes;
-		TNode* _lastImpt;
 		TNode* _rootNode;
 
 	public:

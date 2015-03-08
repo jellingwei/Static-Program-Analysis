@@ -6,7 +6,12 @@ QNode::QNode()
 
 /**
  * Initialises and creates a QNode for Query Tree with the given QNODETYPE and SYNONYM arguments. 
- * NODETYPE differentiates the type of QNode.
+ * @param QNODE_TYPE the type of Qnode which can be the Default QueryTree Placeholder QNODE_TYPEs (ROOT/RESULT/CLAUSES) or 
+ *					 the Query QNODE_TYPEs and the Select and Pattern QNODE_TYPEs.
+ * @param arg0 
+ * @param arg1 
+ * @param arg2
+ * @return the QNode for Query Tree with the its corresponding QNODETYPE and SYNONYM arguments.
  */
 QNode::QNode(QNODE_TYPE QNODE_TYPE,Synonym arg0,Synonym arg1, Synonym arg2)
 {
@@ -19,7 +24,7 @@ QNode::QNode(QNODE_TYPE QNODE_TYPE,Synonym arg0,Synonym arg1, Synonym arg2)
 }
 
 /**
- * Return SYNONYM argument 0.
+ * @return SYNONYM argument 0.
  */
 Synonym QNode::getArg0() 
 {
@@ -27,7 +32,7 @@ Synonym QNode::getArg0()
 }
 
 /**
- * Return SYNONYM argument 1.
+ * #return SYNONYM argument 1.
  */
 Synonym QNode::getArg1() 
 {
@@ -35,7 +40,7 @@ Synonym QNode::getArg1()
 }
 
 /**
- * Return SYNONYM argument 2.
+ * @return SYNONYM argument 2.
  */
 Synonym QNode::getArg2() 
 {
@@ -43,7 +48,7 @@ Synonym QNode::getArg2()
 }
 
 /**
- * Return the node type of the QNode.
+ * @return the node type of the QNode.
  */
 QNODE_TYPE QNode::getNodeType()
 {
@@ -52,6 +57,7 @@ QNODE_TYPE QNode::getNodeType()
 
 /**
  * Set the QNode, parent_node, as a parent node.
+ * @param parent_node a QNode which is a parent node of another QNode
  */
 void QNode::setParent(QNode* parent_node)
 {
@@ -60,6 +66,7 @@ void QNode::setParent(QNode* parent_node)
 
 /**
  * Set the QNode, child_node, as a child node.
+ * @param child_node a QNode which is a child node of another QNode
  */
 void QNode::setChild(QNode* child_node)
 {
@@ -67,7 +74,7 @@ void QNode::setChild(QNode* child_node)
 }
 
 /**
- * Return the number of children the QNode has.
+ * @return the number of children the QNode has.
  */
 int QNode::getNumberOfChildren()
 {
@@ -75,7 +82,7 @@ int QNode::getNumberOfChildren()
 }
 
 /**
- * Return the parent QNode of the current QNode.
+ * @return the parent QNode of the current QNode.
  */
 QNode* QNode::getParent() 
 {
@@ -83,7 +90,7 @@ QNode* QNode::getParent()
 }
 
 /**
- * Return the child QNode of the current QNode.
+ * @return the child QNode of the current QNode.
  * If the current QNode has no child node, return NULL.
  */
 QNode* QNode::getChild()
@@ -96,7 +103,8 @@ QNode* QNode::getChild()
 }
 
 /**
- * Return the child QNode of the current QNode with the given index.
+ * @param index the index of the current QNode 
+ * @return the child QNode of the current QNode with the given index.
  * If the current QNode has no child node or index is negative, return NULL.
  */ 
 QNode* QNode::getChild(int index)
@@ -109,7 +117,7 @@ QNode* QNode::getChild(int index)
 }
 
 /**
- * Return the next child's QNode.
+ * @return the QNode of the next child.
  */ 
 QNode* QNode::getNextChild()
 {
@@ -121,7 +129,7 @@ QNode* QNode::getNextChild()
 }
 
 /**
- * Return the previous child’s QNode.
+ * @return the QNode of the previous child.
  */ 
 QNode* QNode::getPreviousChild()
 {

@@ -252,9 +252,10 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'u + (4 * z)'_) - Variable Dont Exist", 0, (int)pkb.patternMatchAssign("_\"u + (4 * z)\"_").size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '')", 12, (int)pkb.patternMatchAssign("\"\"").size());
+	// Query Validator will check
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _''_)", 12, (int)pkb.patternMatchAssign("_\"\"_").size());
 
-	// New Pattern Design
+	// PatternMatch
 	cout << "new pattern design" << endl;
 	const char* args[] = {"d", "+", "f"};
 	vector<string> argVector(args, args + 3);
@@ -262,25 +263,25 @@ void PKBTest::testPKB()
 	TNode* top = exprParser.parseExpressionForQuerying(argVector);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("ok", Plus, top->getNodeType());
 	PatternMatch pattern;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 2, pattern.PatternMatchAssign(top, "*").at(0));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 2, pattern.PatternMatchAssign(top, true).at(0));
 
 	const char* args2[] = {"1"};
 	vector<string> argVector2(args2, args2 + 1);
 	TNode* top2 = exprParser.parseExpressionForQuerying(argVector2);
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 9, pattern.PatternMatchAssign(top2, ",").at(2));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 9, pattern.PatternMatchAssign(top2, false).at(2));
 
 	const char* args3[] = {"e", "+", "3", "*", "b", "+", "f"};
 	vector<string> argVector3(args3, args3 + 7);
 	TNode* top3 = exprParser.parseExpressionForQuerying(argVector3);
 	// full pattern match for e+3*b+f
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 11, pattern.PatternMatchAssign(top3, ",").at(0));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 11, pattern.PatternMatchAssign(top3, false).at(0));
 
 	const char* args4[] = {"3", "*", "b"};
 	vector<string> argVector4(args4, args4 + 3);
 	TNode* top4 = exprParser.parseExpressionForQuerying(argVector4);
 	// partial match from 3 * b
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 1, (int)pattern.PatternMatchAssign(top4, ",").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 1, (int)pattern.PatternMatchAssign(top4, false).size());
 
 	// Pattern for while
 	cout << "Pattern for while" << endl;
@@ -297,13 +298,13 @@ void PKBTest::testPKB()
 
 	// Pattern for if 
 	cout << "pattern for if" << endl;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _)", 12, pkb.patternMatchIf(" b ").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('c', _)", 13, pkb.patternMatchIf("c").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('unusedvar', _)", 0, (int)pkb.patternMatchIf("unusedvar").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _, _)", 12, pkb.patternMatchIf(" b ").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('c', _, _)", 13, pkb.patternMatchIf("c").front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('unusedvar', _, _)", 0, (int)pkb.patternMatchIf("unusedvar").size());
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 12", pkb.getVarIndex("b"), pkb.getControlVariable(12));
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum 8", pkb.getVarIndex("c"), pkb.getControlVariable(13));
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _) given stmtnum which is not a if statement", -1, pkb.getControlVariable(14));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _, _) given stmtnum 12", pkb.getVarIndex("b"), pkb.getControlVariable(12));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _, _) given stmtnum 8", pkb.getVarIndex("c"), pkb.getControlVariable(13));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat(v, _, _) given stmtnum which is not a if statement", -1, pkb.getControlVariable(14));
 
 	// All pairs for Follows
 	pair<vector<int>, vector<int>> allFollows = pkb.getAllFollowsPairs(false);

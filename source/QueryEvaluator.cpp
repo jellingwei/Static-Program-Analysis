@@ -65,7 +65,8 @@ namespace QueryEvaluator
 
 	/**
 	* Processes the query tree given a query tree node.
-	* Return an empty vector if the Such That or Pattern clauses are invalid.
+	* @param qTreeRoot the root node of the query tree
+	* @return an empty vector if the Such That or Pattern clauses are invalid.
 	*/
 	vector<Synonym> processQueryTree(QueryTree* qTreeRoot) 
 	{
@@ -79,8 +80,10 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Processes the result node in the query tree
-	* Returns the wanted synonym in a vector
+	* Processes the result node in the query tree.
+	* @param resultNode
+	* @param isValid
+	* @return the wanted synonym in a vector
 	*/
 	vector<Synonym> processResultNode(QNode* resultNode, bool isValid) 
 	{
@@ -113,8 +116,9 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Processes the such that node in the query tree
-	* Returns true if the clauses are valid, false otherwise
+	* Processes the such that node in the query tree.
+	* @param clausesNode
+	* @eturn TRUE if the clauses are valid. FALSE if the clauses are not valid.
 	*/
 	inline bool processClausesNode(QNode* clausesNode) 
 	{
@@ -134,8 +138,9 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to processes each such that clause from the such that node
-	* Returns true if a clause is valid, false otherwise
+	* Processes each such that clause from the such that node.
+	* @param clausesNode
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	inline bool processClause(QNode* clauseNode) 
 	{
@@ -144,29 +149,31 @@ namespace QueryEvaluator
 		Synonym RHS = clauseNode->getArg2();
 
 		switch (qnode_type) {
-		case Modifies:
+		case ModifiesP:
+		case ModifiesS:
 			return processModifies(LHS, RHS);
-		case Uses:
+		case UsesP:
+		case UsesS:
 			return processUses(LHS, RHS);
 		case Parent:
 			return processParentT(LHS, RHS, false);
-		case ParentS:
+		case ParentT:
 			return processParentT(LHS, RHS, true);
 		case Follows:
 			return processFollowsT(LHS, RHS, false);
-		case FollowsS:
+		case FollowsT:
 			return processFollowsT(LHS, RHS, true);
 		case Calls:
 			return processCallsT(LHS, RHS, false);
-		case CallsS:
+		case CallsT:
 			return processCallsT(LHS, RHS, true);
 		case Next:
 			return processNextT(LHS, RHS, false);
-		case NextS:
+		case NextT:
 			return processNextT(LHS, RHS, true);
 		case Affects:
 			return processAffectsT(LHS, RHS, false);
-		case AffectsS:
+		case AffectsT:
 			return processAffectsT(LHS, RHS, true);
 		case Pattern:
 			return processPatternClause(clauseNode);
@@ -178,8 +185,10 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to processes the modifies clause
-	* Returns true if this clause is valid, false otherwise
+	* Processes the modifies clause.
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	bool processModifies(Synonym LHS, Synonym RHS) 
 	{
@@ -215,7 +224,13 @@ namespace QueryEvaluator
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_CHAR) {
 			//RHS is the variable that is modified, find the statements
-			vector<int> stmts = pkb.getModStmtNum(pkb.getVarIndex(nameRHS));
+			vector<int> stmts;
+			if (typeLHS == PROCEDURE) {
+				stmts = pkb.getModProcIndex(pkb.getVarIndex(nameRHS));
+			} else {
+				stmts = pkb.getModStmtNum(pkb.getVarIndex(nameRHS));
+			}
+
 			if (stmts.size() == 0) {
 				return false;
 			}
@@ -240,6 +255,11 @@ namespace QueryEvaluator
 		return true;
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
@@ -265,6 +285,11 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -291,8 +316,10 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to processes the uses clause
-	* Returns true if this clause is valid, false otherwise
+	* Processes the uses clause.
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	bool processUses(Synonym LHS, Synonym RHS) 
 	{
@@ -327,7 +354,12 @@ namespace QueryEvaluator
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_CHAR) {
 			//RHS is the variable that is used, find the statements that uses it
-			vector<int> stmts = pkb.getUsesStmtNum(pkb.getVarIndex(nameRHS));
+			vector<int> stmts;
+			if (typeLHS == PROCEDURE) {
+				stmts = pkb.getUsesProcIndex(pkb.getVarIndex(nameRHS));
+			} else {
+				stmts = pkb.getUsesStmtNum(pkb.getVarIndex(nameRHS));
+			}
 			if (stmts.size() == 0) {
 				return false;
 			}
@@ -352,6 +384,11 @@ namespace QueryEvaluator
 		return true;
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
@@ -377,7 +414,11 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
-	//TODO: Check for proc on LHS
+	/**
+	* @param LHS
+	* @param RHS
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -404,8 +445,11 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to processes the parent clause
-	* Returns true if this clause is valid, false otherwise
+	* Processes the parent clause.
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans) 
 	{
@@ -456,6 +500,12 @@ namespace QueryEvaluator
 		return true;
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
@@ -476,6 +526,12 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -497,8 +553,11 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to processes the follows clause
-	* Returns true if this clause is valid, false otherwise
+	* Processes the follows clause.
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans) 
 	{
@@ -551,6 +610,12 @@ namespace QueryEvaluator
 		return true;
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
@@ -571,6 +636,12 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -591,6 +662,13 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* Processes the Calls clause.
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
+	*/
 	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		if (AbstractWrapper::GlobalStop) {
@@ -640,6 +718,12 @@ namespace QueryEvaluator
 		return true;
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
@@ -660,6 +744,12 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -680,6 +770,13 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* Processes the Next clause.
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Next or Next* relation
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
+	*/
 	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		if (AbstractWrapper::GlobalStop) {
@@ -729,6 +826,12 @@ namespace QueryEvaluator
 		return true;
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Next or Next* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
@@ -749,6 +852,12 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Next or Next* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -769,6 +878,13 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* Processes the Affects clause.
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
+	*/
 	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		return false;
@@ -817,6 +933,12 @@ namespace QueryEvaluator
 		return true;*/
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValues();
@@ -837,6 +959,12 @@ namespace QueryEvaluator
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
+	* @return 
+	*/
 	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		set<int> valuesLHS = IntermediateValuesHandler::getSynonymWithName(LHS.getName()).getValuesSet();
@@ -858,8 +986,9 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to process individual pattern clauses
-	* Returns true if the pattern clause is valid, false otherwise
+	* Processes individual pattern clauses.
+	* @param patternClause
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	inline bool processPatternClause(QNode* patternClause) 
 	{
@@ -881,8 +1010,11 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to process assign patterns
-	* Returns true if the pattern clause is valid, false otherwise
+	* Processes assign patterns.
+	* @param arg0
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	bool processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
@@ -938,8 +1070,11 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to process if patterns
-	* Returns true if the pattern clause is valid, false otherwise
+	* Processes if patterns.
+	* @param arg0
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	bool processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
@@ -981,8 +1116,11 @@ namespace QueryEvaluator
 	}
 
 	/**
-	* Method to process while patterns
-	* Returns true if the pattern clause is valid, false otherwise
+	* Processes while patterns.
+	* @param arg0
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
 	bool processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
@@ -1023,6 +1161,11 @@ namespace QueryEvaluator
 		}
 	}
 
+	/**
+	* Processes with clause.
+	* @param withClause
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
+	*/
 	bool processWithClause(QNode* withClause)
 	{
 		//Assume that var and int cannot be compared (should be checked by the query validator)
@@ -1035,10 +1178,14 @@ namespace QueryEvaluator
 			string arg1Value = LHS.getName();
 			string arg2Value = RHS.getName();
 			return arg1Value == arg2Value;
-		} else if (typeLHS == STRING_CHAR) {
+		} else if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
+			string arg1Value = LHS.getName();
+			string arg2Value = RHS.getName();
+			return arg1Value == arg2Value;
+		} else if (typeLHS == STRING_CHAR || typeLHS == STRING_INT) {
 			string arg1Value = LHS.getName();
 			return IntermediateValuesHandler::filterEqualValue(RHS, arg1Value);
-		} else if (typeRHS == STRING_PATTERNS) {
+		} else if (typeRHS == STRING_CHAR || typeRHS == STRING_INT) {
 			string arg2Value = RHS.getName();
 			return IntermediateValuesHandler::filterEqualValue(LHS, arg2Value);
 		} else {

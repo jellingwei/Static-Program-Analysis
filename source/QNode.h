@@ -15,13 +15,14 @@ enum QNODE_TYPE
 	ROOT, RESULT, CLAUSES,
 
 	// Query QNODE_TYPEs
-	Affects, AffectsS,
-	Next, NextS,
-	Modifies,
-	Calls, CallsS,
-	Uses, UsesS, 
-	Parent, ParentS, 
-	Follows, FollowsS,
+	ModifiesP, ModifiesS,
+	UsesP, UsesS,
+	Calls, CallsT,
+	Parent, ParentT,
+	Follows, FollowsT,
+	Next, NextT,
+	Affects, AffectsT,
+	AttrCompare,
 
 	// Select and Pattern QNODE_TYPEs
 	Selection, Pattern, With
