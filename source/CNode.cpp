@@ -25,7 +25,9 @@ CNode::CNode(CNODE_TYPE cfgNodeType, int procLineNum, CNode* header, TNode* ast)
 	_ASTref = ast;
 }
 
-
+/**
+ * @return TRUE if the node is a dummy node, and does not correspond directly to any statement in the source program.
+ */
 bool CNode::isDummy() {
 	return _nodeType == EndIf_C || _nodeType == Proc_C || _nodeType == EndProc_C;
 }

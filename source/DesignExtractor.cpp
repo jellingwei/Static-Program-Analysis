@@ -513,6 +513,9 @@ void DesignExtractor::setUsesForContainerStatements() {
 	}
 }
 
+/**
+ * For use in the priority queue when traversing the CFG
+ */
 class CompareProglines {
     public:
     bool operator() (CNode* node1, CNode* node2) { 
@@ -602,7 +605,7 @@ void setVariablesInside() {
 			if (firstProcCfg->isInsideNode(containerNode, node)) {
 				containerNode->setVariablesInside(variables);
 			} 
-			if (firstProcCfg->isInside2Node(containerNode, node)) {
+			if (firstProcCfg->isInsideElseNode(containerNode, node)) {
 				containerNode->setVariablesInside2(variables);
 			} 
 
@@ -611,6 +614,10 @@ void setVariablesInside() {
 
 }
 
+
+/**
+ * Precomputes additional information to be stored for Affects and Affects*
+ */
 void DesignExtractor::precomputeInformationForAffects() {
 	PKB& pkb = PKB::getInstance();
 	

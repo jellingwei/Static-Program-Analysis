@@ -225,14 +225,9 @@ TNode* ExpressionParser::parse(int bindingLevel) {
 }
 
 /**
- * Method to parse an expression. Returns the root of a tree. This function writes data to the pkb (UsesTable and VarTable).
+ * Method to parse an expression. Returns the root of a tree. Does not throw an exception if a unknown variable is encountered.
+ * Instead it assigns a temporary variable.
  * 
- * For example, given an expression x + y + z, the following tree is the output.
- *                           + <- root
- *                         /   \
- *                        +     z
- *                       / \
- *                      x   y
  * @param buffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
@@ -243,14 +238,8 @@ TNode* ExpressionParser::parseExpressionForAST(vector<string> buffer) {
 } 
 
 /**
- * Method to parse an expression. Returns the root of a tree. This method differs from parseExpressionForAST as it does not 
- * write data to the PKB.
- * For example, given an expression x + y + z, the following tree is the output.
- *                           + <- root
- *                         /   \
- *                        +     z
- *                       / \
- *                      x   y
+ * Method to parse an expression. Returns the root of a tree. This method differs from parseExpressionForAST as it throws exceptions on 
+ * encountering unknown variables
  * @param buffer A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y"] should be passed in
  * @sa ExpressionParser::updateBuffer
  * @sa ExpressionParser::updateStmtNum
