@@ -360,7 +360,7 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg,
  */
 bool DesignExtractor::constructCfg() {
 	// make a CFG(?) for every procedure
-	PKB pkb = PKB::getInstance();
+	PKB& pkb = PKB::getInstance();
 	
 	TNode* rootNode = pkb.getRoot();
 	assert(rootNode->getNodeType() == Program);
@@ -515,36 +515,58 @@ void DesignExtractor::setUsesForContainerStatements() {
 
 class CompareProglines {
     public:
-    bool operator() (CNode& node1, CNode& node2) { 
-       return node1.getProcLineNumber() < node1.getProcLineNumber(); 
+    bool operator() (CNode* node1, CNode* node2) { 
+       return node1->getProcLineNumber() < node1->getProcLineNumber(); 
     }
-}
+};
 
 class ReverseCompareProglines {
     public:
-    bool operator() (CNode& node1, CNode& node2) { 
-       return node1.getProcLineNumber() > node1.getProcLineNumber(); 
+    bool operator() (CNode* node1, CNode* node2) { 
+       return node1->getProcLineNumber() > node1->getProcLineNumber(); 
     }
+};
+
+void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variablesModified, unordered_map<int, int>& reachingDefinitions) {
+	int startingVarIndex = 1;
+	for (int i = startingVarIndex; i < variablesModified.size(); i++) {		
+		if (variablesModified[i] == 1) {
+			reachingDefinitions[i] = progLineNum;
+		}
+	}
 }
 
 /**
- * Traverse through the cfg using dijkstra, with progline numbers as priority, while maintaining the values for the definitions.
+ * Traverse through the cfg using priority queue, with progline numbers as priority, while maintaining the values for the definitions.
  */
-void traverseThroughCfg(CNode startNode) {
+void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 	PKB pkb = PKB::getInstance();
-	vector<int> result;
 	
-	priority_queue<CNode, vector<CNode>, CompareProglines> frontier;
+	priority_queue<CNode*, vector<CNode*>, CompareProglines> frontier;
  
 	set<int> visited;
 	frontier.push(startNode);
 
-	while (!frontier.empty()) {
-		CNode curNode = frontier.top(); frontier.pop();
-		result.push_back(curNode.getProcLineNumber());
+	unordered_map<int, int> reachingDefinition;
 
-		// add to frontier
-		vector<int> intermediateNodes = pkb.getNextAfter(curNode.getProcLineNumber(), false);
+	while (!frontier.empty()) {
+		CNode* curNode = frontier.top(); frontier.pop();
+
+		// update reaching definition
+		if (curNode->getNodeType() == Assign_C) {
+			boost::dynamic_bitset<> variablesModified = pkb.getModVarInBitvectorForStmt(curNode->getProcLineNumber());
+			addVariablesToMap(curNode->getProcLineNumber(), variablesModified, reachingDefinition);
+		}
+
+		// set reaching definition in the node if specified
+		bool isReachingDefinitionStored = (curNode->getNodeType() == If_C || curNode->getNodeType() == While_C);
+		if (isReachingDefinitionStored) {
+			curNode->setReachingDefinitions(reachingDefinition);
+		}
+		
+
+		// add next node to frontier
+		vector<int> intermediateNodes = pkb.getNextAfter(curNode->getProcLineNumber(), false);
 		for (auto iter = intermediateNodes.begin(); iter != intermediateNodes.end(); ++iter) {
 			CNode* nextNode = pkb.cfgNodeTable.at(*iter);
 			if (visited.count(*iter) != 0 ) {
@@ -552,28 +574,28 @@ void traverseThroughCfg(CNode startNode) {
 				continue;
 			}
 			visited.insert(*iter);
-			frontier.push(*nextNode);
+			frontier.push(nextNode);
 		}
 	}
 }
 
-void DesignExtractor::precomputeInformationForAffects() {
-	// set variables inside..
+
+void setVariablesInside() {
 	PKB& pkb = PKB::getInstance();
 	CFG* firstProcCfg = pkb.cfgTable.at(0); // can just get any cfg, since only using functions without needing state
 	
-	vector<STMT> containerStmt = pkb.getStmtNumForType(IF);
-	vector<STMT> whileStmt = pkb.getStmtNumForType(WHILE);
+	vector<int> containerStmt = pkb.getStmtNumForType(IF);
+	vector<int> whileStmt = pkb.getStmtNumForType(WHILE);
 	containerStmt.insert(containerStmt.end(), whileStmt.begin(), whileStmt.end());
 
 	//@todo can be optimised very significantly... although there is no need
 	for (auto iter = containerStmt.begin(); iter != containerStmt.end(); ++iter) {
-		STMT container = *iter;
+		int container = *iter;
 
 		CNode* containerNode = pkb.cfgNodeTable.at(container);
-		vector<STMT> descendants = pkb.getChild(container, true);
+		vector<int> descendants = pkb.getChild(container, true);
 		for (auto childrenIter = descendants.begin(); childrenIter != descendants.end(); ++childrenIter) {
-			STMT descendant = *childrenIter;
+			int descendant = *childrenIter;
 			VARIABLES variables = pkb.getModVarInBitvectorForStmt(descendant);
 
 			CNode* node = pkb.cfgNodeTable.at(descendant);
@@ -587,19 +609,30 @@ void DesignExtractor::precomputeInformationForAffects() {
 		}
 	}
 
+}
+
+void DesignExtractor::precomputeInformationForAffects() {
+	PKB& pkb = PKB::getInstance();
+	
+	// set variables inside..
+	setVariablesInside();
+
 	// set definitions reaching the dummy nodes
 	for (int i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
 
-		// will traverse from the start
-
-
-
+		// traverse through cfg and update reaching definitions
+		updateReachingDefinitionsThroughCfg(cfg->getProcRoot());
 	}
 
 
 
 	// set first use of variables in container nodes
+	//for (int i = 0; i < pkb.cfgTable.size(); i++) {
+		//CFG* cfg = pkb.cfgTable.at(i); 
 
+		// traverse through cfg and update reaching definitions
+		//updateFirstUseThroughCfg(cfg->getProcRoot());
+	//}
 
 }

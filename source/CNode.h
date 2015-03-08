@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include <unordered_map>
 
 #include <boost\dynamic_bitset.hpp>
 
@@ -14,7 +15,6 @@ using std::string;
 using namespace std;
 
 typedef boost::dynamic_bitset<> VARIABLES ;
-typedef unordered_map<int, int> VAR_TO_STATEMENT_MAP ;
 
 enum CNODE_TYPE
 {
@@ -36,10 +36,10 @@ public:
 	int getProcLineNumber();
 	CNODE_TYPE getNodeType();
 	bool isDummy();
-	VAR_TO_STATEMENT_MAP getReachingDefinitions();
-	void setReachingDefinitions(VAR_TO_STATEMENT_MAP);
-	VAR_TO_STATEMENT_MAP getFirstUseOfVariable();
-	void setFirstUseOfVariable(VAR_TO_STATEMENT_MAP);
+	unordered_map<int, int> getReachingDefinitions();
+	void setReachingDefinitions(unordered_map<int, int>);
+	unordered_map<int, int> getFirstUseOfVariable();
+	void setFirstUseOfVariable(unordered_map<int, int>);
 	
 	vector<CNode*>* getBefore();
 	void addBefore(CNode* node);
@@ -85,8 +85,8 @@ private:
 	TNode* _ASTref;
 	bool isEnd;
 
-	VAR_TO_STATEMENT_MAP _reachingDefinitions;
-	VAR_TO_STATEMENT_MAP _firstUseOfVariable;
+	unordered_map<int, int> _reachingDefinitions;
+	unordered_map<int, int> _firstUseOfVariable;
 	VARIABLES _variablesInside;
 	VARIABLES _variablesInside2;
 };

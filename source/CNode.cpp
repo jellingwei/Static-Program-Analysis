@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 #include "CNode.h"
 
@@ -26,7 +27,7 @@ CNode::CNode(CNODE_TYPE cfgNodeType, int procLineNum, CNode* header, TNode* ast)
 
 
 bool CNode::isDummy() {
-	return _nodeType == EndIf_C;
+	return _nodeType == EndIf_C || _nodeType == Proc_C || _nodeType == EndProc_C;
 }
 
 /**
@@ -176,16 +177,16 @@ void CNode::setVariablesInside(VARIABLES variables) {
 	_variablesInside = variables;
 }
 
-VAR_TO_STATEMENT_MAP CNode::getReachingDefinitions() {
+unordered_map<int, int> CNode::getReachingDefinitions() {
 	return _reachingDefinitions;
 }
-void CNode::setReachingDefinitions(VAR_TO_STATEMENT_MAP varStmtMap) {
+void CNode::setReachingDefinitions(unordered_map<int, int> varStmtMap) {
 	_reachingDefinitions = varStmtMap;
 }
 
-VAR_TO_STATEMENT_MAP CNode::getFirstUseOfVariable() {
+unordered_map<int, int> CNode::getFirstUseOfVariable() {
 	return _firstUseOfVariable;
 }
-void CNode::setFirstUseOfVariable(VAR_TO_STATEMENT_MAP varStmtMap) {
+void CNode::setFirstUseOfVariable(unordered_map<int, int> varStmtMap) {
 	_firstUseOfVariable = varStmtMap;
 }

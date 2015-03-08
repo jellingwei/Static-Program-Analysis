@@ -21,7 +21,6 @@
 
 using namespace std;
 typedef short PROC;
-typedef int STMT;
 
 class TNode;
 
@@ -105,7 +104,7 @@ public:
 	bool insertStmt(int, string, TNode*, int);
 	string getType(int);
 	vector<int> getStmtNumForType(string);
-	vector<STMT> getStmtNumForType(SYNONYM_TYPE);
+	vector<int> getStmtNumForType(SYNONYM_TYPE);
 	bool isAssign(int);
 	bool isWhile(int);
 	bool isIf(int);
