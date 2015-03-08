@@ -31,16 +31,16 @@ void QueryValidator::initTable()
 	//Modifies argument 1
 	SYNONYM_TYPE list1array[] = { ASSIGN, CALL, IF, WHILE, STMT, PROG_LINE, PROCEDURE, STRING_INT, STRING_CHAR };
 	vector<SYNONYM_TYPE> list1; list1.insert(list1.begin(), list1array, list1array + 9);
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Modifies), list1));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(ModifiesP), list1));
 
 	//Modifies arguement 2
 	SYNONYM_TYPE list2array[] = { VARIABLE, STRING_CHAR, UNDEFINED }; 
 	vector<SYNONYM_TYPE> list2; list2.insert(list2.begin(), list2array, list2array + 3);
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Modifies), list2));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(ModifiesP), list2));
 
 	//Uses argument 1 & 2
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Uses), list1));
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Uses), list2));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(UsesP), list1));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(UsesP), list2));
 
 	SYNONYM_TYPE list3array[] = { ASSIGN, CALL, IF, WHILE, STMT, PROG_LINE, PROCEDURE, STRING_INT };
 	vector<SYNONYM_TYPE> list3; list3.insert(list3.begin(), list3array, list3array + 8);
@@ -67,9 +67,9 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Parent), list5));
 
 	//ParentS argument 1
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(ParentS), list4));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(ParentT), list4));
 	//ParentS argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(ParentS), list5));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(ParentT), list5));
 
 	//Follows argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Follows), list5));
@@ -78,10 +78,10 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Follows), list5));
 
 	//FollowsS argument 1
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(FollowsT), list5));
 
 	//FollowsS argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsS), list5));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsT), list5));
 
 
 	SYNONYM_TYPE list6array[] = { ASSIGN, STMT, PROG_LINE, STRING_INT, UNDEFINED };
@@ -94,10 +94,10 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Affects), list6));
 	
 	//AffectsS argument 1
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(AffectsS), list6));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(AffectsT), list6));
 
 	//AffectsS argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsS), list6));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsT), list6));
 
 	//Next
 	SYNONYM_TYPE list7array[] = { ASSIGN, CALL, IF, STMT, WHILE, PROG_LINE, STRING_INT, UNDEFINED };
@@ -107,9 +107,9 @@ void QueryValidator::initTable()
 	//Next argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Next), list7));
 	//NextS argument 1
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(NextS), list7));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(NextT), list7));
 	//NextS argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(NextS), list7));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(NextT), list7));
 
 
 	//Calls argument 1
@@ -119,9 +119,9 @@ void QueryValidator::initTable()
 	//Calls argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Calls), list8));
 	//CallsS argument 1
-	relationshipArg1Map.insert(make_pair(QNODE_TYPE(CallsS), list8));
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(CallsT), list8));
 	//CallsS argument 2
-	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsS), list8));
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsT), list8));
 
 
 	/* patterns queries */
@@ -213,7 +213,7 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 	}
 
 
-	if((type != QNODE_TYPE(Next)) && (type != QNODE_TYPE(NextS))){
+	if((type != QNODE_TYPE(Next)) && (type != QNODE_TYPE(NextT))){
 		//Since the two are constant strings, they must be digits by the checks above
 		if ((arg1Type == STRING_INT && arg2Type == STRING_INT) &&
 			(stoi(arg1.getName()) >= stoi(arg2.getName())) ){

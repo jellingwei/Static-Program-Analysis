@@ -99,43 +99,42 @@ void QueryTree::printNode(QNode* node)
 
 
 	switch(node->getNodeType()) {
-	case Modifies:          
+	case ModifiesP:
+	case ModifiesS:          
 		type = "Modifies";
 		break;
 	case Follows:
 		type = "Follows";
 		break;
-	case FollowsS:
+	case FollowsT:
 		type = "Follows*";
 		break;
 	case Parent:
 		type = "Parent";
 		break;
-	case ParentS:
+	case ParentT:
 		type = "Parent*";
 		break;
-	case Uses:
-		type = "Uses";
-		break;
+	case UsesP:
 	case UsesS:
-		type = "Uses*";
+		type = "Uses";
 		break;
 	case Calls:
 		type = "Calls";
 		break;
-	case CallsS:
+	case CallsT:
 		type = "Calls*";
 		break;
 	case Next:
 		type = "Next";
 		break;
-	case NextS:
+	case NextT:
 		type = "Next*";
 		break;
 	case Affects:
 		type = "Affects";
 		break;
-	case AffectsS:
+	case AffectsT:
 		type = "Affects*";
 		break;
 	case Selection:
