@@ -3,7 +3,6 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <unordered_map>
 
 #include "CNode.h"
 
@@ -23,13 +22,6 @@ CNode::CNode(CNODE_TYPE cfgNodeType, int procLineNum, CNode* header, TNode* ast)
 	_procLineNumber = procLineNum;
 	_header = header;
 	_ASTref = ast;
-}
-
-/**
- * @return TRUE if the node is a dummy node, and does not correspond directly to any statement in the source program.
- */
-bool CNode::isDummy() {
-	return _nodeType == EndIf_C || _nodeType == Proc_C || _nodeType == EndProc_C;
 }
 
 /**
@@ -112,83 +104,93 @@ void CNode::setHeader(CNode* header)
 	_header = header;
 }
 
-
+/**
+ * @return a CNode, header, which is the container statement for if/while statements.
+ */
 CNode* CNode::getHeader() 
 {
 	return _header;
 }
 
+/**
+ * @return a list of all the CNodes inside the container statement for if/while statements.
+ */
 vector<CNode*>* CNode::getInside()
 {
 	return &_inside;
 }
 
+/**
+ * Add the CNode to the list of CNodes inside the container statement for if/while statements.
+ * @param node a CNode
+ */
 void CNode::addInside(CNode* node)
 {
 	_inside.push_back(node);
 }
 
+/**
+ * Check if the current CNode has any CNode inside the container statement for if/while statements. 
+ * @return TRUE if the current CNode has at least 1 CNode inside the container statement. 
+ *		   FALSE if the current CNode does not have any CNode inside the container statement.
+ */
 bool CNode::hasInside()
 {
 	if(_inside.size() < 1) return false;
 	else return true;
 }
 
+/**
+ * @return a list of all the CNodes inside the 'else' of the if/else statement.
+ */
 vector<CNode*>* CNode::getInside2()
 {
 	return &_inside;
 }
 
+/**
+ * Add the CNode to the list of CNodes inside the 'else' of the if/else statement.
+ * @param node a CNode
+ */
 void CNode::addInside2(CNode* node)
 {
 	_inside.push_back(node);
 }
 
+/**
+ * Check if the current CNode has any CNode inside the 'else' of the if/else statement.
+ * @return TRUE if the current CNode has at least 1 CNode inside the 'else' of the if/else statement. 
+ *		   FALSE if the current CNode does not have any CNode inside the 'else' of the if/else statement.
+ */
 bool CNode::hasInside2()
 {
 	if(_inside.size() < 1) return false;
 	else return true;
 }
 
+/**
+ * Get the TNode in AST that corresponds to the CNode in CFG.
+ * @return the TNode corresponds to the CNode given.
+ */
 TNode* CNode::getASTref()
 {
 	return _ASTref;
 }
 
+/**
+ * Set the node to indicate it is the last node in the CFG of a procedure.
+ */
 void CNode::setEnd()
 {
 	isEnd = true;
 }
 
+/**
+ * Check if the node is the end node in the CFG of a procedure.
+ * @return TRUE if the the node is the end node in the CFG of a procedure.
+ *		   FALSE if the the node is not the end node in the CFG of a procedure.
+ */
 bool CNode::getEnd()
 {
 	return isEnd;
-}
-
-VARIABLES CNode::getVariablesInside2() {
-	return _variablesInside2;
-}
-void CNode::setVariablesInside2(VARIABLES variables) {
-	_variablesInside2 = variables;
-}
-
-VARIABLES CNode::getVariablesInside() {
-	return _variablesInside;
-}
-void CNode::setVariablesInside(VARIABLES variables) {
-	_variablesInside = variables;
-}
-
-unordered_map<int, int> CNode::getReachingDefinitions() {
-	return _reachingDefinitions;
-}
-void CNode::setReachingDefinitions(unordered_map<int, int> varStmtMap) {
-	_reachingDefinitions = varStmtMap;
-}
-
-unordered_map<int, int> CNode::getFirstUseOfVariable() {
-	return _firstUseOfVariable;
-}
-void CNode::setFirstUseOfVariable(unordered_map<int, int> varStmtMap) {
-	_firstUseOfVariable = varStmtMap;
 }
