@@ -18,8 +18,9 @@ PatternMatch::PatternMatch()
 
 /**
  * Pattern matching for assign statements.
+ * @param _rootNodeQ  the Root Node of the query tree build for the expression and a flag for exact or non-exact matching
+ * @param isExact  a flag for exact or non-exact matching
  * @return a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node.
- * @param Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
 vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact)
 {
@@ -62,8 +63,10 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact)
 
 /**
  * Checks Match Pattern in Particular Assignment Statement [Recursive Step]
+ * @param _rightChildNodeA  the Root node of the AST assignment sub-tree being examined, 
+ * @param _rootNodeQ  the Root node of the query tree build for the expression
+ * @param isExact  a flag for exact or non-exact matching
  * @return true if Assignment contains Pattern
- * @param Root Node of Assignment sub-tree, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
 bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact)
 {
@@ -88,8 +91,10 @@ bool checkPatternMatchAssign(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool is
 
 /**
  * Breadth-First Search variation for searching and comparing nodes.
+ * @param _rightChildNodeA  the Root node of the AST assignment sub-tree being examined, 
+ * @param _rootNodeQ  the Root node of the query tree build for the expression
+ * @param isExact  a flag for exact or non-exact matching
  * @return true if a valid "path" (nodes of same value and type) in both AST and queryAST is found
- * @param Root Node of Assignment sub-tree, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
 bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact)
 {
@@ -185,8 +190,10 @@ bool BFS(TNode* _rightChildNodeA, TNode* _rootNodeQ, bool isExact)
 
 /**
  * Auxilliary method for Non-Exact Pattern Match, recursively checks subtrees to find a matching pattern.
+ * @param GrandChildrenList  a list of children nodes of current Root node
+ * @param _rootNodeQ  the Root node of the query tree build for the expression
+ * @param isExact  a flag for exact or non-exact matching
  * @return true if Assignment contains Pattern
- * @param Children nodes of current Root node in a Vector<>, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
 bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, bool isExact) {
 
@@ -223,8 +230,10 @@ bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, bool 
 
 /**
  * Pattern matching when query is a single value.
+ * @param _rightChildNodeA  the Root node of the AST assignment sub-tree being examined, 
+ * @param _rootNodeQ  the Root node of the query tree build for the expression
+ * @param isExact  a flag for exact or non-exact matching
  * @return a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node.
- * @param Root Node of Assignment sub-tree, Root node of the query tree build for the expression and a flag for exact or non-exact matching
  */
 vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, bool isExact) {
 	TNODE_TYPE constType = Constant, varType = Variable;
@@ -280,9 +289,9 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, b
 
 /**
  * Pattern matching for while or if statements.
- * @return a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable.
  * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
  * @param type the type of statement to match, either While or If
+ * @return a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable.
  */
 vector<int> PatternMatch::patternMatchParentStmt(string LHS, TNODE_TYPE type) {
 	// strip leading and trailing space

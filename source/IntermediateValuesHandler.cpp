@@ -29,6 +29,7 @@ namespace IntermediateValuesHandler
 
 	/**
 	* Initialize the handler for intermediate values.
+	* @param synonymsMap which maps from the synonym to the synonym type (e.g. STMT)
 	*/
 	void initialize(unordered_map<string, SYNONYM_TYPE> synonymsMap) 
 	{
@@ -37,6 +38,9 @@ namespace IntermediateValuesHandler
 		synonymMap = synonymsMap;
 	}
 
+	/**
+	* Initialize the handler for intermediate values. For unit testing purposes. 
+	*/
 	void clear()
 	{
 		allIntermediateValues.clear();
@@ -44,6 +48,13 @@ namespace IntermediateValuesHandler
 		synonymMap.clear();
 	}
 
+	/**
+	* Find the column number in which this synonym is stored in the table
+	* Made public for testing purposes. 
+	* @param synonymName the name of the synonym
+	* @return the column number if the synonym exists in the table
+	*         -1 if the synonym does not exist in the table
+	*/
 	int findIntermediateSynonymIndex(string synonymName)
 	{
 		auto itr = allIntermediateNamesMap.find(synonymName);
@@ -77,7 +88,7 @@ namespace IntermediateValuesHandler
 	* Check if the adding and processing of intermediate synonym is successful.
 	* @param synonym
 	* @return TRUE if the processing of intermediate values is successful.
-	*		  FALSE if the processing of intermediate values is successful.
+	*		  FALSE if the processing of intermediate values causes the table to have zero rows.
 	*/
 	bool addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
@@ -118,11 +129,11 @@ namespace IntermediateValuesHandler
 	}
 
 	/**
-	* Check if the adding and processing of intermediate synonym is successful.
+	* Check if the adding and processing of intermediate synonyms is successful.
 	* @param LHS
 	* @param RHS
 	* @return TRUE if the processing of intermediate values is successful.
-	*		  FALSE if the processing of intermediate values is successful.
+	*		  FALSE if the processing of intermediate values causes the table to have zero rows.
 	*/
 	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
 	{
@@ -162,7 +173,9 @@ namespace IntermediateValuesHandler
 
 
 	/**
-	* Helper method to do a cartesian product of the intermediate synonym values with other values
+	* Helper method to do a join or cartesian product of the intermediate synonym values with other values
+	* Made public for testing purposes
+	* @param synonym
 	*/
 	void joinWithExistingValues(Synonym synonym) 
 	{
@@ -191,8 +204,11 @@ namespace IntermediateValuesHandler
 	}
 
 	/**
-	* Helper method to do a cartesian product of the intermediate synonym values with other values
+	* Helper method to do a join or cartesian product of the intermediate synonym values with other values
 	* Overloaded method which takes in two arguments instead of one
+	* Made public for testing purposes
+	* @param LHS
+	* @param RHS
 	*/
 	void joinWithExistingValues(Synonym LHS, Synonym RHS) 
 	{
@@ -228,6 +244,9 @@ namespace IntermediateValuesHandler
 
 	/**
 	* Helper method to do a set intersection of the intermediate values in the table
+	* Made public for testing purposes
+	* @param synonymIndex the column number of the synonym
+	* @param probeValues the new values that are to be inserted
 	*/
 	void intersectWithExistingValues(int synonymIndex, vector<int> probeValues) 
 	{
@@ -249,6 +268,11 @@ namespace IntermediateValuesHandler
 	/**
 	* Helper method to do a set intersection of the intermediate values in the table
 	* Overloaded method which takes in two pairs of arguments instead of one pair
+	* Made public for testing purposes
+	* @param indexLHS the column number of the LHS synonym
+	* @param LHSValues the new values of the LHS synonym
+	* @param indexRHS the column number of the RHS synonym
+	* @param RHSValues the values of the RHS synonym
 	*/
 	void intersectWithExistingValues(int indexLHS, vector<int> LHSValues, int indexRHS, vector<int> RHSValues) 
 	{
@@ -264,6 +288,14 @@ namespace IntermediateValuesHandler
 		swap(allIntermediateValues, acceptedValues);
 	}
 
+	/**
+	* Helper method to do a set intersection and joining of paired synonyms
+	* One synonym exists in the main table while the other does not
+	* Made public for testing purposes
+	* @param existingIndex the column number of the existing synonym
+	* @param probe the synonym that is being used as the join value
+	* @param newSynonym the new synonym that is to be joined
+	*/
 	void intersectAndJoinWithExistingValues(int existingIndex, Synonym probe, Synonym newSynonym)
 	{
 		vector<vector<int>> acceptedValues;
@@ -287,6 +319,14 @@ namespace IntermediateValuesHandler
 		swap(allIntermediateValues, acceptedValues);
 	}
 
+	/**
+	* Helper method to iterate through the main table and filter rows containing only that value
+	* For "with" clauses that are comparing synonyms with constants
+	* @param synonym the synonym that is to be filtered
+	* @param wantedValue the value that is to be filtered
+	* @return TRUE if there are rows left in the table after filtering
+	*         FALSE if there are no rows left in the table after filtering
+	*/
 	bool filterEqualValue(Synonym synonym, string wantedValue)
 	{
 		int synonymIndex = findIntermediateSynonymIndex(synonym.getName());
@@ -360,10 +400,14 @@ namespace IntermediateValuesHandler
 		return (allIntermediateValues.size() != 0);
 	}
 
-	//Assume that varIndex and int cannot be compared
-	//Assume that process with clauses last
-	//@todo special handling for comparison between varName and procName
-	//@todo special handling for comparison between p.procName and call.procName
+	/**
+	* Helper method to iterate through the main table and filter rows having equal values across both columns
+	* For "with" clauses that are comparing synonyms with synonyms
+	* @param LHS
+	* @param RHS
+	* @return TRUE if there are rows left after filtering
+	*         FALSE if there are no rows left after filtering
+	*/
 	bool filterEqualPair(Synonym LHS, Synonym RHS)
 	{
 		SYNONYM_TYPE arg1Type = LHS.getType();
@@ -380,6 +424,14 @@ namespace IntermediateValuesHandler
 		}
 	}
 
+	/**
+	* Helper method to iterate through the main table and filter rows having equal numbers across both columns
+	* For "with" clauses that are comparing number attributes such as stmtNo
+	* @param LHS
+	* @param RHS
+	* @return TRUE if there are rows left after filtering
+	*         FALSE if there are no rows left after filtering
+	*/
 	bool filterEqualPairByNumber(Synonym LHS, Synonym RHS)
 	{
 		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
@@ -453,6 +505,14 @@ namespace IntermediateValuesHandler
 		}
 	}
 
+	/**
+	* Helper method to iterate through the main table and filter rows having equal numbers across both columns
+	* For "with" clauses that are comparing string attributes such as procName
+	* @param LHS
+	* @param RHS
+	* @return TRUE if there are rows left after filtering
+	*         FALSE if there are no rows left after filtering
+	*/
 	bool filterEqualPairByString(Synonym LHS, Synonym RHS)
 	{
 		SYNONYM_TYPE arg1Type = LHS.getType();
@@ -537,8 +597,9 @@ namespace IntermediateValuesHandler
 	/**
 	* Helper method to get the synonym with its final values
 	* Gets the default values if this synonym is not in the intermediate values
-	* Otherwise, performs set intersection with the intermediate values
-	* Returns a new synonym with the final values
+	* Otherwise, performs gets the existing intermediate values
+	* @param wantedName the name of the wanted synonym
+	* @return Synonym object with the type, name and values
 	*/
 	Synonym getSynonymWithName(string wantedName) 
 	{
@@ -558,6 +619,13 @@ namespace IntermediateValuesHandler
 		}
 	}
 
+	/**
+	* Helper method to convert an index to it's actual name
+	* e.g. converting index 1 of procedure type yields "ProcOne"
+	* @param index the variable or procedure index
+	* @param type the type of synonym (e.g. procedure)
+	* @return The string representation of the index
+	*/
 	string convertIndexToString(int index, SYNONYM_TYPE type)
 	{
 		switch (type) {
@@ -572,6 +640,13 @@ namespace IntermediateValuesHandler
 		}
 	}
 
+	/**
+	* Helper method to get all intermediate values of the column
+	* Might contain duplicates
+	* Made public for testing
+	* @param synonymIndex the index of the column
+	* @return A vector containing all the intermediate values so far
+	*/
 	vector<int> getIntermediateValues(int synonymIndex) 
 	{
 		vector<int> intermediateValues;
@@ -581,6 +656,13 @@ namespace IntermediateValuesHandler
 		return intermediateValues;
 	}
 
+	/**
+	* Helper method to get all intermediate values of the column
+	* There are no duplicates contain duplicates
+	* Made public for testing
+	* @param synonymIndex the index of the column
+	* @return A set containing all the intermediate values with no duplicates
+	*/
 	set<int> getIntermediateValuesSet(int synonymIndex) 
 	{
 		set<int> intermediateValues;
@@ -592,6 +674,10 @@ namespace IntermediateValuesHandler
 
 	/**
 	* Helper method to check if a particular value is contained in the set
+	* @param setToSearch a given set to search
+	* @param value the value that is to be searched for
+	* @return TRUE if the value exists in the set given
+	*         FALSE if the value does not exist in the set given
 	*/
 	inline bool isValueExist(set<int> setToSearch, int value) 
 	{

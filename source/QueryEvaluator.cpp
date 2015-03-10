@@ -262,7 +262,7 @@ namespace QueryEvaluator
 	/**
 	* @param LHS
 	* @param RHS
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS)
 	{
@@ -292,7 +292,7 @@ namespace QueryEvaluator
 	/**
 	* @param LHS
 	* @param RHS
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS)
 	{
@@ -391,7 +391,7 @@ namespace QueryEvaluator
 	/**
 	* @param LHS
 	* @param RHS
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS)
 	{
@@ -421,7 +421,7 @@ namespace QueryEvaluator
 	/**
 	* @param LHS
 	* @param RHS
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS)
 	{
@@ -508,7 +508,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -534,7 +534,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -618,7 +618,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -644,7 +644,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -726,7 +726,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -752,7 +752,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -834,7 +834,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -860,7 +860,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -941,7 +941,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
@@ -967,7 +967,7 @@ namespace QueryEvaluator
 	* @param LHS
 	* @param RHS
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
-	* @return 
+	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
 	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
