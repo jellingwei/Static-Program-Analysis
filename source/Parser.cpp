@@ -8,6 +8,7 @@
 #include <sstream>
 #include <regex>
 #include <exception>
+#include <algorithm>
 
 #include "PKB.h"
 #include "AST.h"
@@ -24,14 +25,12 @@
 			the SIMPLE grammar
 
  */
-namespace Parser 
-{
+namespace Parser {
 	using std::string;
 	using std::vector;
 	using std::regex;
 
-	namespace var // contains state of the parser
-	{
+	namespace var { // contains state of the parser
 		ifstream inputFile;
 
 		vector<string> buffer;
@@ -51,8 +50,7 @@ namespace Parser
 	 * The file specified by filename is opened for parsing. 
 	 * Return TRUE if the file can be successfully opened. Otherwise, return FALSE.
 	 */
-	bool initParser(string filename) 
-	{
+	bool initParser(string filename) {
 		using namespace Parser::var;
 		inputFile.open(filename);
 		stmtNum = 0;
@@ -63,8 +61,7 @@ namespace Parser
 		return inputFile.is_open(); 
 	}
 
-	namespace util 
-	{
+	namespace util {
 		using namespace Parser::var;
 		
 		bool parseStmtList();
@@ -74,8 +71,7 @@ namespace Parser
 		 */
 		bool parseLine() 
 		{
-			if (!inputFile.is_open()) 
-			{
+			if (!inputFile.is_open()) {
 				throw new logic_error("Parse failure: Parser not initialised before parsing functions were called");
 			}
 	
@@ -87,15 +83,12 @@ namespace Parser
 
 			// drop everything after 2 backslash
 			int pos;
-			if ((pos = line.find("\\")) != string::npos) 
-			{
+			if ((pos = line.find("\\")) != string::npos) {
 				line = line.substr(0, pos);
 			}
 
-			if (line.empty()) 
-			{
-				if (inputFile.eof()) 
-				{
+			if (line.empty()) {
+				if (inputFile.eof()) {
 					inputFile.close();
 					return false;
 				}
@@ -115,14 +108,11 @@ namespace Parser
 			string operators = "([\\w\\d]+|[*\\-+=;{}\\(\\)])";
 			regex operRegex(operators);
 
-			for (; rs != reg_end; ++rs) 
-			{
+			for (; rs != reg_end; ++rs) {
 				std::smatch match;
 				string res(rs->str());
-				while (std::regex_search(res, match, operRegex)) 
-				{
-					if (match.empty()) 
-					{
+				while (std::regex_search(res, match, operRegex)) {
+					if (match.empty()) {
 						break;
 					}
 					buffer.push_back(match[0]);
@@ -136,15 +126,12 @@ namespace Parser
 		/**
 		 * Returns the next token
 		 */
-		string parseToken() 
-		{
-			if (buffer.size() && bufferIter != buffer.end()) 
-			{
+		string parseToken() {
+			if (buffer.size() && bufferIter != buffer.end()) {
 				return *(bufferIter ++);
 			} else {
 				bool res = parseLine();
-				if (!res) 
-				{
+				if (!res) {
 					return inputFile.eof()? "" : parseToken();
 				} else {
 					bufferIter = buffer.begin();
@@ -153,15 +140,12 @@ namespace Parser
 			}
 		}
 
-		string peekToken() 
-		{
-			if (buffer.size() && bufferIter != buffer.end()) 
-			{
+		string peekToken() {
+			if (buffer.size() && bufferIter != buffer.end()) {
 				return *(bufferIter);
 			} else {
 				bool res = parseLine();
-				if (!res) 
-				{
+				if (!res) {
 					return inputFile.eof()? "" : peekToken();
 				} else {
 					bufferIter = buffer.begin();
@@ -234,6 +218,22 @@ namespace Parser
 		}
 
 
+		bool createVariablesForExpr(vector<string> tokenizedBuffer) {
+			bool status = true;
+			for (int i = 0; i < tokenizedBuffer.size(); i++) {
+				
+				bool isVariable = !matchName(tokenizedBuffer[i]).empty();
+				if (!isVariable) {
+					continue;
+				}
+
+				string varName = tokenizedBuffer[i];
+				
+				int varIndex = PKB::getInstance().insertVar(varName, stmtNum);
+				status &= (varIndex != -1 );
+			}
+			return status;
+		}
 
 		/**
 		 * Parses an expression. 
@@ -250,6 +250,8 @@ namespace Parser
 			vector<string> slicedBuffer(first, last);
 
 			ExpressionParser exprParser;
+			createVariablesForExpr(slicedBuffer);
+
 			exprParser.updateStmtNum(stmtNum);
 			exprParser.updateProcIndex(currentProcIndex);
 			TNode* top = exprParser.parseExpressionForAST(slicedBuffer);

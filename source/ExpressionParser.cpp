@@ -103,7 +103,6 @@ int matchVariable(string value, int stmtNum, int procIndex, VarTable* varTable =
 	// write to pkb if not under test, otherwise write to vartable
 	bool isUnderTest = varTable != NULL;
 	if (!isUnderTest) {
-		pkb.insertVar(value, stmtNum);
 		varIndx = pkb.getVarIndex(value);
 	} else {
 		varTable->insertVar(value, stmtNum);
@@ -254,3 +253,4 @@ TNode* ExpressionParser::parseExpression(vector<string> buffer, bool readOnly) {
 	this->readOnly = readOnly;
 	return parse();
 } 
+
