@@ -334,11 +334,14 @@ bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 
 	}else{
 
-		listArg1 = withAttrRefMap.at(arg1Attr);
-
 		//case 1: synonym.attrName
-		if(!listArg1.empty()){ // if there are restrictions place on argument 1
-			
+		if(withAttrRefMap.count(arg1Attr)>0){
+
+			//case 1: synonym.attrName
+			//checks if there are restrictions place on argument 1
+			listArg1 = withAttrRefMap.at(arg1Attr);
+		
+
 			auto result1 = std::find(std::begin(listArg1), std::end(listArg1), arg1Type);
 		
 			if(result1 == std::end(listArg1)){ // not inside list of type of argument 1
@@ -386,10 +389,14 @@ bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 
 	}else{
 
-		listArg2 = withAttrRefMap.at(arg2Attr);
 
-		//synonym.attrName
-		if(!listArg2.empty()){ // if there are restrictions place on argument 2
+		//case 1: synonym.attrName
+		if(withAttrRefMap.count(arg2Attr)>0){
+
+			//case 1: synonym.attrName
+			//checks if there are restrictions place on argument 2
+			listArg2 = withAttrRefMap.at(arg2Attr);
+		
 			
 			auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
 		
@@ -425,10 +432,21 @@ bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 	}
 
 
-	if(!LHS_integer && RHS_integer)
+	if(!LHS_integer && RHS_integer){
+
+		#ifdef DEBUG
+			cout<<"In QueryValidator for with clause, !LHS_int && RHS_int"<<endl;
+		#endif
+
 		return false;
-	else if(LHS_integer && !RHS_integer)
+	}else if(LHS_integer && !RHS_integer){
+
+		#ifdef DEBUG
+			cout<<"In QueryValidator for with clause, LHS_int && !RHS_int"<<endl;
+		#endif
+
 		return false;
+	}
 
 
 	return true;

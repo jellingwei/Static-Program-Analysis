@@ -229,3 +229,34 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return UNDEFINED;
 	}
 }
+string Synonym::convertSynonymAttrToString(SYNONYM_ATTRIBUTE synonymAttr)
+{
+	switch (synonymAttr) {
+	case procName:
+		return "procName";
+	case varName:
+		return "varName";
+	case value:
+		return "value";
+	case stmtNo:
+		return "stmtNo";
+	case empty:
+		return "";
+	default:
+		return "";
+	}
+}
+SYNONYM_ATTRIBUTE Synonym::convertSynonymAttrToEnum(string synonymAttr)
+{
+	if (synonymAttr == "procName") {
+		return procName;
+	} else if (synonymAttr == "varName") {
+		return varName;
+	} else if (synonymAttr == "value") {
+		return value;
+	} else if (synonymAttr == "stmtNo"){
+		return stmtNo;
+	}else{
+		return empty;
+	}
+}

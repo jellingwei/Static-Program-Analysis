@@ -909,7 +909,7 @@ namespace QueryParser
 
 
 			//build Synonym and return
-			return Synonym(DE_type,value,SYNONYM_ATTRIBUTE());
+			return Synonym(DE_type,value,SYNONYM_ATTRIBUTE(empty));
 		}
 
 		return Synonym(); //wont reach here

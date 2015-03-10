@@ -18,10 +18,12 @@ enum SYNONYM_TYPE
 
 enum SYNONYM_ATTRIBUTE
 {
+	empty,     //if SYNONYM_ATTRIBUTE() 
 	procName,  //Used for procedure and call
 	varName,   //Used for var
 	value,     //Used for constant
 	stmtNo     //Used for all others including call
+
 };
 
 class Synonym
@@ -49,6 +51,8 @@ public:
 	
 	static string convertToString(SYNONYM_TYPE synonymType);
 	static SYNONYM_TYPE convertToEnum(string synonymType);
+	static string convertSynonymAttrToString(SYNONYM_ATTRIBUTE synonymAttr);
+	static SYNONYM_ATTRIBUTE convertSynonymAttrToEnum(string synonymAttr);
 
 private:
 	SYNONYM_TYPE _type;  //Type of synonym (Can use "string" or "boolean")
