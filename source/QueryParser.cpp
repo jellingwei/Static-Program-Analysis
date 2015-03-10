@@ -27,10 +27,13 @@ using std::make_tuple;
 
 /**
 	@brief Namespace containing functions for parsing PQL queries.
-	QueryParser checks the query input to see if it matches with 
-	PQL grammar and builds a query tree. 
-
+	Query Parser parses the query according to PQL Grammar rules, 
+	builds a synonym map and a Query Tree. It validates the 
+	structural syntax of PQL query provided, if the query provided 
+	is structurally correct, it calls upon Query Validator for 
+	validation of the logical aspect of the query. 
  */
+
 namespace QueryParser
 {
 	enum REF_TYPE
@@ -65,7 +68,7 @@ namespace QueryParser
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
 	 * @return TRUE if the query parser have been initialized. Otherwise, return FALSE.
-	 * If a query string given is empty, or the buffer’s size is 0 after tokenizing return FALSE. 
+	 * If a query string given is empty, or the buffer\’s size is 0 after tokenizing return FALSE. 
 	 */
 	bool initParser(string query)
 	{
@@ -115,7 +118,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * @return the next token
+	 * @return the next token in the buffer.
 	 */
 	string parseToken()
 	{
@@ -135,6 +138,9 @@ namespace QueryParser
 		return "";
 	}
 
+	/**
+	 * Prints out the remaining tokens in the buffer.
+	 */
 	void testingQueryParser()
 	{
 		string nxtToken = parseToken();
@@ -147,6 +153,11 @@ namespace QueryParser
 	/**************************************************************/
 	/**   Supporting Functions - To read the buffer of queries   **/
 	/**************************************************************/
+	
+	/**
+	 * @return the next token in the buffer, but does not 
+	 * take that token out of buffer.
+	 */
 	string peekInToTheNextToken()
 	{
 		if(buffer.size()==0 || bufferIter == buffer.end()) // if there is no next token
@@ -157,7 +168,8 @@ namespace QueryParser
 
 	/**
 	 * @To-do merge with peekInToTheNextToken
-	 * @return the next , next token from the current token. 
+	 * @return the next next token in the buffer, but does not
+	 * take that token out of buffer.
 	 */
 	string peekInToTheNextNextToken()
 	{
@@ -166,8 +178,8 @@ namespace QueryParser
 
 	/**
 	 * @return a token these number of steps backwards from the currToken.
-	 * If steps = 0 , it returns the currToken
-	 * If steps = 1, it returns the previous token
+	 * If steps = 0 , it returns the currToken.
+	 * If steps = 1, it returns the previous token.
 	 */
 	string peekBackwards(int steps)
 	{
@@ -182,7 +194,8 @@ namespace QueryParser
 	/**************************************************************/
 	
 	/**
-	 * Initialise query tree, synonymsMap and nodeTypeMap.
+	 * Initialise query tree, synonymsMap, nodeTypeMap, 
+	 * relRefMap and attrNameMap.
 	 */	
 	void initQueryTreeAndSymbolsTable()
 	{
@@ -268,7 +281,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * Prints out the built by the query parser onto console for testing and debugging.
+	 * Calls Query Tree to print the query tree built by Query Parser
+	 * onto console (for testing and debugging).
 	 **/
 	void queryTreeTesting()
 	{
@@ -281,7 +295,9 @@ namespace QueryParser
 	/**************************************************************/
 
 	/**
-	 * Matches if the given token follows the naming convention for NAME, as per the given grammar.
+	 * Matches if the given token follows the naming convention for NAME, 
+	 * as per the given grammar.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchName(string token)
 	{
@@ -291,7 +307,9 @@ namespace QueryParser
 	}
 
 	/**
-	 * Matches if the given token follows the naming convention for INTEGER, as per the given grammar.
+	 * Matches if the given token follows the naming convention for INTEGER, 
+	 * as per the given grammar.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchInteger(string token)
 	{
@@ -300,7 +318,9 @@ namespace QueryParser
 	}
 
 	/**
-	 * Matches if the given token follows the naming convention of a factor.
+	 * Matches if the given token follows the naming convention of a factor, 
+	 * as per the given grammar.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchFactor(string token)
 	{
@@ -313,14 +333,17 @@ namespace QueryParser
 		return (matchInteger(token) || matchName(token));
 	}
 	/**
-	 *  Checks if it's a factor 
+	 * Checks if it's a factor 
+	 * @return TRUE if it's a factor, FALSE otherwise.
 	 **/
 	bool isFactor(string token)
 	{
 		return (matchInteger(token) || matchName(token));
 	}
 	/**
-	 *Matches if the given token follows the naming convention of Synonym and IDENT.
+	 * Matches if the given token follows the naming convention of Synonym and IDENT
+	 * as per the given grammar.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchSynonymAndIdent(string token, bool comma)
 	{
@@ -339,13 +362,19 @@ namespace QueryParser
 	}
 
 	/**
-	 * Matches if the given token follows the naming convention of entity reference.
+	 * Matches if the given token is an underscore.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchUnderscore(string token)
 	{
 		return (token.compare("_") == 0);
 	}
 	
+	/**
+	 * Matches if the given token is an attrName as per 
+	 * the given grammar.
+	 * @return TRUE if it matches, FALSE otherwise.
+	 */
 	bool matchAttrName(string token)
 	{
 		for(int i=0; i<(sizeof(attrName)/sizeof(*attrName)); i++){
@@ -361,9 +390,10 @@ namespace QueryParser
 	}
 
 	/**
-	 * @siling
-	 * Matches if has "synonym.attrName" syntax
-	 **/
+	 * Matches if the given token is an attrRef as per the 
+	 * given grammar. It checks if it has "synonym.attrName" syntax.
+	 * @return TRUE if it matches, FALSE otherwise.
+	 */
 	bool matchAttrRef(string token)
 	{
 
@@ -388,8 +418,12 @@ namespace QueryParser
 
 		return true;
 	}
+
+
 	/**
-	 * Matches if the given token follows the naming convention of stmt reference or line reference.
+	 * Matches if the given token follows the naming convention
+	 * of stmt reference or line reference. 
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchStmtOrLineRef(string token)
 	{
@@ -407,7 +441,9 @@ namespace QueryParser
 	}
 
 	/**
-	 * Matches if the given token follows the naming convention of entity reference.
+	 * Matches if the given token follows the naming convention of 
+	 * an entity reference.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchEntRef(string token)
 	{
@@ -428,7 +464,9 @@ namespace QueryParser
 	}
 
 	/**
-	 * Matches if the given token follows the naming convention of entity reference.
+	 * Matches if the given token follows the naming convention of 
+	 * an variable reference.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchVarRef(string token)
 	{
@@ -447,7 +485,9 @@ namespace QueryParser
 	}
 
 	/**
-	 * Matches if the given token follows the naming convention of a reference.
+	 * Matches if the given token follows the naming convention of 
+	 * a reference.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	 bool matchRef(string token)
 	 {
@@ -468,7 +508,9 @@ namespace QueryParser
 	 }
 
 	/**
-	 * Matches if the given token follows the naming convention of design entity reference.
+	 * Matches if the given token follows the naming convention of 
+	 * a design entity.
+	 * @return TRUE if it matches, FALSE otherwise.
 	 */
 	bool matchDesignEntity(string token)
 	{
@@ -483,12 +525,14 @@ namespace QueryParser
 		
 		return false;
 	}
+
 	/**************************************************************/
 	/**                      Parsing                             **/
 	/**************************************************************/
 
 	/**
 	 * Parses the next token and check if it is equal to the given target.
+	 * @return TRUE if it equals, FALSE otherwise.
 	 */
 	bool parse(string target)
 	{
@@ -497,7 +541,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * Parses the next token and check if it is equal to the apostrophe.
+	 * Parses the next token and check if it is equal to an apostrophe.
+	 * @return TRUE if it equals, FALSE otherwise.
 	 */
 	bool parseApostrophe()
 	{
@@ -507,7 +552,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * Parses the next token and check if is a design entity.
+	 * Parses the next token and check if it is a design entity.
+	 * @return TRUE if it's a design entity, FALSE otherwise.
 	 */
 	bool parseDesignEntity()
 	{
@@ -516,7 +562,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * Parses the next token and check if is a synonym.
+	 * Parses the next token and check if it is a synonym.
+	 * @return TRUE if it's a synonym, FALSE otherwise.
 	 */
 	bool parseSynonymns()
 	{
@@ -525,9 +572,10 @@ namespace QueryParser
 	}
 
 	/**
-	 * It's able to parse both stmtRef anf lineRef
-	 * Parses the next token and check if is a stmt reference or line reference.
-	 * @return an empty string if parsing fails
+	 * It's able to parse both stmtRef and lineRef.
+	 * Parses the next token and check if it is a stmt reference
+	 * or line reference.
+	 * @return an empty string if parsing fails.
 	 */
 	string parseStmtOrLineRef()
 	{
@@ -536,8 +584,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * Parses the next token and check if is a entity reference.
-	 * @return an empty string if parsing fails
+	 * Parses tokens and check if it is an entity reference.
+	 * @return an empty string if parsing fails.
 	 */
 	string parseEntRef()
 	{
@@ -558,8 +606,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * Parses the next token and check if is a variable reference.
-	 * @return an empty string if parsing fails
+	 * Parses tokens and check if it is a variable reference.
+	 * @return an empty string if parsing fails.
 	 */
 	string parseVarRef()
 	{
@@ -580,8 +628,9 @@ namespace QueryParser
 	}
 
 	/**
-	 * Parses the next token and check if is a reference. 
+	 * Parses tokens and check if it is a reference. 
 	 * Supporting method for parsing with clause. 
+	 * @return an empty string if parsing fails.
 	 */
 	 string parseRef()
 	 {
@@ -607,7 +656,8 @@ namespace QueryParser
 	 }
 
 	/**
-	 * Parses the next token and check if is a factor
+	 * Parses tokens and checks if it is a factor.
+	 * @return FALSE if parsing fails.
 	 */
 	bool parseFactor()
 	{
@@ -630,7 +680,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * @Siling
+	 * Parses tokens and check if it is a term.
+	 * @return FALSE if parsing fails.
 	 */
 	bool parseTerm()
 	{
@@ -650,7 +701,8 @@ namespace QueryParser
 
 
 	/**
-	 * @Siling
+	 * Parses tokens and check if it is an expression.
+	 * @return FALSE if parsing fails.
 	 */
 	bool parseExpr()
 	{
@@ -687,7 +739,8 @@ namespace QueryParser
 
 
 	/**
-	 * @Siling
+	 * Parses tokens and check if it is an expression-spec (for patterns).
+	 * @return FALSE if parsing fails.
 	 */
 	bool parseExpressionSpec()
 	{
@@ -726,6 +779,8 @@ namespace QueryParser
 	 *	Helper function for parse such that clause
 	 *  After parsing the relRef, build a tree.
 	 *  @To-do Temporarily it's for such-that. Extend it for patterns, select, with
+	 *  @return TRUE if a QNode is created and linked to Query Tree built, 
+	 *  and FALSE if query validation failed in Query Validator. 
 	 */
 	bool buildQueryTree(QNODE_TYPE relRef, Synonym s1, Synonym s2)
 	{				
@@ -748,6 +803,7 @@ namespace QueryParser
 	}
 
 	/**
+	 * Supporting function to create synonyms.
 	 * @return Synonym() if it is unable to create a Synonym.
 	 */
 	Synonym createSynonym(QNODE_TYPE relRef,string value, int arg)
@@ -861,11 +917,11 @@ namespace QueryParser
 	}
 
 	/**
-	 *	Helper function for parse such that clause
+	 *	Helper function to parse such that clause.
 	 *  @param[in] input the relRef (ie "Follows*") and the argument it's parsing(either 1 or 2 only) 
 	 *  Argument 1 can be an entRef, stmtRef or lineRef.
 	 *  Argument 2 can be an entRef, stmtRef, lineRef or varRef.
-	 *  If @return is an empty string, means parsing failed.
+	 *  @return an empty string if parsing fails.
 	 *  @To-do return synonym  
 	 */
 	string parseArg(QNODE_TYPE relRef, int arg)
@@ -899,7 +955,11 @@ namespace QueryParser
 		return entRef_value;
 	}
 
-
+	/**
+	 * Converts valid relRef types into QNODE_TYPE.
+	 * @return QNODE_TYPE if it's a valid string relRef, 
+	 * otherwise return a null.
+	 */
 	QNODE_TYPE convertIntoEnum(string relRef){
 
 		QNODE_TYPE nodeType;
@@ -946,10 +1006,9 @@ namespace QueryParser
 		return nodeType;
 	}
 
-
 	/**
-	 * Creates QNode for such that clause and validates the query.
-	 * @return FALSE if there is an error parsing query.
+	 * Creates QNode Such that and validates the such that clause.
+	 * @return FALSE if there are errors in the such that portion of query.
 	 */
 	bool parseSuchThatClause()
 	{
@@ -1021,7 +1080,7 @@ namespace QueryParser
 
 	/**
 	 * Creates QNode Pattern and validates the pattern clause.
-	 * @return FALSE if there's errors in the pattern portion of query.
+	 * @return FALSE if there are errors in the pattern portion of query.
 	 */
 	bool parsePatternClause()
 	{
@@ -1169,6 +1228,10 @@ namespace QueryParser
 		return true;
 	}
 
+	/**
+	 * Creates QNode With and validates the with clause.
+	 * @return FALSE if there are errors in the with portion of query.
+	 */
 	bool parseAttrCompare()
 	{
 		string ref1 = parseRef();
@@ -1212,12 +1275,20 @@ namespace QueryParser
 
 		return  true;
 	}
+
+	/**
+	 * Calls parseAttrCompare().
+	 * @return FALSE if there are errors in the with portion of query.
+	 */
 	bool parseWithClause()
 	{
 		bool res = parseAttrCompare();
 		return res;
 	}
 
+	/**
+	 * @return FALSE if there are errors in the optional clauses.
+	 */
 	bool parseOptionalClauses()
 	{
 
@@ -1303,6 +1374,7 @@ namespace QueryParser
 
 	/**
 	 * Supporting function to parse declarations.
+	 * @return FALSE if there are errors in the declarations.
 	 */
 	bool parseDeclarations()
 	{
@@ -1357,7 +1429,7 @@ namespace QueryParser
 
 	/**
 	 * Creates QNode Selection and validates the select synonym.
-	 * @return FALSE if there's errors in the select synonym.
+	 * @return FALSE if there are errors in the select synonym.
 	 */
 	bool parseSelect()
 	{
@@ -1414,7 +1486,7 @@ namespace QueryParser
 	}
 
 	/**
-	 * @return FALSE if there's errors in query declarations and select synonym.
+	 * @return FALSE if there are errors in query declarations and select synonym.
 	 */
 	bool parseQuerySelectClause()
 	{
@@ -1446,7 +1518,9 @@ namespace QueryParser
 	}
 
 	/**
-	 * It takes in a query, validates the query and builds a query tree.  
+	 * It takes in a query, validates the query and builds a query tree. 
+	 * @returns TRUE always. If the input query is invalid, an empty 
+	 * (default) query tree and synonyms map is passed.  
 	 */
 	bool parseQuery()
 	{
@@ -1458,7 +1532,7 @@ namespace QueryParser
 		initQueryTreeAndSymbolsTable();
 
 		bool res = parseQuerySelectClause();
-		//if there's an error in parsing the queries, return an empty query tree
+		//If there's an error in parsing the queries, return an empty query tree.  
 		if(!res){
 			#ifdef DEBUG
 				throw exception("QueryParser error: Error in parsing query. Empty query tree and synonymsMap is passed.");
