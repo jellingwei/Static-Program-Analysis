@@ -16,6 +16,10 @@ using std::make_pair;
 #include "IntermediateValuesHandler.h"
 #include "AbstractWrapper.h"
 
+/**
+	@brief Namespace containing functions for the evaluating of queries.
+
+ */
 namespace QueryEvaluator 
 {
 	//Private functions to evaluate the query tree

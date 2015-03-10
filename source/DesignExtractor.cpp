@@ -28,7 +28,12 @@ DesignExtractor::DesignExtractor() {
 	pkb.initModifiesTable(pkb.getAllVarIndex().size() + 1);
 }
 
-
+/**
+* @param startProc the procedure index of a procedure calling other procedures
+* @param allProcs a list of all unvisited procedures
+* @param visited a list of all procedures visited
+* @return a list of all procedures being called by startProc.
+*/
 vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set<int>* visited) {
 	PKB pkb = PKB::getInstance();
 
@@ -65,7 +70,7 @@ vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set
 
 
 /**
- * Return the called procedures in topological order
+ * @return a list of the called procedures in topological order
  */
 vector<int> getCallsInTopologicalOrder() {
 	PKB pkb = PKB::getInstance();
@@ -95,7 +100,11 @@ public:
 	}
 
 	/**
-	 * Sorts the call statements by the order given in the constructor
+	 * Sorts the call statements by the order given in the constructor.
+	 * @param i a TNode
+	 * @param j a TNode
+	 * @return TRUE if the call statements are sorted by the given order. 
+	 *		   FALSE if the call statements are not sorted by the given order. 
 	 */
 	bool operator() (TNode* i, TNode* j) { 
 		assert(i->getNodeType() == Call);
@@ -115,7 +124,8 @@ private:
 
 
 /**
- * Sorts the call statements in topological ordering
+ * Sorts the call statements in topological ordering.
+ * @return a list of all the call statements in topological ordering.
  */
 vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 	vector<int> topologicalOrder = getCallsInTopologicalOrder();
@@ -140,8 +150,8 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
 
 
 /**
- * For the input call statements nodes, set Modifies for them as well as all their ancestors
- * This function writes into the PKB
+ * For the input call statements nodes, set Modifies for them as well as all their ancestors.
+ * This function writes into the PKB.
  * @param callStmt a vector of sorted TNodes in order of setting Modifies on them
  */
 void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
@@ -209,7 +219,11 @@ void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
 }
 
 /**
- * Comparator function for sorting procedure nodes in ascending order
+ * Comparator function for sorting procedure nodes in ascending order.
+ * @param node1 a TNode of Procedure node type
+ * @param node2 a TNode of Procedure node type
+ * @return TRUE if node1 has a lower procedure index than node2.
+ *		   FALSE if node1 does not have a lower procedure index than node2.
  */
 bool procNodesCompare(TNode* node1, TNode* node2) {
 	assert(node1->getNodeType() == Procedure);
@@ -218,7 +232,6 @@ bool procNodesCompare(TNode* node1, TNode* node2) {
 	// node value of proc nodes is its proc index
 	return node1->getNodeValueIdx() < node2->getNodeValueIdx();
 }
-
 
 CNode* createNextNode(TNode* nextStmt, CFG* cfg, CNode* header = NULL) {
 	PKB& pkb = PKB::getInstance();
@@ -356,7 +369,9 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg,
 
 
 /**
- * Build Control Flow Graph
+ * Build Control Flow Graph(CFG).
+ * @return TRUE if the CFG is built successfully.
+ *		   FALSE if the CFG is not built successfully.
  */
 bool DesignExtractor::constructCfg() {
 	// make a CFG(?) for every procedure
@@ -534,7 +549,8 @@ void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variables, unord
 }
 
 /**
- * Traverse through the cfg using priority queue, with progline numbers as priority, while maintaining the values for the definitions.
+ * Traverse through the CFG using priority queue, with progline numbers as priority, while maintaining the values for the definitions.
+ * @param startNode the CNode used to start traversing the CFG
  */
 void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 	PKB pkb = PKB::getInstance();

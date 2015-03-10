@@ -10,6 +10,10 @@ using std::stoi;
 
 #include "IntermediateValuesHandler.h"
 
+/**
+	@brief Namespace containing functions for the handling of intermediate values.
+
+ */
 namespace IntermediateValuesHandler 
 {
 	//Private functions
@@ -23,6 +27,9 @@ namespace IntermediateValuesHandler
 	unordered_map<string, int> allIntermediateNamesMap;
 	PKB pkb = PKB::getInstance();
 
+	/**
+	* Initialize the handler for intermediate values.
+	*/
 	void initialize(unordered_map<string, SYNONYM_TYPE> synonymsMap) 
 	{
 		allIntermediateValues.clear();
@@ -48,6 +55,11 @@ namespace IntermediateValuesHandler
 		}
 	}
 
+	/**
+	* Get a list of all the values depending on the SYNONYM_TYPE which can be VARIABLE/CONSTANT/PROCEDURE/STATEMENT.
+	* @param type the type of synonym which can be VARIABLE/CONSTANT/PROCEDURE/STATEMENT
+	* @return the list of values of the SYNONYM_TYPE, type.
+	*/
 	vector<int> getDefaultValues(SYNONYM_TYPE type) 
 	{
 		if (type == VARIABLE) {
@@ -61,6 +73,12 @@ namespace IntermediateValuesHandler
 		}
 	}
 
+	/**
+	* Check if the adding and processing of intermediate synonym is successful.
+	* @param synonym
+	* @return TRUE if the processing of intermediate values is successful.
+	*		  FALSE if the processing of intermediate values is successful.
+	*/
 	bool addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
 		if (synonym.getType() == UNDEFINED) {
@@ -99,6 +117,13 @@ namespace IntermediateValuesHandler
 		return allIntermediateValues.size() != 0;
 	}
 
+	/**
+	* Check if the adding and processing of intermediate synonym is successful.
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the processing of intermediate values is successful.
+	*		  FALSE if the processing of intermediate values is successful.
+	*/
 	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
 	{
 		if (LHS.getType() == UNDEFINED && RHS.getType() == UNDEFINED) {

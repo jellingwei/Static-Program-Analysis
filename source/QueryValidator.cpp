@@ -168,8 +168,10 @@ void QueryValidator::initTable()
 }
 
 /**
- * Method to validate arguments of all such that clauses.
- * Returns true if the arguments are valid, false otherwise.
+ * Validate arguments of all such that clauses.
+ * @param arg1 
+ * @param arg2 
+ * @return TRUE if the arguments are valid. FALSE if the arguments are not valid.
  */
 bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
 {	
@@ -243,8 +245,11 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 }
 
 /**
- * Method to validate arguments of all pattern clauses.
- * Returns true if the arguments are valid, false otherwise.
+ * Validate arguments of all pattern clauses.
+ * @param arg0 
+ * @param arg1 
+ * @param arg2 
+ * @return TRUE if the arguments are valid. FALSE if the arguments are not valid.
  */
 bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
 {
@@ -298,7 +303,10 @@ bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym 
 
 /**
  *	Ensures that both left and right hand side types are consistent. 
- *  @return false if one side is INTEGER and the other side is character string. 
+ *  @param arg1
+ *  @param arg2
+ *  @return TRUE if both left and right hand side types are consistent.
+ *			FALSE if one side is INTEGER and the other side is character string. 
  */
 bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 {

@@ -15,9 +15,12 @@ QueryTree::QueryTree()
 }
 
 /**
- * This function creates a QNode with the given NODE_TYPE and SYNONYM
- * arguments.
- * @return a QNode
+ * Creates a QNode with the given NODE_TYPE and SYNONYM arguments.
+ * @param QNODE_TYPE
+ * @param arg0
+ * @param arg1
+ * @param arg2
+ * @return a QNode with its corresponding NODE_TYPE and SYNONYM arguments.
  */
 QNode* QueryTree::createQNode(QNODE_TYPE QNODE_TYPE,Synonym arg0, Synonym arg1, Synonym arg2)
 {
@@ -26,7 +29,10 @@ QNode* QueryTree::createQNode(QNODE_TYPE QNODE_TYPE,Synonym arg0, Synonym arg1, 
 }
 
 /**
- * This function creates a link between parent QNode and the child QNode.
+ * Creates a link between the parent QNode and the child QNode.
+ * @param parent_node
+ * @param child_node
+ * @return TRUE to indicate the link between the parent QNode and the child QNode is created successfully.
  */
 bool QueryTree::linkNode(QNode* parent_node, QNode* child_node)
 {
@@ -73,6 +79,7 @@ unordered_map<string, SYNONYM_TYPE> QueryTree::getSynonymsMap()
 /**
  * Set the synonym map in the query tree. This overwrites the current
  * synonym map in the query tree.
+ * @param synonymsMap
  */
 void QueryTree::setSynonymsMap(unordered_map<string, SYNONYM_TYPE> synonymsMap)
 {

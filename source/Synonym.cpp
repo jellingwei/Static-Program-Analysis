@@ -14,6 +14,8 @@ Synonym::~Synonym()
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type 
+ * @param name 
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name)
 {
@@ -24,6 +26,9 @@ Synonym::Synonym(SYNONYM_TYPE type, string name)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type 
+ * @param name 
+ * @param attribute 
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
 {
@@ -35,6 +40,8 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type
+ * @param name
  */
 Synonym::Synonym(SYNONYM_TYPE type, int name)
 {
@@ -61,6 +68,9 @@ Synonym::Synonym(SYNONYM_TYPE type, int name)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type 
+ * @param name 
+ * @param values 
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 {
@@ -73,6 +83,9 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 /**
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
+ * @param type 
+ * @param name 
+ * @param values
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 {
@@ -100,7 +113,7 @@ void Synonym::setValues(set<int> values)
 }
 
 /**
- * Return the type of the synonym.
+ * @return the type of the synonym.
  */
 SYNONYM_TYPE Synonym::getType()
 {
@@ -113,7 +126,7 @@ SYNONYM_ATTRIBUTE Synonym::getAttribute()
 }
 
 /**
- * Return the name of the synonym.
+ * @return the name of the synonym.
  */
 string Synonym::getName()
 {
@@ -121,7 +134,7 @@ string Synonym::getName()
 }
 
 /**
- * Return a list of values of the synonym. 
+ * @return a list of values of the synonym. 
  * If there are no values, return an empty list.
  */
 vector<int> Synonym::getValues()
