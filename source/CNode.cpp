@@ -194,3 +194,31 @@ bool CNode::getEnd()
 {
 	return isEnd;
 }
+
+VARIABLES CNode::getVariablesInside2() {
+	return _variablesInside2;
+}
+void CNode::setVariablesInside2(VARIABLES variables) {
+	_variablesInside2 = variables;
+}
+
+VARIABLES CNode::getVariablesInside() {
+	return _variablesInside;
+}
+void CNode::setVariablesInside(VARIABLES variables) {
+	_variablesInside = variables;
+}
+
+unordered_map<int, set<int>> CNode::getReachingDefinitions() {
+	return _reachingDefinitions;
+}
+void CNode::setReachingDefinitions(unordered_map<int, set<int>> varStmtMap) {
+	_reachingDefinitions = varStmtMap;
+}
+
+unordered_map<int, set<int>> CNode::getFirstUseOfVariable() {
+	return _firstUseOfVariable;
+}
+void CNode::setFirstUseOfVariable(unordered_map<int, set<int>> varStmtMap) {
+	_firstUseOfVariable = varStmtMap;
+}

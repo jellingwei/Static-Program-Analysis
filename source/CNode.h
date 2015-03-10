@@ -6,6 +6,7 @@
 #include <string>
 #include <utility>
 #include <unordered_map>
+#include <set>
 
 #include <boost\dynamic_bitset.hpp>
 
@@ -36,10 +37,10 @@ public:
 	int getProcLineNumber();
 	CNODE_TYPE getNodeType();
 	bool isDummy();
-	unordered_map<int, int> getReachingDefinitions();
-	void setReachingDefinitions(unordered_map<int, int>);
-	unordered_map<int, int> getFirstUseOfVariable();
-	void setFirstUseOfVariable(unordered_map<int, int>);
+	unordered_map<int, set<int>> getReachingDefinitions();
+	void setReachingDefinitions(unordered_map<int, set<int>>);
+	unordered_map<int, set<int>> getFirstUseOfVariable();
+	void setFirstUseOfVariable(unordered_map<int, set<int>>);
 	
 	vector<CNode*>* getBefore();
 	void addBefore(CNode* node);
@@ -85,8 +86,8 @@ private:
 	TNode* _ASTref;
 	bool isEnd;
 
-	unordered_map<int, int> _reachingDefinitions;
-	unordered_map<int, int> _firstUseOfVariable;
+	unordered_map<int, set<int>> _reachingDefinitions;
+	unordered_map<int, set<int>> _firstUseOfVariable;
 	VARIABLES _variablesInside;
 	VARIABLES _variablesInside2;
 };

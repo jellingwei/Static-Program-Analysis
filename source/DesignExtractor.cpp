@@ -524,11 +524,11 @@ class CompareProglines {
 };
 
 
-void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variables, unordered_map<int, int>& reachingDefinitions) {
+void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variables, unordered_map<int, set<int>>& reachingDefinitions) {
 	int startingVarIndex = 1;
 	for (int i = startingVarIndex; i < variables.size(); i++) {		
 		if (variables[i] == 1) {
-			reachingDefinitions[i] = progLineNum;
+			reachingDefinitions[i].insert(progLineNum);
 		}
 	}
 }
@@ -544,7 +544,7 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 	set<int> visited;
 	frontier.push(startNode);
 
-	unordered_map<int, int> reachingDefinition;
+	unordered_map<int, set<int>> reachingDefinition;
 
 	while (!frontier.empty()) {
 		CNode* curNode = frontier.top(); frontier.pop();
