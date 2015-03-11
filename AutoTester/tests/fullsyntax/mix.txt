@@ -124,7 +124,7 @@ Select a such that Calls*("One", "Six") pattern a(v,_""_) with v.varName = "a"
 none
 5000
 325 - 
-stmt s1, s2; assign a;
+stmt s1, s2; assign a; variable v;
 Select a such that Follows*(s1, s2) pattern a(v, _) with a.stmt# = s2.stmt#
 21, 22, 4, 13, 14, 24, 29
 5000
@@ -150,7 +150,7 @@ Select i such that Parent(i, a) pattern a(_, "4")  with a.stmt# = 4
 5000
 329 - 
 assign a1; variable v;
-Select a1 pattern a1(v, _) with v.varName = f
+Select a1 pattern a1(v, _) with v.varName = "f"
 35, 33
 5000
 330 - 
