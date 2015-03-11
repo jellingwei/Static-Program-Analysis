@@ -132,7 +132,7 @@ namespace QueryEvaluator
 		for (int i = 0; i < numberOfClauses; i++) {
 			bool isValid = processClause(clauseNode);
 
-			if (!isValid) {
+			if (!isValid || AbstractWrapper::GlobalStop) {
 				return false;
 			} else {
 				clauseNode = clausesNode->getNextChild();
@@ -196,10 +196,6 @@ namespace QueryEvaluator
 	*/
 	bool processModifies(Synonym LHS, Synonym RHS) 
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
@@ -327,10 +323,6 @@ namespace QueryEvaluator
 	*/
 	bool processUses(Synonym LHS, Synonym RHS) 
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
@@ -457,10 +449,6 @@ namespace QueryEvaluator
 	*/
 	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans) 
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
@@ -565,10 +553,6 @@ namespace QueryEvaluator
 	*/
 	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans) 
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
@@ -675,10 +659,6 @@ namespace QueryEvaluator
 	*/
 	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
@@ -783,10 +763,6 @@ namespace QueryEvaluator
 	*/
 	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
@@ -892,10 +868,8 @@ namespace QueryEvaluator
 	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		return false;
-		/*if (AbstractWrapper::GlobalStop) {
-		return false;
-		}
 
+		/*
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 
@@ -1022,10 +996,6 @@ namespace QueryEvaluator
 	*/
 	bool processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		vector<int> isMatchStmts = pkb.patternMatchAssign(RHS.getName());
 
@@ -1082,10 +1052,6 @@ namespace QueryEvaluator
 	*/
 	bool processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 
 		//Find all if statements that uses LHS
@@ -1128,10 +1094,6 @@ namespace QueryEvaluator
 	*/
 	bool processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
-		if (AbstractWrapper::GlobalStop) {
-			return false;
-		}
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 
 		//Find all while statements that uses LHS
