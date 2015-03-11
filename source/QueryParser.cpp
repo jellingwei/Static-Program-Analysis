@@ -89,7 +89,7 @@ namespace QueryParser
 		std::tr1::sregex_token_iterator rs(query.begin(), query.end(), separatorRegex, -1);
 
 		// tokenise words and operators
-		string operators = "([\\w\\d\\*\\#\\-]+|[.=_+;,(\\)\"])";
+		string operators = "([\\w\\d\\#\\-]+|[*<>.=_+;,(\\)\"])";
 		std::regex operRegex(operators);
 
 		for (; rs != reg_end; ++rs){
@@ -325,6 +325,9 @@ namespace QueryParser
 	bool matchFactor(string token)
 	{
 		if(!(matchInteger(token) || matchName(token))){
+
+			cout<<endl;
+			cout<<"token : "<<token<<endl;
 
 			#ifdef DEBUG
 				throw exception("QueryParser error: at matchFactor.");
@@ -1017,6 +1020,9 @@ namespace QueryParser
 		string DE_type, nextToken, entRef_value1,entRef_value2;
 
 		nextToken = parseToken();
+		if (peekInToTheNextToken().compare("*")==0)
+			nextToken +=parseToken();  //ie it's a Follows*/Next*
+
 		for(int i=0; i<(sizeof(relRef)/sizeof(*relRef)); i++){
 
 			if(nextToken.compare(relRef[i]) == 0){
@@ -1142,6 +1148,7 @@ namespace QueryParser
 		}else if(synonymsMap.count(pattern_variable) > 0){
 			DE_type = synonymsMap.at(pattern_variable);
 		}else{
+
 			#ifdef DEBUG
 				throw exception("QueryParser error: parsePatternClause(), building query tree error.");
 			#endif
@@ -1427,16 +1434,153 @@ namespace QueryParser
 		return res;
 	}
 
+	bool matchElem(string token)
+	{
+		if(matchSynonymAndIdent(token, false))
+		 	return true;
+		else if(matchAttrRef(token))
+			return true;
+
+		return false;
+	}
+
+	string parseElem()
+	{
+		string nextToken = "";
+		string returnToken = "";
+
+		nextToken = parseToken();
+		if(peekInToTheNextToken().compare(".")==0){
+			nextToken += parseToken();  //parse the .
+			nextToken += parseToken();  //parse the attrName
+		}
+		returnToken = nextToken;
+		
+
+	 	return matchElem(nextToken) ? returnToken: "";
+	}
+
+	bool buildSelectQueryTree(string value)
+	{
+		bool res;
+		QNode* childNode;
+		SYNONYM_TYPE DE_type;
+		SYNONYM_ATTRIBUTE attribute;
+
+		if (synonymsMap.count(value) > 0){
+
+			DE_type = synonymsMap.at(value); 
+			Synonym s1(DE_type,value);
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+
+		}else{
+
+			// it must be an attrRef
+			if(synonymsMap.count(peekBackwards(2)) > 0)
+				DE_type = synonymsMap.at(peekBackwards(2));
+			else{
+
+				#ifdef DEBUG
+					cout<<"synonym can't be found : " <<peekBackwards(2)<<endl;
+				#endif
+				return false;  //error no such synonym
+			}
+			value = peekBackwards(2);
+
+			if(attrNameMap.count(peekBackwards(0)) > 0)
+				attribute = attrNameMap.at(peekBackwards(0));
+			else{
+				
+				#ifdef DEBUG
+					cout<<"attrName can't be found : " <<peekBackwards(0)<<endl;
+				#endif
+				return false;  //error no such attrName
+			}
+
+			
+			Synonym s1(DE_type,value, attribute);
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+		}
+
+		res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
+		return res;
+
+	}
+
+	bool parseTuple()
+	{
+		bool res;
+		string elem;
+
+		if(peekInToTheNextToken().compare("<")==0){
+
+			parseToken();
+
+			elem = parseElem();
+			if(elem.compare("")==0) {return false;}
+
+			/* creates synonym,builds QNode and links to query tree node*/
+			res = buildSelectQueryTree(elem);
+			if(!res) {return false;}
+
+
+			while(peekInToTheNextToken().compare(",")==0){
+				parseToken();
+
+				elem = parseElem();
+				if(elem.compare("")==0) {return false;}
+
+				/* creates synonym,builds QNode and links to query tree node*/
+				res = buildSelectQueryTree(elem);
+				if(!res) {return false;}
+
+			}				
+
+			res = parse(">");
+			if(!res){return false;}
+
+		}else{
+
+			elem = parseElem();
+			if(elem.compare("")==0) {return false;}
+
+			/* creates synonym,builds QNode and links to query tree node*/
+			res = buildSelectQueryTree(elem);
+			if(!res) {return false;}
+		}
+
+		return true; //everything is successful
+	}
+
+	bool parseResultClause()
+	{
+		bool res;
+
+		if(peekInToTheNextToken().compare("BOOLEAN")==0){
+			
+			parseToken();
+
+			Synonym s1(SYNONYM_TYPE(BOOLEAN),"");
+			QNode* childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+			res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
+
+		}else{
+
+			res = parseTuple();
+			if(!res){return false;}
+		
+		}
+
+		return true; //everything is successful
+	}
+
+
 	/**
 	 * Creates QNode Selection and validates the select synonym.
 	 * @return FALSE if there are errors in the select synonym.
 	 */
 	bool parseSelect()
 	{
-		SYNONYM_TYPE DE_type;
-		QNODE_TYPE nodeType;
-		QNode* childNode;
-
 		bool res = parse("Select");
 		if (!res){
 			#ifdef DEBUG
@@ -1445,44 +1589,9 @@ namespace QueryParser
 			return false;
 		}
 
-		if(peekInToTheNextToken().compare("BOOLEAN")==0){
-		
-			parseToken();
-			Synonym s1(SYNONYM_TYPE(BOOLEAN),"");
-			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
-		
-		}else{
-			res = parseSynonymns();
-			if (!res){return false;}
+		res = parseResultClause();
 
-
-			/*** Building Query Tree ***/
-			nodeType = RESULT;
-
-			if (!synonymsMap.empty()){
-				if (synonymsMap.count(peekBackwards(0)) > 0){
-					DE_type = synonymsMap.at(peekBackwards(0)); 
-				}else{
-					#ifdef DEBUG
-						throw exception("QueryParser error: synonymsMap error, unable to find the synonym");
-					#endif
-					return false;
-				}
-
-			}else{
-				#ifdef DEBUG
-					throw exception("QueryParser error: synonymsMap error, synonymsMap is empty");
-				#endif
-				return false;
-			}
-
-			Synonym s1(DE_type,peekBackwards(0));
-			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
-
-		}
-		res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
 		return res;
-
 	}
 
 	/**
