@@ -14,8 +14,9 @@ Synonym::~Synonym()
 
 /**
  * Set the synonym type and name to the given type and name respectively.
- * @param type 
- * @param name 
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name)
 {
@@ -26,9 +27,10 @@ Synonym::Synonym(SYNONYM_TYPE type, string name)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
- * @param type 
- * @param name 
- * @param attribute 
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED 
+ * @param name the name of the synonym, e.g a for ASSIGN
+ * @param attribute the attribute of the synonym which can be procName/varName/value/stmtNum
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
 {
@@ -40,8 +42,9 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
- * @param type
- * @param name
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
  */
 Synonym::Synonym(SYNONYM_TYPE type, int name)
 {
@@ -68,9 +71,10 @@ Synonym::Synonym(SYNONYM_TYPE type, int name)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
- * @param type 
- * @param name 
- * @param values 
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
+ * @param values a list of the possible kinds of values associated with the synonym which can be statement numbers, indexes.
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 {
@@ -83,9 +87,10 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 /**
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
- * @param type 
- * @param name 
- * @param values
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
+ * @param values a list of the possible kinds of values associated with the synonym which can be statement numbers, indexes.
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 {
