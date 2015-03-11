@@ -99,20 +99,21 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a17d1f14c655bb9aed171cb832fd8b180"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a287d78a55e3356b5051a5c998eca376b"><td class="memItemLeft" align="right" valign="top">CNODE_TYPE&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a287d78a55e3356b5051a5c998eca376b">getNodeType</a> ()</td></tr>
 <tr class="separator:a287d78a55e3356b5051a5c998eca376b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa909dbc7e8bc6829e03ca58df694125"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#aaa909dbc7e8bc6829e03ca58df694125">isDummy</a> ()</td></tr>
+<tr class="memitem:aaa909dbc7e8bc6829e03ca58df694125"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa909dbc7e8bc6829e03ca58df694125"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isDummy</b> ()</td></tr>
 <tr class="separator:aaa909dbc7e8bc6829e03ca58df694125"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5799d2a9ab36ab7e42f86968d566c62"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af5799d2a9ab36ab7e42f86968d566c62"></a>
-unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getReachingDefinitions</b> ()</td></tr>
-<tr class="separator:af5799d2a9ab36ab7e42f86968d566c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38ea098846c0eb820cb3732c22f48f90"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38ea098846c0eb820cb3732c22f48f90"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setReachingDefinitions</b> (unordered_map&lt; int, int &gt;)</td></tr>
-<tr class="separator:a38ea098846c0eb820cb3732c22f48f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60a727345c01092339766047daf54819"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a60a727345c01092339766047daf54819"></a>
-unordered_map&lt; int, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstUseOfVariable</b> ()</td></tr>
-<tr class="separator:a60a727345c01092339766047daf54819"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6cb77ba659d2842d3dd073f3f60f07c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac6cb77ba659d2842d3dd073f3f60f07c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFirstUseOfVariable</b> (unordered_map&lt; int, int &gt;)</td></tr>
-<tr class="separator:ac6cb77ba659d2842d3dd073f3f60f07c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a413376b2b9aeeba44594aa348b6f46d4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a413376b2b9aeeba44594aa348b6f46d4"></a>
+unordered_map&lt; int, set&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getReachingDefinitions</b> ()</td></tr>
+<tr class="separator:a413376b2b9aeeba44594aa348b6f46d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a558acf3575c7e31c9ba241c32745e9b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a558acf3575c7e31c9ba241c32745e9b9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setReachingDefinitions</b> (unordered_map&lt; int, set&lt; int &gt;&gt;)</td></tr>
+<tr class="separator:a558acf3575c7e31c9ba241c32745e9b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81aaf489a8e2aeda44c5d361b7243823"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a81aaf489a8e2aeda44c5d361b7243823"></a>
+unordered_map&lt; int, set&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstUseOfVariable</b> ()</td></tr>
+<tr class="separator:a81aaf489a8e2aeda44c5d361b7243823"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54d343768712be0fd82901eae3a3a1c9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a54d343768712be0fd82901eae3a3a1c9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFirstUseOfVariable</b> (unordered_map&lt; int, set&lt; int &gt;&gt;)</td></tr>
+<tr class="separator:a54d343768712be0fd82901eae3a3a1c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a365bba61024c539101971ddab2aba1e3"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="class_c_node.html">CNode</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a365bba61024c539101971ddab2aba1e3">getBefore</a> ()</td></tr>
 <tr class="separator:a365bba61024c539101971ddab2aba1e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27af015ffe6672ad57ca4ef987ddd5bd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a27af015ffe6672ad57ca4ef987ddd5bd">addBefore</a> (<a class="el" href="class_c_node.html">CNode</a> *node)</td></tr>
@@ -127,17 +128,13 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setFirstUseOfVariable
 <tr class="separator:afd449e053d9c517667533f4669e13d3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a657bc42c8047e27a581f8ab5ebc4064c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a657bc42c8047e27a581f8ab5ebc4064c">setHeader</a> (<a class="el" href="class_c_node.html">CNode</a> *header)</td></tr>
 <tr class="separator:a657bc42c8047e27a581f8ab5ebc4064c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab255152b1f6a54f76f44bbff9fe6c4a9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab255152b1f6a54f76f44bbff9fe6c4a9"></a>
-<a class="el" href="class_c_node.html">CNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getHeader</b> ()</td></tr>
+<tr class="memitem:ab255152b1f6a54f76f44bbff9fe6c4a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_c_node.html">CNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#ab255152b1f6a54f76f44bbff9fe6c4a9">getHeader</a> ()</td></tr>
 <tr class="separator:ab255152b1f6a54f76f44bbff9fe6c4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a736904fd6f27c07a11dca9768c5c4ea1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a736904fd6f27c07a11dca9768c5c4ea1"></a>
-vector&lt; <a class="el" href="class_c_node.html">CNode</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getInside</b> ()</td></tr>
+<tr class="memitem:a736904fd6f27c07a11dca9768c5c4ea1"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="class_c_node.html">CNode</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a736904fd6f27c07a11dca9768c5c4ea1">getInside</a> ()</td></tr>
 <tr class="separator:a736904fd6f27c07a11dca9768c5c4ea1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6dfa6691e7e84ce9e088744f02284146"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6dfa6691e7e84ce9e088744f02284146"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addInside</b> (<a class="el" href="class_c_node.html">CNode</a> *node)</td></tr>
+<tr class="memitem:a6dfa6691e7e84ce9e088744f02284146"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a6dfa6691e7e84ce9e088744f02284146">addInside</a> (<a class="el" href="class_c_node.html">CNode</a> *node)</td></tr>
 <tr class="separator:a6dfa6691e7e84ce9e088744f02284146"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87f73e5f163dd7c74e29043dce944f82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87f73e5f163dd7c74e29043dce944f82"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInside</b> ()</td></tr>
+<tr class="memitem:a87f73e5f163dd7c74e29043dce944f82"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a87f73e5f163dd7c74e29043dce944f82">hasInside</a> ()</td></tr>
 <tr class="separator:a87f73e5f163dd7c74e29043dce944f82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e38edbdba84325bcb19ad37e34c4e82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e38edbdba84325bcb19ad37e34c4e82"></a>
 VARIABLES&#160;</td><td class="memItemRight" valign="bottom"><b>getVariablesInside</b> ()</td></tr>
@@ -145,14 +142,11 @@ VARIABLES&#160;</td><td class="memItemRight" valign="bottom"><b>getVariablesInsi
 <tr class="memitem:aa7a71a316506330527f33ffb3b2c8ae3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa7a71a316506330527f33ffb3b2c8ae3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setVariablesInside</b> (VARIABLES)</td></tr>
 <tr class="separator:aa7a71a316506330527f33ffb3b2c8ae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2144958262646d51f0808f82b1e981b2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2144958262646d51f0808f82b1e981b2"></a>
-vector&lt; <a class="el" href="class_c_node.html">CNode</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><b>getInside2</b> ()</td></tr>
+<tr class="memitem:a2144958262646d51f0808f82b1e981b2"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="class_c_node.html">CNode</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a2144958262646d51f0808f82b1e981b2">getInside2</a> ()</td></tr>
 <tr class="separator:a2144958262646d51f0808f82b1e981b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab134fcbf248a11950303ae2c0986d287"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab134fcbf248a11950303ae2c0986d287"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addInside2</b> (<a class="el" href="class_c_node.html">CNode</a> *node)</td></tr>
+<tr class="memitem:ab134fcbf248a11950303ae2c0986d287"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#ab134fcbf248a11950303ae2c0986d287">addInside2</a> (<a class="el" href="class_c_node.html">CNode</a> *node)</td></tr>
 <tr class="separator:ab134fcbf248a11950303ae2c0986d287"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe2381b1fd2bb13bf4db1e19032fbb8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe2381b1fd2bb13bf4db1e19032fbb8c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasInside2</b> ()</td></tr>
+<tr class="memitem:afe2381b1fd2bb13bf4db1e19032fbb8c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#afe2381b1fd2bb13bf4db1e19032fbb8c">hasInside2</a> ()</td></tr>
 <tr class="separator:afe2381b1fd2bb13bf4db1e19032fbb8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4491e7c69d3e8dfc1d597b13e56156ca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4491e7c69d3e8dfc1d597b13e56156ca"></a>
 VARIABLES&#160;</td><td class="memItemRight" valign="bottom"><b>getVariablesInside2</b> ()</td></tr>
@@ -160,14 +154,11 @@ VARIABLES&#160;</td><td class="memItemRight" valign="bottom"><b>getVariablesInsi
 <tr class="memitem:a8e3e621b8d52133dfdd66d0fa802061e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8e3e621b8d52133dfdd66d0fa802061e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setVariablesInside2</b> (VARIABLES)</td></tr>
 <tr class="separator:a8e3e621b8d52133dfdd66d0fa802061e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bea0f9f53b944b692c81a051703c83c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8bea0f9f53b944b692c81a051703c83c"></a>
-<a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getASTref</b> ()</td></tr>
+<tr class="memitem:a8bea0f9f53b944b692c81a051703c83c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a8bea0f9f53b944b692c81a051703c83c">getASTref</a> ()</td></tr>
 <tr class="separator:a8bea0f9f53b944b692c81a051703c83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a87f436aa716f30652424838474390c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a87f436aa716f30652424838474390c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setEnd</b> ()</td></tr>
+<tr class="memitem:a3a87f436aa716f30652424838474390c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a3a87f436aa716f30652424838474390c">setEnd</a> ()</td></tr>
 <tr class="separator:a3a87f436aa716f30652424838474390c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a6c036c5f657b8fa4d11379660873e2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5a6c036c5f657b8fa4d11379660873e2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnd</b> ()</td></tr>
+<tr class="memitem:a5a6c036c5f657b8fa4d11379660873e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_node.html#a5a6c036c5f657b8fa4d11379660873e2">getEnd</a> ()</td></tr>
 <tr class="separator:a5a6c036c5f657b8fa4d11379660873e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
@@ -263,6 +254,50 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnd</b> ()</td></t
 
 </div>
 </div>
+<a class="anchor" id="a6dfa6691e7e84ce9e088744f02284146"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CNode::addInside </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_c_node.html">CNode</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Add the <a class="el" href="class_c_node.html">CNode</a> to the list of CNodes inside the container statement for if/while statements. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>a <a class="el" href="class_c_node.html">CNode</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="ab134fcbf248a11950303ae2c0986d287"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CNode::addInside2 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_c_node.html">CNode</a> *&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Add the <a class="el" href="class_c_node.html">CNode</a> to the list of CNodes inside the 'else' of the if/else statement. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>a <a class="el" href="class_c_node.html">CNode</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a class="anchor" id="a642df667ab69b3bb420c4c9c9e962f58"></a>
 <div class="memitem">
 <div class="memproto">
@@ -279,6 +314,22 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnd</b> ()</td></t
 
 </div>
 </div>
+<a class="anchor" id="a8bea0f9f53b944b692c81a051703c83c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_t_node.html">TNode</a> * CNode::getASTref </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the <a class="el" href="class_t_node.html">TNode</a> in <a class="el" href="class_a_s_t.html">AST</a> that corresponds to the <a class="el" href="class_c_node.html">CNode</a> in <a class="el" href="class_c_f_g.html">CFG</a>. </p><dl class="section return"><dt>Returns</dt><dd>the <a class="el" href="class_t_node.html">TNode</a> corresponds to the <a class="el" href="class_c_node.html">CNode</a> given. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a365bba61024c539101971ddab2aba1e3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -292,6 +343,70 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnd</b> ()</td></t
       </table>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>a list of all the predecessor CNodes of the current <a class="el" href="class_c_node.html">CNode</a>. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a5a6c036c5f657b8fa4d11379660873e2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CNode::getEnd </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check if the node is the end node in the <a class="el" href="class_c_f_g.html">CFG</a> of a procedure. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the the node is the end node in the <a class="el" href="class_c_f_g.html">CFG</a> of a procedure. FALSE if the the node is not the end node in the <a class="el" href="class_c_f_g.html">CFG</a> of a procedure. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab255152b1f6a54f76f44bbff9fe6c4a9"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_c_node.html">CNode</a> * CNode::getHeader </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="class_c_node.html">CNode</a>, header, which is the container statement for if/while statements. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a736904fd6f27c07a11dca9768c5c4ea1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; <a class="el" href="class_c_node.html">CNode</a> * &gt; * CNode::getInside </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a list of all the CNodes inside the container statement for if/while statements. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2144958262646d51f0808f82b1e981b2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; <a class="el" href="class_c_node.html">CNode</a> * &gt; * CNode::getInside2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>a list of all the CNodes inside the 'else' of the if/else statement. </dd></dl>
 
 </div>
 </div>
@@ -359,19 +474,51 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnd</b> ()</td></t
 
 </div>
 </div>
-<a class="anchor" id="aaa909dbc7e8bc6829e03ca58df694125"></a>
+<a class="anchor" id="a87f73e5f163dd7c74e29043dce944f82"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool CNode::isDummy </td>
+          <td class="memname">bool CNode::hasInside </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>TRUE if the node is a dummy node, and does not correspond directly to any statement in the source program. </dd></dl>
+<p>Check if the current <a class="el" href="class_c_node.html">CNode</a> has any <a class="el" href="class_c_node.html">CNode</a> inside the container statement for if/while statements. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the current <a class="el" href="class_c_node.html">CNode</a> has at least 1 <a class="el" href="class_c_node.html">CNode</a> inside the container statement. FALSE if the current <a class="el" href="class_c_node.html">CNode</a> does not have any <a class="el" href="class_c_node.html">CNode</a> inside the container statement. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="afe2381b1fd2bb13bf4db1e19032fbb8c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CNode::hasInside2 </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Check if the current <a class="el" href="class_c_node.html">CNode</a> has any <a class="el" href="class_c_node.html">CNode</a> inside the 'else' of the if/else statement. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the current <a class="el" href="class_c_node.html">CNode</a> has at least 1 <a class="el" href="class_c_node.html">CNode</a> inside the 'else' of the if/else statement. FALSE if the current <a class="el" href="class_c_node.html">CNode</a> does not have any <a class="el" href="class_c_node.html">CNode</a> inside the 'else' of the if/else statement. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a3a87f436aa716f30652424838474390c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void CNode::setEnd </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the node to indicate it is the last node in the <a class="el" href="class_c_f_g.html">CFG</a> of a procedure. </p>
 
 </div>
 </div>
@@ -404,7 +551,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEnd</b> ()</td></t
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 8 2015 22:30:02 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:51 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -134,6 +134,12 @@ static string&#160;</td><td class="memItemRight" valign="bottom"><b>convertToStr
 <tr class="memitem:a5fcce8e14cc9baf3ec6a73efb6bc2cf2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5fcce8e14cc9baf3ec6a73efb6bc2cf2"></a>
 static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>convertToEnum</b> (string synonymType)</td></tr>
 <tr class="separator:a5fcce8e14cc9baf3ec6a73efb6bc2cf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f0c180d37f12c624bef2db991346ab1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9f0c180d37f12c624bef2db991346ab1"></a>
+static string&#160;</td><td class="memItemRight" valign="bottom"><b>convertSynonymAttrToString</b> (SYNONYM_ATTRIBUTE synonymAttr)</td></tr>
+<tr class="separator:a9f0c180d37f12c624bef2db991346ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80a17ad10441bee918cafdfafb3a5469"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a80a17ad10441bee918cafdfafb3a5469"></a>
+static SYNONYM_ATTRIBUTE&#160;</td><td class="memItemRight" valign="bottom"><b>convertSynonymAttrToEnum</b> (string synonymAttr)</td></tr>
+<tr class="separator:a80a17ad10441bee918cafdfafb3a5469"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="aaad455aa680dec09937a523aae2cafc8"></a>
@@ -159,7 +165,13 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the synonym type and name to the given type and name respectively. </p>
+<p>Set the synonym type and name to the given type and name respectively. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/ STRING_INT/STRING_PATTERNS/UNDEFINED </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the synonym, e.g a for ASSIGN </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -186,7 +198,13 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the synonym type and name to the given type and name respectively. </p>
+<p>Set the synonym type and name to the given type and name respectively. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/ STRING_INT/STRING_PATTERNS/UNDEFINED </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the synonym, e.g a for ASSIGN </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -219,7 +237,14 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the synonym type and name to the given type and name respectively. </p>
+<p>Set the synonym type and name to the given type and name respectively. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/ STRING_INT/STRING_PATTERNS/UNDEFINED </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the synonym, e.g a for ASSIGN </td></tr>
+    <tr><td class="paramname">attribute</td><td>the attribute of the synonym which can be procName/varName/value/stmtNum </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -252,7 +277,14 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the synonym type and name to the given type and name respectively. Also, set the synonym to a list of values given. Set the synonym type and name to the given type and name respectively. </p>
+<p>Set the synonym type and name to the given type and name respectively. Also, set the synonym to a list of values given. Set the synonym type and name to the given type and name respectively. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/ STRING_INT/STRING_PATTERNS/UNDEFINED </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the synonym, e.g a for ASSIGN </td></tr>
+    <tr><td class="paramname">values</td><td>a list of the possible kinds of values associated with the synonym which can be statement numbers, indexes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -285,7 +317,14 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the synonym type and name to the given type and name respectively. Also, set the synonym to a list of values given. </p>
+<p>Set the synonym type and name to the given type and name respectively. Also, set the synonym to a list of values given. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/ STRING_INT/STRING_PATTERNS/UNDEFINED </td></tr>
+    <tr><td class="paramname">name</td><td>the name of the synonym, e.g a for ASSIGN </td></tr>
+    <tr><td class="paramname">values</td><td>a list of the possible kinds of values associated with the synonym which can be statement numbers, indexes. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -302,7 +341,7 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the name of the synonym. </p>
+<dl class="section return"><dt>Returns</dt><dd>the name of the synonym. </dd></dl>
 
 </div>
 </div>
@@ -318,7 +357,7 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the type of the synonym. </p>
+<dl class="section return"><dt>Returns</dt><dd>the type of the synonym. </dd></dl>
 
 </div>
 </div>
@@ -334,7 +373,7 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a list of values of the synonym. If there are no values, return an empty list. </p>
+<dl class="section return"><dt>Returns</dt><dd>a list of values of the synonym. If there are no values, return an empty list. </dd></dl>
 
 </div>
 </div>
@@ -345,7 +384,7 @@ static SYNONYM_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>conver
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 8 2015 22:30:02 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:52 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

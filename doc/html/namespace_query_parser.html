@@ -91,7 +91,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Namespace containing functions for parsing PQL queries. <a class="el" href="namespace_query_parser.html" title="Namespace containing functions for parsing PQL queries. QueryParser checks the query input to see if ...">QueryParser</a> checks the query input to see if it matches with PQL grammar and builds a query tree.  
+<p>Namespace containing functions for parsing PQL queries. Query <a class="el" href="namespace_parser.html" title="Namespace containing functions for parsing the source SIMPLE file as well as utility functions to par...">Parser</a> parses the query according to PQL Grammar rules, builds a synonym map and a Query Tree. It validates the structural syntax of PQL query provided, if the query provided is structurally correct, it calls upon Query Validator for validation of the logical aspect of the query.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -128,8 +128,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>initParser</b> (std::
 <tr class="separator:a8adca420d10b8046d3fddd0cd930a957"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec65cc23d94d0e9807dff3acbacf1b74"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#aec65cc23d94d0e9807dff3acbacf1b74">initParser</a> (string query)</td></tr>
 <tr class="separator:aec65cc23d94d0e9807dff3acbacf1b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58af59372b448f954ff0728d7d971dca"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a58af59372b448f954ff0728d7d971dca"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>testingQueryParser</b> ()</td></tr>
+<tr class="memitem:a58af59372b448f954ff0728d7d971dca"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a58af59372b448f954ff0728d7d971dca">testingQueryParser</a> ()</td></tr>
 <tr class="separator:a58af59372b448f954ff0728d7d971dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d81e9851792b1a9de748e20cbe4f1a4"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a4d81e9851792b1a9de748e20cbe4f1a4">peekInToTheNextToken</a> ()</td></tr>
 <tr class="separator:a4d81e9851792b1a9de748e20cbe4f1a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,8 +152,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>testingQueryParser</b
 <tr class="separator:ab745bcedc1eeb38fc78b26234fc8ce3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a31f3f7e29eede9c7fad24a6cbcf9da0b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a31f3f7e29eede9c7fad24a6cbcf9da0b">matchUnderscore</a> (string token)</td></tr>
 <tr class="separator:a31f3f7e29eede9c7fad24a6cbcf9da0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a74135456b151163d7ad71ddc901407e6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a74135456b151163d7ad71ddc901407e6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>matchAttrName</b> (string token)</td></tr>
+<tr class="memitem:a74135456b151163d7ad71ddc901407e6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a74135456b151163d7ad71ddc901407e6">matchAttrName</a> (string token)</td></tr>
 <tr class="separator:a74135456b151163d7ad71ddc901407e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac201fdf6633eac0438efd34a16b781f5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#ac201fdf6633eac0438efd34a16b781f5">matchAttrRef</a> (string token)</td></tr>
 <tr class="separator:ac201fdf6633eac0438efd34a16b781f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -190,21 +188,17 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>matchAttrName</b> (st
 <tr class="separator:a33504cee8640f003bbe781734afa46d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a031532b2f8d489d6dce01a18b68e31cb"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a031532b2f8d489d6dce01a18b68e31cb">parseArg</a> (QNODE_TYPE relRef, int arg)</td></tr>
 <tr class="separator:a031532b2f8d489d6dce01a18b68e31cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5d01d641c223948b9598cb6fb22b0ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab5d01d641c223948b9598cb6fb22b0ed"></a>
-QNODE_TYPE&#160;</td><td class="memItemRight" valign="bottom"><b>convertIntoEnum</b> (string relRef)</td></tr>
+<tr class="memitem:ab5d01d641c223948b9598cb6fb22b0ed"><td class="memItemLeft" align="right" valign="top">QNODE_TYPE&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#ab5d01d641c223948b9598cb6fb22b0ed">convertIntoEnum</a> (string relRef)</td></tr>
 <tr class="separator:ab5d01d641c223948b9598cb6fb22b0ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aac66bee40525432005477036f13660c3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#aac66bee40525432005477036f13660c3">parseSuchThatClause</a> ()</td></tr>
 <tr class="separator:aac66bee40525432005477036f13660c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabeabe5c2342d1a614b5fa223cf05a51"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#aabeabe5c2342d1a614b5fa223cf05a51">parsePatternClause</a> ()</td></tr>
 <tr class="separator:aabeabe5c2342d1a614b5fa223cf05a51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57f0559aa10ce284f61d77cfa873db4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a57f0559aa10ce284f61d77cfa873db4f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseAttrCompare</b> ()</td></tr>
+<tr class="memitem:a57f0559aa10ce284f61d77cfa873db4f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a57f0559aa10ce284f61d77cfa873db4f">parseAttrCompare</a> ()</td></tr>
 <tr class="separator:a57f0559aa10ce284f61d77cfa873db4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a841ce080e0d3ff4e6e1ac70367481f08"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a841ce080e0d3ff4e6e1ac70367481f08"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseWithClause</b> ()</td></tr>
+<tr class="memitem:a841ce080e0d3ff4e6e1ac70367481f08"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#a841ce080e0d3ff4e6e1ac70367481f08">parseWithClause</a> ()</td></tr>
 <tr class="separator:a841ce080e0d3ff4e6e1ac70367481f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abaa411dddfd884c3ddc0d27e71312d85"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abaa411dddfd884c3ddc0d27e71312d85"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>parseOptionalClauses</b> ()</td></tr>
+<tr class="memitem:abaa411dddfd884c3ddc0d27e71312d85"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_parser.html#abaa411dddfd884c3ddc0d27e71312d85">parseOptionalClauses</a> ()</td></tr>
 <tr class="separator:abaa411dddfd884c3ddc0d27e71312d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a748c481c6d4167130d05f236ea549db3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a748c481c6d4167130d05f236ea549db3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>printSynonymsMap</b> ()</td></tr>
@@ -259,7 +253,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
 <tr class="separator:ac272499612054ef93fca88ead9ee5149"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Namespace containing functions for parsing PQL queries. <a class="el" href="namespace_query_parser.html" title="Namespace containing functions for parsing PQL queries. QueryParser checks the query input to see if ...">QueryParser</a> checks the query input to see if it matches with PQL grammar and builds a query tree. </p>
+<div class="textblock"><p>Namespace containing functions for parsing PQL queries. Query <a class="el" href="namespace_parser.html" title="Namespace containing functions for parsing the source SIMPLE file as well as utility functions to par...">Parser</a> parses the query according to PQL Grammar rules, builds a synonym map and a Query Tree. It validates the structural syntax of PQL query provided, if the query provided is structurally correct, it calls upon Query Validator for validation of the logical aspect of the query. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
 <a class="anchor" id="a01817234839fb23def84cf2e94347000"></a>
 <div class="memitem">
@@ -290,7 +284,24 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Helper function for parse such that clause After parsing the relRef, build a tree. -do Temporarily it's for such-that. Extend it for patterns, select, with </p>
+<p>Helper function for parse such that clause After parsing the relRef, build a tree. -do Temporarily it's for such-that. Extend it for patterns, select, with </p><dl class="section return"><dt>Returns</dt><dd>TRUE if a <a class="el" href="class_q_node.html">QNode</a> is created and linked to Query Tree built, and FALSE if query validation failed in Query Validator. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab5d01d641c223948b9598cb6fb22b0ed"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QNODE_TYPE QueryParser::convertIntoEnum </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>relRef</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Converts valid relRef types into QNODE_TYPE. </p><dl class="section return"><dt>Returns</dt><dd>QNODE_TYPE if it's a valid string relRef, otherwise return a null. </dd></dl>
 
 </div>
 </div>
@@ -323,7 +334,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_synonym.html">Synonym()</a> if it is unable to create a <a class="el" href="class_synonym.html">Synonym</a>. </dd></dl>
+<p>Supporting function to create synonyms. </p><dl class="section return"><dt>Returns</dt><dd><a class="el" href="class_synonym.html">Synonym()</a> if it is unable to create a <a class="el" href="class_synonym.html">Synonym</a>. </dd></dl>
 
 </div>
 </div>
@@ -356,7 +367,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Initialises and prepares the parser for parsing with a query. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the query parser have been initialized. Otherwise, return FALSE. If a query string given is empty, or the buffer’s size is 0 after tokenizing return FALSE. </dd></dl>
+<p>Initialises and prepares the parser for parsing with a query. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the query parser have been initialized. Otherwise, return FALSE. If a query string given is empty, or the buffer\’s size is 0 after tokenizing return FALSE. </dd></dl>
 
 </div>
 </div>
@@ -372,7 +383,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Supporting functions - To build query tree Initialise query tree, synonymsMap and nodeTypeMap. </p>
+<p>Supporting functions - To build query tree Initialise query tree, synonymsMap, nodeTypeMap, relRefMap and attrNameMap. </p>
 
 </div>
 </div>
@@ -389,7 +400,24 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Checks if it's a factor </p>
+<p>Checks if it's a factor </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it's a factor, FALSE otherwise. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a74135456b151163d7ad71ddc901407e6"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QueryParser::matchAttrName </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>token</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Matches if the given token is an attrName as per the given grammar. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -406,7 +434,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if has "synonym.attrName" syntax </p>
+<p>Matches if the given token is an attrRef as per the given grammar. It checks if it has "synonym.attrName" syntax. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -423,7 +451,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of design entity reference. </p>
+<p>Matches if the given token follows the naming convention of a design entity. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -440,7 +468,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of entity reference. </p>
+<p>Matches if the given token follows the naming convention of an entity reference. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -457,7 +485,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of a factor. </p>
+<p>Matches if the given token follows the naming convention of a factor, as per the given grammar. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -474,7 +502,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention for INTEGER, as per the given grammar. </p>
+<p>Matches if the given token follows the naming convention for INTEGER, as per the given grammar. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -491,7 +519,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matching Matches if the given token follows the naming convention for NAME, as per the given grammar. </p>
+<p>Matching Matches if the given token follows the naming convention for NAME, as per the given grammar. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -508,7 +536,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of a reference. </p>
+<p>Matches if the given token follows the naming convention of a reference. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -525,7 +553,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of stmt reference or line reference. </p>
+<p>Matches if the given token follows the naming convention of stmt reference or line reference. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -552,7 +580,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of <a class="el" href="class_synonym.html">Synonym</a> and IDENT. </p>
+<p>Matches if the given token follows the naming convention of <a class="el" href="class_synonym.html">Synonym</a> and IDENT as per the given grammar. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -569,7 +597,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of entity reference. </p>
+<p>Matches if the given token is an underscore. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -586,7 +614,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Matches if the given token follows the naming convention of entity reference. </p>
+<p>Matches if the given token follows the naming convention of an variable reference. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it matches, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -603,7 +631,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parsing Parses the next token and check if it is equal to the given target. </p>
+<p>Parsing Parses the next token and check if it is equal to the given target. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it equals, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -619,7 +647,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the next token and check if it is equal to the apostrophe. </p>
+<p>Parses the next token and check if it is equal to an apostrophe. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it equals, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -646,13 +674,29 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Helper function for parse such that clause </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Helper function to parse such that clause. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>the relRef (ie "Follows*") and the argument it's parsing(either 1 or 2 only) Argument 1 can be an entRef, stmtRef or lineRef. Argument 2 can be an entRef, stmtRef, lineRef or varRef. If </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>the relRef (ie "Follows*") and the argument it's parsing(either 1 or 2 only) Argument 1 can be an entRef, stmtRef or lineRef. Argument 2 can be an entRef, stmtRef, lineRef or varRef. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>is an empty string, means parsing failed. -do return synonym </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails. -do return synonym </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a57f0559aa10ce284f61d77cfa873db4f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QueryParser::parseAttrCompare </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates <a class="el" href="class_q_node.html">QNode</a> With and validates the with clause. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in the with portion of query. </dd></dl>
 
 </div>
 </div>
@@ -668,7 +712,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Supporting function to parse declarations. </p>
+<p>Supporting function to parse declarations. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in the declarations. </dd></dl>
 
 </div>
 </div>
@@ -684,7 +728,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the next token and check if is a design entity. </p>
+<p>Parses the next token and check if it is a design entity. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it's a design entity, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -700,7 +744,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the next token and check if is a entity reference. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails </dd></dl>
+<p>Parses tokens and check if it is an entity reference. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails. </dd></dl>
 
 </div>
 </div>
@@ -716,6 +760,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Parses tokens and check if it is an expression. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if parsing fails. </dd></dl>
 
 </div>
 </div>
@@ -731,6 +776,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Parses tokens and check if it is an expression-spec (for patterns). </p><dl class="section return"><dt>Returns</dt><dd>FALSE if parsing fails. </dd></dl>
 
 </div>
 </div>
@@ -746,7 +792,23 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the next token and check if is a factor </p>
+<p>Parses tokens and checks if it is a factor. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if parsing fails. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="abaa411dddfd884c3ddc0d27e71312d85"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QueryParser::parseOptionalClauses </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in the optional clauses. </dd></dl>
 
 </div>
 </div>
@@ -762,7 +824,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates <a class="el" href="class_q_node.html">QNode</a> Pattern and validates the pattern clause. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there's errors in the pattern portion of query. </dd></dl>
+<p>Creates <a class="el" href="class_q_node.html">QNode</a> Pattern and validates the pattern clause. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in the pattern portion of query. </dd></dl>
 
 </div>
 </div>
@@ -778,7 +840,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>It takes in a query, validates the query and builds a query tree. </p>
+<p>It takes in a query, validates the query and builds a query tree. </p><dl class="section return"><dt>Returns</dt><dd>TRUE always. If the input query is invalid, an empty (default) query tree and synonyms map is passed. </dd></dl>
 
 </div>
 </div>
@@ -794,7 +856,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>FALSE if there's errors in query declarations and select synonym. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in query declarations and select synonym. </dd></dl>
 
 </div>
 </div>
@@ -810,7 +872,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the next token and check if is a reference. Supporting method for parsing with clause. </p>
+<p>Parses tokens and check if it is a reference. Supporting method for parsing with clause. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails. </dd></dl>
 
 </div>
 </div>
@@ -826,7 +888,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates <a class="el" href="class_q_node.html">QNode</a> Selection and validates the select synonym. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there's errors in the select synonym. </dd></dl>
+<p>Creates <a class="el" href="class_q_node.html">QNode</a> Selection and validates the select synonym. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in the select synonym. </dd></dl>
 
 </div>
 </div>
@@ -842,7 +904,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>It's able to parse both stmtRef anf lineRef Parses the next token and check if is a stmt reference or line reference. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails </dd></dl>
+<p>It's able to parse both stmtRef and lineRef. Parses the next token and check if it is a stmt reference or line reference. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails. </dd></dl>
 
 </div>
 </div>
@@ -858,7 +920,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates <a class="el" href="class_q_node.html">QNode</a> for such that clause and validates the query. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there is an error parsing query. </dd></dl>
+<p>Creates <a class="el" href="class_q_node.html">QNode</a> Such that and validates the such that clause. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in the such that portion of query. </dd></dl>
 
 </div>
 </div>
@@ -874,7 +936,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the next token and check if is a synonym. </p>
+<p>Parses the next token and check if it is a synonym. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if it's a synonym, FALSE otherwise. </dd></dl>
 
 </div>
 </div>
@@ -890,6 +952,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Parses tokens and check if it is a term. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if parsing fails. </dd></dl>
 
 </div>
 </div>
@@ -905,7 +968,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>the next token </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the next token in the buffer. </dd></dl>
 
 </div>
 </div>
@@ -921,7 +984,23 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Parses the next token and check if is a variable reference. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails </dd></dl>
+<p>Parses tokens and check if it is a variable reference. </p><dl class="section return"><dt>Returns</dt><dd>an empty string if parsing fails. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a841ce080e0d3ff4e6e1ac70367481f08"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool QueryParser::parseWithClause </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calls <a class="el" href="namespace_query_parser.html#a57f0559aa10ce284f61d77cfa873db4f">parseAttrCompare()</a>. </p><dl class="section return"><dt>Returns</dt><dd>FALSE if there are errors in the with portion of query. </dd></dl>
 
 </div>
 </div>
@@ -938,7 +1017,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>a token these number of steps backwards from the currToken. If steps = 0 , it returns the currToken If steps = 1, it returns the previous token </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a token these number of steps backwards from the currToken. If steps = 0 , it returns the currToken. If steps = 1, it returns the previous token. </dd></dl>
 
 </div>
 </div>
@@ -954,7 +1033,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>-do merge with peekInToTheNextToken </p><dl class="section return"><dt>Returns</dt><dd>the next , next token from the current token. </dd></dl>
+<p>-do merge with peekInToTheNextToken </p><dl class="section return"><dt>Returns</dt><dd>the next next token in the buffer, but does not take that token out of buffer. </dd></dl>
 
 </div>
 </div>
@@ -970,7 +1049,7 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Supporting Functions - To read the buffer of queries </p>
+<p>Supporting Functions - To read the buffer of queries </p><dl class="section return"><dt>Returns</dt><dd>the next token in the buffer, but does not take that token out of buffer. </dd></dl>
 
 </div>
 </div>
@@ -986,14 +1065,30 @@ unordered_map&lt; string, SYNONYM_ATTRIBUTE &gt;&#160;</td><td class="memItemRig
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Prints out the built by the query parser onto console for testing and debugging. </p>
+<p>Calls Query Tree to print the query tree built by Query <a class="el" href="namespace_parser.html" title="Namespace containing functions for parsing the source SIMPLE file as well as utility functions to par...">Parser</a> onto console (for testing and debugging). </p>
+
+</div>
+</div>
+<a class="anchor" id="a58af59372b448f954ff0728d7d971dca"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QueryParser::testingQueryParser </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Prints out the remaining tokens in the buffer. </p>
 
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 8 2015 22:30:02 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:53 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

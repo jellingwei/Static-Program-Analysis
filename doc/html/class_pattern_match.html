@@ -122,13 +122,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Pattern matching for assign statements. </p><dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Pattern matching for assign statements. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Root</td><td>node of the query tree build for the expression and a flag for exact or non-exact matching </td></tr>
+    <tr><td class="paramname">_rootNodeQ</td><td>the Root Node of the query tree build for the expression and a flag for exact or non-exact matching </td></tr>
+    <tr><td class="paramname">isExact</td><td>a flag for exact or non-exact matching </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node. </dd></dl>
 
 </div>
 </div>
@@ -155,14 +156,14 @@ Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Pattern matching for while or if statements. </p><dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Pattern matching for while or if statements. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">LHS</td><td>the name of the variable that acts as the control variable for the while statements we are interested in. </td></tr>
     <tr><td class="paramname">type</td><td>the type of statement to match, either While or If </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable. </dd></dl>
 
 </div>
 </div>
@@ -173,7 +174,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 8 2015 22:30:02 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:52 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

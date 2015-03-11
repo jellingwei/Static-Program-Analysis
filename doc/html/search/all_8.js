@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['initialize',['initialize',['../namespace_intermediate_values_handler.html#a0286bc1727677a4613dfd7d18a49ee0f',1,'IntermediateValuesHandler']]],
   ['initparser',['initParser',['../namespace_parser.html#a7ae4f148b0d9ca3f5320ff1abbf99c40',1,'Parser::initParser()'],['../namespace_query_parser.html#aec65cc23d94d0e9807dff3acbacf1b74',1,'QueryParser::initParser()']]],
   ['initquerytreeandsymbolstable',['initQueryTreeAndSymbolsTable',['../namespace_query_parser.html#a00cc2d44cfff6dd5f28200c9a28a2b68',1,'QueryParser']]],
   ['inittable',['initTable',['../class_query_validator.html#a9d70eeb0ba5385ca1e15c099cda41225',1,'QueryValidator']]],
@@ -7,6 +8,9 @@ var searchData=
   ['insertproc',['insertProc',['../class_p_k_b.html#ae48aadc241983a1e95ddbe9f75d53f0a',1,'PKB']]],
   ['insertstmt',['insertStmt',['../class_p_k_b.html#a61e4f5ecfcda7a81a1669d23259984ce',1,'PKB']]],
   ['insertvar',['insertVar',['../class_p_k_b.html#a0b2513c2dd6c90dcb3783bad8af8fc2e',1,'PKB']]],
+  ['intermediatevalueshandler',['IntermediateValuesHandler',['../namespace_intermediate_values_handler.html',1,'']]],
+  ['intersectandjoinwithexistingvalues',['intersectAndJoinWithExistingValues',['../namespace_intermediate_values_handler.html#a451ee51ed95d2dd0574588c56c151625',1,'IntermediateValuesHandler']]],
+  ['intersectwithexistingvalues',['intersectWithExistingValues',['../namespace_intermediate_values_handler.html#ad2d4d38557b2d5b2b165080061ad831c',1,'IntermediateValuesHandler::intersectWithExistingValues(int synonymIndex, vector&lt; int &gt; probeValues)'],['../namespace_intermediate_values_handler.html#a1e083569d3d76876b8387274903f2842',1,'IntermediateValuesHandler::intersectWithExistingValues(int indexLHS, vector&lt; int &gt; LHSValues, int indexRHS, vector&lt; int &gt; RHSValues)']]],
   ['isafternode',['isAfterNode',['../class_c_f_g.html#a7aa1d1f976e4fe61ef942c4a2cd5acb1',1,'CFG']]],
   ['isassign',['isAssign',['../class_p_k_b.html#af4e86d4a594bb5bf6c93e8eed5d20c23',1,'PKB']]],
   ['isbeforenode',['isBeforeNode',['../class_c_f_g.html#a60380f8d3a3c43d496915f4108050fa6',1,'CFG']]],
@@ -15,7 +19,6 @@ var searchData=
   ['iscallss',['isCallsS',['../class_p_k_b.html#afe56b7d5912985540dd7a5cd63897b55',1,'PKB']]],
   ['ischildnode',['isChildNode',['../class_a_s_t.html#a7b81dd32e82c1b6e8229d4160f4bf078',1,'AST::isChildNode()'],['../class_p_k_b.html#ab3b48cdd915cc46e215b56465e85bced',1,'PKB::isChildNode()']]],
   ['isconstant',['isConstant',['../class_p_k_b.html#a0fe7bb9fc063eaa8e6f490cd0421ab4c',1,'PKB']]],
-  ['isdummy',['isDummy',['../class_c_node.html#aaa909dbc7e8bc6829e03ca58df694125',1,'CNode']]],
   ['isexists',['isExists',['../class_a_s_t.html#ad802d5d3a47c0141f1fed4a3f175248c',1,'AST::isExists()'],['../class_c_f_g.html#a9bea0c9744aa661d77bc3301f7e0715c',1,'CFG::isExists()'],['../class_p_k_b.html#a09ebe6d9c9bc88d6547a73ea8196c1bf',1,'PKB::isExists()']]],
   ['isfactor',['isFactor',['../namespace_query_parser.html#a52a700cb3591b277eece92da637a6471',1,'QueryParser']]],
   ['isfollows',['isFollows',['../class_p_k_b.html#ad1383cdcf44c16742f7fac193d1be88b',1,'PKB']]],
@@ -31,5 +34,6 @@ var searchData=
   ['isparents',['isParentS',['../class_p_k_b.html#a7df8d85b8745c159332e594f85ee44a7',1,'PKB']]],
   ['isuses',['isUses',['../class_p_k_b.html#a9172069feab68ac212353a300d91a135',1,'PKB']]],
   ['isusesproc',['isUsesProc',['../class_p_k_b.html#a832cc948cc312ea2845505dfe16a93fa',1,'PKB']]],
+  ['isvalueexist',['isValueExist',['../namespace_intermediate_values_handler.html#ac541b1e01ba0452e5195441d3af5a3e1',1,'IntermediateValuesHandler']]],
   ['iswhile',['isWhile',['../class_p_k_b.html#a648f7fead9e8db61831d60eccd28a57f',1,'PKB']]]
 ];
