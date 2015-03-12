@@ -92,10 +92,14 @@ namespace IntermediateValuesHandler
 	*/
 	bool addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
+		if (synonym.getValues().size() == 0) {
+			return false;
+		}
+
 		if (synonym.getType() == UNDEFINED) {
 			return allIntermediateValues.size() != 0;
 		}
-
+		
 		string name = synonym.getName();
 		int synonymIndex = findIntermediateSynonymIndex(name);
 
@@ -137,21 +141,37 @@ namespace IntermediateValuesHandler
 	*/
 	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
 	{
+		if (LHS.getValues().size() == 0) {
+			return false;
+		}
+		
 		if (LHS.getType() == UNDEFINED && RHS.getType() == UNDEFINED) {
 			return allIntermediateValues.size() != 0;
 		} else if (LHS.getType() == UNDEFINED) {
-			addAndProcessIntermediateSynonym(RHS);
-			return allIntermediateValues.size() != 0;
+			return addAndProcessIntermediateSynonym(RHS);
 		} else if (RHS.getType() == UNDEFINED) {
-			addAndProcessIntermediateSynonym(LHS);
-			return allIntermediateValues.size() != 0;
+			return addAndProcessIntermediateSynonym(LHS);
 		}
 
 		//If it reaches here, it is two proper synonyms that require handling
 		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
 		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
 
-		if (indexLHS == -1 && indexRHS == -1) {
+		if (indexLHS == indexRHS) {
+			//These are the same synonyms
+			//Only take values that are the same on both sides
+			vector<int> valuesLHS = LHS.getValues();
+			vector<int> valuesRHS = RHS.getValues();
+			vector<int> acceptedValues;
+			
+			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+				if (valuesLHS[i] == valuesRHS[i]) {
+					acceptedValues.push_back(valuesLHS[i]);
+				}
+			}
+			LHS.setValues(acceptedValues);  //Can take either LHS or RHS
+			return addAndProcessIntermediateSynonym(LHS);
+		} else if (indexLHS == -1 && indexRHS == -1) {
 			//Both LHS and RHS are not in the table
 			//Cartesian product the two values with the current table
 			joinWithExistingValues(LHS, RHS);
@@ -170,7 +190,6 @@ namespace IntermediateValuesHandler
 		}
 		return allIntermediateValues.size() != 0;
 	}
-
 
 	/**
 	* Helper method to do a join or cartesian product of the intermediate synonym values with other values
