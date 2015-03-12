@@ -14,6 +14,7 @@
 #include "ConstantTable.h"
 #include "CallsTable.h"
 #include "NextTable.h"
+#include "AffectsTable.h"
 #include "CFG.h"
 #include "AST.h"
 #include "TNode.h"
@@ -170,6 +171,8 @@ public:
 	vector<int> getUsesLhs();
 	vector<int> getUsesRhs();
 
+	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(int stmtNum);
+
 	bool setUsesProc(int procIndex, int varIndex);
 	bool isUsesProc(int procIndex, int varIndex);
 	vector<int> getUsesProcIndex(int varIndex);
@@ -189,6 +192,8 @@ public:
 
 	vector<CFG*> cfgTable;
 
+	// affects
+	vector<int> getAffectedBy(int progLine1, bool transitiveClosure = false);
 
 	//@todo 
 	// @cond todo
@@ -200,6 +205,7 @@ public:
 
 private:
 	NextTable* nextTable;
+	AffectsTable* affectsTable;
 	PKB();
 	
 	

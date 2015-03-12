@@ -285,7 +285,6 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg,
 	curCNode = firstCNode;
 	// iterate over all stmts in the stmtlist
 	while (curStmt != NULL) {
-		cfg->createLink(typeOfLinkToContainer, curCNode, firstCNode);
 
 		if (curStmt->getNodeType() == Assign || curStmt->getNodeType() == Call) {
 			// for assign and call statements,
@@ -297,6 +296,7 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg,
 
 			CNode* nextCNode = createNextNode(nextStmt, cfg, startCNode);
 			cfg->createLink(After, curCNode, nextCNode);  
+			cfg->createLink(typeOfLinkToContainer, startCNode, nextCNode);
 
 			curStmt = nextStmt;
 			curCNode = nextCNode;
@@ -327,6 +327,7 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg,
 			}
 			CNode* nextCNode = createNextNode(nextStmtNode, cfg, startCNode);
 			cfg->createLink(After, IfEndNode, nextCNode);
+			cfg->createLink(typeOfLinkToContainer, startCNode, nextCNode);
 
 			curStmt = nextStmtNode;
 			curCNode = nextCNode;
@@ -345,6 +346,7 @@ CNode* constructCfgForStmtList(TNode* stmtListNode, CNode* startCNode, CFG* cfg,
 			}
 			CNode* nextCNode = createNextNode(nextStmtNode, cfg, startCNode);
 			cfg->createLink(After, curCNode, nextCNode);
+			cfg->createLink(typeOfLinkToContainer, startCNode, nextCNode);
 			
 			curStmt = nextStmtNode;   
 			curCNode = nextCNode;
@@ -519,7 +521,7 @@ void DesignExtractor::setUsesForContainerStatements() {
 class CompareProglines {
     public:
     bool operator() (CNode* node1, CNode* node2) { 
-       return node1->getProcLineNumber() < node1->getProcLineNumber(); 
+       return node1->getProcLineNumber() < node2->getProcLineNumber(); 
     }
 };
 
@@ -619,12 +621,12 @@ void DesignExtractor::precomputeInformationForAffects() {
 	setVariablesInside();
 
 	// set definitions reaching the dummy nodes
-	for (int i = 0; i < pkb.cfgTable.size(); i++) {
+	/*for (int i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
 
 		// traverse through cfg and update reaching definitions
 		updateReachingDefinitionsThroughCfg(cfg->getProcRoot());
-	}
+	}*/
 
 
 

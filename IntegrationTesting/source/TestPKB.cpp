@@ -387,6 +387,11 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next lhs", 23, (int)pkb.getNextLhs().size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next rhs", 23, (int)pkb.getNextRhs().size());
 
+	// Affects... 
+	cout << "Affects" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(6, _)", 2, (int)pkb.getAffectedBy(6).size());
+
+
 	cout << "End TestPkb" << endl;
 }
 

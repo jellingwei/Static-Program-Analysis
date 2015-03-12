@@ -23,8 +23,10 @@ PKB::PKB()
 	usesTable = new UsesTable();
 	followsTable = new FollowsTable();
 	parentTable = new ParentTable();
+
 	ast = new AST();
 	nextTable = new NextTable();
+	affectsTable = new AffectsTable();
 }
 
 /**
@@ -978,6 +980,9 @@ vector<int> PKB::getUsesStmtNum(int varIndex) {
 vector<int> PKB::getUsesVarForStmt(int stmtNum) {
 	return usesTable->getUsesVarForStmt(stmtNum);
 }
+boost::dynamic_bitset<> PKB::getUseVarInBitvectorForStmt(int stmtNum) {
+	return usesTable->getUseVarInBitvectorForStmt(stmtNum);
+}
 
 /**
 * @return all pairs of statement numbers, stmtNum, and variable indexes, varIndex, where Uses(stmtNum, varIndex) is satisfied.
@@ -1138,6 +1143,10 @@ vector<int> PKB::getNextRhs() {
 */
 CNode* PKB::getCNodeForProgLine(int progLine) {
 	return nextTable->getCNodeForProgLine(progLine);
+}
+
+vector<int> PKB::getAffectedBy(int progLine1, bool transitiveClosure) {
+	return affectsTable->getProgLinesAffectedBy(progLine1, transitiveClosure);
 }
 
 /*
