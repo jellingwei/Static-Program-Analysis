@@ -128,6 +128,13 @@ vector<int> UsesTable::getUsesVarForStmt(int stmtNum) {
 	return result;
 }
 
+boost::dynamic_bitset<> UsesTable::getUseVarInBitvectorForStmt(int stmtNum) {
+	if (varIndexMap.count(stmtNum) == 0) {
+		throw logic_error("UsesTable: stmt is not a key in UsesTable");
+	}
+
+	return varIndexMap.at(stmtNum);
+}
 
 pair<vector<int>, vector<int>> UsesTable::getAllUsesPair() {
 	pair<vector<int>, vector<int>> result;

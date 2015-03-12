@@ -220,7 +220,7 @@ namespace Parser {
 
 		bool createVariablesForExpr(vector<string> tokenizedBuffer) {
 			bool status = true;
-			for (int i = 0; i < tokenizedBuffer.size(); i++) {
+			for (unsigned int i = 0; i < tokenizedBuffer.size(); i++) {
 				
 				bool isVariable = !matchName(tokenizedBuffer[i]).empty();
 				if (!isVariable) {
