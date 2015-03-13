@@ -20,6 +20,7 @@ public:
 	vector<int> getUsesStmtNum(int varIndex);
 	vector<int> getUsesVarForStmt(int stmtNum);
 	pair<vector<int>, vector<int>> getAllUsesPair();
+	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(int stmtNum);
 	vector<int> getLhs();
 	vector<int> getRhs();
 

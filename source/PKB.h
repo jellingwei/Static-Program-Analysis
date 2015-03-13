@@ -14,6 +14,7 @@
 #include "ConstantTable.h"
 #include "CallsTable.h"
 #include "NextTable.h"
+#include "AffectsTable.h"
 #include "CFG.h"
 #include "AST.h"
 #include "TNode.h"
@@ -170,6 +171,8 @@ public:
 	vector<int> getUsesLhs();
 	vector<int> getUsesRhs();
 
+	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(int stmtNum);
+
 	bool setUsesProc(int procIndex, int varIndex);
 	bool isUsesProc(int procIndex, int varIndex);
 	vector<int> getUsesProcIndex(int varIndex);
@@ -189,17 +192,27 @@ public:
 
 	vector<CFG*> cfgTable;
 
+	// affects
+	bool isAffects(int progLine1, int progLine2, bool transitiveClosure = false);
+	vector<int> getAffectedBy(int progLine1, bool transitiveClosure = false);
+	vector<int> getAffecting(int progLine2, bool transitiveClosure = false);
+	vector<int> getAffectsLhs();
+	vector<int> getAffectsRhs();
+	void setAffectsLhs(vector<int>);
+	void setAffectsRhs(vector<int>);
+
 
 	//@todo 
 	// @cond todo
 	unordered_map<int, CNode*> cfgNodeTable; //@todo nextTable?
-	unordered_map<int, TNode*> nodeTable;   // @todo stmtTable
-	unordered_map<int, int> stmtToProcMap;  // a temporary structure for convenience @todo move into either procTable or stmtTable
-	unordered_map<int, int> stmtNumToProcLineMap; // a temporary structure for mapping proc lines to stmt num @todo move into stmtTable
+	unordered_map<int, TNode*> nodeTable;   // @todo change calls to nodeTable to getNodeFromStmt
+	unordered_map<int, int> stmtToProcMap;  // @todo change to getProcIndexForStmt from stmtTable
+	unordered_map<int, int> stmtNumToProcLineMap; // @todo not needed anymore
 	// @endcond
 
 private:
 	NextTable* nextTable;
+	AffectsTable* affectsTable;
 	PKB();
 	
 	

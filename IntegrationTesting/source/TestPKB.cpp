@@ -387,6 +387,30 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next lhs", 23, (int)pkb.getNextLhs().size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next rhs", 23, (int)pkb.getNextRhs().size());
 
+	// Affects... 
+	cout << "Affects" << endl;
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(6, _)", 2, (int)pkb.getAffectedBy(6).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(9, _)", 2, (int)pkb.getAffectedBy(9).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(9, _)", 4, (int)pkb.getAffectedBy(9, true).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(2, _)", 0, (int)pkb.getAffectedBy(2).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(4, _)", 1, (int)pkb.getAffectedBy(4).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(4, _)", 2, (int)pkb.getAffectedBy(4, true).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 2)", 0, (int)pkb.getAffecting(2).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 6)", 1, (int)pkb.getAffecting(6).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 11)", 4, (int)pkb.getAffecting(11).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(_, 11)", 5, (int)pkb.getAffecting(11, true).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(23, 25)", true, pkb.isAffects(23, 25));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(25, 23)", false, pkb.isAffects(25, 23));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(14, 15)", false, pkb.isAffects(14, 15, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(1, 11)", true, pkb.isAffects(1, 11, true));
+
+
 	cout << "End TestPkb" << endl;
 }
 

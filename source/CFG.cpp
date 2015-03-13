@@ -80,7 +80,7 @@ bool CFG::createLink(CLINK_TYPE link, CNode* currNode, CNode* toNode)
 		case Inside2: {
 			CNode& temp = *currNode;
 			temp.addInside2(toNode);
-			toNode->setHeader(&temp);
+			//toNode->setHeader(&temp);
 			return true; }
 
 		default:
