@@ -1149,6 +1149,10 @@ vector<int> PKB::getAffectedBy(int progLine1, bool transitiveClosure) {
 	return affectsTable->getProgLinesAffectedBy(progLine1, transitiveClosure);
 }
 
+vector<int> PKB::getAffecting(int progLine2, bool transitiveClosure) {
+	return affectsTable->getProgLinesAffecting(progLine2, transitiveClosure);
+}
+
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
 */

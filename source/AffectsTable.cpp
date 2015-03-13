@@ -38,7 +38,7 @@ CNode* getMandatoryNextNode(CNode* node, CFG* cfg) {
 	vector<CNode*>* possibleNextNodes = node->getAfter();
 	
 	for (auto iter = possibleNextNodes->begin(); iter != possibleNextNodes->end(); ++iter) {
-		if (cfg->isInsideNode(node, *iter)) {
+		if (cfg->isInsideNode(node, *iter) && (*iter)->getNodeType() != Proc_C && (*iter)->getNodeType() != EndProc_C) {
 			continue;
 		}
 		return *iter;	
@@ -52,12 +52,13 @@ CNode* getMandatoryPrevNode(CNode* node, CFG* cfg) {
 	PKB pkb = PKB::getInstance();
 
 	CNODE_TYPE type = node->getNodeType();
-	vector<CNode*>* possibleNextNodes = node->getBefore();
+	vector<CNode*>* possiblePrevNodes = node->getBefore();
 	
-	for (auto iter = possibleNextNodes->begin(); iter != possibleNextNodes->end(); ++iter) {
-		if (cfg->isInsideNode(node, *iter)) {
+	for (auto iter = possiblePrevNodes->begin(); iter != possiblePrevNodes->end(); ++iter) {
+		if (cfg->isInsideNode(node, *iter) || (*iter)->getNodeType() == Proc_C || (*iter)->getNodeType() == EndProc_C) {
 			continue;
 		}
+
 		return *iter;	
 	}
 
@@ -72,7 +73,7 @@ CNode* getInsideNextNode(CNode* node, CFG* cfg) {
 	vector<CNode*>* possibleNextNodes = node->getAfter();
 	
 	for (auto iter = possibleNextNodes->begin(); iter != possibleNextNodes->end(); ++iter) {
-		if (cfg->isInsideNode(node, *iter)) {
+		if (cfg->isInsideNode(node, *iter) && (*iter)->getNodeType() != Proc_C && (*iter)->getNodeType() != EndProc_C) {
 			return *iter;
 		}	
 	}
@@ -80,13 +81,21 @@ CNode* getInsideNextNode(CNode* node, CFG* cfg) {
 	return NULL;
 }
 
+// assumes that each node has only 1 inside node directly connected to it
+CNode* getInsidePrevNode(CNode* node, CFG* cfg) {
+	PKB pkb = PKB::getInstance();
 
-//	variablesToMatch &= ~nodeModVariables;
+	CNODE_TYPE type = node->getNodeType();
+	vector<CNode*>* possiblePrevNodes = node->getBefore();
+	
+	for (auto iter = possiblePrevNodes->begin(); iter != possiblePrevNodes->end(); ++iter) {
+		if (cfg->isInsideNode(node, *iter) && (*iter)->getNodeType() != Proc_C && (*iter)->getNodeType() != EndProc_C) {
+			return *iter;
+		}	
+	}
 
-	//if (isResultsChanged && isTransitiveClosure) {
-	//	variablesToMatch |= nodeModVariables;  or variablesToMatch |= nodeUsedVariables;
-	//}
-
+	return NULL;
+}
 
 
 
@@ -97,6 +106,13 @@ class CompareAffects {
     public:
 		bool operator() (pair<CNode*, boost::dynamic_bitset<> >& pair1, pair<CNode*, boost::dynamic_bitset<> >& pair2) { 
 			return pair1.first->getProcLineNumber() < pair2.first->getProcLineNumber(); 
+		}
+};
+
+class CompareAffectsReverse {
+    public:
+		bool operator() (pair<CNode*, boost::dynamic_bitset<> >& pair1, pair<CNode*, boost::dynamic_bitset<> >& pair2) { 
+			return pair1.first->getProcLineNumber() > pair2.first->getProcLineNumber(); 
 		}
 };
 
@@ -117,7 +133,10 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 	boost::dynamic_bitset<> variablesToMatch = pkb.getModVarInBitvectorForStmt(progLine1);
 	priority_queue<pair<CNode*, boost::dynamic_bitset<> >, vector<pair<CNode*, boost::dynamic_bitset<> > >, CompareAffects> frontier;
 
-	frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(getMandatoryNextNode(node, pkb.cfgTable.at(0)), variablesToMatch));
+	CNode* startNode = getMandatoryNextNode(node, pkb.cfgTable.at(0));
+	if (startNode) {
+		frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(startNode,variablesToMatch));
+	}
 	set<pair<CNode*, boost::dynamic_bitset<> >> visited;
 
 	while (!frontier.empty()) {
@@ -171,8 +190,74 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 
 
 vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveClosure) {
-	
-	return vector<int>();
+	PKB pkb = PKB::getInstance();
+	// verify that progLine2 is a program line and is an assignment statement
+	if (pkb.cfgNodeTable.count(progLine2) == 0) {
+		return vector<int>();
+	}
+	CNode* node = pkb.cfgNodeTable.at(progLine2);
+	if (node->getNodeType() != Assign_C) {
+		return vector<int>();
+	}
+
+	vector<int> result;
+
+	// initialise variablesToMatch and the priority queue
+	boost::dynamic_bitset<> variablesToMatch = pkb.getUseVarInBitvectorForStmt(progLine2);
+	priority_queue<pair<CNode*, boost::dynamic_bitset<> >, vector<pair<CNode*, boost::dynamic_bitset<> > >, CompareAffectsReverse> frontier;
+
+	CNode* startNode = getMandatoryPrevNode(node, pkb.cfgTable.at(0));
+	if (startNode) {
+		frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(startNode, variablesToMatch));
+	}
+	set<pair<CNode*, boost::dynamic_bitset<> >> visited;
+
+	while (!frontier.empty()) {
+		node = frontier.top().first;
+		variablesToMatch = frontier.top().second;
+		
+		visited.insert(frontier.top());
+		frontier.pop();
+
+		if (node->getNodeType() == Assign_C || node->getNodeType() == Call_C) {
+			boost::dynamic_bitset<> variablesModified = pkb.getUseVarInBitvectorForStmt(node->getProcLineNumber());
+			boost::dynamic_bitset<> variablesUsed = pkb.getUseVarInBitvectorForStmt(node->getProcLineNumber());
+		
+			// test for results
+			bool isResultsModified = false;
+			if (!(variablesToMatch & variablesModified).none()) {
+				result.push_back(node->getProcLineNumber());
+				isResultsModified = true;
+			}
+			// reset any re-defined variables
+			variablesToMatch &= ~variablesModified;
+
+			// set variables for indrectly affected stmts
+			if (transitiveClosure && isResultsModified) {
+				variablesToMatch |= variablesUsed;
+			}
+
+			// if there are no more variables to match, don't explore this path further
+			if (variablesToMatch.none()) {
+				continue;
+			}
+		} 
+
+		CNode* prevNode = getMandatoryPrevNode(node, pkb.cfgTable.at(0));
+		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch);
+		if (prevNode && visited.count(nodePair) == 0 ) {
+			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch));
+		}
+
+		CNode* possibleNode = getInsidePrevNode(node, pkb.cfgTable.at(0));
+		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
+		if (possibleNode && visited.count(nodePair) == 0 ) {
+			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
+		}
+		
+	}
+
+	return result;
 }
 
 

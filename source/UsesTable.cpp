@@ -128,9 +128,14 @@ vector<int> UsesTable::getUsesVarForStmt(int stmtNum) {
 	return result;
 }
 
+/**
+ * Unlike getModVarInBitvectorForStmt, this function returns an empty bitvector if the stmtNum is not a key.
+ * This is because it is possible for assign/call stmt to not use any variable.
+ * @sa ModifiesTable::getModVarInBitvectorForStmt
+ */
 boost::dynamic_bitset<> UsesTable::getUseVarInBitvectorForStmt(int stmtNum) {
 	if (varIndexMap.count(stmtNum) == 0) {
-		throw logic_error("UsesTable: stmt is not a key in UsesTable");
+		return boost::dynamic_bitset<>(numVariables);
 	}
 
 	return varIndexMap.at(stmtNum);
