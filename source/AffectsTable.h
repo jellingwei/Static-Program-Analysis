@@ -21,12 +21,17 @@ public:
 
 	pair<vector<int>, vector<int>> getAllAffectsPairs(bool transitiveClosure);
 
-	//@todo
-	//vector<int> getLhs();
-	//vector<int> getRhs();
+	
+	vector<int> getLhs();
+	vector<int> getRhs();
+
+	void setLhs(vector<int>);
+	void setRhs(vector<int>);
 
 private: 
-
+	//@todo check with Jin if this is permitted
+	vector<int> lhs;
+	vector<int> rhs;
 
 };
 

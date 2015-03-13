@@ -193,8 +193,14 @@ public:
 	vector<CFG*> cfgTable;
 
 	// affects
+	bool isAffects(int progLine1, int progLine2, bool transitiveClosure = false);
 	vector<int> getAffectedBy(int progLine1, bool transitiveClosure = false);
 	vector<int> getAffecting(int progLine2, bool transitiveClosure = false);
+	vector<int> getAffectsLhs();
+	vector<int> getAffectsRhs();
+	void setAffectsLhs(vector<int>);
+	void setAffectsRhs(vector<int>);
+
 
 	//@todo 
 	// @cond todo

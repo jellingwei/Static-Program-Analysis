@@ -280,3 +280,20 @@ pair<vector<int>, vector<int>> AffectsTable::getAllAffectsPairs(bool transitiveC
 
 	return results;
 }
+
+
+
+
+vector<int> AffectsTable::getLhs() {
+	return lhs;
+}
+vector<int> AffectsTable::getRhs(){
+	return rhs;
+}
+
+void AffectsTable::setLhs(vector<int>) {
+
+}
+void AffectsTable::setRhs(vector<int>) {
+
+}

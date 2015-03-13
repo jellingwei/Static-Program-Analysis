@@ -1145,12 +1145,36 @@ CNode* PKB::getCNodeForProgLine(int progLine) {
 	return nextTable->getCNodeForProgLine(progLine);
 }
 
+
+bool PKB::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
+	//@todo optimise in future
+	// do this now to prevent regressions, as Affects will change a lot in the next week
+	vector<int> ans = getAffectedBy(progLine1, transitiveClosure);
+
+	return find(ans.begin(), ans.end(), progLine2) != ans.end();
+
+}
+
 vector<int> PKB::getAffectedBy(int progLine1, bool transitiveClosure) {
 	return affectsTable->getProgLinesAffectedBy(progLine1, transitiveClosure);
 }
 
 vector<int> PKB::getAffecting(int progLine2, bool transitiveClosure) {
 	return affectsTable->getProgLinesAffecting(progLine2, transitiveClosure);
+}
+
+vector<int> PKB::getAffectsLhs() {
+	return affectsTable->getLhs();
+}
+vector<int> PKB::getAffectsRhs() {
+	return affectsTable->getRhs();
+}
+
+void PKB::setAffectsLhs(vector<int> lhs) {
+	affectsTable->setLhs(lhs);
+}
+void PKB::setAffectsRhs(vector<int> rhs) {
+	affectsTable->setRhs(rhs);
 }
 
 /*
