@@ -38,7 +38,7 @@ CNode* getMandatoryNextNode(CNode* node, CFG* cfg) {
 	vector<CNode*>* possibleNextNodes = node->getAfter();
 	
 	for (auto iter = possibleNextNodes->begin(); iter != possibleNextNodes->end(); ++iter) {
-		if (cfg->isInsideNode(node, *iter) && (*iter)->getNodeType() != Proc_C && (*iter)->getNodeType() != EndProc_C) {
+		if (cfg->isInsideNode(node, *iter) || (*iter)->getNodeType() == Proc_C || (*iter)->getNodeType() == EndProc_C) {
 			continue;
 		}
 		return *iter;	
@@ -138,6 +138,7 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 		frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(startNode,variablesToMatch));
 	}
 	set<pair<CNode*, boost::dynamic_bitset<> >> visited;
+	set<int> addedToAnswer;
 
 	while (!frontier.empty()) {
 		node = frontier.top().first;
@@ -148,13 +149,18 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 		frontier.pop();
 
 		if (node->getNodeType() == Assign_C || node->getNodeType() == Call_C) {
-			boost::dynamic_bitset<> variablesModified = pkb.getUseVarInBitvectorForStmt(node->getProcLineNumber());
+			boost::dynamic_bitset<> variablesModified = pkb.getModVarInBitvectorForStmt(node->getProcLineNumber());
 			boost::dynamic_bitset<> variablesUsed = pkb.getUseVarInBitvectorForStmt(node->getProcLineNumber());
-		
+			
 			// test for results
+			bool isAssignment = node->getNodeType() == Assign_C ;
 			bool isResultsModified = false;
-			if (!(variablesToMatch & variablesUsed).none()) {
-				result.push_back(node->getProcLineNumber());
+			bool isAlreadyAddedToResults = find(addedToAnswer.begin(), addedToAnswer.end(), node->getProcLineNumber()) != addedToAnswer.end();
+			if (!((variablesToMatch & variablesUsed).none()) && isAssignment) {
+				if (!isAlreadyAddedToResults) {
+					result.push_back(node->getProcLineNumber());
+					addedToAnswer.insert(node->getProcLineNumber());
+				}
 				isResultsModified = true;
 			}
 			// reset any re-defined variables
@@ -211,6 +217,7 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 		frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(startNode, variablesToMatch));
 	}
 	set<pair<CNode*, boost::dynamic_bitset<> >> visited;
+	set<int> addedToAnswer;
 
 	while (!frontier.empty()) {
 		node = frontier.top().first;
@@ -220,13 +227,18 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 		frontier.pop();
 
 		if (node->getNodeType() == Assign_C || node->getNodeType() == Call_C) {
-			boost::dynamic_bitset<> variablesModified = pkb.getUseVarInBitvectorForStmt(node->getProcLineNumber());
+			boost::dynamic_bitset<> variablesModified = pkb.getModVarInBitvectorForStmt(node->getProcLineNumber());
 			boost::dynamic_bitset<> variablesUsed = pkb.getUseVarInBitvectorForStmt(node->getProcLineNumber());
 		
 			// test for results
+			bool lineIsAssignment = node->getNodeType() == Assign_C;
 			bool isResultsModified = false;
-			if (!(variablesToMatch & variablesModified).none()) {
-				result.push_back(node->getProcLineNumber());
+			bool isAlreadyAddedToResults = find(addedToAnswer.begin(), addedToAnswer.end(), node->getProcLineNumber()) != addedToAnswer.end();
+			if (!((variablesToMatch & variablesModified).none()) && lineIsAssignment) {
+				if (!isAlreadyAddedToResults) {
+					result.push_back(node->getProcLineNumber());
+					addedToAnswer.insert(node->getProcLineNumber());
+				}
 				isResultsModified = true;
 			}
 			// reset any re-defined variables

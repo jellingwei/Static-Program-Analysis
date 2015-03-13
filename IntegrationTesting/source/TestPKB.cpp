@@ -389,14 +389,17 @@ void PKBTest::testPKB()
 
 	// Affects... 
 	cout << "Affects" << endl;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(6, _)", 2, (int)pkb.getAffectedBy(6).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(9, _): test line 11 should not be affected", 1, (int)pkb.getAffectedBy(9).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(9, _)", 10, pkb.getAffectedBy(9).front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(2, _)", 0, (int)pkb.getAffectedBy(2).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(6, _)", 2, (int)pkb.getAffectedBy(6).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(9, _)", 2, (int)pkb.getAffectedBy(9).size());
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(9, _)", 4, (int)pkb.getAffectedBy(9, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(2, _)", 0, (int)pkb.getAffectedBy(2).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(4, _)", 1, (int)pkb.getAffectedBy(4).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(4, _)", 2, (int)pkb.getAffectedBy(4, true).size());
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(_, 2)", 0, (int)pkb.getAffecting(2).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(_, 6)", 1, (int)pkb.getAffecting(6).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(_, 11)", 3, (int)pkb.getAffecting(11).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 2)", 0, (int)pkb.getAffecting(2).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 6)", 1, (int)pkb.getAffecting(6).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 11)", 4, (int)pkb.getAffecting(11).size());
 
 
 	cout << "End TestPkb" << endl;

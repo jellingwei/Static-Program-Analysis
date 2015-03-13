@@ -257,11 +257,12 @@ CNode* createDummyEndIfNode(CFG* cfg, TNode* ifStmtListNode, CNode* lastNodeInIf
 		cfg->createLink(After, curCNode, IfEndNode);
 	}
 
+	/*
 	vector<CNode*>* insideNodes = curCNode->getInside();
 	for (auto iter = insideNodes->begin(); iter != insideNodes->end(); ++iter) {
 		CNode* insideNode = *iter;
 		cfg->createLink(Inside, IfEndNode, insideNode);
-	}
+	}*/
 
 	return IfEndNode;
 }
