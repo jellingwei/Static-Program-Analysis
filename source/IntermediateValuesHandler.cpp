@@ -157,11 +157,7 @@ namespace IntermediateValuesHandler
 		int indexLHS = findIntermediateSynonymIndex(LHS.getName());
 		int indexRHS = findIntermediateSynonymIndex(RHS.getName());
 
-		if (indexLHS == -1 && indexRHS == -1) {
-			//Both LHS and RHS are not in the table
-			//Cartesian product the two values with the current table
-			joinWithExistingValues(LHS, RHS);
-		} else if (indexLHS == indexRHS) {
+		if (LHS.getName() == RHS.getName()) {
 			//These are the same synonyms
 			//Only take values that are the same on both sides
 			vector<int> valuesLHS = LHS.getValues();
@@ -175,6 +171,10 @@ namespace IntermediateValuesHandler
 			}
 			LHS.setValues(acceptedValues);  //Can take either LHS or RHS
 			return addAndProcessIntermediateSynonym(LHS);
+		} else if (indexLHS == -1 && indexRHS == -1) {
+			//Both LHS and RHS are not in the table
+			//Cartesian product the two values with the current table
+			joinWithExistingValues(LHS, RHS);
 		} else if (indexLHS == -1) {
 			//LHS is not in the table while RHS is
 			//Use RHS to intersect with the table values then join with the LHS
