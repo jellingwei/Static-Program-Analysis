@@ -97,7 +97,7 @@ namespace IntermediateValuesHandler
 		}
 
 		if (synonym.getType() == UNDEFINED) {
-			return allIntermediateValues.size() != 0;
+			return synonym.getValues().size() != 0;
 		}
 		
 		string name = synonym.getName();
@@ -146,7 +146,7 @@ namespace IntermediateValuesHandler
 		}
 		
 		if (LHS.getType() == UNDEFINED && RHS.getType() == UNDEFINED) {
-			return allIntermediateValues.size() != 0;
+			return LHS.getValues().size() != 0;
 		} else if (LHS.getType() == UNDEFINED) {
 			return addAndProcessIntermediateSynonym(RHS);
 		} else if (RHS.getType() == UNDEFINED) {
