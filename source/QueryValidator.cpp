@@ -214,34 +214,7 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
 		return false;
 	}
 
-
-	if((type != QNODE_TYPE(Next)) && (type != QNODE_TYPE(NextT))){
-		//Since the two are constant strings, they must be digits by the checks above
-		if ((arg1Type == STRING_INT && arg2Type == STRING_INT) &&
-			(stoi(arg1.getName()) >= stoi(arg2.getName())) ){
-
-			#ifdef DEBUG
-				throw exception("QueryValidator error: arg1 must be smaller than arg2 or else it is false.");
-			#endif
-			return false;  //arg1 must be smaller than arg2 or else it is false
-		
-		}	
-	
-		if(arg1Type != STRING_INT && arg2Type != STRING_INT &&
-			arg1Type != STRING_CHAR && arg2Type != STRING_CHAR && 
-			arg1Type != UNDEFINED && arg2Type != UNDEFINED &&
-			arg1.getName() == arg2.getName()){
-
-			#ifdef DEBUG
-				throw exception("QueryValidator error:arg1 and arg2 cannot have the same names if they are synonyms.");
-			#endif
-			return false; //arg1 and arg2 cannot have the same names if they are synonyms
-		
-		}
-	}
-
 	return true;
-
 }
 
 /**
