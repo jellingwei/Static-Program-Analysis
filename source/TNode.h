@@ -5,18 +5,9 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include "common.h"
 using std::string;
 using namespace std;
-
-enum TNODE_TYPE
-{
-	Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant, Minus, Times, Program, Call
-};
-
-enum LINK_TYPE
-{
-	Par, Right_Sibling, Left_Sibling, Child
-};
 
 class TNode 
 {

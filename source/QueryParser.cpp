@@ -20,6 +20,7 @@
 #include "Synonym.h"
 #include "QueryTree.h"
 #include "QueryValidator.h"
+#include "common.h"
 
 using std::string;
 using std::vector;
@@ -36,11 +37,6 @@ using std::make_tuple;
 
 namespace QueryParser
 {
-	enum REF_TYPE
-	{
-		entRef, stmtRef, lineRef, varRef, ref
-	};
-
 	ifstream inputFile;
 	vector<string> buffer;
 	vector<string>::iterator bufferIter;

@@ -10,22 +10,13 @@
 
 #include <boost\dynamic_bitset.hpp>
 
+#include "common.h"
 #include "TNode.h"
 
 using std::string;
 using namespace std;
 
 typedef boost::dynamic_bitset<> VARIABLES ;
-
-enum CNODE_TYPE
-{
-	Assign_C, While_C, If_C, Call_C, Proc_C, EndProc_C, EndIf_C
-};
-
-enum CLINK_TYPE
-{
-	Before, After, Inside, Inside2
-};
 
 class CNode 
 {

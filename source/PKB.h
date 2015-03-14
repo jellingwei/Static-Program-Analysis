@@ -19,9 +19,9 @@
 #include "AST.h"
 #include "TNode.h"
 #include "Synonym.h"
+#include "common.h"
 
 using namespace std;
-typedef short PROC;
 
 class TNode;
 
