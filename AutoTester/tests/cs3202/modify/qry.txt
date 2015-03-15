@@ -1,0 +1,325 @@
+0001 - 
+stmt s; 
+Select s
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,5,6,7,8,9
+5000
+0002 - 
+variable v; 
+Select v
+a,b,beef,buffet,c,charsiew,cheeseburger,chicken,coke,crab,d,duckrice,e,f,fries,hamburger,pork,salmon,x,xiaolongbao,y,z
+5000
+0003 -
+constant c; 
+Select c
+0,1,2,25,3,6,7,8
+5000
+0004 -  
+prog_line l;
+Select l
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,5,6,7,8,9
+5000
+0005 - 
+procedure p; 
+Select p
+One,Two, Three
+5000
+0006 - 
+assign a; 
+Select a
+1,12,13,14,16,17,2,21,23,24,26,3,30,31,33,34,35,37,39,40,5,6,8,9
+5000
+0007 - 
+while w; 
+Select w
+18,19,22,29,38,4
+5000
+0008 - 
+if i; 
+Select i
+10,20,27,28,32,36
+5000
+0009 -
+call c;
+Select c
+11,15,25,7
+5000
+1001 - Valid assign variable
+stmt s;
+Select BOOLEAN such that Modifies(2, "d")
+TRUE
+5000
+1002 - Valid if variable
+stmt s;
+Select BOOLEAN such that Modifies(10, "d")
+TRUE
+5000
+1003 - Valid if else variable
+stmt s;
+Select BOOLEAN such that Modifies(10, "a")
+TRUE
+5000
+1004 - Valid while variable
+stmt s;
+Select BOOLEAN such that Modifies(4, "chicken")
+TRUE
+5000
+1005 - Valid redundant
+stmt s;
+Select s such that Modifies(12, "charsiew")
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,5,6,7,8,9
+5000
+1006 - Valid stmt that modify variable v
+stmt s;
+Select s such that Modifies(s, "charsiew")
+10,12
+5000
+1007 - Valid variable modified by stmt n
+variable v;
+Select v such that Modifies(24, v)
+x
+5000
+1008 - Valid stmts that modify
+stmt s; variable v;
+Select s such that Modifies(s, v)
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40
+5000
+1009 - Valid variables modified by stmts
+stmt s; variable v;
+Select v such that Modifies(s, v)
+b,d,pork,chicken,duckrice,charsiew,a,beef,f,x,c,fries,buffet
+5000
+1010 - Valid assign that modify variable v
+assign a;
+Select a such that Modifies(a, "a")
+8,14
+5000
+1011 - Valid variable modified by assign n
+variable v;
+Select v such that Modifies(24, v)
+x
+5000
+1012 - Valid assign that modify
+assign a; variable v;
+Select a such that Modifies(a,v)
+1,12,13,14,16,17,2,21,23,24,26,3,30,31,33,34,35,37,39,40,5,6,8,9
+5000
+1013 - Valid variable that is modified by assign
+assign a; variable v;
+Select v such that Modifies(a,v)
+b,d,pork,chicken,duckrice,charsiew,a,beef,f,x,c,fries,buffet
+5000
+1014 - Valid if that modify variable v
+if i;
+Select i such that Modifies(i, "fries")
+27,28,20,10
+5000
+1015 - Valid variable modified by if n nest
+variable v;
+Select v such that Modifies(27, v)
+fries, b, buffet, pork, d, f, duckrice
+5000
+1016 - Valid if that modifies
+if i; variable v;
+Select i such that Modifies(i, v)
+10,20,27,28,32,36
+5000
+1017 - Valid variables modified by if 
+variable v; if i;
+Select v such that Modifies(i, v)
+a,b,beef,buffet,c,charsiew,d,duckrice,f,fries,pork,x
+5000
+1018 - Valid while that modify variable v
+while w;
+Select w such that Modifies(w, "fries")
+29,18,19,4
+5000
+1019 - Valid variable modified by while n nest
+variable v;
+Select v such that Modifies(18, v)
+f, pork,x,c,fries, b, buffet, d, duckrice
+5000
+1020 - Valid while that modifies
+while w; variable v;
+Select w such that Modifies(w, v)
+18,19,22,29,38,4
+5000
+1021 - Valid variables modified by while 
+variable v;
+Select v such that Modifies(18, v)
+b,buffet,c,d,duckrice,f,fries,pork,x
+5000
+1022 - Valid prog_line that modify variable v
+prog_line l;
+Select l such that Modifies(l, "b")
+31,1,16,10,11,15,18,19,20,25,27,28,4,7
+5000
+1023 - Valid variable modified by prog_line n 
+variable v;
+Select v such that Modifies(22, v)
+pork,x
+5000
+1024 - Valid prog_line that modifies variable
+prog_line l; variable v;
+Select l such that Modifies(l, v)
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40
+5000
+1025 - Valid variables modified by prog_line
+prog_line l; variable v;
+Select v such that Modifies(l, v)
+b,d,pork,chicken,duckrice,charsiew,a,beef,f,x,c,fries,buffet
+5000
+1026 - Valid stmt wild card variable
+stmt s;
+Select s such that Modifies(s, _)
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,5,6,7,8,9
+5000
+2001 - Invalid assign variable
+assign a;
+Select BOOLEAN such that Modifies(1, "hamburger")
+FALSE
+5000
+2002 - Invalid if variable
+if a;
+Select BOOLEAN such that Modifies(36, "beef")
+FALSE
+5000
+2003 - Invalid while variable
+while w;
+Select BOOLEAN such that Modifies(29, "coke")
+FALSE
+5000
+2004 - Invalid redundant
+stmt s;
+Select s such that Modifies(26, "crab")
+none
+5000
+2005 - Invalid RHS assign
+stmt s; assign a;
+Select s such that Modifies(s, a)
+none
+5000
+2006 - Invalid RHS constant
+stmt s; constant c;
+Select s such that Modifies(s, c)
+none
+5000
+2007 - Invalid RHS if
+stmt s; if i;
+Select s such that Modifies(s, i)
+none
+5000
+2008 - Invalid RHS prog_line
+stmt s; prog_line l;
+Select s such that Modifies(s, l)
+none
+5000
+2009 - Invalid RHS stmt
+stmt s, s1;
+Select s such that Modifies(s, s1)
+none
+5000
+2010 - Invalid RHS while
+stmt s; while w;
+Select s such that Modifies(s, w)
+none
+5000
+2011 - Invalid LHS variable
+variable v, v1;
+Select v such that Modifies(v, v1)
+none
+5000
+2012 - Invalid LHS constant
+constant c; variable v;
+Select c such that Modifies(c, v)
+none
+5000
+2013 - Invalid entry
+stmt s;
+Select s such that Modifies("a","7")
+none
+5000
+2014 - Invalid wild card on RHS
+variable v;
+Select v such that Modifies(_, v)
+none
+5000
+3001 - Valid procedure variable
+procedure p;
+Select BOOLEAN such that Modifies("Three", "buffet")
+TRUE
+5000
+3002 - Valid procedures that modify variable
+procedure p;
+Select p such that Modifies(p, "chicken")
+One
+5000
+3003 - Valid variables modified by procedure
+variable v;
+Select v such that Modifies("Three", v)
+fries, b, buffet, pork, d, f, duckrice
+5000
+3004 - Valid procedures modifies variables
+procedure p; variable v;
+Select p such that Modifies(p, v)
+One,Two,Three
+5000
+3005 - Valid variables modified by procedure
+procedure p; variable v;
+Select v such that Modifies(p, v)
+a,b,beef,buffet,c,charsiew,chicken,d,duckrice,f,fries,pork,x
+5000
+3006 - Valid call varaible
+call c; 
+Select BOOLEAN such that Modifies(25, "f")
+TRUE
+5000
+3007 - Valid call that modifies variable v
+call c; 
+Select c such that Modifies(c, "fries")
+25,7,11,15
+5000
+3008 - Valid variable modified by call
+variable v;
+Select v such that Modifies(11, v)
+fries, b, buffet, pork, d, f,duckrice
+5000
+3009 - Valid calls that modify a variable
+call c; variable v;
+Select c such that Modifies(c, v)
+11,15,25,7
+5000
+3010 - Valid calls that modify a variable
+call c; variable v;
+Select v such that Modifies(c, v)
+b,beef,buffet,c,d,duckrice,f,fries,pork,x
+5000
+3011 - Valid variable modified by procedure nest
+variable v;
+Select v such that Modifies("Two", v)
+beef, f, pork, x, c, fries, b, buffet, d,duckrice
+5000
+3012 - Valid variable modified by call nest
+variable v;
+Select v such that Modifies(15, v)
+beef, f, pork, x, c, fries, b, buffet, d,duckrice
+5000
+4001 - Invalid procedure variable
+procedure p;
+Select BOOLEAN such that Modifies("Three", "salmon")
+FALSE
+5000
+4002 - Invalid call variable
+call c;
+Select BOOLEAN such that Modifies(7, "salmon")
+FALSE
+5000
+4003 - Invalid RHS procedure
+procedure p; stmt s;
+Select s such that Modifies(s,p)
+none
+5000
+4004 - Invalid RHS call
+call c; stmt s;
+Select s such that Modifies(s,c)
+none
+5000

@@ -1,0 +1,51 @@
+procedure One {
+  b = a + b;                \\1
+  while a {                 \\2
+    call Two;  }           \\3
+  if z then {             \\4
+    call Three;           \\5
+    call Five;            \\6
+  }
+  else {  
+    a = x * y * (y + x);    \\7  
+   }
+  y = a + b * c;      \\8
+}
+
+procedure Two {
+  b = a - b;        \\9
+}
+
+procedure Three {
+  while c {       \\10
+    call Four;      \\11
+    while z {       \\12
+      y = x - ((y - y) + z * (a * c));      \\13
+    }
+    z = x + y + z;      \\14
+  }
+}
+
+procedure Four {
+  if b then {             \\15
+    z = z - (b + 1);      \\16
+  } else {
+    z = a * 10 - b - c;     \\17
+  }
+}
+
+procedure Five {
+  f = 1 + 2 + 3;      \\18
+  call Six;       \\19
+}
+
+procedure Six {
+  f = y * (z * c);    \\20
+  call Two;             \\21
+}
+
+procedure Seven {   
+  while a {           \\22
+    x = x - 1;        \\23
+  }
+}

@@ -1,0 +1,50 @@
+1 - ParenStar
+while w;
+Select w such that Parent*(w, 12)
+10
+5000
+2 - FollowsStar
+stmt s; while w;
+Select w such that Follows* (s, w)
+10
+5000
+3 - FollowsStar
+if ifstat;
+Select ifstat such that Follows* (ifstat, 17)
+8
+5000
+4 - Modifies
+variable v;
+Select v such that Modifies (18, v)
+m,x,y,z
+5000
+5 - Modifies, Uses
+assign a;
+Select a such that Modifies (a, "y") and Uses (a, "y")
+16,21
+5000
+6 - CallsStar
+procedure p;
+Select p such that Calls* (p, "Trio")
+Solo,Duo
+5000
+7 - Pattern
+assign a;
+Select a pattern a ("m", "z * x")
+none
+5000
+8 - NextStar
+prog_line n;
+Select n such that Next* (9, n) and Next* (n, 12)
+10,11,12
+5000
+9 - With
+stmt s; constant co;
+Select s with s.stmt# = co.value
+1, 2, 3, 10, 20
+5000
+10 - Modifies, Uses, Follows, ParentStar, multiple clauses
+assign a;
+Select a such that Modifies (a, "y") and Uses (a, "y") and Follows (15, a) and Parent* (_, a)
+16
+5000

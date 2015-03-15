@@ -1,0 +1,685 @@
+1 - Select
+assign a;
+Select a
+1,11,12,14,15,17,19,2,21,22,3,5,7,8,9
+5000
+2 - Select
+variable v;
+Select v
+asdasdasd,kakaka,lalala,mamama
+5000
+3 - Select
+constant c;
+Select c
+174,241,555,69,777,999
+5000
+4 - Select
+stmt s;
+Select s
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,3,4,5,6,7,8,9
+5000
+5 - Select
+prog_line l;
+Select l;
+none
+5000
+6 - Select
+while w;
+Select w
+10,13,16,18,20,4,6
+5000
+7 - Pattern
+assign a;
+Select a pattern a(_, _"lalala + 174"_)
+7
+5000
+8 - Pattern
+assign a;
+Select a pattern a(_, "lalala + asdasdasd")
+19
+5000
+9 - Pattern
+assign a;
+Select a pattern a(_, " lala + 241 ")
+none
+5000
+10 - Pattern
+assign a;
+Select a pattern a(_, _"asdasdasd"_)
+2, 9, 11, 12, 14, 19, 21 ,22
+5000
+11 - Pattern
+assign a;
+Select a pattern a("asd", _)
+none
+5000
+12 - Pattern
+assign a;
+Select a pattern a("kakaka", _)
+3, 9, 12, 21
+5000
+13 - Pattern
+assign a;
+Select a pattern a(_, _)
+1,11,12,14,15,17,19,2,21,22,3,5,7,8,9
+5000
+14 - Pattern
+while w;
+Select w pattern w(_, _)
+10,13,16,18,20,4,6
+5000
+15 - Pattern
+while w;
+Select w pattern w("lala", _)
+none
+5000
+16 - Pattern
+while w;
+Select w pattern w("lalala", _)
+4, 18
+5000
+17 - Uses
+assign a;
+Select a such that Uses(a, "lalala")
+14,15,17,19,3,7,8
+5000
+18 - Uses
+while w;
+Select w such that Uses(w, "mama")
+none
+5000
+19 - Uses
+stmt s;
+Select s such that Uses(s, "kakaka")
+13,16,20,4,5
+5000
+20 - Uses
+prog_line l;
+Select l such that Uses(l, "kakaka")
+13,16,20,4,5
+5000
+21 - Uses
+variable v;
+Select v such that Uses("asdasdasd", v)
+none
+5000
+22 - Uses
+variable v;
+Select v such that Uses(1, v)
+none
+5000
+22 - Uses
+variable s;
+Select s such that Uses(1, s)
+none
+5000
+22 - Uses
+variable v;
+Select v such that Uses(2, v)
+asdasdasd, mamama
+5000
+23 - Uses
+while w; variable v;
+Select w such that Uses(w, v)
+4, 6, 10, 13, 16, 18, 20
+5000
+24 - Uses
+assign a; variable v;
+Select a such that Uses(a, v)
+2, 3, 5, 7, 8, 9, 11, 12, 14, 15, 17, 19, 21, 22
+5000
+25 - Uses
+while w;
+Select w such that Uses(w, _)
+4, 6, 10, 13, 16, 18, 20
+5000
+26 - Follows
+assign a;
+Select a such that Follows(1, a)
+2
+5000
+27 - Follows
+stmt s;
+Select s such that Follows(4, s)
+8
+5000
+28 - Follows
+prog_line l;
+Select a such that Follows(19, l)
+none
+5000
+29 - Follows
+constant c; while w;
+Select c such that Follows(13, w)
+174,241,555,69,777,999
+5000
+30 - Follows
+assign a;
+Select a such that Follows(a, 20)
+none
+5000
+31 - Follows
+while w;
+Select w such that Follows(w, 10)
+none
+5000
+32 - Follows
+stmt s;
+Select s such that Follows(s, 1)
+none
+5000
+33 - Follows
+prog_line l;
+Select l such that Follows(l, 8)
+4
+5000
+34 - Follows*
+stmt s;
+Select s such that Follows*(22, s)
+none
+5000
+35 - Follows*
+assign a;
+Select a such that Follows*(1, a)
+2, 3, 8, 9
+5000
+36 - Follows*
+while w;
+Select w such that Follows*(8, w)
+10, 13, 20
+5000
+37 - Follows*
+stmt s;
+Select s such that Follows*(18, s)
+none
+5000
+38 - Follows*
+while w;
+Select w such that Follows*(w, _)
+4, 10, 13
+5000
+39 - Follows*
+assign a;
+Select a such that Follows*(_, a)
+2, 3, 8, 9, 12, 15, 22
+5000
+40 - Follows*
+variable v;
+Select v such that Follows*(_, _)
+asdasdasd,kakaka,lalala,mamama
+5000
+41 - Follows
+prog_line l;
+Select l such that Follows(_, l)
+2, 3, 4, 6, 8, 9, 10, 12, 13, 15, 16, 18, 20, 22
+5000
+42 - Follows
+while w;
+Select w such that Follows(w, _)
+4, 10, 13
+5000
+43 - Follows
+assign a;
+Select a such that Follows(_, _)
+1,11,12,14,15,17,19,2,21,22,3,5,7,8,9
+5000
+44 - Modifies
+stmt s;
+Select s such that Modifies(s, "lalala")
+2, 4, 6, 7, 13, 16, 17, 18, 19
+5000
+45 - Modifies
+assign a;
+Select a such that Modifies(a, "lala")
+none
+5000
+46 - Modifies
+prog_line l;
+Select l such that Modifies(l, "hehe")
+none
+5000
+47 - Modifies
+while w;
+Select w such that Modifies(w, "asdasdasd")
+4, 10, 13
+5000
+48 - Modifies
+assign a;
+Select a such that Modifies(a, _)
+1, 2, 3, 5, 7, 8, 9, 11, 12, 14, 15, 17, 19, 21, 22
+5000
+49 - Modifies
+variable v;
+Select v such that Modifies(4, v)
+asdasdasd, lalala
+5000
+50 - Modifies
+variable v;
+Select v such that Modifies(5, v)
+asdasdasd
+5000
+51 - Modifies
+assign a; variable v;
+Select v such that Modifies(a, v)
+asdasdasd, lalala, mamama, kakaka 
+5000
+52 - Modifies
+variable v; while w;
+Select v such that Modifies(w, _)
+asdasdasd, lalala, mamama, kakaka 
+5000
+53 - Parent
+while w;
+Select w such that Parent(w, 5)
+4
+5000
+54 - Parent
+stmt s;
+Select s such that Parent(s, 6)
+4
+5000
+55 - Parent
+prog_line l;
+Select l such that Parent(l, 9)
+none
+5000
+56 - Parent
+assign a;
+Select a such that Parent(a, 12)
+none
+5000
+57 - Parent
+while w;
+Select w such that Parent(w, 19)
+18
+5000
+58 - Parent*
+while w;
+Select w such that Parent*(w, 7)
+4, 6
+5000
+59 - Parent*
+stmt s;
+Select s such that Parent*(s, 9)
+none
+5000
+60 - Parent*
+prog_line l;
+Select l such that Parent*(l, 15)
+13
+5000
+61 - Parent*
+while w;
+Select w such that Parent*(w, _)
+4, 6, 10, 13, 16, 18, 20
+5000
+62 - Parent*
+variable v;
+Select v such that Parent*(v, _)
+none
+5000
+63 - Parent
+assign a;
+Select a such that Parent(3, a)
+none
+5000
+64 - Parent
+stmt s;
+Select s such that Parent(4, s)
+5, 6
+5000
+65 - Parent
+prog_line l;
+Select l such that Parent(10, l)
+11, 12
+5000
+66 - Parent
+while w;
+Select w such that Parent(13, w)
+16
+5000
+66 - Parent
+variable v;
+Select v such that Parent(16, _)
+asdasdasd, lalala, mamama, kakaka
+5000
+67 - Parent*
+assign a;
+Select a such that Parent*(4, a)
+5, 7
+5000
+68 - Parent*
+while w;
+Select w such that Parent*(13, w)
+16, 18
+5000
+69 - Parent*
+stmt s;
+Select s such that Parent*(21, s)
+none
+5000
+70 - Parent*
+assign a;
+Select a such that Parent*(_, a)
+5, 7, 11, 12, 14, 15, 17, 19, 21, 22
+5000
+71 - Parent*
+constant c;
+Select c such that Parent*(_, _)
+174,241,555,69,777,999
+5000
+72 - Parent
+constant c;
+Select c such that Parent(_, _)
+174,241,555,69,777,999
+5000
+73 - pattern Follows
+assign a;
+Select a pattern a("asdasdasd", _) such that Follows(a,2)
+1
+5000
+74 - pattern Follows
+while w; assign a; variable v;
+Select w pattern a(v, _"mamama"_) such that Follows(w,a) 
+none
+5000
+75 - Follows pattern
+assign a1, a2;
+Select a1 such that Follows(a1, a2) pattern a1(_,_)
+1,11,14,2,21,8
+5000
+76 - Follows pattern
+assign a;
+Select a such that Follows(a, _) pattern a(_,"999 + lalala")
+8
+5000
+77 - Follows pattern
+assign a;
+Select a such that Follows(1, 10) pattern a(_,_)
+none
+5000
+78 - Follows pattern
+assign a;
+Select a such that Follows(_,_) pattern a("kaka", _) 
+none
+5000
+79 - pattern Follows
+while w;
+Select w pattern w("mamama", _)  such that Follows(w,_)
+10
+5000
+79 - pattern Follows
+while w;
+Select w pattern w(_, _) such that Follows(_,w) 
+4, 6, 10, 13, 16, 18, 20
+5000
+80 - Follows* pattern
+assign a; while w;
+Select a such that Follows*(a, w) pattern a("kakaka",_)
+3, 9
+5000
+81 - pattern Follows*
+while w1,w2;
+Select w1 pattern w1("kakaka", _) such that Follows*(w1, w2)
+none
+5000
+82 - Follow* pattern
+while w; assign a;
+Select w pattern a(_, _"999"_) such that Follows*(w, a)
+4
+5000
+83 - Follows* pattern
+assign a;
+Select a such that Follows*(23, a) pattern a(_, _)
+none
+5000
+84 - Follows* pattern
+assign a; while w;
+Select a such that Follows*(a, 1) pattern w("kakaka", _)
+none
+5000
+85 - Parent pattern
+assign a; stmt s;
+Select s such that Parent(s, a) pattern a(_, "lalala + asdasdasd")
+18
+5000
+86 - Parent* pattern
+assign a; stmt s;
+Select s such that Parent*(s, a) pattern a(_, "lalala + asdasdasd")
+13, 16, 18
+5000
+87 - pattern Parent 
+stmt s; assign a;
+Select s pattern a(_, _"777"_) such that Parent(s, a) 
+none
+5000
+88 - pattern Parent*
+stmt s; assign a;
+Select s pattern a(_, _"777"_) such that Parent*(s, a) 
+none
+5000
+89 - Parent* pattern
+assign a; while w; variable v;
+Select a such that Parent*(w, a) pattern w(v, _)
+5, 7, 11, 12, 14, 15, 17, 19, 21, 22
+5000
+90 - Parent pattern
+prog_line l; assign a;
+Select l such that Parent(l, 7) pattern a(_, _"mamama"_)
+6
+5000
+91 - Parent* pattern
+while w1, w2;
+Select w1 such that Parent*(w2, w1) pattern w1("lalala",_)
+18
+5000
+92 - Modifies pattern
+assign a; variable v;
+Select v such that Modifies(a, v) pattern a(v, _)
+asdasdasd, kakaka, lalala, mamama
+5000
+93 - pattern Modifies 
+assign a;
+Select v pattern a("lala", _) such that Modifies(a, v) 
+none
+5000
+94 - Modifies pattern
+stmt s; while w;
+Select w such that Modifies(s, _) pattern w(_, _)
+4, 6, 10, 13, 16, 18, 20
+5000
+95 - Modifies pattern
+assign a;
+Select a such that Modifies(a, _) pattern a(_, "asdasdasd + 69 + lalala")
+14
+5000
+96 - Modifies pattern
+stmt s; while w;
+Select s such that Modifies(s, _) pattern w(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22
+5000
+97 - Uses pattern
+assign a;
+Select a such that Uses(a, "mamama") pattern a(_, _"lalala"_)
+15
+5000
+98 - pattern Uses
+while w;
+Select w pattern w("asdasdasd", _) such that Uses(w, "mamama")
+13
+5000
+99 - Uses pattern
+assign a;
+Select a such that Uses(a, "999") pattern a("mamama", _)
+none
+5000
+100 - Uses pattern
+stmt s; variable v; while w;
+Select s such that Uses(s, v) pattern w(v, _)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22
+5000
+1001 - Select
+assign a;
+Select b
+none
+5000
+1002 - Pattern
+assign a;
+Select a pattern a(_, _"lalala + 174")
+none
+5000
+1003 - Pattern
+assign a;
+Select a pattern a(_, "lalala + 174"_)
+none
+5000
+1004 - Pattern
+assign a;
+Select a pattern a(_, "_lalala + 174_")
+none
+5000
+1005 - Pattern
+assign a;
+Select a pattern a(_"kakaka"_, _)
+none
+5000
+1006 - Pattern
+assign a;
+Select a pattern a("_kakaka_", _)
+none
+5000
+1007 - Pattern
+while w;
+Select w pattern w("", _)
+none
+5000
+1008 - Pattern
+while w;
+Select w pattern w(_, w)
+none
+5000
+1009 - Pattern
+stmt s;
+Select s pattern s(_, _)
+none
+5000
+1010 - Uses
+stmt s;
+Select s such that Uses(_, _)
+none
+5000
+1011 - Uses
+variable v;
+Select v such that Uses(_, v)
+none
+5000
+1012 - Uses
+stmt s; assign a;
+Select s such that Uses(a, 777)
+none
+5000
+1013 - Uses
+stmt s;
+Select s such that Uses(a, v)
+none
+5000
+1014 - Follows
+constant c; variable v;
+Select c such that Follows(c, v)
+none
+5000
+1015 - Follows
+constant c;
+Select c such that Follows(_, c)
+none
+5000
+1016 - Follows
+variable v;
+Select v such that Follows("crashpls", v)
+none
+5000
+1017 - Follows*
+variable v;
+Select v such that Follows*(1, v)
+none
+5000
+1018 - Follows*
+constant c;
+Select c such that Follows*(c, 2)
+none
+5000
+1019 - Follows*
+assign a;
+Select a such that Follows*("mamama", a)
+none
+5000
+1020 - Follows*
+stmt s;
+Select s such that Follows*("mamama", _)
+none
+5000
+1021 - Modifies
+constant c;
+Select c such that Modifies(c, _)
+none
+5000
+1022 - Modifies
+prog_line l;
+Select l such that Modifies(l, "asdfaskfksvsav")
+none
+5000
+1023 - Modifies
+stmt s;
+Select s such that Modifies(_, _)
+none
+5000
+1024 - Modifies
+stmt s;
+Select s such that Modifies(_, "mamama")
+none
+5000
+1025 - Modifies
+stmt s1, s2; 
+Select s2 such that Modifies(s1, s2)
+none
+5000
+1026 - Parent
+stmt s;
+Select s such that Parent(_, "var")
+none
+5000
+1027 - Parent
+assign a;
+Select a such that Parent("while", a)
+none
+5000
+1028 - Parent
+constant c; stmt s; assign a;
+Select s such that Parent(c, a)
+none
+5000
+1029 - Parent
+variable v;
+Select v such that Parent(v, _)
+none
+5000
+1030 - Parent*
+variable v;
+Select v such that Parent*(v, _)
+none
+5000
+1031 - Parent*
+assign a;
+Select a such that Parent(a, _)
+none
+5000
+1032 - Parent*
+constant c;
+Select c such that Parent(_, c)
+none
+5000
+1033 - Pattern
+assign a1, a2;
+Select a1 such that pattern a3(_,_)
+none
+5000

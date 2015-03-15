@@ -1,0 +1,320 @@
+0001 - 
+stmt s; 
+Select s
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,3,4,5,6,7,8,9
+5000
+0002 - 
+variable v; 
+Select v
+a,b,c,f,x,y,z
+5000
+0003 -
+constant c; 
+Select c
+1,10,2,3
+5000
+0004 - 
+prog_line l;
+Select l
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,3,4,5,6,7,8,9
+5000
+0005 - 
+procedure p; 
+Select p
+One,Two,Three,Four,Five,Six,Seven
+5000
+0006 - 
+assign a; 
+Select a
+1,13,14,16,17,18,20,23,7,8,9
+5000
+0007 - 
+while w; 
+Select w
+10,12,2,22
+5000
+0008 - 
+if i; 
+Select i
+15,4
+5000
+0009 -
+call c;
+Select c
+11,19,21,3,5,6
+5000
+1001 - Valid Calls
+procedure p;
+Select BOOLEAN such that Calls("One", "Two")
+TRUE
+5000
+1002 - Valid Calls redundant
+call c;
+Select c such that Calls("One", "Two")
+11,19,21,3,5,6
+5000
+1003 - Valid Calls procedure calls n
+procedure p; 
+Select p such that Calls(p, "Two")
+One, Six
+5000
+1004 - Valid Calls procedures called by n
+procedure p;
+Select p such that Calls("One",p)
+Two, Three, Five
+5000
+1005 - Valid Calls all procedures that calls
+procedure p,q;
+Select p such that Calls(p,q)
+Five,One,Six,Three
+5000
+1006 - Valid Calls all procedures that is called by
+procedure p, q; 
+Select q such that Calls(p, q)
+Two, Three, Four, Five, Six
+5000
+1007 - Valid Calls p,_
+procedure p;
+Select p such that Calls(p,_)
+Five,One,Six,Three
+5000
+1008 - Valid Calls _,p
+procedure p;
+Select p such that Calls(_,p)
+Five,Four,Six,Three,Two
+5000
+1009 - Valid Calls redundant _,_
+constant c;
+Select c such that Calls(_,_)
+1,10,2,3
+5000
+1010 - Valid Calls redundant _,_
+stmt s;
+Select BOOLEAN such that Calls(_,_)
+TRUE
+5000
+2001 - Invalid Calls 
+procedure p;
+Select BOOLEAN such that Calls("One", "Four")
+FALSE
+5000
+2002 - Invalid Calls reverse valid
+procedure p;
+Select BOOLEAN such that Calls("Two", "One")
+FALSE
+5000
+2003 - Invalid Calls chained procedure
+procedure p;
+Select BOOLEAN such that Calls("One", "Four")
+FALSE
+5000
+2004 - Invalid Calls recursion
+procedure p;
+Select BOOLEAN such that Calls("One", "One")
+FALSE
+5000
+2005 - Invalid Calls LHS assign
+procedure p; assign a;
+Select p such that Calls(a, p)
+none
+5000
+2006 - Invalid Calls LHS call
+procedure p; call c;
+Select p such that Calls(c, p)
+none
+5000
+2007 - Invalid Calls LHS constant
+procedure p; constant c;
+Select p such that Calls(c, p)
+none
+5000
+2008 - Invalid Calls LHS if
+procedure p; if i;
+Select p such that Calls(i, p)
+none
+5000
+2009 - Invalid Calls LHS prog_line
+procedure p; prog_line l;
+Select p such that Calls(l, p)
+none
+5000
+2010 - Invalid Calls LHS stmt
+procedure p; stmt s;
+Select p such that Calls(s, p)
+none
+5000
+2011 - Invalid Calls LHS variable
+procedure p; variable v;
+Select p such that Calls(v, p)
+none
+5000
+2012 - Invalid Calls RHS assign
+procedure p; assign a;
+Select p such that Calls(p, a)
+none
+5000
+2013 - Invalid Calls RHS call
+procedure p; call c;
+Select p such that Calls(p, c)
+none
+5000
+2014 - Invalid Calls RHS constant
+procedure p; constant c;
+Select p such that Calls(p, c)
+none
+5000
+2015 - Invalid Calls RHS if
+procedure p; if i;
+Select p such that Calls(p, i)
+none
+5000
+2016 - Invalid Calls RHS prog_line
+procedure p; prog_line l;
+Select p such that Calls(p, l)
+none
+5000
+2017 - Invalid Calls RHS stmt
+procedure p; stmt s;
+Select p such that Calls(p, s)
+none
+5000
+2018 - Invalid Calls RHS variable
+procedure p; variable v;
+Select p such that Calls(p, v)
+none
+5000
+3001 - Valid Call*
+procedure p;
+Select BOOLEAN such that Calls*("One","Three")
+TRUE
+5000
+3002 - Valid Calls* chained
+procedure p;
+Select BOOLEAN such that Calls*("Five","Two")
+TRUE
+5000
+3003 - Valid Calls* redundant
+procedure p;
+Select p such that Calls*("Five", "Two")
+One,Two,Three,Four,Five,Six,Seven
+5000
+3004 - Valid Calls* procedure calls n chained
+procedure p;
+Select p such that Calls*(p, "Two")
+Five,One,Six
+5000
+3005 - Valid Calls* procedure called by n chained
+procedure p;
+Select p such that Calls*("One", p)
+Five,Four,Six,Three,Two
+5000
+3006 - Valid Calls* all procedure that calls
+procedure p,q;
+Select p such that Calls*(p,q)
+Five,One,Six,Three
+5000
+3007 - Valid Calls* all procedure that is called by
+procedure p,q;
+Select q such that Calls*(p,q)
+Two, Three, Four, Five, Six
+5000
+3008 - Valid Calls* p,_
+procedure p;
+Select p such that Calls*(p,_)
+Five,One,Six,Three
+5000
+3009 - Valid Calls* _,p
+procedure p;
+Select p such that Calls*(_,p)
+Two, Three, Four, Five, Six
+5000
+3010 - Valid Calls* _,_
+constant c;
+Select c such that Calls*(_,_)
+1,10,2,3
+5000
+4001 - Invalid Calls*
+procedure p;
+Select BOOLEAN such that Calls*("Two", "Five")
+FALSE
+5000
+4002 - Invalid Calls* reverse valid
+procedure p;
+Select BOOLEAN such that Calls*("Four","Three")
+FALSE
+5000
+4003 - Invalid Calls* recurse
+procedure p;
+Select BOOLEAN such that Calls("Seven", "Seven")
+FALSE
+5000
+4004 - Invalid Calls* LHS assign
+assign a; procedure p;
+Select p such that Calls*(a, p)
+none
+5000
+4005 - Invalid Calls* LHS call
+call c; procedure p;
+Select p such that Calls*(c, p)
+none
+5000
+4006 - Invalid Calls* LHS constant
+constant c; procedure p;
+Select p such that Calls*(c, p)
+none
+5000
+4007 - Invalid Calls* LHS if
+if i; procedure p;
+Select p such that Calls*(i, p)
+none
+5000
+4008 - Invalid Calls* LHS prog_line
+prog_line l; procedure p;
+Select p such that Calls*(l, p)
+none
+5000
+4009 - Invalid Calls* LHS stmt
+stmt s; procedure p;
+Select p such that Calls*(s, p)
+none
+5000
+4010 - Invalid Calls* LHS variable
+variable v; procedure p;
+Select p such that Calls*(v, p)
+none
+5000
+4011 - Invalid Calls* RHS assign
+assign a; procedure p;
+Select p such that Calls*(p, a)
+none
+5000
+4012 - Invalid Calls* RHS call
+call c; procedure p;
+Select p such that Calls*(p,c)
+none
+5000
+4013 - Invalid Calls* RHS constant
+constant c; procedure p;
+Select p such that Calls*(p,c)
+none
+5000
+4014 - Invalid Calls* RHS if
+if i; procedure p;
+Select p such that Calls*(p,i)
+none
+5000
+4015 - Invalid Calls* RHS prog_line
+prog_line l; procedure p;
+Select p such that Calls*(p,l)
+none
+5000
+4016 - Invalid Calls* RHS stmt
+stmt s; procedure p;
+Select p such that Calls*(p,s)
+none
+5000
+4017 - Invalid Calls* RHS variable
+variable v; procedure p;
+Select p such that Calls*(p,v)
+none
+5000

@@ -1,0 +1,580 @@
+0001 - 
+stmt s; 
+Select s
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,5,6,7,8,9
+5000
+0002 - 
+variable v; 
+Select v
+a,b,beef,buffet,c,charsiew,cheeseburger,chicken,coke,crab,d,duckrice,e,f,fries,hamburger,pork,salmon,x,xiaolongbao,y,z
+5000
+0003 -
+constant c; 
+Select c
+0,1,2,25,3,6,7,8
+5000
+0004 - 
+prog_line l;
+Select l
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,5,6,7,8,9
+5000
+0005 - 
+procedure p; 
+Select p
+One,Two, Three
+5000
+0006 - 
+assign a; 
+Select a
+1,12,13,14,16,17,2,21,23,24,26,3,30,31,33,34,35,37,39,40,5,6,8,9
+5000
+0007 - 
+while w; 
+Select w
+18,19,22,29,38,4
+5000
+0008 - 
+if i; 
+Select i
+10,20,27,28,32,36
+5000
+0009 -
+call c;
+Select c
+11,15,25,7
+5000
+1001 - Valid Follows
+stmt s;
+Select BOOLEAN such that Follows(1,2)
+TRUE
+5000
+1002 - Valid redundant
+procedure p;
+Select p such that Follows(1,2)
+One,Two,Three
+5000
+1003 - Valid stmts that follows n
+stmt s;
+Select s such that Follows(s, 3)
+2
+5000
+1004 - Valid stmts followed by n
+stmt s;
+Select s such that Follows(8, s)
+9
+5000
+1005 - Valid all stmts that follows
+stmt s,s1;
+Select s such that Follows(s,s1)
+1,2,3,4,5,6,8,9,10,11,12,14,17,21,23,19,31,32,39
+5000
+1006 - Valid all stmts that followed by s
+stmt s,s1;
+Select s1 such that Follows(s,s1)
+10,12,13,15,16,18,2,22,24,26,3,32,35,4,40,6,7,8,9
+5000
+1007 - Valid stmt before if
+stmt s;
+Select BOOLEAN such that Follows(9,10)
+TRUE
+5000
+1008 - Valid stmt after if
+stmt s;
+Select BOOLEAN such that Follows(10, 16)
+TRUE
+5000
+1009 - Valid stmt before while
+stmt s;
+Select BOOLEAN such that Follows(3,4)
+TRUE
+5000
+1010 - Valid stmt after while
+stmt s;
+Select BOOLEAN such that Follows(4,8)
+TRUE
+5000
+1011 - Valid v,_
+stmt s;
+Select s such that Follows(s,_)
+1,2,3,4,5,6,8,9,10,11,12,14,17,21,23,19,31,32,39
+5000
+1012 - Valid _,v
+stmt s;
+Select s such that Follows(_,s)
+10,12,13,15,16,18,2,22,24,26,3,32,35,4,40,6,7,8,9
+5000
+1013 - Valid Redundant _,_
+assign a;
+Select a such that Follows(_,_)
+1,12,13,14,16,17,2,21,23,24,26,3,30,31,33,34,35,37,39,40,5,6,8,9
+5000
+1014 - Valid assign synonym LHS
+assign a;
+Select a such that Follows(a,15)
+14
+5000 
+1015 - Valid all assign synonym LHS
+assign a; stmt s;
+Select a such that Follows(a,s)
+1,2,3,5,6,8,9,12,14,17,23,31,39,21 
+5000
+1016 - Valid call synonym LHS
+call c;
+Select c such that Follows(c,12)
+11
+5000
+1017 - Valid all call synonym LHS
+call c; stmt s;
+Select c such that Follows(c,s)
+11
+5000
+1018 - Valid if synonym LHS
+if i;
+Select i such that Follows(i, 35)
+32
+5000
+1019 - Valid all if synonym LHS
+if i; stmt s;
+Select i such that Follows(i, s)
+10, 32
+5000
+1020 - Valid prog_line synonym LHS
+prog_line l;
+Select l such that Follows(l, 40)
+39
+5000
+1021 - Valid all prog_line synonym LHS
+prog_line l; stmt s;
+Select l such that Follows(l, s)
+1,2,3,4,5,6,8,9,10,11,12,14,17,21,23,19,31,32,39
+5000
+1022 - Valid while synonym LHS
+while w;
+Select w such that Follows(w, 8)
+4
+5000
+1023 - Valid all while synonym LHS
+while w; stmt s;
+Select w such that Follows(w,s)
+4, 19  
+5000
+1024 - Valid assign synonym RHS
+assign a;
+Select a such that Follows(11, a)
+12
+5000
+1025 - Valid all assign synonym RHS
+stmt s; assign a;
+Select a such that Follows(s, a)
+2,3,6,8,9,12,13,16,24,26,35,40
+5000
+1026 - Valid call synonym RHS
+call c;
+Select c such that Follows(6, c)
+7
+5000
+1027 - Valid all calls synonym RHS
+call c; stmt s;
+Select c such that Follows(s, c)
+7, 15
+5000
+1028 - Valid if synonym RHS
+if i;
+Select i such that Follows(9,i)
+10
+5000
+1029 - Valid all if synonym RHS
+if i; stmt s;
+Select i such that Follows(s, i)
+32, 10
+5000
+1030 - Valid prog_line RHS
+prog_line l;
+Select l such that Follows(23, l)
+24
+5000
+1031 - Valid all prog_line RHS
+prog_line l; stmt s;
+Select l such that Follows(s, l)
+10,12,13,15,16,18,2,22,24,26,3,32,35,4,40,6,7,8,9
+5000
+1032 - Valid while synonym RHS
+while w;
+Select w such that Follows(17,w)
+18
+5000
+1033 - Valid all while synonym RHS
+while w; stmt s;
+Select w such that Follows(s, w)
+22,4,18
+5000
+2001 - Invalid not directly follows
+stmt s;
+Select BOOLEAN such that Follows(1,3)
+FALSE
+5000
+2002 - Invalid reverse
+stmt s;
+Select BOOLEAN such that Follows(2,1)
+FALSE
+5000
+2003 - Invalid if to in if
+stmt s;
+Select BOOLEAN such that Follows(10,11)
+FALSE
+5000
+2004 - Invalid if to in else
+stmt s;
+Select BOOLEAN such that Follows(10,14)
+FALSE
+5000
+2005 - Invalid end of if to outside if
+stmt s;
+Select BOOLEAN such that Follows(13,16)
+FALSE
+5000
+2006 - Invalid end of else to outside if
+stmt s;
+Select BOOLEAN such that Follows(15,16)
+FALSE
+5000
+2007 - Invalid end of if to start of else
+stmt s;
+Select BOOLEAN such that Follows(13,14)
+FALSE
+5000
+2008 - Invalid while to inside while
+stmt s;
+Select BOOLEAN such that Follows(4,5)
+FALSE
+5000
+2009 - Invalid end of while to outside while
+stmt s;
+Select BOOLEAN such that Follows(7,8)
+FALSE
+5000
+2010 - Invalid Redundant
+stmt s;
+Select s such that Follows(2,1)
+none
+5000
+2011 - Invalid stmts before first line in proc
+stmt s;
+Select s such that Follows(s, 1)
+none
+5000
+2012 - Invalid stmts after last line in proc
+stmt s;
+Select s such that Follows(40,s)
+none
+5000
+2013 - Invalid end of proc to start of another proc 
+stmt s;
+Select BOOLEAN such that Follows(16,17)
+FALSE
+5000
+2014 - Invalid LHS synonym
+procedure p; stmt s;
+Select p such that Follows(p,s)
+none
+5000
+2015 - Invalid LHS synonym
+stmt s; variable v;
+Select v such that Follows(v,s)
+none
+5000
+2016 - Invalid LHS synonym
+stmt s; constant c;
+Select c such that Follows(c, s)
+none
+5000
+2017 - Invalid RHS synonym
+stmt s; procedure p;
+Select p such that Follows(s, p)
+none
+5000
+2018 - Invalid RHS synonym
+stmts; variable v;
+Select v such that Follows(s, v)
+none
+5000
+2019 - Invalid RHS synonym
+stmt s; constant c;
+Select c such that Follows(s, c)
+none
+5000
+2020 - Invalid same stmt
+stmt s;
+Select BOOLEAN such that Follows(s,s)
+FALSE
+5000
+2021 - Invalid same stmt
+stmt s;
+Select s such that Follows(s,s)
+none
+5000
+3001 - Valid direct Follows*
+stmt s;
+Select BOOLEAN such that Follows*(1,2)
+TRUE
+5000
+3002 - Valid indirect Follows*
+stmt s;
+Select BOOLEAN such that Follows*(1,3)
+TRUE
+5000
+3003 - Valid indirect Follows* over while
+stmt s;
+Select BOOLEAN such that Follows*(2,9)
+TRUE
+5000
+3004 - Valid indirect Follows* over if
+stmt s;
+Select BOOLEAN such that Follows*(8,16)
+TRUE
+5000
+3005 - Valid all stmts that follows n
+stmt s;
+Select s such that Follows*(s, 16)
+10,9,8,4,3,2,1
+5000
+3006 - Valid all stmts followed by n
+stmt s;
+Select s such that Follows*(1, s)
+2,3,4,8,9,10,16
+5000
+3007 - Valid all stmts that follows*
+stmt s,s1;
+Select s such that Follows*(s,s1)
+1,2,3,4,5,6,8,9,10,11,12,14,17,21,23,19,31,32,39
+5000
+3008 - Valid all stmts that followed* by s
+stmt s,s1;
+Select s1 such that Follows*(s,s1)
+10,12,13,15,16,18,2,22,24,26,3,32,35,4,40,6,7,8,9
+5000
+3009 - Valid assign synonym LHS
+assign a;
+Select a such that Follows*(a,16)
+1,2,3,8,9
+5000 
+3010 - Valid all assign synonym LHS
+assign a; stmt s;
+Select a such that Follows*(a,s)
+1,2,3,5,6,8,9,12,14,17,23,31,39,21 
+5000
+3011 - Valid call synonym LHS
+call c;
+Select c such that Follows*(c,13)
+11
+5000
+3012 - Valid all call synonym LHS
+call c; stmt s;
+Select c such that Follows*(c,s)
+11
+5000
+3013 - Valid if synonym LHS
+if i;
+Select i such that Follows*(i, 16)
+10
+5000
+3014 - Valid all if synonym LHS
+if i; stmt s;
+Select i such that Follows*(i, s)
+10, 32
+5000
+3015 - Valid prog_line synonym LHS
+prog_line l;
+Select l such that Follows*(l, 16)
+10,9,8,4,3,2,1
+5000
+3016 - Valid all prog_line synonym LHS
+prog_line l; stmt s;
+Select l such that Follows*(l, s)
+1,2,3,4,5,6,8,9,10,11,12,14,17,21,23,19,31,32,39
+5000
+3017 - Valid while synonym LHS
+while w;
+Select w such that Follows*(w, 16)
+4
+5000
+3018 - Valid all while synonym LHS
+while w; stmt s;
+Select w such that Follows*(w,s)
+4, 19  
+5000
+3019 - Valid assign synonym RHS
+assign a;
+Select a such that Follows*(3, a)
+8,9,16
+5000
+3020 - Valid all assign synonym RHS
+stmt s; assign a;
+Select a such that Follows*(s, a)
+2,3,6,8,9,12,13,16,24,26,35,40
+5000
+3021 - Valid call synonym RHS
+call c;
+Select c such that Follows*(5, c)
+7
+5000
+3022 - Valid all calls synonym RHS
+call c; stmt s;
+Select c such that Follows*(s, c)
+7, 15
+5000
+3023 - Valid if synonym RHS
+if i;
+Select i such that Follows*(1,i)
+10
+5000
+3024 - Valid all if synonym RHS
+if i; stmt s;
+Select i such that Follows*(s, i)
+32, 10
+5000
+3025 - Valid prog_line RHS
+prog_line l;
+Select l such that Follows*(1, l)
+2,3,4,8,9,10,16
+5000
+3026 - Valid all prog_line RHS
+prog_line l; stmt s;
+Select l such that Follows*(s, l)
+10,12,13,15,16,18,2,22,24,26,3,32,35,4,40,6,7,8,9
+5000
+3027 - Valid while synonym RHS
+while w;
+Select w such that Follows*(17,w)
+18
+5000
+3028 - Valid all while synonym RHS
+while w; stmt s;
+Select w such that Follows*(s, w)
+22,4,18
+5000
+3029 - Valid v,_
+stmt s;
+Select s such that Follows*(s,_)
+1,2,3,4,5,6,8,9,10,11,12,14,17,21,23,19,31,32,39
+5000
+3030 - Valid _,v
+stmt s;
+Select s such that Follows*(_,s)
+10,12,13,15,16,18,2,22,24,26,3,32,35,4,40,6,7,8,9
+5000
+3031 - Valid Redundant _,_
+procedure p;
+Select p such that Follows*(_,_)
+One,Two,Three
+5000
+4001 - Invalid reverse direct valid
+stmt s;
+Select BOOLEAN such that Follows*(2,1)
+FALSE
+5000
+4002 - Invalid reverse indirect valid
+stmt s;
+Select BOOLEAN such that Follows*(16,1)
+FALSE
+5000
+4003 - Invalid outside if to in if
+stmt s;
+Select BOOLEAN such that Follows*(8,11)
+FALSE
+5000
+4004 - Invalid soutside if to in else
+stmt s;
+Select BOOLEAN such that Follows*(8,14)
+FALSE
+5000
+4005 - Invalid if to outside if
+stmt s;
+Select BOOLEAN such that Follows*(11,16)
+FALSE
+5000
+4006 - Invalid else to outside if
+stmt s;
+Select BOOLEAN such that Follows*(14,16)
+FALSE
+5000
+4007 - Invalid in if to in else
+stmt s;
+Select BOOLEAN such that Follows*(11,15)
+FALSE
+5000
+4008 - Invalid while to inside while
+stmt s;
+Select BOOLEAN such that Follows*(1,6)
+FALSE
+5000
+4009 - Invalid in while to outside while
+stmt s;
+Select BOOLEAN such that Follows*(5,16)
+FALSE
+5000
+4010 - Invalid in while to in if
+stmt s;
+Select BOOLEAN such that Follows*(5,12)
+FALSE
+5000
+4011 - Invalid Redundant
+stmt s;
+Select s such that Follows*(1, 5)
+none
+5000
+4012 - Invalid stmts before first line in proc
+stmt s;
+Select s such that Follows*(s, 1)
+none
+5000
+4013 - Invalid stmts after last line in proc
+stmt s;
+Select s such that Follows*(18,s)
+none
+5000
+4014 - Invalid end of proc to start of another proc 
+stmt s;
+Select BOOLEAN such that Follows*(17,27)
+FALSE
+5000
+4015 - Invalid LHS synonym
+procedure p; stmt s;
+Select p such that Follows*(p,s)
+none
+5000
+4016 - Invalid LHS synonym
+stmt s; variable v;
+Select v such that Follows*(v,s)
+none
+5000
+4017 - Invalid LHS synonym
+stmt s; constant c;
+Select c such that Follows*(c, s)
+none
+5000
+4018 - Invalid RHS synonym
+stmt s; procedure p;
+Select p such that Follows*(s, p)
+none
+5000
+4019 - Invalid RHS synonym
+stmts; variable v;
+Select v such that Follows*(s, v)
+none
+5000
+4020 - Invalid RHS synonym
+stmt s; constant c;
+Select c such that Follows*(s c)
+none
+5000
+4021 - Invalid same stmt
+stmt s;
+Select BOOLEAN such that Follows*(s,s)
+FALSE
+5000
+4022 - Invalid same stmt
+stmt s;
+Select s such that Follows*(s,s)
+none
+5000

@@ -1,0 +1,730 @@
+1001 - Q1
+stmt s, s1; 
+Select s such that Parent (s, s1) with s1.stmt# = 4
+none
+5000
+1002 - Q1
+stmt s, s1; 
+Select s such that Parent (s, s1) with s1.stmt# = 8
+none
+5000
+1003 - Q1
+stmt s, s1; 
+Select s such that Parent (s, s1) with s1.stmt# = 12
+10
+5000
+1004 - Q1
+stmt s, s1;
+Select s such that Parent (s, s1) with s1.stmt# = 24
+23
+5000
+2001 - Q2
+stmt s; prog_line n;
+Select s such that Parent (s, n) with n = 4
+none
+5000
+2002 - Q2
+stmt s; prog_line n;
+Select s such that Parent (s, n) with n = 8
+none
+5000
+2003 - Q2
+stmt s; prog_line n;
+Select s such that Parent (s, n) with n = 12
+10
+5000
+2004 - Q2
+stmt s; prog_line n;
+Select s such that Parent (s, n) with n = 24
+23
+5000
+3001 - Q3
+stmt s; prog_line n;
+Select s such that Parent (n, s) with n = 3
+none
+5000
+3002 - Q3
+stmt s; prog_line n; 
+Select s such that Parent (n, s) with n = 8
+9, 10, 13, 14, 15, 16
+5000
+3003 - Q3
+stmt s; prog_line n;
+Select s such that Parent (n, s) with n = 13
+none
+5000
+3004 - Q3
+stmt s; prog_line n; 
+Select s such that Parent (n, s) with n = 24
+25, 26
+5000
+4001 - Q4
+stmt s; prog_line n;
+Select s such that Parent* (s, n) with n = 4
+none
+5000
+4002 - Q4
+stmt s; prog_line n;
+Select s such that Parent* (s, n) with n = 8
+none
+5000
+4003 - Q4
+stmt s; prog_line n; 
+Select s such that Parent* (s, n) with n = 12
+8, 10
+5000
+4004 - Q4
+stmt s; prog_line n;
+Select s such that Parent* (s, n) with n = 24
+23
+5000
+5001 - Q5
+stmt s; prog_line n; while w;
+Select w such that Parent* (s, n) with n = 4
+none
+5000
+5002 - Q5
+stmt s; prog_line n; while w;
+Select w such that Parent* (s, n) with n = 8
+none
+5000
+5003 - Q5
+stmt s; prog_line n; while w;
+Select w such that Parent* (s, n) with n = 12
+10, 18, 23
+5000
+5004 - Q5
+stmt s; prog_line n; while w;
+Select w such that Parent* (s, n) with n = 24
+10, 18, 23
+5000
+6001  - Q6
+while w; prog_line n;
+Select w such that Parent* (w, n) with n = 9
+none
+5000
+6002 - Q6
+while w; prog_line n;
+Select w such that Parent* (w, n) with n = 19
+18
+5000
+6003 - Q6
+while w; prog_line n;
+Select w such that Parent* (w, n) with n = 25
+23
+5000
+6004 - Q6
+while w; prog_line n;
+Select w such that Parent* (w, n) with n = 27
+none
+5000
+7001 - Q7
+stmt s; prog_line n;
+Select s such that Follows (s, n) with n = 8
+7
+5000
+7002 - Q7
+stmt s; prog_line n;
+Select s such that Follows (s, n) with n = 10
+9
+5000
+7003 - Q7
+stmt s; prog_line n;
+Select s such that Follows (s, n) with n = 16
+15
+5000
+7004 - Q7
+stmt s; prog_line n;
+Select s such that Follows (s, n) with n = 22
+18
+5000
+7005 - Q7
+stmt s; prog_line n;
+Select s such that Follows (s, n) with n = 24
+none
+5000
+7006 - Q7
+stmt s; prog_line n;
+Select s such that Follows (s, n) with n = 26
+none
+5000
+7007 - Q7
+stmt s; prog_line n;
+Select s such that Follows (s, n) with n = 28
+none
+5000
+8001 - Q8
+assign a; prog_line n;
+Select a such that Follows (a, n) with n = 8
+7
+5000
+8002 - Q8
+assign a; prog_line n;
+Select a such that Follows (a, n) with n = 10
+9
+5000
+8003 - Q8
+assign a; prog_line n;
+Select a such that Follows (a, n) with n = 16
+none
+5000
+8004 - Q8
+assign a; prog_line n;
+Select a such that Follows (a, n) with n = 22
+none
+5000
+8005 - Q8
+assign a; prog_line n;
+Select a such that Follows (a, n) with n = 24
+none
+5000
+8006 - Q8
+assign a; prog_line n;
+Select a such that Follows (a, n) with n = 26
+none
+5000
+8007 - Q8
+assign a; prog_line n;
+Select a such that Follows (a, n) with n = 28
+none
+5000
+9001 - Q9
+while w; stmt s;
+Select w such that Follows* (s, w)
+10
+5000
+10001 - Q10
+while w; stmt s;
+Select w such that Follows* (w, s)
+10, 18, 23
+5000
+11001 - Q11
+stmt s; prog_line n;
+Select s such that Follows* (s, n) with n = 4
+1, 2, 3
+5000
+11002 - Q11
+stmt s; prog_line n;
+Select s such that Follows* (s, n) with n = 10
+9
+5000
+11003 - Q11
+stmt s; prog_line n;
+Select s such that Follows* (s, n) with n = 16
+14, 15
+5000
+11004 - Q11
+stmt s; prog_line n;
+Select s such that Follows* (s, n) with n = 17
+1, 2, 3, 4, 5, 6, 7, 8
+5000
+11005 - Q11
+stmt s; prog_line n;
+Select s such that Follows* (s, n) with n = 20
+19
+5000
+11006 - Q11
+stmt s; prog_line n;
+Select s such that Follows* (s, n) with n = 24
+none
+5000
+12001 - Q12
+if ifstat; prog_line n;
+Select ifstat such that Follows* (ifstat, n) with n = 8
+none
+5000
+12002  Q12
+if ifstat; prog_line n;
+Select ifstat such that Follows* (ifstat, n) with n = 17
+8
+5000
+12003 - Q12
+if ifstat; prog_line n;
+Select ifstat such that Follows* (ifstat, n) with n = 26
+none
+5000
+12004 - Q12
+if ifstat; prog_line n;
+Select ifstat such that Follows* (ifstat, n) with n = 27
+none
+5000
+13001 - Q13
+assign a; prog_line n;
+Select a such that Follows* (a, n) with n = 8
+1, 2, 3, 5, 7
+5000
+13002 - Q13
+assign a; prog_line n;
+Select a such that Follows* (a, n) with n = 9
+none
+5000
+13003 - Q13
+assign a; prog_line n;
+Select a such that Follows* (a, n) with n = 16
+14
+5000
+13004 - Q13
+assign a; prog_line n;
+Select a such that Follows* (a, n) with n = 20
+19
+5000
+13005 - Q13
+assign a; prog_line n;
+Select a such that Follows* (a, n) with n = 26
+none
+5000
+13006 - Q13
+assign a; prog_line n;
+Select a such that Follows* (a, n) with n = 27
+none
+5000
+14001 - Q14
+variable v; stmt s;
+Select v such that Modifies (s, v) with s.stmt# = 3
+m
+5000
+14002 - Q14
+variable v; stmt s;
+Select v such that Modifies (s, v) with s.stmt# = 4
+m, x, y
+5000
+14003 - Q14
+variable v; stmt s;
+Select v such that Modifies (s, v) with s.stmt# = 6
+z
+5000
+14004 - Q14
+variable v; stmt s;
+Select v such that Modifies (s, v) with s.stmt# = 18
+m, x, y, z
+5000
+14005 - Q14
+variable v; stmt s;
+Select v such that Modifies (s, v) with s.stmt# = 24
+m, x
+5000
+14006 - Q14
+variable v; stmt s;
+Select v such that Modifies (s, v) with s.stmt# = 28
+z
+5000
+15001 - Q15
+while w;
+Select w such that Modifies (w, "m")
+10, 18, 23
+5000
+15002 - Q15
+while w;
+Select w such that Modifies (w, "z")
+18
+5000
+16001 - Q16
+variable v;
+Select v such that Modifies ("Duo", v)
+m, x, y, z
+5000
+17001 - Q17
+stmt s;
+Select s such that Uses (s, "m")
+4, 8, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 23, 24, 26
+5000
+17002 - Q17
+stmt s;
+Select s such that Uses (s, "y")
+8, 10, 16, 17, 18, 19, 21
+5000
+18001 - Q18
+variable v; prog_line n;
+Select v such that Uses (n, v) with n = 10
+m, y, z
+5000
+18002 - Q18
+variable v; prog_line n;
+Select v such that Uses (n, v) with n = 18
+k, m, n, x, y, z
+5000
+18003 - Q18
+variable v; prog_line n;
+Select v such that Uses (n, v) with n = 23
+k, m, n, x, z
+5000
+19001 - Q19
+variable v; assign a;
+Select v such that Uses (a, v)
+k, m, n, x, y, z
+5000
+20001 - Q20
+assign a; variable v;
+Select a such that Modifies (a, v) and Uses (a, v) with v.varName = "k"
+none
+5000
+20002 - Q20
+assign a; variable v;
+Select a such that Modifies (a, v) and Uses (a, v) with v.varName = "m"
+11
+5000
+20003 - Q20
+assign a; variable v;
+Select a such that Modifies (a, v) and Uses (a, v) with v.varName = "y"
+16, 21
+5000
+20004 - Q20
+assign a; variable v;
+Select a such that Modifies (a, v) and Uses (a, v) with v.varName = "z"
+28
+5000
+21001 - Q21
+assign a; while w;
+Select a such that Modifies (a, "x") and Parent (w, a)
+none
+5000
+22001 - Q22
+assign a; while w;
+Select a such that Parent (w, a) and Modifies (a, "x")
+none
+5000
+23001 - Q23
+assign a; while w;
+Select a such that Modifies (a, "z") and Parent (w, a)
+19
+5000
+24001 - Q24
+procedure p;
+Select p such that Calls* (p, "Trio")
+Solo, Duo
+5000
+25001 - Q25
+procedure p;
+Select p such that Calls ("Solo", p) and Modifies (p, "m") and Uses (p, "z")
+Duo, Trio
+5000
+26001 - Q26
+procedure p;
+Select p such that Calls* ("Solo", p) and Modifies (p, "x")
+Duo, Trio
+5000
+27001 - Q27
+assign a;
+Select a pattern a ("y", _)
+12, 16, 21, 27
+5000
+28001 - Q28
+assign a;
+Select a pattern a ("x", "z * x")
+none
+5000
+29001 - Q29
+assign a; while w;
+Select a pattern a ("y", _) such that Follows (w, a)
+27
+5000
+30001 - Q30
+assign a;
+Select a pattern a (_, "z + x")
+5, 7
+5000
+31001 - Q31
+assign a;
+Select a pattern a (_, "2 - x * 4")
+none
+5000
+32001 - Q32
+assign a;
+Select a pattern a (_, _"m + k * n"_)
+none
+5000
+33001 - Q33
+assign a;
+Select a pattern a (_, _"z * x + m")
+none
+5000
+34001 - Q34
+assign a;
+Select a pattern a (_, _"m + z"_)
+11, 13, 14
+5000
+35001 - Q35
+assign a;
+Select a pattern a (_, _"m + 3"_)
+none
+5000
+36001 - Q36
+assign a;
+Select a pattern a (_, _"m + 3 * x"_)
+19
+5000
+37001 - Q37
+assign a;
+Select a pattern a (_, _"3 * x"_)
+19
+5000
+38001 - Q38
+assign a;
+Select a pattern a (_, _"1 + 2"_)
+none
+5000
+39001 - Q39
+assign a, a1;
+Select a pattern a1 (_, _"z + x"_)
+1, 2, 3, 5, 7, 9, 11, 12, 13, 14, 16, 19, 21, 22, 25, 26, 27, 28
+5000
+40001 - Q40
+procedure p; if ifstat;
+Select p pattern ifstat ("y", _, _)
+none
+5000
+41001 - Q41
+stmt s; constant co;
+Select s with s.stmt# = co.value
+1, 2, 3, 10, 20
+5000
+42001 - Q42
+while w; constant co;
+Select BOOLEAN pattern w ("m", _) with co.value = 2
+TRUE
+5000
+43001 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 1 with n2 = 2
+TRUE
+5000
+43002 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 6 with n2 = 8
+FALSE
+5000
+43003 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 8 with n2 = 9
+TRUE
+5000
+43004 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 10 with n2 = 11
+TRUE
+5000
+43005 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 12 with n2 = 10
+TRUE
+5000
+43006 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 12 with n2 = 11
+FALSE
+5000
+43007 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 13 with n2 = 14
+FALSE
+5000
+43008 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 16 with n2 = 17
+TRUE
+5000
+43009 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 17 with n2 = 18
+FALSE
+5000
+43010 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 23 with n2 = 27
+TRUE
+5000
+43011 - Q43
+prog_line n1, n2;
+Select BOOLEAN such that Next (n1, n2) with n1 = 26 with n2 = 27
+FALSE
+5000
+44001 - Q44
+prog_line n;
+Select BOOLEAN such that Next* (n, n) with n = 9
+FALSE
+5000
+44002 - Q44
+prog_line n;
+Select BOOLEAN such that Next* (n, n) with n = 13
+FALSE
+5000
+44003 - Q44
+prog_line n;
+Select BOOLEAN such that Next* (n, n) with n = 18
+TRUE
+5000
+44004 - Q44
+prog_line n;
+Select BOOLEAN such that Next* (n, n) with n = 26
+TRUE
+5000
+45001 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 1 with a2.stmt# = 2
+TRUE
+5000
+45002 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 1 with a2.stmt# = 3
+TRUE
+5000
+45003 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 1 with a2.stmt# = 4
+FALSE
+5000
+45004 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 2 with a2.stmt# = 5
+FALSE
+5000
+45005 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 2 with a2.stmt# = 7
+FALSE
+5000
+45006 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 3 with a2.stmt# = 11
+FALSE
+5000
+45007 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 3 with a2.stmt# = 12
+FALSE
+5000
+45008 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 14 with a2.stmt# = 28
+FALSE
+5000
+45009 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 25 with a2.stmt# = 26
+TRUE
+5000
+45010 - Q45
+assign a1, a2;
+Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 25 with a2.stmt# = 27
+TRUE
+5000
+46001 - Q46
+assign a1, a2;
+Select a1 such that Affects (a1, a2) with a2.stmt# = 1
+none
+5000
+46002- Q46
+assign a1, a2;
+Select a1 such that Affects (a1, a2) with a2.stmt# = 9
+none
+5000
+46003 - Q46
+assign a1, a2;
+Select a1 such that Affects (a1, a2) with a2.stmt# = 22
+19
+5000
+46004 - Q46
+assign a1, a2;
+Select a1 such that Affects (a1, a2) with a2.stmt# = 28
+none
+5000
+47001 - Q47
+assign a1, a2;
+Select a2 such that Affects (a1, a2) with a1.stmt# = 1
+1,2,3,5
+5000
+47002 - Q47
+assign a1, a2;
+Select a2 such that Affects (a1, a2) with a1.stmt# = 12
+none
+5000
+47003 - Q47
+assign a1, a2;
+Select a2 such that Affects (a1, a2) with a1.stmt# = 21
+19
+5000
+47004 - Q47
+assign a1, a2;
+Select a2 such that Affects (a1, a2) with a1.stmt# = 22
+none
+5000
+47005 - Q47
+assign a1, a2;
+Select a2 such that Affects (a1, a2) with a1.stmt# = 25
+26
+5000
+47006 - Q47
+assign a1, a2;
+Select a2 such that Affects (a1, a2) with a1.stmt# = 28
+none
+5000
+48001 - Q48
+assign a1, a2;
+Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 2
+TRUE
+5000
+48002 - Q48
+assign a1, a2;
+Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 3
+TRUE
+5000
+48003 - Q48
+assign a1, a2;
+Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 5
+TRUE
+5000
+48004 - Q48
+assign a1, a2;
+Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 7
+FALSE
+5000
+48005 - Q48
+assign a1, a2;
+Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 11 with a2.stmt# = 11
+TRUE
+5000
+48006 - Q48
+assign a1, a2;
+Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 11 with a2.stmt# = 13
+TRUE
+5000
+49001 - Q49
+assign a1, a2;
+Select a1 such that Affects* (a1, a2) with a2.stmt# = 5
+1
+5000
+49002 - Q49
+assign a1, a2;
+Select a1 such that Affects* (a1, a2) with a2.stmt# = 13
+11
+5000
+49003 - Q49
+assign a1, a2;
+Select a1 such that Affects* (a1, a2) with a2.stmt# = 2
+19,21
+5000
+49004 - Q49
+assign a1, a2;
+Select a1 such that Affects* (a1, a2) with a2.stmt# = 25
+none
+5000
+50001 - Q50
+assign a1, a2;
+Select a2 such that Affects* (a1, a2) with a1.stmt# = 11
+11,12,13
+5000
+50002 - Q50
+assign a1, a2;
+Select a2 such that Affects* (a1, a2) with a1.stmt# = 21
+19, 22
+5000
+50003 - Q50
+assign a1, a2;
+Select a2 such that Affects* (a1, a2) with a1.stmt# = 25
+26, 27
+5000
+50004 - Q50
+assign a1, a2;
+Select a2 such that Affects* (a1, a2) with a1.stmt# = 28
+none
+5000
