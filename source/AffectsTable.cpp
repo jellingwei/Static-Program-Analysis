@@ -66,11 +66,17 @@ CNode* getMandatoryPrevNode(CNode* node, CFG* cfg) {
 }
 
 // assumes that each node has only 1 inside node directly connected to it
-CNode* getInsideNextNode(CNode* node, CFG* cfg) {
+CNode* getInsideNextNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> variablesToMatch) {
 	PKB pkb = PKB::getInstance();
 
 	CNODE_TYPE type = node->getNodeType();
 	vector<CNode*>* possibleNextNodes = node->getAfter();
+
+	
+	if (node->getVariablesInside().size() > 0 && (node->getVariablesInside() & variablesToMatch).none()) {
+		// this branch will not match variablesToMatch, therefore do an early return
+		return NULL;
+	}
 	
 	for (auto iter = possibleNextNodes->begin(); iter != possibleNextNodes->end(); ++iter) {
 		if (cfg->isInsideNode(node, *iter) && (*iter)->getNodeType() != Proc_C && (*iter)->getNodeType() != EndProc_C) {
@@ -82,11 +88,16 @@ CNode* getInsideNextNode(CNode* node, CFG* cfg) {
 }
 
 // assumes that each node has only 1 inside node directly connected to it
-CNode* getInsidePrevNode(CNode* node, CFG* cfg) {
+CNode* getInsidePrevNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> variablesToMatch) {
 	PKB pkb = PKB::getInstance();
 
 	CNODE_TYPE type = node->getNodeType();
 	vector<CNode*>* possiblePrevNodes = node->getBefore();
+
+	if ((pkb.getModVarInBitvectorForStmt(node->getProcLineNumber()) & variablesToMatch).none()) {
+		// this branch will not match variablesToMatch, therefore do an early return
+		return NULL;
+	}
 	
 	for (auto iter = possiblePrevNodes->begin(); iter != possiblePrevNodes->end(); ++iter) {
 		if (cfg->isInsideNode(node, *iter) && (*iter)->getNodeType() != Proc_C && (*iter)->getNodeType() != EndProc_C) {
@@ -183,7 +194,7 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(nextNode, variablesToMatch));
 		}
 
-		CNode* possibleNode = getInsideNextNode(node, pkb.cfgTable.at(0));
+		CNode* possibleNode = getInsideNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
 		if (possibleNode && visited.count(nodePair) == 0 ) {
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
@@ -261,7 +272,7 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch));
 		}
 
-		CNode* possibleNode = getInsidePrevNode(node, pkb.cfgTable.at(0));
+		CNode* possibleNode = getInsidePrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
 		if (possibleNode && visited.count(nodePair) == 0 ) {
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
