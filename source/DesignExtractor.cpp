@@ -577,14 +577,20 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 }
 
 
-CNode* obtainEndIfNodeIfIsIf(CNode* node) {
+CNode* obtainEndIfNodeIfIsIf(CNode* node, CFG* cfg) {
 	if (node->getNodeType() != If_C) {
 		return NULL;
 	}
 
 	CNode* curNode = node;
 	while (curNode->getNodeType() != EndIf_C) {
-		curNode = (curNode->getAfter())->at(0); // just traverse any link, just will still end up at the last node
+		
+		CNode* nextNode = (curNode->getAfter())->at(0); 
+		if (cfg->isInsideNode(curNode, nextNode)) {
+			nextNode = (curNode->getAfter())->at(1); 
+		}
+		curNode = nextNode;
+		
 	}
 
 	return curNode;
@@ -604,11 +610,12 @@ void setVariablesInside() {
 		int container = *iter;
 
 		CNode* containerNode = pkb.cfgNodeTable.at(container);
-		CNode* ifEndNode = obtainEndIfNodeIfIsIf(containerNode);
+		CNode* ifEndNode = obtainEndIfNodeIfIsIf(containerNode, firstProcCfg);
 
 		vector<int> descendants = pkb.getChild(container, true);
 		for (auto childrenIter = descendants.begin(); childrenIter != descendants.end(); ++childrenIter) {
 			int descendant = *childrenIter;
+			
 			VARIABLES variablesUsed = pkb.getUseVarInBitvectorForStmt(descendant);
 			VARIABLES variablesModified = pkb.getModVarInBitvectorForStmt(descendant);
 
