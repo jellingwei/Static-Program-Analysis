@@ -577,6 +577,20 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 }
 
 
+CNode* obtainEndIfNodeIfIsIf(CNode* node) {
+	if (node->getNodeType() != If_C) {
+		return NULL;
+	}
+
+	CNode* curNode = node;
+	while (curNode->getNodeType() != EndIf_C) {
+		curNode = (curNode->getAfter())->at(0); // just traverse any link, just will still end up at the last node
+	}
+
+	return curNode;
+}
+
+
 void setVariablesInside() {
 	PKB& pkb = PKB::getInstance();
 	CFG* firstProcCfg = pkb.cfgTable.at(0); // can just get any cfg, since only using functions without needing state
@@ -590,27 +604,43 @@ void setVariablesInside() {
 		int container = *iter;
 
 		CNode* containerNode = pkb.cfgNodeTable.at(container);
+		CNode* ifEndNode = obtainEndIfNodeIfIsIf(containerNode);
+
 		vector<int> descendants = pkb.getChild(container, true);
 		for (auto childrenIter = descendants.begin(); childrenIter != descendants.end(); ++childrenIter) {
 			int descendant = *childrenIter;
-			VARIABLES variables = pkb.getUseVarInBitvectorForStmt(descendant);
+			VARIABLES variablesUsed = pkb.getUseVarInBitvectorForStmt(descendant);
+			VARIABLES variablesModified = pkb.getModVarInBitvectorForStmt(descendant);
 
 			CNode* node = pkb.cfgNodeTable.at(descendant);
 			if (firstProcCfg->isInsideNode(containerNode, node)) {
 				boost::dynamic_bitset<> updatedInsideVariables = containerNode->getVariablesInside().size() > 0? 
-															   variables | containerNode->getVariablesInside() :
-															   variables;
+															   variablesUsed | containerNode->getVariablesInside() :
+															   variablesUsed;
 				
 				containerNode->setVariablesInside(updatedInsideVariables);
+
+				if (ifEndNode) {
+					boost::dynamic_bitset<> updatedInsideVariables = ifEndNode->getVariablesInside().size() > 0? 
+															   variablesModified | ifEndNode->getVariablesInside() :
+															   variablesModified;
 				
-				cout << "setting ... " << containerNode->getProcLineNumber() << " to " << variables << endl;
+					ifEndNode->setVariablesInside(updatedInsideVariables);
+				}
 			}
 			if (firstProcCfg->isInsideElseNode(containerNode, node)) {
 				boost::dynamic_bitset<> updatedInsideVariables = containerNode->getVariablesInside2().size() > 0? 
-															   variables | containerNode->getVariablesInside2() :
-															   variables;
+															   variablesUsed | containerNode->getVariablesInside2() :
+															   variablesUsed;
 				containerNode->setVariablesInside2(updatedInsideVariables);
-				cout << "setting 2 ... " << containerNode->getProcLineNumber() << " to " << variables << endl;
+
+				if (ifEndNode) {
+					boost::dynamic_bitset<> updatedInsideVariables = ifEndNode->getVariablesInside2().size() > 0? 
+															   variablesModified | ifEndNode->getVariablesInside2() :
+															   variablesModified;
+				
+					ifEndNode->setVariablesInside2(updatedInsideVariables);
+				}
 			} 
 
 		}
