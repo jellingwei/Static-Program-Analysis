@@ -197,9 +197,9 @@ bool CFG::isInsideElseNode(CNode* header, CNode* inside) {
 	}
 
 	CNode &ins = *inside;
-	if(ins.CNode::getHeader() == header) 
-		return true;
-	else return false;
+	vector<CNode*>* inside2 = header->getInside2();
+	
+	return (find(inside2->begin(), inside2->end(), inside) != inside2->end());
 }
 
 /**

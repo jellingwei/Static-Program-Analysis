@@ -145,7 +145,7 @@ bool CNode::hasInside()
  */
 vector<CNode*>* CNode::getInside2()
 {
-	return &_inside;
+	return &_inside2;
 }
 
 /**
@@ -154,7 +154,7 @@ vector<CNode*>* CNode::getInside2()
  */
 void CNode::addInside2(CNode* node)
 {
-	_inside.push_back(node);
+	_inside2.push_back(node);
 }
 
 /**
@@ -164,7 +164,7 @@ void CNode::addInside2(CNode* node)
  */
 bool CNode::hasInside2()
 {
-	if(_inside.size() < 1) return false;
+	if(_inside2.size() < 1) return false;
 	else return true;
 }
 

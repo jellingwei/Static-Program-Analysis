@@ -551,7 +551,7 @@ class CompareProglines {
 
 void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variables, unordered_map<int, set<int>>& reachingDefinitions) {
 	int startingVarIndex = 1;
-	for (int i = startingVarIndex; i < variables.size(); i++) {		
+	for (size_t i = startingVarIndex; i < variables.size(); i++) {		
 		if (variables[i] == 1) {
 			reachingDefinitions[i].insert(progLineNum);
 		}
@@ -567,39 +567,27 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 	
 	priority_queue<CNode*, vector<CNode*>, CompareProglines> frontier;
  
-	set<int> visited;
+	set<pair<CNode*, boost::dynamic_bitset<> >> visited;
 	frontier.push(startNode);
 
 	unordered_map<int, set<int>> reachingDefinition;
 
-	while (!frontier.empty()) {
-		CNode* curNode = frontier.top(); frontier.pop();
+	//@todo tmr
+	
+}
 
-		// update reaching definition
-		if (curNode->getNodeType() == Assign_C) {
-			boost::dynamic_bitset<> variablesModified = pkb.getModVarInBitvectorForStmt(curNode->getProcLineNumber());
-			addVariablesToMap(curNode->getProcLineNumber(), variablesModified, reachingDefinition);
-		}
 
-		// set reaching definition in the node if specified
-		bool isReachingDefinitionStored = (curNode->getNodeType() == If_C || curNode->getNodeType() == While_C);
-		if (isReachingDefinitionStored) {
-			curNode->setReachingDefinitions(reachingDefinition);
-		}
-		
-
-		// add next node to frontier
-		vector<int> intermediateNodes = pkb.getNextAfter(curNode->getProcLineNumber(), false);
-		for (auto iter = intermediateNodes.begin(); iter != intermediateNodes.end(); ++iter) {
-			CNode* nextNode = pkb.cfgNodeTable.at(*iter);
-			if (visited.count(*iter) != 0 ) {
-				// skip if already visited, or if already in the frontier
-				continue;
-			}
-			visited.insert(*iter);
-			frontier.push(nextNode);
-		}
+CNode* obtainEndIfNodeIfIsIf(CNode* node) {
+	if (node->getNodeType() != If_C) {
+		return NULL;
 	}
+
+	CNode* curNode = node;
+	while (curNode->getNodeType() != EndIf_C) {
+		curNode = (curNode->getAfter())->at(0); // just traverse any link, just will still end up at the last node
+	}
+
+	return curNode;
 }
 
 
@@ -616,17 +604,43 @@ void setVariablesInside() {
 		int container = *iter;
 
 		CNode* containerNode = pkb.cfgNodeTable.at(container);
+		CNode* ifEndNode = obtainEndIfNodeIfIsIf(containerNode);
+
 		vector<int> descendants = pkb.getChild(container, true);
 		for (auto childrenIter = descendants.begin(); childrenIter != descendants.end(); ++childrenIter) {
 			int descendant = *childrenIter;
-			VARIABLES variables = pkb.getModVarInBitvectorForStmt(descendant);
+			VARIABLES variablesUsed = pkb.getUseVarInBitvectorForStmt(descendant);
+			VARIABLES variablesModified = pkb.getModVarInBitvectorForStmt(descendant);
 
 			CNode* node = pkb.cfgNodeTable.at(descendant);
 			if (firstProcCfg->isInsideNode(containerNode, node)) {
-				containerNode->setVariablesInside(variables);
-			} 
+				boost::dynamic_bitset<> updatedInsideVariables = containerNode->getVariablesInside().size() > 0? 
+															   variablesUsed | containerNode->getVariablesInside() :
+															   variablesUsed;
+				
+				containerNode->setVariablesInside(updatedInsideVariables);
+
+				if (ifEndNode) {
+					boost::dynamic_bitset<> updatedInsideVariables = ifEndNode->getVariablesInside().size() > 0? 
+															   variablesModified | ifEndNode->getVariablesInside() :
+															   variablesModified;
+				
+					ifEndNode->setVariablesInside(updatedInsideVariables);
+				}
+			}
 			if (firstProcCfg->isInsideElseNode(containerNode, node)) {
-				containerNode->setVariablesInside2(variables);
+				boost::dynamic_bitset<> updatedInsideVariables = containerNode->getVariablesInside2().size() > 0? 
+															   variablesUsed | containerNode->getVariablesInside2() :
+															   variablesUsed;
+				containerNode->setVariablesInside2(updatedInsideVariables);
+
+				if (ifEndNode) {
+					boost::dynamic_bitset<> updatedInsideVariables = ifEndNode->getVariablesInside2().size() > 0? 
+															   variablesModified | ifEndNode->getVariablesInside2() :
+															   variablesModified;
+				
+					ifEndNode->setVariablesInside2(updatedInsideVariables);
+				}
 			} 
 
 		}
