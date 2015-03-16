@@ -795,9 +795,6 @@ namespace QueryEvaluator
 	*/
 	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		return false;
-
-
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 
