@@ -38,7 +38,7 @@ CNode* getMandatoryNextNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> varia
 	vector<CNode*>* possibleNextNodes = node->getAfter();
 
 	// handle special case for if statement
-	if (node->getVariablesInside2().size() > 0 && (node->getVariablesInside2() & variablesToMatch).none()) {
+	if (node->getNodeType() == If_C && node->getVariablesInside2().size() > 0 && (node->getVariablesInside2() & variablesToMatch).none()) {
 		// the else stmtList does not contain the variable,
 		// skip to the statement Following the node in the AST
 
@@ -55,6 +55,7 @@ CNode* getMandatoryNextNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> varia
 		if (cfg->isInsideNode(node, *iter) || (*iter)->getNodeType() == Proc_C || (*iter)->getNodeType() == EndProc_C) {
 			continue;
 		}
+		
 		return *iter;	
 	}
 
@@ -192,9 +193,7 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 
 	while (!frontier.empty()) {
 		node = frontier.top().first;
-		
 		variablesToMatch = frontier.top().second;
-		
 		visited.insert(frontier.top());
 		frontier.pop();
 
@@ -229,12 +228,14 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 
 		CNode* nextNode = getMandatoryNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(nextNode, variablesToMatch);
+		
 		if (nextNode && visited.count(nodePair) == 0 ) {
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(nextNode, variablesToMatch));
 		}
 
 		CNode* possibleNode = getInsideNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
+		
 		if (possibleNode && visited.count(nodePair) == 0 ) {
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
 		}
