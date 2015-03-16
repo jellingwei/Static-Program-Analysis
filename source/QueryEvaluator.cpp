@@ -802,13 +802,13 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeRHS = RHS.getType();
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
-			return pkb.isAffects(pkb.getProcIndex(LHS.getName()), pkb.getProcIndex(RHS.getName()), isTrans);
+			return pkb.isAffects(stoi(LHS.getName()), stoi(RHS.getName()), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffectedBy(pkb.getProcIndex(LHS.getName()), isTrans);
+			vector<int> stmt = pkb.getAffectedBy(stoi(LHS.getName()), isTrans);
 			RHS.setValues(stmt);
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffecting(pkb.getProcIndex(RHS.getName()), isTrans);
+			vector<int> stmt = pkb.getAffecting(stoi(RHS.getName()), isTrans);
 			LHS.setValues(stmt);
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
