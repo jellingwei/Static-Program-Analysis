@@ -811,10 +811,10 @@ namespace QueryEvaluator
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
 			return true;
 		} else if (typeLHS == UNDEFINED) {
-			Synonym RHS(typeRHS, RHS.getName(), pkb.getAffectsRhs());
+			RHS.setValues(pkb.getAffectsRhs());
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == UNDEFINED) {
-			Synonym LHS(typeLHS, LHS.getName(), pkb.getAffectsLhs());
+			LHS.setValues(pkb.getAffectsLhs());
 			return IntermediateValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
 			pair<vector<int>, vector<int>> affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
