@@ -101,6 +101,8 @@ void ModifiesTableTest::testIsModifies() {
 
 void ModifiesTableTest::testGetModifiesStmtNum() {
 	ModifiesTable modifiesTable;
+	modifiesTable.init(20);
+
 	modifiesTable.setModifies(2, 3);
 
 	vector<int> result = modifiesTable.getModStmtNum(2);
