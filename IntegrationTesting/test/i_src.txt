@@ -15,24 +15,44 @@ procedure Test {
        a = 2;  \\14
     } else {  
        a = a + 3; \\15
-       call Test2; } } }  \\16
+       call Test2; } } else { \\16
+    call Trio;		\\17
+
+} }  
 
 procedure Test2 {
-  call Test3;  \\ 17
-  while a {    \\18
-    if b then{   \\19
-    	call Test4;}}} \\20
+  call Test3;  \\ 18
+  while a {    \\19
+    if b then{   \\20
+    	call Test4;} \\21
+	else {
+  		a = 1;	\\22
+		call Trio;	\\23 
+		b = a;	\\24
+	}
+}} 
 
 procedure Test3 {
-  while c {    \\21
-    if  a then{ \\22
-      a = 1;    \\23
+  while c {    \\25
+    if  a then{ \\26
+      a = 1;    \\27
     } else {
-      while c {   \\24
-         a = a * a - b; }}}}  \\25
+      while c {   \\28
+         a = a * a - b; }}}}  \\29
       
 
 
 procedure Test4 {
-  call Test3; }  \\26
+  call Test3; }  \\30
 
+procedure Trio {
+  c = 2;	\\31
+  while a {           \\32
+    if b then {  	\\33                 
+      a = b + 2; 	\\34
+      c = 1;}            \\35
+    else {                       
+      b = f * d + a + c * c;  \\ 36
+      c = 3; }}   \\37
+  c = b + c;                      \\38
+}

@@ -30,14 +30,14 @@ void PQLTest::tearDown()
 void PQLTest::testPQL()
 {
 	// Select
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all assign", 12, (int)evaluate("assign a; Select a").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all stmt", 26, (int)evaluate("stmt s; Select s").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all assign", 20, (int)evaluate("assign a; Select a").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all stmt", 38, (int)evaluate("stmt s; Select s").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all var", 6, (int)evaluate("variable v; Select v").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all while", 6, (int)evaluate("while w; Select w").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all while", 7, (int)evaluate("while w; Select w").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all constant", 3, (int)evaluate("constant c; Select c").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all prog_line", 26, (int)evaluate("prog_line l; Select l").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all call", 4, (int)evaluate("call c; Select c").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all if", 4, (int)evaluate("if ifStmt; Select ifStmt").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all prog_line", 38, (int)evaluate("prog_line l; Select l").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all call", 6, (int)evaluate("call c; Select c").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select all if", 5, (int)evaluate("if ifStmt; Select ifStmt").size());
 
 	// Parent
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, 4)", (string)"3", evaluate("stmt s; Select s such that Parent(s, 4)").front());
@@ -52,17 +52,17 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(7, a)", (string)"10", evaluate("assign a; Select a such that Parent(7, a)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(7, w)", (string)"8", evaluate("while w; Select w such that Parent(7, w)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(3, v)", 0, (int)evaluate("variable v; Select v such that Parent(3, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(<w>, s)", 6, (int)evaluate("while w; stmt s; Select w such that Parent(w, s)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(<w>, s)", 7, (int)evaluate("while w; stmt s; Select w such that Parent(w, s)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(w, <a>)", 4, (int)evaluate("assign a; while w; Select a such that Parent(w, a)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Parent(1, 3)", 0, (int)evaluate("stmt s; Select s such that Parent(1, 3)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Parent(7, 9)", 0, (int)evaluate("prog_line l; Select l such that Parent(7, 9)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Parent(a1, a2)", 0, (int)evaluate("assign a1, a2; while w; Select w such that Parent(a1, a2)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Parent(3, 4)", 6, (int)evaluate("while w; Select w such that Parent(3, 4)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Parent(7, 10)", 26, (int)evaluate("stmt s; Select s such that Parent(7, 10)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a1; Parent(w, a2)", 12, (int)evaluate("assign a1, a2; while w; Select a1 such that Parent(w, a2)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Parent(3, 4)", 7, (int)evaluate("while w; Select w such that Parent(3, 4)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Parent(7, 10)", 38, (int)evaluate("stmt s; Select s such that Parent(7, 10)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a1; Parent(w, a2)", 20, (int)evaluate("assign a1, a2; while w; Select a1 such that Parent(w, a2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, w)", (string)"8", evaluate("while w; Select w such that Parent(_, w)").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, a)", 7, (int)evaluate("assign a; Select a such that Parent(_, a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, _)", 10, (int)evaluate("stmt s; Select s such that Parent(s, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, a)", 13, (int)evaluate("assign a; Select a such that Parent(_, a)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(s, _)", 12, (int)evaluate("stmt s; Select s such that Parent(s, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, _)", 6, (int)evaluate("variable v; Select v such that Parent(_, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(l,)", 0, (int)evaluate("prog_line l; Select l such that Parent(l,)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(,l)", 0, (int)evaluate("prog_line l; Select l such that Parent(,l)").size());
@@ -86,64 +86,64 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(l, 1)", 0, (int)evaluate("prog_line l; Select l such that Follows(l, 1)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(12, l)", 0, (int)evaluate("prog_line l; Select l such that Follows(12, l)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(w, 11)", (string)"7", evaluate("while w; Select w such that Follows(w, 11)").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(<a1>, a2)", 2, (int)evaluate("assign a1, a2; Select a1 such that Follows(a1, a2)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(a, <w>)", 2, (int)evaluate("while w; assign a; Select w such that Follows(a, w)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, <l>)", 10, (int)evaluate("stmt s; prog_line l; Select l such that Follows(s, l)").size()); 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(<a1>, a2)", 4, (int)evaluate("assign a1, a2; Select a1 such that Follows(a1, a2)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(a, <w>)", 3, (int)evaluate("while w; assign a; Select w such that Follows(a, w)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, <l>)", 16, (int)evaluate("stmt s; prog_line l; Select l such that Follows(s, l)").size()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Follows(3, 4)", 0, (int)evaluate("while w; Select w such that Follows(3, 4)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Follows(1, 11)", 0, (int)evaluate("stmt s; Select s such that Follows(1, 11)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Follows(v, a)", 0, (int)evaluate("variable v; assign a; prog_line l; Select l such that Follows(v, a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Follows(3, 5)", 26, (int)evaluate("prog_line l; Select l such that Follows(3, 5)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a; Follows(1, 2)", 12, (int)evaluate("assign a; Select a such that Follows(1, 2)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Follows(a, w)", 26, (int)evaluate("stmt s; assign a; while w; Select s such that Follows(a, w)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(_, a)", 5, (int)evaluate("assign a; Select a such that Follows(_,a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, _)", 10, (int)evaluate("stmt s; Select s such that Follows(s, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Follows(3, 5)", 38, (int)evaluate("prog_line l; Select l such that Follows(3, 5)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a; Follows(1, 2)", 20, (int)evaluate("assign a; Select a such that Follows(1, 2)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Follows(a, w)", 38, (int)evaluate("stmt s; assign a; while w; Select s such that Follows(a, w)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(_, a)", 9, (int)evaluate("assign a; Select a such that Follows(_,a)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, _)", 16, (int)evaluate("stmt s; Select s such that Follows(s, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(_, _)", 6, (int)evaluate("variable v; Select v such that Follows(_, _)").size());
 
 	// Uses
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'd')", 2, (int)evaluate("stmt s; Select s such that Uses(s, \"d\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(l, 'a')", 15, (int)evaluate("prog_line l; Select l such that Uses(l, \"a\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, 'd')", 12, (int)evaluate("stmt s; Select s such that Uses(s, \"d\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(l, 'a')", 21, (int)evaluate("prog_line l; Select l such that Uses(l, \"a\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(a, 'z')", 0, (int)evaluate("assign a; Select a such that Uses(a, \"z\")").size()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(w, 'b')", (string)"7", evaluate("while w; Select w such that Uses(w, \"b\")").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(v, 'f')", 0, (int)evaluate("variable v; Select v such that Uses(v, \"f\")").size()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(1, v)", 0, (int)evaluate("variable v; Select v such that Uses(1, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(2, v)", 2, (int)evaluate("variable v; Select v such that Uses(2, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(7, v)", 4, (int)evaluate("variable v; Select v such that Uses(7, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<a>, v)", 8, (int)evaluate("assign a; variable v; Select a such that Uses(a, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<s>, v)", 22, (int)evaluate("stmt s; variable v; Select s such that Uses(s, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(w, <v>)", 5, (int)evaluate("variable v; while w; Select v such that Uses(w, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<a>, v)", 12, (int)evaluate("assign a; variable v; Select a such that Uses(a, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(<s>, v)", 30, (int)evaluate("stmt s; variable v; Select s such that Uses(s, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(w, <v>)", 6, (int)evaluate("variable v; while w; Select v such that Uses(w, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(l, <v>)", 6, (int)evaluate("prog_line l; variable v; Select v such that Uses(l, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Uses(1, 'a')", 0, (int)evaluate("prog_line l; Select l such that Uses(1, \"a\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Uses(7, 'a')", 0, (int)evaluate("stmt s; Select s such that Uses(7, \"a\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Uses(v, l)", 0, (int)evaluate("while w; variable v; prog_line l; Select w such that Uses(v, l)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a; Uses(5, 'd')", 12, (int)evaluate("assign a; Select a such that Uses(5, \"d\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Uses(7, 'e')", 6, (int)evaluate("while w; Select w such that Uses(7, \"e\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Uses(a, v)", 26, (int)evaluate("stmt s; assign a; variable v; Select s such that Uses(a, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(a, _)", 8, (int)evaluate("assign a; Select a such that Uses(a,_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(w, _)", 6, (int)evaluate("while w; Select w such that Uses(w, _)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, _)", 22, (int)evaluate("stmt s; Select s such that Uses(s, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a; Uses(5, 'd')", 20, (int)evaluate("assign a; Select a such that Uses(5, \"d\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Uses(7, 'e')", 7, (int)evaluate("while w; Select w such that Uses(7, \"e\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Uses(a, v)", 38, (int)evaluate("stmt s; assign a; variable v; Select s such that Uses(a, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(a, _)", 12, (int)evaluate("assign a; Select a such that Uses(a,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(w, _)", 7, (int)evaluate("while w; Select w such that Uses(w, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(s, _)", 30, (int)evaluate("stmt s; Select s such that Uses(s, _)").size());
 
 	// Modifies
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(a, 'a')", 6, (int)evaluate("assign a; Select a such that Modifies(a, \"a\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(a, 'a')", 8, (int)evaluate("assign a; Select a such that Modifies(a, \"a\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(w, 'f')", 2,(int)evaluate("while w; Select w such that Modifies(w, \"f\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(s, 'e')", 3, (int)evaluate("stmt s; Select s such that Modifies(s, \"e\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(l, 'b')", 2, (int)evaluate("prog_line l; Select l such that Modifies(l, \"b\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(l, 'b')", 13, (int)evaluate("prog_line l; Select l such that Modifies(l, \"b\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(v, 'd')", 0, (int)evaluate("variable v; Select v such that Modifies(v, \"d\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(1, v)", (string)"a", evaluate("variable v; Select v such that Modifies(1, v)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(3, v)", 1, (int)evaluate("variable v; Select v such that Modifies(3, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(7, v)", 2, (int)evaluate("variable v; Select v such that Modifies(7, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(<a>, v)", 12,(int)evaluate("variable v; assign a; Select a such that Modifies(a, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(<w>, v)", 6,(int)evaluate("while w; variable v; Select w such that Modifies(w, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(<a>, v)", 20,(int)evaluate("variable v; assign a; Select a such that Modifies(a, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(<w>, v)", 7,(int)evaluate("while w; variable v; Select w such that Modifies(w, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(s, <v>)", 6,(int)evaluate("stmt s; variable v; Select v such that Modifies(s, v)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(v1, v2)", 0,(int)evaluate("variable v1, v2; Select v2 such that Modifies(v1, v2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Modifies(1, 'v')", 0, (int)evaluate("stmt s; Select s such that Modifies(1,\"v\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Modifies(7, 'a')", 0, (int)evaluate("prog_line l; Select l such that Modifies(7,\"a\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s1; Modifies(v, s2)", 0, (int)evaluate("stmt s1,s2; variable v; Select s1 such that Modifies(v, s2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v; Modifies(2, 'c')", 6, (int)evaluate("variable v; Select v such that Modifies(2,\"c\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Modifies(7, 'f')", 6, (int)evaluate("while w; Select w such that Modifies(7,\"f\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Modifies(a, v)", 6, (int)evaluate("while w; assign a; variable v; Select w such that Modifies(a, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(a, _)", 12, (int)evaluate("assign a; Select a such that Modifies(a, _)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(w, _)", 6, (int)evaluate("while w; Select w such that Modifies(w, _)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(s, _)", 26, (int)evaluate("stmt s; Select s such that Modifies(s, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Modifies(7, 'f')", 7, (int)evaluate("while w; Select w such that Modifies(7,\"f\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select w; Modifies(a, v)", 7, (int)evaluate("while w; assign a; variable v; Select w such that Modifies(a, v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(a, _)", 20, (int)evaluate("assign a; Select a such that Modifies(a, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(w, _)", 7, (int)evaluate("while w; Select w such that Modifies(w, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(s, _)", 38, (int)evaluate("stmt s; Select s such that Modifies(s, _)").size());
 
 	// Follows*
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(s, 3)", 2, (int)evaluate("stmt s; Select s such that Follows*(s, 3)").size());
@@ -152,14 +152,14 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(8, a)", (string)"10", evaluate("assign a; Select a such that Follows*(8, a)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(7, l)", (string)"11", evaluate("prog_line l; Select l such that Follows*(7, l)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(3, a)", 3, (int)evaluate("assign a; Select a such that Follows*(3, a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(<a1>, a2)", 4, (int)evaluate("assign a1, a2; Select a1 such that Follows*(a1, a2)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(<w>, a)", 3, (int)evaluate("assign a; while w; Select w such that Follows*(w, a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(<s>, w)", 6, (int)evaluate("stmt s; while w; Select s such that Follows*(s, w)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(s, <w>)", 3, (int)evaluate("stmt s; while w; Select w such that Follows*(s, w)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(a1, <a2>)", 4, (int)evaluate("assign a1, a2; Select a2 such that Follows*(a1, a2)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(<a1>, a2)", 8, (int)evaluate("assign a1, a2; Select a1 such that Follows*(a1, a2)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(<w>, a)", 4, (int)evaluate("assign a; while w; Select w such that Follows*(w, a)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(<s>, w)", 7, (int)evaluate("stmt s; while w; Select s such that Follows*(s, w)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(s, <w>)", 4, (int)evaluate("stmt s; while w; Select w such that Follows*(s, w)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(a1, <a2>)", 8, (int)evaluate("assign a1, a2; Select a2 such that Follows*(a1, a2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(v, <s>)", 0, (int)evaluate("variable v; stmt s; Select s such that Follows*(v, s)").size()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v; Follows*(l, w)", 6, (int)evaluate("prog_line l; while w; variable v; Select v such that Follows*(l, w)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Follows*(l1, l2)", 26, (int)evaluate("prog_line l1, l2; stmt s; Select s such that Follows*(l1, l2)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Follows*(l1, l2)", 38, (int)evaluate("prog_line l1, l2; stmt s; Select s such that Follows*(l1, l2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a; Follows*(1, 4)", 0, (int)evaluate("assign a; Select a such that Follows*(1, 4)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select a; Follows*(4, 11)", 0, (int)evaluate("assign a; Select a such that Follows*(4, 11)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l; Follows*(8, 9)", 0, (int)evaluate("prog_line l; Select l such that Follows*(8, 9)").size());
@@ -174,15 +174,15 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(a, 10)", 0, (int)evaluate("assign a; Select a such that Parent*(a, 10)").size()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(l, 8)", (string)"7", evaluate("prog_line l; Select l such that Parent*(l, 8)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(v, 9)", 0, (int)evaluate("variable v; Select v such that Parent*(v, 9)").size()); 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(w, <a>)", 5, (int)evaluate("while w; assign a; Select a such that Parent*(w, a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(w, <s>)", 10, (int)evaluate("stmt s; while w; Select s such that Parent*(w, s)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(w, <a>)", 11, (int)evaluate("while w; assign a; Select a such that Parent*(w, a)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(w, <s>)", 18, (int)evaluate("stmt s; while w; Select s such that Parent*(w, s)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(w1, <w2>)", 2, (int)evaluate("while w1, w2; Select w2 such that Parent*(w1, w2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, <v>)", 0, (int)evaluate("variable v; stmt s; Select v such that Parent*(s, v)").size()); 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<l>, s)", 10, (int)evaluate("prog_line l; stmt s; Select l such that Parent*(l, s)").size()); 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<l>, s)", 12, (int)evaluate("prog_line l; stmt s; Select l such that Parent*(l, s)").size()); 
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<s>, w)", (string)"7", evaluate("while w; stmt s; Select s such that Parent*(s, w)").front()); 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(<a>, w)", 0, (int)evaluate("assign a; while w; Select a such that Parent*(a, w)").size()); 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Parent*(w1, w2)", 26, (int)evaluate("while w1, w2; stmt s; Select s such that Parent*(w1, w2)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select s; Parent*(w1, w2)", 38, (int)evaluate("while w1, w2; stmt s; Select s such that Parent*(w1, w2)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v; Parent*(a, w)", 0, (int)evaluate("variable v; assign a; while w; Select v such that Parent*(a, w)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v, Parent*(7, 9)", 6, (int)evaluate("variable v; Select v such that Parent*(7, 9)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select l, Parent*(7, 6)", 0, (int)evaluate("prog_line l; Select l such that Parent*(7, 6)").size());
@@ -195,25 +195,25 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, 'f+2')", (string)"10", evaluate("assign a; Select a pattern a(_, \"f +2\")").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '1')", (string)"1", evaluate("assign a; Select a pattern a(_, \"1\")").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, '1 + 2 + 3 + a')", 0, (int)evaluate("assign a; Select a pattern a(_, \"1+2+3+a\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 12, (int)evaluate("assign a; Select a pattern a(_, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)", 20, (int)evaluate("assign a; Select a pattern a(_, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('e', '_f_')", 2, (int)evaluate("assign a; Select a pattern a(\"e\", _\"f\"_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('f', _'e+1'_)", (string)"9", evaluate("assign a; Select a pattern a(\"f\", _\"e+1\"_)").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'1'_)", 4, (int)evaluate("assign a; Select a pattern a(_, _ \"1\" _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'1'_)", 6, (int)evaluate("assign a; Select a pattern a(_, _ \"1\" _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('c', '_d+f+e_')", 0, (int)evaluate("assign a; Select a pattern a(\"c\", \"_d + f +e_\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('v', _)", 0, (int)evaluate("assign a; Select a pattern a(\"v\", _)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v; pattern a(v, _'d'_)", 2, (int)evaluate("variable v; assign a; Select v pattern a(v, _\"d\"_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Select v; pattern a(v, _'d'_)", 3, (int)evaluate("variable v; assign a; Select v pattern a(v, _\"d\"_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _''_)'", 0, (int)evaluate("assign a; Select a pattern a(_, _\"\"_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)'", 12, (int)evaluate("assign a; Select a pattern a(_, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _)'", 20, (int)evaluate("assign a; Select a pattern a(_, _)").size());
 	// exception handler
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('f', 'woot')", 0, (int)evaluate("assign a; Select a pattern a(\"f\", \"woot\")").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e+3*b'_)", 0, (int)evaluate("assign a; Select a pattern a(_, _\"e+3*b\"_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'e+3*b'_)", 1, (int)evaluate("assign a; Select a pattern a(_, _\"e+3*b\"_)").size());
 	
 	// while pattern
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('a', _)", (string)"3", evaluate("while w; Select w pattern w(\"a\", _)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', _)", (string)"7", evaluate("while w; Select w pattern w(\"b\", _)").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('a', _)", 2, (int)evaluate("while w; Select w pattern w(\"a\", _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('a', _)", 3, (int)evaluate("while w; Select w pattern w(\"a\", _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(v, _)", 3, (int)evaluate("variable v; while w; Select v pattern w(v, _)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(_, _)", 6, (int)evaluate("while w; Select w pattern w(_, _)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(_, _)", 7, (int)evaluate("while w; Select w pattern w(_, _)").size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(7, a) pattern a(_, _'f'_)", (string)"10", evaluate("assign a; Select a such that Parent(7, a) pattern a(_, _\"f\"_)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'f'_) Parent(7, a)", (string)"10", evaluate("assign a; Select a pattern a(_, _\"f\"_) such that Parent(7, a)").front());
@@ -221,29 +221,30 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('d', _) Follows(a,6)", (string)"5", evaluate("assign a; Select a pattern a(\"d\", _) such that Follows(a, 6)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(6, 'f') pattern a('e', _'a'_)", (string)"6", evaluate("assign a; variable v; Select a such that Uses(6, \"f\") pattern a(\"e\", _\"a\"_)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a('e', _'a'_) Uses(6, 'f')", (string)"6", evaluate("assign a; variable v; Select a pattern a(\"e\", _\"a\"_) such that Uses(6, \"f\")").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(a, 'c') pattern a(_, _'b + c'_)", 0, (int)evaluate("assign a; Select a such that Modifies(a, \"c\") pattern a (_, _\"b+c\"_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'b + c'_) Modifies(a, 'c')", 0, (int)evaluate("assign a; Select a pattern a (_, _\"b+c\"_) such that Modifies(a, \"c\")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(a, 'c') pattern a(_, _'b + c'_)", 1, (int)evaluate("assign a; Select a such that Modifies(a, \"c\") pattern a (_, _\"b+c\"_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(_, _'b + c'_) Modifies(a, 'c')", 1, (int)evaluate("assign a; Select a pattern a (_, _\"b+c\"_) such that Modifies(a, \"c\")").size());
 	// Assertion
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(w, 4) pattern w(_, _)", (string)"3", evaluate("while w; Select w such that Parent (w, 4) pattern w(_, _)").front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(_, _) Parent(w, 4)", (string)"3", evaluate("while w; Select w pattern w(_, _) such that Parent (w, 4)").front());
 
 	// case sensitive synonym
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("while w, W; Parent(<W>, w)", (string)"7", evaluate("while w, W; Select W such that Parent(W, w)").front());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("while W; assign w; Follows(W, <w>)", 3, (int)evaluate("while W; assign w; Select w such that Follows(W, w)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("while W; assign w; Follows(W, <w>)", 4, (int)evaluate("while W; assign w; Select w such that Follows(W, w)").size());
 	
 	// Values that are not suppose to be in queries
+	string beyondLastLine = "39";
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("assign a; Modifies(b, 'b')", 0, (int)evaluate("assign a; Select b such that Modifies(b, \"b\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*('b', s)", 0, (int)evaluate("Select s; Select s such that Parent*(\"b\", s)").size()); 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(27, s)", 0, (int)evaluate("Select s; Select s such that Parent*(27, s)").size()); 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, 27)", 0, (int)evaluate("Select s; Select s such that Parent*(s, 27)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(bigger than last line, s)", 0, (int)evaluate("Select s; Select s such that Parent*(" + beyondLastLine + ", s)").size()); 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent*(s, bigger than last line)", 0, (int)evaluate("Select s; Select s such that Parent*(s, " + beyondLastLine + ")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(a, 'a')", 0, (int)evaluate("assign a; Select a such that Follows*(a, \"a\")").size()); 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(s, 27)", 0, (int)evaluate("stmt s; Select s such that Follows*(s, 27)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(27, s)", 0, (int)evaluate("stmt s; Select s such that Follows*(27, s)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(w, 27)", 0, (int)evaluate("while w; Select w such that Parent(w, 27)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(27, a)", 0, (int)evaluate("assign a; Select a such that Parent(27, a)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(27, v)", 0, (int)evaluate("variable v; Select v such that Modifies(27, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(27, v)", 0, (int)evaluate("variable v; Select v such that Uses(27, v)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, 27)", 0, (int)evaluate("stmt s; Select s such that Follows(s, 27)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(s, bigger than last line)", 0, (int)evaluate("stmt s; Select s such that Follows*(s, " + beyondLastLine + ")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows*(bigger than last line, s)", 0, (int)evaluate("stmt s; Select s such that Follows*(" + beyondLastLine + ", s)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(w, bigger than last line)", 0, (int)evaluate("while w; Select w such that Parent(w, " + beyondLastLine + ")").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(bigger than last line, a)", 0, (int)evaluate("assign a; Select a such that Parent(" + beyondLastLine + ", a)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(bigger than last line, v)", 0, (int)evaluate("variable v; Select v such that Modifies(" + beyondLastLine + ", v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(bigger than last line, v)", 0, (int)evaluate("variable v; Select v such that Uses(" + beyondLastLine + ", v)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(s, bigger than last line)", 0, (int)evaluate("stmt s; Select s such that Follows(s, " + beyondLastLine + ")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(0, s)", 0, (int)evaluate("stmt s; Select s such that Follows(0, s)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(a, '_a_')", 0, (int)evaluate("assign a; Select a pattern a(_, \"_f_\"").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(a, _'a')", 0, (int)evaluate("assign a; Select a pattern a(_, \"_\"a\"").size());
@@ -258,15 +259,15 @@ void PQLTest::testPQL()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(c, 5)", 0, (int)evaluate("constant c; Select c such that Follows(c, 5)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w(c, _)", 0, (int)evaluate("while w; constant c; Select c pattern w(c, _)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern a(c, _)", 0, (int)evaluate("assign a; constant c; Select c pattern a(c, _)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(a,v) pattern a(v, _)", 2, (int)evaluate("assign a; variable v; Select v such that Uses(a,v) pattern a(v,_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(a,v) pattern a(v, _)", 3, (int)evaluate("assign a; variable v; Select a such that Uses(a,v) pattern a(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(a,v) pattern a(v, _)", 3, (int)evaluate("assign a; variable v; Select v such that Uses(a,v) pattern a(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(a,v) pattern a(v, _)", 4, (int)evaluate("assign a; variable v; Select a such that Uses(a,v) pattern a(v,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(a,v) pattern a(v, _)", 6, (int)evaluate("assign a; variable v; Select v such that Modifies(a,v) pattern a(v,_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(a,v) pattern a(v, _)", 12, (int)evaluate("assign a; variable v; Select a such that Modifies(a,v) pattern a(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(a,v) pattern a(v, _)", 20, (int)evaluate("assign a; variable v; Select a such that Modifies(a,v) pattern a(v,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(w,v) pattern w(v, _)", 3, (int)evaluate("while w; variable v; Select v such that Uses(w,v) pattern w(v,_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(w,v) pattern w(v, _)", 6, (int)evaluate("while w; variable v; Select w such that Uses(w,v) pattern w(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("uses(w,v) pattern w(v, _)", 7, (int)evaluate("while w; variable v; Select w such that Uses(w,v) pattern w(v,_)").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(w,v) pattern w(v, _)", 1, (int)evaluate("while w; variable v; Select v such that Modifies(w,v) pattern w(v,_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(w,v) pattern w(v, _)", 1, (int)evaluate("while w; variable v; Select w such that Modifies(w,v) pattern w(v,_)").size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("parent*(w,a) pattern a(v, _)", 4, (int)evaluate("assign a; while w; variable v; Select v such that Parent*(w,a) pattern a(v,_)").size()); 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("modifies(w,v) pattern w(v, _)", 2, (int)evaluate("while w; variable v; Select w such that Modifies(w,v) pattern w(v,_)").size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("parent*(w,a) pattern a(v, _)", 5, (int)evaluate("assign a; while w; variable v; Select v such that Parent*(w,a) pattern a(v,_)").size()); 
 }
 
 list<string> evaluate(string query)
