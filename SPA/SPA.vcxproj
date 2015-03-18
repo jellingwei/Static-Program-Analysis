@@ -21,7 +21,6 @@
     <ClCompile Include="..\source\ExpressionParser.cpp" />
     <ClCompile Include="..\source\FollowsTable.cpp" />
     <ClCompile Include="..\source\FrontEndController.cpp" />
-    <ClCompile Include="..\source\IntermediateValuesHandler.cpp" />
     <ClCompile Include="..\source\ModifiesTable.cpp" />
     <ClCompile Include="..\source\NextTable.cpp" />
     <ClCompile Include="..\source\ParentTable.cpp" />
@@ -40,6 +39,7 @@
     <ClCompile Include="..\source\Synonym.cpp" />
     <ClCompile Include="..\source\TNode.cpp" />
     <ClCompile Include="..\source\UsesTable.cpp" />
+    <ClCompile Include="..\source\ValuesHandler.cpp" />
     <ClCompile Include="..\source\VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -54,7 +54,6 @@
     <ClInclude Include="..\source\FollowsTable.h" />
     <ClInclude Include="..\source\FrontEndController.h" />
     <ClInclude Include="..\source\InputQueryParser.h" />
-    <ClInclude Include="..\source\IntermediateValuesHandler.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
     <ClInclude Include="..\source\NextTable.h" />
     <ClInclude Include="..\source\ParentTable.h" />
@@ -73,6 +72,7 @@
     <ClInclude Include="..\source\Synonym.h" />
     <ClInclude Include="..\source\TNode.h" />
     <ClInclude Include="..\source\UsesTable.h" />
+    <ClInclude Include="..\source\ValuesHandler.h" />
     <ClInclude Include="..\source\VarTable.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
