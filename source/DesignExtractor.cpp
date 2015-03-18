@@ -543,19 +543,47 @@ void DesignExtractor::setUsesForContainerStatements() {
  */
 class CompareProglines {
     public:
-    bool operator() (CNode* node1, CNode* node2) { 
-       return node1->getProcLineNumber() < node2->getProcLineNumber(); 
+    bool operator() (pair<CNode*, unordered_map<int, set<int> > >& pair1, pair<CNode*,  unordered_map<int, set<int> > >& pair2) { 
+       return pair1.first->getProcLineNumber() < pair2.first->getProcLineNumber(); 
+    }
+};
+
+class ReverseCompareProglines {
+    public:
+    bool operator() (pair<CNode*, unordered_map<int, set<int> > >& pair1, pair<CNode*,  unordered_map<int, set<int> > >& pair2) { 
+       return pair1.first->getProcLineNumber() > pair2.first->getProcLineNumber(); 
     }
 };
 
 
-void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variables, unordered_map<int, set<int>>& reachingDefinitions) {
-	int startingVarIndex = 1;
-	for (size_t i = startingVarIndex; i < variables.size(); i++) {		
-		if (variables[i] == 1) {
-			reachingDefinitions[i].insert(progLineNum);
+void resetVarsInMap(unordered_map<int, set<int>>& currentReachingDefs, vector<int> varDefToKill) {
+	for (auto iter = varDefToKill.begin(); iter != varDefToKill.end(); ++iter) {
+		int var = *iter;
+
+		if (currentReachingDefs.count(var) != 0) {
+			currentReachingDefs[var].clear();
+		}
+
+	}
+}
+
+void addVariablesToNodeReachingDef(CNode* node, unordered_map<int, set<int>> reachingDefinitions) {
+	unordered_map<int, set<int>> currentReachingDefOnNode = node->getReachingDefinitions();
+
+	for (auto iter = reachingDefinitions.begin(); iter != reachingDefinitions.end(); ++iter) {
+		int variable = iter->first;
+		set<int> updatedProgLines = iter->second;
+
+		// update node's reaching def for variable
+		if (currentReachingDefOnNode.count(variable) == 0) {
+			currentReachingDefOnNode[variable] = updatedProgLines;
+		} else {
+			currentReachingDefOnNode[variable].insert(updatedProgLines.begin(), updatedProgLines.end());
 		}
 	}
+
+	node->setReachingDefinitions(currentReachingDefOnNode);
+
 }
 
 /**
@@ -565,14 +593,55 @@ void addVariablesToMap(int progLineNum, boost::dynamic_bitset<> variables, unord
 void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 	PKB pkb = PKB::getInstance();
 	
-	priority_queue<CNode*, vector<CNode*>, CompareProglines> frontier;
+	priority_queue<pair<CNode*, unordered_map<int, set<int> > >, vector<pair<CNode*, unordered_map<int, set<int>> > >, CompareProglines> frontier;
  
-	set<pair<CNode*, boost::dynamic_bitset<> >> visited;
-	frontier.push(startNode);
-
+	set<pair<CNode*, unordered_map<int, set<int> > > > visited;
 	unordered_map<int, set<int>> reachingDefinition;
 
-	//@todo tmr
+	frontier.push(make_pair<CNode*, unordered_map<int, set<int> > >(startNode, reachingDefinition));
+
+	while (!frontier.empty()) {
+		pair<CNode*, unordered_map<int, set<int> > > currentState = frontier.top();  frontier.pop();
+		CNode* currentNode = currentState.first;
+		unordered_map<int, set<int> > currentReachingDefs = currentState.second;
+
+		// attach the current value of reaching definition to the node
+		bool attachReachingDefinition = (currentNode->getNodeType() == EndIf_C || currentNode->getNodeType() == While_C);
+		if (attachReachingDefinition) {
+			addVariablesToNodeReachingDef(currentNode, currentReachingDefs);
+		}
+		
+		// kill off definitions of variables modified by the current node
+		if (currentNode->getNodeType() == Assign_C || currentNode->getNodeType() == Call_C) {
+			vector<int> varDefToKill = pkb.getModVarForStmt(currentNode->getProcLineNumber());
+			resetVarsInMap(currentReachingDefs, varDefToKill);
+		}
+		// generate new definitions
+		if (currentNode->getNodeType() == Assign_C) {
+			int varDefToGenerate = pkb.getModVarForStmt(currentNode->getProcLineNumber()).at(0);
+
+			if (currentReachingDefs.count(varDefToGenerate) == 0) {
+				set<int> newSetOfProgline;
+				newSetOfProgline.insert(currentNode->getProcLineNumber());
+				currentReachingDefs[varDefToGenerate] = newSetOfProgline;
+			} else {
+				currentReachingDefs[varDefToGenerate].insert(currentNode->getProcLineNumber());
+			}
+		}
+
+		// get next nodes to put in the frontier
+		vector<CNode*>* nextNodes = currentNode->getAfter();
+
+		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
+			CNode* nextNode = *iter;
+			pair<CNode*, unordered_map<int, set<int> > > nextState(nextNode, currentReachingDefs);
+			if (visited.count(nextState) == 0) {
+				frontier.push(nextState);
+			}
+			visited.insert(nextState);
+		}
+
+	}
 	
 }
 
@@ -666,14 +735,12 @@ void DesignExtractor::precomputeInformationForAffects() {
 	setVariablesInside();
 
 	// set definitions reaching the dummy nodes
-	/*for (int i = 0; i < pkb.cfgTable.size(); i++) {
+	for (int i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
 
 		// traverse through cfg and update reaching definitions
 		updateReachingDefinitionsThroughCfg(cfg->getProcRoot());
-	}*/
-
-
+	}
 
 	// set first use of variables in container nodes
 	//for (int i = 0; i < pkb.cfgTable.size(); i++) {

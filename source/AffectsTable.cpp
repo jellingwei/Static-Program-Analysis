@@ -69,8 +69,8 @@ CNode* getMandatoryPrevNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> varia
 	CNODE_TYPE type = node->getNodeType();
 	vector<CNode*>* possiblePrevNodes = node->getBefore();
 
-	// handle special case for if statement
-	if (node->getVariablesInside2().size() > 0 && (node->getVariablesInside2() & variablesToMatch).none()) {
+	// handle special case for end if statement
+	if (node->getNodeType() == EndIf_C && node->getVariablesInside2().size() > 0 && (node->getVariablesInside2() & variablesToMatch).none()) {
 		// the else stmtList does not contain the variable,
 		// skip to the statement Following the node in the AST
 		vector<int> follows = pkb.getStmtFollowedTo(node->getProcLineNumber());
