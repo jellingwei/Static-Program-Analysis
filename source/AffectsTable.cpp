@@ -306,16 +306,40 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 			}
 		} 
 
+		// skip to future nodes if there is the required information attached
+		bool isReachingDefinitionAttached = (node->getNodeType() == EndIf_C || node->getNodeType() == While_C);
+		if (isReachingDefinitionAttached) {
+			unordered_map<int, set<int> > currentReachingDefs = node->getReachingDefinitions();
+			
+			for (int i = 0; i < variablesToMatch.size(); i++) {
+				if (variablesToMatch[i] == 0 || currentReachingDefs.count(i) == 0) {
+					continue;
+				}
+
+				set<int> procLinesToSkipTo = currentReachingDefs[i];
+				for (auto skipIter = procLinesToSkipTo.begin(); skipIter != procLinesToSkipTo.end(); ++skipIter) {
+					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
+
+					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
+					if (skipToNode && visited.count(nodePair) == 0 ) {
+						frontier.push(nodePair);
+					}
+				}		
+			}
+
+			continue;
+		}
+
 		CNode* prevNode = getMandatoryPrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch);
 		if (prevNode && visited.count(nodePair) == 0 ) {
-			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch));
+			frontier.push(nodePair);
 		}
 
 		CNode* possibleNode = getInsidePrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
 		if (possibleNode && visited.count(nodePair) == 0 ) {
-			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
+			frontier.push(nodePair);
 		}
 		
 	}
