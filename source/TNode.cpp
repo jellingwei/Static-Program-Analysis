@@ -37,6 +37,7 @@ TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value)
 	_nodeValueIdx = value;
 	_leftSibling = _rightSibling = NULL;
 	_parent = NULL;
+	_descendents = 0;
 }
 
 /**
@@ -58,6 +59,7 @@ TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value, TNode* parent)
 	_nodeValueIdx = value;
 	_parent = parent;
 	_leftSibling = _rightSibling = NULL;
+	_descendents = 0;
 }
 
 /**
@@ -190,6 +192,15 @@ void TNode::setParent(TNode* parent)
 	_parent = parent;
 }
 
+//@todo 
+void TNode::increaseDescendent(int toAdd) {
+	_descendents += toAdd;
+}
+
+//@todo 
+int TNode::getDescendent() {
+	return _descendents;
+}
 
 std::ostream& operator<<(std::ostream &strm, const TNode &node) 
 {

@@ -57,6 +57,7 @@ public:
 	bool isExists(TNode* node);
 	TNode* getLastImpt();
 	int getASTSize();
+	int getDescendentSize(TNode* node);
 
 	vector<int> patternMatchAssign(string RHS);
 	vector<int> patternMatchWhile(string LHS);

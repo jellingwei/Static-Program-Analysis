@@ -22,11 +22,25 @@ PatternMatch::PatternMatch()
  * @param isExact  a flag for exact or non-exact matching
  * @return a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node.
  */
-vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact)
+vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact, string usedOperand)
 {
 	PKB pkb = PKB::getInstance();
-	vector<int> assignTable = pkb.getStmtNumForType("assign");
-	
+	vector<int> assignTable;
+	if(_rootNodeQ->getDescendent() < 2) {
+		if(_rootNodeQ->getNodeType() == Variable) {
+			assignTable = pkb.getUsesStmtNum(_rootNodeQ->getNodeValueIdx());
+		} else if(_rootNodeQ->getNodeType() == Constant) {
+			assignTable = pkb.getStmtNum(_rootNodeQ->getNodeValueIdx());
+		}
+	} else if(_rootNodeQ->getDescendent() >= 2) {
+		if (isdigit(usedOperand.at(0))) {
+			assignTable = pkb.getStmtNum(stoi(usedOperand));
+		} else {
+			int toCheck = pkb.getVarIndex(usedOperand);
+			assignTable = pkb.getUsesStmtNum(toCheck);
+		}
+	}
+
 	TNode* _currentAssign; TNode* _rightChildNodeA;
 	vector<int> results;
 	TNODE_TYPE assignType = Assign, plusType = Plus, constType = Constant, varType = Variable;
@@ -34,30 +48,42 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact)
 	for(size_t i=0; i<assignTable.size(); i++) 
 	{
 		_currentAssign = pkb.getNodeForStmt(assignTable.at(i));
-		_rightChildNodeA = _currentAssign->getChildren()->at(1);
+		if(_currentAssign->getNodeType() == Assign) {
+			_rightChildNodeA = _currentAssign->getChildren()->at(1);
 
-		if((_rootNodeQ->getNodeType() == Constant) || (_rootNodeQ->getNodeType() == Variable))
-		{
-			vector<int> tempResults = SingleVariableConstant(_rightChildNodeA, _rootNodeQ, isExact);
-			results.insert( results.end(), tempResults.begin(), tempResults.end() );
+			if((_rootNodeQ->getNodeType() == Constant) || (_rootNodeQ->getNodeType() == Variable))
+			{
+				vector<int> tempResults = SingleVariableConstant(_rightChildNodeA, _rootNodeQ, isExact);
+				results.insert( results.end(), tempResults.begin(), tempResults.end() );
 			
-			if(!isExact) break;
-		}
-		else {
-			if(checkPatternMatchAssign(_rightChildNodeA, _rootNodeQ, isExact))
-			{
-				results.push_back(_rightChildNodeA->getStmtNumber());
+				if(!isExact) break;
 			}
-			else 
-			{
-				if(!isExact && _rightChildNodeA->getChildren()->size() > 0) {
-					if(recurseChecking(_rightChildNodeA->getChildren(), _rootNodeQ, isExact))
+			else {
+				bool skipThis = true;
+				if(isExact) {
+					if(pkb.getDescendentSize(_rightChildNodeA) != pkb.getDescendentSize(_rootNodeQ)) skipThis = false;
+				} else {
+					if(pkb.getDescendentSize(_rightChildNodeA) < pkb.getDescendentSize(_rootNodeQ)) skipThis = false;
+				}
+			
+				if(skipThis) {
+					if(checkPatternMatchAssign(_rightChildNodeA, _rootNodeQ, isExact))
+					{
 						results.push_back(_rightChildNodeA->getStmtNumber());
+					}
+					else 
+					{
+						if(!isExact && _rightChildNodeA->getChildren()->size() > 0) {
+							if(recurseChecking(_rightChildNodeA->getChildren(), _rootNodeQ, isExact))
+								results.push_back(_rightChildNodeA->getStmtNumber());
+						}
+					}
 				}
 			}
+		} else {
+			continue;
 		}
 	}
-
 	return results;
 }
 

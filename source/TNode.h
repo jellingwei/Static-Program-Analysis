@@ -32,6 +32,9 @@ public:
 	TNode* getRightSibling();
 
 	void setParent(TNode* parent);
+	
+	void increaseDescendent(int toAdd);
+	int getDescendent();
 
 private:
 	TNODE_TYPE _nodeType;
@@ -41,6 +44,7 @@ private:
 	vector<TNode*> _children;
 	TNode* _leftSibling;
 	TNode* _rightSibling;
+	int _descendents;
 
 	friend std::ostream& operator<<(std::ostream&, const TNode&);
 
