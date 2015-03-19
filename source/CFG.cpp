@@ -346,7 +346,7 @@ TNode* CFG::getASTref(CNode* node) {
 * @param CFGlast  the last CNode in CFG
 */
 void CFG::setEndNode(CNode* CFGlast) {
-	CFGlast->addAfter(_endNode);
+	createLink(After, CFGlast, _endNode);
 }
 
 /**
