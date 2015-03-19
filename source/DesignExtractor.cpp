@@ -583,7 +583,86 @@ void addVariablesToNodeReachingDef(CNode* node, unordered_map<int, set<int>> rea
 	}
 
 	node->setReachingDefinitions(currentReachingDefOnNode);
+}
 
+void addVariablesToNodeFirstUse(CNode* node, unordered_map<int, set<int>> firstUse) {
+	unordered_map<int, set<int>> currentFirstUseOnNode = node->getFirstUseOfVariable();
+
+	for (auto iter = firstUse.begin(); iter != firstUse.end(); ++iter) {
+		int variable = iter->first;
+		set<int> updatedProgLines = iter->second;
+
+		// update node's first use  for variable
+		if (currentFirstUseOnNode.count(variable) == 0) {
+			currentFirstUseOnNode[variable] = updatedProgLines;
+		} else {
+			currentFirstUseOnNode[variable].insert(updatedProgLines.begin(), updatedProgLines.end());
+		}
+	}
+
+	node->setFirstUseOfVariable(currentFirstUseOnNode);
+}
+
+
+/**
+ * Traverse through the CFG using priority queue, with progline numbers as priority, while maintaining the values for the definitions.
+ * @param endNode the CNode used to start traversing the CFG. In this case, the last node in the cfg
+ */
+void updateFirstUseOfVarThroughCfg(CNode* endNode) {
+	PKB pkb = PKB::getInstance();
+	
+	priority_queue<pair<CNode*, unordered_map<int, set<int> > >, vector<pair<CNode*, unordered_map<int, set<int>> > >, ReverseCompareProglines> frontier;
+ 
+	set<pair<CNode*, unordered_map<int, set<int> > > > visited;
+	unordered_map<int, set<int>> firstUseOfVariable;
+
+	frontier.push(make_pair<CNode*, unordered_map<int, set<int> > >(endNode, firstUseOfVariable));
+
+	while (!frontier.empty()) {
+		pair<CNode*, unordered_map<int, set<int> > > currentState = frontier.top();  frontier.pop();
+		CNode* currentNode = currentState.first;
+		unordered_map<int, set<int> > currentFirstUse = currentState.second;
+
+		// attach the current value of first use to the node
+		bool attachFirstUse = (currentNode->getNodeType() == If_C || currentNode->getNodeType() == While_C);
+		if (attachFirstUse) {
+			addVariablesToNodeFirstUse(currentNode, currentFirstUse);
+		}
+		
+		// kill off use of variables used by the current node
+		if (currentNode->getNodeType() == Assign_C || currentNode->getNodeType() == Call_C) {
+			vector<int> varUseToRemove = pkb.getUsesVarForStmt(currentNode->getProcLineNumber());
+			resetVarsInMap(firstUseOfVariable, varUseToRemove);
+		}
+		// generate new use
+		if (currentNode->getNodeType() == Assign_C) {
+			vector<int> varUseToGenerate = pkb.getUsesVarForStmt(currentNode->getProcLineNumber());
+
+			for (int i = 0; i <varUseToGenerate.size(); i++) {
+				int varGenerated = varUseToGenerate[i];
+				if (currentFirstUse.count(varGenerated) == 0) {
+					set<int> newSetOfProgline;
+					newSetOfProgline.insert(currentNode->getProcLineNumber());
+					currentFirstUse[varGenerated] = newSetOfProgline;
+				} else {
+					currentFirstUse[varGenerated].insert(currentNode->getProcLineNumber());
+				}
+			}
+		}
+
+		// get next nodes to put in the frontier
+		vector<CNode*>* nextNodes = currentNode->getBefore();
+
+		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
+			CNode* nextNode = *iter;
+			pair<CNode*, unordered_map<int, set<int> > > nextState(nextNode, currentFirstUse);
+			if (visited.count(nextState) == 0) {
+				frontier.push(nextState);
+			}
+			visited.insert(nextState);
+		}
+	}
+	
 }
 
 /**
@@ -718,10 +797,8 @@ void setVariablesInside() {
 					ifEndNode->setVariablesInside2(updatedInsideVariables);
 				}
 			} 
-
 		}
 	}
-
 }
 
 
@@ -743,11 +820,11 @@ void DesignExtractor::precomputeInformationForAffects() {
 	}
 
 	// set first use of variables in container nodes
-	//for (int i = 0; i < pkb.cfgTable.size(); i++) {
-		//CFG* cfg = pkb.cfgTable.at(i); 
+	for (int i = 0; i < pkb.cfgTable.size(); i++) {
+		CFG* cfg = pkb.cfgTable.at(i); 
 
 		// traverse through cfg and update reaching definitions
-		//updateFirstUseThroughCfg(cfg->getProcRoot());
-	//}
+		updateFirstUseOfVarThroughCfg(cfg->getProcEnd());
+	}
 
 }

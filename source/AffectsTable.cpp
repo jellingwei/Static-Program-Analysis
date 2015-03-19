@@ -20,16 +20,6 @@ bool AffectsTable::isAffects(int progLine1, int progLine2, bool transitiveClosur
 }
 
 
-bool isNodeCandidateForSkippingAhead() {
-	// @todo
-	return false;
-}
-
-vector<CNode*> getNodesToSkipTo() {
-	//@todo
-	return vector<CNode*>();
-}
-
 // assumes that each node has only 1 non-inside node directly connected After it
 CNode* getMandatoryNextNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> variablesToMatch) {
 	PKB pkb = PKB::getInstance();
@@ -225,6 +215,30 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 				continue;
 			}
 		} 
+
+		// skip to future nodes if there is the required information attached
+		bool isFirstUseAttached = (node->getNodeType() == If_C || node->getNodeType() == While_C);
+		if (isFirstUseAttached) {
+			unordered_map<int, set<int> > currentFirstUse = node->getFirstUseOfVariable();
+			
+			for (int i = 0; i < variablesToMatch.size(); i++) {
+				if (variablesToMatch[i] == 0 || currentFirstUse.count(i) == 0) {
+					continue;
+				}
+
+				set<int> procLinesToSkipTo = currentFirstUse[i];
+				for (auto skipIter = procLinesToSkipTo.begin(); skipIter != procLinesToSkipTo.end(); ++skipIter) {
+					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
+
+					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
+					if (skipToNode && visited.count(nodePair) == 0 ) {
+						frontier.push(nodePair);
+					}
+				}		
+			}
+
+			continue;
+		}
 
 		CNode* nextNode = getMandatoryNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(nextNode, variablesToMatch);
