@@ -1,0 +1,25 @@
+procedure One {
+  a = 1;  \\1
+  b = a + 1;  \\2
+  c = (a - f) * e; \\3
+  a = b + d - s;  \\4
+  e = a * c - (1 * d);  \\5
+  calls Two;  \\6
+  e = a + e;} \\7
+
+procedure Two {
+  a = 1;        \\8
+  z = x - y;      \\9
+  while x {     \\10
+    x = y - e + 2;    \\11
+    c = a + z - c;      \\12
+    a = ((2 + x) * c) + d;    \\13
+  }
+  f = a - z - f;    \\14
+  f = x + a * f - k;  \\15
+  z = f * b - c;    \\16
+}
+
+procedure Three {
+  a = 1;
+}
