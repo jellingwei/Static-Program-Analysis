@@ -606,7 +606,7 @@ TRUE
 45010 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 25 with a2.stmt# = 27
-TRUE
+FALSE
 5000
 46001 - Q46
 assign a1, a2;
@@ -631,7 +631,7 @@ none
 47001 - Q47
 assign a1, a2;
 Select a2 such that Affects (a1, a2) with a1.stmt# = 1
-1,2,3,5
+2,3,5
 5000
 47002 - Q47
 assign a1, a2;
@@ -700,7 +700,7 @@ Select a1 such that Affects* (a1, a2) with a2.stmt# = 13
 5000
 49003 - Q49
 assign a1, a2;
-Select a1 such that Affects* (a1, a2) with a2.stmt# = 2
+Select a1 such that Affects* (a1, a2) with a2.stmt# = 22
 19,21
 5000
 49004 - Q49
