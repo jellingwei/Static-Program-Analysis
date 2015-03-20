@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <queue>
 #include <cassert>
+#include <time.h>
 
 #include "DesignExtractor.h"
 #include "TNode.h"
@@ -257,7 +258,7 @@ CNode* createNextNode(TNode* nextStmt, CFG* cfg, CNode* header = NULL) {
 
 CNode* createDummyEndIfNode(CFG* cfg, TNode* ifStmtListNode, CNode* lastNodeInIf, CNode* lastNodeInElse, CNode* curCNode) {
 	CNode* IfEndNode = cfg->createCNode(EndIf_C, 
-										NULL,
+										-1 * curCNode->getProcLineNumber() ,
 										NULL, ifStmtListNode);
 
 			
@@ -544,27 +545,29 @@ void DesignExtractor::setUsesForContainerStatements() {
 class CompareProglines {
     public:
     bool operator() (pair<CNode*, unordered_map<int, set<int> > >& pair1, pair<CNode*,  unordered_map<int, set<int> > >& pair2) { 
-       return pair1.first->getProcLineNumber() < pair2.first->getProcLineNumber(); 
+       return pair1.first->getProcLineNumber() > pair2.first->getProcLineNumber(); 
     }
 };
 
 class ReverseCompareProglines {
     public:
     bool operator() (pair<CNode*, unordered_map<int, set<int> > >& pair1, pair<CNode*,  unordered_map<int, set<int> > >& pair2) { 
-       return pair1.first->getProcLineNumber() > pair2.first->getProcLineNumber(); 
+       return pair1.first->getProcLineNumber() < pair2.first->getProcLineNumber(); 
     }
 };
 
 
-void resetVarsInMap(unordered_map<int, set<int>>& currentReachingDefs, vector<int> varDefToKill) {
+unordered_map<int, set<int>> resetVarsInMap(unordered_map<int, set<int>> currentReachingDefs, vector<int> varDefToKill) {
 	for (auto iter = varDefToKill.begin(); iter != varDefToKill.end(); ++iter) {
 		int var = *iter;
 
 		if (currentReachingDefs.count(var) != 0) {
 			currentReachingDefs[var].clear();
+			currentReachingDefs.erase(var);
 		}
 
 	}
+	return currentReachingDefs;
 }
 
 void addVariablesToNodeReachingDef(CNode* node, unordered_map<int, set<int>> reachingDefinitions) {
@@ -613,7 +616,7 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 	
 	priority_queue<pair<CNode*, unordered_map<int, set<int> > >, vector<pair<CNode*, unordered_map<int, set<int>> > >, ReverseCompareProglines> frontier;
  
-	set<pair<CNode*, unordered_map<int, set<int> > > > visited;
+	unordered_map<int, unordered_map<int, set<int> > > visited;
 	unordered_map<int, set<int>> firstUseOfVariable;
 
 	frontier.push(make_pair<CNode*, unordered_map<int, set<int> > >(endNode, firstUseOfVariable));
@@ -622,17 +625,38 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 		pair<CNode*, unordered_map<int, set<int> > > currentState = frontier.top();  frontier.pop();
 		CNode* currentNode = currentState.first;
 		unordered_map<int, set<int> > currentFirstUse = currentState.second;
+		cout << "at... " << currentNode->getProcLineNumber() << " size of uses = " << currentFirstUse.size() << " , " << endl; 
 
 		// attach the current value of first use to the node
 		bool attachFirstUse = (currentNode->getNodeType() == If_C || currentNode->getNodeType() == While_C);
 		if (attachFirstUse) {
 			addVariablesToNodeFirstUse(currentNode, currentFirstUse);
+			cout << "----" << endl;
+			for (auto iter = currentFirstUse.begin() ; iter != currentFirstUse.end(); ++iter) {
+				cout << iter->first<< " [ " << (iter->second).size() << "] : " ;
+				for (auto iter2 = iter->second.begin() ; iter2 != iter->second.end(); ++iter2) {
+					cout << *iter2 << ",";
+				}cout << endl;
+			}  
 		}
 		
 		// kill off use of variables used by the current node
 		if (currentNode->getNodeType() == Assign_C || currentNode->getNodeType() == Call_C) {
 			vector<int> varUseToRemove = pkb.getUsesVarForStmt(currentNode->getProcLineNumber());
-			resetVarsInMap(firstUseOfVariable, varUseToRemove);
+			vector<int> varMod = pkb.getModVarForStmt(currentNode->getProcLineNumber());
+			varUseToRemove.insert(varUseToRemove.end(), varMod.begin(), varMod.end());
+
+			cout << "reseting ... " << endl;
+			cout << "----" << endl;
+			for (auto iter = currentFirstUse.begin() ; iter != currentFirstUse.end(); ++iter) {
+				cout << iter->first<< " [ " << (iter->second).size() << "] : " ;
+				for (auto iter2 = iter->second.begin() ; iter2 != iter->second.end(); ++iter2) {
+					cout << *iter2 << ",";
+				}cout << endl;
+			}  
+
+			firstUseOfVariable = resetVarsInMap(firstUseOfVariable, varUseToRemove);
+		
 		}
 		// generate new use
 		if (currentNode->getNodeType() == Assign_C) {
@@ -648,6 +672,7 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 					currentFirstUse[varGenerated].insert(currentNode->getProcLineNumber());
 				}
 			}
+			cout << "gen" << endl;
 		}
 
 		// get next nodes to put in the frontier
@@ -656,10 +681,51 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* nextNode = *iter;
 			pair<CNode*, unordered_map<int, set<int> > > nextState(nextNode, currentFirstUse);
-			if (visited.count(nextState) == 0) {
-				frontier.push(nextState);
+
+			bool isNotVisited = false;
+			if (visited.count(nextNode->getProcLineNumber()) == 0)  {
+				isNotVisited = true;   // the current progline has not appeared in visited yet
+			} else {
+				unordered_map<int, set<int> > definitionInVisited = visited.at(nextNode->getProcLineNumber());
+
+				// check if all keys in currentReachingDefs are already in definitionInVisited
+				// and if they are, whether or not the values are the same
+				for (auto defIter = currentFirstUse.begin(); defIter != currentFirstUse.end(); ++defIter) {
+					int key = defIter->first;
+					set<int> procLines = defIter->second;
+
+					bool isAllProcLinesInVisited = true;
+					for (auto currentReachingIter = procLines.begin(); currentReachingIter != procLines.end(); ++currentReachingIter) {
+						if (find(definitionInVisited[key].begin(), definitionInVisited[key].end(), *currentReachingIter) == definitionInVisited[key].end()) {
+							isAllProcLinesInVisited = false;
+						}
+					}
+
+					// if var isn't in the state, or if the proglines associated with the var is different
+					if (definitionInVisited.count(key) == 0 || !isAllProcLinesInVisited) {
+						isNotVisited = true;
+						continue;
+					} 
+				}
 			}
-			visited.insert(nextState);
+			
+			if (isNotVisited) {
+				frontier.push(nextState);
+
+				// update visited
+				if (visited.count(nextNode->getProcLineNumber()) == 0) {
+					visited[nextNode->getProcLineNumber()] = currentFirstUse;
+				} else {
+					for (auto defIter = currentFirstUse.begin(); defIter != currentFirstUse.end(); ++defIter) {
+						if (visited[nextNode->getProcLineNumber()].count(defIter->first) > 0) {
+							set<int> progLinesToAdd = defIter->second;
+							visited[nextNode->getProcLineNumber()][defIter->first].insert(progLinesToAdd.begin(), progLinesToAdd.end());
+						} else {
+							visited[nextNode->getProcLineNumber()].insert(make_pair<int, set<int> >(defIter->first, defIter->second));
+						}
+					}
+				}	
+			} 	
 		}
 	}
 	
@@ -673,8 +739,8 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 	PKB pkb = PKB::getInstance();
 	
 	priority_queue<pair<CNode*, unordered_map<int, set<int> > >, vector<pair<CNode*, unordered_map<int, set<int>> > >, CompareProglines> frontier;
- 
-	set<pair<CNode*, unordered_map<int, set<int> > > > visited;
+
+	unordered_map<int, unordered_map<int, set<int> > > visited;
 	unordered_map<int, set<int>> reachingDefinition;
 
 	frontier.push(make_pair<CNode*, unordered_map<int, set<int> > >(startNode, reachingDefinition));
@@ -693,7 +759,8 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 		// kill off definitions of variables modified by the current node
 		if (currentNode->getNodeType() == Assign_C || currentNode->getNodeType() == Call_C) {
 			vector<int> varDefToKill = pkb.getModVarForStmt(currentNode->getProcLineNumber());
-			resetVarsInMap(currentReachingDefs, varDefToKill);
+
+			currentReachingDefs = resetVarsInMap(currentReachingDefs, varDefToKill);
 		}
 		// generate new definitions
 		if (currentNode->getNodeType() == Assign_C) {
@@ -711,13 +778,56 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 		// get next nodes to put in the frontier
 		vector<CNode*>* nextNodes = currentNode->getAfter();
 
+		unordered_map<int, set<int> > prevReachingDef = currentReachingDefs;
+
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* nextNode = *iter;
 			pair<CNode*, unordered_map<int, set<int> > > nextState(nextNode, currentReachingDefs);
-			if (visited.count(nextState) == 0) {
-				frontier.push(nextState);
+
+			bool isNotVisited = false;
+			if (visited.count(nextNode->getProcLineNumber()) == 0)  {
+				isNotVisited = true;   // the current progline has not appeared in visited yet
+			} else {
+				unordered_map<int, set<int> > definitionInVisited = visited.at(nextNode->getProcLineNumber());
+
+				// check if all keys in currentReachingDefs are already in definitionInVisited
+				// and if they are, whether or not the values are the same
+				for (auto defIter = currentReachingDefs.begin(); defIter != currentReachingDefs.end(); ++defIter) {
+					int key = defIter->first;
+					set<int> procLines = defIter->second;
+
+					bool isAllProcLinesInVisited = true;
+					for (auto currentReachingIter = procLines.begin(); currentReachingIter != procLines.end(); ++currentReachingIter) {
+						if (find(definitionInVisited[key].begin(), definitionInVisited[key].end(), *currentReachingIter) == definitionInVisited[key].end()) {
+							isAllProcLinesInVisited = false;
+						}
+					}
+
+					// if var isn't in the state, or if the proglines associated with the var is different
+					if (definitionInVisited.count(key) == 0 || !isAllProcLinesInVisited) {
+						isNotVisited = true;
+						continue;
+					} 
+				}
 			}
-			visited.insert(nextState);
+			
+			if (isNotVisited) {
+				frontier.push(nextState);
+
+				// update visited
+				if (visited.count(nextNode->getProcLineNumber()) == 0) {
+					visited[nextNode->getProcLineNumber()] = currentReachingDefs;
+				} else {
+					for (auto defIter = currentReachingDefs.begin(); defIter != currentReachingDefs.end(); ++defIter) {
+						if (visited[nextNode->getProcLineNumber()].count(defIter->first) > 0) {
+							set<int> progLinesToAdd = defIter->second;
+							visited[nextNode->getProcLineNumber()][defIter->first].insert(progLinesToAdd.begin(), progLinesToAdd.end());
+						} else {
+							visited[nextNode->getProcLineNumber()].insert(make_pair<int, set<int> >(defIter->first, defIter->second));
+						}
+					}
+				}	
+			} 	
 		}
 
 	}
@@ -810,21 +920,33 @@ void DesignExtractor::precomputeInformationForAffects() {
 	
 	// set variables inside..
 	setVariablesInside();
+	cout << "End of step 1 in precomputations " << endl;
 
 	// set definitions reaching the dummy nodes
 	for (int i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
+		int times,timed;
+		times=clock();
+
+		cout << "at iteration " << i << " in step 2" <<  endl;
 
 		// traverse through cfg and update reaching definitions
 		updateReachingDefinitionsThroughCfg(cfg->getProcRoot());
+
+		timed=clock();
+		times=timed-times;
+		cout << "ticks from start to end" << times;
 	}
+	cout << "End of step 2 in precomputations " << endl;
 
 	// set first use of variables in container nodes
 	for (int i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
+		cout << "at iteration " << i << " in step 3" <<  endl;
 
 		// traverse through cfg and update reaching definitions
 		updateFirstUseOfVarThroughCfg(cfg->getProcEnd());
 	}
+	cout << "End of step 3 in precomputations " << endl;
 
 }
