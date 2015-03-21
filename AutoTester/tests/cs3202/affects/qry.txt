@@ -1,0 +1,390 @@
+1001 - Valid Affects
+assign a;
+Select BOOLEAN such that Affects(1,2)
+TRUE
+5000
+1002 - Valid Affects with stmts in between
+assign a;
+Select BOOLEAN such that Affects(1, 3)
+TRUE
+5000
+1003 - Valid Affects Redundant 
+assign a; call c;
+Select c such that Affects(1,3)
+none
+5000
+1004 - Valid Affects all assign affected by a
+assign a;
+Select a such that Affects(1,a)
+2,3
+5000
+1005 - Valid Affects all assign affects a
+assign a;
+Select a such that Affects(a,7)
+5
+5000
+1006 - Valid Affects over calls
+assign a;
+Select BOOLEAN such that Affects(5, 7)
+TRUE
+5000
+1007 - Valid Affects outside to inside while
+assign a;
+Select BOOLEAN such that Affects(8,12)
+TRUE
+5000
+1008 - Valid Affects inside to outside while
+assign a;
+Select BOOLEAN such that Affects(13,15)
+TRUE
+5000
+1009 - Valid Affects same line in while
+assign a;
+Select BOOLEAN such that Affects(12,12)
+TRUE
+5000
+1010 - Valid Affects after then before in while
+assign a;
+Select BOOLEAN such that Affects(13, 12)
+TRUE
+5000
+1011 - Valid Affects over while
+assign a;
+Select BOOLEAN such that Affects(9,14)
+TRUE
+5000
+1012 - Valid Affects while all assign affects by
+assign a;
+Select a such that Affects(8,a)
+12, 14,15
+5000
+1013 - Valid Affects while all assign affects
+assign a;
+Select a such that Affects(a,15)
+11,13,8,14
+5000
+1014 - Valid Affects outside to inside if
+assign a;
+Select BOOLEAN such that Affects(17, 22)
+TRUE
+5000
+1015 - Valid Affects outside to inside else
+assign a;
+Select BOOLEAN such that Affects(17,24)
+TRUE
+5000
+1016 - Valid Affects inside if to outside
+assign a;
+Select BOOLEAN such that Affects(21, 25)
+TRUE
+5000
+1017 - Valid Affects inside else to outside
+assign a;
+Select BOOLEAN such that Affects(24,25)
+TRUE
+5000
+1018 - Valid Affects over if blocked else
+assign a;
+Select BOOLEAN such that Affects(18, 25)
+TRUE
+5000
+1019 - Valid Affects over if blocked if
+assign a;
+Select BOOLEAN such that Affects(19, 25)
+TRUE
+5000
+1020 - Valid Affects if all assign affects by
+assign a;
+Select a such that Affects(17, a)
+22,24
+5000
+1021 - Valid Affects if all assign affects
+assign a;
+Select a such that Affects(a, 25)
+24,23,18,21,19
+5000
+1022 - Valid Affects all assign affects an assign
+assign a1,a2;
+Select a1 such that Affects(a1, a2)
+1,2,3,4,5,8,9,11,12,13,14,15,17,18,19,21,23,24,25,28,29,30,33,34,36,40,42
+5000
+1023 - Valid Affects all assign affects by an assign 
+assign a1,a2;
+Select a2 such that Affects(a1, a2)
+45,44,43,42,40,39,36,34,31,30,29,26,27,24,23,22,16,15,14,13,12,7,5,4,3,2
+5000
+1024 - Valid Affects _,a
+assign a;
+Select a such that Affects(_,a)
+45,44,43,42,40,39,36,34,31,30,29,26,27,24,23,22,16,15,14,13,12,7,5,4,3,2
+5000
+1025 - Valid Affects a,_
+assign a;
+Select a such that Affects(a,_)
+1,2,3,4,5,8,9,11,12,13,14,15,17,18,19,21,23,24,25,28,29,30,33,34,36,40,42
+5000
+1026 - Valid Affects _,_
+assign a;
+Select a such that Affects(_,_)
+1,2,3,4,5,7,8,9,11,12,13,14,15,16,17,18,19,21,,22,23,24,25,26,28,29,30,31,33,34,36,37,39,40,42,43,44,45,46,48,49,50
+5000
+1027 - Valid Affects LHS stmt
+assign a; stmt s;
+Select a such that Affects(s, a)
+45,44,43,42,40,39,36,34,31,30,29,26,27,24,23,22,16,15,14,13,12,7,5,4,3,2
+5000
+1028 - Valid Affects LHS prog_line
+assign a; prog_line l;
+Select a such that Affects(l, a)
+45,44,43,42,40,39,36,34,31,30,29,26,27,24,23,22,16,15,14,13,12,7,5,4,3,2
+5000
+1029 - Valid Affects RHS stmt
+assign a; stmt s;
+Select a such that Affects(a, s)
+1,2,3,4,5,8,9,11,12,13,14,15,17,18,19,21,23,24,25,28,29,30,33,34,36,40,42
+5000
+1030 - Valid Affects RHS prog_line
+assign a; prog_line l;
+Select a such that Affects(a, l)
+1,2,3,4,5,8,9,11,12,13,14,15,17,18,19,21,23,24,25,28,29,30,33,34,36,40,42
+5000
+2001 - Invalid Affects not affects
+assign a;
+Select BOOLEAN such that Affects(1, 4)
+FALSE
+5000
+2002 - Invalid Affects indirect
+assign a;
+Select BOOLEAN such that Affects(1, 5)
+FALSE
+5000
+2003 - Invalid Affects redundant
+assign a;
+Select a such that Affects(1,5)
+none
+5000
+2004 - Invalid Affects over calls
+assign a;
+Select BOOLEAN such that Affects(4, 7)
+FALSE
+5000
+2005 - Invalid Affects LHS call
+assign a; call c;
+Select a such that Affects(c,a)
+none
+5000
+2006 - Invalid Affects LHS constant
+assign a; constant c;
+Select a such that Affects(c,a)
+none
+5000
+2007 - Invalid Affects LHS if
+assign a; if i;
+Select a such that Affects(i,a)
+none
+5000
+2008 - Invalid Affects LHS procedure
+assign a; procedure p;
+Select a such that Affects(p,a)
+none
+5000
+2009 - Invalid Affects LHS variable
+assign a; variable v;
+Select a such that Affects(v,a)
+none
+5000
+2010 - Invalid Affects RHS call
+assign a; call c;
+Select a such that Affects(a,c)
+none
+5000
+2011 - Invalid Affects RHS constant
+assign a; constant c;
+Select a such that Affects(a,c)
+none
+5000
+2012 - Invalid Affects RHS if
+assign a; if i;
+Select a such that Affects(a,i)
+none
+5000
+2013 - Invalid Affects RHS procedure
+assign a; procedure p;
+Select a such that Affects(a,p)
+none
+5000
+2014 - Invalid Affects RHS variable
+assign a; variable v;
+Select a such that Affects(a,v)
+none
+5000
+2015 - Invalid Affects cross procedure
+assign a;
+Select BOOLEAN such that Affects(7, 30)
+FALSE
+5000
+2016 - Invalid Affects over if
+assign a;
+Select BOOLEAN such that Affects(46, 50)
+FALSE
+5000
+3001 - Valid Affects* direct
+assign a;
+Select BOOLEAN such that Affects*(1, 3)
+TRUE
+5000
+3002 - Valid Affects* indirect
+assign a;
+Select BOOLEAN such that Affects*(1, 5)
+TRUE
+5000
+3003 - Valid Affects* indirect diff variable
+assign a;
+Select BOOLEAN such that Affects*(2,5)
+TRUE
+5000
+3004 - Valid Affects* Redundant
+constant c;
+Select c such that Affects*(1,5)
+none
+5000
+3005 - Valid Affects* all assign affects* by a
+assign a;
+Select a such that Affects*(1, a)
+2,4,5,7,3
+5000
+3006 - Valid Affects* all assign affects* a
+assign a;
+Select a such that Affects*(a,7)
+5,4,3,2,1
+5000
+3007 - Valid Affects* over calls
+assign a;
+Select BOOLEAN such that Affects*(1,7)
+TRUE
+5000
+3008 - Valid Affects* through while
+assign a;
+Select BOOLEAN such that Affects*(8,16)
+TRUE
+5000
+3009 - Valid Affects* through if 
+assign a;
+Select BOOLEAN such that Affects*(17,26)
+TRUE
+5000
+3010 - Valid Affects* through if and while
+assign a;
+Select BOOLEAN such that Affects*(28,36)
+TRUE
+5000
+3011 - Valid Affects* loop through if and while
+assign a;
+Select BOOLEAN such that Affects*(40, 36)
+TRUE
+5000
+3012 - Valid Affects* all assign affects* by a
+assign a;
+Select a such that Affects*(28,a)
+29,36,30,34,43,45,40
+5000
+3013 - Valid Affects* all assign affects* a
+assign a;
+Select a such that Affects*(a,45)
+43,42,40,36,33,29,28,34,30
+5000
+3014 - Valid Affects* LHS prog_line
+assign a; prog_line l;
+Select a such that Affects*(l, a)
+none
+5000
+3015 - Valid Affects* LHS stmt
+assign a; stmt s;
+Select a such that Affects*(s, a)
+none
+5000
+3016 - Valid Affects* RHS prog_line
+assign a; prog_line l;
+Select a such that Affects*(a, l)
+none
+5000
+3017 - Valid Affects* RHS stmt
+assign a; stmt s;
+Select a such that Affects*(a, s)
+none
+5000
+4001 - Invalid Affects* 
+assign a;
+Select BOOLEAN such that Affects*(2,3)
+FALSE
+5000
+4002 - Invalid Affects* redundant
+if i;
+Select i such that Affects*(2,3)
+FALSE
+5000
+4003 - Invalid Affects* over calls
+assign a;
+Select BOOLEAN such that Affects*(51, 54)
+FALSE
+5000
+4004 - Invalid Affects* LHS call
+assign a; call c;
+Select a such that Affects*(c,a)
+none
+5000
+4005 - Invalid Affects* LHS constant
+assign a; constant c;
+Select a such that Affects*(c,a)
+none
+5000
+4006 - Invalid Affects* LHS if
+assign a; if i;
+Select a such that Affects*(i,a)
+none
+5000
+4007 - Invalid Affects* LHS procedure
+assign a; procedure p;
+Select a such that Affects*(p,a)
+none
+5000
+4008 - Invalid Affects* LHS variable
+assign a; variable v;
+Select a such that Affects*(v,a)
+none
+5000
+4009 - Invalid Affects* RHS call
+assign a; call c;
+Select a such that Affects*(a,c)
+none
+5000
+4010 - Invalid Affects* RHS constant
+assign a; constant c;
+Select a such that Affects*(a,c)
+none
+5000
+4011 - Invalid Affects* RHS if
+assign a; if i;
+Select a such that Affects*(a,i)
+none
+5000
+4012 - Invalid Affects* RHS procedure
+assign a; procedure p;
+Select a such that Affects*(a,p)
+none
+5000
+4013 - Invalid Affects* RHS variable
+assign a; variable v;
+Select a such that Affects*(a,v)
+none
+5000
+4014 - Invalid Affects* cross procedure
+assign a;
+Select BOOLEAN such that Affects*(7, 30)
+FALSE
+5000
+4015 - Invalid Affects* over if
+assign a;
+Select BOOLEAN such that Affects*(46, 50)
+FALSE
+5000
