@@ -116,11 +116,6 @@ int PKB::getASTSize()
 	return ast->getSize();
 }
 
-//@todo
-int PKB::getDescendentSize(TNode* node) {
-	return ast->getDescendent(node);
-}
-
 /**
  * Pattern matching for assign statements.
  * @param RHS  the expression query with a suitable subtree

@@ -50,7 +50,6 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact, st
 		_currentAssign = pkb.getNodeForStmt(assignTable.at(i));
 		if(_currentAssign->getNodeType() == Assign) {
 			_rightChildNodeA = _currentAssign->getChildren()->at(1);
-
 			if((_rootNodeQ->getNodeType() == Constant) || (_rootNodeQ->getNodeType() == Variable))
 			{
 				vector<int> tempResults = SingleVariableConstant(_rightChildNodeA, _rootNodeQ, isExact);
@@ -61,9 +60,9 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact, st
 			else {
 				bool skipThis = true;
 				if(isExact) {
-					if(pkb.getDescendentSize(_rightChildNodeA) != pkb.getDescendentSize(_rootNodeQ)) skipThis = false;
+					if(_rightChildNodeA->getDescendent() != _rootNodeQ->getDescendent()) skipThis = false;
 				} else {
-					if(pkb.getDescendentSize(_rightChildNodeA) < pkb.getDescendentSize(_rootNodeQ)) skipThis = false;
+					if(_rightChildNodeA->getDescendent() < _rootNodeQ->getDescendent()) skipThis = false;
 				}
 			
 				if(skipThis) {
@@ -78,7 +77,7 @@ vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact, st
 								results.push_back(_rightChildNodeA->getStmtNumber());
 						}
 					}
-				}
+				} 
 			}
 		} else {
 			continue;
@@ -229,12 +228,20 @@ bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, bool 
 		if(GrandChildrenList->size() > 0 ) {
 			if((GrandChildrenList->at(0)->getNodeType() == Plus) || (GrandChildrenList->at(0)->getNodeType() == Minus) || (GrandChildrenList->at(0)->getNodeType() == Times)) {
 				_GrandChildNodeAA = GrandChildrenList->at(0);
-				found = checkPatternMatchAssign(_GrandChildNodeAA, _rootNodeQ, isExact);
+				
+				if(_GrandChildNodeAA->getDescendent() >= _rootNodeQ->getDescendent()) {
+					found = checkPatternMatchAssign(_GrandChildNodeAA, _rootNodeQ, isExact);
+				}
 			}
 			
 			if((found==false) && ((GrandChildrenList->at(1)->getNodeType() == Plus) || (GrandChildrenList->at(1)->getNodeType() == Minus) || (GrandChildrenList->at(1)->getNodeType() == Times))) {
 				_GrandChildNodeAB = GrandChildrenList->at(1);
-				found = checkPatternMatchAssign(_GrandChildNodeAB, _rootNodeQ, isExact);
+
+				if(_GrandChildNodeAB->getDescendent() >= _rootNodeQ->getDescendent()) {
+					found = checkPatternMatchAssign(_GrandChildNodeAB, _rootNodeQ, isExact);
+				} else {
+					return false;
+				}
 			}
 
 			if(found)
