@@ -4,7 +4,7 @@ procedure One {
   c = (a - f) * e; \\3
   a = b + d - s;  \\4
   e = a * c - (1 * d);  \\5
-  calls Two;  \\6
+  call Two;  \\6
   e = a + e;} \\7
 
 procedure Two {
@@ -15,7 +15,7 @@ procedure Two {
     c = a + z - c;      \\12
     a = ((2 + x) * c) + d;    \\13
   }
-  f = a - z - f;    \\14
+  f = a - z - f;    \\14	
   f = x + a * f - k;  \\15
   z = f * b - c;    \\16
 }
@@ -47,16 +47,16 @@ procedure Four {
       while k {       \\35
         s = k - b;      \\36
         f = e + a;      \\37
-        calls Three;      \\38
+        call Three;      \\38
       }
       f = k * l * l;      \\39
     } else {
       s = b * 2;      \\40
-      calls Two;    \\41
+      call Two;    \\41
     }
     b = b * q + t;      \\42
   }
-  a = s + * (b - 1);      \\43
+  a = s * (b - 1);      \\43
   l = l + b;      \\44
   k = a + q * t;      \\45
 }
