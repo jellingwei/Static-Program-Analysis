@@ -1125,8 +1125,6 @@ vector<int> PKB::getNextAfterS(int progLine1) {
 	return nextTable->getNextAfter(progLine1, transClosure);
 }
 
-
-
 /**
 * @return a list of all program lines, progLine1, where Next(progLine1, progLine2) is true.
 */
@@ -1139,34 +1137,6 @@ vector<int> PKB::getNextLhs() {
 */
 vector<int> PKB::getNextRhs() {
 	return nextTable->getRhs();
-}
-
-
-int PKB::getFirstProgLineInProc(int procIndex) {
-	return nextTable->getFirstProgLineInProc(procIndex);
-}
-int PKB::getLastProgLineInProc(int procIndex) {
-	return nextTable->getLastProgLineInProc(procIndex);
-}
-void PKB::setFirstProgLineInProc(int procIndex, int firstProgline) {
-	nextTable->setFirstProgLineInProc(procIndex, firstProgline);
-}
-void PKB::setLastProgLineInProc(int procIndex, int lastProgline) {
-	nextTable->setLastProgLineInProc(procIndex, lastProgline);
-}
-
-
-int PKB::getFirstProgLineInContainer(int container) {
-	return nextTable->getFirstProgLineInContainer(container);
-}
-int PKB::getLastProgLineInContainer(int container) {
-	return nextTable->getLastProgLineInContainer(container);
-}
-void PKB::setFirstProgLineInContainer(int container, int progline) {
-	nextTable->setFirstProgLineInContainer(container, progline);
-}
-void PKB::setLastProgLineInContainer(int container, int progline) {
-	nextTable->setLastProgLineInContainer(container, progline);
 }
 
 /**
