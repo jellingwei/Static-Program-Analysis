@@ -16,19 +16,12 @@
 
 
 bool AffectsTable::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
-	return false;
+	vector<int> ans = getProgLinesAffectedBy(progLine1, transitiveClosure);
+
+	return find(ans.begin(), ans.end(), progLine2) != ans.end();
+
 }
 
-
-bool isNodeCandidateForSkippingAhead() {
-	// @todo
-	return false;
-}
-
-vector<CNode*> getNodesToSkipTo() {
-	//@todo
-	return vector<CNode*>();
-}
 
 // assumes that each node has only 1 non-inside node directly connected After it
 CNode* getMandatoryNextNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> variablesToMatch) {
@@ -69,8 +62,8 @@ CNode* getMandatoryPrevNode(CNode* node, CFG* cfg, boost::dynamic_bitset<> varia
 	CNODE_TYPE type = node->getNodeType();
 	vector<CNode*>* possiblePrevNodes = node->getBefore();
 
-	// handle special case for if statement
-	if (node->getVariablesInside2().size() > 0 && (node->getVariablesInside2() & variablesToMatch).none()) {
+	// handle special case for end if statement
+	if (node->getNodeType() == EndIf_C && node->getVariablesInside2().size() > 0 && (node->getVariablesInside2() & variablesToMatch).none()) {
 		// the else stmtList does not contain the variable,
 		// skip to the statement Following the node in the AST
 		vector<int> follows = pkb.getStmtFollowedTo(node->getProcLineNumber());
@@ -167,7 +160,12 @@ class CompareAffectsReverse {
 		}
 };
 
-vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveClosure) {
+bool AffectsTable::canSkipNodesForwards(CNode* node) {
+	int lineNum = node->getProcLineNumber();
+	return (lineNum % 4 == 0 || node->getNodeType() == If_C || node->getNodeType() == While_C);
+}
+
+vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine1 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine1) == 0) {
@@ -211,6 +209,12 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 					addedToAnswer.insert(node->getProcLineNumber());
 				}
 				isResultsModified = true;
+
+				// early return. this is used if the presense of one result is sufficient for the query
+				if (terminateOnOneResult) {
+					return result;
+				}
+
 			}
 			// reset any re-defined variables
 			variablesToMatch &= ~variablesModified;
@@ -225,6 +229,30 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 				continue;
 			}
 		} 
+
+		// skip to future nodes if there is the required information attached
+		bool isFirstUseAttached = canSkipNodesForwards(node);
+		if (isFirstUseAttached) {
+			unordered_map<int, set<int> > currentFirstUse = node->getFirstUseOfVariable();
+			
+			for (int i = 0; i < variablesToMatch.size(); i++) {
+				if (variablesToMatch[i] == 0 || currentFirstUse.count(i) == 0) {
+					continue;
+				}
+
+				set<int> procLinesToSkipTo = currentFirstUse[i];
+				for (auto skipIter = procLinesToSkipTo.begin(); skipIter != procLinesToSkipTo.end(); ++skipIter) {
+					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
+
+					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
+					if (skipToNode && visited.count(nodePair) == 0 ) {
+						frontier.push(nodePair);
+					}
+				}		
+			}
+
+			continue;
+		}
 
 		CNode* nextNode = getMandatoryNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(nextNode, variablesToMatch);
@@ -245,8 +273,13 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 	return result;
 }
 
+bool AffectsTable::canSkipNodesBackwards(CNode* node) {
+	int lineNum = node->getProcLineNumber();
 
-vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveClosure) {
+	return (lineNum % 4 == 0 || node->getNodeType() == EndIf_C || node->getNodeType() == While_C );
+}
+
+vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine2 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine2) == 0) {
@@ -291,6 +324,11 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 					addedToAnswer.insert(node->getProcLineNumber());
 				}
 				isResultsModified = true;
+
+				// early return. this is used if the presense of one result is sufficient for the query
+				if (terminateOnOneResult) {
+					return result;
+				}
 			}
 			// reset any re-defined variables
 			variablesToMatch &= ~variablesModified;
@@ -306,16 +344,40 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 			}
 		} 
 
+		// skip to future nodes if there is the required information attached
+		bool isReachingDefinitionAttached = canSkipNodesBackwards(node);
+		if (isReachingDefinitionAttached) {
+			unordered_map<int, set<int> > currentReachingDefs = node->getReachingDefinitions();
+			
+			for (int i = 0; i < variablesToMatch.size(); i++) {
+				if (variablesToMatch[i] == 0 || currentReachingDefs.count(i) == 0) {
+					continue;
+				}
+
+				set<int> procLinesToSkipTo = currentReachingDefs[i];
+				for (auto skipIter = procLinesToSkipTo.begin(); skipIter != procLinesToSkipTo.end(); ++skipIter) {
+					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
+
+					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
+					if (skipToNode && visited.count(nodePair) == 0 ) {
+						frontier.push(nodePair);
+					}
+				}		
+			}
+
+			continue;
+		}
+
 		CNode* prevNode = getMandatoryPrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch);
 		if (prevNode && visited.count(nodePair) == 0 ) {
-			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch));
+			frontier.push(nodePair);
 		}
 
 		CNode* possibleNode = getInsidePrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
 		if (possibleNode && visited.count(nodePair) == 0 ) {
-			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
+			frontier.push(nodePair);
 		}
 		
 	}
@@ -336,15 +398,32 @@ pair<vector<int>, vector<int>> AffectsTable::getAllAffectsPairs(bool transitiveC
 
 
 vector<int> AffectsTable::getLhs() {
-	return lhs;
+	PKB pkb = PKB::getInstance();
+	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
+	vector<int> results;
+
+	for (auto iter = assignments.begin(); iter != assignments.end(); ++iter) {
+		vector<int> ans = getProgLinesAffectedBy(*iter, false, true); // no transitive closure, early termination
+		if (!ans.empty()) {
+			results.push_back(*iter);
+		}
+	}
+
+	return results;
 }
-vector<int> AffectsTable::getRhs(){
-	return rhs;
+vector<int> AffectsTable::getRhs() {
+
+	PKB pkb = PKB::getInstance();
+	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
+	vector<int> results;
+
+	for (auto iter = assignments.begin(); iter != assignments.end(); ++iter) {
+		vector<int> ans = getProgLinesAffecting(*iter, false, true); // no transitive closure, early termination
+		if (!ans.empty()) {
+			results.push_back(*iter);
+		}
+	}
+
+	return results;
 }
 
-void AffectsTable::setLhs(vector<int>) {
-
-}
-void AffectsTable::setRhs(vector<int>) {
-
-}

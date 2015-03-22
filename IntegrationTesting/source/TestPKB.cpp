@@ -417,6 +417,15 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(9, 10), stmt in while loop can affect outside of loop", true, pkb.isAffects(9, 10, false));
 
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(31, 38)", true, pkb.isAffects(31, 38));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(37, 38)", true, pkb.isAffects(37, 38));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(34, 38)", true, pkb.isAffects(34, 38, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(37, 38)", true, pkb.isAffects(37, 38, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(35, 38)", true, pkb.isAffects(35, 38, true));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(22, 24)", false, pkb.isAffects(22, 24));
+
 	cout << "End TestPkb" << endl;
 }
+
 
