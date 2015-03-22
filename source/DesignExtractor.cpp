@@ -629,7 +629,7 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 		unordered_map<int, set<int> > currentFirstUse = currentState.second;
 
 		// attach the current value of first use to the node
-		bool attachFirstUse = (currentNode->getNodeType() == If_C || currentNode->getNodeType() == While_C);
+		bool attachFirstUse = PKB::canSkipNodesForwards(currentNode);
 		if (attachFirstUse) {
 			addVariablesToNodeFirstUse(currentNode, currentFirstUse); 
 		}
@@ -735,7 +735,7 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 		unordered_map<int, set<int> > currentReachingDefs = currentState.second;
 
 		// attach the current value of reaching definition to the node
-		bool attachReachingDefinition = (currentNode->getNodeType() == EndIf_C || currentNode->getNodeType() == While_C);
+		bool attachReachingDefinition = PKB::canSkipNodesBackwards(currentNode);
 		if (attachReachingDefinition) {
 			addVariablesToNodeReachingDef(currentNode, currentReachingDefs);
 		}

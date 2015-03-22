@@ -161,7 +161,8 @@ class CompareAffectsReverse {
 };
 
 bool AffectsTable::canSkipNodesForwards(CNode* node) {
-	return (node->getNodeType() == If_C || node->getNodeType() == While_C);
+	int lineNum = node->getProcLineNumber();
+	return (lineNum % 4 == 0 || node->getNodeType() == If_C || node->getNodeType() == While_C);
 }
 
 vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveClosure, bool terminateOnOneResult) {
@@ -273,7 +274,9 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 }
 
 bool AffectsTable::canSkipNodesBackwards(CNode* node) {
-	return (node->getNodeType() == EndIf_C || node->getNodeType() == While_C);
+	int lineNum = node->getProcLineNumber();
+
+	return (lineNum % 4 == 0 || node->getNodeType() == EndIf_C || node->getNodeType() == While_C );
 }
 
 vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveClosure, bool terminateOnOneResult) {

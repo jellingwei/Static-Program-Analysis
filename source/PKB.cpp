@@ -1172,6 +1172,13 @@ vector<int> PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
+bool PKB::canSkipNodesBackwards(CNode* node) {
+	return AffectsTable::canSkipNodesBackwards(node);
+}
+
+bool PKB::canSkipNodesForwards(CNode* node) {
+	return AffectsTable::canSkipNodesForwards(node);
+}
 
 
 /*

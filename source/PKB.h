@@ -199,6 +199,9 @@ public:
 	vector<int> getAffectsLhs();
 	vector<int> getAffectsRhs();
 
+	static bool canSkipNodesBackwards(CNode* node);
+	static bool canSkipNodesForwards(CNode* node);
+
 
 	//@todo 
 	// @cond todo
