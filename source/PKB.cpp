@@ -1172,12 +1172,14 @@ vector<int> PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
-void PKB::setAffectsLhs(vector<int> lhs) {
-	affectsTable->setLhs(lhs);
+bool PKB::canSkipNodesBackwards(CNode* node) {
+	return AffectsTable::canSkipNodesBackwards(node);
 }
-void PKB::setAffectsRhs(vector<int> rhs) {
-	affectsTable->setRhs(rhs);
+
+bool PKB::canSkipNodesForwards(CNode* node) {
+	return AffectsTable::canSkipNodesForwards(node);
 }
+
 
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
