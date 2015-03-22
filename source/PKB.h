@@ -198,8 +198,6 @@ public:
 	vector<int> getAffecting(int progLine2, bool transitiveClosure = false);
 	vector<int> getAffectsLhs();
 	vector<int> getAffectsRhs();
-	void setAffectsLhs(vector<int>);
-	void setAffectsRhs(vector<int>);
 
 
 	//@todo 

@@ -1172,12 +1172,7 @@ vector<int> PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
-void PKB::setAffectsLhs(vector<int> lhs) {
-	affectsTable->setLhs(lhs);
-}
-void PKB::setAffectsRhs(vector<int> rhs) {
-	affectsTable->setRhs(rhs);
-}
+
 
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB

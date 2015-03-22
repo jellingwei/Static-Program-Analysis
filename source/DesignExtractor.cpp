@@ -796,6 +796,7 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 			}
 			
 			if (isNotVisited) {
+				// add to frontier for future exploration
 				frontier.push(nextState);
 
 				// update visited
@@ -810,7 +811,8 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 							visited[nextNode->getProcLineNumber()].insert(make_pair<int, set<int> >(defIter->first, defIter->second));
 						}
 					}
-				}	
+				}
+
 			} 	
 		}
 

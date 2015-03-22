@@ -16,7 +16,10 @@
 
 
 bool AffectsTable::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
-	return false;
+	vector<int> ans = getProgLinesAffectedBy(progLine1, transitiveClosure);
+
+	return find(ans.begin(), ans.end(), progLine2) != ans.end();
+
 }
 
 
@@ -157,7 +160,11 @@ class CompareAffectsReverse {
 		}
 };
 
-vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveClosure) {
+bool AffectsTable::canSkipNodesForwards(CNode* node) {
+	return (node->getNodeType() == If_C || node->getNodeType() == While_C);
+}
+
+vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine1 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine1) == 0) {
@@ -201,6 +208,12 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 					addedToAnswer.insert(node->getProcLineNumber());
 				}
 				isResultsModified = true;
+
+				// early return. this is used if the presense of one result is sufficient for the query
+				if (terminateOnOneResult) {
+					return result;
+				}
+
 			}
 			// reset any re-defined variables
 			variablesToMatch &= ~variablesModified;
@@ -217,7 +230,7 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 		} 
 
 		// skip to future nodes if there is the required information attached
-		bool isFirstUseAttached = (node->getNodeType() == If_C || node->getNodeType() == While_C);
+		bool isFirstUseAttached = canSkipNodesForwards(node);
 		if (isFirstUseAttached) {
 			unordered_map<int, set<int> > currentFirstUse = node->getFirstUseOfVariable();
 			
@@ -259,8 +272,11 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 	return result;
 }
 
+bool AffectsTable::canSkipNodesBackwards(CNode* node) {
+	return (node->getNodeType() == EndIf_C || node->getNodeType() == While_C);
+}
 
-vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveClosure) {
+vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine2 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine2) == 0) {
@@ -305,6 +321,11 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 					addedToAnswer.insert(node->getProcLineNumber());
 				}
 				isResultsModified = true;
+
+				// early return. this is used if the presense of one result is sufficient for the query
+				if (terminateOnOneResult) {
+					return result;
+				}
 			}
 			// reset any re-defined variables
 			variablesToMatch &= ~variablesModified;
@@ -321,7 +342,7 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 		} 
 
 		// skip to future nodes if there is the required information attached
-		bool isReachingDefinitionAttached = (node->getNodeType() == EndIf_C || node->getNodeType() == While_C);
+		bool isReachingDefinitionAttached = canSkipNodesBackwards(node);
 		if (isReachingDefinitionAttached) {
 			unordered_map<int, set<int> > currentReachingDefs = node->getReachingDefinitions();
 			
@@ -374,15 +395,32 @@ pair<vector<int>, vector<int>> AffectsTable::getAllAffectsPairs(bool transitiveC
 
 
 vector<int> AffectsTable::getLhs() {
-	return lhs;
+	PKB pkb = PKB::getInstance();
+	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
+	vector<int> results;
+
+	for (auto iter = assignments.begin(); iter != assignments.end(); ++iter) {
+		vector<int> ans = getProgLinesAffectedBy(*iter, false, true); // no transitive closure, early termination
+		if (!ans.empty()) {
+			results.push_back(*iter);
+		}
+	}
+
+	return results;
 }
-vector<int> AffectsTable::getRhs(){
-	return rhs;
+vector<int> AffectsTable::getRhs() {
+
+	PKB pkb = PKB::getInstance();
+	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
+	vector<int> results;
+
+	for (auto iter = assignments.begin(); iter != assignments.end(); ++iter) {
+		vector<int> ans = getProgLinesAffecting(*iter, false, true); // no transitive closure, early termination
+		if (!ans.empty()) {
+			results.push_back(*iter);
+		}
+	}
+
+	return results;
 }
 
-void AffectsTable::setLhs(vector<int>) {
-
-}
-void AffectsTable::setRhs(vector<int>) {
-
-}

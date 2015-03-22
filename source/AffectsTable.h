@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include "TNode.h"
+#include "CNode.h"
 
 using namespace std;
 using namespace stdext;
@@ -16,8 +17,8 @@ public:
 
 	bool isAffects(int progLine1, int progLine2, bool transitiveClosure);
 	
-	vector<int> getProgLinesAffectedBy(int progLine1, bool transitiveClosure);
-	vector<int> getProgLinesAffecting(int progLine2, bool transitiveClosure);
+	vector<int> getProgLinesAffectedBy(int progLine1, bool transitiveClosure, bool terminateOnOneResult = false);
+	vector<int> getProgLinesAffecting(int progLine2, bool transitiveClosure, bool terminateOnOneResult = false);
 
 	pair<vector<int>, vector<int>> getAllAffectsPairs(bool transitiveClosure);
 
@@ -25,13 +26,9 @@ public:
 	vector<int> getLhs();
 	vector<int> getRhs();
 
-	void setLhs(vector<int>);
-	void setRhs(vector<int>);
+	static bool canSkipNodesBackwards(CNode* node);
+	static bool canSkipNodesForwards(CNode* node);
 
-private: 
-	//@todo check with Jin if this is permitted
-	vector<int> lhs;
-	vector<int> rhs;
 
 };
 
