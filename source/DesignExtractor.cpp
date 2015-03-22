@@ -487,6 +487,7 @@ void DesignExtractor::setUsesForAssignmentStatements() {
 		TNode* node = pkb.getNodeForStmt(stmtNumber);
 		assert(node != NULL);
 		vector<int> varIndexesUsed = obtainVarUsedInExpression(node);
+		
 		for (auto varIter = varIndexesUsed.begin(); varIter != varIndexesUsed.end(); ++varIter) {
 			pkb.setUses(stmtNumber, *varIter);
 		}
@@ -604,6 +605,7 @@ void addVariablesToNodeFirstUse(CNode* node, unordered_map<int, set<int>> firstU
 	}
 
 	node->setFirstUseOfVariable(currentFirstUseOnNode);
+	
 }
 
 
@@ -625,19 +627,11 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 		pair<CNode*, unordered_map<int, set<int> > > currentState = frontier.top();  frontier.pop();
 		CNode* currentNode = currentState.first;
 		unordered_map<int, set<int> > currentFirstUse = currentState.second;
-		cout << "at... " << currentNode->getProcLineNumber() << " size of uses = " << currentFirstUse.size() << " , " << endl; 
 
 		// attach the current value of first use to the node
 		bool attachFirstUse = (currentNode->getNodeType() == If_C || currentNode->getNodeType() == While_C);
 		if (attachFirstUse) {
-			addVariablesToNodeFirstUse(currentNode, currentFirstUse);
-			cout << "----" << endl;
-			for (auto iter = currentFirstUse.begin() ; iter != currentFirstUse.end(); ++iter) {
-				cout << iter->first<< " [ " << (iter->second).size() << "] : " ;
-				for (auto iter2 = iter->second.begin() ; iter2 != iter->second.end(); ++iter2) {
-					cout << *iter2 << ",";
-				}cout << endl;
-			}  
+			addVariablesToNodeFirstUse(currentNode, currentFirstUse); 
 		}
 		
 		// kill off use of variables used by the current node
@@ -646,16 +640,7 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 			vector<int> varMod = pkb.getModVarForStmt(currentNode->getProcLineNumber());
 			varUseToRemove.insert(varUseToRemove.end(), varMod.begin(), varMod.end());
 
-			cout << "reseting ... " << endl;
-			cout << "----" << endl;
-			for (auto iter = currentFirstUse.begin() ; iter != currentFirstUse.end(); ++iter) {
-				cout << iter->first<< " [ " << (iter->second).size() << "] : " ;
-				for (auto iter2 = iter->second.begin() ; iter2 != iter->second.end(); ++iter2) {
-					cout << *iter2 << ",";
-				}cout << endl;
-			}  
-
-			firstUseOfVariable = resetVarsInMap(firstUseOfVariable, varUseToRemove);
+			currentFirstUse = resetVarsInMap(currentFirstUse, varUseToRemove);
 		
 		}
 		// generate new use
@@ -672,7 +657,6 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 					currentFirstUse[varGenerated].insert(currentNode->getProcLineNumber());
 				}
 			}
-			cout << "gen" << endl;
 		}
 
 		// get next nodes to put in the frontier
@@ -921,32 +905,31 @@ void DesignExtractor::precomputeInformationForAffects() {
 	// set variables inside..
 	setVariablesInside();
 	cout << "End of step 1 in precomputations " << endl;
+	int times,timed;
+		times=clock();
 
 	// set definitions reaching the dummy nodes
 	for (int i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
-		int times,timed;
-		times=clock();
 
 		cout << "at iteration " << i << " in step 2" <<  endl;
 
 		// traverse through cfg and update reaching definitions
 		updateReachingDefinitionsThroughCfg(cfg->getProcRoot());
-
-		timed=clock();
-		times=timed-times;
-		cout << "ticks from start to end" << times;
 	}
 	cout << "End of step 2 in precomputations " << endl;
 
 	// set first use of variables in container nodes
 	for (int i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
-		cout << "at iteration " << i << " in step 3" <<  endl;
 
 		// traverse through cfg and update reaching definitions
 		updateFirstUseOfVarThroughCfg(cfg->getProcEnd());
 	}
 	cout << "End of step 3 in precomputations " << endl;
+
+	timed=clock();
+	times=timed-times;
+	cout << "ticks from start to end: " << times << endl;
 
 }
