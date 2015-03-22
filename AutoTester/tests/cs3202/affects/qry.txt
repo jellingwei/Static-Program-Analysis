@@ -366,7 +366,7 @@ FALSE
 4002 - Invalid Affects* redundant
 if i;
 Select i such that Affects*(2,3)
-FALSE
+none
 5000
 4003 - Invalid Affects* over calls
 assign a;
