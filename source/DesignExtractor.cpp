@@ -647,7 +647,7 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 		if (currentNode->getNodeType() == Assign_C) {
 			vector<int> varUseToGenerate = pkb.getUsesVarForStmt(currentNode->getProcLineNumber());
 
-			for (int i = 0; i <varUseToGenerate.size(); i++) {
+			for (size_t i = 0; i <varUseToGenerate.size(); i++) {
 				int varGenerated = varUseToGenerate[i];
 				if (currentFirstUse.count(varGenerated) == 0) {
 					set<int> newSetOfProgline;
@@ -911,7 +911,7 @@ void DesignExtractor::precomputeInformationForAffects() {
 		times=clock();
 
 	// set definitions reaching the dummy nodes
-	for (int i = 0; i < pkb.cfgTable.size(); i++) {
+	for (size_t i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
 
 		cout << "at iteration " << i << " in step 2" <<  endl;
@@ -922,7 +922,7 @@ void DesignExtractor::precomputeInformationForAffects() {
 	cout << "End of step 2 in precomputations " << endl;
 
 	// set first use of variables in container nodes
-	for (int i = 0; i < pkb.cfgTable.size(); i++) {
+	for (size_t i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
 
 		// traverse through cfg and update reaching definitions

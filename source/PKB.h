@@ -32,16 +32,7 @@ class StmtTable;
 class PKB {
 public:
 	// @cond todo
-	VarTable* varTable; 
-	ProcTable* procTable;
-	StmtTable* stmtTable;
-	ConstantTable* constantTable;
-	CallsTable* callsTable;
-	ModifiesTable* modifiesTable;
-	UsesTable* usesTable;
-	FollowsTable* followsTable;
-	ParentTable* parentTable;
-	AST* ast;
+
 
 	// @endcond
 
@@ -212,6 +203,16 @@ public:
 	// @endcond
 
 private:
+	VarTable* varTable; 
+	ProcTable* procTable;
+	StmtTable* stmtTable;
+	ConstantTable* constantTable;
+	CallsTable* callsTable;
+	ModifiesTable* modifiesTable;
+	UsesTable* usesTable;
+	FollowsTable* followsTable;
+	ParentTable* parentTable;
+	AST* ast;
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
 	PKB();

@@ -235,7 +235,7 @@ vector<int> AffectsTable::getProgLinesAffectedBy(int progLine1, bool transitiveC
 		if (isFirstUseAttached) {
 			unordered_map<int, set<int> > currentFirstUse = node->getFirstUseOfVariable();
 			
-			for (int i = 0; i < variablesToMatch.size(); i++) {
+			for (size_t i = 0; i < variablesToMatch.size(); i++) {
 				if (variablesToMatch[i] == 0 || currentFirstUse.count(i) == 0) {
 					continue;
 				}
@@ -349,7 +349,7 @@ vector<int> AffectsTable::getProgLinesAffecting(int progLine2, bool transitiveCl
 		if (isReachingDefinitionAttached) {
 			unordered_map<int, set<int> > currentReachingDefs = node->getReachingDefinitions();
 			
-			for (int i = 0; i < variablesToMatch.size(); i++) {
+			for (size_t i = 0; i < variablesToMatch.size(); i++) {
 				if (variablesToMatch[i] == 0 || currentReachingDefs.count(i) == 0) {
 					continue;
 				}

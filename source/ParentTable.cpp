@@ -23,8 +23,8 @@ bool ParentTable::setParent(TNode* stmt1, TNode* stmt2)
 		throw exception("ParentTable invalid parameters provided");
 	}
 
-	AST* ast = PKB::getInstance().ast;
-	ast->createLink(Child, stmt1, stmt2);
+	
+	PKB::getInstance().createLink(Child, stmt1, stmt2);
 	
 	return true;
 }
@@ -359,7 +359,7 @@ pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClo
 		}
 	} else 
 	{
-		vector<TNode*>* procNodes = PKB::getInstance().ast->getRoot()->getChildren();
+		vector<TNode*>* procNodes = PKB::getInstance().getRoot()->getChildren();
 
 		for (auto iter = procNodes->begin(); iter != procNodes->end(); ++iter) 
 		{

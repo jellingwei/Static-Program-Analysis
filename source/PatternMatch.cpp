@@ -296,9 +296,9 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, b
 		try{
 			if(_rootNodeQ->getNodeType() == Variable)
 			{
-				UsesTable* usesTable = pkb.usesTable;
-				string NodeValue = pkb.varTable->getVarName(_rootNodeQ->getNodeValueIdx());
-				tempResults = usesTable->getUsesStmtNum(PKB::getInstance().getVarIndex(NodeValue));
+				
+				string NodeValue = pkb.getVarName(_rootNodeQ->getNodeValueIdx());
+				tempResults = pkb.getUsesStmtNum(PKB::getInstance().getVarIndex(NodeValue));
 			}
 			else
 			{
