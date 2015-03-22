@@ -935,3 +935,44 @@ void DesignExtractor::precomputeInformationForAffects() {
 	cout << "ticks from start to end: " << times << endl;
 
 }
+
+
+void DesignExtractor::precomputeInformationForNext() {
+	PKB pkb = PKB::getInstance();
+	// get first progline for each program's graph
+	vector<int> proc = pkb.getAllProcIndex();
+	for (auto iter = proc.begin(); iter != proc.end(); ++iter) {
+		CNode* procroot = pkb.cfgTable.at(*iter)->getProcRoot();
+		CNode* firstline = procroot->getAfter()->at(0);
+		pkb.setFirstProgLineInProc(*iter, firstline->getProcLineNumber());
+	}
+
+	// get last progline
+	for (auto iter = proc.begin(); iter != proc.end(); ++iter) {
+		CNode* procEnd = pkb.cfgTable.at(*iter)->getProcEnd();
+		CNode* lastline = procEnd->getBefore()->at(0);
+		pkb.setLastProgLineInProc(*iter, lastline->getProcLineNumber());
+	}
+
+
+	// first progline for each container
+	vector<int> stmt = pkb.getStmtNumForType(WHILE);
+
+	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
+		TNode* node = pkb.getNodeForStmt(*iter);
+		TNode* stmtListNode = node->getChildren()->at(1);
+		TNode* firstChildOfStmtListNode = stmtListNode->getChildren()->at(0);
+
+		pkb.setFirstProgLineInContainer(node->getStmtNumber(), firstChildOfStmtListNode->getStmtNumber());
+	}
+
+	// last progline
+	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
+		TNode* node = pkb.getNodeForStmt(*iter);
+		TNode* stmtListNode = node->getChildren()->at(1);
+		TNode* lastChildOfStmtListNode = stmtListNode->getChildren()->back();
+
+		pkb.setFirstProgLineInContainer(node->getStmtNumber(), lastChildOfStmtListNode->getStmtNumber());
+	}
+
+}

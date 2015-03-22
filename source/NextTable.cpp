@@ -220,3 +220,41 @@ vector<int> NextTable::getRhs() {
 CNode* NextTable::getCNodeForProgLine(int progLine) {
 	throw exception("not implemented yet");
 }
+
+int NextTable::getFirstProgLineInContainer(int container) {
+	if (firstProgLineInContainer.count(container) != 0) {
+		return firstProgLineInContainer[container];
+	} else {
+		return -1;
+	}
+}
+
+int NextTable::getLastProgLineInContainer(int container) {
+	if (lastProgLineInContainer.count(container) != 0) {
+		return lastProgLineInContainer[container];
+	} else {
+		return -1;
+	}
+}
+
+void NextTable::setFirstProgLineInContainer(int container, int firstline) {
+	firstProgLineInContainer.insert(pair<int, int>(container, firstline);
+}
+void NextTable::setLastProgLineInContainer(int container, int lastline) {
+	lastProgLineInContainer.insert(pair<int, int>(container, lastline);
+}
+
+int NextTable::getFirstProgLineInProc(int procIndex) {
+	return firstProgLineInProc[procIndex];
+}
+int NextTable::getLastProgLineInProc(int procIndex) {
+	return lastProgLineInProc[procIndex];
+}
+
+void NextTable::setFirstProgLineInProc(int procIndex, int firstlines) {
+	firstProgLineInProc.push_back(firstlines);
+}
+void NextTable::setLastProgLineInProc(int procIndex, int lastlines) {
+	lastProgLineInProc.push_back(lastlines);
+}
+

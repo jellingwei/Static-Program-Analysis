@@ -18,4 +18,21 @@ public:
 
 	CNode* getCNodeForProgLine(int);
 
+	int getFirstProgLineInProc(int);
+	int getLastProgLineInProc(int);
+	void setFirstProgLineInProc(int, int);
+	void setLastProgLineInProc(int, int);
+
+	int getFirstProgLineInContainer(int);
+	int getLastProgLineInContainer(int);
+	void setFirstProgLineInContainer(int, int);
+	void setLastProgLineInContainer(int, int);
+
+private:
+	vector<int> firstProgLineInProc;
+	vector<int> lastProgLineInProc;
+
+	unordered_map<int, int> firstProgLineInContainer;
+	unordered_map<int, int> lastProgLineInContainer;
+
 };
