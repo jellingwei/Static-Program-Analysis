@@ -24,6 +24,7 @@ namespace ValuesHandler
 	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
 	
 	Synonym getSynonym(string wantedName);
+	vector<Synonym> getSynonymTuples(vector<string> wantedNames);
 	bool filterEqualValue(Synonym synonym, string wantedValue);
 	bool filterEqualPair(Synonym LHS, Synonym RHS);
 	bool isValueExistInSet(set<int> setToSearch, int value);

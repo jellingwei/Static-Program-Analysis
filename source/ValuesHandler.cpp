@@ -224,6 +224,55 @@ namespace ValuesHandler
 		}
 	}
 	
+	vector<Synonym> getSynonymTuples(vector<string> wantedNames)
+	{
+		vector<Synonym> returnSynonyms;
+		vector<bool> isSingleton;
+		int singletonFactor = 1;
+		int mainFactor = 1;
+		
+		for (unsigned int i = 0; i < wantedNames.size(); i++) {
+			SYNONYM_TYPE type = synonymMap[wantedNames[i]];
+			
+			if (isExistInMainTable(wantedNames[i])) {
+				isSingleton.push_back(false);
+				int index = findIndexInMainTable(wantedNames[i]);
+				vector<int> values = getIntermediateValuesInMain(index);
+				mainFactor = values.size();
+				Synonym synonym(type, wantedNames[i], values);
+				returnSynonyms.push_back(synonym);
+			} else {
+				isSingleton.push_back(true);
+				Synonym synonym = getSynonym(wantedNames[i]);
+				singletonFactor *= synonym.getValues().size();
+				returnSynonyms.push_back(synonym);
+			}
+		}
+		
+		for (unsigned int i = 0; i < returnSynonyms.size(); i++) {
+			Synonym synonym = returnSynonyms[i];
+			vector<int> values = synonym.getValues();
+			vector<int> finalValues;
+			
+			if (isSingleton[i]) {
+				for (unsigned int j = 0; j < values.size(); j++) {
+					for (int k = 1; k <= mainFactor; k++) {
+						finalValues.push_back(values[j]);
+					}
+				}
+				synonym.setValues(finalValues);
+				swap(synonym, returnSynonyms[i]);
+			} else {
+				for (int j = 1; j <= singletonFactor; j++) {
+					finalValues.insert(finalValues.end(), values.begin(), values.end());
+				}
+				synonym.setValues(finalValues);
+				swap(synonym, returnSynonyms[i]);
+			}
+		}
+		return returnSynonyms;
+	}
+	
 	/**
 	* Helper method to get all intermediate values of the column
 	* Might contain duplicates

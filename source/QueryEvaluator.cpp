@@ -96,26 +96,36 @@ namespace QueryEvaluator
 		QNode* resultChildNode = resultNode->getChild();
 		int numberOfSynonyms = resultNode->getNumberOfChildren();
 
-		for (int i = 0; i < numberOfSynonyms; i++) {
-			Synonym wantedSynonym = resultChildNode->getArg1();
+		if (numberOfSynonyms == 1) {
+				Synonym wantedSynonym = resultChildNode->getArg1();
 
-			if (wantedSynonym.getType() == BOOLEAN && isValid) {
-				Synonym s(BOOLEAN, "TRUE");
+				if (wantedSynonym.getType() == BOOLEAN && isValid) {
+					Synonym s(BOOLEAN, "TRUE");
+					result.push_back(s);
+					return result;
+				} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
+					Synonym s(BOOLEAN, "FALSE");
+					result.push_back(s);
+					return result;
+				} else if (!isValid) {
+					return result;
+				}
+
+				string wantedSynonymName = wantedSynonym.getName();
+				Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
 				result.push_back(s);
-				return result;
-			} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
-				Synonym s(BOOLEAN, "FALSE");
-				result.push_back(s);
-				return result;
-			} else if (!isValid) {
-				return result;
+		} else if (numberOfSynonyms > 1) {
+			vector<string> wantedNames;
+
+			for (int i = 0; i < numberOfSynonyms; i++) {
+				Synonym wantedSynonym = resultChildNode->getArg1();
+				string wantedSynonymName = wantedSynonym.getName();
+				wantedNames.push_back(wantedSynonymName);
+				resultChildNode = resultNode->getNextChild();
 			}
 
-			string wantedSynonymName = wantedSynonym.getName();
-			Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
-			result.push_back(s);
-			resultChildNode = resultNode->getNextChild();
-		}
+			result = ValuesHandler::getSynonymTuples(wantedNames);
+		} 
 		return result;
 	}
 
