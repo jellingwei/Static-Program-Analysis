@@ -38,7 +38,7 @@ namespace ResultProjector {
 					oneRow.push_back(allValues[j][i]);
 				}
 				
-				string outputStr = "<";
+				string outputStr; //= "<";
 				
 				for (unsigned int j = 0; j < oneRow.size(); j++) {
 					SYNONYM_TYPE synonymType = resultVector[j].getType();
@@ -47,11 +47,11 @@ namespace ResultProjector {
 					outputStr += value;
 
 					if (j + 1 != allValues.size()) {
-						outputStr += ", ";
+						outputStr += " ";
 					}
 				}
 				
-				outputStr += ">";
+				//outputStr += ">";
 				resultList.push_back(outputStr);
 			}
 		}
