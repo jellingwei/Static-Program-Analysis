@@ -1,0 +1,79 @@
+procedure One {
+  a = 1;  \\1
+  b = a + 1;  \\2
+  c = (a - f) * e; \\3
+  a = b + d - s;  \\4
+  e = a * c - (1 * d);  \\5
+  call Two;  \\6
+  e = a + e;} \\7
+
+procedure Two {
+  a = 1;        \\8
+  z = x - y;      \\9
+  while x {     \\10
+    x = y - e + 2;    \\11
+    c = a + z - c;      \\12
+    a = ((2 + x) * c) + d;    \\13
+  }
+  f = a - z - f;    \\14	
+  f = x + a * f - k;  \\15
+  z = f * b - c;    \\16
+}
+
+procedure Three {
+  e = z + 1;  \\17
+  f = a - v - k;    \\18
+  b = 2;      \\19
+  if k then {     \\20
+    b = s + x;    \\21
+    d = e * (2 + e);    \\22
+  } else {        
+    f = f + 1;        \\23
+    a = ((b + c) * e) * a;    \\24
+  }
+  e = a + f - b;      \\25
+  f = f * 2 * e;    \\26
+}
+
+procedure Four {
+  while z {     \\27
+    k = 1;      \\28
+    b = 1 + k;      \\29
+    l = (s - e) * 2;    \\30
+    k = q * t;      \\31
+    if x then {     \\32
+      k = 2;    \\33
+      s = l - e;      \\34
+      while k {       \\35
+        s = k - b;      \\36
+        f = e + a;      \\37
+        call Three;      \\38
+      }
+      f = k * l * l;      \\39
+    } else {
+      s = b * 2;      \\40
+      call Two;    \\41
+    }
+    b = b * q + t;      \\42
+  }
+  a = s * (b - 1);      \\43
+  l = l + b;      \\44
+  k = a + q * t;      \\45
+}
+
+procedure Five {
+  q = 1;        \\46
+  if k then {     \\47
+    q = a + b;    \\48
+  } else {      
+    q = a - b;      \\49
+  }
+  a = q * 2;        \\50
+}
+
+procedure Six {
+  a = b * c;    \\51
+  q = a - b;      \\52
+  call Five;      \\53
+  a = a - q;      \\54
+}

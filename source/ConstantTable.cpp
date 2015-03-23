@@ -51,13 +51,6 @@ int ConstantTable::getSize()
 	return stmtMap.size();
 }
 
-
-int ConstantTable::getConstant(int index) 
-{
-	return (constantMap.count(index) > 0) ? constantMap.at(index) : -1;
-}
-
-
 int ConstantTable::getConstantIndex(int constant) 
 {
 	if (constant < 0) {
@@ -80,9 +73,6 @@ vector<int> ConstantTable::getStmtNum(int constant)
 
 bool ConstantTable::isConstant(int number) 
 {
-	if (number < 0) {
-		throw exception("constantTable error: Negative number input");
-	}
 
 	if (indexMap.count(number) > 0) {
 		return true;

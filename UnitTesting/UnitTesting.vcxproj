@@ -41,7 +41,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)source;$(SolutionDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)source;$(SolutionDir)include;$(SolutionDir)include\boost;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
@@ -85,11 +85,11 @@
     <ClCompile Include="source\TestExpressionParser.cpp" />
     <ClCompile Include="source\TestModifiesTable.cpp" />
     <ClCompile Include="source\TestProcTable.cpp" />
-    <ClCompile Include="source\TestIntermediateValuesHandler.cpp" />
     <ClCompile Include="source\TestQueryTree.cpp" />
     <ClCompile Include="source\TestParser.cpp" />
     <ClCompile Include="source\TestStmtTable.cpp" />
     <ClCompile Include="source\TestUsesTable.cpp" />
+    <ClCompile Include="source\TestValuesHandler.cpp" />
     <ClCompile Include="source\TestVarTable.cpp" />
     <ClCompile Include="source\UnitTest.cpp" />
   </ItemGroup>
@@ -99,11 +99,11 @@
     <ClInclude Include="source\TestExpressionParser.h" />
     <ClInclude Include="source\TestModifiesTable.h" />
     <ClInclude Include="source\TestProcTable.h" />
-    <ClInclude Include="source\TestIntermediateValuesHandler.h" />
     <ClInclude Include="source\TestQueryTree.h" />
     <ClInclude Include="source\TestParser.h" />
     <ClInclude Include="source\TestStmtTable.h" />
     <ClInclude Include="source\TestUsesTable.h" />
+    <ClInclude Include="source\TestValuesHandler.h" />
     <ClInclude Include="source\TestVarTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

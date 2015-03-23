@@ -22,7 +22,7 @@ class ExpressionParser {
 		int procIndex;
 		string token; // current token
 
-		bool readOnly; /*! if this is set to true, the expression will not make any updates onto the pkb. This is used when parsing expressions for querying */
+		bool readOnly; 
 
 		VarTable* varTable;
 

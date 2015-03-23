@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>SPA: PatternMatch Class Reference</title>
+<title>CS3202 Minions SPA: PatternMatch Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,8 +22,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">SPA
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -38,7 +39,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -93,16 +93,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8d3fc957792882b0922716532e395cf6"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#a8d3fc957792882b0922716532e395cf6">PatternMatchAssign</a> (<a class="el" href="class_t_node.html">TNode</a> *queryASTroot, string isExact)</td></tr>
-<tr class="separator:a8d3fc957792882b0922716532e395cf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a140e4086f47f2a5e3f5fb58e726949d1"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#a140e4086f47f2a5e3f5fb58e726949d1">PatternMatchWhile</a> (string LHS)</td></tr>
-<tr class="separator:a140e4086f47f2a5e3f5fb58e726949d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d105c6b49a1b3a4dbe5be8913571008"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d105c6b49a1b3a4dbe5be8913571008"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>PatternMatchIf</b> (string LHS)</td></tr>
-<tr class="separator:a9d105c6b49a1b3a4dbe5be8913571008"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a275e63be421438ca71704f59df11672b"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#a275e63be421438ca71704f59df11672b">PatternMatchAssign</a> (<a class="el" href="class_t_node.html">TNode</a> *queryASTroot, bool isExact)</td></tr>
+<tr class="separator:a275e63be421438ca71704f59df11672b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d91444563f3efafe44eb515f0260a9d"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#a1d91444563f3efafe44eb515f0260a9d">patternMatchParentStmt</a> (string LHS, TNODE_TYPE type)</td></tr>
+<tr class="separator:a1d91444563f3efafe44eb515f0260a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a8d3fc957792882b0922716532e395cf6"></a>
+<a class="anchor" id="a275e63be421438ca71704f59df11672b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -115,7 +112,7 @@ vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Patter
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">bool&#160;</td>
           <td class="paramname"><em>isExact</em>&#160;</td>
         </tr>
         <tr>
@@ -125,36 +122,48 @@ vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Patter
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Pattern matching for assign statements. </p><dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Pattern matching for assign statements. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">Root</td><td>node of the query tree build for the expression and a flag for exact or non-exact matching </td></tr>
+    <tr><td class="paramname">_rootNodeQ</td><td>the Root Node of the query tree build for the expression and a flag for exact or non-exact matching </td></tr>
+    <tr><td class="paramname">isExact</td><td>a flag for exact or non-exact matching </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a140e4086f47f2a5e3f5fb58e726949d1"></a>
+<a class="anchor" id="a1d91444563f3efafe44eb515f0260a9d"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; int &gt; PatternMatch::PatternMatchWhile </td>
+          <td class="memname">vector&lt; int &gt; PatternMatch::patternMatchParentStmt </td>
           <td>(</td>
           <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>LHS</em></td><td>)</td>
+          <td class="paramname"><em>LHS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">TNODE_TYPE&#160;</td>
+          <td class="paramname"><em>type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Pattern matching for while statements. </p><dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are while loops, and uses the input LHS as its control variable. </dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Pattern matching for while or if statements. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">LHS</td><td>the name of the variable that acts as the control variable for the while statements we are interested in. </td></tr>
+    <tr><td class="paramname">type</td><td>the type of statement to match, either While or If </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable. </dd></dl>
 
 </div>
 </div>
@@ -165,7 +174,7 @@ vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Patter
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 9 2015 10:12:47 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:52 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

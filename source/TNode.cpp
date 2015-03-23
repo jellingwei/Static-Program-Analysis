@@ -10,13 +10,16 @@ TNode::TNode()
 {}
 
 /**
- * Return a TNode with parameters as follows, node type, the corresponding statement number and the corresponding value. 
- * If ast_node_type is Variable, then value is the INDEX of the variable in the VarTable. 
- * If ast_node_type is Constant, then value is the value of the CONSTANT. 
- * If ast_node_type is neither Variable nor Constant, then value is not a meaningful value.
- * @exception if stmtNo is negative or 0.
+ * @param astNodeType the type of Tnode which can be Procedure/Assign/Plus/Variable/StmtLst/While/If/Constant/Minus/Times/Program/Call
+ * @param stmtNum the statement number of the TNode
+ * @param value a number which can be the INDEX of the variable or the value of the CONSTANT
+ * @return a TNode with its node type, the corresponding statement number and the corresponding value. 
+ * If astNodeType is Variable, then value is the INDEX of the variable in the VarTable. 
+ * If astNodeType is Constant, then value is the value of the CONSTANT. 
+ * If astNodeType is neither Variable nor Constant, then value is not a meaningful value.
+ * @exception if stmtNum is negative or 0.
  */
-TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value) 
+TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value) 
 {
 	/*if(stmtNo <= 0) 
 	{
@@ -29,32 +32,38 @@ TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value)
 		throw exception("TNode error: Invalid TNode_Type");
 	}*/
 
-	_nodeType = ast_node_type;
-	_stmtNumber = stmtNo;
+	_nodeType = astNodeType;
+	_stmtNumber = stmtNum;
 	_nodeValueIdx = value;
 	_leftSibling = _rightSibling = NULL;
 	_parent = NULL;
+	_descendents = 0;
 }
 
 /**
- * Return a TNode with parameters as follows, node type, the corresponding statement number and the corresponding parent TNode. 
- * If ast_node_type is Variable, then value is the INDEX of the variable in the VarTable. 
- * If ast_node_type is Constant, then value is the value of the CONSTANT. 
- * If ast_node_type is neither Variable nor Constant, then value is not a meaningful value.
- * @exception if stmtNo is negative or 0.
+ * @param astNodeType the type of Tnode which can Procedure/Assign/Plus/Variable/StmtLst/While/If/Constant/Minus/Times/Program/Call
+ * @param stmtNum the statement number of the TNode
+ * @param value a number which can be the INDEX of the variable or the value of the CONSTANT
+ * @param parent a TNode indicating the parent of this particular TNode
+ * @return a TNode with its node type, the corresponding statement number, value and the parent TNode. 
+ * If astNodeType is Variable, then value is the INDEX of the variable in the VarTable. 
+ * If astNodeType is Constant, then value is the value of the CONSTANT. 
+ * If astNodeType is neither Variable nor Constant, then value is not a meaningful value.
+ * @exception if stmtNum is negative or 0.
  */
-TNode::TNode(TNODE_TYPE ast_node_type, int stmtNo, int value, TNode* parent) 
+TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value, TNode* parent) 
 {
 
-	_nodeType = ast_node_type;
-	_stmtNumber = stmtNo;
+	_nodeType = astNodeType;
+	_stmtNumber = stmtNum;
 	_nodeValueIdx = value;
 	_parent = parent;
 	_leftSibling = _rightSibling = NULL;
+	_descendents = 0;
 }
 
 /**
- * Return the statement number.
+ * @return the statement number of the TNode.
  */
 int TNode::getStmtNumber() 
 {
@@ -62,7 +71,7 @@ int TNode::getStmtNumber()
 }
 
 /**
- * Return the value of the node. 
+ * @return the value of the node. 
  * If the node is a Variable node, then value is the INDEX of the variable in the VarTable. 
  * If the node is a Constant node, then value is a CONSTANT. 
  * If the node is neither a Variable node or Constant node, then value is not a meaningful value.
@@ -74,7 +83,7 @@ int TNode::getNodeValueIdx()
 
 
 /**
- * Return the type of the TNode.
+ * @return the type of the TNode.
  */
 TNODE_TYPE TNode::getNodeType() 
 {
@@ -82,7 +91,7 @@ TNODE_TYPE TNode::getNodeType()
 }
 
 /**
- * Return the parent TNode.
+ * @return the parent TNode.
  */
 TNode* TNode::getParent() 
 {
@@ -91,7 +100,8 @@ TNode* TNode::getParent()
 
 /**
  * Add node to the existing list of child nodes.	
- * @exception if node is NULL.
+ * @param node a TNode
+ * @exception exception if node is NULL.
  */
 void TNode::addChild(TNode* node) 
 {
@@ -99,7 +109,7 @@ void TNode::addChild(TNode* node)
 }
 
 /**
- * Return TRUE if the current node has any child node. Otherwise, return FALSE.
+ * @return TRUE if the current node has any child node. FALSE if the current node does not have any child node.
  */
 bool TNode::hasChild() 
 {
@@ -108,8 +118,8 @@ bool TNode::hasChild()
 }
 
 /**
- * Return a list of children nodes from the current node.	 	
- * If there is no answer, return an empty list.
+ * @return a list of all the children nodes of the current node.	 	
+ * If the current node does not have any children nodes, return an empty list.
  */
 vector<TNode*>* TNode::getChildren() 
 {
@@ -118,7 +128,8 @@ vector<TNode*>* TNode::getChildren()
 
 /**
  * Add node as the left sibling of the current node.
- * @exception if node is NULL.
+ * @param node a TNode
+ * @exception exception if node is NULL.
  */
 void TNode::addLeftSibling(TNode* node) 
 {
@@ -127,7 +138,8 @@ void TNode::addLeftSibling(TNode* node)
 
 /**
  * Add node as the right sibling of the current node.
- * @exception if node is NULL.
+ * @param node a TNode
+ * @exception exception if node is NULL.
  */
 void TNode::addRightSibling(TNode* node) 
 {
@@ -135,7 +147,8 @@ void TNode::addRightSibling(TNode* node)
 }
 
 /**
- * Return TRUE if the current node has a left sibling. Otherwise, return FALSE.
+ * Check if the current node has any left sibling.
+ * @return TRUE if the current node has a left sibling. FALSE if the current node does not have any left sibling.
  */
 bool TNode::hasLeftSibling() 
 {
@@ -144,7 +157,8 @@ bool TNode::hasLeftSibling()
 }
 
 /**
- * Return TRUE if the current node has a right sibling. Otherwise, return FALSE.
+ * Check if the current node has any right sibling.
+ * @return TRUE if the current node has a right sibling. FALSE if the current node does not have any right sibling.
  */
 bool TNode::hasRightSibling() 
 {
@@ -153,7 +167,7 @@ bool TNode::hasRightSibling()
 }
 
 /**
- * Return the left sibling of the current node.
+ * @return the left sibling of the current node.
  */
 TNode* TNode::getLeftSibling() 
 {
@@ -161,7 +175,7 @@ TNode* TNode::getLeftSibling()
 }
 
 /**
- * Return the right sibling of the current node.
+ * @return the right sibling of the current node.
  */
 TNode* TNode::getRightSibling() 
 {
@@ -170,13 +184,23 @@ TNode* TNode::getRightSibling()
 
 /**
  * Set the parent node for current node.
- * @exception if parent is NULL.
+ * @param parent a parent TNode for the current nodes
+ * @exception exception if parent is NULL.
  */
 void TNode::setParent(TNode* parent) 
 {
 	_parent = parent;
 }
 
+//@todo 
+void TNode::increaseDescendent(int toAdd) {
+	_descendents += toAdd;
+}
+
+//@todo 
+int TNode::getDescendent() {
+	return _descendents;
+}
 
 std::ostream& operator<<(std::ostream &strm, const TNode &node) 
 {

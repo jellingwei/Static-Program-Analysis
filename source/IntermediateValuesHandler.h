@@ -15,9 +15,9 @@ using std::swap;
 namespace IntermediateValuesHandler 
 {
 	//Public functions to be used
-	void initialize(unordered_map<string, string> synonymMap);
-	void addAndProcessIntermediateSynonym(Synonym synonym);
-	void addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
+	void initialize(unordered_map<string, SYNONYM_TYPE> synonymMap);
+	bool addAndProcessIntermediateSynonym(Synonym synonym);
+	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
 	Synonym getSynonymWithName(string wantedName);
 	bool filterEqualValue(Synonym synonym, string wantedValue);
 	bool filterEqualPair(Synonym LHS, Synonym RHS);

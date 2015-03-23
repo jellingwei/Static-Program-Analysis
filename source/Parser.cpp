@@ -8,6 +8,7 @@
 #include <sstream>
 #include <regex>
 #include <exception>
+#include <algorithm>
 
 #include "PKB.h"
 #include "AST.h"
@@ -24,14 +25,12 @@
 			the SIMPLE grammar
 
  */
-namespace Parser 
-{
+namespace Parser {
 	using std::string;
 	using std::vector;
 	using std::regex;
 
-	namespace var // contains state of the parser
-	{
+	namespace var { // contains state of the parser
 		ifstream inputFile;
 
 		vector<string> buffer;
@@ -51,8 +50,7 @@ namespace Parser
 	 * The file specified by filename is opened for parsing. 
 	 * Return TRUE if the file can be successfully opened. Otherwise, return FALSE.
 	 */
-	bool initParser(string filename) 
-	{
+	bool initParser(string filename) {
 		using namespace Parser::var;
 		inputFile.open(filename);
 		stmtNum = 0;
@@ -63,8 +61,7 @@ namespace Parser
 		return inputFile.is_open(); 
 	}
 
-	namespace util 
-	{
+	namespace util {
 		using namespace Parser::var;
 		
 		bool parseStmtList();
@@ -74,8 +71,7 @@ namespace Parser
 		 */
 		bool parseLine() 
 		{
-			if (!inputFile.is_open()) 
-			{
+			if (!inputFile.is_open()) {
 				throw new logic_error("Parse failure: Parser not initialised before parsing functions were called");
 			}
 	
@@ -83,24 +79,22 @@ namespace Parser
 
 			string line;
 			getline(inputFile, line);
+			progLineNum += 1;
 
 			// drop everything after 2 backslash
 			int pos;
-			if ((pos = line.find("\\")) != string::npos) 
-			{
+			if ((pos = line.find("\\")) != string::npos) {
 				line = line.substr(0, pos);
 			}
 
-			if (line.empty()) 
-			{
-				if (inputFile.eof()) 
-				{
+			if (line.empty()) {
+				if (inputFile.eof()) {
 					inputFile.close();
 					return false;
 				}
 				return parseLine();
 			}
-			progLineNum += 1;
+			
 			currentParsedLine = line;
 
 			// remove blocks of multiple whitespace
@@ -114,14 +108,11 @@ namespace Parser
 			string operators = "([\\w\\d]+|[*\\-+=;{}\\(\\)])";
 			regex operRegex(operators);
 
-			for (; rs != reg_end; ++rs) 
-			{
+			for (; rs != reg_end; ++rs) {
 				std::smatch match;
 				string res(rs->str());
-				while (std::regex_search(res, match, operRegex)) 
-				{
-					if (match.empty()) 
-					{
+				while (std::regex_search(res, match, operRegex)) {
+					if (match.empty()) {
 						break;
 					}
 					buffer.push_back(match[0]);
@@ -135,15 +126,12 @@ namespace Parser
 		/**
 		 * Returns the next token
 		 */
-		string parseToken() 
-		{
-			if (buffer.size() && bufferIter != buffer.end()) 
-			{
+		string parseToken() {
+			if (buffer.size() && bufferIter != buffer.end()) {
 				return *(bufferIter ++);
 			} else {
 				bool res = parseLine();
-				if (!res) 
-				{
+				if (!res) {
 					return inputFile.eof()? "" : parseToken();
 				} else {
 					bufferIter = buffer.begin();
@@ -152,15 +140,12 @@ namespace Parser
 			}
 		}
 
-		string peekToken() 
-		{
-			if (buffer.size() && bufferIter != buffer.end()) 
-			{
+		string peekToken() {
+			if (buffer.size() && bufferIter != buffer.end()) {
 				return *(bufferIter);
 			} else {
 				bool res = parseLine();
-				if (!res) 
-				{
+				if (!res) {
 					return inputFile.eof()? "" : peekToken();
 				} else {
 					bufferIter = buffer.begin();
@@ -190,7 +175,7 @@ namespace Parser
 	
 				return true;
 			} else if (designEntity.compare("StmtTable") == 0) {
-				pkb.insertStmt(atoi(LHS.c_str()), RHS);
+//				pkb.insertStmt(atoi(LHS.c_str()), RHS);
 	
 				return true;
 			} else if (designEntity.compare("Modifies") == 0) {
@@ -233,6 +218,22 @@ namespace Parser
 		}
 
 
+		bool createVariablesForExpr(vector<string> tokenizedBuffer) {
+			bool status = true;
+			for (unsigned int i = 0; i < tokenizedBuffer.size(); i++) {
+				
+				bool isVariable = !matchName(tokenizedBuffer[i]).empty();
+				if (!isVariable) {
+					continue;
+				}
+
+				string varName = tokenizedBuffer[i];
+				
+				int varIndex = PKB::getInstance().insertVar(varName, stmtNum);
+				status &= (varIndex != -1 );
+			}
+			return status;
+		}
 
 		/**
 		 * Parses an expression. 
@@ -249,6 +250,8 @@ namespace Parser
 			vector<string> slicedBuffer(first, last);
 
 			ExpressionParser exprParser;
+			createVariablesForExpr(slicedBuffer);
+
 			exprParser.updateStmtNum(stmtNum);
 			exprParser.updateProcIndex(currentProcIndex);
 			TNode* top = exprParser.parseExpressionForAST(slicedBuffer);
@@ -283,7 +286,6 @@ namespace Parser
 
 
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
 			PKB pkb = PKB::getInstance();
 
 			TNode* node = pkb.createTNode(If, stmtNum, -1);
@@ -295,8 +297,9 @@ namespace Parser
 			// stmtList node as second child
 			pkb.createLink(Child, node, stmtlistNode); 
 
-			pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
-			PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			//pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+			//PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			PKB::getInstance().insertStmt(stmtNum, "if", node, currentProcIndex);
 
 			// Follows from prev stmt in the stmt list
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
@@ -353,7 +356,7 @@ namespace Parser
 			if (!res) return false;
 
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
+
 			PKB pkb = PKB::getInstance();
 
 			TNode* node = pkb.createTNode(While, stmtNum, -1);
@@ -363,8 +366,9 @@ namespace Parser
 			TNode* stmtlistNode = pkb.createTNode(StmtLst, stmtNum, -1);
 			pkb.createLink(Child, node, stmtlistNode);
 
-			pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
-			PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			//pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+			//PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			PKB::getInstance().insertStmt(stmtNum, "while", node, currentProcIndex);
 
 			// Follows from prev stmt in the stmt list
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
@@ -399,7 +403,7 @@ namespace Parser
 		
 
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
+			
 			PKB pkb = PKB::getInstance();
 			TNode* node = pkb.createTNode(Assign, stmtNum, -1);
 			TNode* LHSNode = pkb.createTNode(Variable, stmtNum, 
@@ -410,8 +414,9 @@ namespace Parser
 			TNode* RHSNode = node;  // pass the assignNode directly to parseExpr, which will attach the variable/constant to it
 
 		
-			pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
-			PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			//pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+			//PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			PKB::getInstance().insertStmt(stmtNum, "assign", node, currentProcIndex);
 
 
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
@@ -435,11 +440,11 @@ namespace Parser
 			int index = pkb.insertProc(procName);
 		
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
 			TNode* node = pkb.createTNode(Call, stmtNum, index);
 		
-			pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
-			PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			//pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+			//PKB::getInstance().nodeTable.insert(stmtNumToNodePair);
+			PKB::getInstance().insertStmt(stmtNum, "call", node, currentProcIndex);
 
 			TNode* prevStmtInStmtList = currentASTParent()->hasChild() ? currentASTParent()->getChildren()->back() : NULL;
 			if (prevStmtInStmtList) 
@@ -452,8 +457,7 @@ namespace Parser
 			callPkb("CallsTable", std::to_string(static_cast<long long>(currentProcIndex)), std::to_string(static_cast<long long>(calledProcIndex)));
 	
 			string nextToken = parseToken();
-			match(nextToken, ";");
-			return true;
+			return match(nextToken, ";");
 		}
 
 
@@ -468,18 +472,15 @@ namespace Parser
 
 			stmtNum += 1;
 			PKB::getInstance().stmtToProcMap.insert(make_pair<int, int>(stmtNum, currentProcIndex));
+			PKB::getInstance().stmtNumToProcLineMap.insert(make_pair<int, int>(stmtNum, progLineNum));
 
 			if (currentParsedLine.find("=") != string::npos) {
-				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "assign");
 				res = parseAssign(firstToken);
 			} else if (firstToken == "while") {
-				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "while");
 				res = parseWhile(firstToken);
 			} else if (firstToken == "if") {
-				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "if");
 				res = parseIf(firstToken);	
 			} else if (firstToken == "call") {
-				callPkb("StmtTable", std::to_string(static_cast<long long>(stmtNum)), "call");
 				res = parseCall(firstToken);
 			}
 

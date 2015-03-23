@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['queryparser',['QueryParser',['../namespace_query_parser.html',1,'']]]
+  ['parser',['Parser',['../namespace_parser.html',1,'']]]
 ];

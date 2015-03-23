@@ -14,6 +14,9 @@ Synonym::~Synonym()
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name)
 {
@@ -24,6 +27,10 @@ Synonym::Synonym(SYNONYM_TYPE type, string name)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED 
+ * @param name the name of the synonym, e.g a for ASSIGN
+ * @param attribute the attribute of the synonym which can be procName/varName/value/stmtNum
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
 {
@@ -35,6 +42,9 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
  */
 Synonym::Synonym(SYNONYM_TYPE type, int name)
 {
@@ -47,7 +57,7 @@ Synonym::Synonym(SYNONYM_TYPE type, int name)
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
  */
-Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
+/*Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
 {
 	_isEmpty = false;
 	_type = type;
@@ -57,10 +67,14 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<string> values)
 	{
 		_values.push_back(std::stoi(values[i]));
 	}
-}
+}*/
 
 /**
  * Set the synonym type and name to the given type and name respectively.
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
+ * @param values a list of the possible kinds of values associated with the synonym which can be statement numbers, indexes.
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 {
@@ -73,17 +87,17 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
 /**
  * Set the synonym type and name to the given type and name respectively.
  * Also, set the synonym to a list of values given.
+ * @param type the SYNONYM_TYPE which can be PROCEDURE/STMT/ASSIGN/CALL/WHILE/IF/VARIABLE/CONSTANT/PROG_LINE/STRING_CHAR/
+ *											 STRING_INT/STRING_PATTERNS/UNDEFINED
+ * @param name the name of the synonym, e.g a for ASSIGN
+ * @param values a list of the possible kinds of values associated with the synonym which can be statement numbers, indexes.
  */
 Synonym::Synonym(SYNONYM_TYPE type, string name, set<int> values)
 {
 	_isEmpty = false;
 	_type = type;
 	_name = name;
-	
-	for (set<int>::iterator itr = values.begin(); itr != values.end(); ++itr)
-	{
-		_values.push_back(*itr);
-	}
+	_valuesSet = values;
 }
 
 bool Synonym::isEmpty()
@@ -94,20 +108,17 @@ bool Synonym::isEmpty()
 void Synonym::setValues(vector<int> values)
 {
 	_values = values;
+	_valuesSet.clear();
 }
 
 void Synonym::setValues(set<int> values)
 {
+	_valuesSet = values;
 	_values.clear();
-
-	for (set<int>::iterator itr = values.begin(); itr != values.end(); ++itr)
-	{
-		_values.push_back(*itr);
-	}
 }
 
 /**
- * Return the type of the synonym.
+ * @return the type of the synonym.
  */
 SYNONYM_TYPE Synonym::getType()
 {
@@ -120,7 +131,7 @@ SYNONYM_ATTRIBUTE Synonym::getAttribute()
 }
 
 /**
- * Return the name of the synonym.
+ * @return the name of the synonym.
  */
 string Synonym::getName()
 {
@@ -128,23 +139,31 @@ string Synonym::getName()
 }
 
 /**
- * Return a list of values of the synonym. 
+ * @return a list of values of the synonym. 
  * If there are no values, return an empty list.
  */
 vector<int> Synonym::getValues()
 {
+	if (_values.size() != 0) {
+		return _values;
+	} else if (_valuesSet.size() != 0) {
+		for (auto itr = _valuesSet.begin(); itr != _valuesSet.end(); ++itr) {
+			_values.push_back(*itr);
+		}
+	}
 	return _values;
 }
 
 set<int> Synonym::getValuesSet()
 {
-	set<int> returnValues;
-	
-	for (unsigned int i = 0; i < _values.size(); i++)
-	{
-		returnValues.insert(_values[i]);
+	if (_valuesSet.size() != 0) {
+		return _valuesSet;
+	} else if (_values.size() != 0) {
+		for (unsigned int i = 0; i < _values.size(); i++) {
+			_valuesSet.insert(_values[i]);
+		}
 	}
-	return returnValues;
+	return _valuesSet;
 }
 
 string Synonym::convertToString(SYNONYM_TYPE synonymType)
@@ -168,8 +187,12 @@ string Synonym::convertToString(SYNONYM_TYPE synonymType)
 		return "constant";
 	case PROG_LINE:
 		return "prog_line";
-	case STRING:
-		return "string";
+	case STRING_CHAR:
+		return "string_char";
+	case STRING_INT:
+		return "string_int";
+	case STRING_PATTERNS:
+		return "string_patterns";
 	case BOOLEAN:
 		return "boolean";
 	case UNDEFINED:
@@ -199,11 +222,46 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return CONSTANT;
 	} else if (synonymType == "prog_line") {
 		return PROG_LINE;
-	} else if (synonymType == "string") {
-		return STRING;
-	} else if (synonymType == "boolean") {
+	} else if (synonymType == "string_char") {
+		return STRING_CHAR; 
+	} else if (synonymType == "string_int") {
+		return STRING_INT;
+	} else if (synonymType == "string_patterns") {
+		return STRING_PATTERNS;
+	}else if (synonymType == "boolean") {
 		return BOOLEAN;
 	} else {
 		return UNDEFINED;
+	}
+}
+string Synonym::convertSynonymAttrToString(SYNONYM_ATTRIBUTE synonymAttr)
+{
+	switch (synonymAttr) {
+	case procName:
+		return "procName";
+	case varName:
+		return "varName";
+	case value:
+		return "value";
+	case stmtNo:
+		return "stmtNo";
+	case empty:
+		return "";
+	default:
+		return "";
+	}
+}
+SYNONYM_ATTRIBUTE Synonym::convertSynonymAttrToEnum(string synonymAttr)
+{
+	if (synonymAttr == "procName") {
+		return procName;
+	} else if (synonymAttr == "varName") {
+		return varName;
+	} else if (synonymAttr == "value") {
+		return value;
+	} else if (synonymAttr == "stmtNo"){
+		return stmtNo;
+	}else{
+		return empty;
 	}
 }

@@ -8,16 +8,12 @@
 #include <algorithm>
 
 #include "StmtTable.h"
+#include "TNode.h"
+#include "PKB.h"
 
 using namespace std;
 
-/**
-* Return TRUE if the StmtTable is updated accordingly. Otherwise, return FALSE. 
-* If stmtNum and type are already present in the StmtTable and are previously set, the StmtTable will not be updated.
-* @exception if stmtNum is negative or 0, or type is not while/assign/if/call.
-*/
-bool StmtTable::insertStmt(int stmtNum, string type) 
-{
+bool StmtTable::insertStmt(int stmtNum, string type, TNode* node, int procIndex) {
 	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
 	} else if(!(type=="while" || type=="assign" || type=="if" || type=="call")) {
@@ -48,18 +44,15 @@ bool StmtTable::insertStmt(int stmtNum, string type)
 			ifStmt.push_back(stmtNum);
 		}
 		
+		pair<int, TNode*> stmtNumToNodePair(stmtNum, node);
+		nodeTable.insert(stmtNumToNodePair);
+
 		return true;
 	} else {
 		return false;
 	} 
 }
 
-
-/**
- * Return the statement type in the StmtTable with the given statement number.
- * If stmtNum is out of range, return an empty string.
- * @exception if stmtNum is negative or 0.
- */
 string StmtTable::getType(int stmtNum) 
 {
 	if(stmtNum <= 0) {
@@ -72,10 +65,6 @@ string StmtTable::getType(int stmtNum)
 	return "";
 }
 
-/**
- * Return all the statement number of the statement type in the the StmtTable. 
- * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
-*/
 vector<int> StmtTable::getStmtNumForType(string type) 
 {
 
@@ -116,10 +105,10 @@ vector<int> StmtTable::getStmtNumForType(string type)
 	}
 }
 
-/**
-* Return TRUE if stmtNo is of Assignment Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
+int StmtTable::getProcIndexForStmt(int stmtNo) {
+	throw exception("not implemented yet");
+}
+
 bool StmtTable::isAssign(int stmtNo) 
 {
 	if(stmtNo <= 0) {
@@ -129,10 +118,6 @@ bool StmtTable::isAssign(int stmtNo)
 	return stmtNumMap.at(stmtNo) == "assign";
 }
 
-/**
-* Return TRUE if stmtNo is of While Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
 bool StmtTable::isWhile(int stmtNo) 
 {
 	if(stmtNo <= 0) {
@@ -143,10 +128,6 @@ bool StmtTable::isWhile(int stmtNo)
 	
 }
 
-/**
-* Return TRUE if stmtNo is of If Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
 bool StmtTable::isIf(int stmtNo) 
 {
 	if(stmtNo <= 0) {
@@ -157,10 +138,6 @@ bool StmtTable::isIf(int stmtNo)
 	
 }
 
-/**
-* Return TRUE if stmtNo is of call Type. Otherwise, return FALSE. 
-* If stmtNo is out of range, return FALSE.
-*/
 bool StmtTable::isCall(int stmtNo) 
 {
 	if(stmtNo <= 0) {
@@ -171,10 +148,15 @@ bool StmtTable::isCall(int stmtNo)
 	
 }
 
-/**
- * Return the total number of statements in the the StmtTable.
- */
 int StmtTable::getSize() 
 {
 	return stmtNumMap.size();
+}
+
+TNode* StmtTable::getNodeForStmt(int stmtNum) {
+	if (nodeTable.count(stmtNum) > 0) {
+		return nodeTable.at(stmtNum);
+	} else {
+		return NULL;
+	}
 }

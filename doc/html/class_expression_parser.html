@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>SPA: ExpressionParser Class Reference</title>
+<title>CS3202 Minions SPA: ExpressionParser Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,8 +22,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">SPA
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -38,7 +39,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -125,7 +125,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>updateProcIndex</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructor. Only for use in unit testing, to avoid potential problems with using a global pkb singleton that may interfere with other unit tests. </p>
+<p>Constructor. Only for use in unit testing, so that the expression parser directly reads from the vartable. </p>
 
 </div>
 </div>
@@ -159,11 +159,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>updateProcIndex</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Method to parse an expression. Returns the root of a tree. This function writes data to the pkb (<a class="el" href="class_uses_table.html">UsesTable</a> and <a class="el" href="class_var_table.html">VarTable</a>).</p>
-<p>For example, given an expression x + y + z, the following tree is the output.</p><ul>
-<li>&lt;- root / \</li>
-</ul>
-<p>z / \ x y </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Method to parse an expression. Returns the root of a tree. Does not throw an exception if a unknown variable is encountered. Instead it assigns a temporary variable.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td>A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y", ";"] should be passed in </td></tr>
   </table>
@@ -190,10 +187,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>updateProcIndex</b> (
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Method to parse an expression. Returns the root of a tree. This method differs from parseExpressionForAST as it does not write data to the <a class="el" href="class_p_k_b.html">PKB</a>. For example, given an expression x + y + z, the following tree is the output.</p><ul>
-<li>&lt;- root / \</li>
-</ul>
-<p>z / \ x y </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Method to parse an expression. Returns the root of a tree. This method differs from parseExpressionForAST as it throws exceptions on encountering unknown variables </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">buffer</td><td>A vector containing the tokenized right side of expression. e.g. For "a = x + y;" , a vector containing ["x", "+", "y"] should be passed in </td></tr>
   </table>
@@ -231,7 +225,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>updateProcIndex</b> (
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 9 2015 10:12:44 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:51 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -48,7 +48,7 @@
     <ClCompile Include="source\TestProcTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\TestIntermediateValuesHandler.cpp">
+    <ClCompile Include="source\TestValuesHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -83,7 +83,7 @@
     <ClInclude Include="source\TestProcTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="source\TestIntermediateValuesHandler.h">
+    <ClInclude Include="source\TestValuesHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

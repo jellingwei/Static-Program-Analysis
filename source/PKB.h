@@ -13,12 +13,15 @@
 #include "ParentTable.h"
 #include "ConstantTable.h"
 #include "CallsTable.h"
+#include "NextTable.h"
+#include "AffectsTable.h"
+#include "CFG.h"
 #include "AST.h"
 #include "TNode.h"
 #include "Synonym.h"
+#include "common.h"
 
 using namespace std;
-typedef short PROC;
 
 class TNode;
 
@@ -29,16 +32,7 @@ class StmtTable;
 class PKB {
 public:
 	// @cond todo
-	VarTable* varTable; 
-	ProcTable* procTable;
-	StmtTable* stmtTable;
-	ConstantTable* constantTable;
-	CallsTable* callsTable;
-	ModifiesTable* modifiesTable;
-	UsesTable* usesTable;
-	FollowsTable* followsTable;
-	ParentTable* parentTable;
-	AST* ast;
+
 
 	// @endcond
 
@@ -99,15 +93,19 @@ public:
 	vector<int> getCallsRhs();
 
 	// StmtTable methods
-	bool insertStmt(int, string);
+	bool insertStmt(int, string, TNode*, int);
 	string getType(int);
+	// @cond todo
 	vector<int> getStmtNumForType(string);
+	// @endcond todo
 	vector<int> getStmtNumForType(SYNONYM_TYPE);
+	int getProcIndexForStmt(int stmtNo);
 	bool isAssign(int);
 	bool isWhile(int);
 	bool isIf(int);
 	bool isCall(int);
 	int getStmtTableSize();
+	TNode* getNodeForStmt(int);
 
 	// Parent Table methods
 	bool setParent(TNode* stmtNum1, TNode* stmtNum2);
@@ -135,7 +133,8 @@ public:
 	vector<int> getFollowsLhs();
 	vector<int> getFollowsRhs();
 
-	// ModifiesTable methods
+	// Modifies Table methods
+	void initModifiesTable(int numVariables);
 	bool setModifies(int stmtNum, int varIndex);
 	bool isModifies(int stmtNum, int varIndex);
 	vector<int> getModStmtNum(int varIndex);
@@ -144,13 +143,17 @@ public:
 	vector<int> getModifiesLhs();
 	vector<int> getModifiesRhs();
 
+	boost::dynamic_bitset<> getModVarInBitvectorForStmt(int stmtNum);
+
 	bool setModifiesProc(int procIndex, int varIndex);
 	bool isModifiesProc(int procIndex, int varIndex);
 	vector<int> getModProcIndex(int varIndex);
 	vector<int> getModVarForProc(int procIndex);
 	pair<vector<int>, vector<int>> getAllModProcPair();
 
+
 	// UsesTable methods
+	void initUsesTable(int numVariables);
 	bool setUses(int stmtNum, int varIndex);
 	bool isUses(int stmtNum, int varIndex);
 	vector<int> getUsesStmtNum(int varIndex);
@@ -159,20 +162,59 @@ public:
 	vector<int> getUsesLhs();
 	vector<int> getUsesRhs();
 
+	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(int stmtNum);
+
 	bool setUsesProc(int procIndex, int varIndex);
 	bool isUsesProc(int procIndex, int varIndex);
 	vector<int> getUsesProcIndex(int varIndex);
 	vector<int> getUsesVarForProc(int procIndex);
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
+	// cfg
+	vector<int> getNextAfter(int progLine1, bool transitiveClosure = false);
+	vector<int> getNextBefore(int progLine2, bool transitiveClosure = false);
+	bool isNext(int progLine1, int progLine2, bool transitiveClosure = false);
+	vector<int> getNextAfterS(int progLine1);
+	vector<int> getNextBeforeS(int progLine2);
+	bool isNextS(int progLine1, int progLine2);
+	vector<int> getNextLhs();
+	vector<int> getNextRhs();
+	CNode* getCNodeForProgLine(int progLine);
 
-	//@todo move to somewhere in pkb? discuss with kenson
+	vector<CFG*> cfgTable;
+
+	// affects
+	bool isAffects(int progLine1, int progLine2, bool transitiveClosure = false);
+	vector<int> getAffectedBy(int progLine1, bool transitiveClosure = false);
+	vector<int> getAffecting(int progLine2, bool transitiveClosure = false);
+	vector<int> getAffectsLhs();
+	vector<int> getAffectsRhs();
+
+	static bool canSkipNodesBackwards(CNode* node);
+	static bool canSkipNodesForwards(CNode* node);
+
+
+	//@todo 
 	// @cond todo
-	unordered_map<int, TNode*> nodeTable;
-	unordered_map<int, int> stmtToProcMap;  // a temporary structure for convenience
+	unordered_map<int, CNode*> cfgNodeTable; //@todo nextTable?
+	unordered_map<int, TNode*> nodeTable;   // @todo change calls to nodeTable to getNodeFromStmt
+	unordered_map<int, int> stmtToProcMap;  // @todo change to getProcIndexForStmt from stmtTable
+	unordered_map<int, int> stmtNumToProcLineMap; // @todo not needed anymore
 	// @endcond
 
 private:
+	VarTable* varTable; 
+	ProcTable* procTable;
+	StmtTable* stmtTable;
+	ConstantTable* constantTable;
+	CallsTable* callsTable;
+	ModifiesTable* modifiesTable;
+	UsesTable* usesTable;
+	FollowsTable* followsTable;
+	ParentTable* parentTable;
+	AST* ast;
+	NextTable* nextTable;
+	AffectsTable* affectsTable;
 	PKB();
 	
 	

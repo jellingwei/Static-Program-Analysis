@@ -2,30 +2,13 @@
 
 //Node for the query tree
 #include <string>
-#include "Synonym.h"
 #include <vector>
 #include <iostream>
+#include "common.h"
+#include "Synonym.h"
 
 using std::string;
 using std::vector;
-
-enum QNODE_TYPE
-{
-	// Default QueryTree Placeholder QNODE_TYPEs
-	ROOT, RESULT, SUCHTHAT, PATTERN, WITH,
-
-	// Query QNODE_TYPEs
-	Affects, AffectsS,
-	Next, NextS,
-	Modifies,
-	Calls, CallsS,
-	Uses, UsesS, 
-	Parent, ParentS, 
-	Follows, FollowsS,
-
-	// Select and Pattern QNODE_TYPEs
-	Selection, Pattern
-};
 
 class QNode
 {

@@ -10,7 +10,6 @@ using namespace std;
 class AST {
 	private:		
 		vector<TNode*> allNodes;
-		TNode* _lastImpt;
 		TNode* _rootNode;
 
 	public:
@@ -24,7 +23,6 @@ class AST {
 		bool isChildNode(TNode* parent, TNode* child);
 
 		bool isExists(TNode* node);
-		TNode* getLastImpt();
 		int getSize();
 
 		vector<int> patternMatchAssign(string RHS);
@@ -32,4 +30,6 @@ class AST {
 		vector<int> patternMatchIf(string LHS);
 
 		int getControlVariable(int stmtNum);
+
+		int getDescendent(TNode* curr);
 };

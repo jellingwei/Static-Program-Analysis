@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>SPA: CallComparator Class Reference</title>
+<title>CS3202 Minions SPA: CallComparator Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,8 +22,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">SPA
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -38,7 +39,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -96,17 +96,59 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6fc731f6c81e861e82b2bcd9b936ccd5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6fc731f6c81e861e82b2bcd9b936ccd5"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CallComparator</b> (vector&lt; int &gt; topoOrder)</td></tr>
 <tr class="separator:a6fc731f6c81e861e82b2bcd9b936ccd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0b5fbe21429a5f8aa434eb074af66fd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad0b5fbe21429a5f8aa434eb074af66fd"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (<a class="el" href="class_t_node.html">TNode</a> *i, <a class="el" href="class_t_node.html">TNode</a> *j)</td></tr>
+<tr class="memitem:ad0b5fbe21429a5f8aa434eb074af66fd"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_call_comparator.html#ad0b5fbe21429a5f8aa434eb074af66fd">operator()</a> (<a class="el" href="class_t_node.html">TNode</a> *i, <a class="el" href="class_t_node.html">TNode</a> *j)</td></tr>
 <tr class="separator:ad0b5fbe21429a5f8aa434eb074af66fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ad0b5fbe21429a5f8aa434eb074af66fd"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool CallComparator::operator() </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
+          <td class="paramname"><em>j</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sorts the call statements by the order given in the constructor. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">i</td><td>a <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+    <tr><td class="paramname">j</td><td>a <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TRUE if the call statements are sorted by the given order. FALSE if the call statements are not sorted by the given order. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>source/DesignExtractor.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 9 2015 10:12:44 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:50 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

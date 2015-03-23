@@ -14,9 +14,15 @@
 using namespace std;
 using namespace stdext;
 
+//@todo change to bool
+void ModifiesTable::init(int numVariables) {
+	this->numVariables = numVariables;
+}
 
-bool ModifiesTable::setModifies(int stmtNum, int varIndex) 
-{
+bool ModifiesTable::setModifies(int stmtNum, int varIndex) {
+	if (this->numVariables == 0) {
+		throw logic_error("init modifiesTable first");
+	}
 	if (stmtNum <= 0 || varIndex <= 0) {
 		throw exception("ModifiesTable error: Negative statement number or varIndex");
 	}
@@ -26,20 +32,24 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 
 	//check if varIndexMap key stmtNum contains the variable
 	if (varIndexMap.count(stmtNum) > 0) {
+		boost::dynamic_bitset<> varIndexList;
+
 		varIndexList = varIndexMap.at(stmtNum);
 
-		auto result = find(begin(varIndexList), end(varIndexList), varIndex);
-		if (result != end(varIndexList)) { // varIndex can be found already
-			
+		bool result = varIndexList[varIndex];
+		if (result) { // varIndex can be found already
+		   //@todo
 		} else {
-			varIndexList.push_back(varIndex);
+			varIndexList[varIndex] = true;
 			varIndexMap.erase(stmtNum);
-			varIndexMap.insert(pair<int, vector<int>> (stmtNum, varIndexList));
+			varIndexMap.insert(pair<int, boost::dynamic_bitset<> > (stmtNum, varIndexList));
 		}
 
 	} else {
-		newVarList.push_back(varIndex);
-		varIndexMap.insert(pair<int, vector<int>> (stmtNum, newVarList));
+		boost::dynamic_bitset<> varIndexList(this->numVariables);
+		auto position = varIndexList[varIndex];
+		position = true;
+		varIndexMap.insert(pair<int, boost::dynamic_bitset<> > (stmtNum, varIndexList));
 	}
 
 	vector<int> newStmtList;
@@ -65,21 +75,22 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex)
 	return true;
 }
 
-bool ModifiesTable::isModifies(int stmtNum, int varIndex) 
-{
+bool ModifiesTable::isModifies(int stmtNum, int varIndex) {
 	if (stmtNum <= 0 || varIndex <= 0) {
 		return false;
 	}
 
-	if (varIndexMap.count(stmtNum) == 0) {
+	boost::dynamic_bitset<> varIndexList;
+
+	if (varIndexMap.count(stmtNum) > 0) {
+		varIndexList = varIndexMap.at(stmtNum);
+	} else {
 		return false;
 	}
 
-	vector<int> varIndexList = varIndexMap.at(stmtNum);
-
-	auto result = find(begin(varIndexList), end(varIndexList), varIndex);
+	bool result = varIndexMap.at(stmtNum)[varIndex];
 	// TRUE if varindex is new in the table
-	return result != end(varIndexList);
+	return result; 
 }
 
 vector<int> ModifiesTable::getModStmtNum(int varIndex) 
@@ -98,8 +109,7 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 }
 
 
-vector<int> ModifiesTable::getModVarForStmt(int stmtNum) 
-{
+vector<int> ModifiesTable::getModVarForStmt(int stmtNum) {
 	if (stmtNum <= 0) {
 		return vector<int>();
 	}
@@ -109,18 +119,32 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum)
 		return result;
 	}
 
-	vector<int> varIndexList = varIndexMap.at(stmtNum);
-	return varIndexList;
+	boost::dynamic_bitset<> varIndexList = varIndexMap.at(stmtNum);
+
+	vector<int> result;
+	for (int i = 0; i < numVariables; i++) {
+		if (varIndexList[i]) {
+			result.push_back(i);
+		}
+	}
+	return result;
 }
 
+boost::dynamic_bitset<> ModifiesTable::getModVarInBitvectorForStmt(int stmtNum) {
 
-pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() 
-{
+	if (varIndexMap.count(stmtNum) == 0) {
+		throw logic_error("ModifiesTable: stmt is not a key in ModifiesTable");
+	}
+
+	return varIndexMap.at(stmtNum);
+}
+
+pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
-		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
+		for (unsigned int i = 0; i < iter->second.size(); i++) {
 			result.first.push_back(iter->first);
-			result.second.push_back(*varListIter);
+			result.second.push_back(iter->second[i]);
 		}
 		
 	}
@@ -152,7 +176,7 @@ bool ModifiesTable::setModifiesProc(int procIndex, int varIndex)
 		} else {
 			varIndexList.push_back(varIndex);
 			procVarIndexMap.erase(procIndex);
-			procVarIndexMap.insert(pair<int, vector<int>> (procIndex, varIndexList));
+			procVarIndexMap.insert(pair<int, vector<int> > (procIndex, varIndexList));
 		}
 
 	} else {
@@ -183,17 +207,18 @@ bool ModifiesTable::setModifiesProc(int procIndex, int varIndex)
 	return true;
 }
 
-bool ModifiesTable::isModifiesProc(int procIndex, int varIndex) 
-{
+bool ModifiesTable::isModifiesProc(int procIndex, int varIndex) {
 	if (procIndex < 0 || varIndex <= 0) {
 		return false;
 	}
 
-	if (varIndexMap.count(procIndex) == 0) {
+	vector<int> varIndexList;
+
+	if (procVarIndexMap.count(procIndex) > 0) {
+		varIndexList = procVarIndexMap.at(procIndex);
+	} else {
 		return false;
 	}
-
-	vector<int> varIndexList = varIndexMap.at(procIndex);
 
 	auto result = find(begin(varIndexList), end(varIndexList), varIndex);
 	// TRUE if varindex is new in the table

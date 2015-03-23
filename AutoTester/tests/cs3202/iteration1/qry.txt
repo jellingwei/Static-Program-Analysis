@@ -1,0 +1,160 @@
+1 - Q
+stmt s; 
+Select s
+1,2,3,4,5,6,7,8,9,10
+5000
+2 - Q
+variable v; 
+Select v
+a,b,c,d
+5000
+3 - Q
+call c; 
+Select c
+4,8, 9
+5000
+4 - Q
+while w; 
+Select w
+3
+5000
+5 - Q
+if i; 
+Select i
+5
+5000
+6 - Q
+if i; stmt s; 
+Select i with s.stmt# = 4
+5
+5000
+7 - Q
+constant c;
+Select c
+1, 2
+5000
+8 - 
+constant c; assign a;
+Select a with c.value = 2
+1, 2, 6, 7, 10
+5000
+9 -
+constant c; assign a;
+Select a with c.value = 10
+none
+5000
+10 - Q
+if i; assign a;
+Select a such that Parent (i, a)
+6, 7
+5000
+11 - Q
+while w; assign a;
+Select a such that Parent (w, a)
+none
+5000
+12 - Q
+call c; stmt s;
+Select s such that Parent (s, c)
+3, 5
+5000
+13 - Q
+procedure p;
+Select p with p.procName="A"
+A
+5000
+14 - Q
+procedure p, q;
+Select p such that Calls(p, q)
+A, B
+5000
+15 - Q
+procedure p;
+Select p such that Calls(_, "C")
+A, B, C
+5000
+16 - Q
+procedure p;
+Select p such that Calls(_, "C") with p.procName = "A"
+A
+5000
+17 - Q
+procedure p; stmt s;
+Select p such that Calls("A", p) with s.stmt# = 3
+B, C
+5000
+18 - Q
+constant c; while w;
+Select w such that Parent(w, c) with c.value = 4
+none
+5000
+19 - Q
+call c; assign a;
+Select c such that Follows(a, c)
+8
+5000
+20 - Q
+stmt s;
+Select BOOLEAN such that Calls*("A", "C")
+TRUE
+5000
+21 - Q
+assign a;
+Select BOOLEAN such that pattern a(_, "a + b")
+none
+5000
+22 - Q
+assign a;
+Select BOOLEAN such that pattern a(_, _"a + b"_)
+none
+5000
+23 - Q
+procedure a, b;
+Select BOOLEAN such that Calls*(a, b)
+TRUE
+5000
+24 - Q
+procedure a, b;
+Select b such that Calls*(a, b)
+B, C
+5000
+25 - Q
+procedure a, b;
+Select b such that Calls*(a, b) with a.procName = "B"
+C
+5000
+26 - Q
+procedure a, b;
+Select BOOLEAN such that Calls*(a, b) with a.procName = "B"
+TRUE
+5000
+27 - Q
+procedure p;
+Select p
+A,B,C
+5000
+28 - Q
+stmt s; call c;
+Select s such that Parent*(s, c)
+3, 5
+5000
+29 - Q
+variable v; assign a;
+Select v pattern a(v, "1") with v.varName = "a"
+a
+5000
+30 - Q
+variable v; assign a;
+Select v pattern a(v, "2") with v.varName = "a"
+none
+5000
+31 - Q
+assign a;
+Select a with a.stmt# = 3
+none
+5000
+32 - Q
+assign a;
+Select a with a.stmt# = 2
+2
+5000

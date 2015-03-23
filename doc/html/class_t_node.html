@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>SPA: TNode Class Reference</title>
+<title>CS3202 Minions SPA: TNode Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,8 +22,9 @@
 <table cellspacing="0" cellpadding="0">
  <tbody>
  <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">SPA
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -38,7 +39,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
@@ -142,13 +142,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td class="memname">TNode::TNode </td>
           <td>(</td>
           <td class="paramtype">TNODE_TYPE&#160;</td>
-          <td class="paramname"><em>ast_node_type</em>, </td>
+          <td class="paramname"><em>astNodeType</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>stmtNo</em>, </td>
+          <td class="paramname"><em>stmtNum</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -163,9 +163,18 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a <a class="el" href="class_t_node.html">TNode</a> with parameters as follows, node type, the corresponding statement number and the corresponding value. If ast_node_type is Variable, then value is the INDEX of the variable in the <a class="el" href="class_var_table.html">VarTable</a>. If ast_node_type is Constant, then value is the value of the CONSTANT. If ast_node_type is neither Variable nor Constant, then value is not a meaningful value. </p><dl class="exception"><dt>Exceptions</dt><dd>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">astNodeType</td><td>the type of Tnode which can be Procedure/Assign/Plus/Variable/StmtLst/While/If/Constant/Minus/Times/Program/Call </td></tr>
+    <tr><td class="paramname">stmtNum</td><td>the statement number of the <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+    <tr><td class="paramname">value</td><td>a number which can be the INDEX of the variable or the value of the CONSTANT </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="class_t_node.html">TNode</a> with its node type, the corresponding statement number and the corresponding value. If astNodeType is Variable, then value is the INDEX of the variable in the <a class="el" href="class_var_table.html">VarTable</a>. If astNodeType is Constant, then value is the value of the CONSTANT. If astNodeType is neither Variable nor Constant, then value is not a meaningful value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">if</td><td>stmtNo is negative or 0. </td></tr>
+    <tr><td class="paramname">if</td><td>stmtNum is negative or 0. </td></tr>
   </table>
   </dd>
 </dl>
@@ -180,13 +189,13 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
           <td class="memname">TNode::TNode </td>
           <td>(</td>
           <td class="paramtype">TNODE_TYPE&#160;</td>
-          <td class="paramname"><em>ast_node_type</em>, </td>
+          <td class="paramname"><em>astNodeType</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>stmtNo</em>, </td>
+          <td class="paramname"><em>stmtNum</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -207,9 +216,19 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a <a class="el" href="class_t_node.html">TNode</a> with parameters as follows, node type, the corresponding statement number and the corresponding parent <a class="el" href="class_t_node.html">TNode</a>. If ast_node_type is Variable, then value is the INDEX of the variable in the <a class="el" href="class_var_table.html">VarTable</a>. If ast_node_type is Constant, then value is the value of the CONSTANT. If ast_node_type is neither Variable nor Constant, then value is not a meaningful value. </p><dl class="exception"><dt>Exceptions</dt><dd>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">astNodeType</td><td>the type of Tnode which can Procedure/Assign/Plus/Variable/StmtLst/While/If/Constant/Minus/Times/Program/Call </td></tr>
+    <tr><td class="paramname">stmtNum</td><td>the statement number of the <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+    <tr><td class="paramname">value</td><td>a number which can be the INDEX of the variable or the value of the CONSTANT </td></tr>
+    <tr><td class="paramname">parent</td><td>a <a class="el" href="class_t_node.html">TNode</a> indicating the parent of this particular <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="class_t_node.html">TNode</a> with its node type, the corresponding statement number, value and the parent <a class="el" href="class_t_node.html">TNode</a>. If astNodeType is Variable, then value is the INDEX of the variable in the <a class="el" href="class_var_table.html">VarTable</a>. If astNodeType is Constant, then value is the value of the CONSTANT. If astNodeType is neither Variable nor Constant, then value is not a meaningful value. </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">if</td><td>stmtNo is negative or 0. </td></tr>
+    <tr><td class="paramname">if</td><td>stmtNum is negative or 0. </td></tr>
   </table>
   </dd>
 </dl>
@@ -230,9 +249,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add node to the existing list of child nodes. </p><dl class="exception"><dt>Exceptions</dt><dd>
+<p>Add node to the existing list of child nodes. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>a <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">if</td><td>node is NULL. </td></tr>
+    <tr><td class="paramname">exception</td><td>if node is NULL. </td></tr>
   </table>
   </dd>
 </dl>
@@ -252,9 +277,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add node as the left sibling of the current node. </p><dl class="exception"><dt>Exceptions</dt><dd>
+<p>Add node as the left sibling of the current node. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>a <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">if</td><td>node is NULL. </td></tr>
+    <tr><td class="paramname">exception</td><td>if node is NULL. </td></tr>
   </table>
   </dd>
 </dl>
@@ -274,9 +305,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Add node as the right sibling of the current node. </p><dl class="exception"><dt>Exceptions</dt><dd>
+<p>Add node as the right sibling of the current node. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">node</td><td>a <a class="el" href="class_t_node.html">TNode</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">if</td><td>node is NULL. </td></tr>
+    <tr><td class="paramname">exception</td><td>if node is NULL. </td></tr>
   </table>
   </dd>
 </dl>
@@ -295,7 +332,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return a list of children nodes from the current node. If there is no answer, return an empty list. </p>
+<dl class="section return"><dt>Returns</dt><dd>a list of all the children nodes of the current node. If the current node does not have any children nodes, return an empty list. </dd></dl>
 
 </div>
 </div>
@@ -311,7 +348,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the left sibling of the current node. </p>
+<dl class="section return"><dt>Returns</dt><dd>the left sibling of the current node. </dd></dl>
 
 </div>
 </div>
@@ -327,7 +364,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the type of the <a class="el" href="class_t_node.html">TNode</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>the type of the <a class="el" href="class_t_node.html">TNode</a>. </dd></dl>
 
 </div>
 </div>
@@ -343,7 +380,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the value of the node. If the node is a Variable node, then value is the INDEX of the variable in the <a class="el" href="class_var_table.html">VarTable</a>. If the node is a Constant node, then value is a CONSTANT. If the node is neither a Variable node or Constant node, then value is not a meaningful value. </p>
+<dl class="section return"><dt>Returns</dt><dd>the value of the node. If the node is a Variable node, then value is the INDEX of the variable in the <a class="el" href="class_var_table.html">VarTable</a>. If the node is a Constant node, then value is a CONSTANT. If the node is neither a Variable node or Constant node, then value is not a meaningful value. </dd></dl>
 
 </div>
 </div>
@@ -359,7 +396,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the parent <a class="el" href="class_t_node.html">TNode</a>. </p>
+<dl class="section return"><dt>Returns</dt><dd>the parent <a class="el" href="class_t_node.html">TNode</a>. </dd></dl>
 
 </div>
 </div>
@@ -375,7 +412,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the right sibling of the current node. </p>
+<dl class="section return"><dt>Returns</dt><dd>the right sibling of the current node. </dd></dl>
 
 </div>
 </div>
@@ -391,7 +428,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the statement number. </p>
+<dl class="section return"><dt>Returns</dt><dd>the statement number of the <a class="el" href="class_t_node.html">TNode</a>. </dd></dl>
 
 </div>
 </div>
@@ -407,7 +444,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return TRUE if the current node has any child node. Otherwise, return FALSE. </p>
+<dl class="section return"><dt>Returns</dt><dd>TRUE if the current node has any child node. FALSE if the current node does not have any child node. </dd></dl>
 
 </div>
 </div>
@@ -423,7 +460,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return TRUE if the current node has a left sibling. Otherwise, return FALSE. </p>
+<p>Check if the current node has any left sibling. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the current node has a left sibling. FALSE if the current node does not have any left sibling. </dd></dl>
 
 </div>
 </div>
@@ -439,7 +476,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return TRUE if the current node has a right sibling. Otherwise, return FALSE. </p>
+<p>Check if the current node has any right sibling. </p><dl class="section return"><dt>Returns</dt><dd>TRUE if the current node has a right sibling. FALSE if the current node does not have any right sibling. </dd></dl>
 
 </div>
 </div>
@@ -456,9 +493,15 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Set the parent node for current node. </p><dl class="exception"><dt>Exceptions</dt><dd>
+<p>Set the parent node for current node. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">parent</td><td>a parent <a class="el" href="class_t_node.html">TNode</a> for the current nodes </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
   <table class="exception">
-    <tr><td class="paramname">if</td><td>parent is NULL. </td></tr>
+    <tr><td class="paramname">exception</td><td>if parent is NULL. </td></tr>
   </table>
   </dd>
 </dl>
@@ -472,7 +515,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Feb 9 2015 10:12:47 for SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Mar 11 2015 10:33:52 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

@@ -5,18 +5,9 @@
 #include <vector>
 #include <string>
 #include <utility>
+#include "common.h"
 using std::string;
 using namespace std;
-
-enum TNODE_TYPE
-{
-	Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant, Minus, Times, Program, Call
-};
-
-enum LINK_TYPE
-{
-	Par, Right_Sibling, Left_Sibling, Child
-};
 
 class TNode 
 {
@@ -41,6 +32,9 @@ public:
 	TNode* getRightSibling();
 
 	void setParent(TNode* parent);
+	
+	void increaseDescendent(int toAdd);
+	int getDescendent();
 
 private:
 	TNODE_TYPE _nodeType;
@@ -50,6 +44,7 @@ private:
 	vector<TNode*> _children;
 	TNode* _leftSibling;
 	TNode* _rightSibling;
+	int _descendents;
 
 	friend std::ostream& operator<<(std::ostream&, const TNode&);
 

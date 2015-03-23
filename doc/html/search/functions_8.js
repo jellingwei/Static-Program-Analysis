@@ -1,14 +1,4 @@
 var searchData=
 [
-  ['matchattrref',['matchAttrRef',['../namespace_query_parser.html#ac201fdf6633eac0438efd34a16b781f5',1,'QueryParser']]],
-  ['matchdesignentity',['matchDesignEntity',['../namespace_query_parser.html#a2c5229777e999d101fe20839f04dc5cc',1,'QueryParser']]],
-  ['matchentref',['matchEntRef',['../namespace_query_parser.html#a481b9c15f9ac08c193f241fdaaa0c591',1,'QueryParser']]],
-  ['matchfactor',['matchFactor',['../namespace_query_parser.html#ac5c72d66b652adb017e44b4ea03ff8d8',1,'QueryParser']]],
-  ['matchinteger',['matchInteger',['../namespace_parser.html#a79c52f03c3b8a1a1cc287fdb6b3ebc41',1,'Parser::matchInteger()'],['../namespace_query_parser.html#a3bbf9683c2cc435cb24b9a24847f3c11',1,'QueryParser::matchInteger()']]],
-  ['matchname',['matchName',['../namespace_parser.html#a35e8f86210f5615cfefd8769138b1e5f',1,'Parser::matchName()'],['../namespace_query_parser.html#af471aced791eaf7f28d268a6920f05d4',1,'QueryParser::matchName()']]],
-  ['matchoperator',['matchOperator',['../namespace_parser.html#a7a1347b54d0cd28f146ece8d08637d12',1,'Parser']]],
-  ['matchref',['matchRef',['../namespace_query_parser.html#a1d31f5404d49bc43f5e42b035d3db9b4',1,'QueryParser']]],
-  ['matchstmtref',['matchStmtRef',['../namespace_query_parser.html#ab93adb92a99b7e2722f39d0901588075',1,'QueryParser']]],
-  ['matchsynonymandident',['matchSynonymAndIdent',['../namespace_query_parser.html#ab745bcedc1eeb38fc78b26234fc8ce3b',1,'QueryParser']]],
-  ['matchunderscore',['matchUnderscore',['../namespace_query_parser.html#a31f3f7e29eede9c7fad24a6cbcf9da0b',1,'QueryParser']]]
+  ['joinwithexistingvalues',['joinWithExistingValues',['../namespace_intermediate_values_handler.html#a7c56bc10ce49328864014ef39a1bd311',1,'IntermediateValuesHandler::joinWithExistingValues(Synonym synonym)'],['../namespace_intermediate_values_handler.html#acc42a277b8f7d352b3e93f6d6a342559',1,'IntermediateValuesHandler::joinWithExistingValues(Synonym LHS, Synonym RHS)']]]
 ];
