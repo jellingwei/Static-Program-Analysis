@@ -238,10 +238,10 @@ int NextTable::getLastProgLineInContainer(int container) {
 }
 
 void NextTable::setFirstProgLineInContainer(int container, int firstline) {
-	firstProgLineInContainer.insert(pair<int, int>(container, firstline);
+	firstProgLineInContainer.insert(pair<int, int>(container, firstline));
 }
 void NextTable::setLastProgLineInContainer(int container, int lastline) {
-	lastProgLineInContainer.insert(pair<int, int>(container, lastline);
+	lastProgLineInContainer.insert(pair<int, int>(container, lastline));
 }
 
 int NextTable::getFirstProgLineInProc(int procIndex) {
