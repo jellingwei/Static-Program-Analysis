@@ -5,6 +5,8 @@ struct IntegerPair
 	int value1;
 	int value2;
 
+	IntegerPair(int val1, int val2): value1(val1), value2(val2) {}
+
 	bool operator==(const IntegerPair &other) const
 	{ 
 		return (value1 == other.value1 && value2 == other.value2);
@@ -414,18 +416,18 @@ namespace ValuesHandler
 		
 		//Hash the rows in the new values into the hash table
 		for (unsigned int i = 0; i < newValuesLHS.size(); i++) {
-			IntegerPair valuesPair;
-			valuesPair.value1 = newValuesLHS[i];
-			valuesPair.value2 = newValuesRHS[i];
+			IntegerPair valuesPair(newValuesLHS[i], newValuesRHS[i]);
+			//valuesPair.value1 = newValuesLHS[i];
+			//valuesPair.value2 = newValuesRHS[i];
 			hashTable[valuesPair] = 1;
 		}
 		
 		//Using the main table as the probe, check whether the values exists in the hash table
 		//Keep this row if it exists
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
-			IntegerPair valuesPair;
-			valuesPair.value1 = mainTable[i][indexLHS];
-			valuesPair.value2 = mainTable[i][indexRHS];
+			IntegerPair valuesPair(mainTable[i][indexLHS], mainTable[i][indexRHS]);
+			//valuesPair.value1 = mainTable[i][indexLHS];
+			//valuesPair.value2 = mainTable[i][indexRHS];
 			if (hashTable.count(valuesPair) != 0) {
 				acceptedValues.push_back(mainTable[i]);
 			}
