@@ -57,8 +57,11 @@ namespace ValuesHandler
 
 	bool filterEqualPairByNumber(Synonym LHS, Synonym RHS);
 	bool filterEqualNumberInMain(Synonym LHS, Synonym RHS);
+	bool filterEqualNumberPairInSingleton(Synonym LHS, Synonym RHS);
+
 	bool filterEqualPairByString(Synonym LHS, Synonym RHS);
 	bool filterEqualStringInMain(Synonym LHS, Synonym RHS);
+	bool filterEqualStringPairInSingleton(Synonym LHS, Synonym RHS);
 
 	/**
 	* Initialize the handler for intermediate values.
@@ -847,72 +850,8 @@ namespace ValuesHandler
 			}
 		} else {
 			//Both synonyms do not exist in the main table
-			if (isLHSInSingletonTable && isRHSInSingletonTable) {
-				//If both synonyms exist in the singleton table
-				LHS = getSynonym(nameLHS);  //Assign LHS to the current values
-				RHS.setValues(LHS.getValues());  //Assign RHS to the same values as LHS
-
-				//Get the reduced pair by intersecting with RHS
-				pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(RHS, LHS);
-				RHS.setValues(pair.first);
-				LHS.setValues(pair.second);
-				removeFromSingletonTable(nameLHS);
-				removeFromSingletonTable(nameRHS);
-				return joinWithMainTable(RHS, LHS);
-			} else if (isLHSInSingletonTable) {
-				//Only LHS exists in the singleton table
-				RHS = getSynonym(nameRHS);  //Assign RHS to its default values
-				LHS.setValues(RHS.getValues());  //Assign LHS to the RHS values
-
-				//Get the reduced pair by intersecting with LHS
-				pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(LHS, RHS);
-				LHS.setValues(pair.first);
-				RHS.setValues(pair.second);
-				removeFromSingletonTable(nameLHS);
-				return joinWithMainTable(LHS, RHS);
-			} else if (isRHSInSingletonTable) {
-				//Only RHS exists in the singleton table
-				LHS = getSynonym(nameLHS);  //Assign LHS to its default values
-				RHS.setValues(LHS.getValues());  //Assign RHS to the LHS values
-
-				//Get the reduced pair by intersecting with LHS
-				pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(RHS, LHS);
-				RHS.setValues(pair.first);
-				LHS.setValues(pair.second);
-				removeFromSingletonTable(nameRHS);
-				return joinWithMainTable(RHS, LHS);
-			} else {
-				//These two synonyms do not exist at all
-				LHS = getSynonym(nameLHS);  //Assign LHS to its default values
-				addToSingletonTable(LHS);
-
-				RHS = getSynonym(nameRHS);  //Assigh RHS to its default values
-				LHS.setValues(RHS.getValues());  //Assign LHS to the values of RHS
-
-				pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(LHS, RHS);
-				LHS.setValues(pair.first);
-				RHS.setValues(pair.second);
-				removeFromSingletonTable(nameLHS);
-				return joinWithMainTable(LHS, RHS);
-			}
+			return filterEqualNumberPairInSingleton(LHS, RHS);
 		}
-	}
-
-	bool filterEqualNumberInMain(Synonym LHS, Synonym RHS)
-	{
-		//TODO: Assert that they both are in main
-		int indexLHS = findIndexInMainTable(LHS.getName());
-		int indexRHS = findIndexInMainTable(RHS.getName());
-		vector<vector<int>> acceptedValues;
-
-		for (unsigned int i = 0; i < mainTable.size(); i++) {
-			vector<int> oneRow = mainTable[i];
-			if (oneRow[indexLHS] == oneRow[indexRHS]) {
-				acceptedValues.push_back(oneRow);
-			}
-		}
-		swap(acceptedValues, mainTable);
-		return mainTable.size() != 0;
 	}
 
 	/**
@@ -956,28 +895,113 @@ namespace ValuesHandler
 			}
 		} else {
 			//Both synonyms do not exist in the main table
-			if (!isLHSInSingletonTable && !isRHSInSingletonTable) {
-				//If both synonyms do not exist at all
-				LHS = getSynonym(nameLHS);  //Assign LHS to its default values
-				addToSingletonTable(LHS);
-				RHS = getSynonym(nameRHS);  //Assigh RHS to its default values
-				addToSingletonTable(RHS);
-			} else if (isLHSInSingletonTable) {
-				//Only LHS exists in the singleton table
-				RHS = getSynonym(nameRHS);  //Assign RHS to its default values
-				addToSingletonTable(RHS);
-			} else if (isRHSInSingletonTable) {
-				//Only RHS exists in the singleton table
-				LHS = getSynonym(nameLHS);  //Assign LHS to its default values
-				addToSingletonTable(LHS);
-			}
+			return filterEqualStringPairInSingleton(LHS, RHS);
+		}
+	}
 
-			pair<vector<int>, vector<int>> pair = getPairBySingletonStringIntersect(LHS, RHS);
+	bool filterEqualNumberPairInSingleton(Synonym LHS, Synonym RHS)
+	{
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
+		bool isLHSInSingletonTable = isExistInSingletonTable(nameLHS);
+		bool isRHSInSingletonTable = isExistInSingletonTable(nameRHS);
+
+		//Both synonyms do not exist in the main table
+		if (isLHSInSingletonTable && isRHSInSingletonTable) {
+			//If both synonyms exist in the singleton table
+			LHS = getSynonym(nameLHS);  //Assign LHS to the current values
+			RHS.setValues(LHS.getValues());  //Assign RHS to the same values as LHS
+
+			//Get the reduced pair by intersecting with RHS
+			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(RHS, LHS);
+			RHS.setValues(pair.first);
+			LHS.setValues(pair.second);
+			removeFromSingletonTable(nameLHS);
+			removeFromSingletonTable(nameRHS);
+			return joinWithMainTable(RHS, LHS);
+		} else if (isLHSInSingletonTable) {
+			//Only LHS exists in the singleton table
+			RHS = getSynonym(nameRHS);  //Assign RHS to its default values
+			LHS.setValues(RHS.getValues());  //Assign LHS to the RHS values
+
+			//Get the reduced pair by intersecting with LHS
+			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(LHS, RHS);
+			LHS.setValues(pair.first);
+			RHS.setValues(pair.second);
+			removeFromSingletonTable(nameLHS);
+			return joinWithMainTable(LHS, RHS);
+		} else if (isRHSInSingletonTable) {
+			//Only RHS exists in the singleton table
+			LHS = getSynonym(nameLHS);  //Assign LHS to its default values
+			RHS.setValues(LHS.getValues());  //Assign RHS to the LHS values
+
+			//Get the reduced pair by intersecting with LHS
+			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(RHS, LHS);
+			RHS.setValues(pair.first);
+			LHS.setValues(pair.second);
+			removeFromSingletonTable(nameRHS);
+			return joinWithMainTable(RHS, LHS);
+		} else {
+			//These two synonyms do not exist at all
+			LHS = getSynonym(nameLHS);  //Assign LHS to its default values
+			addToSingletonTable(LHS);
+
+			RHS = getSynonym(nameRHS);  //Assigh RHS to its default values
+			LHS.setValues(RHS.getValues());  //Assign LHS to the values of RHS
+
+			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(LHS, RHS);
 			LHS.setValues(pair.first);
 			RHS.setValues(pair.second);
 			removeFromSingletonTable(nameLHS);
 			return joinWithMainTable(LHS, RHS);
 		}
+	}
+
+	bool filterEqualStringPairInSingleton(Synonym LHS, Synonym RHS)
+	{
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
+		bool isLHSInSingletonTable = isExistInSingletonTable(nameLHS);
+		bool isRHSInSingletonTable = isExistInSingletonTable(nameRHS);
+
+		if (!isLHSInSingletonTable && !isRHSInSingletonTable) {
+			//If both synonyms do not exist at all
+			LHS = getSynonym(nameLHS);  //Assign LHS to its default values
+			addToSingletonTable(LHS);
+			RHS = getSynonym(nameRHS);  //Assigh RHS to its default values
+			addToSingletonTable(RHS);
+		} else if (isLHSInSingletonTable) {
+			//Only LHS exists in the singleton table
+			RHS = getSynonym(nameRHS);  //Assign RHS to its default values
+			addToSingletonTable(RHS);
+		} else if (isRHSInSingletonTable) {
+			//Only RHS exists in the singleton table
+			LHS = getSynonym(nameLHS);  //Assign LHS to its default values
+			addToSingletonTable(LHS);
+		}
+
+		pair<vector<int>, vector<int>> pair = getPairBySingletonStringIntersect(LHS, RHS);
+		LHS.setValues(pair.first);
+		RHS.setValues(pair.second);
+		removeFromSingletonTable(nameLHS);
+		return joinWithMainTable(LHS, RHS);
+	}
+
+	bool filterEqualNumberInMain(Synonym LHS, Synonym RHS)
+	{
+		//TODO: Assert that they both are in main
+		int indexLHS = findIndexInMainTable(LHS.getName());
+		int indexRHS = findIndexInMainTable(RHS.getName());
+		vector<vector<int>> acceptedValues;
+
+		for (unsigned int i = 0; i < mainTable.size(); i++) {
+			vector<int> oneRow = mainTable[i];
+			if (oneRow[indexLHS] == oneRow[indexRHS]) {
+				acceptedValues.push_back(oneRow);
+			}
+		}
+		swap(acceptedValues, mainTable);
+		return mainTable.size() != 0;
 	}
 
 	bool filterEqualStringInMain(Synonym LHS, Synonym RHS)
