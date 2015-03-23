@@ -54,5 +54,4 @@ namespace ValuesHandler
 	bool processPairWithMainTable(Synonym LHS, Synonym RHS);
 	bool processPairWithSingletonTable(Synonym LHS, Synonym RHS);
 	bool mergeSingletonToMain(Synonym mainSynonym, Synonym singleton);
-
 }
