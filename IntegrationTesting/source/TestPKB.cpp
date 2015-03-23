@@ -264,25 +264,25 @@ void PKBTest::testPKB()
 	TNode* top = exprParser.parseExpressionForQuerying(argVector);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("ok", Plus, top->getNodeType());
 	PatternMatch pattern;
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 2, pattern.PatternMatchAssign(top, true).at(0));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 2, pattern.PatternMatchAssign(top, true, "d").at(0));
 
 	const char* args2[] = {"1"};
 	vector<string> argVector2(args2, args2 + 1);
 	TNode* top2 = exprParser.parseExpressionForQuerying(argVector2);
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 9, pattern.PatternMatchAssign(top2, false).at(2));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 9, pattern.PatternMatchAssign(top2, false, "1").at(2));
 
 	const char* args3[] = {"e", "+", "3", "*", "b", "+", "f"};
 	vector<string> argVector3(args3, args3 + 7);
 	TNode* top3 = exprParser.parseExpressionForQuerying(argVector3);
 	// full pattern match for e+3*b+f
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 11, pattern.PatternMatchAssign(top3, false).at(0));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 11, pattern.PatternMatchAssign(top3, false, "e").at(0));
 
 	const char* args4[] = {"3", "*", "b"};
 	vector<string> argVector4(args4, args4 + 3);
 	TNode* top4 = exprParser.parseExpressionForQuerying(argVector4);
 	// partial match from 3 * b
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 1, (int)pattern.PatternMatchAssign(top4, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("this", 1, (int)pattern.PatternMatchAssign(top4, false, "3").size());
 
 	// Pattern for while
 	cout << "Pattern for while" << endl;
@@ -417,6 +417,15 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(9, 10), stmt in while loop can affect outside of loop", true, pkb.isAffects(9, 10, false));
 
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(31, 38)", true, pkb.isAffects(31, 38));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(37, 38)", true, pkb.isAffects(37, 38));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(34, 38)", true, pkb.isAffects(34, 38, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(37, 38)", true, pkb.isAffects(37, 38, true));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(35, 38)", true, pkb.isAffects(35, 38, true));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(22, 24)", false, pkb.isAffects(22, 24));
+
 	cout << "End TestPkb" << endl;
 }
+
 

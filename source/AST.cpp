@@ -66,6 +66,11 @@ bool AST::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
 			TNode& temp = *fromNode;
 			temp.addChild(toNode);
 			toNode->setParent(&temp);
+
+			TNode* parent = fromNode;
+			
+			fromNode->increaseDescendent((toNode->getDescendent())+1);
+
 			return true; }
 
 		default:
@@ -206,11 +211,18 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		} 
 	}
 
+	int x = 0;
+	string usedOperand = vRHS[0];
+	while(usedOperand == "(") {
+		x++;
+		usedOperand = vRHS[x];
+	}
+
 	try {
 		ExpressionParser exprParser;
 		TNode* top = exprParser.parseExpressionForQuerying(vRHS);
 		PatternMatch pattern;
-		results = pattern.PatternMatchAssign(top, isExact);
+		results = pattern.PatternMatchAssign(top, isExact, usedOperand);
 	} catch(const runtime_error& e) {
 		return results;
 	}
@@ -275,4 +287,9 @@ vector<int> AST::patternMatchIf(string LHS) {
 	result = pattern.patternMatchParentStmt(LHS, If);
 
 	return result;
+}
+
+//@todo
+int AST::getDescendent(TNode* curr) {
+	return curr->getDescendent();
 }

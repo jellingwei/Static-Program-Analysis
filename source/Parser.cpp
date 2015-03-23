@@ -286,7 +286,6 @@ namespace Parser {
 
 
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
 			PKB pkb = PKB::getInstance();
 
 			TNode* node = pkb.createTNode(If, stmtNum, -1);
@@ -357,7 +356,7 @@ namespace Parser {
 			if (!res) return false;
 
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
+
 			PKB pkb = PKB::getInstance();
 
 			TNode* node = pkb.createTNode(While, stmtNum, -1);
@@ -404,7 +403,7 @@ namespace Parser {
 		
 
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
+			
 			PKB pkb = PKB::getInstance();
 			TNode* node = pkb.createTNode(Assign, stmtNum, -1);
 			TNode* LHSNode = pkb.createTNode(Variable, stmtNum, 
@@ -441,7 +440,6 @@ namespace Parser {
 			int index = pkb.insertProc(procName);
 		
 			// AST interactions
-			AST* ast = PKB::getInstance().ast;
 			TNode* node = pkb.createTNode(Call, stmtNum, index);
 		
 			//pair<int, TNode*> stmtNumToNodePair(stmtNum, node);

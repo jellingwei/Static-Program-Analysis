@@ -30,4 +30,6 @@ class AST {
 		vector<int> patternMatchIf(string LHS);
 
 		int getControlVariable(int stmtNum);
+
+		int getDescendent(TNode* curr);
 };

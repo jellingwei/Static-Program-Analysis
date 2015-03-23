@@ -32,16 +32,7 @@ class StmtTable;
 class PKB {
 public:
 	// @cond todo
-	VarTable* varTable; 
-	ProcTable* procTable;
-	StmtTable* stmtTable;
-	ConstantTable* constantTable;
-	CallsTable* callsTable;
-	ModifiesTable* modifiesTable;
-	UsesTable* usesTable;
-	FollowsTable* followsTable;
-	ParentTable* parentTable;
-	AST* ast;
+
 
 	// @endcond
 
@@ -198,8 +189,9 @@ public:
 	vector<int> getAffecting(int progLine2, bool transitiveClosure = false);
 	vector<int> getAffectsLhs();
 	vector<int> getAffectsRhs();
-	void setAffectsLhs(vector<int>);
-	void setAffectsRhs(vector<int>);
+
+	static bool canSkipNodesBackwards(CNode* node);
+	static bool canSkipNodesForwards(CNode* node);
 
 
 	//@todo 
@@ -211,6 +203,16 @@ public:
 	// @endcond
 
 private:
+	VarTable* varTable; 
+	ProcTable* procTable;
+	StmtTable* stmtTable;
+	ConstantTable* constantTable;
+	CallsTable* callsTable;
+	ModifiesTable* modifiesTable;
+	UsesTable* usesTable;
+	FollowsTable* followsTable;
+	ParentTable* parentTable;
+	AST* ast;
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
 	PKB();
