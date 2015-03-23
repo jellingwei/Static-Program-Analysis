@@ -41,6 +41,16 @@ bool QueryTree::linkNode(QNode* parent_node, QNode* child_node)
 	return true;
 }
 
+void QueryTree::setResultNode(QNode* resultNode)
+{
+	_result = *resultNode;
+}
+
+void QueryTree::setClausesNode(QNode* clausesNode)
+{
+	_clauses = *clausesNode;
+}
+
 /**
  * @return the root of the query tree.
  */

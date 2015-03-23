@@ -49,6 +49,7 @@
     <ClInclude Include="..\source\CallsTable.h" />
     <ClInclude Include="..\source\CFG.h" />
     <ClInclude Include="..\source\CNode.h" />
+    <ClInclude Include="..\source\common.h" />
     <ClInclude Include="..\source\ConstantTable.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExpressionParser.h" />

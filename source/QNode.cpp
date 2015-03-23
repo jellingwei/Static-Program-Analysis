@@ -73,6 +73,16 @@ void QNode::setChild(QNode* child_node)
 	_child_list.push_back(child_node);
 }
 
+void QNode::setDirection(DIRECTION direction)
+{
+	_direction = direction;
+}
+
+DIRECTION QNode::getDirection()
+{
+	return _direction;
+}
+
 /**
  * @return the number of children the QNode has.
  */

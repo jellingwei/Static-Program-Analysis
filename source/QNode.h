@@ -21,6 +21,9 @@ public:
 	QNODE_TYPE QNode::getNodeType();
 	void setParent(QNode* parent_node);
 	void setChild(QNode* child_node);
+	void setDirection(DIRECTION direction);
+
+	DIRECTION getDirection();
 	int getNumberOfChildren();
 	QNode* getParent();
 	QNode* getChild();
@@ -30,6 +33,7 @@ public:
 
 private:
 	QNODE_TYPE _QNODE_TYPE;
+	DIRECTION _direction;
 	Synonym _arg0;
 	Synonym _arg1;
 	Synonym _arg2;
