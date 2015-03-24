@@ -39,7 +39,7 @@ namespace ValuesHandler
 	unordered_map<string, SYNONYM_TYPE> synonymMap;  //Maps from the name to the synonym type
 	
 	//This table should only store 2 or more synonyms
-	vector<vector<int>> mainTable;  //[i][j] where i denotes the column number and j denotes the row number
+	vector<vector<int>> mainTable;  //[i][j] where i denotes the row number and j denotes the column number
 	unordered_map<string, int> mainTableIndex;  //Maps from synonym name to main table column number
 	
 	//This table is used to store singleton synonyms with no dependent synonyms
@@ -232,48 +232,28 @@ namespace ValuesHandler
 	vector<Synonym> getSynonymTuples(vector<string> wantedNames)
 	{
 		vector<Synonym> returnSynonyms;
-		vector<bool> isSingleton;
-		int singletonFactor = 1;
-		int mainFactor = 1;
+		vector<pair<string, int>> mainTableSynonyms;
+		set<string> singletonSynonyms;
 		
 		for (unsigned int i = 0; i < wantedNames.size(); i++) {
-			SYNONYM_TYPE type = synonymMap[wantedNames[i]];
-			
-			if (isExistInMainTable(wantedNames[i])) {
-				isSingleton.push_back(false);
-				int index = findIndexInMainTable(wantedNames[i]);
-				vector<int> values = getIntermediateValuesInMain(index);
-				mainFactor = values.size();
-				Synonym synonym(type, wantedNames[i], values);
-				returnSynonyms.push_back(synonym);
+			int index = findIndexInMainTable(wantedNames[i]);
+			if (index != 0) {
+				mainTableSynonyms.push_back(make_pair(wantedNames[i], index));
 			} else {
-				isSingleton.push_back(true);
-				Synonym synonym = getSynonym(wantedNames[i]);
-				singletonFactor *= synonym.getValues().size();
-				returnSynonyms.push_back(synonym);
+				singletonSynonyms.insert(wantedNames[i]);
 			}
 		}
-		
-		for (unsigned int i = 0; i < returnSynonyms.size(); i++) {
-			Synonym synonym = returnSynonyms[i];
-			vector<int> values = synonym.getValues();
-			vector<int> finalValues;
-			
-			if (isSingleton[i]) {
-				for (unsigned int j = 0; j < values.size(); j++) {
-					for (int k = 1; k <= mainFactor; k++) {
-						finalValues.push_back(values[j]);
-					}
-				}
-				synonym.setValues(finalValues);
-				swap(synonym, returnSynonyms[i]);
-			} else {
-				for (int j = 1; j <= singletonFactor; j++) {
-					finalValues.insert(finalValues.end(), values.begin(), values.end());
-				}
-				synonym.setValues(finalValues);
-				swap(synonym, returnSynonyms[i]);
-			}
+
+		for (unsigned int i = 0; i < mainTableSynonyms.size(); i++) {
+			SYNONYM_TYPE type = synonymMap[mainTableSynonyms[i].first];
+			vector<int> values = getIntermediateValuesInMain(mainTableSynonyms[i].second);
+			Synonym synonym(type, mainTableSynonyms[i].first, values);
+			returnSynonyms.push_back(synonym);
+		}
+
+		for (auto itr = singletonSynonyms.begin(); itr != singletonSynonyms.end(); ++itr) {
+			Synonym synonym = getSynonym(*itr);
+			returnSynonyms.push_back(synonym);
 		}
 		return returnSynonyms;
 	}
