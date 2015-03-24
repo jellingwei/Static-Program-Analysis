@@ -4,11 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "boost/dynamic_bitset.hpp"
-
-#include "PKB.h"
 #include "CNode.h"
-
 
 CNode::CNode() 
 {}
@@ -149,7 +145,7 @@ bool CNode::hasInside()
  */
 vector<CNode*>* CNode::getInside2()
 {
-	return &_inside2;
+	return &_inside;
 }
 
 /**
@@ -158,7 +154,7 @@ vector<CNode*>* CNode::getInside2()
  */
 void CNode::addInside2(CNode* node)
 {
-	_inside2.push_back(node);
+	_inside.push_back(node);
 }
 
 /**
@@ -168,7 +164,7 @@ void CNode::addInside2(CNode* node)
  */
 bool CNode::hasInside2()
 {
-	if(_inside2.size() < 1) return false;
+	if(_inside.size() < 1) return false;
 	else return true;
 }
 
@@ -218,12 +214,6 @@ unordered_map<int, set<int>> CNode::getReachingDefinitions() {
 }
 void CNode::setReachingDefinitions(unordered_map<int, set<int>> varStmtMap) {
 	_reachingDefinitions = varStmtMap;
-
-	_reachingDefinitionsVariables = new boost::dynamic_bitset<>(PKB::getInstance().getAllVarIndex().size() + 1);
-	for (auto iter = varStmtMap.begin(); iter != varStmtMap.end(); ++iter) {
-		int varIndex = iter->first;
-		_reachingDefinitionsVariables->set(varIndex);		
-	}
 }
 
 unordered_map<int, set<int>> CNode::getFirstUseOfVariable() {
@@ -231,19 +221,4 @@ unordered_map<int, set<int>> CNode::getFirstUseOfVariable() {
 }
 void CNode::setFirstUseOfVariable(unordered_map<int, set<int>> varStmtMap) {
 	_firstUseOfVariable = varStmtMap;
-	
-	_liveVariables = new boost::dynamic_bitset<>(PKB::getInstance().getAllVarIndex().size() + 1);
-	for (auto iter = varStmtMap.begin(); iter != varStmtMap.end(); ++iter) {
-		int varIndex = iter->first;
-		_liveVariables->set(varIndex);
-	}
-}
-
-
-bool CNode::isVariableLive(int varIndex) {
-	return _liveVariables->test(varIndex);
-}
-
-bool CNode::isVariableDefinedBefore(int varIndex) {
-	return _reachingDefinitionsVariables->test(varIndex);
 }
