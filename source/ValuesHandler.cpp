@@ -234,6 +234,7 @@ namespace ValuesHandler
 		vector<Synonym> returnSynonyms;
 		vector<pair<string, int>> mainTableSynonyms;
 		set<string> singletonSynonyms;
+		unordered_map<string, vector<int>> valuesMap;
 		
 		for (unsigned int i = 0; i < wantedNames.size(); i++) {
 			int index = findIndexInMainTable(wantedNames[i]);
@@ -245,14 +246,22 @@ namespace ValuesHandler
 		}
 
 		for (unsigned int i = 0; i < mainTableSynonyms.size(); i++) {
-			SYNONYM_TYPE type = synonymMap[mainTableSynonyms[i].first];
+			string name = mainTableSynonyms[i].first;
+			SYNONYM_TYPE type = synonymMap[name];
 			vector<int> values = getIntermediateValuesInMain(mainTableSynonyms[i].second);
-			Synonym synonym(type, mainTableSynonyms[i].first, values);
-			returnSynonyms.push_back(synonym);
+			valuesMap[name] = values;
 		}
 
 		for (auto itr = singletonSynonyms.begin(); itr != singletonSynonyms.end(); ++itr) {
 			Synonym synonym = getSynonym(*itr);
+			valuesMap[synonym.getName()] = synonym.getValues();
+		}
+
+		for (unsigned int i = 0; i < wantedNames.size(); i++) {
+			string name = wantedNames[i];
+			SYNONYM_TYPE type = synonymMap[name];
+			vector<int> values = valuesMap[name];
+			Synonym synonym(type, name, values);
 			returnSynonyms.push_back(synonym);
 		}
 		return returnSynonyms;
