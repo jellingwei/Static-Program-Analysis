@@ -237,7 +237,7 @@ namespace ValuesHandler
 		
 		for (unsigned int i = 0; i < wantedNames.size(); i++) {
 			int index = findIndexInMainTable(wantedNames[i]);
-			if (index != 0) {
+			if (index != -1) {
 				mainTableSynonyms.push_back(make_pair(wantedNames[i], index));
 			} else {
 				singletonSynonyms.insert(wantedNames[i]);

@@ -85,7 +85,7 @@ namespace ResultProjector {
 				stringValuesMap[name] = valuesStrings;
 			} else {
 				valuesStrings = expandRange(valuesStrings, mainFactor);
-				valuesStrings = expandEachRow(valuesStrings, mainFactor / individualFactor[name]);
+				valuesStrings = expandEachRow(valuesStrings, singletonFactor / individualFactor[name]);
 				stringValuesMap[name] = valuesStrings;
 			}
 		}
