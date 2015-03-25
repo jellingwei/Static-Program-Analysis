@@ -22,6 +22,7 @@ class DesignExtractor {
 		
 		bool constructCfg();
 		void precomputeInformationForAffects();
+		void precomputeInformationForNext();
 		void constructStatisticsTable();
 
 };
