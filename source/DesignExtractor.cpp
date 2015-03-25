@@ -906,20 +906,14 @@ void DesignExtractor::precomputeInformationForAffects() {
 	
 	// set variables inside..
 	setVariablesInside();
-	cout << "End of step 1 in precomputations " << endl;
-	int times,timed;
-		times=clock();
 
 	// set definitions reaching the dummy nodes
 	for (size_t i = 0; i < pkb.cfgTable.size(); i++) {
 		CFG* cfg = pkb.cfgTable.at(i); 
 
-		cout << "at iteration " << i << " in step 2" <<  endl;
-
 		// traverse through cfg and update reaching definitions
 		updateReachingDefinitionsThroughCfg(cfg->getProcRoot());
 	}
-	cout << "End of step 2 in precomputations " << endl;
 
 	// set first use of variables in container nodes
 	for (size_t i = 0; i < pkb.cfgTable.size(); i++) {
@@ -928,10 +922,6 @@ void DesignExtractor::precomputeInformationForAffects() {
 		// traverse through cfg and update reaching definitions
 		updateFirstUseOfVarThroughCfg(cfg->getProcEnd());
 	}
-	cout << "End of step 3 in precomputations " << endl;
 
-	timed=clock();
-	times=timed-times;
-	cout << "ticks from start to end: " << times << endl;
 
 }
