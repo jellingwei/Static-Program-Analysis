@@ -59,6 +59,10 @@ public:
 	VARIABLES getVariablesInside2();
 	void setVariablesInside2(VARIABLES);
 
+	bool isVariableLive(int);
+	bool isVariableDefinedBefore(int);
+	
+
 	TNode* getASTref();
 	void setEnd();
 	bool getEnd();
@@ -81,4 +85,7 @@ private:
 	unordered_map<int, set<int>> _firstUseOfVariable;
 	VARIABLES _variablesInside;
 	VARIABLES _variablesInside2;
+
+	VARIABLES* _reachingDefinitionsVariables;
+	VARIABLES* _liveVariables;
 };

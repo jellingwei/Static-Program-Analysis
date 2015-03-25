@@ -1125,8 +1125,6 @@ vector<int> PKB::getNextAfterS(int progLine1) {
 	return nextTable->getNextAfter(progLine1, transClosure);
 }
 
-
-
 /**
 * @return a list of all program lines, progLine1, where Next(progLine1, progLine2) is true.
 */

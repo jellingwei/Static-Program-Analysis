@@ -192,7 +192,6 @@ public:
 	void setFirstProgLineInElse(int, int);
 	void setLastProgLineInContainer(int, int);
 
-
 	vector<CFG*> cfgTable;
 
 	// affects

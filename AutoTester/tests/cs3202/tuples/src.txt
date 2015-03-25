@@ -1,0 +1,208 @@
+procedure One {
+  b = 1001;   \\1
+  d = lala * haha + a * b;    \\2
+  e = xiaolongbao + buffet;   \\3
+  woohaha = (e + crab) * buffet;  \\4
+  while hoho {  \\5
+    haha = woohaha - woo * 1; \\6
+    duckrice = a - (b + c) * ((x + y) * z); \\7
+    call Two; \\8
+  }
+  a = 0;   \\9
+  call Eight; \\10
+  if f then { \\11
+    hehe = hoho - c;  \\12
+    d = 11 * lala - (f + 11) * 9999; \\13
+  }
+  else {
+    wawa = haha * 0 - buffet - woo; \\14
+    hehe = 250 + a * (a * a) + 2;     \\15
+    z = (111 + ((250 - 9 * 1001) - 33)) + 11;   \\16
+  }
+  b = 1001;   \\17
+  call Eight;   \18
+}
+
+procedure Two {
+  while c {       \\19
+    while d {     \\20
+      if f then {     \\21
+        f = 33;       \\22
+        while e {       \\23
+          woohaha = (xiaolongbao + buffet) * 25 - (crab + buffet) * 25; \\24
+          a = (a + b - c) * d + f - x;      \\25
+          x = y + z * woo;        \\26
+        }
+      }
+      else {
+        call Three;       \\27
+      }
+    }
+    c = x + crab - a + 7;       \\28
+  }
+}
+
+procedure Three {
+  if hoho then {      \\29
+    if hoho then{       \\30
+      while x {           \\31
+        lala = 9999;          \\32
+        lala = lala - wawa;       \\33
+        x = lala * 5 - (hoho + (x * y) + woohaha);        \\34
+      }
+    }
+    else {
+      b = 1 + 2 + 3 + 5 + 11;       \\35
+      z = hehe * hoho * wawa + a * c * z;     \\36
+      if xiaolongbao then {       \\37
+        buffet = xiaolongbao;       \\38
+      } else {
+        buffet = crab;        \\39
+      }
+      woohaha = wawa + haha;      \\40
+    }
+  }
+  else {
+    if haha then {       \\41
+      d = 1 + (e * (lala - wawa - crab)) * z;     \\42
+      d = (1 + e * lala) - (wawa - crab) * z;       \\43
+      d = (1 + e * (lala - wawa - crab) * z);      \\44
+    }
+    else {
+      while haha {            \\45
+        f = duckrice;       \\46
+        duckrice = 1 + 2;     \\47
+      }
+    }
+  }
+}
+
+procedure Four {
+  yes = yes + no;   \\48
+  no = yes * 0;       \\49
+  call Three;       \\50
+  if yes then {       \\51
+    call Five;        \\52
+    a = b * (woohaha + woo * z - z);    \\53
+    hehe = haha + hoho + woohaha;     \\54
+  }
+  else {
+    while papaya {      \\55
+      banana = 7;       \\56
+      papaya = banana - 7 - 25 + 9999 * 11;     \\57
+      z = 2;        \\58
+    }
+  }
+  if no then {        \\59
+    lala = 7 + (9 + duckrice) + woo;        \\60
+    b = x + (f - (z * no + (banana + 33)) - hehe);      \\61
+  }
+  else { 
+    yes = yes * yes - yes + yes * yes - yes;        \\62
+    buffet = crab + xiaolongbao;          \\63
+    buffet = buffet - 1001;             \\64
+  }
+  yes = 1 + no * no * no;             \\65
+}
+
+procedure Five {
+  z = z * z * z * z;      \\66
+  woo = 111 * c - 11 + z * lala - haha;     \\67
+  if woo then {     \\68
+    haha = woohaha;     \\69
+  } else {
+    x = 2 + haha - 25;      \\70
+    while z {       \\71
+      banana = (111 * (7 - papaya));      \\72
+      x = 0 + (1 + 2) - (3 * 5 * 11 - 25 * 33 - 9999) * 7;    \\73
+    }
+  }
+  no = yes * 0;     \\74
+  a = (x + a - b) * z;    \\75
+}
+
+procedure Six { 
+  call Four;       \\76
+  while x {         \\77
+    b = banana;       \\78
+    z = a * b - (c + x - woo);    \\79
+  }
+  f = y * (z * c);    \\80
+  if duckrice then {      \\81
+    woohaha = (xiaolongbao + buffet) * (crab + buffet);   \\82
+    while f {     \\83
+      a = (7 - 1 * 9) * 0 - 0;      \\84
+      f = f + 1;      \\85
+    }
+  } 
+  else {
+    if banana then {    \\86
+      lala = haha - hoho * woohaha * f - 1 * 1001;    \\87
+    } 
+    else {
+      haha = hoho * (woohaha * f - 1 * 1001) + lala;    \\88
+    }
+  }
+  f = (y - z) * c;    \\89
+}
+
+procedure Seven {      
+  if y then {   \\90
+    while y {   \\91
+      call Eight;       \\92
+      y = y - 1 + (0 * (0 - 0) * 0 + 0);      \\93
+    }
+    a = b * ((woohaha + (woo * z)) - z);    \\94
+ 
+  } else {
+    wawa = 9;   \\95
+  }
+  while a {           \\96
+    x = x - 1;          \\97
+    if y then {       \\98
+      x = 0;          \\99
+      if x then {         \\100
+        hehe = a + 2 - no * 1001 - 1;       \\101
+      } else {    
+        duckrice = buffet * no;     \\102
+        buffet = buffet + buffet;     \\103
+      }
+    } 
+    else {
+      x = 1 * (lala * a + (1001 - duckrice + y) - x);     \\104
+      no = 1001 - x + f * woo;      \\105
+    }
+  }
+  call Two;     \\106
+}
+
+procedure Eight {
+  e = 0;   \\107
+  if e then {   \\108
+    a = 1 * 1001 * (7 - 9999 + 0) - 11;   \\109
+    wawa = haha + lala + hoho + woohaha;  \\110
+  } 
+  else {
+    crab = crab + buffet - buffet;      \\111
+  }
+  call Six;     \\112
+  while hoho {    \\113
+    haha = woohaha - woo * 1;     \\114
+    z = a * b - (c + x);      \\115
+    if z then {         \\116
+      a = yes - (((woo * (a - 5)) + 111) + woo) * woo;      \\117
+      yes = no;   \\118
+      while haha {      \\119
+        hehe = 0;       \\120
+      }
+    } else {
+      if z then {     \\121
+        z = x + y + z;      \\122
+      } else {
+        z = a * b * c;      \\123
+      }
+    }
+  }
+  z = 1 - 1001 - 25 - 33;     \\124
+  f = ((9999 - 1 * 0) + (11 - 250)) * (111 - 9999 * 7);   \\125
+}
