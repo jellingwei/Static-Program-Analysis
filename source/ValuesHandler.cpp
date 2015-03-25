@@ -36,7 +36,7 @@ namespace ValuesHandler
 {
 	//Private attributes
 	PKB pkb = PKB::getInstance();  //Used to get the default values of synonyms from the PKB
-	unordered_map<string, SYNONYM_TYPE> synonymMap;  //Maps from the name to the synonym type
+	unordered_map<string, SYNONYM_TYPE> mapSynonymNameToType;  //Maps from the name to the synonym type
 	
 	//This table should only store 2 or more synonyms
 	vector<vector<int>> mainTable;  //[i][j] where i denotes the row number and j denotes the column number
@@ -50,9 +50,9 @@ namespace ValuesHandler
 	string convertIndexToString(int index, SYNONYM_TYPE type);
 	bool filterEqualValueByString(string synonymName, string wantedValue);
 	bool filterEqualValueByNumber(string synonymName, int wantedValue);
-	bool filterMainTableByValue(string synonymName, int wantedValue);
+	bool filterMainTableByNumber(string synonymName, int wantedValue);
 	bool filterMainTableByString(string synonymName, string wantedValue);
-	bool filterSingletonTableByValue(string synonymName, int wantedValue);
+	bool filterSingletonTableByNumber(string synonymName, int wantedValue);
 	bool filterSingletonTableByString(string synonymName, string wantedValue);
 
 	bool filterEqualPairByNumber(Synonym LHS, Synonym RHS);
@@ -70,7 +70,7 @@ namespace ValuesHandler
 	void initialize(unordered_map<string, SYNONYM_TYPE> synonymsMap) 
 	{
 		clearAll();
-		synonymMap = synonymsMap;
+		mapSynonymNameToType = synonymsMap;
 	}
 
 	/**
@@ -78,7 +78,7 @@ namespace ValuesHandler
 	*/
 	inline void clearAll()
 	{
-		synonymMap.clear();
+		mapSynonymNameToType.clear();
 		mainTable.clear();
 		mainTableIndex.clear();
 		singletonTable.clear();
@@ -211,7 +211,7 @@ namespace ValuesHandler
 	*/
 	Synonym getSynonym(string wantedName) 
 	{
-		SYNONYM_TYPE type = synonymMap[wantedName];
+		SYNONYM_TYPE type = mapSynonymNameToType[wantedName];
 
 		if (isExistInMainTable(wantedName)) {
 			int index = findIndexInMainTable(wantedName);
@@ -247,7 +247,7 @@ namespace ValuesHandler
 
 		for (unsigned int i = 0; i < mainTableSynonyms.size(); i++) {
 			string name = mainTableSynonyms[i].first;
-			SYNONYM_TYPE type = synonymMap[name];
+			SYNONYM_TYPE type = mapSynonymNameToType[name];
 			vector<int> values = getIntermediateValuesInMain(mainTableSynonyms[i].second);
 			valuesMap[name] = values;
 		}
@@ -259,7 +259,7 @@ namespace ValuesHandler
 
 		for (unsigned int i = 0; i < wantedNames.size(); i++) {
 			string name = wantedNames[i];
-			SYNONYM_TYPE type = synonymMap[name];
+			SYNONYM_TYPE type = mapSynonymNameToType[name];
 			vector<int> values = valuesMap[name];
 			Synonym synonym(type, name, values);
 			returnSynonyms.push_back(synonym);
@@ -450,6 +450,67 @@ namespace ValuesHandler
 				vector<int> newRow(oneRow);
 				newRow.push_back(joinValue);
 				acceptedValues.push_back(newRow);
+			}
+		}
+		swap(mainTable, acceptedValues);
+		if (mainTable.size() == 0) {
+			return false;
+		} else {
+			mainTableIndex[pairedSynonym.getName()] = mainTable[0].size() - 1;
+			return true;
+		}
+	}
+	
+	bool hashJoinWithMainTableOnNumber(string mainName, Synonym pairedSynonym)
+	{
+		//TODO: Assert main synonym and paired are not varName or procName
+		int mainIndex = findIndexInMainTable(mainName);
+		vector<int> pairedValues = pairedSynonym.getValues();
+		unordered_map<int, int> hashTable;
+		vector<vector<int>> acceptedValues;
+		
+		for (unsigned int i = 0; i < pairedValues.size(); i++) {
+			hashTable[pairedValues[i]] = 1;
+		}
+		
+		for (unsigned int i = 0; i < mainTable.size(); i++) {
+			int value = mainTable[i][mainIndex];
+			if (hashTable.count(value) != 0) {
+				vector<int> oneRow(mainTable[i]);
+				oneRow.push_back(value);
+				acceptedValues.push_back(oneRow);
+			}
+		}
+		swap(mainTable, acceptedValues);
+		if (mainTable.size() == 0) {
+			return false;
+		} else {
+			mainTableIndex[pairedSynonym.getName()] = mainTable[0].size() - 1;
+			return true;
+		}
+	}
+
+	bool hashJoinWithMainTableOnString(string mainName, Synonym pairedSynonym)
+	{
+		//TODO: Assert main synonym and paired are varName or procName
+		int mainIndex = findIndexInMainTable(mainName);
+		SYNONYM_TYPE pairedType = pairedSynonym.getType();
+		SYNONYM_TYPE mainType = mapSynonymNameToType[mainName];
+		vector<int> pairedValues = pairedSynonym.getValues();
+		unordered_map<string, int> hashTable;
+		vector<vector<int>> acceptedValues;
+		
+		for (unsigned int i = 0; i < pairedValues.size(); i++) {
+			string value = convertIndexToString(pairedValues[i], pairedType);
+			hashTable[value] = pairedValues[i];
+		}
+		
+		for (unsigned int i = 0; i < mainTable.size(); i++) {
+			string value = convertIndexToString(mainTable[i][mainIndex], mainType);
+			if (hashTable.count(value) != 0) {
+				vector<int> oneRow(mainTable[i]);
+				oneRow.push_back(hashTable[value]);
+				acceptedValues.push_back(oneRow);
 			}
 		}
 		swap(mainTable, acceptedValues);
@@ -664,7 +725,7 @@ namespace ValuesHandler
 
 	bool filterEqualValueByString(string synonymName, string wantedValue)
 	{
-		SYNONYM_TYPE type = synonymMap[synonymName];
+		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
 
 		if (isExistInMainTable(synonymName)) {
 			return filterMainTableByString(synonymName, wantedValue);
@@ -690,12 +751,12 @@ namespace ValuesHandler
 	bool filterEqualValueByNumber(string synonymName, int wantedValue)
 	{
 		if (isExistInMainTable(synonymName)) {
-			return filterMainTableByValue(synonymName, wantedValue);
+			return filterMainTableByNumber(synonymName, wantedValue);
 		} else if (isExistInSingletonTable(synonymName)) {
-			return filterSingletonTableByValue(synonymName, wantedValue);
+			return filterSingletonTableByNumber(synonymName, wantedValue);
 		} else {
 			//This synonym does not exist in both tables
-			SYNONYM_TYPE type = synonymMap[synonymName];
+			SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
 			vector<int> values = getDefaultValues(type);
 			for (unsigned int i = 0; i < values.size(); i++) {
 				if (values[i] == wantedValue) {
@@ -709,7 +770,7 @@ namespace ValuesHandler
 		}
 	}
 
-	bool filterMainTableByValue(string synonymName, int wantedValue)
+	bool filterMainTableByNumber(string synonymName, int wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
 		vector<vector<int>> acceptedValues;
@@ -727,7 +788,7 @@ namespace ValuesHandler
 	bool filterMainTableByString(string synonymName, string wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
-		SYNONYM_TYPE type = synonymMap[synonymName];
+		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
 		vector<vector<int>> acceptedValues;
 		
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
@@ -741,7 +802,7 @@ namespace ValuesHandler
 		return mainTable.size() != 0;
 	}
 
-	bool filterSingletonTableByValue(string synonymName, int wantedValue)
+	bool filterSingletonTableByNumber(string synonymName, int wantedValue)
 	{
 		vector<int> singletonValues = singletonTable[synonymName];
 		vector<int> acceptedValue;
@@ -760,7 +821,7 @@ namespace ValuesHandler
 	{
 		vector<int> singletonValues = singletonTable[synonymName];
 		vector<int> acceptedValue;
-		SYNONYM_TYPE type = synonymMap[synonymName];
+		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
 		
 		for (unsigned int i = 0; i < singletonValues.size(); i++) {
 			int valueIndex = singletonValues[i];
@@ -821,22 +882,12 @@ namespace ValuesHandler
 			//Only the LHS synonym exists in the main table
 			RHS = getSynonym(nameRHS);
 			removeFromSingletonTable(nameRHS);
-
-			if (hashJoinWithMainTable(LHS, RHS)) {
-				return filterEqualNumberInMain(LHS, RHS);
-			} else {
-				return false;
-			}
+			return hashJoinWithMainTableOnNumber(nameLHS, RHS);
 		} else if (isRHSInMainTable) {
 			//Only the RHS synonym exists in the main table
 			LHS = getSynonym(nameLHS);
 			removeFromSingletonTable(nameLHS);
-
-			if (hashJoinWithMainTable(RHS, LHS)) {
-				return filterEqualNumberInMain(RHS, LHS);
-			} else {
-				return false;
-			}
+			return hashJoinWithMainTableOnNumber(nameRHS, LHS);
 		} else {
 			//Both synonyms do not exist in the main table
 			return filterEqualNumberPairInSingleton(LHS, RHS);
@@ -866,22 +917,12 @@ namespace ValuesHandler
 			//Only the LHS synonym exists in the main table
 			RHS = getSynonym(nameRHS);
 			removeFromSingletonTable(nameRHS);
-
-			if (hashJoinWithMainTable(LHS, RHS)) {
-				return filterEqualStringInMain(LHS, RHS);
-			} else {
-				return false;
-			}
+			return hashJoinWithMainTableOnString(nameLHS, RHS);
 		} else if (isRHSInMainTable) {
 			//If it comes here, only the RHS synonym exists in the main table
 			LHS = getSynonym(nameLHS);
 			removeFromSingletonTable(nameLHS);
-
-			if (hashJoinWithMainTable(RHS, LHS)) {
-				return filterEqualStringInMain(RHS, LHS);
-			} else {
-				return false;
-			}
+			return hashJoinWithMainTableOnString(nameRHS, LHS);
 		} else {
 			//Both synonyms do not exist in the main table
 			return filterEqualStringPairInSingleton(LHS, RHS);
@@ -935,7 +976,7 @@ namespace ValuesHandler
 			LHS = getSynonym(nameLHS);  //Assign LHS to its default values
 			addToSingletonTable(LHS);
 
-			RHS = getSynonym(nameRHS);  //Assigh RHS to its default values
+			RHS = getSynonym(nameRHS);  //Assign RHS to its default values
 			LHS.setValues(RHS.getValues());  //Assign LHS to the values of RHS
 
 			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(LHS, RHS);
@@ -957,7 +998,7 @@ namespace ValuesHandler
 			//If both synonyms do not exist at all
 			LHS = getSynonym(nameLHS);  //Assign LHS to its default values
 			addToSingletonTable(LHS);
-			RHS = getSynonym(nameRHS);  //Assigh RHS to its default values
+			RHS = getSynonym(nameRHS);  //Assign RHS to its default values
 			addToSingletonTable(RHS);
 		} else if (isLHSInSingletonTable) {
 			//Only LHS exists in the singleton table
