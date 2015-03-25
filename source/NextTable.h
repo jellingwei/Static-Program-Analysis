@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <iostream>
 #include <unordered_map>
+
+#include <boost/dynamic_bitset.hpp>
+
 #include "CNode.h"
 
 class NextTable 
@@ -25,14 +28,18 @@ public:
 
 	int getFirstProgLineInContainer(int);
 	int getLastProgLineInContainer(int);
-	void setFirstProgLineInContainer(int, int);
+	void setFirstProgLineInElse(int, int);
 	void setLastProgLineInContainer(int, int);
+
+	bool setProgLineInWhile(int); 
 
 private:
 	vector<int> firstProgLineInProc;
 	vector<int> lastProgLineInProc;
 
-	unordered_map<int, int> firstProgLineInContainer;
+	boost::dynamic_bitset<> isProgLineInWhile;
+
+	unordered_map<int, int> firstProgLineInElse;
 	unordered_map<int, int> lastProgLineInContainer;
 
 };

@@ -1162,8 +1162,8 @@ int PKB::getFirstProgLineInContainer(int container) {
 int PKB::getLastProgLineInContainer(int container) {
 	return nextTable->getLastProgLineInContainer(container);
 }
-void PKB::setFirstProgLineInContainer(int container, int progline) {
-	nextTable->setFirstProgLineInContainer(container, progline);
+void PKB::setFirstProgLineInElse(int container, int progline) {
+	nextTable->setFirstProgLineInElse(container, progline);
 }
 void PKB::setLastProgLineInContainer(int container, int progline) {
 	nextTable->setLastProgLineInContainer(container, progline);

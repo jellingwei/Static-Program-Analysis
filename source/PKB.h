@@ -189,7 +189,7 @@ public:
 
 	int getFirstProgLineInContainer(int);
 	int getLastProgLineInContainer(int);
-	void setFirstProgLineInContainer(int, int);
+	void setFirstProgLineInElse(int, int);
 	void setLastProgLineInContainer(int, int);
 
 

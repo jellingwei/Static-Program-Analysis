@@ -278,6 +278,9 @@ CNode* createDummyEndIfNode(CFG* cfg, TNode* ifStmtListNode, CNode* lastNodeInIf
 		cfg->createLink(Inside, IfEndNode, insideNode);
 	}*/
 
+	pair<int, CNode*> progLineToNodePair(-1 * curCNode->getProcLineNumber() , IfEndNode); // so that can retrieve the EndIf node
+	PKB::getInstance().cfgNodeTable.insert(progLineToNodePair);
+
 	return IfEndNode;
 }
 
@@ -951,6 +954,7 @@ void DesignExtractor::precomputeInformationForNext() {
 	for (auto iter = proc.begin(); iter != proc.end(); ++iter) {
 		CNode* procEnd = pkb.cfgTable.at(*iter)->getProcEnd();
 		CNode* lastline = procEnd->getBefore()->at(0);
+
 		pkb.setLastProgLineInProc(*iter, lastline->getProcLineNumber());
 	}
 
@@ -963,7 +967,7 @@ void DesignExtractor::precomputeInformationForNext() {
 		TNode* stmtListNode = node->getChildren()->at(1);
 		TNode* firstChildOfStmtListNode = stmtListNode->getChildren()->at(0);
 
-		pkb.setFirstProgLineInContainer(node->getStmtNumber(), firstChildOfStmtListNode->getStmtNumber());
+		pkb.setFirstProgLineInElse(node->getStmtNumber(), firstChildOfStmtListNode->getStmtNumber());
 	}
 
 	// last progline
@@ -972,7 +976,7 @@ void DesignExtractor::precomputeInformationForNext() {
 		TNode* stmtListNode = node->getChildren()->at(1);
 		TNode* lastChildOfStmtListNode = stmtListNode->getChildren()->back();
 
-		pkb.setFirstProgLineInContainer(node->getStmtNumber(), lastChildOfStmtListNode->getStmtNumber());
+		pkb.setLastProgLineInContainer(node->getStmtNumber(), lastChildOfStmtListNode->getStmtNumber());
 	}
 
 }

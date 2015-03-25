@@ -10,6 +10,9 @@
 
 using namespace std;
 
+
+bool optimiseNext = true;
+
 NextTable::NextTable() {
 }
 
@@ -120,12 +123,26 @@ vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
 	return result;
 }
 
+
+
 bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
 		return false;
 	}
+
+	/*if (optimiseNext && isProgLineInWhile[progLine1] && transitiveClosure) {
+		vector<int> parents = pkb.getParent(progLine1);
+		if (parents.size() > 0){
+			int parent = parents[0];
+
+			getLastProgLineInContainer(parent);
+		}
+
+	}*/
+
+
 	CNode* curNode = pkb.cfgNodeTable.at(progLine1);
 	
 	vector<int> result;
@@ -171,39 +188,64 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 
 
 vector<int> NextTable::getLhs() {
-	//@todo change after asking jin what is proglines. might be able to do it faster depending on which definition
-
 	PKB pkb = PKB::getInstance();
+
+	vector<int> listOfProglinesToExclude;
+	
+	vector<int> procs = pkb.getAllProcIndex();
+	for (auto iter = procs.begin(); iter != procs.end(); ++iter) {
+		int procNum = *iter;
+
+		int lastline = getLastProgLineInProc(procNum);
+		CNode* node = pkb.cfgNodeTable.at(lastline);
+
+		if (node->getNodeType() == EndIf_C ) {
+			vector<CNode*> frontier; 
+			frontier.push_back(node);
+
+			while (!frontier.empty()) {
+				node = frontier.back(); 
+				frontier.pop_back();
+				if (node->getNodeType() == EndIf_C) {
+					// add previous nodes 
+					vector<CNode*>* prevNodes = node->getBefore();
+
+					for (auto prevNodeIt = prevNodes->begin(); prevNodeIt != prevNodes->end(); ++prevNodeIt) {
+						frontier.push_back(*prevNodeIt);
+					}
+				} else if (node->getNodeType() != While_C) {
+					listOfProglinesToExclude.push_back(node->getProcLineNumber() );
+				}
+			}
+		} else {
+			if (node->getNodeType() != While_C) {
+				listOfProglinesToExclude.push_back(node->getProcLineNumber() );
+			}	
+		}
+	}
+
+	//sort in desc
+	sort(listOfProglinesToExclude.begin(), listOfProglinesToExclude.end(), std::greater<int>());
+
+	// include every line except the ones in listOfProglinesToExclude
 	vector<int> result;
-
-	for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
-		CNode* node = iter->second;
-
-		vector<CNode*>* after = node->getAfter();
-		bool isLastNode;
-
-		// first handle special case for dummy node (End of if statement)
-		while (after->size() == 1 && after->at(0)->getNodeType() == EndIf_C) {
-			after = after->at(0)->getAfter();	
+	for (unsigned int i = 1; i <= pkb.getStmtTableSize(); i++) {
+		if (!listOfProglinesToExclude.empty() && i == listOfProglinesToExclude.back()) {
+			listOfProglinesToExclude.pop_back();
+			continue;
 		}
 
-		isLastNode = (after->size() == 1 && after->at(0)->getNodeType() == EndProc_C);
-		
-		if (!isLastNode) {
-			result.push_back(node->getProcLineNumber());
-		}
+		result.push_back(i);
 	}
 
 	return result;
 }
 
 vector<int> NextTable::getRhs() {
-	//@todo change after asking jin what is proglines. might be able to do it faster depending on which definition
 
 	PKB pkb = PKB::getInstance();
-	vector<int> result;
-
-	for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
+	
+	/*for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
 		CNode* node = iter->second;
 
 		vector<CNode*>* before = node->getBefore();
@@ -212,7 +254,37 @@ vector<int> NextTable::getRhs() {
 		if (!isFirstNode) {
 			result.push_back(node->getProcLineNumber());
 		}
+	}*/
+
+	vector<int> listOfProglinesToExclude;
+
+	vector<int> procs = pkb.getAllProcIndex();
+	for (auto iter = procs.begin(); iter != procs.end(); ++iter) {
+		int procNum = *iter;
+
+		int firstline = getFirstProgLineInProc(procNum);
+		CNode* node = pkb.cfgNodeTable.at(firstline);
+
+		if (node->getNodeType() != While_C) {
+			listOfProglinesToExclude.push_back(node->getProcLineNumber());
+		}
 	}
+
+	//sort in desc
+	sort(listOfProglinesToExclude.begin(), listOfProglinesToExclude.end(), std::greater<int>());
+
+	// include every line except the ones in listOfProglinesToExclude
+	vector<int> result;
+	for (unsigned int i = 1; i <= pkb.getStmtTableSize(); i++) {
+		if (!listOfProglinesToExclude.empty() && i == listOfProglinesToExclude.back()) {
+			listOfProglinesToExclude.pop_back();
+			continue;
+		}
+
+		result.push_back(i);
+	}
+
+
 
 	return result;
 }
@@ -222,8 +294,8 @@ CNode* NextTable::getCNodeForProgLine(int progLine) {
 }
 
 int NextTable::getFirstProgLineInContainer(int container) {
-	if (firstProgLineInContainer.count(container) != 0) {
-		return firstProgLineInContainer[container];
+	if (firstProgLineInElse.count(container) != 0) {
+		return firstProgLineInElse[container];
 	} else {
 		return -1;
 	}
@@ -237,8 +309,8 @@ int NextTable::getLastProgLineInContainer(int container) {
 	}
 }
 
-void NextTable::setFirstProgLineInContainer(int container, int firstline) {
-	firstProgLineInContainer.insert(pair<int, int>(container, firstline));
+void NextTable::setFirstProgLineInElse(int container, int firstline) {
+	firstProgLineInElse.insert(pair<int, int>(container, firstline));
 }
 void NextTable::setLastProgLineInContainer(int container, int lastline) {
 	lastProgLineInContainer.insert(pair<int, int>(container, lastline));
@@ -253,8 +325,18 @@ int NextTable::getLastProgLineInProc(int procIndex) {
 
 void NextTable::setFirstProgLineInProc(int procIndex, int firstlines) {
 	firstProgLineInProc.push_back(firstlines);
+	cout << "NextTable verification: first line" << endl;
+	cout << " proc index : " << procIndex << endl;
+	cout << "first line : " << firstlines << endl;
 }
 void NextTable::setLastProgLineInProc(int procIndex, int lastlines) {
 	lastProgLineInProc.push_back(lastlines);
+	cout << "NextTable verification: last line" << endl;
+	cout << " proc index : " << procIndex << endl;
+	cout << "last line : " << lastlines << endl;
 }
 
+bool NextTable::setProgLineInWhile(int progline) {
+	isProgLineInWhile.set(progline);
+	return true;
+}
