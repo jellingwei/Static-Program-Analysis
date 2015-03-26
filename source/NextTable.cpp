@@ -126,6 +126,12 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
 		return false;
 	}
+
+	// early return if not in the same procedure
+	if (PKB::getInstance().stmtToProcMap[progLine1] != PKB::getInstance().stmtToProcMap[progLine2]) {
+		return false;
+	}
+
 	CNode* curNode = pkb.cfgNodeTable.at(progLine1);
 	
 	vector<int> result;
