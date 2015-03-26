@@ -27,6 +27,7 @@ PKB::PKB()
 	ast = new AST();
 	nextTable = new NextTable();
 	affectsTable = new AffectsTable();
+	contain = new Contains();
 }
 
 //AST
@@ -1180,6 +1181,10 @@ bool PKB::canSkipNodesForwards(CNode* node) {
 	return AffectsTable::canSkipNodesForwards(node);
 }
 
+//contains
+vector<pair<TNode*, vector<TNode*>>> PKB::contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure) {
+	return contain->contains(parentType, childType, transitiveClosure);
+}
 
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB

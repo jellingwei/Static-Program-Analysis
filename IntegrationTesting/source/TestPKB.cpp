@@ -7,6 +7,7 @@
 #include "PKB.h"
 #include "ConstantTable.h"
 #include "PatternMatch.h"
+#include "Contains.h"
 
 #include "ExpressionParser.h"
 
@@ -424,6 +425,23 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(35, 38)", true, pkb.isAffects(35, 38, true));
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(22, 24)", false, pkb.isAffects(22, 24));
+
+	//Contains
+	cout << "Affects" << endl;
+	/*vector<pair<TNode*, vector<TNode*>>> testing;
+	testing = pkb.contains(StmtLst, While, false);
+	for(int i=0; i<testing.size(); i++) {
+		pair <TNode*, vector<TNode*>> tester = testing.at(i);
+		cout << "StmtLst at stmtNo " << tester.first->getStmtNumber() << endl;
+		for(int j=0; j<tester.second.size(); j++) {
+			cout << "While StmtNo " << tester.second.at(j)->getStmtNumber() << endl;
+		}
+	}*/
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(While, Assign)", 7, (int)pkb.contains(While, Assign, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Procedure, If)", 4, (int)pkb.contains(Procedure, If, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(If, While)", 1, (int)pkb.contains(If, While, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Assign, Plus)", 10, (int)pkb.contains(Assign, Plus, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, While)", 7, (int)pkb.contains(StmtLst, While, false).size());
 
 	cout << "End TestPkb" << endl;
 }

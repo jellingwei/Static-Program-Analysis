@@ -20,6 +20,7 @@
 #include "TNode.h"
 #include "Synonym.h"
 #include "common.h"
+#include "Contains.h"
 
 using namespace std;
 
@@ -193,6 +194,9 @@ public:
 	static bool canSkipNodesBackwards(CNode* node);
 	static bool canSkipNodesForwards(CNode* node);
 
+	//contains 
+	vector<pair<TNode*, vector<TNode*>>> contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
+
 
 	//@todo 
 	// @cond todo
@@ -215,7 +219,7 @@ private:
 	AST* ast;
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
-	PKB();
-	
+	class Contains* contain;
+	PKB();	
 	
 };
