@@ -128,7 +128,7 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 	}
 
 	// early return if not in the same procedure
-	if (PKB::getInstance().getProcIndexForStmt(progLine1) != PKB::getInstance().getProcIndexForStmt(progLine2)) {
+	if (PKB::getInstance().stmtToProcMap[progLine1] != PKB::getInstance().stmtToProcMap[progLine2]) {
 		return false;
 	}
 
