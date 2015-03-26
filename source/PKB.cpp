@@ -1147,35 +1147,68 @@ CNode* PKB::getCNodeForProgLine(int progLine) {
 	return nextTable->getCNodeForProgLine(progLine);
 }
 
-
+/**
+ * @param progLine1  the program line on the left hand side 
+ * @param progLine2  the program line on the right hand side
+ * @param transitiveClosure a flag to indicate the computation of Affects or Affects* relation
+ * @return if transitiveClosure is false: TRUE if Affects(progLine1, progLine2) holds, and FALSE if Affects(progLine1, progLine2) doesnt's hold. 
+ *         if transitiveClosure is true: TRUE if Affects*(progLine1, progLine2) holds, and FALSE if Affects*(progLine1, progLine2) doesnt's hold. 
+ *
+ */
 bool PKB::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
 	//@todo optimise in future
 	// do this now to prevent regressions, as Affects will change a lot in the next week
 	vector<int> ans = getAffectedBy(progLine1, transitiveClosure);
 
 	return find(ans.begin(), ans.end(), progLine2) != ans.end();
-
 }
 
+/**
+ * @param progLine1  the program line
+ * @param transitiveClosure  a flag to indicate the computation of Affects or Affects* relation
+ * @return if transitiveClosure is false: a list of progLine2 if Affects(progLine1, progLine2) holds, and FALSE if Affects(progLine1, progLine2) doesnt's hold. 
+ *         if transitiveClosure is true: a list of progLine2 if Affects*(progLine1, progLine2) holds, and FALSE if Affects*(progLine1, progLine2) doesnt's hold. 
+ */
 vector<int> PKB::getAffectedBy(int progLine1, bool transitiveClosure) {
 	return affectsTable->getProgLinesAffectedBy(progLine1, transitiveClosure);
 }
 
+/**
+ * @param progLine2  the program line
+ * @param transitiveClosure  a flag to indicate the computation of Affects or Affects* relation
+ * @return if transitiveClosure is false: a list of progLine1 if Affects(progLine1, progLine2) holds, and FALSE if Affects(progLine1, progLine2) doesnt's hold. 
+ *         if transitiveClosure is true: a list of progLine1 if Affects*(progLine1, progLine2) holds, and FALSE if Affects*(progLine1, progLine2) doesnt's hold. 
+ */
 vector<int> PKB::getAffecting(int progLine2, bool transitiveClosure) {
 	return affectsTable->getProgLinesAffecting(progLine2, transitiveClosure);
 }
 
+/**
+ * @return a list of all proglines, where Affects(progline, _) is true.
+ */
 vector<int> PKB::getAffectsLhs() {
 	return affectsTable->getLhs();
 }
+
+/**
+ * @return a list of all proglines, where Affects(progline, _) is true.
+ */
 vector<int> PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
+/**
+ * Checks if the node has information about the variables modified previously on the control flow graph
+ * @return TRUE if the node contains the neccessary information to skip behind
+ */
 bool PKB::canSkipNodesBackwards(CNode* node) {
 	return AffectsTable::canSkipNodesBackwards(node);
 }
 
+/**
+* Checks if the node has information about the variables used next on the control flow graph
+ * @return TRUE if the node contains the neccessary information to skip ahead
+ */
 bool PKB::canSkipNodesForwards(CNode* node) {
 	return AffectsTable::canSkipNodesForwards(node);
 }
