@@ -16,6 +16,10 @@
 
 
 bool AffectsTable::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
+	if (PKB::getInstance().getProcIndexForStmt(progLine1) != PKB::getInstance().getProcIndexForStmt(progLine2)) {
+		return false;
+	}
+
 	vector<int> ans = getProgLinesAffectedBy(progLine1, transitiveClosure);
 
 	return find(ans.begin(), ans.end(), progLine2) != ans.end();
