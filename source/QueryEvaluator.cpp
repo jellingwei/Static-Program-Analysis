@@ -159,6 +159,7 @@ namespace QueryEvaluator
 	inline bool processClause(QNode* clauseNode) 
 	{
 		QNODE_TYPE qnode_type = clauseNode->getNodeType();
+		DIRECTION direction = clauseNode->getDirection();
 		Synonym LHS = clauseNode->getArg1();
 		Synonym RHS = clauseNode->getArg2();
 
@@ -272,10 +273,10 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
 					acceptedLHS.push_back(valuesLHS[i]);
 					acceptedRHS.push_back(stmts[j]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -302,10 +303,10 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
 					acceptedLHS.push_back(stmts[j]);
 					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -383,10 +384,10 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
 					acceptedLHS.push_back(valuesLHS[i]);
 					acceptedRHS.push_back(stmts[j]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -413,10 +414,10 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
 					acceptedLHS.push_back(stmts[j]);
 					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -480,10 +481,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getChild(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
 					acceptedLHS.push_back(valuesLHS[i]);
 					acceptedRHS.push_back(stmts[j]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -506,10 +507,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getParent(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
 					acceptedLHS.push_back(stmts[j]);
 					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -575,10 +576,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getStmtFollowedFrom(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
 					acceptedLHS.push_back(valuesLHS[i]);
 					acceptedRHS.push_back(stmts[j]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -601,10 +602,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getStmtFollowedTo(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
 					acceptedLHS.push_back(stmts[j]);
 					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -668,10 +669,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getProcsCalledBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
 					acceptedLHS.push_back(valuesLHS[i]);
 					acceptedRHS.push_back(stmts[j]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -694,10 +695,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getProcsCalling(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
 					acceptedLHS.push_back(stmts[j]);
 					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -761,10 +762,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getNextAfter(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
 					acceptedLHS.push_back(valuesLHS[i]);
 					acceptedRHS.push_back(stmts[j]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -787,10 +788,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getNextBefore(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
 					acceptedLHS.push_back(stmts[j]);
 					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -852,10 +853,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getAffectedBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
 					acceptedLHS.push_back(valuesLHS[i]);
 					acceptedRHS.push_back(stmts[j]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -878,10 +879,10 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getAffecting(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
+				//if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
 					acceptedLHS.push_back(stmts[j]);
 					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				//}
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);

@@ -366,12 +366,14 @@ namespace ValuesHandler
 		//If it reaches here, it is two proper synonyms that require handling
 		if (isExistInMainTable(nameLHS) || isExistInMainTable(nameRHS)) {
 			return processPairWithMainTable(LHS, RHS);
-		} else if (isExistInSingletonTable(nameLHS) || isExistInSingletonTable(nameRHS)){
+		} else {
+			return processPairWithSingletonTable(LHS, RHS);
+		}/*else if (isExistInSingletonTable(nameLHS) || isExistInSingletonTable(nameRHS)){
 			return processPairWithSingletonTable(LHS, RHS);
 		} else {
 			//The two synonyms does not exist in the main table or the singleton table
 			return joinWithMainTable(LHS, RHS);
-		}
+		}*/
 	}
 	
 	bool hashIntersectWithMainTable(Synonym synonym)
@@ -587,21 +589,23 @@ namespace ValuesHandler
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		vector<int> existingLHS = singletonTable[LHS.getName()];
 		vector<int> existingRHS = singletonTable[RHS.getName()];
-		unordered_map<string, int> hashTable;
-		unordered_map<string, int> hashLHS;
+		unordered_multimap<string, int> hashLHS;
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
 
 		for (unsigned int i = 0; i < existingLHS.size(); i++) {
-			string existingString = convertIndexToString(existingLHS[i], typeLHS);
-			hashTable[existingString] = 1;
-			hashLHS[existingString] = existingLHS[i];
+			int indexValue = existingLHS[i];
+			string existingString = convertIndexToString(indexValue, typeLHS);
+			hashLHS.emplace(make_pair(existingString, indexValue));
 		}
 
 		for (unsigned int i = 0; i < existingRHS.size(); i++) {
 			string existingString = convertIndexToString(existingRHS[i], typeRHS);
-			if (hashTable.count(existingString) != 0) {
-				acceptedLHS.push_back(hashLHS[existingString]);
+			auto range = hashLHS.equal_range(existingString);
+			
+			for (auto itr = range.first; itr != range.second; ++itr) {
+				int value = itr->second;
+				acceptedLHS.push_back(value);
 				acceptedRHS.push_back(existingRHS[i]);
 			}
 		}
@@ -629,7 +633,7 @@ namespace ValuesHandler
 		singletonTable[name] = acceptedValues;
 		return acceptedValues.size() != 0;
 	}
-	
+
 	bool processPairWithMainTable(Synonym LHS, Synonym RHS)
 	{
 		//Either LHS or RHS is in the main table or both
@@ -637,72 +641,61 @@ namespace ValuesHandler
 		string nameRHS = RHS.getName();
 		bool isLHSInMainTable = isExistInMainTable(nameLHS);
 		bool isRHSInMainTable = isExistInMainTable(nameRHS);
-		
+
 		if (isLHSInMainTable && isRHSInMainTable) {
 			return hashIntersectWithMainTable(LHS, RHS);  //Both synonyms exists in the main table
 		} else if (isLHSInMainTable) {
-			//Only the LHS synonym exists in the main table
-			if (isExistInSingletonTable(nameRHS)) {
-				//RHS exists in the singleton table
-				return mergeSingletonToMain(LHS, RHS);  //Merge RHS into the main table using LHS
-			} else {
-				return hashJoinWithMainTable(LHS, RHS);  //RHS does not exist
-			}
+			return mergeSingletonToMain(LHS, RHS);  //Merge RHS into the main table using LHS
 		} else {
-			//If it comes here, only the RHS synonym exists in the main table
-			if (isExistInSingletonTable(nameLHS)) {
-				//LHS exists in the singleton table
-				return mergeSingletonToMain(RHS, LHS);  //Merge LHS into the main table using RHS
-			} else {
-				return hashJoinWithMainTable(RHS, LHS);  //LHS does not exist
-			}
+			return mergeSingletonToMain(RHS, LHS);  //Merge RHS into the main table using RHS
 		}
 	}
-	
+
 	bool processPairWithSingletonTable(Synonym LHS, Synonym RHS)
 	{
+		//These two synonyms do not exist in the main table
 		//Either LHS or RHS is in the singleton table or both
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
 		bool isLHSInSingletonTable = isExistInSingletonTable(nameLHS);
 		bool isRHSInSingletonTable = isExistInSingletonTable(nameRHS);
-		
-		if (isLHSInSingletonTable && isRHSInSingletonTable) {
-			//Both synonyms exists in the singleton table
-			pair<vector<int>, vector<int>> synonymPair = getPairBySingletonIntersect(LHS, RHS);
-			LHS.setValues(synonymPair.first);
-			RHS.setValues(synonymPair.second);
-			
-			synonymPair = getPairBySingletonIntersect(RHS, LHS);
-			RHS.setValues(synonymPair.first);
-			LHS.setValues(synonymPair.second);
-			
-			removeFromSingletonTable(LHS.getName());
-			removeFromSingletonTable(RHS.getName());
-			return joinWithMainTable(LHS, RHS);
-		} else if (isLHSInSingletonTable) {
-			//Only the LHS synonym exists in the singleton table
-			pair<vector<int>, vector<int>> synonymPair = getPairBySingletonIntersect(LHS, RHS);
-			removeFromSingletonTable(LHS.getName());
-			LHS.setValues(synonymPair.first);
-			RHS.setValues(synonymPair.second);
-			return joinWithMainTable(LHS, RHS);
-		} else {
-			//If it comes here, only the RHS synonym exists in the singleton table
-			pair<vector<int>, vector<int>> synonymPair = getPairBySingletonIntersect(RHS, LHS);
-			removeFromSingletonTable(RHS.getName());
-			RHS.setValues(synonymPair.first);
-			LHS.setValues(synonymPair.second);
-			return joinWithMainTable(LHS, RHS);
+
+		if (!isLHSInSingletonTable) {
+			Synonym defaultLHS = getSynonym(nameLHS);
+			addToSingletonTable(defaultLHS);
 		}
+
+		if (!isRHSInSingletonTable) {
+			Synonym defaultRHS = getSynonym(nameRHS);
+			addToSingletonTable(defaultRHS);
+		}
+
+		pair<vector<int>, vector<int>> synonymPair = getPairBySingletonIntersect(LHS, RHS);
+		LHS.setValues(synonymPair.first);
+		RHS.setValues(synonymPair.second);
+
+		synonymPair = getPairBySingletonIntersect(RHS, LHS);
+		RHS.setValues(synonymPair.first);
+		LHS.setValues(synonymPair.second);
+
+		removeFromSingletonTable(LHS.getName());
+		removeFromSingletonTable(RHS.getName());
+		return joinWithMainTable(LHS, RHS);
 	}
-	
+
 	bool mergeSingletonToMain(Synonym mainSynonym, Synonym singleton)
 	{
+		string singletonName = singleton.getName();
+
+		if (!isExistInSingletonTable(singletonName)) {
+			Synonym defaultSingleton = getSynonym(singletonName);
+			addToSingletonTable(defaultSingleton);
+		}
+
 		pair<vector<int>, vector<int>> synonymPair = getPairBySingletonIntersect(singleton, mainSynonym);
 		singleton.setValues(synonymPair.first);
 		mainSynonym.setValues(synonymPair.second);
-		removeFromSingletonTable(singleton.getName());
+		removeFromSingletonTable(singletonName);
 		return hashJoinWithMainTable(mainSynonym, singleton);
 	}
 	
@@ -983,6 +976,7 @@ namespace ValuesHandler
 			LHS.setValues(pair.first);
 			RHS.setValues(pair.second);
 			removeFromSingletonTable(nameLHS);
+			removeFromSingletonTable(nameRHS);
 			return joinWithMainTable(LHS, RHS);
 		}
 	}
@@ -1014,6 +1008,7 @@ namespace ValuesHandler
 		LHS.setValues(pair.first);
 		RHS.setValues(pair.second);
 		removeFromSingletonTable(nameLHS);
+		removeFromSingletonTable(nameRHS);
 		return joinWithMainTable(LHS, RHS);
 	}
 
