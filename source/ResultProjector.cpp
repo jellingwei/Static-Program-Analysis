@@ -48,8 +48,9 @@ namespace ResultProjector {
 
 	unordered_map<string, vector<string>> convertTuplesToString(vector<Synonym> resultVector)
 	{
-		int mainFactor = 1;
-		int singletonFactor = 1;
+		unsigned int mainFactor = 1;
+		unsigned int singletonFactor = 1;
+		unsigned int lastSingletonIndex = 0;
 		unordered_map<string, int> individualFactor;
 		unordered_map<string, bool> isInMainTableMap;
 		unordered_map<string, vector<string>> stringValuesMap;
@@ -70,6 +71,9 @@ namespace ResultProjector {
 					singletonFactor *= size;
 					insertedNames.insert(name);
 					isInMainTableMap[name] = false;
+					if (i > lastSingletonIndex) {
+						lastSingletonIndex = i;
+					}
 				}
 			}
 		}
@@ -89,9 +93,15 @@ namespace ResultProjector {
 				valuesStrings = expandEachRow(valuesStrings, singletonFactor);
 				stringValuesMap[name] = valuesStrings;
 			} else {
-				valuesStrings = expandRange(valuesStrings, mainFactor);
-				valuesStrings = expandEachRow(valuesStrings, singletonFactor / individualFactor[name]);
-				stringValuesMap[name] = valuesStrings;
+				if (i == lastSingletonIndex) {
+					valuesStrings = expandRange(valuesStrings, mainFactor);
+					stringValuesMap[name] = valuesStrings;
+				} else {
+					valuesStrings = expandRange(valuesStrings, mainFactor);
+					mainFactor *= individualFactor[name];
+					valuesStrings = expandEachRow(valuesStrings, singletonFactor / mainFactor);
+					stringValuesMap[name] = valuesStrings;
+				}
 			}
 		}
 		return stringValuesMap;

@@ -86,7 +86,7 @@ Select <s2, v> such that Parent(s1, s2) such that Parent(s2, s3) and Modifies(s3
 1009 - no relation at all
 procedure p, p2; 
 Select <p, p2> such that Affects(66,67)
-One Two,One Three,One Four,One Five,One Six,One Seven,One Eight,One One,Two One,Two Two,Two Three,Two Four,Two Five,Two Six,Two Seven,Two Eight,Three One,Three Two,Three Three,Three Four,Three Five,Three Six,Three Seven,Three Eight,Four One,Four Two,Four Three,Four Four,Four Five Six,Four Seven,Four Eight,Five One,Five Two,Five Three,Five Four,Five Five,Five Six,Five Seven,Five Eight,Six One,Six Two,Six Three,Six Four,Six Five,Six Six,Six Seven,Six Eight,Seven One,Seven Two,Seven Three,Seven Four,Seven Five,Seven Six,Seven Seven,Seven Eight,Eight One,Eight Two,Eight Three,Eight Four,Eight Five,Eight Six,Eight Seven,Eight Eight
+One Two,One Three,One Four,One Five,One Six,One Seven,One Eight,One One,Two One,Two Two,Two Three,Two Four,Two Five,Two Six,Two Seven,Two Eight,Three One,Three Two,Three Three,Three Four,Three Five,Three Six,Three Seven,Three Eight,Four One,Four Two,Four Three,Four Four,Four Five, Four Six,Four Seven,Four Eight,Five One,Five Two,Five Three,Five Four,Five Five,Five Six,Five Seven,Five Eight,Six One,Six Two,Six Three,Six Four,Six Five,Six Six,Six Seven,Six Eight,Seven One,Seven Two,Seven Three,Seven Four,Seven Five,Seven Six,Seven Seven,Seven Eight,Eight One,Eight Two,Eight Three,Eight Four,Eight Five,Eight Six,Eight Seven,Eight Eight
 5000
 1010 - no relation over different relation
 procedure p; variable v; while w;
