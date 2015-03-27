@@ -45,12 +45,15 @@ namespace QueryOptimiser
 	QueryTree* flattenQuery(QueryTree* qTreeRoot);
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
 	QNode* optimiseClausesNode(QNode* clausesNode);
+
 	pair<vector<QNode*>, vector<QNode*>> splitConstantClauses(QNode* clausesNode);
 	vector<QNode*> reorderNonConstantClauses(vector<QNode*> clauses);
-	QNode* getSuitableSmallestAndUpdate(vector<QNode*> &clauses);
+	QNode* getNextSmallestAndUpdate(vector<QNode*> &clauses);
+	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(vector<QNode*> clauses);
 	pair<Synonym, Synonym> getClauseArguments(QNode* clause);
+
 	int getExpectedCount(QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output);
-	int calculateCost(QNODE_TYPE rel_type, int numberOfValues);
+	unsigned int calculateCost(QNODE_TYPE rel_type, int numberOfValues);
 	inline bool isContainedInMain(string wantedName);
 	void updateSynonymsCount(string name, int expectedCount);
 	QNode* convertToTree(vector<QNode*> constantClauses, vector<QNode*> nonConstantClauses);
@@ -149,20 +152,51 @@ namespace QueryOptimiser
 		vector<QNode*> reorderedClauses;
 		
 		while (clauses.size() != 0) {
-			QNode* smallestClause = getSuitableSmallestAndUpdate(clauses);
+			QNode* smallestClause = getNextSmallestAndUpdate(clauses);
 			reorderedClauses.push_back(smallestClause);
 		}
 		
 		return reorderedClauses;
 	}
 	
-	QNode* getSuitableSmallestAndUpdate(vector<QNode*> &clauses)
+	QNode* getNextSmallestAndUpdate(vector<QNode*> &clauses)
+	{
+		pair<int, DIRECTION> indexDirectionPair = findIndexAndDirectionWithSmallestCost(clauses);
+		int smallestIndex = indexDirectionPair.first;  //Set index 0 as the smallest cost clause temporarily
+		DIRECTION direction = indexDirectionPair.second;
+		
+		QNode* smallestNode = clauses[smallestIndex];
+		smallestNode->setDirection(direction);
+		clauses.erase(clauses.begin() + smallestIndex);
+		QNODE_TYPE qnode_type = smallestNode->getNodeType();
+
+		pair<Synonym, Synonym> argumentPair = getClauseArguments(smallestNode);
+		Synonym LHS = argumentPair.first;
+		Synonym RHS = argumentPair.second;
+		SYNONYM_TYPE typeLHS = LHS.getType();
+		SYNONYM_TYPE typeRHS = RHS.getType();
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
+		
+		if (direction == LeftToRight) {
+			int expectedCount = getExpectedCount(qnode_type, typeLHS, typeRHS);
+			updateSynonymsCount(nameRHS, expectedCount);
+		} else {
+			int expectedCount = getExpectedCount(qnode_type, typeRHS, typeLHS);
+			updateSynonymsCount(nameLHS, expectedCount);
+		}		
+		mainTableSynonyms.insert(nameLHS);
+		mainTableSynonyms.insert(nameRHS);
+		return smallestNode;
+	}
+
+	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(vector<QNode*> clauses)
 	{
 		int smallestIndex = 0;  //Set index 0 as the smallest cost clause temporarily
-		int smallestCost = 0;
+		unsigned int smallestCost = UINT_MAX;  //Set the maximum for smallest cost
 		bool isJoinClauseFound = false;
 		DIRECTION direction = LeftToRight;
-		
+
 		for (unsigned int i = 0; i < clauses.size(); i++) {
 			QNODE_TYPE qnode_type = clauses[i]->getNodeType();
 			pair<Synonym, Synonym> argumentPair = getClauseArguments(clauses[i]);
@@ -184,7 +218,7 @@ namespace QueryOptimiser
 			
 			//Check left to right direction
 			int numberOfValues = synonymsCount[nameLHS];
-			int cost = calculateCost(qnode_type, numberOfValues);
+			unsigned int cost = calculateCost(qnode_type, numberOfValues);
 			
 			if (cost < smallestCost) {
 				smallestCost = cost;
@@ -202,29 +236,7 @@ namespace QueryOptimiser
 				direction = RightToLeft;
 			}
 		}
-		
-		QNode* smallestNode = clauses[smallestIndex];
-		smallestNode->setDirection(direction);
-		clauses.erase(clauses.begin() + smallestIndex);
-		QNODE_TYPE qnode_type = smallestNode->getNodeType();
-		pair<Synonym, Synonym> argumentPair = getClauseArguments(smallestNode);
-		Synonym LHS = argumentPair.first;
-		Synonym RHS = argumentPair.second;
-		SYNONYM_TYPE typeLHS = LHS.getType();
-		SYNONYM_TYPE typeRHS = RHS.getType();
-		string nameLHS = LHS.getName();
-		string nameRHS = RHS.getName();
-		
-		if (direction == LeftToRight) {
-			int expectedCount = getExpectedCount(qnode_type, typeLHS, typeRHS);
-			updateSynonymsCount(nameRHS, expectedCount);
-		} else {
-			int expectedCount = getExpectedCount(qnode_type, typeRHS, typeLHS);
-			updateSynonymsCount(nameLHS, expectedCount);
-		}		
-		mainTableSynonyms.insert(nameLHS);
-		mainTableSynonyms.insert(nameRHS);
-		return smallestNode;
+		return make_pair(smallestIndex, direction);
 	}
 	
 	pair<Synonym, Synonym> getClauseArguments(QNode* clause)
@@ -315,41 +327,39 @@ namespace QueryOptimiser
 		}
 	}
 	
-	int calculateCost(QNODE_TYPE rel_type, int numberOfValues)
+	unsigned int calculateCost(QNODE_TYPE rel_type, int numberOfValues)
 	{
-		int zero = 0;
-		
 		switch (rel_type) {
 		case ModifiesS:
 		case ModifiesP:
-			return zero - (numberOfValues * COST_MODIFIES);
+			return numberOfValues * COST_MODIFIES;
 		case UsesS:
 		case UsesP:
-			return zero - (numberOfValues * COST_USES);
+			return numberOfValues * COST_USES;
 		case Parent:
-			return zero - (numberOfValues * COST_PARENT);
+			return numberOfValues * COST_PARENT;
 		case ParentT:
-			return zero - (numberOfValues * COST_PARENTS);
+			return numberOfValues * COST_PARENTS;
 		case Follows:
-			return zero - (numberOfValues * COST_FOLLOWS);
+			return numberOfValues * COST_FOLLOWS;
 		case FollowsT:
-			return zero - (numberOfValues * COST_FOLLOWSS);
+			return numberOfValues * COST_FOLLOWSS;
 		case Calls:
-			return zero - (numberOfValues * COST_CALLS);
+			return numberOfValues * COST_CALLS;
 		case CallsT:
-			return zero - (numberOfValues * COST_CALLSS);
+			return numberOfValues * COST_CALLSS;
 		case Next:
-			return zero - (numberOfValues * COST_NEXT);
+			return numberOfValues * COST_NEXT;
 		case NextT:
-			return zero - (numberOfValues * COST_NEXTS);
+			return numberOfValues * COST_NEXTS;
 		case Affects:
-			return zero - (numberOfValues * COST_AFFECTS);
+			return numberOfValues * COST_AFFECTS;
 		case AffectsT:
-			return zero - (numberOfValues * COST_AFFECTSS);
+			return numberOfValues * COST_AFFECTSS;
 		case Pattern:
-			return zero - (numberOfValues * COST_PATTERN);
+			return numberOfValues * COST_PATTERN;
 		case With:
-			return zero - (numberOfValues * 1);
+			return numberOfValues * 1;
 		default:
 			return 1;  //It should never reach here
 		}
