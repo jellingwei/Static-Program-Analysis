@@ -192,7 +192,7 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 
 
 vector<int> NextTable::getLhs() {
-	PKB pkb = PKB::getInstance();
+	/*PKB pkb = PKB::getInstance();
 
 	vector<int> listOfProglinesToExclude;
 	
@@ -241,54 +241,53 @@ vector<int> NextTable::getLhs() {
 
 		result.push_back(i);
 	}
+	*/
+
+	PKB pkb = PKB::getInstance();
+	
+	vector<int> result;
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
+
+		CNode* node = pkb.cfgNodeTable.at(i);
+
+		if (node->getNodeType() == While_C || node->getNodeType() == If_C) {
+			result.push_back(node->getProcLineNumber());
+			continue;
+		}
+
+		vector<CNode*>* after = node->getAfter();
+		bool isLastNode;
+
+		// first handle special case for dummy node (End of if statement)
+		while (after->size() == 1 && after->at(0)->getNodeType() == EndIf_C) {
+			after = after->at(0)->getAfter();	
+		}
+
+		isLastNode = (after->size() == 1 && after->at(0)->getNodeType() == EndProc_C);
+		
+		if (!isLastNode) {
+			result.push_back(node->getProcLineNumber());
+		}
+	}
 
 	return result;
 }
 
 vector<int> NextTable::getRhs() {
-
 	PKB pkb = PKB::getInstance();
-	
-	/*for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
-		CNode* node = iter->second;
+
+	vector<int> result;
+	vector<int> assignStmts = pkb.getStmtNumForType(ASSIGN);
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
+		CNode* node = pkb.cfgNodeTable.at(i);
 
 		vector<CNode*>* before = node->getBefore();
 		bool isFirstNode = (before->size() == 1 && before->at(0)->getNodeType() == Proc_C);
 		
 		if (!isFirstNode) {
-			result.push_back(node->getProcLineNumber());
-		}
-	}*/
-
-	vector<int> listOfProglinesToExclude;
-
-	vector<int> procs = pkb.getAllProcIndex();
-	for (auto iter = procs.begin(); iter != procs.end(); ++iter) {
-		int procNum = *iter;
-
-		int firstline = getFirstProgLineInProc(procNum);
-		CNode* node = pkb.cfgNodeTable.at(firstline);
-
-		if (node->getNodeType() != While_C) {
-			listOfProglinesToExclude.push_back(node->getProcLineNumber());
+			result.push_back(i);
 		}
 	}
-
-	//sort in desc
-	sort(listOfProglinesToExclude.begin(), listOfProglinesToExclude.end(), std::greater<int>());
-
-	// include every line except the ones in listOfProglinesToExclude
-	vector<int> result;
-	for (unsigned int i = 1; i <= pkb.getStmtTableSize(); i++) {
-		if (!listOfProglinesToExclude.empty() && i == listOfProglinesToExclude.back()) {
-			listOfProglinesToExclude.pop_back();
-			continue;
-		}
-
-		result.push_back(i);
-	}
-
-
 
 	return result;
 }
