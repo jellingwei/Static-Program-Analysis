@@ -957,6 +957,15 @@ void DesignExtractor::precomputeInformationForNext() {
 		pkb.setFirstProgLineInElse(node->getStmtNumber(), firstChildOfStmtListNode->getStmtNumber());
 	}
 
+	// set nodes inside while
+	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
+		vector<int> children = pkb.getChild(*iter, true);
+
+		for (auto childStmtNum = children.begin(); childStmtNum != children.end(); ++childStmtNum) {
+			pkb.setProgLineInWhile(*childStmtNum);
+		}
+	}
+
 	// last progline
 	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
 		TNode* node = pkb.getNodeForStmt(*iter);
@@ -966,4 +975,5 @@ void DesignExtractor::precomputeInformationForNext() {
 		pkb.setLastProgLineInContainer(node->getStmtNumber(), lastChildOfStmtListNode->getStmtNumber());
 	}
 
+	
 }

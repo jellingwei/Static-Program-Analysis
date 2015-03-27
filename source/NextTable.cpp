@@ -132,15 +132,19 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 		return false;
 	}
 
-	/*if (optimiseNext && isProgLineInWhile[progLine1] && transitiveClosure) {
+	if (optimiseNext && isProgLineInWhile.test(progLine1) && transitiveClosure) {
 		vector<int> parents = pkb.getParent(progLine1);
 		if (parents.size() > 0){
 			int parent = parents[0];
 
-			getLastProgLineInContainer(parent);
+			int lastline = getLastProgLineInContainer(parent);
+
+			if (lastline >= progLine2) {
+				return true;
+			}
 		}
 
-	}*/
+	}
 
 
 	CNode* curNode = pkb.cfgNodeTable.at(progLine1);
@@ -325,18 +329,14 @@ int NextTable::getLastProgLineInProc(int procIndex) {
 
 void NextTable::setFirstProgLineInProc(int procIndex, int firstlines) {
 	firstProgLineInProc.push_back(firstlines);
-	cout << "NextTable verification: first line" << endl;
-	cout << " proc index : " << procIndex << endl;
-	cout << "first line : " << firstlines << endl;
 }
 void NextTable::setLastProgLineInProc(int procIndex, int lastlines) {
 	lastProgLineInProc.push_back(lastlines);
-	cout << "NextTable verification: last line" << endl;
-	cout << " proc index : " << procIndex << endl;
-	cout << "last line : " << lastlines << endl;
+
 }
 
 bool NextTable::setProgLineInWhile(int progline) {
+	isProgLineInWhile = boost::dynamic_bitset<>(PKB::getInstance().getStmtTableSize() + 1);
 	isProgLineInWhile.set(progline);
 	return true;
 }

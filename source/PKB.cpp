@@ -1166,6 +1166,9 @@ void PKB::setFirstProgLineInElse(int container, int progline) {
 void PKB::setLastProgLineInContainer(int container, int progline) {
 	nextTable->setLastProgLineInContainer(container, progline);
 }
+void PKB::setProgLineInWhile(int progline) {
+	nextTable->setProgLineInWhile(progline);
+}
 
 /**
 * @param progLine the program line

@@ -191,6 +191,7 @@ public:
 	int getLastProgLineInContainer(int);
 	void setFirstProgLineInElse(int, int);
 	void setLastProgLineInContainer(int, int);
+	void setProgLineInWhile(int);
 
 	vector<CFG*> cfgTable;
 
