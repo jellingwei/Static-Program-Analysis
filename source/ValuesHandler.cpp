@@ -235,7 +235,7 @@ namespace ValuesHandler
 		vector<pair<string, int>> mainTableSynonyms;
 		set<string> singletonSynonyms;
 		unordered_map<string, vector<int>> valuesMap;
-		
+
 		for (unsigned int i = 0; i < wantedNames.size(); i++) {
 			int index = findIndexInMainTable(wantedNames[i]);
 			if (index != -1) {
@@ -266,7 +266,7 @@ namespace ValuesHandler
 		}
 		return returnSynonyms;
 	}
-	
+
 	/**
 	* Helper method to get all intermediate values of the column
 	* Might contain duplicates

@@ -114,7 +114,7 @@ namespace QueryEvaluator
 				string wantedSynonymName = wantedSynonym.getName();
 				Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
 				result.push_back(s);
-		} else if (numberOfSynonyms > 1) {
+		} else if (numberOfSynonyms > 1 && isValid) {
 			vector<string> wantedNames;
 
 			for (int i = 0; i < numberOfSynonyms; i++) {
