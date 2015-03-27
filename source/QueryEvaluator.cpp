@@ -1,6 +1,3 @@
-//@TODO: if patterns
-//@TODO: Special handling for relation(_, _) if this does not exist
-
 #include <vector>
 #include <string>
 #include <set>
@@ -17,9 +14,9 @@ using std::make_pair;
 #include "AbstractWrapper.h"
 
 /**
-	@brief Namespace containing functions for the evaluating of queries.
+@brief Namespace containing functions for the evaluating of queries.
 
- */
+*/
 namespace QueryEvaluator 
 {
 	//Private functions to evaluate the query tree
@@ -97,23 +94,23 @@ namespace QueryEvaluator
 		int numberOfSynonyms = resultNode->getNumberOfChildren();
 
 		if (numberOfSynonyms == 1) {
-				Synonym wantedSynonym = resultChildNode->getArg1();
+			Synonym wantedSynonym = resultChildNode->getArg1();
 
-				if (wantedSynonym.getType() == BOOLEAN && isValid) {
-					Synonym s(BOOLEAN, "TRUE");
-					result.push_back(s);
-					return result;
-				} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
-					Synonym s(BOOLEAN, "FALSE");
-					result.push_back(s);
-					return result;
-				} else if (!isValid) {
-					return result;
-				}
-
-				string wantedSynonymName = wantedSynonym.getName();
-				Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
+			if (wantedSynonym.getType() == BOOLEAN && isValid) {
+				Synonym s(BOOLEAN, "TRUE");
 				result.push_back(s);
+				return result;
+			} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
+				Synonym s(BOOLEAN, "FALSE");
+				result.push_back(s);
+				return result;
+			} else if (!isValid) {
+				return result;
+			}
+
+			string wantedSynonymName = wantedSynonym.getName();
+			Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
+			result.push_back(s);
 		} else if (numberOfSynonyms > 1 && isValid) {
 			vector<string> wantedNames;
 
@@ -162,7 +159,7 @@ namespace QueryEvaluator
 		DIRECTION direction = clauseNode->getDirection();
 		Synonym LHS = clauseNode->getArg1();
 		Synonym RHS = clauseNode->getArg2();
-		
+
 		switch (qnode_type) {
 		case ModifiesP:
 		case ModifiesS:
@@ -512,8 +509,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getParent(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -585,8 +582,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getStmtFollowedFrom(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -608,8 +605,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getStmtFollowedTo(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -679,8 +676,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getProcsCalledBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -702,8 +699,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getProcsCalling(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -773,8 +770,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getNextAfter(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -796,8 +793,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getNextBefore(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -864,8 +861,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getAffectedBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -887,8 +884,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getAffecting(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -932,7 +929,7 @@ namespace QueryEvaluator
 		if (isMatchStmts.size() == 0) {
 			return false;
 		}
-		
+
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		if (typeLHS == VARIABLE) {
 			//If LHS is a variable synonym, use the return statements to probe the ModifiesTable
@@ -995,7 +992,7 @@ namespace QueryEvaluator
 			if (arg0Values.size() == 0) {
 				return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
 			}
-			
+
 			vector<int> vars;
 			for (unsigned int i = 0; i < arg0Values.size(); i++) {
 				int var = pkb.getControlVariable(arg0Values[i]);
