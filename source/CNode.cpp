@@ -216,6 +216,10 @@ void CNode::setVariablesInside(VARIABLES variables) {
 unordered_map<int, set<int>> CNode::getReachingDefinitions() {
 	return _reachingDefinitions;
 }
+
+/**
+ * @param varStmtMap  the reaching definition to set on the node
+ */
 void CNode::setReachingDefinitions(unordered_map<int, set<int>> varStmtMap) {
 	_reachingDefinitions = varStmtMap;
 
@@ -229,6 +233,10 @@ void CNode::setReachingDefinitions(unordered_map<int, set<int>> varStmtMap) {
 unordered_map<int, set<int>> CNode::getFirstUseOfVariable() {
 	return _firstUseOfVariable;
 }
+
+/**
+ * @param varStmtMap  the first use of variables to set on the node
+ */
 void CNode::setFirstUseOfVariable(unordered_map<int, set<int>> varStmtMap) {
 	_firstUseOfVariable = varStmtMap;
 	

@@ -820,7 +820,9 @@ void updateReachingDefinitionsThroughCfg(CNode* startNode) {
 	
 }
 
-
+/** 
+ * @return the EndIf node for the if-statement. If the node given is not an if-statement, returns NULL
+ */
 CNode* obtainEndIfNodeIfIsIf(CNode* node, CFG* cfg) {
 	if (node->getNodeType() != If_C) {
 		return NULL;

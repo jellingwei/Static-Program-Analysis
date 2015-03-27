@@ -803,6 +803,11 @@ vector<int> PKB::getCallsRhs() {
 
 // ModifiesTable methods
 
+/**
+* Initialise the Modifies Table.
+* @param numVariables number of variables
+* @exception exception if numVariables is negative or 0.
+*/
 void PKB::initModifiesTable(int numVariables) {
 	if (numVariables <= 0) {
 		throw runtime_error("initModifiesTable: invalid number of variables");
@@ -855,6 +860,10 @@ vector<int> PKB::getModVarForStmt(int stmtNum) {
 	return modifiesTable->getModVarForStmt(stmtNum);
 }
 
+/**
+* @param stmtNum the statement number that modifies a particular variable
+* @exception exception if stmtNum is negative or 0.
+*/
 boost::dynamic_bitset<> PKB::getModVarInBitvectorForStmt(int stmtNum) {
 	return modifiesTable->getModVarInBitvectorForStmt(stmtNum);
 }
@@ -931,6 +940,11 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair() {
 
 // UsesTable methods
 
+/**
+* Initialise the Uses Table.
+* @param numVariables number of variables
+* @exception exception if numVariables is negative or 0.
+*/
 void PKB::initUsesTable(int numVariables) {
 	if (numVariables <= 0) {
 		throw runtime_error("initUsesTable: invalid number of variables");
@@ -982,6 +996,11 @@ vector<int> PKB::getUsesStmtNum(int varIndex) {
 vector<int> PKB::getUsesVarForStmt(int stmtNum) {
 	return usesTable->getUsesVarForStmt(stmtNum);
 }
+
+/**
+* @param stmtNum the statement number that uses a particular variable
+* @exception exception if stmtNum is negative or 0.
+*/
 boost::dynamic_bitset<> PKB::getUseVarInBitvectorForStmt(int stmtNum) {
 	return usesTable->getUseVarInBitvectorForStmt(stmtNum);
 }
@@ -1023,8 +1042,8 @@ bool PKB::setUsesProc(int procIndex, int varIndex) {
 /**
 * @param procIndex  the index of a procedure that uses a particular variable
 * @param varIndex  the index of a variable
-* @return TRUE if Uses(stmtNum,varIndex) is satisfied.
-*		  FALSE if Uses(stmtNum,varIndex) is not satisfied or either procIndex or varIndex is negative or 0.
+* @return TRUE if Uses(procIndex,varIndex) is satisfied.
+*		  FALSE if Uses(procIndex,varIndex) is not satisfied or either procIndex or varIndex is negative or 0.
 */
 bool PKB::isUsesProc(int procIndex, int varIndex) {
 	return usesTable->isUsesProc(procIndex, varIndex);
@@ -1147,7 +1166,15 @@ CNode* PKB::getCNodeForProgLine(int progLine) {
 	return nextTable->getCNodeForProgLine(progLine);
 }
 
+// Affects Table methods
 
+/**
+* @param progLine1  the program line that affects progline2
+* @param progLine2  the program line that is affected by progline1
+* @param transitiveClosure  a flag to indicate the computation of Affect or Affect* relation
+* @return TRUE if Affect(progLine1,progLine2) is satisfied.
+*		  FALSE if Affect(progLine1,progLine2) is not satisfied or either progline1 or progLine2 is negative or 0.
+*/
 bool PKB::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
 	//@todo optimise in future
 	// do this now to prevent regressions, as Affects will change a lot in the next week
@@ -1157,25 +1184,58 @@ bool PKB::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
 
 }
 
+/**
+* @param progLine1  the program line that affects progline2
+* @param transitiveClosure  a flag to indicate the computation of Affect or Affect* relation
+* @return if transitiveClosure is false: a list of program lines, progLine2, where Affect(progLine1, progLine2) is satisfied.
+*		  if transitiveClosure is true: a list of program lines, progLine2, where Affect*(progLine1, progLine2) is satisfied.
+*		  an empty list if progLine1 is invalid or negative or 0.
+*/
 vector<int> PKB::getAffectedBy(int progLine1, bool transitiveClosure) {
 	return affectsTable->getProgLinesAffectedBy(progLine1, transitiveClosure);
 }
 
+/**
+* @param progLine2  the program line that is affected by progline1
+* @param transitiveClosure  a flag to indicate the computation of Affect or Affect* relation
+* @return if transitiveClosure is false: a list of program lines, progLine1, where Affect(progLine1, progLine2) is satisfied.
+*		  if transitiveClosure is true: a list of program lines, progLine1, where Affect*(progLine1, progLine2) is satisfied.
+*		  an empty list if progLine2 is invalid or negative or 0.
+*/
 vector<int> PKB::getAffecting(int progLine2, bool transitiveClosure) {
 	return affectsTable->getProgLinesAffecting(progLine2, transitiveClosure);
 }
 
+/**
+* @return a list of all program lines, progLine1, where Affect(progLine1, progLine2) is true.
+*/
 vector<int> PKB::getAffectsLhs() {
 	return affectsTable->getLhs();
 }
+
+/**
+* @return a list of all program lines, progLine2, where Affect(progLine1, progLine2) is true.
+*/
 vector<int> PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
+/**
+* Checks if the node has information about the variables modified previously on the control flow graph.
+* @param node a CNode
+* @return TRUE if the node contains the neccessary information to skip backwards.
+*		  FALSE if the node does not contain the neccessary information to skip backwards.
+*/
 bool PKB::canSkipNodesBackwards(CNode* node) {
 	return AffectsTable::canSkipNodesBackwards(node);
 }
 
+/**
+* Checks if the node has information about the variables used next on the control flow graph.
+* @param node a CNode
+* @return TRUE if the node contains the neccessary information to skip ahead.
+*		  FALSE if the node does not contain the neccessary information to skip ahead.
+*/
 bool PKB::canSkipNodesForwards(CNode* node) {
 	return AffectsTable::canSkipNodesForwards(node);
 }
