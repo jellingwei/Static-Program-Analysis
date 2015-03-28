@@ -42,24 +42,8 @@ void StatisticsTable::tabulateFollows()
 	int numberOfWhile = pkb.getStmtNumForType("while").size();
 	int numberOfProcedure = pkb.getProcTableSize();
 
-	// Follows(s,s)
-	int followsS_S = (totalNumberOfStmts - 1 - numberOfIf - numberOfWhile - numberOfProcedure) * 2;
+	/*TODO: The worst case would depend on the length of the longest stmtList. */
 
-	// Follows(s,ANY) Follows(ANY,s)
-	int followsANY = 1;
-
-	// Follows*
-
-	// TODO Follows*(s,s) s^2
-	int followsSS_S = 0;
-
-	//Follows*(a,s) Follows*(s,a)
-
-
-
-	// TODO Follows*("#",s) Follows*(s,"#")
-	int n = 0; // n = #
-	int followsSANY = (totalNumberOfStmts - n)/totalNumberOfStmts * followsSS_S;
 }
 
 void StatisticsTable::tabulateParent()
@@ -68,26 +52,9 @@ void StatisticsTable::tabulateParent()
 	vector<int> parent = pkb.getParentLhs();
 	vector<int> child = pkb.getParentRhs();
 
-	// Parent
-	// Parent(s,s)
-	int parentS_S = parent.size() + child.size();
-
-	//Parent(s,"#")
-	int parentS_ANY = 1;
-
-	// Parent("#", s)
-	
-	int parentWithMostChild = 0;
-	for(vector<int>::iterator it = parent.begin(); it != parent.end(); ++it) {
-		if(*it > parentWithMostChild) 
-			parentWithMostChild = *it;
-	}
-	int parentANY_S = parentWithMostChild;
-
-
 	//Parent*
 	//Parent*(s,s)
-	int parentSS_S = parentS_S;
+	int parentSS_S = parent.size() + child.size();
 
 	//Parent*(s,"#")
 	int childWithMostAncestors = 0;
@@ -104,6 +71,9 @@ void StatisticsTable::tabulateParent()
 			parentWithMostDescendants = *it;
 	}
 	int parentSANY_S = parentWithMostDescendants;
+
+	/* Take the average of the 3 possible worst case scenerio */
+	int parentSCost = (1/3) * (parentSS_S + parentSS_ANY + parentSANY_S);
 }
 
 void StatisticsTable::tabulateCalls()
@@ -112,7 +82,16 @@ void StatisticsTable::tabulateCalls()
 	int numberOfProcedure = pkb.getProcTableSize();
 
 	//TODO - compute callsSWeight
+	/* To compute Calls*("#",p2) all possible p2 is computed from a given procedure
+	   It's done using double-ended queue and DFS to get all p2, and each procedure 
+	   would only be visited once. Therefore getting all p1, or all p2 is O(V), 
+	   where V is the total number of procedures.
 
+	   This is also similar for get all pairs <p1,p2> Calls*(p1,p2). */
+
+
+	/* Take the average of the 3 possible worst case scenerio */
+	int callSCost = (1/3) * (numberOfProcedure + numberOfProcedure + numberOfProcedure);
 }
 
 void StatisticsTable::tabulateNext()
@@ -120,12 +99,19 @@ void StatisticsTable::tabulateNext()
 	PKB pkb = PKB::getInstance();
 	int numberOfProcedure = pkb.getProcTableSize();
 
-	//TODO - compute nextSWeight: find the procedure with the greatest number of program lines. 
+	CFG* cfg = pkb.cfgTable.at(0);
+	int cfgSize = cfg->getInsideSize(cfg->getProcRoot());
+
+	//TODO - compute nextSWeight: 
+	/* The worst case is when Next*(1, k) where k the the last prog_line in the procedure. */
+	int nextSCost = cfgSize;
 }
 
 void StatisticsTable::tabulatePattern()
 {
 	//TODO - compute patternWeight: find the largest possible number of RHS operators/variables in an assignment stmt. 
+	/* Patterns match assign - builts a vector<string> and calls ExpressionParser to build the sub-expression tree. */
+
 }
 
 /** Getters **/

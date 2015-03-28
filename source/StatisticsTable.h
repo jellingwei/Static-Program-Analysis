@@ -13,6 +13,16 @@ class StatisticsTable
 {
 public:
 	StatisticsTable();
+	~StatisticsTable();
+
+	void initWeights();
+	void tabulateWeights();
+	void tabulateAffects();
+	void tabulateFollows();
+	void tabulateParent();
+	void tabulateCalls();
+	void tabulateNext();
+	void tabulatePattern();
 
 	int getAffectsCost();
 	int getAffectsSCost();
