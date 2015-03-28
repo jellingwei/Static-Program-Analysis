@@ -22,7 +22,7 @@ PatternMatch::PatternMatch()
  * @param isExact  a flag for exact or non-exact matching
  * @return a vector of statement numbers which are assign stmts, and uses the input of the query subtree root node.
  */
-vector<int> PatternMatch::PatternMatchAssign(TNode* _rootNodeQ, bool isExact, string usedOperand)
+STATEMENT_LIST PatternMatch::patternMatchAssign(TNode* _rootNodeQ, bool isExact, string usedOperand)
 {
 	PKB pkb = PKB::getInstance();
 	vector<int> assignTable;
@@ -326,7 +326,7 @@ vector<int> SingleVariableConstant(TNode *_rightChildNodeA, TNode *_rootNodeQ, b
  * @param type the type of statement to match, either While or If
  * @return a vector of statement numbers which are while or if loops, depending on type, and uses the input LHS as its control variable.
  */
-vector<int> PatternMatch::patternMatchParentStmt(string LHS, TNODE_TYPE type) {
+STATEMENT_LIST PatternMatch::patternMatchParentStmt(EXPRESSION LHS, TNODE_TYPE type) {
 	// strip leading and trailing space
 	LHS.erase(0, LHS.find_first_not_of(" "));
 	LHS.erase(LHS.find_last_not_of(" ") + 1);

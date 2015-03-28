@@ -38,7 +38,7 @@ PKB::PKB()
 * @return a TNode for the given design entity together with its statement number and value. 
 * @exception exception if stmtNum is negative or 0 or value is negative.
 */
-TNode* PKB::createTNode(TNODE_TYPE astNodeType, int stmtNo, int value) 
+TNode* PKB::createTNode(TNODE_TYPE astNodeType, STATEMENT stmtNo, VAR_INDEX value) 
 {
 	return ast->createTNode(astNodeType, stmtNo, value);
 }
@@ -59,7 +59,7 @@ TNode* PKB::getRoot()
 *		  FALSE if the link between the fromNode to toNode is not created successfully.
 * @exception exception if link is invalid, or fromNode and toNode is NULL.
 */
-bool PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) 
+STATUS PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) 
 {
 	return ast->createLink(link, fromNode, toNode);
 }
@@ -69,7 +69,7 @@ bool PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode)
 * @return the total number of children the parent TNode has. 
 * @exception exception if parent is NULL.
 */
-int PKB::getChildrenSize(TNode* parent) 
+INTEGER PKB::getChildrenSize(TNode* parent) 
 {
 	return ast->getChildrenSize(parent);
 }
@@ -92,7 +92,7 @@ vector<TNode*>* PKB::getChildrenNode(TNode* parent)
 *		  FALSE if child TNode is not a child node of parent TNode.
 * @exception exception if parent or child is NULL.
 */
-bool PKB::isChildNode(TNode* parent, TNode* child) 
+BOOLEAN_ PKB::isChildNode(TNode* parent, TNode* child) 
 {
 	return ast->isChildNode(parent, child);
 }
@@ -103,7 +103,7 @@ bool PKB::isChildNode(TNode* parent, TNode* child)
 		  FALSE if node does not exist.
 * @exception exception if node is NULL.
 */
-bool PKB::isExists(TNode* node) 
+BOOLEAN_ PKB::isExists(TNode* node) 
 {
 	return ast->isExists(node);
 }
@@ -111,7 +111,7 @@ bool PKB::isExists(TNode* node)
 /**
  * @return the total number of nodes in the the AST.
  */
-int PKB::getASTSize() 
+INTEGER PKB::getASTSize() 
 {
 	return ast->getSize();
 }
@@ -121,7 +121,7 @@ int PKB::getASTSize()
  * @param RHS  the expression query with a suitable subtree
  * @return a vector of statement numbers which are assign stmts, and uses the input RHS as its right substree.
  */
-vector<int> PKB::patternMatchAssign(string RHS) 
+STATEMENT_LIST PKB::patternMatchAssign(EXPRESSION RHS) 
 {
 	return ast->patternMatchAssign(RHS);
 }
@@ -131,7 +131,7 @@ vector<int> PKB::patternMatchAssign(string RHS)
  * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in
  * @return a vector of statement numbers which are while statements, and uses the input LHS as its control variable.
  */
-vector<int> PKB::patternMatchWhile(string LHS) 
+STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS) 
 {
 	return ast->patternMatchWhile(LHS);
 }
@@ -141,7 +141,7 @@ vector<int> PKB::patternMatchWhile(string LHS)
  * @param LHS  the name of the variable that acts as the control variable for the if statements we are interested in
  * @return a vector of statement numbers which are in if statements, and uses the input LHS as its control variable.
  */
-vector<int> PKB::patternMatchIf(string LHS) 
+STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS) 
 {
 	return ast->patternMatchIf(LHS);
 }
@@ -155,7 +155,7 @@ vector<int> PKB::patternMatchIf(string LHS)
  *     3. the AST is poorly formed and the while loop's node is in an invalid state
  * Otherwise, return the index of the control variable.
  */
-int PKB::getControlVariable(int stmtNum) 
+VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum) 
 {
 	return ast->getControlVariable(stmtNum);
 }

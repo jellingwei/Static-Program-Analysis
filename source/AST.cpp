@@ -22,7 +22,7 @@ TNode* AST::getRoot() {
 	return _rootNode;
 }
 
-TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
+TNode* AST::createTNode(TNODE_TYPE ast_node_type, STATEMENT stmtNo, VAR_INDEX idx) {
 
 	if(stmtNo < 0) {
 		throw exception("AST error: Negative statment number");
@@ -40,7 +40,7 @@ TNode* AST::createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx) {
 * @return TRUE if the link between the fromNode to toNode is created successfully. Otherwise, return FALSE. 
 * @exception if link is invalid, or fromNode and toNode is NULL.
 */
-bool AST::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
+STATUS AST::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
 	if(!(link==0 || link==1 || link==2 || link==3)) {
 		throw exception("AST error: Invalid Link_Type");
 	} else if(fromNode==NULL || toNode==NULL) {
@@ -82,7 +82,7 @@ bool AST::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
 * @return the total number of children the parent TNode has. 
 * @exception if parent is NULL.
 */
-int AST::getChildrenSize(TNode* parent) {
+INTEGER AST::getChildrenSize(TNode* parent) {
 	if(parent==NULL) {
 		throw exception("AST error: TNode* not referenced");
 	}
@@ -109,7 +109,7 @@ vector<TNode*>* AST::getChildrenNode(TNode* parent) {
 * @return TRUE if child TNode is a child node of parent TNode. Otherwise, return FALSE.
 * @exception if parent or child is NULL.
 */
-bool AST::isChildNode(TNode* parent, TNode* child) {
+BOOLEAN_ AST::isChildNode(TNode* parent, TNode* child) {
 	if(parent==NULL) {
 		throw exception("AST error: TNode* not referenced");
 	}
@@ -124,7 +124,7 @@ bool AST::isChildNode(TNode* parent, TNode* child) {
 * @return TRUE if node exists. Otherwise, return FALSE.
 * @exception if node is NULL.
 */
-bool AST::isExists(TNode* node) { 
+BOOLEAN_ AST::isExists(TNode* node) { 
 	if(node==NULL) {
 		throw exception("AST error: TNode* not referenced");
 	}
@@ -140,7 +140,7 @@ bool AST::isExists(TNode* node) {
 /**
  * @return the total number of nodes in the the AST.
  */
-int AST::getSize() {
+INTEGER AST::getSize() {
 	return allNodes.size();
 }
 
@@ -157,7 +157,7 @@ bool is_number(const std::string& s)
  * @return a vector of statement numbers which are assign stmts, and uses the input RHS as its right substree.
  * @param RHS to match the expression query with a suitable subtree.
  */
-vector<int> AST::patternMatchAssign(string RHS) {
+STATEMENT_LIST AST::patternMatchAssign(EXPRESSION RHS) {
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), ' '), RHS.end());			//remove whitespaces
 	RHS.erase(std::remove(RHS.begin(), RHS.end(), '\"'), RHS.end());		//remove ""
 
@@ -222,7 +222,7 @@ vector<int> AST::patternMatchAssign(string RHS) {
 		ExpressionParser exprParser;
 		TNode* top = exprParser.parseExpressionForQuerying(vRHS);
 		PatternMatch pattern;
-		results = pattern.PatternMatchAssign(top, isExact, usedOperand);
+		results = pattern.patternMatchAssign(top, isExact, usedOperand);
 	} catch(const runtime_error& e) {
 		return results;
 	}
@@ -238,7 +238,7 @@ vector<int> AST::patternMatchAssign(string RHS) {
  *     3. the AST is poorly formed and the while or if's node is in an invalid state
  * Otherwise, return the index of the control variable.
  */
-int AST::getControlVariable(int stmtNum) {
+VAR_INDEX AST::getControlVariable(STATEMENT stmtNum) {
 	if (stmtNum <= 0) {
 		return -1;
 	}
@@ -267,7 +267,7 @@ int AST::getControlVariable(int stmtNum) {
  * @return a vector of statement numbers which are while loops, and uses the input LHS as its control variable.
  * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in.
  */
-vector<int> AST::patternMatchWhile(string LHS) {
+STATEMENT_LIST AST::patternMatchWhile(VARNAME LHS) {
 	
 	PatternMatch pattern;
 	vector<int> result;
@@ -280,7 +280,7 @@ vector<int> AST::patternMatchWhile(string LHS) {
  * @return a vector of statement numbers which are if statements, and uses the input LHS as its control variable.
  * @param LHS  the name of the variable that acts as the control variable for the if statements we are interested in.
  */
-vector<int> AST::patternMatchIf(string LHS) {
+STATEMENT_LIST AST::patternMatchIf(VARNAME LHS) {
 
 	PatternMatch pattern;
 	vector<int> result;
@@ -290,6 +290,6 @@ vector<int> AST::patternMatchIf(string LHS) {
 }
 
 //@todo
-int AST::getDescendent(TNode* curr) {
+INTEGER AST::getDescendent(TNode* curr) {
 	return curr->getDescendent();
 }

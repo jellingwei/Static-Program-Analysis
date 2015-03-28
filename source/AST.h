@@ -4,6 +4,7 @@
 #include <string>
 #include <cassert>
 #include "TNode.h"
+#include "common.h"
 
 using namespace std;
 
@@ -14,22 +15,22 @@ class AST {
 
 	public:
 		AST();														
-		TNode* createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx);						
+		TNode* createTNode(TNODE_TYPE ast_node_type, STATEMENT stmtNo, VAR_INDEX idx);						
 		TNode* getRoot();
-		bool createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode);
+		STATUS createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode);
 		
-		int getChildrenSize(TNode* parent);	
+		INTEGER getChildrenSize(TNode* parent);	
 		vector<TNode*>* getChildrenNode(TNode* parent);
-		bool isChildNode(TNode* parent, TNode* child);
+		BOOLEAN_ isChildNode(TNode* parent, TNode* child);
 
-		bool isExists(TNode* node);
-		int getSize();
+		BOOLEAN_ isExists(TNode* node);
+		INTEGER getSize();
 
-		vector<int> patternMatchAssign(string RHS);
-		vector<int> patternMatchWhile(string LHS);
-		vector<int> patternMatchIf(string LHS);
+		STATEMENT_LIST patternMatchAssign(EXPRESSION RHS);
+		STATEMENT_LIST patternMatchWhile(VARNAME LHS);
+		STATEMENT_LIST patternMatchIf(VARNAME LHS);
 
-		int getControlVariable(int stmtNum);
+		VAR_INDEX getControlVariable(STATEMENT stmtNum);
 
-		int getDescendent(TNode* curr);
+		INTEGER getDescendent(TNode* curr);
 };
