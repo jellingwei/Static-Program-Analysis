@@ -2,33 +2,37 @@
 
 #include "StatisticsTable.h"
 
-//TODO think of storing methods
-void tabulateWeights();
-void tabulateFollows();
-void tabulateParent();
-void tabulateModifies();
-void tabulateUses();
-
 StatisticsTable::StatisticsTable()
 {
+	initWeights();
 	tabulateWeights();
 }
-
-// TODO return weights to query evaluator
-int StatisticsTable::getWeightsForRelation(string relation, string LHS, string RHS)
-{
-	return 0;
+StatisticsTable::~StatisticsTable() {
 }
 
-void tabulateWeights()
+void StatisticsTable::initWeights()
+{	
+	affectsWeight = affectsSWeight = followsSWeight = 1;
+	parentSWeight = callsSWeight = nextSWeight = 1;
+	patternWeight = 1;
+}
+void StatisticsTable::tabulateWeights()
 {
+	tabulateAffects();
 	tabulateFollows();
 	tabulateParent();
-	tabulateModifies();
-	tabulateUses();
-}
+	tabulateCalls();
+	tabulateNext();
+	tabulatePattern();
 
-void tabulateFollows()
+	//tabulateModifies();
+	//tabulateUses();
+}
+void StatisticsTable::tabulateAffects()
+{
+
+}
+void StatisticsTable::tabulateFollows()
 {
 	PKB pkb = PKB::getInstance();
 
@@ -58,7 +62,7 @@ void tabulateFollows()
 	int followsSANY = (totalNumberOfStmts - n)/totalNumberOfStmts * followsSS_S;
 }
 
-void tabulateParent()
+void StatisticsTable::tabulateParent()
 {
 	PKB pkb = PKB::getInstance();
 	vector<int> parent = pkb.getParentLhs();
@@ -102,51 +106,54 @@ void tabulateParent()
 	int parentSANY_S = parentWithMostDescendants;
 }
 
-
-void tabulateModifies()
+void StatisticsTable::tabulateCalls()
 {
 	PKB pkb = PKB::getInstance();
+	int numberOfProcedure = pkb.getProcTableSize();
 
-	vector<int> stmtsThatModifies = pkb.getModifiesLhs();
-	vector<int> variableThatIsModified = pkb.getModifiesRhs();
+	//TODO - compute callsSWeight
 
-	// Modifies(s,v)
-	int modifiesS_V = stmtsThatModifies.size() + variableThatIsModified.size();
-
-	// Modifies(a,v)
-	int modifiesA_V = pkb.getStmtNumForType("assign").size() + variableThatIsModified.size(); 
-
-	// Modifies(if,v)
-	vector<int> if_stmts = pkb.getStmtNumForType("if");
-	int mostVariablesModifiedByIf = 0;
-	for(vector<int>::iterator it = if_stmts.begin(); it != if_stmts.end(); ++it) {
-		if(pkb.getModVarForStmt(*it).size() > mostVariablesModifiedByIf) 
-			mostVariablesModifiedByIf = *it;
-	}
-	int modifiesIF_V = if_stmts.size() + mostVariablesModifiedByIf;
-
-	// Modifies(while,v)
-	vector<int> while_stmts = pkb.getStmtNumForType("while");
-	int mostVariablesModifiedByWhile = 0;
-	for(vector<int>::iterator it = while_stmts.begin(); it != while_stmts.end(); ++it) {
-		if(pkb.getModVarForStmt(*it).size() > mostVariablesModifiedByWhile) 
-			mostVariablesModifiedByWhile = *it;
-	}
-	int modifiesW_V = while_stmts.size() + mostVariablesModifiedByWhile;
-
-	// Modifies(proc,v) & (TODO)Modifies(call,v) 
-	vector<int> procedures = pkb.getAllProcIndex();
-	int mostVariablesModifiedByProcedure = 0;
-	for(vector<int>::iterator it = procedures.begin(); it != procedures.end(); ++it) {
-		if(pkb.getModVarForProc(*it).size() > mostVariablesModifiedByProcedure) 
-			mostVariablesModifiedByProcedure = *it;
-	}
-	int modifiesP_V = procedures.size() + mostVariablesModifiedByProcedure;
 }
 
-void tabulateUses()
+void StatisticsTable::tabulateNext()
 {
 	PKB pkb = PKB::getInstance();
+	int numberOfProcedure = pkb.getProcTableSize();
 
+	//TODO - compute nextSWeight: find the procedure with the greatest number of program lines. 
+}
 
+void StatisticsTable::tabulatePattern()
+{
+	//TODO - compute patternWeight: find the largest possible number of RHS operators/variables in an assignment stmt. 
+}
+
+/** Getters **/
+int StatisticsTable::getAffectsCost()
+{
+	return affectsWeight;
+}
+int StatisticsTable::getAffectsSCost()
+{
+	return affectsSWeight;
+}
+int StatisticsTable::getFollowsSCost()
+{
+	return followsSWeight;
+}
+int StatisticsTable::getParentSCost()
+{
+	return parentSWeight;
+}
+int StatisticsTable::getCallsSCost()
+{
+	return callsSWeight;
+}
+int StatisticsTable::getNextSCost()
+{
+	return nextSWeight;
+}
+int StatisticsTable::getPatternCost()
+{
+	return patternWeight;
 }

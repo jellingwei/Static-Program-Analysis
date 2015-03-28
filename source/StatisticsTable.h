@@ -14,9 +14,22 @@ class StatisticsTable
 public:
 	StatisticsTable();
 
-	int getWeightsForRelation(string relation, string LHS, string RHS);
+	int getAffectsCost();
+	int getAffectsSCost();
+	int getFollowsSCost();
+	int getParentSCost();
+	int getCallsSCost();
+	int getNextSCost();
+	int getPatternCost();
 
 private:
-	//TODO storage method
+	
+	int affectsWeight;
+	int affectsSWeight;
+	int followsSWeight;
+	int parentSWeight;
+	int callsSWeight;
+	int nextSWeight;
+	int patternWeight;
 
 };
