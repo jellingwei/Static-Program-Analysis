@@ -16,7 +16,10 @@ class QueryTree
 public:
 	QueryTree();
 	QNode* createQNode(QNODE_TYPE QNODE_TYPE, Synonym arg0, Synonym arg1, Synonym arg2);
-	STATUS linkNode(QNode* parent_node, QNode* child_node);
+	bool linkNode(QNode* parent_node, QNode* child_node);
+	void setResultNode(QNode* resultNode);
+	void setClausesNode(QNode* clausesNode);
+
 	QNode* getRoot();
 	QNode* getResultNode();
 	QNode* getClausesNode();

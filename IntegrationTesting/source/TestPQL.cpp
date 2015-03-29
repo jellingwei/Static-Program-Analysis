@@ -4,6 +4,7 @@
 #include <list>
 #include "TestPQL.h"
 #include "SourceParser.h"
+#include "QueryOptimiser.h"
 #include "QueryEvaluator.h"
 #include "QueryParser.h"
 #include "QueryTree.h"
@@ -275,7 +276,10 @@ list<string> evaluate(string query)
 	QueryParser::initParser(query);
 	QueryParser::parseQuery();
 	QueryTree* qT = QueryParser::getQueryTree();
+
+	qT = QueryOptimiser::optimiseQueryTree(qT);
 	vector<Synonym> queryResults = QueryEvaluator::processQueryTree(qT);
+
 	ResultProjector::projectResultToList(queryResults, results);
 	return results;
 }

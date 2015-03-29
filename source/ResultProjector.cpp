@@ -48,24 +48,33 @@ namespace ResultProjector {
 
 	unordered_map<string, vector<string>> convertTuplesToString(vector<Synonym> resultVector)
 	{
-		int mainFactor = 1;
-		int singletonFactor = 1;
+		unsigned int mainFactor = 1;
+		unsigned int singletonFactor = 1;
+		unsigned int lastSingletonIndex = 0;
 		unordered_map<string, int> individualFactor;
-		vector<bool> isInMainTable;
+		unordered_map<string, bool> isInMainTableMap;
 		unordered_map<string, vector<string>> stringValuesMap;
+		set<string> insertedNames;
 
 		for (unsigned int i = 0; i < resultVector.size(); i++) {
 			Synonym synonym = resultVector[i];
 			string name = synonym.getName();
 
-			if (ValuesHandler::isExistInMainTable(name)) {
-				mainFactor = synonym.getValues().size();
-				isInMainTable.push_back(true);
-			} else {
-				int size = synonym.getValues().size();
-				individualFactor[name] = size;
-				singletonFactor *= size;
-				isInMainTable.push_back(false);
+			if (insertedNames.count(name) == 0) {
+				if (ValuesHandler::isExistInMainTable(name)) {
+					mainFactor = synonym.getValues().size();
+					insertedNames.insert(name);
+					isInMainTableMap[name] = true;
+				} else {
+					int size = synonym.getValues().size();
+					individualFactor[name] = size;
+					singletonFactor *= size;
+					insertedNames.insert(name);
+					isInMainTableMap[name] = false;
+					if (i > lastSingletonIndex) {
+						lastSingletonIndex = i;
+					}
+				}
 			}
 		}
 
@@ -80,13 +89,19 @@ namespace ResultProjector {
 				valuesStrings.push_back(ResultProjector::convertValueToString(valuesNumbers[j], type));
 			}
 
-			if (isInMainTable[i]) {
+			if (isInMainTableMap[name] == true) {
 				valuesStrings = expandEachRow(valuesStrings, singletonFactor);
 				stringValuesMap[name] = valuesStrings;
 			} else {
-				valuesStrings = expandRange(valuesStrings, mainFactor);
-				valuesStrings = expandEachRow(valuesStrings, singletonFactor / individualFactor[name]);
-				stringValuesMap[name] = valuesStrings;
+				if (i == lastSingletonIndex) {
+					valuesStrings = expandRange(valuesStrings, mainFactor);
+					stringValuesMap[name] = valuesStrings;
+				} else {
+					valuesStrings = expandRange(valuesStrings, mainFactor);
+					mainFactor *= individualFactor[name];
+					valuesStrings = expandEachRow(valuesStrings, singletonFactor / mainFactor);
+					stringValuesMap[name] = valuesStrings;
+				}
 			}
 		}
 		return stringValuesMap;

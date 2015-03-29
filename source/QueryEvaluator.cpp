@@ -1,6 +1,3 @@
-//@TODO: if patterns
-//@TODO: Special handling for relation(_, _) if this does not exist
-
 #include <vector>
 #include <string>
 #include <set>
@@ -17,9 +14,9 @@ using std::make_pair;
 #include "AbstractWrapper.h"
 
 /**
-	@brief Namespace containing functions for the evaluating of queries.
+@brief Namespace containing functions for the evaluating of queries.
 
- */
+*/
 namespace QueryEvaluator 
 {
 	//Private functions to evaluate the query tree
@@ -28,31 +25,31 @@ namespace QueryEvaluator
 	inline bool processClause(QNode* clauseNode);
 
 	//Functions to process clauses
-	bool processModifies(Synonym LHS, Synonym RHS);
+	bool processModifies(Synonym LHS, Synonym RHS, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS);
 
-	bool processUses(Synonym LHS, Synonym RHS);
+	bool processUses(Synonym LHS, Synonym RHS, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS);
 
-	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans);
+	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, bool isTrans);
 
-	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans);
+	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
 
-	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans);
+	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
 
-	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans);
+	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, bool isTrans);
 
-	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans);
+	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
 
@@ -97,24 +94,24 @@ namespace QueryEvaluator
 		int numberOfSynonyms = resultNode->getNumberOfChildren();
 
 		if (numberOfSynonyms == 1) {
-				Synonym wantedSynonym = resultChildNode->getArg1();
+			Synonym wantedSynonym = resultChildNode->getArg1();
 
-				if (wantedSynonym.getType() == BOOLEAN && isValid) {
-					Synonym s(BOOLEAN, "TRUE");
-					result.push_back(s);
-					return result;
-				} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
-					Synonym s(BOOLEAN, "FALSE");
-					result.push_back(s);
-					return result;
-				} else if (!isValid) {
-					return result;
-				}
-
-				string wantedSynonymName = wantedSynonym.getName();
-				Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
+			if (wantedSynonym.getType() == BOOLEAN && isValid) {
+				Synonym s(BOOLEAN, "TRUE");
 				result.push_back(s);
-		} else if (numberOfSynonyms > 1) {
+				return result;
+			} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
+				Synonym s(BOOLEAN, "FALSE");
+				result.push_back(s);
+				return result;
+			} else if (!isValid) {
+				return result;
+			}
+
+			string wantedSynonymName = wantedSynonym.getName();
+			Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
+			result.push_back(s);
+		} else if (numberOfSynonyms > 1 && isValid) {
 			vector<string> wantedNames;
 
 			for (int i = 0; i < numberOfSynonyms; i++) {
@@ -159,36 +156,37 @@ namespace QueryEvaluator
 	inline bool processClause(QNode* clauseNode) 
 	{
 		QNODE_TYPE qnode_type = clauseNode->getNodeType();
+		DIRECTION direction = clauseNode->getDirection();
 		Synonym LHS = clauseNode->getArg1();
 		Synonym RHS = clauseNode->getArg2();
 
 		switch (qnode_type) {
 		case ModifiesP:
 		case ModifiesS:
-			return processModifies(LHS, RHS);
+			return processModifies(LHS, RHS, direction);
 		case UsesP:
 		case UsesS:
-			return processUses(LHS, RHS);
+			return processUses(LHS, RHS, direction);
 		case Parent:
-			return processParentT(LHS, RHS, false);
+			return processParentT(LHS, RHS, false, direction);
 		case ParentT:
-			return processParentT(LHS, RHS, true);
+			return processParentT(LHS, RHS, true, direction);
 		case Follows:
-			return processFollowsT(LHS, RHS, false);
+			return processFollowsT(LHS, RHS, false, direction);
 		case FollowsT:
-			return processFollowsT(LHS, RHS, true);
+			return processFollowsT(LHS, RHS, true, direction);
 		case Calls:
-			return processCallsT(LHS, RHS, false);
+			return processCallsT(LHS, RHS, false, direction);
 		case CallsT:
-			return processCallsT(LHS, RHS, true);
+			return processCallsT(LHS, RHS, true, direction);
 		case Next:
-			return processNextT(LHS, RHS, false);
+			return processNextT(LHS, RHS, false, direction);
 		case NextT:
-			return processNextT(LHS, RHS, true);
+			return processNextT(LHS, RHS, true, direction);
 		case Affects:
-			return processAffectsT(LHS, RHS, false);
+			return processAffectsT(LHS, RHS, false, direction);
 		case AffectsT:
-			return processAffectsT(LHS, RHS, true);
+			return processAffectsT(LHS, RHS, true, direction);
 		case Pattern:
 			return processPatternClause(clauseNode);
 		case With:
@@ -204,7 +202,7 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processModifies(Synonym LHS, Synonym RHS) 
+	bool processModifies(Synonym LHS, Synonym RHS, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -238,17 +236,24 @@ namespace QueryEvaluator
 			LHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeRHS == UNDEFINED) {
-			//TODO: Does get modifies lhs get proc as well? 
-			LHS.setValues(pkb.getModifiesLhs());
+			if (typeLHS == PROCEDURE) {
+				LHS.setValues(pkb.getAllProcIndex());
+			} else {
+				LHS.setValues(pkb.getModifiesLhs());
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			//Use LHS temporarily
-			pair<vector<int>, vector<int>> modifiesPair = evaluateModifiesByLHS(LHS, RHS);
-			LHS.setValues(modifiesPair.first);
-			RHS.setValues(modifiesPair.second);
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> modifiesPair = evaluateModifiesByLHS(LHS, RHS);
+				LHS.setValues(modifiesPair.first);
+				RHS.setValues(modifiesPair.second);
+			} else {
+				pair<vector<int>, vector<int>> modifiesPair = evaluateModifiesByRHS(LHS, RHS);
+				LHS.setValues(modifiesPair.first);
+				RHS.setValues(modifiesPair.second);
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		return true;
 	}
 
 	/**
@@ -259,7 +264,6 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		set<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
 		vector<int> stmts;
@@ -272,10 +276,8 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
-				}
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -288,7 +290,6 @@ namespace QueryEvaluator
 	*/
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS)
 	{
-		set<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValuesSet();
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
@@ -302,10 +303,8 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -317,7 +316,7 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processUses(Synonym LHS, Synonym RHS) 
+	bool processUses(Synonym LHS, Synonym RHS, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -349,17 +348,24 @@ namespace QueryEvaluator
 			LHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeRHS == UNDEFINED) {
-			//TODO: Does get uses lhs get proc as well? 
-			LHS.setValues(pkb.getUsesLhs());
+			if (typeLHS == PROCEDURE) {
+				LHS.setValues(pkb.getAllProcIndex());
+			} else {
+				LHS.setValues(pkb.getUsesLhs());
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			//Use LHS temporarily
-			pair<vector<int>, vector<int>> usesPair = evaluateUsesByLHS(LHS, RHS);
-			LHS.setValues(usesPair.first);
-			RHS.setValues(usesPair.second);
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> usesPair = evaluateUsesByLHS(LHS, RHS);
+				LHS.setValues(usesPair.first);
+				RHS.setValues(usesPair.second);
+			} else {
+				pair<vector<int>, vector<int>> usesPair = evaluateUsesByRHS(LHS, RHS);
+				LHS.setValues(usesPair.first);
+				RHS.setValues(usesPair.second);
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		return true;
 	}
 
 	/**
@@ -370,12 +376,11 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		set<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
-		vector<int> stmts;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts;
 			if (LHS.getType() == PROCEDURE) {
 				stmts = pkb.getUsesVarForProc(valuesLHS[i]);
 			} else {
@@ -383,10 +388,8 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
-				}
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -399,7 +402,6 @@ namespace QueryEvaluator
 	*/
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS)
 	{
-		set<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValuesSet();
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
@@ -413,10 +415,8 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -429,7 +429,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans) 
+	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -447,7 +447,9 @@ namespace QueryEvaluator
 			LHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			return true;
+			//TODO: Shift the optimiser since this clause might be redundant
+			LHS.setValues(pkb.getParentLhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getParentRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -455,12 +457,17 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getParentLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
-			LHS.setValues(parentsPair.first);
-			RHS.setValues(parentsPair.second);
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
+				LHS.setValues(parentsPair.first);
+				RHS.setValues(parentsPair.second);
+			} else {
+				pair<vector<int>, vector<int>> parentsPair = evaluateParentByRHS(LHS, RHS, isTrans);
+				LHS.setValues(parentsPair.first);
+				RHS.setValues(parentsPair.second);
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		return true;
 	}
 
 	/**
@@ -472,7 +479,6 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		set<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
 
@@ -480,10 +486,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getChild(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
-				}
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -497,7 +501,6 @@ namespace QueryEvaluator
 	*/
 	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		set<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValuesSet();
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
@@ -506,10 +509,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getParent(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -522,7 +523,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans) 
+	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -542,7 +543,9 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			return true;
+			//TODO: Shift to optimiser since this might be a redundant clause
+			LHS.setValues(pkb.getFollowsLhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getFollowsRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -550,12 +553,17 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getFollowsLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
-			LHS.setValues(followsPair.first);
-			RHS.setValues(followsPair.second);
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
+				LHS.setValues(followsPair.first);
+				RHS.setValues(followsPair.second);
+			} else {
+				pair<vector<int>, vector<int>> followsPair = evaluateFollowsByRHS(LHS, RHS, isTrans);
+				LHS.setValues(followsPair.first);
+				RHS.setValues(followsPair.second);
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		return true;
 	}
 
 	/**
@@ -567,7 +575,6 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		set<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
 
@@ -575,10 +582,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getStmtFollowedFrom(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
-				}
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -592,7 +597,6 @@ namespace QueryEvaluator
 	*/
 	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		set<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValuesSet();
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
@@ -601,10 +605,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getStmtFollowedTo(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -617,7 +619,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans)
+	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -635,7 +637,9 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			return true;
+			//TODO: This clause might be redundant
+			LHS.setValues(pkb.getCallsLhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getCallsRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -643,12 +647,17 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getCallsLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
-			LHS.setValues(callsPair.first);
-			RHS.setValues(callsPair.second);
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
+				LHS.setValues(callsPair.first);
+				RHS.setValues(callsPair.second);
+			} else {
+				pair<vector<int>, vector<int>> callsPair = evaluateCallsByRHS(LHS, RHS, isTrans);
+				LHS.setValues(callsPair.first);
+				RHS.setValues(callsPair.second);
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		return true;
 	}
 
 	/**
@@ -660,7 +669,6 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		set<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
 
@@ -668,10 +676,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getProcsCalledBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
-				}
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -685,7 +691,6 @@ namespace QueryEvaluator
 	*/
 	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		set<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValuesSet();
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
@@ -694,10 +699,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getProcsCalling(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -710,7 +713,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans)
+	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -728,7 +731,9 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			return true;
+			//TODO: This clause might be redundant
+			LHS.setValues(pkb.getNextLhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getNextRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -736,12 +741,17 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getNextLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> callsPair = evaluateNextByLHS(LHS, RHS, isTrans);
-			LHS.setValues(callsPair.first);
-			RHS.setValues(callsPair.second);
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> callsPair = evaluateNextByLHS(LHS, RHS, isTrans);
+				LHS.setValues(callsPair.first);
+				RHS.setValues(callsPair.second);
+			} else {
+				pair<vector<int>, vector<int>> callsPair = evaluateNextByRHS(LHS, RHS, isTrans);
+				LHS.setValues(callsPair.first);
+				RHS.setValues(callsPair.second);
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		return true;
 	}
 
 	/**
@@ -753,7 +763,6 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		set<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
 
@@ -761,10 +770,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getNextAfter(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
-				}
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -778,7 +785,6 @@ namespace QueryEvaluator
 	*/
 	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		set<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValuesSet();
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
@@ -787,10 +793,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getNextBefore(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -803,7 +807,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans)
+	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -819,7 +823,8 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			return true;
+			LHS.setValues(pkb.getAffectsLhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getAffectsRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -827,12 +832,17 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getAffectsLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
-			LHS.setValues(affectsPair.first);
-			RHS.setValues(affectsPair.second);
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
+				LHS.setValues(affectsPair.first);
+				RHS.setValues(affectsPair.second);
+			} else {
+				pair<vector<int>, vector<int>> affectsPair = evaluateAffectsByRHS(LHS, RHS, isTrans);
+				LHS.setValues(affectsPair.first);
+				RHS.setValues(affectsPair.second);
+			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		return true;
 	}
 
 	/**
@@ -844,7 +854,6 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		set<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValuesSet();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
 
@@ -852,10 +861,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getAffectedBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesRHS, stmts[j])) {
-					acceptedLHS.push_back(valuesLHS[i]);
-					acceptedRHS.push_back(stmts[j]);
-				}
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -869,7 +876,6 @@ namespace QueryEvaluator
 	*/
 	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
 	{
-		set<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValuesSet();
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
 		vector<int> acceptedRHS;
@@ -878,10 +884,8 @@ namespace QueryEvaluator
 			vector<int> stmts = pkb.getAffecting(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
-				if (ValuesHandler::isValueExistInSet(valuesLHS, stmts[j])) {
-					acceptedLHS.push_back(stmts[j]);
-					acceptedRHS.push_back(valuesRHS[i]);
-				}
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
@@ -920,13 +924,13 @@ namespace QueryEvaluator
 	*/
 	bool processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
-		SYNONYM_TYPE typeLHS = LHS.getType();
 		vector<int> isMatchStmts = pkb.patternMatchAssign(RHS.getName());
 
 		if (isMatchStmts.size() == 0) {
 			return false;
 		}
 
+		SYNONYM_TYPE typeLHS = LHS.getType();
 		if (typeLHS == VARIABLE) {
 			//If LHS is a variable synonym, use the return statements to probe the ModifiesTable
 			vector<int> vars;
@@ -958,12 +962,8 @@ namespace QueryEvaluator
 					matchingStmts.push_back(stmt);
 				}
 			}
-			if (matchingStmts.size() == 0) {
-				return false;
-			}
 			arg0.setValues(matchingStmts);
-			ValuesHandler::addAndProcessIntermediateSynonym(arg0);
-			return true;
+			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 		}
 	}
 
@@ -981,12 +981,8 @@ namespace QueryEvaluator
 		//Find all if statements that uses LHS
 		if (LHS.getType() == STRING_CHAR) {
 			vector<int> stmts = pkb.patternMatchIf(LHS.getName());
-			if (stmts.size() == 0) {
-				return false;
-			}
 			arg0.setValues(stmts);
-			ValuesHandler::addAndProcessIntermediateSynonym(arg0);
-			return true;
+			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 		} else if (typeLHS == UNDEFINED) {
 			vector<int> ifStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			return (ifStmts.size() != 0);  //Do nothing because pattern i(_, _, _) is always true if there are if statements
@@ -994,7 +990,7 @@ namespace QueryEvaluator
 			//LHS is a variable synonym
 			vector<int> arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			if (arg0Values.size() == 0) {
-				return false;
+				return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
 			}
 
 			vector<int> vars;
@@ -1004,8 +1000,7 @@ namespace QueryEvaluator
 			}
 			arg0.setValues(arg0Values);
 			LHS.setValues(vars);
-			ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
-			return true;
+			return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
 		}
 	}
 
@@ -1023,12 +1018,8 @@ namespace QueryEvaluator
 		//Find all while statements that uses LHS
 		if (LHS.getType() == STRING_CHAR) {
 			vector<int> stmts = pkb.patternMatchWhile(LHS.getName());
-			if (stmts.size() == 0) {
-				return false;
-			}
 			arg0.setValues(stmts);
-			ValuesHandler::addAndProcessIntermediateSynonym(arg0);
-			return true;
+			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 		} else if (typeLHS == UNDEFINED) {
 			vector<int> whileStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			return (whileStmts.size() != 0);  //Do nothing because pattern w(_, _) is always true if there are while statements
@@ -1036,7 +1027,7 @@ namespace QueryEvaluator
 			//LHS is a variable synonym
 			vector<int> arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			if (arg0Values.size() == 0) {
-				return false;
+				return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
 			}
 
 			vector<int> vars;
@@ -1046,8 +1037,7 @@ namespace QueryEvaluator
 			}
 			arg0.setValues(arg0Values);
 			LHS.setValues(vars);
-			ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
-			return true;
+			return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
 		}
 	}
 
@@ -1064,7 +1054,11 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 
-		if (typeLHS == STRING_CHAR && typeRHS == STRING_CHAR) {
+		if (typeLHS == STRING_CHAR && STRING_INT) {
+			return false;
+		} else if (typeLHS == STRING_INT && STRING_CHAR) {
+			return false;
+		} else if (typeLHS == STRING_CHAR && typeRHS == STRING_CHAR) {
 			string arg1Value = LHS.getName();
 			string arg2Value = RHS.getName();
 			return arg1Value == arg2Value;
