@@ -20,6 +20,7 @@
 #include "TNode.h"
 #include "Synonym.h"
 #include "common.h"
+#include "common_list.h"
 
 using namespace std;
 

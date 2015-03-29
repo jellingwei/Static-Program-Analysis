@@ -35,7 +35,7 @@ DesignExtractor::DesignExtractor() {
 * @param visited a list of all procedures visited
 * @return a list of all procedures being called by startProc.
 */
-vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set<int>* visited) {
+PROCINDEX_LIST dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set<int>* visited) {
 	PKB pkb = PKB::getInstance();
 
 	vector<int> result;
@@ -73,7 +73,7 @@ vector<int> dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set
 /**
  * @return a list of the called procedures in topological order
  */
-vector<int> getCallsInTopologicalOrder() {
+STATEMENT_LIST getCallsInTopologicalOrder() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 	
@@ -96,7 +96,7 @@ vector<int> getCallsInTopologicalOrder() {
 
 class CallComparator {
 public:
-	CallComparator(vector<int> topoOrder) {
+	CallComparator(STATEMENT_LIST topoOrder) {
 		this->topoOrder = topoOrder; 
 	}
 
@@ -449,7 +449,7 @@ void DesignExtractor::setModifiesForAssignmentStatements() {
 }
 
 
-vector<int> obtainVarUsedInExpression(TNode* node) {
+VARINDEX_LIST obtainVarUsedInExpression(TNode* node) {
 	vector<int> varUsed;
 
 	deque<TNode*> frontier;
