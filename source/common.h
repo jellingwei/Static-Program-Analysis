@@ -1,6 +1,6 @@
- /** 
-  *  This file holds all the enums and multiple typedefs used in our SPA system.
-  */
+/** 
+*  This file holds all the enums and multiple typedefs used in our SPA system.
+*/
 #pragma once
 
 #include <set>
@@ -112,3 +112,33 @@ namespace QueryParser
 		entRef, stmtRef, lineRef, varRef, ref
 	};
 }
+
+#define MAX_SYNONYMS_ASSUMED 100
+
+struct IntegerPair
+{
+	int value1;
+	int value2;
+
+	IntegerPair(int val1, int val2): value1(val1), value2(val2) {}
+
+	bool operator==(const IntegerPair &other) const
+	{ 
+		return (value1 == other.value1 && value2 == other.value2);
+	}
+};
+
+struct Pair_Hasher
+{
+public:
+	std::size_t operator() ( const IntegerPair &p ) const
+	{
+		using std::size_t;
+		return p.value1 * MAX_SYNONYMS_ASSUMED + p.value2;
+	}
+
+	bool operator() ( const IntegerPair &a, const IntegerPair &b) const
+	{
+		return (a.value1 * MAX_SYNONYMS_ASSUMED + a.value2) == (b.value1 * MAX_SYNONYMS_ASSUMED + b.value2);
+	}
+};

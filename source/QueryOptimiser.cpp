@@ -13,6 +13,11 @@ Affects: 3
 Affects*: 5
 */
 
+/**
+	@brief Namespace containing functions for the query optimisation
+
+*/
+
 namespace QueryOptimiser
 {
 	double COST_MODIFIES = 1;
@@ -70,6 +75,11 @@ namespace QueryOptimiser
 	void reduceSynonymsCount(string name, double reductionFactor);
 	QNode* convertToTree(vector<QNode*> constantClauses, vector<QNode*> nonConstantClauses);
 
+	/**
+	* Method that is public to optimise the query tree
+	* @param qTreeRoot the root of the query tree
+	* @return a QueryTree object that contains the optimised query tree
+	*/
 	QueryTree* optimiseQueryTree(QueryTree* qTreeRoot)
 	{
 		initialize(qTreeRoot);
@@ -78,6 +88,10 @@ namespace QueryOptimiser
 		return optimiseClauses(flattenedQueryTree);
 	}
 
+	/**
+	* Method to initialize
+	* @param qTreeRoot the root of the query tree
+	*/
 	void initialize(QueryTree* qTreeRoot)
 	{
 		synonymNameToTypeMap = qTreeRoot->getSynonymsMap();
@@ -89,6 +103,11 @@ namespace QueryOptimiser
 		}
 	}
 
+	/**
+	* Method to remove redundant clause and to rewrite the clauses
+	* @param qTreeRoot the root of the query tree
+	* @return a QueryTree object that contains the flattened query tree
+	*/
 	QueryTree* flattenQuery(QueryTree* qTreeRoot)
 	{
 		//TODO: Remove redundant clauses
@@ -124,6 +143,11 @@ namespace QueryOptimiser
 	}
 	}*/
 
+	/**
+	* Method that optimised clauses and constructs a new query tree
+	* @param qTreeRoot the root of the query tree
+	* @return a QueryTree object that contains the optimised query tree
+	*/
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot)
 	{
 		QNode* resultNode = qTreeRoot->getResultNode();
@@ -135,6 +159,11 @@ namespace QueryOptimiser
 		return qTreeRoot;
 	}
 
+	/**
+	* Method to optimise the CLAUSES subtree
+	* @param clausesNode the start of the CLAUSES subtree
+	* @return a QNode object that contains the optimised clauses
+	*/
 	QNode* optimiseClausesNode(QNode* clausesNode)
 	{
 		pair<vector<QNode*>, vector<QNode*>> clauses = splitConstantClauses(clausesNode);
@@ -144,6 +173,11 @@ namespace QueryOptimiser
 		return convertToTree(constantClauses, nonConstantClauses);
 	}
 
+	/**
+	* Method to split the clauses into clauses containing constants and those that do not
+	* @param clausesNode the start of the CLAUSES subtree
+	* @return a pair of QNode objects that represent the clauses
+	*/
 	pair<vector<QNode*>, vector<QNode*>> splitConstantClauses(QNode* clausesNode)
 	{
 		vector<QNode*> constantClauses;
@@ -186,6 +220,11 @@ namespace QueryOptimiser
 		return make_pair(constantClauses, nonConstantClauses);
 	}
 
+	/**
+	* Method to reorder the non-constant clauses
+	* @param A vector of clauses that is to be reordered
+	* @return a vector of QNode objects that are re-ordered
+	*/
 	vector<QNode*> reorderNonConstantClauses(vector<QNode*> clauses)
 	{
 		//TODO: Check that the vector is not of size zero
@@ -199,6 +238,11 @@ namespace QueryOptimiser
 		return reorderedClauses;
 	}
 
+	/**
+	* Method that updates the relevant information after getting the appropriate smallest cost clause
+	* @param A vector of clauses that is to be reordered
+	* @return a QNode object that is suitably small
+	*/
 	QNode* getNextSmallestAndUpdate(vector<QNode*> &clauses)
 	{
 		pair<int, DIRECTION> indexDirectionPair = findIndexAndDirectionWithSmallestCost(clauses);
@@ -231,6 +275,12 @@ namespace QueryOptimiser
 		return smallestNode;
 	}
 
+	/**
+	* Method that decides which is the smallest clause to be taken out of the given vector of clauses
+	* Also decides which direction is better for evaluation
+	* @param A vector of clauses that is to be reordered
+	* @return The index of the clause in the vector and the direction
+	*/
 	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(vector<QNode*> clauses)
 	{
 		int smallestIndex = 0;  //Set index 0 as the smallest cost clause temporarily
@@ -280,6 +330,13 @@ namespace QueryOptimiser
 		return make_pair(smallestIndex, direction);
 	}
 
+	/**
+	* Method that returns the appropriate LHS and RHS given a clause
+	* e.g. LHS and RHS for usual clauses is at arg1 and arg 2
+	* e.g. LHS and RHS for pattern is at arg0 and arg1
+	* @param A QNode* object representing a clause
+	* @return The pair of LHS and RHS synonyms that are in the clause
+	*/
 	pair<Synonym, Synonym> getClauseArguments(QNode* clause)
 	{
 		Synonym LHS;
@@ -295,6 +352,10 @@ namespace QueryOptimiser
 		return make_pair(LHS, RHS);
 	}
 
+	/**
+	* Method to get the reduction factor of a given clause
+	* @return The reduction factor
+	*/
 	double getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 	{
 		return statsTable.getReductionFactor(rel_type, typeLHS, typeRHS, direction);
@@ -338,6 +399,11 @@ namespace QueryOptimiser
 	}
 	}*/
 
+	/**
+	* Method to get the estimated cost of evaluating this relation
+	* @param The relationship type
+	* @param The estimated number of times this relation will be called
+	*/
 	double calculateCost(QNODE_TYPE rel_type, int numberOfValues)
 	{
 		switch (rel_type) {
@@ -403,7 +469,7 @@ namespace QueryOptimiser
 		}
 	}
 
-	void updateSynonymsCount(string name, int expectedCount)
+	/*void updateSynonymsCount(string name, int expectedCount)
 	{
 		auto mapItr = synonymsCount.find(name);
 		//Only set if the synonym exists in the map
@@ -411,8 +477,13 @@ namespace QueryOptimiser
 			int currentCount = synonymsCount[name];
 			synonymsCount[name] = min(currentCount, expectedCount);
 		}
-	}
+	}*/
 
+	/**
+	* Method to reduce the synonym count by the reduction factor
+	* @param name The name of the synonym
+	* @param reductionFactor the reduction factor that is given
+	*/
 	void reduceSynonymsCount(string name, double reductionFactor)
 	{
 		auto mapItr = synonymsCount.find(name);
@@ -423,6 +494,12 @@ namespace QueryOptimiser
 		}
 	}
 
+	/**
+	* Method to join constant clauses and non-constant clauses into one subtree
+	* @param a vector of constant clauses
+	* @param a vector of non-constant clauses
+	* @return A QNode object representing the subtree
+	*/
 	QNode* convertToTree(vector<QNode*> constantClauses, vector<QNode*> nonConstantClauses)
 	{
 		Synonym empty;
