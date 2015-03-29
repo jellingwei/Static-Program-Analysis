@@ -79,9 +79,37 @@ namespace QueryOptimiser
 	
 	QueryTree* flattenQuery(QueryTree* qTreeRoot)
 	{
-		//Remove redundant clauses
-		//Replace with clauses
+		//TODO: Remove redundant clauses
+		//Rewrite with clauses
 		return qTreeRoot;
+	}
+
+	QueryTree* rewriteWithClauses(QueryTree* qTreeRoot)
+	{
+		unordered_map<string, bool> selectSynonyms;
+
+		QNode* resultNode = qTreeRoot->getResultNode();
+		QNode* resultChildNode = resultNode->getChild();
+		int numberOfSynonyms = resultNode->getNumberOfChildren();
+
+		//Populate the select synonyms map
+		for (int i = 0; i < numberOfSynonyms; i++) {
+			Synonym wantedSynonym = resultChildNode->getArg1();
+			if (wantedSynonym.getType() == BOOLEAN) {
+				break;
+			}
+			selectSynonyms[wantedSynonym.getName()] = true;
+			resultChildNode = resultNode->getNextChild();
+		}
+
+		QNode* clausesNode = qTreeRoot->getClausesNode();
+		QNode* clauseNode = clausesNode->getChild();
+		int numberOfClauses = clausesNode->getNumberOfChildren();
+
+		for (int i = 0; i < numberOfClauses; i++) {
+			if (clauseNode->getNodeType() == With) {
+
+		}
 	}
 	
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot)
