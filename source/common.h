@@ -32,13 +32,14 @@ typedef string PROCNAME;
 typedef string EXPRESSION;
 typedef string STATEMENT_TYPE;
 
-
 typedef set<int> VALUE_LIST;
 typedef vector<int> CONSTANT_LIST;
 typedef vector<int> STATEMENT_LIST;
 typedef vector<int> PROGLINE_LIST;
-typedef vector<int> AFFECTS_LIST;
-typedef vector<int> AFFECTED_LIST; 
+typedef vector<int> ASSIGNMENT_LIST;
+
+typedef vector<VAR_INDEX> VARINDEX_LIST;
+typedef vector<PROC_INDEX> PROCINDEX_LIST;
 
 
 enum CNODE_TYPE
