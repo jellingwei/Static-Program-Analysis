@@ -39,147 +39,147 @@ public:
 	static PKB& getInstance();
 
 	// AST methods
-	TNode* createTNode(TNODE_TYPE ast_node_type, int stmtNo, int idx);					
+	TNode* createTNode(TNODE_TYPE ast_node_type, STATEMENT stmtNo, VAR_INDEX idx);					
 	TNode* getRoot();
-	bool createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode);
-	int getChildrenSize(TNode* parent);	
+	STATUS createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode);
+	INTEGER getChildrenSize(TNode* parent);	
 	vector<TNode*>* getChildrenNode(TNode* parent);
-	bool isChildNode(TNode* parent, TNode* child);
-	bool isExists(TNode* node);
+	BOOLEAN_ isChildNode(TNode* parent, TNode* child);
+	BOOLEAN_ isExists(TNode* node);
 	TNode* getLastImpt();
-	int getASTSize();
+	INTEGER getASTSize();
 
-	vector<int> patternMatchAssign(string RHS);
-	vector<int> patternMatchWhile(string LHS);
-	vector<int> patternMatchIf(string LHS);
-	int getControlVariable(int stmtNum);
+	STATEMENT_LIST patternMatchAssign(EXPRESSION RHS);
+	STATEMENT_LIST patternMatchWhile(VARNAME LHS);
+	STATEMENT_LIST patternMatchIf(VARNAME LHS);
+	VAR_INDEX getControlVariable(STATEMENT stmtNum);
 
 	// VarTable methods
-	int insertVar(string varName, int stmtNum);
-	int getVarTableSize();
-	string getVarName(int index);
-	int getVarIndex(string varName);
-	int getStmtNum(string varName);
+	VAR_INDEX insertVar(VARNAME varName, STATEMENT stmtNum);
+	INTEGER getVarTableSize();
+	VARNAME getVarName(VAR_INDEX index);
+	VAR_INDEX getVarIndex(VARNAME varName);
+	STATEMENT getStmtNum(VARNAME varName);
 	vector<int> getAllVarIndex();
 
 	// ProcTable methods
-	int insertProc(string procName);
-	int getProcTableSize();
-	string getProcName(int index);
-	int getProcIndex(string procName);
-	vector<int> getAllProcIndex();
+	PROC_INDEX insertProc(PROCNAME procName);
+	INTEGER getProcTableSize();
+	PROCNAME getProcName(PROC_INDEX index);
+	PROC_INDEX getProcIndex(PROCNAME procName);
+	PROGLINE_LIST getAllProcIndex();
 
 	// ConstantTable methods
-	bool insertConstant(int constant, int stmtNum);
-	int getConstantTableSize();
-	int getConstant(int index);
-	int getConstantIndex(int constant);
-	vector<int> getStmtNum(int constant);
-	bool isConstant(int number);
-	vector<int> getAllConstant();
+	STATUS insertConstant(VALUE constant, STATEMENT stmtNum);
+	INTEGER getConstantTableSize();
+	VALUE getConstant(VAR_INDEX index);
+	VAR_INDEX getConstantIndex(VALUE constant);
+	STATEMENT_LIST getStmtNum(VALUE constant);
+	BOOLEAN_ isConstant(INTEGER number);
+	CONSTANT_LIST getAllConstant();
 
 	// CallsTable methods
-	bool setCalls(int procIndex1, int procIndex2);
-	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure = false);
-	bool isCallsS(int procIndex1, int procIndex2);
-	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure = false);
-	vector<int> getProcsCallingS(int procIndex2);
-	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure = false);
-	vector<int> getProcsCalledByS(int procIndex1);
-	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure = false);
-	pair<vector<int>, vector<int>> getAllCallsPairsS();
-	string getProcNameCalledByStatement(int);
-	vector<int> getCallsLhs();
-	vector<int> getCallsRhs();
+	STATUS setCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2);
+	BOOLEAN_ isCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2, bool transitiveClosure = false);
+	BOOLEAN_ isCallsS(PROC_INDEX procIndex1, PROC_INDEX procIndex2);
+	PROGLINE_LIST getProcsCalling(PROC_INDEX procIndex2, bool transitiveClosure = false);
+	PROGLINE_LIST getProcsCallingS(PROC_INDEX procIndex2);
+	PROGLINE_LIST getProcsCalledBy(PROC_INDEX procIndex1, bool transitiveClosure = false);
+	PROGLINE_LIST getProcsCalledByS(PROC_INDEX procIndex1);
+	pair<PROGLINE_LIST, PROGLINE_LIST> getAllCallsPairs(bool transitiveClosure = false);
+	pair<PROGLINE_LIST, PROGLINE_LIST> getAllCallsPairsS();
+	string getProcNameCalledByStatement(STATEMENT);
+	PROGLINE_LIST getCallsLhs();
+	PROGLINE_LIST getCallsRhs();
 
 	// StmtTable methods
-	bool insertStmt(int, string, TNode*, int);
-	string getType(int);
+	STATUS insertStmt(STATEMENT, STATEMENT_TYPE, TNode*, PROC_INDEX);
+	STATEMENT_TYPE getType(STATEMENT);
 	// @cond todo
-	vector<int> getStmtNumForType(string);
+	STATEMENT_LIST getStmtNumForType(STATEMENT_TYPE);
 	// @endcond todo
-	vector<int> getStmtNumForType(SYNONYM_TYPE);
-	int getProcIndexForStmt(int stmtNo);
-	bool isAssign(int);
-	bool isWhile(int);
-	bool isIf(int);
-	bool isCall(int);
-	int getStmtTableSize();
-	TNode* getNodeForStmt(int);
+	STATEMENT_LIST getStmtNumForType(SYNONYM_TYPE);
+	PROC_INDEX getProcIndexForStmt(STATEMENT stmtNo);
+	BOOLEAN_ isAssign(STATEMENT);
+	BOOLEAN_ isWhile(STATEMENT);
+	BOOLEAN_ isIf(STATEMENT);
+	BOOLEAN_ isCall(STATEMENT);
+	INTEGER getStmtTableSize();
+	TNode* getNodeForStmt(STATEMENT);
 
 	// Parent Table methods
-	bool setParent(TNode* stmtNum1, TNode* stmtNum2);
-	vector<int> getParent(int stmtNum2, bool transitiveClosure = false);
-	vector<int> getParentS(int stmtNum2);
-	vector<int> getChild(int stmtNum1, bool transitiveClosure = false);
-	vector<int> getChildS(int stmtNum1);
-	bool isParent(int stmtNum1, int stmtNum2, bool transitiveClosure = false);
-	bool isParentS(int stmtNum1, int stmtNum2);
-	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure = false);
-	pair<vector<int>, vector<int>> getAllParentPairsS();
-	vector<int> getParentLhs();  // get LHS of Parent(_, _)
-	vector<int> getParentRhs(); // get RHS of Parent(_, _)
+	STATUS setParent(TNode* stmtNum1, TNode* stmtNum2);
+	STATEMENT_LIST getParent(STATEMENT stmtNum2, bool transitiveClosure = false);
+	STATEMENT_LIST getParentS(STATEMENT stmtNum2);
+	STATEMENT_LIST getChild(STATEMENT stmtNum1, bool transitiveClosure = false);
+	STATEMENT_LIST getChildS(STATEMENT stmtNum1);
+	BOOLEAN_ isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, bool transitiveClosure = false);
+	BOOLEAN_ isParentS(STATEMENT stmtNum1, STATEMENT stmtNum2);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllParentPairs(bool transitiveClosure = false);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllParentPairsS();
+	STATEMENT_LIST getParentLhs();  // get LHS of Parent(_, _)
+	STATEMENT_LIST getParentRhs(); // get RHS of Parent(_, _)
 
 	// Follow Table methods
-	bool setFollows(TNode* stmt1, TNode* stmt2);
-	vector<int> getStmtFollowedTo(int stmtNum2, bool transitiveClosure = false);
-	vector<int> getStmtFollowedToS(int stmtNum2);
-	vector<int> getStmtFollowedFrom(int stmtNum1, bool transitiveClosure = false);
-	vector<int> getStmtFollowedFromS(int stmtNum1);
-	bool isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure = false);
-	bool isFollowsS(int stmtNum1, int stmtNum2);
-	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure = false);
-	pair<vector<int>, vector<int>> getAllFollowsPairsS();
-	vector<int> getFollowsLhs();
-	vector<int> getFollowsRhs();
+	STATUS setFollows(TNode* stmt1, TNode* stmt2);
+	STATEMENT_LIST getStmtFollowedTo(STATEMENT stmtNum2, bool transitiveClosure = false);
+	STATEMENT_LIST getStmtFollowedToS(STATEMENT stmtNum2);
+	STATEMENT_LIST getStmtFollowedFrom(STATEMENT stmtNum1, bool transitiveClosure = false);
+	STATEMENT_LIST getStmtFollowedFromS(STATEMENT stmtNum1);
+	BOOLEAN_ isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, bool transitiveClosure = false);
+	BOOLEAN_ isFollowsS(STATEMENT stmtNum1, STATEMENT stmtNum2);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllFollowsPairs(bool transitiveClosure = false);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllFollowsPairsS();
+	STATEMENT_LIST getFollowsLhs();
+	STATEMENT_LIST getFollowsRhs();
 
 	// Modifies Table methods
-	void initModifiesTable(int numVariables);
-	bool setModifies(int stmtNum, int varIndex);
-	bool isModifies(int stmtNum, int varIndex);
-	vector<int> getModStmtNum(int varIndex);
-	vector<int> getModVarForStmt(int stmtNum);
-	pair<vector<int>, vector<int>> getAllModPair();
-	vector<int> getModifiesLhs();
-	vector<int> getModifiesRhs();
+	void initModifiesTable(INTEGER numVariables);
+	STATUS setModifies(STATEMENT stmtNum, VAR_INDEX varIndex);
+	STATUS isModifies(STATEMENT stmtNum, VAR_INDEX varIndex);
+	STATEMENT_LIST getModStmtNum(VAR_INDEX varIndex);
+	STATEMENT_LIST getModVarForStmt(STATEMENT stmtNum);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllModPair();
+	STATEMENT_LIST getModifiesLhs();
+	STATEMENT_LIST getModifiesRhs();
 
-	boost::dynamic_bitset<> getModVarInBitvectorForStmt(int stmtNum);
+	boost::dynamic_bitset<> getModVarInBitvectorForStmt(STATEMENT stmtNum);
 
-	bool setModifiesProc(int procIndex, int varIndex);
-	bool isModifiesProc(int procIndex, int varIndex);
-	vector<int> getModProcIndex(int varIndex);
-	vector<int> getModVarForProc(int procIndex);
+	STATUS setModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	BOOLEAN_ isModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	vector<int> getModProcIndex(VAR_INDEX varIndex);
+	vector<int> getModVarForProc(PROC_INDEX procIndex);
 	pair<vector<int>, vector<int>> getAllModProcPair();
 
 
 	// UsesTable methods
-	void initUsesTable(int numVariables);
-	bool setUses(int stmtNum, int varIndex);
-	bool isUses(int stmtNum, int varIndex);
-	vector<int> getUsesStmtNum(int varIndex);
-	vector<int> getUsesVarForStmt(int stmtNum);
-	pair<vector<int>, vector<int>> getAllUsesPair();
-	vector<int> getUsesLhs();
-	vector<int> getUsesRhs();
+	void initUsesTable(INTEGER numVariables);
+	STATUS setUses(STATEMENT stmtNum, VAR_INDEX varIndex);
+	BOOLEAN_ isUses(STATEMENT stmtNum, VAR_INDEX varIndex);
+	STATEMENT_LIST getUsesStmtNum(VAR_INDEX varIndex);
+	vector<int> getUsesVarForStmt(STATEMENT stmtNum);
+	pair<STATEMENT_LIST, vector<int>> getAllUsesPair();
+	STATEMENT_LIST getUsesLhs();
+	STATEMENT_LIST getUsesRhs();
 
-	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(int stmtNum);
+	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(STATEMENT stmtNum);
 
-	bool setUsesProc(int procIndex, int varIndex);
-	bool isUsesProc(int procIndex, int varIndex);
-	vector<int> getUsesProcIndex(int varIndex);
-	vector<int> getUsesVarForProc(int procIndex);
+	STATUS setUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	BOOLEAN_ isUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	vector<int> getUsesProcIndex(VAR_INDEX varIndex);
+	vector<int> getUsesVarForProc(PROC_INDEX procIndex);
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
 	// cfg
-	vector<int> getNextAfter(int progLine1, bool transitiveClosure = false);
-	vector<int> getNextBefore(int progLine2, bool transitiveClosure = false);
-	bool isNext(int progLine1, int progLine2, bool transitiveClosure = false);
-	vector<int> getNextAfterS(int progLine1);
-	vector<int> getNextBeforeS(int progLine2);
-	bool isNextS(int progLine1, int progLine2);
+	vector<int> getNextAfter(PROG_LINE_ progLine1, bool transitiveClosure = false);
+	vector<int> getNextBefore(PROG_LINE_ progLine2, bool transitiveClosure = false);
+	BOOLEAN_ isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, bool transitiveClosure = false);
+	vector<int> getNextAfterS(PROG_LINE_ progLine1);
+	vector<int> getNextBeforeS(PROG_LINE_ progLine2);
+	BOOLEAN_ isNextS(PROG_LINE_ progLine1, PROG_LINE_ progLine2);
 	vector<int> getNextLhs();
 	vector<int> getNextRhs();
-	CNode* getCNodeForProgLine(int progLine);
+	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
 
 	// functions for precomputations for next
 	int getFirstProgLineInProc(int);
@@ -196,9 +196,9 @@ public:
 	vector<CFG*> cfgTable;
 
 	// affects
-	bool isAffects(int progLine1, int progLine2, bool transitiveClosure = false);
-	vector<int> getAffectedBy(int progLine1, bool transitiveClosure = false);
-	vector<int> getAffecting(int progLine2, bool transitiveClosure = false);
+	BOOLEAN_ isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, bool transitiveClosure = false);
+	vector<int> getAffectedBy(PROG_LINE_ progLine1, bool transitiveClosure = false);
+	vector<int> getAffecting(PROG_LINE_ progLine2, bool transitiveClosure = false);
 	vector<int> getAffectsLhs();
 	vector<int> getAffectsRhs();
 

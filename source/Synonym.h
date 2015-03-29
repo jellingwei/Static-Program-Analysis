@@ -1,13 +1,6 @@
 #pragma once
 
-#include <string>
-#include <vector>
-#include <set>
 #include "common.h"
-using std::set;
-using std::vector;
-using std::string;
-using std::to_string;
 
 class Synonym
 {

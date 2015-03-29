@@ -25,7 +25,7 @@ CFG::CFG(TNode* procNode) {
 * @return a CNode for the given design entity together with its program line number,
 * @exception exception if cfgNodeType is invalid, procLineNum is negative or 0, header or ast is NULL.
 */
-CNode* CFG::createCNode(CNODE_TYPE cfgNodeType, int procLineNum, CNode* header, TNode* ast)
+CNode* CFG::createCNode(CNODE_TYPE cfgNodeType, PROG_LINE_ procLineNum, CNode* header, TNode* ast)
 {
 	CNode* temp = new CNode(cfgNodeType, procLineNum, header, ast);
 	allNodes.push_back(temp);
@@ -54,7 +54,7 @@ CNode* CFG::getProcEnd() {
 *		  FALSE if the link between the currNode to toNode is not created successfully.
 * @exception exception if link is invalid, or currNode and toNode is NULL.
 */
-bool CFG::createLink(CLINK_TYPE link, CNode* currNode, CNode* toNode)
+STATUS CFG::createLink(CLINK_TYPE link, CNode* currNode, CNode* toNode)
 {
 	switch(link) {
 		case Before: {
@@ -93,7 +93,7 @@ bool CFG::createLink(CLINK_TYPE link, CNode* currNode, CNode* toNode)
 * @param header  the container statement for if/while statements
 * @return TRUE if header has a stmtLst. FALSE if header does not have a stmtLst. 
 */
-bool CFG::hasInside(CNode* header){
+BOOLEAN_ CFG::hasInside(CNode* header){
 	return header->hasInside();
 }
 
@@ -103,7 +103,7 @@ bool CFG::hasInside(CNode* header){
 * @return the total number of CNodes inside the container statement header.
 * @exception exception if header is NULL.
 */
-int CFG::getInsideSize(CNode* header) {
+INTEGER CFG::getInsideSize(CNode* header) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -134,7 +134,7 @@ vector<CNode*>* CFG::getInsideNodes(CNode* header) {
 * @return TRUE if the container statement, header, contains the CNode, inside. 
 *		  FALSE if the container statement, header, does not contain the CNode, inside.
 */
-bool CFG::isInsideNode(CNode* header, CNode* inside) {
+BOOLEAN_ CFG::isInsideNode(CNode* header, CNode* inside) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -150,7 +150,7 @@ bool CFG::isInsideNode(CNode* header, CNode* inside) {
 * @param header  the container statement for if statement
 * @return TRUE if header has a stmtLst. FALSE if header does not have a stmtLst. 
 */
-bool CFG::hasInsideElse(CNode* header){
+BOOLEAN_ CFG::hasInsideElse(CNode* header){
 	return header->hasInside2();
 }
 
@@ -160,7 +160,7 @@ bool CFG::hasInsideElse(CNode* header){
 * @return the total number of CNodes inside the 'else' section of the if statement header.
 * @exception exception if header is NULL.
 */
-int CFG::getInsideElseSize(CNode* header) {
+INTEGER CFG::getInsideElseSize(CNode* header) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -191,7 +191,7 @@ vector<CNode*>* CFG::getInsideElseNodes(CNode* header) {
 * @return TRUE if the if statement, header, contains the CNode, inside. 
 *		  FALSE if the if statement, header, does not contain the CNode, inside.
 */
-bool CFG::isInsideElseNode(CNode* header, CNode* inside) {
+BOOLEAN_ CFG::isInsideElseNode(CNode* header, CNode* inside) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -208,7 +208,7 @@ bool CFG::isInsideElseNode(CNode* header, CNode* inside) {
 * @return TRUE if the current CNode curr is linked to at least 1 predecessor CNode.
 *		  FALSE if the current CNode is not linked to any predecessor CNode or if curr is NULL.
 */
-bool CFG::hasBefore(CNode* curr){
+BOOLEAN_ CFG::hasBefore(CNode* curr){
 	return curr->hasBefore();
 }
 
@@ -218,7 +218,7 @@ bool CFG::hasBefore(CNode* curr){
 * @return the total number of predecessor CNodes the current CNode is linked to.
 * @exception exception if curr is NULL.
 */
-int CFG::getBeforeSize(CNode* curr) {
+INTEGER CFG::getBeforeSize(CNode* curr) {
 	if(curr==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -249,7 +249,7 @@ vector<CNode*>* CFG::getBeforeNodes(CNode* curr) {
 * @return TRUE if the current CNode, curr, is linked to the predecessor CNode, before.
 *		  FALSE if the current CNode, curr, is not linked to the predecessor CNode, before, or if curr or before is NULL.
 */
-bool CFG::isBeforeNode(CNode* curr, CNode* before) {
+BOOLEAN_ CFG::isBeforeNode(CNode* curr, CNode* before) {
 	if(curr==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -264,7 +264,7 @@ bool CFG::isBeforeNode(CNode* curr, CNode* before) {
 * @return TRUE if the current CNode, curr, is linked to at least 1 successor CNode.
 *		  FALSE if the current CNode,curr, is not linked to any successor CNode or if curr is NULL.
 */
-bool CFG::hasAfter(CNode* curr){
+BOOLEAN_ CFG::hasAfter(CNode* curr){
 	return curr->hasAfter();
 }
 
@@ -274,7 +274,7 @@ bool CFG::hasAfter(CNode* curr){
 * @return the total number of successor CNodes the current CNode is linked to.
 * @exception exception if curr is NULL.
 */
-int CFG::getAfterSize(CNode* curr) {
+INTEGER CFG::getAfterSize(CNode* curr) {
 	if(curr==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -305,7 +305,7 @@ vector<CNode*>* CFG::getAfterNodes(CNode* curr) {
 * @return TRUE if the current CNode, curr, is linked to the successor CNode, after.
 *		  FALSE if the current CNode, curr, is not linked to the successor CNode, after, or if curr or after is NULL.
 */
-bool CFG::isAfterNode(CNode* curr, CNode* after) {
+BOOLEAN_ CFG::isAfterNode(CNode* curr, CNode* after) {
 	if(curr==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -320,7 +320,7 @@ bool CFG::isAfterNode(CNode* curr, CNode* after) {
 * @return TRUE if the CNode, node, exists.
 *		  FALSE if the CNode, node, does not exist, or if node is NULL.
 */
-bool CFG::isExists(CNode* node) { 
+BOOLEAN_ CFG::isExists(CNode* node) { 
 	if(node==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
