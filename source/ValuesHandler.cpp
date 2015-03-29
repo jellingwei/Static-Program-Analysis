@@ -847,6 +847,8 @@ namespace ValuesHandler
 		} else if ((LHS.getAttribute() == stmtNo || LHS.getAttribute() == value) 
 			&& (RHS.getAttribute() == stmtNo || RHS.getAttribute() == value)) {
 				return filterEqualPairByNumber(LHS, RHS);
+		} else if (LHS.getType() == PROG_LINE || RHS.getType() == PROG_LINE) {
+			return filterEqualPairByNumber(LHS, RHS);
 		} else {
 			return false;  //Cannot compare between numbers and strings
 		}
@@ -929,7 +931,7 @@ namespace ValuesHandler
 		bool isLHSInSingletonTable = isExistInSingletonTable(nameLHS);
 		bool isRHSInSingletonTable = isExistInSingletonTable(nameRHS);
 
-		//Both synonyms do not exist in the main table
+		//Both synonyms exist in the main table
 		if (isLHSInSingletonTable && isRHSInSingletonTable) {
 			//If both synonyms exist in the singleton table
 			LHS = getSynonym(nameLHS);  //Assign LHS to the current values
