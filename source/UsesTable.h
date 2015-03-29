@@ -8,28 +8,30 @@
 
 #include <boost/dynamic_bitset.hpp>
 
+#include "common.h"
+
 using namespace std;
 
 class UsesTable {
 public:
 	
-	void init(int numVariables);
+	void init(INTEGER numVariables);
 	// for statement numbers
-	bool setUses(int stmtNum, int varIndex);
-	bool isUses(int stmtNum, int varIndex);
-	vector<int> getUsesStmtNum(int varIndex);
-	vector<int> getUsesVarForStmt(int stmtNum);
-	pair<vector<int>, vector<int>> getAllUsesPair();
-	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(int stmtNum);
-	vector<int> getLhs();
-	vector<int> getRhs();
+	STATUS setUses(STATEMENT stmtNum, VAR_INDEX varIndex);
+	BOOLEAN_ isUses(STATEMENT stmtNum, VAR_INDEX varIndex);
+	STATEMENT_LIST getUsesStmtNum(VAR_INDEX varIndex);
+	VARINDEX_LIST getUsesVarForStmt(STATEMENT stmtNum);
+	pair<STATEMENT_LIST, VARINDEX_LIST> getAllUsesPair();
+	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(STATEMENT stmtNum);
+	STATEMENT_LIST getLhs();
+	STATEMENT_LIST getRhs();
 
 	// for procedures 
-	bool setUsesProc(int procIndex, int varIndex);
-	bool isUsesProc(int procIndex, int varIndex);
-	vector<int> getUsesProcIndex(int varIndex);
-	vector<int> getUsesVarForProc(int procIndex);
-	pair<vector<int>, vector<int>> getAllUsesProcPair();
+	STATUS setUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	BOOLEAN_ isUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	PROCINDEX_LIST getUsesProcIndex(VAR_INDEX varIndex);
+	VARINDEX_LIST getUsesVarForProc(PROC_INDEX procIndex);
+	pair<PROCINDEX_LIST, VARINDEX_LIST> getAllUsesProcPair();
 
 private:  
 	unordered_map<int, boost::dynamic_bitset<>> varIndexMap; // key is stmtNum 

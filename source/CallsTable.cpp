@@ -16,7 +16,7 @@
 using namespace std;
 using namespace stdext;
 
-bool CallsTable::setCalls(int procIndex1, int procIndex2) 
+STATUS CallsTable::setCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2) 
 {
 	if (procIndex1 < 0) {
 		throw exception("CallsTable error: Invalid procIndex1");
@@ -71,7 +71,7 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 }
 
 
-bool CallsTable::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) {
+BOOLEAN_ CallsTable::isCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure) {
 	if (procIndex1 < 0 || procIndex2 < 0) {
 		return false;
 	}
@@ -94,7 +94,7 @@ bool CallsTable::isCalls(int procIndex1, int procIndex2, bool transitiveClosure)
 	}
 }
 
-vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure, bool terminateOnFinding, int lineToFind ) 
+PROCINDEX_LIST CallsTable::getProcsCalling(PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure, bool terminateOnFinding, int lineToFind ) 
 {
 	if (procIndex2 < 0 || procIndex1Map.count(procIndex2) == 0) {
 		return vector<int>();
@@ -141,7 +141,7 @@ vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure, 
 }
 
 
-vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure, bool terminateOnFinding, int lineToFind) 
+PROCINDEX_LIST CallsTable::getProcsCalledBy(PROC_INDEX procIndex1, TRANS_CLOSURE transitiveClosure, bool terminateOnFinding, int lineToFind) 
 {
 	if (procIndex1 < 0 || procIndex2Map.count(procIndex1) == 0) {
 		return vector<int>();
@@ -187,7 +187,7 @@ vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure,
 	return resultList;
 }
 
-vector<int> CallsTable::getLhs() {
+PROCINDEX_LIST CallsTable::getLhs() {
 	vector<int> result;
 	for (auto iter = procIndex2Map.begin(); iter != procIndex2Map.end(); ++iter) {
 		result.push_back(iter->first);
@@ -195,7 +195,7 @@ vector<int> CallsTable::getLhs() {
 	return result;
 }
 
-vector<int> CallsTable::getRhs() {
+PROCINDEX_LIST CallsTable::getRhs() {
 	vector<int> result;
 	for (auto iter = procIndex1Map.begin(); iter != procIndex1Map.end(); ++iter) {
 		result.push_back(iter->first);
@@ -204,14 +204,14 @@ vector<int> CallsTable::getRhs() {
 }
 
 
-pair<vector<int>, vector<int>> CallsTable::getAllCallsPairs(bool transitiveClosure) 
+pair<vector<int>, vector<int>> CallsTable::getAllCallsPairs(TRANS_CLOSURE transitiveClosure) 
 {
 	pair<vector<int>, vector<int>> results;
 
 	return results;
 }
 
-string CallsTable::getProcNameCalledByStatement(int stmtNum) {
+PROCNAME CallsTable::getProcNameCalledByStatement(STATEMENT stmtNum) {
 	PKB pkb = PKB::getInstance();
 	TNode* node = pkb.getNodeForStmt(stmtNum);
 

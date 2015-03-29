@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include "TNode.h"
 #include "CNode.h"
+#include "common.h"
 
 using namespace std;
 using namespace stdext;
@@ -15,19 +16,19 @@ using namespace stdext;
 class AffectsTable {
 public:
 
-	bool isAffects(int progLine1, int progLine2, bool transitiveClosure);
+	BOOLEAN_ isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure);
 	
-	vector<int> getProgLinesAffectedBy(int progLine1, bool transitiveClosure, bool terminateOnOneResult = false);
-	vector<int> getProgLinesAffecting(int progLine2, bool transitiveClosure, bool terminateOnOneResult = false);
+	PROGLINE_LIST getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure, bool terminateOnOneResult = false);
+	PROGLINE_LIST getProgLinesAffecting(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure, bool terminateOnOneResult = false);
 
-	pair<vector<int>, vector<int>> getAllAffectsPairs(bool transitiveClosure);
+	pair<PROGLINE_LIST, PROGLINE_LIST> getAllAffectsPairs(TRANS_CLOSURE transitiveClosure);
 
 	
-	vector<int> getLhs();
-	vector<int> getRhs();
+	PROGLINE_LIST getLhs();
+	PROGLINE_LIST getRhs();
 
-	static bool canSkipNodesBackwards(CNode* node);
-	static bool canSkipNodesForwards(CNode* node);
+	static BOOLEAN_ canSkipNodesBackwards(CNode* node);
+	static BOOLEAN_ canSkipNodesForwards(CNode* node);
 
 
 };

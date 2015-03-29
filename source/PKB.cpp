@@ -456,7 +456,7 @@ TNode* PKB::getNodeForStmt(STATEMENT stmtNum) {
 * If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
 * @exception exception if stmtNum1 or stmtNum2 is NULL.
 */
-bool PKB::setParent(TNode* stmtNum1, TNode* stmtNum2) {
+STATUS PKB::setParent(TNode* stmtNum1, TNode* stmtNum2) {
 	return parentTable->setParent(stmtNum1, stmtNum2);
 }
 
@@ -467,7 +467,7 @@ bool PKB::setParent(TNode* stmtNum1, TNode* stmtNum2) {
 *		  if transitiveClosure is true: a list of statement numbers of the ancestors of stmtNum2, based on the Parent* relation.
 *		  if stmtNum2 is out of range, an empty list will be returned.
 */
-vector<int> PKB::getParent(int stmtNum2, bool transitiveClosure) {
+STATEMENT_LIST PKB::getParent(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) {
 	return parentTable->getParent(stmtNum2, transitiveClosure);
 }
 
@@ -476,7 +476,7 @@ vector<int> PKB::getParent(int stmtNum2, bool transitiveClosure) {
 * @return a list of statement numbers of the ancestors of stmtNum2, based on the Parent* relation.
 * 		  if stmtNum2 is out of range, an empty list will be returned.
 */
-vector<int> PKB::getParentS(int stmtNum2) {
+STATEMENT_LIST PKB::getParentS(STATEMENT stmtNum2) {
 	bool transitiveClosure = true;
 	return parentTable->getParent(stmtNum2, transitiveClosure);
 }
@@ -488,7 +488,7 @@ vector<int> PKB::getParentS(int stmtNum2) {
 *		  if transitiveClosure is true: a list of statement numbers of the descendants of stmtNum1, based on the Parent* relation.
 *		  if stmtNum1 is out of range, an empty list will be returned.
 */
-vector<int> PKB::getChild(int stmtNum1, bool transitiveClosure) {
+STATEMENT_LIST PKB::getChild(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure) {
 	return parentTable->getChild(stmtNum1, transitiveClosure);
 }
 
@@ -497,7 +497,7 @@ vector<int> PKB::getChild(int stmtNum1, bool transitiveClosure) {
 * @return a list of statement numbers of the descendants of stmtNum1, based on the Parent* relation.
 *		  if stmtNum1 is out of range, an empty list will be returned.
 */
-vector<int> PKB::getChildS(int stmtNum1) {
+STATEMENT_LIST PKB::getChildS(STATEMENT stmtNum1) {
 	bool transitiveClosure = true;
 	return parentTable->getChild(stmtNum1, transitiveClosure);
 }
@@ -511,7 +511,7 @@ vector<int> PKB::getChildS(int stmtNum1) {
  *										 FALSE if Parent*(stmtNum1, stmtNum2) does not hold.
  *		   FALSE if either stmtNum1 or stmtNum2 is invalid.
  */
-bool PKB::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) {
+BOOLEAN_ PKB::isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) {
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
 
@@ -521,7 +521,7 @@ bool PKB::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) {
  * @return TRUE if Parent*(stmtNum1, stmtNum2) holds. 
  *		   FALSE if Parent*(stmtNum1, stmtNum2) does not hold or either stmtNum1 or stmtNum2 is invalid.
  */
-bool PKB::isParentS(int stmtNum1, int stmtNum2) {
+BOOLEAN_ PKB::isParentS(STATEMENT stmtNum1, STATEMENT stmtNum2) {
 	bool transitiveClosure = true;
 	return parentTable->isParent(stmtNum1, stmtNum2, transitiveClosure);
 }
@@ -531,7 +531,7 @@ bool PKB::isParentS(int stmtNum1, int stmtNum2) {
 * @return if transitiveClosure is false: all pairs of stmtNum1, stmtNum2 where Parent(stmtNum1, stmtNum2) is satisfied.
 *		  if transitiveClosure is true: all pairs of stmtNum1, stmtNum2 where Parent*(stmtNum1, stmtNum2) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllParentPairs(bool transitiveClosure) {
+pair<vector<int>, vector<int>> PKB::getAllParentPairs(TRANS_CLOSURE transitiveClosure) {
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
 
@@ -546,14 +546,14 @@ pair<vector<int>, vector<int>> PKB::getAllParentPairsS() {
 /**
  * @return a list of all statement numbers, stmt, where Parent(stmt, _) is true.
  */
-vector<int> PKB::getParentLhs(){
+STATEMENT_LIST PKB::getParentLhs(){
 	return parentTable->getAllParents();
 }
 
 /**
  * @return a list of all statement numbers, stmt, where Parent(_, stmt) is true.
  */
-vector<int> PKB::getParentRhs(){
+STATEMENT_LIST PKB::getParentRhs(){
 	return parentTable->getAllChildren();
 }
 
@@ -568,7 +568,7 @@ vector<int> PKB::getParentRhs(){
 * If stmtNum1 and stmtNum2 were already previously set, the AST will not be updated.
 * @exception exception if stmtNum1 or stmtNum2 is NULL.
 */
-bool PKB::setFollows(TNode* stmt1, TNode* stmt2) {
+STATUS PKB::setFollows(TNode* stmt1, TNode* stmt2) {
 	return followsTable->setFollows(stmt1, stmt2);
 }	
 
@@ -579,7 +579,7 @@ bool PKB::setFollows(TNode* stmt1, TNode* stmt2) {
 *		  if transitiveClosure is true: a list of statement numbers, stmtNum, where Follows*(stmtNum, stmtNum2) is satisfied.
 *		  an empty list if stmtNum2 is invalid.
 */
-vector<int> PKB::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
+STATEMENT_LIST PKB::getStmtFollowedTo(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) {
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
 
@@ -588,7 +588,7 @@ vector<int> PKB::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
 * @return a list of statement numbers, stmtNum, where Follows*(stmtNum, stmtNum2) is satisfied.
 *		  an empty list if stmtNum2 is invalid.
 */
-vector<int> PKB::getStmtFollowedToS(int stmtNum2) {
+STATEMENT_LIST PKB::getStmtFollowedToS(STATEMENT stmtNum2) {
 	bool transitiveClosure = true;
 	return followsTable->getStmtFollowedTo(stmtNum2, transitiveClosure);
 }
@@ -600,7 +600,7 @@ vector<int> PKB::getStmtFollowedToS(int stmtNum2) {
 *		  if transitiveClosure is true: a list of statement numbers, stmtNum2, where Follows*(stmtNum1, stmtNum2) is satisfied.
 *		  an empty list if stmtNum1 is invalid.
 */
-vector<int> PKB::getStmtFollowedFrom(int stmtNum1 , bool transitiveClosure) {
+STATEMENT_LIST PKB::getStmtFollowedFrom(STATEMENT stmtNum1 , TRANS_CLOSURE transitiveClosure) {
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
 
@@ -609,7 +609,7 @@ vector<int> PKB::getStmtFollowedFrom(int stmtNum1 , bool transitiveClosure) {
 * @return a list of statement numbers, stmtNum2, where Follows*(stmtNum1, stmtNum2) is satisfied.
 *		  an empty list if stmtNum1 is invalid.
 */
-vector<int> PKB::getStmtFollowedFromS(int stmtNum1) {
+STATEMENT_LIST PKB::getStmtFollowedFromS(STATEMENT stmtNum1) {
 	bool transitiveClosure = true;
 	return followsTable->getStmtFollowedFrom(stmtNum1, transitiveClosure);
 }
@@ -623,7 +623,7 @@ vector<int> PKB::getStmtFollowedFromS(int stmtNum1) {
  *										 FALSE if Follow*(stmtNum1, stmtNum2) is not satisfied.
  *		   FALSE if either stmtNum1 or stmtNum2 is invalid.
  */
-bool PKB::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) {
+BOOLEAN_ PKB::isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) {
 	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
 }
 /**
@@ -632,7 +632,7 @@ bool PKB::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) {
 * @return TRUE if Follows*(stmtNum1, stmtNum2) is satisfied. 
 *		  FALSE if Follows*(stmtNum1, stmtNum2) is not satisfied or either stmtNum1 or stmtNum2 is invalid.
 */
-bool PKB::isFollowsS(int stmtNum1, int stmtNum2) {
+BOOLEAN_ PKB::isFollowsS(STATEMENT stmtNum1, STATEMENT stmtNum2) {
 	bool transitiveClosure = true;
 	return followsTable->isFollows(stmtNum1, stmtNum2, transitiveClosure);
 }
@@ -642,7 +642,7 @@ bool PKB::isFollowsS(int stmtNum1, int stmtNum2) {
 * @return if transitiveClosure is false: all pairs of stmtNum1, stmtNum2 where Follow(stmtNum1, stmtNum2) is satisfied.
 *		  if transitiveClosure is true: all pairs of stmtNum1, stmtNum2 where Follow*(stmtNum1, stmtNum2) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(bool transitiveClosure) {
+pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(TRANS_CLOSURE transitiveClosure) {
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
@@ -657,14 +657,14 @@ pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS() {
 /**
  * @return a list of all statement numbers, stmt, where Follows(stmt, _) is true.
  */
-vector<int> PKB::getFollowsLhs() {
+STATEMENT_LIST PKB::getFollowsLhs() {
 	return followsTable->getLhs();
 }
 
 /**
  * @return a list of all statement numbers, stmt, where Follows(_, stmt) is true.
  */
-vector<int> PKB::getFollowsRhs() {
+STATEMENT_LIST PKB::getFollowsRhs() {
 	return followsTable->getRhs();
 }
 
@@ -679,7 +679,7 @@ vector<int> PKB::getFollowsRhs() {
 * If procIndex1 and procIndex2 were already previously set, the CallsTable will not be updated.
 * @exception exception if if procIndex1 or procIndex2 is negative or 0.
 */
-bool PKB::setCalls(int procIndex1, int procIndex2){
+STATUS PKB::setCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2){
 	return callsTable->setCalls(procIndex1, procIndex2);
 }
 
@@ -692,7 +692,7 @@ bool PKB::setCalls(int procIndex1, int procIndex2){
 *										 FALSE if Calls*(procIndex1, procIndex2) is not satisfied.
 *		   FALSE if either procIndex1 or procIndex2 is negative or 0.
 */
-bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) {
+BOOLEAN_ PKB::isCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure) {
 	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);
 }
 
@@ -702,7 +702,7 @@ bool PKB::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) {
 * @return TRUE if Calls*(procIndex1, procIndex2) is satisfied. 
 *		  FALSE if Calls*(procIndex1, procIndex2) is not satisfied or either procIndex1 or procIndex2 is negative or 0.
 */
-bool PKB::isCallsS(int procIndex1, int procIndex2) {
+BOOLEAN_ PKB::isCallsS(PROC_INDEX procIndex1, PROC_INDEX procIndex2) {
 	bool transitiveClosure = true;
 	return callsTable->isCalls(procIndex1, procIndex2, transitiveClosure);
 }
@@ -714,7 +714,7 @@ bool PKB::isCallsS(int procIndex1, int procIndex2) {
  *		   if transitiveClosure is true: a list of procedure indexes, procIndex1, where Calls*(procIndex1, procIndex2) is satisfied.
  *		   an empty list if procIndex2 is invalid or negative or 0.
  */
-vector<int> PKB::getProcsCalling(int procIndex2, bool transitiveClosure) {
+PROCINDEX_LIST PKB::getProcsCalling(PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure) {
 	return callsTable->getProcsCalling(procIndex2, transitiveClosure);
 }
 
@@ -723,7 +723,7 @@ vector<int> PKB::getProcsCalling(int procIndex2, bool transitiveClosure) {
  * @return a list of procedure indexes, procIndex1, where Calls*(procIndex1, procIndex2) is satisfied.
  *		   an empty list if procIndex2 is invalid or negative or 0.
  */
-vector<int> PKB::getProcsCallingS(int procIndex2) {
+PROCINDEX_LIST PKB::getProcsCallingS(PROC_INDEX procIndex2) {
 	bool transitiveClosure = true;
 	return callsTable->getProcsCalling(procIndex2, transitiveClosure);
 }
@@ -735,7 +735,7 @@ vector<int> PKB::getProcsCallingS(int procIndex2) {
  *		   if transitiveClosure is true: a list of procedure indexes, procIndex2, where Calls*(procIndex1, procIndex2) is satisfied.
  *		   an empty list if procIndex1 is invalid or negative or 0.
  */
-vector<int> PKB::getProcsCalledBy(int procIndex1, bool transitiveClosure) {
+PROCINDEX_LIST PKB::getProcsCalledBy(PROC_INDEX procIndex1, TRANS_CLOSURE transitiveClosure) {
 	return callsTable->getProcsCalledBy(procIndex1, transitiveClosure);
 }
 
@@ -744,7 +744,7 @@ vector<int> PKB::getProcsCalledBy(int procIndex1, bool transitiveClosure) {
  * @return a list of procedure indexes, procIndex2, where Calls*(procIndex1, procIndex2) is satisfied.
  *		   an empty list if procIndex1 is invalid or negative or 0.
  */
-vector<int> PKB::getProcsCalledByS(int procIndex1) {
+PROCINDEX_LIST PKB::getProcsCalledByS(PROC_INDEX procIndex1) {
 	bool transitiveClosure = true;
 	return callsTable->getProcsCalledBy(procIndex1, transitiveClosure);
 }
@@ -754,7 +754,7 @@ vector<int> PKB::getProcsCalledByS(int procIndex1) {
  * @return if transitiveClosure is false: all pairs of procIndex1, procIndex2 where Calls(procIndex1, procIndex2) is satisfied.
  *		   if transitiveClosure is true: all pairs of procIndex1, procIndex2 where Calls*(procIndex1, procIndex2) is satisfied.
  */
-pair<vector<int>, vector<int>> PKB::getAllCallsPairs(bool transitiveClosure) {
+pair<vector<int>, vector<int>> PKB::getAllCallsPairs(TRANS_CLOSURE transitiveClosure) {
 	return callsTable->getAllCallsPairs(transitiveClosure);
 }
 
@@ -772,21 +772,21 @@ pair<vector<int>, vector<int>> PKB::getAllCallsPairsS()
  * @return the procedure name that is called by the statement number stmtNum.
  * @exception exception if stmtNum is negative or 0.
  */
-string PKB::getProcNameCalledByStatement(int stmtNum) {
+PROCNAME PKB::getProcNameCalledByStatement(STATEMENT stmtNum) {
 	return callsTable->getProcNameCalledByStatement(stmtNum);
 }
 
 /**
  * @return a list of all procedure indexes, procIndex1, where Calls(procIndex1, procIndex2) is true.
  */
-vector<int> PKB::getCallsLhs() {
+PROCINDEX_LIST PKB::getCallsLhs() {
 	return callsTable->getLhs();
 }
 
 /**
  * @return a list of all procedure indexes, procIndex2, where Calls(procIndex1, procIndex2) is true.
  */
-vector<int> PKB::getCallsRhs() {
+PROCINDEX_LIST PKB::getCallsRhs() {
 	return callsTable->getRhs();
 }
 
@@ -798,7 +798,7 @@ vector<int> PKB::getCallsRhs() {
 * @param numVariables number of variables
 * @exception exception if numVariables is negative or 0.
 */
-void PKB::initModifiesTable(int numVariables) {
+void PKB::initModifiesTable(INTEGER numVariables) {
 	if (numVariables <= 0) {
 		throw runtime_error("initModifiesTable: invalid number of variables");
 	}
@@ -814,7 +814,7 @@ void PKB::initModifiesTable(int numVariables) {
 * If stmtNum and varIndex were already previously set, the ModifiesTable will not be updated.
 * @exception exception if either stmtNum or varIndex is negative or 0.
 */
-bool PKB::setModifies(int stmtNum, int varIndex) {
+STATUS PKB::setModifies(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	int procIndex = stmtToProcMap.at(stmtNum);
 	
 	bool updatedProc = modifiesTable->setModifiesProc(procIndex, varIndex);
@@ -828,7 +828,7 @@ bool PKB::setModifies(int stmtNum, int varIndex) {
 * @return TRUE if Modifies(stmtNum, varIndex) is satisfied.
 *		  FALSE if Modifies(stmtNum, varIndex) is not satisfied or either stmtNum or varIndex is negative or 0.
 */
-bool PKB::isModifies(int stmtNum, int varIndex) {
+BOOLEAN_ PKB::isModifies(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	return modifiesTable->isModifies(stmtNum, varIndex);
 }
 
@@ -837,7 +837,7 @@ bool PKB::isModifies(int stmtNum, int varIndex) {
 * @return the list of all the statements that modifies the variable with variable index varIndex. 
 * If there is no statement that modifies the variable, or if varIndex is invalid, return an empty list.
 */
-vector<int> PKB::getModStmtNum(int varIndex) {
+STATEMENT_LIST PKB::getModStmtNum(VAR_INDEX varIndex) {
 	return modifiesTable->getModStmtNum(varIndex);
 }
 
@@ -846,7 +846,7 @@ vector<int> PKB::getModStmtNum(int varIndex) {
 * @return the list of all the variables that is modified by the statement number. 
 * If there is no answer, or if stmtNum is negative or 0, return an empty list.
 */
-vector<int> PKB::getModVarForStmt(int stmtNum) {
+VARINDEX_LIST PKB::getModVarForStmt(STATEMENT stmtNum) {
 	return modifiesTable->getModVarForStmt(stmtNum);
 }
 
@@ -854,28 +854,28 @@ vector<int> PKB::getModVarForStmt(int stmtNum) {
 * @param stmtNum the statement number that modifies a particular variable
 * @exception exception if stmtNum is negative or 0.
 */
-boost::dynamic_bitset<> PKB::getModVarInBitvectorForStmt(int stmtNum) {
+boost::dynamic_bitset<> PKB::getModVarInBitvectorForStmt(STATEMENT stmtNum) {
 	return modifiesTable->getModVarInBitvectorForStmt(stmtNum);
 }
 
 /**
 * @return all pairs of statement numbers, stmtNum, and variable indexes, varIndex, where Modifies(stmtNum, varIndex) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllModPair() {
+pair<STATEMENT_LIST, STATEMENT_LIST> PKB::getAllModPair() {
 	return modifiesTable->getAllModPair();
 }
 
 /**
 * @return a list of all statement numbers, stmtNum, where Modifies(stmtNum, varIndex) is true.
 */
-vector<int> PKB::getModifiesLhs() {
+STATEMENT_LIST PKB::getModifiesLhs() {
 	return modifiesTable->getLhs();
 }
 
 /**
  * @return a list of all variable indexes, varIndex, where Modifies(stmtNum, varIndex) is true.
  */
-vector<int> PKB::getModifiesRhs() {
+STATEMENT_LIST PKB::getModifiesRhs() {
 	return modifiesTable->getRhs();
 }
 
@@ -888,7 +888,7 @@ vector<int> PKB::getModifiesRhs() {
 * If procIndex and varIndex were already previously set, the ModifiesTable will not be updated.
 * @exception exception if procIndex or varIndex is negative or 0.
 */
-bool PKB::setModifiesProc(int procIndex, int varIndex) {
+STATUS PKB::setModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) {
 	return modifiesTable->setModifiesProc(procIndex, varIndex);
 }
 
@@ -898,7 +898,7 @@ bool PKB::setModifiesProc(int procIndex, int varIndex) {
 * @return TRUE if Modifies(procIndex, varIndex) is satisfied.
 *		  FALSE if Modifies(procIndex, varIndex) is not satisfied or either procIndex or varIndex is negative or 0.
 */
-bool PKB::isModifiesProc(int procIndex, int varIndex) {
+BOOLEAN_ PKB::isModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) {
 	return modifiesTable->isModifiesProc(procIndex, varIndex);
 }
 
@@ -907,7 +907,7 @@ bool PKB::isModifiesProc(int procIndex, int varIndex) {
 * @return the list of all the procedures that modifies the variable with variable index varIndex. 
 * If there is no procedure that modifies the variable, or if varIndex is invalid, return an empty list.
 */
-vector<int> PKB::getModProcIndex(int varIndex) {
+PROCINDEX_LIST PKB::getModProcIndex(VAR_INDEX varIndex) {
 	return modifiesTable->getModProcIndex(varIndex);
 }
 
@@ -916,14 +916,14 @@ vector<int> PKB::getModProcIndex(int varIndex) {
 * @return the list of all the variables that is modified by the procedure with procedure index procIndex. 
 * If there is no variables that is modified by the procedure, or if procIndex is invalid, return an empty list.
 */
-vector<int> PKB::getModVarForProc(int procIndex) {
+VARINDEX_LIST PKB::getModVarForProc(PROC_INDEX procIndex) {
 	return modifiesTable->getModVarForProc(procIndex);
 }
 
 /**
 * @return all pairs of procedure indexes, procIndex, and variable indexes, varIndex, where Modifies(procIndex, varIndex) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllModProcPair() {
+pair<PROCINDEX_LIST, VARINDEX_LIST> PKB::getAllModProcPair() {
 	return modifiesTable->getAllModProcPair();
 }
 
@@ -935,7 +935,7 @@ pair<vector<int>, vector<int>> PKB::getAllModProcPair() {
 * @param numVariables number of variables
 * @exception exception if numVariables is negative or 0.
 */
-void PKB::initUsesTable(int numVariables) {
+void PKB::initUsesTable(INTEGER numVariables) {
 	if (numVariables <= 0) {
 		throw runtime_error("initUsesTable: invalid number of variables");
 	}
@@ -951,7 +951,7 @@ void PKB::initUsesTable(int numVariables) {
 * If stmtNum and varIndex were already previously set, the UsesTable will not be updated.
 * @exception exception if either stmtNum or varIndex is negative or 0.
 */
-bool PKB::setUses(int stmtNum, int varIndex) {
+STATUS PKB::setUses(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	int procIndex = stmtToProcMap.at(stmtNum);
 
 	bool updateProc = usesTable->setUsesProc(procIndex, varIndex);
@@ -965,7 +965,7 @@ bool PKB::setUses(int stmtNum, int varIndex) {
 * @return TRUE if Uses(stmtNum,varIndex) is satisfied.
 *		  FALSE if Uses(stmtNum,varIndex) is not satisfied or either stmtNum or varIndex is negative or 0.
 */
-bool PKB::isUses(int stmtNum, int varIndex) {
+BOOLEAN_ PKB::isUses(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	return usesTable->isUses(stmtNum, varIndex);
 }
 
@@ -974,7 +974,7 @@ bool PKB::isUses(int stmtNum, int varIndex) {
 * @return the list of all the statements that uses the variable with variable index varIndex. 
 * If there is no statement that uses the variable, or if varIndex is invalid, return an empty list.
 */
-vector<int> PKB::getUsesStmtNum(int varIndex) {
+STATEMENT_LIST PKB::getUsesStmtNum(VAR_INDEX varIndex) {
 	return usesTable->getUsesStmtNum(varIndex);
 }
 
@@ -983,7 +983,7 @@ vector<int> PKB::getUsesStmtNum(int varIndex) {
 * @return the list of all the variables that is used by the statement number stmtNum. 
 * If there is no variable that is used by the statement number, or if stmtNum is negative or 0, return an empty list.
 */
-vector<int> PKB::getUsesVarForStmt(int stmtNum) {
+VARINDEX_LIST PKB::getUsesVarForStmt(STATEMENT stmtNum) {
 	return usesTable->getUsesVarForStmt(stmtNum);
 }
 
@@ -991,28 +991,28 @@ vector<int> PKB::getUsesVarForStmt(int stmtNum) {
 * @param stmtNum the statement number that uses a particular variable
 * @exception exception if stmtNum is negative or 0.
 */
-boost::dynamic_bitset<> PKB::getUseVarInBitvectorForStmt(int stmtNum) {
+boost::dynamic_bitset<> PKB::getUseVarInBitvectorForStmt(STATEMENT stmtNum) {
 	return usesTable->getUseVarInBitvectorForStmt(stmtNum);
 }
 
 /**
 * @return all pairs of statement numbers, stmtNum, and variable indexes, varIndex, where Uses(stmtNum, varIndex) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllUsesPair() {
+pair<STATEMENT_LIST, VARINDEX_LIST> PKB::getAllUsesPair() {
 	return usesTable->getAllUsesPair();
 }
 
 /**
 * @return a list of all statement numbers, stmtNum, where Modifies(stmtNum, varIndex) is true.
 */
-vector<int> PKB::getUsesLhs() {
+STATEMENT_LIST PKB::getUsesLhs() {
 	return usesTable->getLhs();
 }
 
 /**
 * @return a list of all variable indexes, varIndex, where Modifies(stmtNum, varIndex) is true.
 */
-vector<int> PKB::getUsesRhs() {
+STATEMENT_LIST PKB::getUsesRhs() {
 	return usesTable->getRhs();
 }
 
@@ -1025,7 +1025,7 @@ vector<int> PKB::getUsesRhs() {
 * If procIndex and varIndex were already previously set, the UsesTable will not be updated.
 * @exception exception if procIndex or varIndex is negative or 0.
 */
-bool PKB::setUsesProc(int procIndex, int varIndex) {
+STATUS PKB::setUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) {
 	return usesTable->setUsesProc(procIndex, varIndex);
 }
 
@@ -1035,7 +1035,7 @@ bool PKB::setUsesProc(int procIndex, int varIndex) {
 * @return TRUE if Uses(procIndex,varIndex) is satisfied.
 *		  FALSE if Uses(procIndex,varIndex) is not satisfied or either procIndex or varIndex is negative or 0.
 */
-bool PKB::isUsesProc(int procIndex, int varIndex) {
+BOOLEAN_ PKB::isUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) {
 	return usesTable->isUsesProc(procIndex, varIndex);
 }
 
@@ -1044,7 +1044,7 @@ bool PKB::isUsesProc(int procIndex, int varIndex) {
 * @return the list of all the procedures that uses the variable with variable index varIndex. 
 * If there is no procedure that uses the variable, or if varIndex is invalid, return an empty list.
 */
-vector<int> PKB::getUsesProcIndex(int varIndex) {
+PROCINDEX_LIST PKB::getUsesProcIndex(VAR_INDEX varIndex) {
 	return usesTable->getUsesProcIndex(varIndex);
 }
 
@@ -1053,14 +1053,14 @@ vector<int> PKB::getUsesProcIndex(int varIndex) {
 * @return the list of all the variables that is used by the procedure with procedure index procIndex. 
 * If there is no variable that is used by the procedure, or if procIndex is negative, return an empty list.
 */
-vector<int> PKB::getUsesVarForProc(int procIndex) {
+VARINDEX_LIST PKB::getUsesVarForProc(PROC_INDEX procIndex) {
 	return usesTable->getUsesVarForProc(procIndex);
 }
 
 /**
 * @return all pairs of procedure indexes, procIndex, and variable index, varIndex, where Uses(procIndex, varIndex) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllUsesProcPair() {
+pair<PROCINDEX_LIST, VARINDEX_LIST> PKB::getAllUsesProcPair() {
 	return usesTable->getAllUsesProcPair();
 }
 
@@ -1077,7 +1077,7 @@ pair<vector<int>, vector<int>> PKB::getAllUsesProcPair() {
 *										 FALSE if Next*(progLine1, progLine2) is not satisfied.
 *		   FALSE if either progLine1 or progLine2 is negative or 0.
 */
-bool PKB::isNext(int progLine1, int progLine2, bool transitiveClosure) {
+BOOLEAN_ PKB::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	return nextTable->isNext(progLine1, progLine2, transitiveClosure);
 }
 
@@ -1087,7 +1087,7 @@ bool PKB::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 * @return TRUE if Next*(progLine1, progLine2) is satisfied. 
 *		  FALSE if Next*(progLine1, progLine2) is not satisfied or if either progLine1 or progLine2 is negative or 0.
 */
-bool PKB::isNextS(int progLine1, int progLine2) {
+BOOLEAN_ PKB::isNextS(PROG_LINE_ progLine1, PROG_LINE_ progLine2) {
 	bool transClosure = true;
 	return nextTable->isNext(progLine1, progLine2, transClosure);
 }
@@ -1099,7 +1099,7 @@ bool PKB::isNextS(int progLine1, int progLine2) {
 *		  if transitiveClosure is true: a list of program lines, progLine1, where Next*(progLine1, progLine2) is satisfied.
 *		  an empty list if progLine2 is invalid or negative or 0.
 */
-vector<int> PKB::getNextBefore(int progLine2, bool transitiveClosure) {
+PROGLINE_LIST PKB::getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	return nextTable->getNextBefore(progLine2, transitiveClosure);
 }
 
@@ -1108,7 +1108,7 @@ vector<int> PKB::getNextBefore(int progLine2, bool transitiveClosure) {
 * @return a list of program lines, progLine1, where Next*(progLine1, progLine2) is satisfied.
 *		  an empty list if progLine2 is invalid or negative or 0.
 */
-vector<int> PKB::getNextBeforeS(int progLine2) {
+PROGLINE_LIST PKB::getNextBeforeS(PROG_LINE_ progLine2) {
 	bool transClosure = true;
 	return nextTable->getNextBefore(progLine2, transClosure);
 }
@@ -1120,7 +1120,7 @@ vector<int> PKB::getNextBeforeS(int progLine2) {
 *		  if transitiveClosure is true: a list of program lines, progLine2, where Next*(progLine1, progLine2) is satisfied.
 *		  an empty list if progLine1 is invalid or negative or 0.
 */
-vector<int> PKB::getNextAfter(int progLine1, bool transitiveClosure) {
+PROGLINE_LIST PKB::getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	return nextTable->getNextAfter(progLine1, transitiveClosure);
 }
 
@@ -1129,7 +1129,7 @@ vector<int> PKB::getNextAfter(int progLine1, bool transitiveClosure) {
 * @return a list of program lines, progLine2, where Next*(progLine1, progLine2) is satisfied.
 *		  an empty list if progLine1 is invalid or negative or 0.
 */
-vector<int> PKB::getNextAfterS(int progLine1) {
+PROGLINE_LIST PKB::getNextAfterS(PROG_LINE_ progLine1) {
 	bool transClosure = true;
 	return nextTable->getNextAfter(progLine1, transClosure);
 }
@@ -1137,53 +1137,53 @@ vector<int> PKB::getNextAfterS(int progLine1) {
 /**
 * @return a list of all program lines, progLine1, where Next(progLine1, progLine2) is true.
 */
-vector<int> PKB::getNextLhs() {
+PROGLINE_LIST PKB::getNextLhs() {
 	return nextTable->getLhs();
 }
 
 /**
 * @return a list of all program lines, progLine2, where Next(progLine1, progLine2) is true.
 */
-vector<int> PKB::getNextRhs() {
+PROGLINE_LIST PKB::getNextRhs() {
 	return nextTable->getRhs();
 }
 
 
-int PKB::getFirstProgLineInProc(int procIndex) {
+PROG_LINE_ PKB::getFirstProgLineInProc(PROC_INDEX procIndex) {
 	return nextTable->getFirstProgLineInProc(procIndex);
 }
-int PKB::getLastProgLineInProc(int procIndex) {
+PROG_LINE_ PKB::getLastProgLineInProc(PROC_INDEX procIndex) {
 	return nextTable->getLastProgLineInProc(procIndex);
 }
-void PKB::setFirstProgLineInProc(int procIndex, int firstProgline) {
+void PKB::setFirstProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ firstProgline) {
 	nextTable->setFirstProgLineInProc(procIndex, firstProgline);
 }
-void PKB::setLastProgLineInProc(int procIndex, int lastProgline) {
+void PKB::setLastProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ lastProgline) {
 	nextTable->setLastProgLineInProc(procIndex, lastProgline);
 }
 
 
-int PKB::getFirstProgLineInContainer(int container) {
+PROG_LINE_ PKB::getFirstProgLineInContainer(int container) {
 	return nextTable->getFirstProgLineInContainer(container);
 }
-int PKB::getLastProgLineInContainer(int container) {
+PROG_LINE_ PKB::getLastProgLineInContainer(int container) {
 	return nextTable->getLastProgLineInContainer(container);
 }
-void PKB::setFirstProgLineInElse(int container, int progline) {
+void PKB::setFirstProgLineInElse(int container, PROG_LINE_ progline) {
 	nextTable->setFirstProgLineInElse(container, progline);
 }
-void PKB::setLastProgLineInContainer(int container, int progline) {
+void PKB::setLastProgLineInContainer(int container, PROG_LINE_ progline) {
 	nextTable->setLastProgLineInContainer(container, progline);
 }
-void PKB::setProgLineInWhile(int progline) {
-	nextTable->setProgLineInWhile(progline);
+void PKB::setProgLineInWhile(PROG_LINE_ progLine) {
+	nextTable->setProgLineInWhile(progLine);
 }
 
 /**
 * @param progLine the program line
 * @return the CNode for the progline
 */
-CNode* PKB::getCNodeForProgLine(int progLine) {
+CNode* PKB::getCNodeForProgLine(PROG_LINE_ progLine) {
 	return nextTable->getCNodeForProgLine(progLine);
 }
 
@@ -1196,7 +1196,7 @@ CNode* PKB::getCNodeForProgLine(int progLine) {
 * @return TRUE if Affect(progLine1,progLine2) is satisfied.
 *		  FALSE if Affect(progLine1,progLine2) is not satisfied or either progline1 or progLine2 is negative or 0.
 */
-bool PKB::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
+BOOLEAN_ PKB::isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	//@todo optimise in future
 	// do this now to prevent regressions, as Affects will change a lot in the next week
 	vector<int> ans = getAffectedBy(progLine1, transitiveClosure);
@@ -1212,7 +1212,7 @@ bool PKB::isAffects(int progLine1, int progLine2, bool transitiveClosure) {
 *		  if transitiveClosure is true: a list of program lines, progLine2, where Affect*(progLine1, progLine2) is satisfied.
 *		  an empty list if progLine1 is invalid or negative or 0.
 */
-vector<int> PKB::getAffectedBy(int progLine1, bool transitiveClosure) {
+PROGLINE_LIST PKB::getAffectedBy(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	return affectsTable->getProgLinesAffectedBy(progLine1, transitiveClosure);
 }
 
@@ -1223,21 +1223,21 @@ vector<int> PKB::getAffectedBy(int progLine1, bool transitiveClosure) {
 *		  if transitiveClosure is true: a list of program lines, progLine1, where Affect*(progLine1, progLine2) is satisfied.
 *		  an empty list if progLine2 is invalid or negative or 0.
 */
-vector<int> PKB::getAffecting(int progLine2, bool transitiveClosure) {
+PROGLINE_LIST PKB::getAffecting(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	return affectsTable->getProgLinesAffecting(progLine2, transitiveClosure);
 }
 
 /**
 * @return a list of all program lines, progLine1, where Affect(progLine1, progLine2) is true.
 */
-vector<int> PKB::getAffectsLhs() {
+PROGLINE_LIST PKB::getAffectsLhs() {
 	return affectsTable->getLhs();
 }
 
 /**
 * @return a list of all program lines, progLine2, where Affect(progLine1, progLine2) is true.
 */
-vector<int> PKB::getAffectsRhs() {
+PROGLINE_LIST PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
@@ -1247,7 +1247,7 @@ vector<int> PKB::getAffectsRhs() {
 * @return TRUE if the node contains the neccessary information to skip backwards.
 *		  FALSE if the node does not contain the neccessary information to skip backwards.
 */
-bool PKB::canSkipNodesBackwards(CNode* node) {
+BOOLEAN_ PKB::canSkipNodesBackwards(CNode* node) {
 	return AffectsTable::canSkipNodesBackwards(node);
 }
 
@@ -1257,7 +1257,7 @@ bool PKB::canSkipNodesBackwards(CNode* node) {
 * @return TRUE if the node contains the neccessary information to skip ahead.
 *		  FALSE if the node does not contain the neccessary information to skip ahead.
 */
-bool PKB::canSkipNodesForwards(CNode* node) {
+BOOLEAN_ PKB::canSkipNodesForwards(CNode* node) {
 	return AffectsTable::canSkipNodesForwards(node);
 }
 

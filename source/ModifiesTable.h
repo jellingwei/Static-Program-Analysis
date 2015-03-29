@@ -8,27 +8,30 @@
 
 #include <boost/dynamic_bitset.hpp>
 
+#include "common.h"
+
 using namespace std;
 
 class ModifiesTable {
 public:
-	void init(int numVariables);
+	void init(INTEGER numVariables);
+
 	//for statement numbers
-	bool setModifies(int stmtNum, int varIndex);
-	bool isModifies(int stmtNum, int varIndex);
-	vector<int> getModStmtNum(int varIndex);
-	vector<int> getModVarForStmt(int stmtNum);
-	boost::dynamic_bitset<> getModVarInBitvectorForStmt(int stmtNum);
-	pair<vector<int>, vector<int>> getAllModPair();
-	vector<int> getLhs();
-	vector<int> getRhs();
+	STATUS setModifies(STATEMENT stmtNum, VAR_INDEX varIndex);
+	BOOLEAN_ isModifies(STATEMENT stmtNum, VAR_INDEX varIndex);
+	STATEMENT_LIST getModStmtNum(VAR_INDEX varIndex);
+	VARINDEX_LIST getModVarForStmt(STATEMENT stmtNum);
+	boost::dynamic_bitset<> getModVarInBitvectorForStmt(STATEMENT stmtNum);
+	pair<STATEMENT_LIST, VARINDEX_LIST> getAllModPair();
+	STATEMENT_LIST getLhs();
+	STATEMENT_LIST getRhs();
 
 	//for procedures
-	bool setModifiesProc(int procIndex, int varIndex);
-	bool isModifiesProc(int procIndex, int varIndex);
-	vector<int> getModProcIndex(int varIndex);
-	vector<int> getModVarForProc(int procIndex);
-	pair<vector<int>, vector<int>> getAllModProcPair();
+	STATUS setModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	BOOLEAN_ isModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
+	PROCINDEX_LIST getModProcIndex(VAR_INDEX varIndex);
+	VARINDEX_LIST getModVarForProc(PROC_INDEX procIndex);
+	pair<PROCINDEX_LIST, VARINDEX_LIST> getAllModProcPair();
 
 private: 
 	unordered_map<int, boost::dynamic_bitset<>> varIndexMap; // key is stmtNum 

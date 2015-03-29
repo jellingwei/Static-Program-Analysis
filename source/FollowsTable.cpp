@@ -15,7 +15,7 @@ using namespace std;
 using namespace stdext;
 
 
-bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
+STATUS FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
 	if (stmt1 == NULL || stmt2 == NULL) {
 		throw logic_error("FollowsTable: invalid parameters provided");
 	}
@@ -25,7 +25,7 @@ bool FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
 	return PKB::getInstance().createLink(Right_Sibling, stmt1, stmt2);
 }
 
-vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure) {
+STATEMENT_LIST FollowsTable::getStmtFollowedTo(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) {
 	vector<int> result;
 
 	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) {
@@ -51,7 +51,7 @@ vector<int> FollowsTable::getStmtFollowedTo(int stmtNum2, bool transitiveClosure
 	return result;
 }
 
-vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosure) {
+STATEMENT_LIST FollowsTable::getStmtFollowedFrom(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure) {
 	vector<int> result;
 	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) {
 		return vector<int>();
@@ -77,7 +77,7 @@ vector<int> FollowsTable::getStmtFollowedFrom(int stmtNum1, bool transitiveClosu
 	return result;
 }
 
-bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure) 
+BOOLEAN_ FollowsTable::isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
 {
 	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) 
 	{
@@ -118,7 +118,7 @@ bool FollowsTable::isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure)
 	}
 }
 
-void generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector<int>* result1, vector<int>* result2) {
+void generateAllPairs(vector<TNode*>* inputNodes, TRANS_CLOSURE transitiveClosure, vector<int>* result1, vector<int>* result2) {
 	vector<TNode*> nextLayer;
 
 	if (transitiveClosure) {
@@ -168,7 +168,7 @@ void generateAllPairs(vector<TNode*>* inputNodes, bool transitiveClosure, vector
 	return ;
 }
 
-pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(bool transitiveClosure) {
+pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(TRANS_CLOSURE transitiveClosure) {
 	pair<vector<int>, vector<int>> results;
 	TNode* root = PKB::getInstance().getRoot(); 
 	vector<TNode*>* procNodes = root->getChildren();
@@ -181,10 +181,10 @@ pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(bool transitiveC
 	return results;
 }
 
-vector<int> FollowsTable::getLhs() {
+STATEMENT_LIST FollowsTable::getLhs() {
 	return lhs;
 }
 
-vector<int> FollowsTable::getRhs() {
+STATEMENT_LIST FollowsTable::getRhs() {
 	return rhs;
 }

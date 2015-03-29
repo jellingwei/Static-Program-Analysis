@@ -15,11 +15,11 @@ using namespace std;
 using namespace stdext;
 
 //@todo change to bool
-void ModifiesTable::init(int numVariables) {
+void ModifiesTable::init(INTEGER numVariables) {
 	this->numVariables = numVariables;
 }
 
-bool ModifiesTable::setModifies(int stmtNum, int varIndex) {
+STATUS ModifiesTable::setModifies(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	if (this->numVariables == 0) {
 		throw logic_error("init modifiesTable first");
 	}
@@ -75,7 +75,7 @@ bool ModifiesTable::setModifies(int stmtNum, int varIndex) {
 	return true;
 }
 
-bool ModifiesTable::isModifies(int stmtNum, int varIndex) {
+BOOLEAN_ ModifiesTable::isModifies(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	if (stmtNum <= 0 || varIndex <= 0) {
 		return false;
 	}
@@ -93,7 +93,7 @@ bool ModifiesTable::isModifies(int stmtNum, int varIndex) {
 	return result; 
 }
 
-vector<int> ModifiesTable::getModStmtNum(int varIndex) 
+STATEMENT_LIST ModifiesTable::getModStmtNum(VAR_INDEX varIndex) 
 {
 	if (varIndex <= 0) {
 		return vector<int>();
@@ -109,7 +109,7 @@ vector<int> ModifiesTable::getModStmtNum(int varIndex)
 }
 
 
-vector<int> ModifiesTable::getModVarForStmt(int stmtNum) {
+VARINDEX_LIST ModifiesTable::getModVarForStmt(STATEMENT stmtNum) {
 	if (stmtNum <= 0) {
 		return vector<int>();
 	}
@@ -130,7 +130,7 @@ vector<int> ModifiesTable::getModVarForStmt(int stmtNum) {
 	return result;
 }
 
-boost::dynamic_bitset<> ModifiesTable::getModVarInBitvectorForStmt(int stmtNum) {
+boost::dynamic_bitset<> ModifiesTable::getModVarInBitvectorForStmt(STATEMENT stmtNum) {
 
 	if (varIndexMap.count(stmtNum) == 0) {
 		throw logic_error("ModifiesTable: stmt is not a key in ModifiesTable");
@@ -139,7 +139,7 @@ boost::dynamic_bitset<> ModifiesTable::getModVarInBitvectorForStmt(int stmtNum) 
 	return varIndexMap.at(stmtNum);
 }
 
-pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() {
+pair<STATEMENT_LIST, VARINDEX_LIST> ModifiesTable::getAllModPair() {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
 		for (unsigned int i = 0; i < iter->second.size(); i++) {
@@ -154,7 +154,7 @@ pair<vector<int>, vector<int>> ModifiesTable::getAllModPair() {
 
 // for procedures
 
-bool ModifiesTable::setModifiesProc(int procIndex, int varIndex) 
+STATUS ModifiesTable::setModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) 
 {
 	if (procIndex < 0 ) {
 		throw logic_error("ModifiesTable error: Negative procedure index");
@@ -207,7 +207,7 @@ bool ModifiesTable::setModifiesProc(int procIndex, int varIndex)
 	return true;
 }
 
-bool ModifiesTable::isModifiesProc(int procIndex, int varIndex) {
+BOOLEAN_ ModifiesTable::isModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) {
 	if (procIndex < 0 || varIndex <= 0) {
 		return false;
 	}
@@ -225,7 +225,7 @@ bool ModifiesTable::isModifiesProc(int procIndex, int varIndex) {
 	return result != end(varIndexList);
 }
 
-vector<int> ModifiesTable::getModProcIndex(int varIndex) 
+PROCINDEX_LIST ModifiesTable::getModProcIndex(VAR_INDEX varIndex) 
 {
 	if (varIndex <= 0) {
 		return vector<int>();
@@ -240,7 +240,7 @@ vector<int> ModifiesTable::getModProcIndex(int varIndex)
 	return procIndexList;
 }
 
-vector<int> ModifiesTable::getModVarForProc(int procIndex) 
+VARINDEX_LIST ModifiesTable::getModVarForProc(PROC_INDEX procIndex) 
 {
 	if (procIndex < 0) {
 		return vector<int>();
@@ -255,7 +255,7 @@ vector<int> ModifiesTable::getModVarForProc(int procIndex)
 	return varIndexList;
 }
 
-pair<vector<int>, vector<int>> ModifiesTable::getAllModProcPair() 
+pair<PROCINDEX_LIST, VARINDEX_LIST> ModifiesTable::getAllModProcPair() 
 {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = procVarIndexMap.begin(); iter != procVarIndexMap.end(); ++iter) {
@@ -270,7 +270,7 @@ pair<vector<int>, vector<int>> ModifiesTable::getAllModProcPair()
 }
 
 
-vector<int> ModifiesTable::getLhs() {
+STATEMENT_LIST ModifiesTable::getLhs() {
 	// returns statement numbers  // is this just all statements?
 	vector<int> result;
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
@@ -279,8 +279,7 @@ vector<int> ModifiesTable::getLhs() {
 	return result;
 }
 
-
-vector<int> ModifiesTable::getRhs() {
+STATEMENT_LIST ModifiesTable::getRhs() {
 	// returns variables
 	vector<int> result;
 	for (auto iter = stmtNumMap.begin(); iter != stmtNumMap.end(); ++iter) {
