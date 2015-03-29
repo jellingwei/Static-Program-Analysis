@@ -84,7 +84,7 @@ namespace QueryOptimiser
 		return qTreeRoot;
 	}
 
-	QueryTree* rewriteWithClauses(QueryTree* qTreeRoot)
+	/*QueryTree* rewriteWithClauses(QueryTree* qTreeRoot)
 	{
 		unordered_map<string, bool> selectSynonyms;
 
@@ -108,9 +108,9 @@ namespace QueryOptimiser
 
 		for (int i = 0; i < numberOfClauses; i++) {
 			if (clauseNode->getNodeType() == With) {
-
+				;
 		}
-	}
+	}*/
 	
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot)
 	{

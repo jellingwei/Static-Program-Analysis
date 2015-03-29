@@ -100,6 +100,11 @@ enum LINK_TYPE
 	Par, Right_Sibling, Left_Sibling, Child
 };
 
+enum DIRECTION
+{
+	LeftToRight, RightToLeft
+};
+
 namespace QueryParser
 {
 	enum REF_TYPE
