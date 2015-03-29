@@ -137,9 +137,6 @@
     <ClInclude Include="..\source\ResultProjector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\InputQueryParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\TNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>

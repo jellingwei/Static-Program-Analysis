@@ -16,7 +16,6 @@
 #include <regex>
 
 #include "QueryParser.h"
-#include "InputQueryParser.h"
 #include "Synonym.h"
 #include "QueryTree.h"
 #include "QueryValidator.h"
@@ -66,7 +65,7 @@ namespace QueryParser
 	 * @return TRUE if the query parser have been initialized. Otherwise, return FALSE.
 	 * If a query string given is empty, or the buffer\’s size is 0 after tokenizing return FALSE. 
 	 */
-	bool initParser(string query)
+	BOOLEAN_ initParser(string query)
 	{
 		buffer.clear();
 		if (query.size() == 0){
@@ -1627,7 +1626,7 @@ namespace QueryParser
 	 * @returns TRUE always. If the input query is invalid, an empty 
 	 * (default) query tree and synonyms map is passed.  
 	 */
-	bool parseQuery()
+	BOOLEAN_ parseQuery()
 	{
 		//testingQueryParser();
 

@@ -4,7 +4,7 @@ void PQLController::evaluate(std::string query, std::list<std::string> &results)
 {
 	try {
 		QueryParser::initParser(query);
-		bool res = QueryParser::parseQuery();
+		BOOLEAN_ res = QueryParser::parseQuery();
 
 		QueryTree* qT = QueryParser::getQueryTree();
 		vector<Synonym> queryResults;

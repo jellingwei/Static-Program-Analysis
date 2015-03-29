@@ -173,7 +173,7 @@ void QueryValidator::initTable()
  * @param arg2 
  * @return TRUE if the arguments are valid. FALSE if the arguments are not valid.
  */
-bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
+BOOLEAN_ QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)
 {	
 	vector<SYNONYM_TYPE> listArg1;
 	vector<SYNONYM_TYPE> listArg2;
@@ -224,7 +224,7 @@ bool QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Syno
  * @param arg2 
  * @return TRUE if the arguments are valid. FALSE if the arguments are not valid.
  */
-bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
+BOOLEAN_ QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
 {
 	vector<SYNONYM_TYPE> listArg1;
 	vector<SYNONYM_TYPE> listArg2;
@@ -281,7 +281,7 @@ bool QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym 
  *  @return TRUE if both left and right hand side types are consistent.
  *			FALSE if one side is INTEGER and the other side is character string. 
  */
-bool QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
+BOOLEAN_ QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 {
 	
 	bool LHS_integer; // true if it is integer type. false if it is char type. 

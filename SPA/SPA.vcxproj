@@ -55,7 +55,6 @@
     <ClInclude Include="..\source\ExpressionParser.h" />
     <ClInclude Include="..\source\FollowsTable.h" />
     <ClInclude Include="..\source\FrontEndController.h" />
-    <ClInclude Include="..\source\InputQueryParser.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
     <ClInclude Include="..\source\NextTable.h" />
     <ClInclude Include="..\source\ParentTable.h" />
