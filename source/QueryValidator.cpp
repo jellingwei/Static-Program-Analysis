@@ -378,7 +378,7 @@ BOOLEAN_ QueryValidator::validateWithQueries(Synonym arg1, Synonym arg2)
 			}
 
 
-			//label if LHS is int type
+			//label if RHS is int type
 			if(arg2Attr == SYNONYM_ATTRIBUTE(procName) || arg2Attr == SYNONYM_ATTRIBUTE(varName)){
 
 				RHS_integer = false;
