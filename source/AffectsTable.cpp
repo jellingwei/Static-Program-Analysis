@@ -20,7 +20,8 @@ bool AffectsTable::isAffects(int progLine1, int progLine2, bool transitiveClosur
 		return false;
 	}
 
-	vector<int> ans = getProgLinesAffectedBy(progLine1, transitiveClosure);
+
+	vector<int> ans = getProgLinesAffectedBy(progLine1, transitiveClosure); 
 
 	return find(ans.begin(), ans.end(), progLine2) != ans.end();
 

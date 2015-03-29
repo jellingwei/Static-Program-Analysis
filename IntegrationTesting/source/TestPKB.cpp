@@ -327,6 +327,9 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("calls*(0, p)", 4, (int)pkb.getProcsCalledByS(0).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("calls(p, 2)", 2, (int)pkb.getProcsCalling(2).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("calls(0, 3)", false, pkb.isCalls(0, 3));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("calls(0, 3)", true, pkb.isCallsS(0, 3));
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Calls(_, )", 3, (int)pkb.getCallsLhs().size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Calls(, _)", 4, (int)pkb.getCallsRhs().size());
 
