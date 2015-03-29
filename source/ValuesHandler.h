@@ -14,8 +14,6 @@ using std::swap;
 #include "Synonym.h"
 #include "PKB.h"
 
-#define MAX_SYNONYMS_ASSUMED 100
-
 namespace ValuesHandler 
 {
 	//Public functions to be used

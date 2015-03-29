@@ -1,33 +1,5 @@
 #include "ValuesHandler.h"
 
-struct IntegerPair
-{
-	int value1;
-	int value2;
-
-	IntegerPair(int val1, int val2): value1(val1), value2(val2) {}
-
-	bool operator==(const IntegerPair &other) const
-	{ 
-		return (value1 == other.value1 && value2 == other.value2);
-	}
-};
-
-struct Pair_Hasher
-{
-public:
-	std::size_t operator() ( const IntegerPair &p ) const
-	{
-		using std::size_t;
-		return p.value1 * MAX_SYNONYMS_ASSUMED + p.value2;
-	}
-
-	bool operator() ( const IntegerPair &a, const IntegerPair &b) const
-	{
-		return (a.value1 * MAX_SYNONYMS_ASSUMED + a.value2) == (b.value1 * MAX_SYNONYMS_ASSUMED + b.value2);
-	}
-};
-
 /**
 	@brief Namespace containing functions for the handling of intermediate values.
 
@@ -102,7 +74,13 @@ namespace ValuesHandler
 		}
 	}
 	
-	
+	/**
+	* Find if whether this synonym exists in the main table
+	* Made public for testing purposes. 
+	* @param synonymName the name of the synonym
+	* @return TRUE if the synonym exists in the table
+	*         FALSE if the synonym does not exist in the table
+	*/
 	bool isExistInMainTable(string synonymName)
 	{
 		auto itr = mainTableIndex.find(synonymName);
@@ -114,6 +92,13 @@ namespace ValuesHandler
 		}
 	}
 	
+	/**
+	* Find if whether this synonym exists in the singleton table
+	* Made public for testing purposes. 
+	* @param synonymName the name of the synonym
+	* @return TRUE if the synonym exists in the table
+	*         FALSE if the synonym does not exist in the table
+	*/
 	bool isExistInSingletonTable(string synonymName)
 	{
 		auto itr = singletonTable.find(synonymName);
@@ -182,6 +167,12 @@ namespace ValuesHandler
 		}
 	}
 	
+	/**
+	* Private helper method to add a synonym object to the singleton table
+	* @param synonym
+	* @return TRUE if this synonym when added to the table does not return size 0
+	*		  FALSE otherwise
+	*/
 	inline bool addToSingletonTable(Synonym synonym)
 	{
 		vector<int> defaultValues = getDefaultValues(synonym.getType());
@@ -189,12 +180,22 @@ namespace ValuesHandler
 		return hashIntersectWithSingletonTable(synonym);
 	}
 
+	/**
+	* Public helper method to add a synonym object to the singleton table
+	* @param synonym
+	* @return TRUE if this synonym when added to the table does not return size 0
+	*		  FALSE otherwise
+	*/
 	bool addToSingletonTableForTesting(Synonym synonym)
 	{
 		singletonTable[synonym.getName()] = synonym.getValues();
 		return true;
 	}
 
+	/**
+	* Public helper method to remove a synonym object from the singleton table
+	* @param synonym
+	*/
 	inline void removeFromSingletonTable(string synonymName)
 	{
 		if (isExistInSingletonTable(synonymName)) {
@@ -229,6 +230,13 @@ namespace ValuesHandler
 		}
 	}
 	
+	/**
+	* Helper method to get the synonym tuples with its final values
+	* Gets the default values if this synonym is not in the intermediate values
+	* Otherwise, performs gets the existing intermediate values
+	* @param wantedName the name of the wanted synonyms
+	* @return vector of Synonym objects with their values
+	*/
 	vector<Synonym> getSynonymTuples(vector<string> wantedNames)
 	{
 		vector<Synonym> returnSynonyms;
@@ -376,6 +384,12 @@ namespace ValuesHandler
 		}*/
 	}
 	
+	/**
+	* Perform a set intersection with the values in the main table
+	* @param synonym A synonym object with its values
+	* @return TRUE if the set intersection does not have size 0
+	*		  FALSE if the set intersection produces size 0
+	*/
 	bool hashIntersectWithMainTable(Synonym synonym)
 	{
 		int index = findIndexInMainTable(synonym.getName());
@@ -399,6 +413,13 @@ namespace ValuesHandler
 		return mainTable.size() != 0;
 	}
 	
+	/**
+	* Perform a set intersection with the values in the main table
+	* @param LHS A paired synonym object with its paired values
+	* @param RHS A paired synonym object with its paired values
+	* @return TRUE if the set intersection does not have size 0
+	*		  FALSE if the set intersection produces size 0
+	*/
 	bool hashIntersectWithMainTable(Synonym LHS, Synonym RHS)
 	{
 		int indexLHS = findIndexInMainTable(LHS.getName());
@@ -430,6 +451,13 @@ namespace ValuesHandler
 		return mainTable.size() != 0;
 	}
 	
+	/**
+	* Perform a hash join with one synonym in the main table
+	* @param mainSynonym The synonym to join on
+	* @param pairedSynonym A synonym that is paired with mainSynonym
+	* @return TRUE if the join does not have 0 rows
+	*		  FALSE if the join produces 0 rows
+	*/
 	bool hashJoinWithMainTable(Synonym mainSynonym, Synonym pairedSynonym)
 	{
 		int mainIndex = findIndexInMainTable(mainSynonym.getName());
@@ -463,6 +491,14 @@ namespace ValuesHandler
 		}
 	}
 	
+	/**
+	* Perform a hash join with one synonym in the main table.
+	* This is used for with clauses involving numbers
+	* @param mainName The name of the synonym to join on
+	* @param pairedSynonym A synonym with values that are to be the same
+	* @return TRUE if the join does not have 0 rows
+	*		  FALSE if the join produces 0 rows
+	*/
 	bool hashJoinWithMainTableOnNumber(string mainName, Synonym pairedSynonym)
 	{
 		//TODO: Assert main synonym and paired are not varName or procName
@@ -492,6 +528,14 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Perform a hash join with one synonym in the main table.
+	* This is used for with clauses involving strings
+	* @param mainName The name of the synonym to join on
+	* @param pairedSynonym A synonym with values that are to be the same
+	* @return TRUE if the join does not have 0 rows
+	*		  FALSE if the join produces 0 rows
+	*/
 	bool hashJoinWithMainTableOnString(string mainName, Synonym pairedSynonym)
 	{
 		//TODO: Assert main synonym and paired are varName or procName
@@ -499,19 +543,23 @@ namespace ValuesHandler
 		SYNONYM_TYPE pairedType = pairedSynonym.getType();
 		SYNONYM_TYPE mainType = mapSynonymNameToType[mainName];
 		vector<int> pairedValues = pairedSynonym.getValues();
-		unordered_map<string, int> hashTable;
+		unordered_multimap<string, int> hashTable;
 		vector<vector<int>> acceptedValues;
 		
 		for (unsigned int i = 0; i < pairedValues.size(); i++) {
-			string value = convertIndexToString(pairedValues[i], pairedType);
-			hashTable[value] = pairedValues[i];
+			int index = pairedValues[i];
+			string value = convertIndexToString(index, pairedType);
+			hashTable.emplace(make_pair(value, index));
 		}
 		
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
 			string value = convertIndexToString(mainTable[i][mainIndex], mainType);
-			if (hashTable.count(value) != 0) {
+			auto range = hashTable.equal_range(value);
+
+			for (auto itr = range.first; itr != range.second; ++itr) {
+				int index = itr->second;
 				vector<int> oneRow(mainTable[i]);
-				oneRow.push_back(hashTable[value]);
+				oneRow.push_back(index);
 				acceptedValues.push_back(oneRow);
 			}
 		}
@@ -524,6 +572,13 @@ namespace ValuesHandler
 		}
 	}
 	
+	/**
+	* Perform a Cartesian product with the synonyms in the main table
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the join does not have 0 rows
+	*		  FALSE if the join produces 0 rows
+	*/
 	bool joinWithMainTable(Synonym LHS, Synonym RHS)
 	{
 		vector<int> valuesLHS = LHS.getValues();
@@ -559,6 +614,13 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Given a pair of synonyms, eliminate rows by doing a set intersection
+	* with one synonym from the singleton table
+	* @param singleton
+	* @param singletonPair
+	* @return The pairs of values that are left after elimination
+	*/
 	pair<vector<int>, vector<int>> getPairBySingletonIntersect(Synonym singleton, Synonym singletonPair)
 	{
 		vector<int> existingValues = singletonTable[singleton.getName()];
@@ -582,6 +644,13 @@ namespace ValuesHandler
 		return make_pair(acceptedValues, acceptedValuesPair);
 	}
 
+	/**
+	* Given a pair of synonyms, eliminate rows by doing a set intersection on strings
+	* with one synonym from the singleton table
+	* @param LHS
+	* @param RHS
+	* @return The pairs of values that are left after elimination
+	*/
 	pair<vector<int>, vector<int>> getPairBySingletonStringIntersect(Synonym LHS, Synonym RHS)
 	{
 		//TODO: Assert that both are either varName or procName and exists in the singleton table
@@ -612,6 +681,12 @@ namespace ValuesHandler
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
 	
+	/**
+	* Given a synonym that exists in the singleton table, perform a
+	* set intersection with new values
+	* @param synonym
+	* @return The pairs of values that are left after elimination
+	*/
 	bool hashIntersectWithSingletonTable(Synonym synonym)
 	{
 		string name = synonym.getName();
@@ -634,6 +709,13 @@ namespace ValuesHandler
 		return acceptedValues.size() != 0;
 	}
 
+	/**
+	* Given a pair of synonyms, at least one of them exist in the main table
+	* Use the information in the main table to process this pair
+	* @param LHS
+	* @param RHS
+	* @return The status of this operation
+	*/
 	bool processPairWithMainTable(Synonym LHS, Synonym RHS)
 	{
 		//Either LHS or RHS is in the main table or both
@@ -651,6 +733,13 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Given a pair of synonyms, at least none of them exist in the main table
+	* Use the information in the singleton table to process this pair
+	* @param LHS
+	* @param RHS
+	* @return The status of this operation
+	*/
 	bool processPairWithSingletonTable(Synonym LHS, Synonym RHS)
 	{
 		//These two synonyms do not exist in the main table
@@ -683,6 +772,13 @@ namespace ValuesHandler
 		return joinWithMainTable(LHS, RHS);
 	}
 
+	/**
+	* Given a pair of synonyms, at least one of them exist in the main table
+	* Eliminate invalid rows and hash join this pair to the main table
+	* @param mainSynonym the synonym to join on
+	* @param singleton
+	* @return The status of this operation
+	*/
 	bool mergeSingletonToMain(Synonym mainSynonym, Synonym singleton)
 	{
 		string singletonName = singleton.getName();
@@ -716,6 +812,13 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Helper method to filter rows that only contain this string
+	* @param synonymName
+	* @param wantedValue
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterEqualValueByString(string synonymName, string wantedValue)
 	{
 		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
@@ -741,6 +844,13 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Helper method to filter rows that only contain this number
+	* @param synonymName
+	* @param wantedValue
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterEqualValueByNumber(string synonymName, int wantedValue)
 	{
 		if (isExistInMainTable(synonymName)) {
@@ -763,6 +873,13 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Helper method to filter main table rows that only contain this number
+	* @param synonymName
+	* @param wantedValue
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterMainTableByNumber(string synonymName, int wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
@@ -778,6 +895,13 @@ namespace ValuesHandler
 		return mainTable.size() != 0;
 	}
 
+	/**
+	* Helper method to filter main table rows that only contain this string
+	* @param synonymName
+	* @param wantedValue
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterMainTableByString(string synonymName, string wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
@@ -795,6 +919,13 @@ namespace ValuesHandler
 		return mainTable.size() != 0;
 	}
 
+	/**
+	* Helper method to filter singleton table rows that only contain this number
+	* @param synonymName
+	* @param wantedValue
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterSingletonTableByNumber(string synonymName, int wantedValue)
 	{
 		vector<int> singletonValues = singletonTable[synonymName];
@@ -810,6 +941,13 @@ namespace ValuesHandler
 		return false;
 	}
 
+	/**
+	* Helper method to filter singleton table rows that only contain this string
+	* @param synonymName
+	* @param wantedValue
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterSingletonTableByString(string synonymName, string wantedValue)
 	{
 		vector<int> singletonValues = singletonTable[synonymName];
@@ -924,6 +1062,15 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Helper method for with clauses involving synonym number attributes on both sides
+	* Given a pair of synonyms, they do not exist in the main table
+	* Only take the valid pairs and merge them to the main table
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterEqualNumberPairInSingleton(Synonym LHS, Synonym RHS)
 	{
 		string nameLHS = LHS.getName();
@@ -983,6 +1130,15 @@ namespace ValuesHandler
 		}
 	}
 
+	/**
+	* Helper method for with clauses involving synonym string attributes on both sides
+	* Given a pair of synonyms, they do not exist in the main table
+	* Only take the valid pairs and merge them to the main table
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterEqualStringPairInSingleton(Synonym LHS, Synonym RHS)
 	{
 		string nameLHS = LHS.getName();
@@ -1014,6 +1170,15 @@ namespace ValuesHandler
 		return joinWithMainTable(LHS, RHS);
 	}
 
+	/**
+	* Helper method for with clauses involving synonym attributes on both sides
+	* Given a pair of synonyms, both exist in the main table
+	* Only take the valid pairs of the main table
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterEqualNumberInMain(Synonym LHS, Synonym RHS)
 	{
 		//TODO: Assert that they both are in main
@@ -1031,6 +1196,15 @@ namespace ValuesHandler
 		return mainTable.size() != 0;
 	}
 
+	/**
+	* Helper method for with clauses involving synonym string attributes on both sides
+	* Given a pair of synonyms, both exist in the main table
+	* Only take the valid pairs and merge them to the main table
+	* @param LHS
+	* @param RHS
+	* @return TRUE if the ending number of rows is not 0
+	*         FALSE if the ending number of rows is 0
+	*/
 	bool filterEqualStringInMain(Synonym LHS, Synonym RHS)
 	{
 		//TODO: Assert that they both are in main
