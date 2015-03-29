@@ -39,10 +39,6 @@ typedef vector<int> STATEMENT_LIST;
 typedef vector<int> PROGLINE_LIST;
 typedef vector<int> AFFECTS_LIST;
 typedef vector<int> AFFECTED_LIST; 
-typedef vector<int> NEXT_AFTER_LIST;
-typedef vector<int> NEXT_BEFORE_LIST;
-typedef vector<int> PROC_INDEX_LIST;
-typedef vector<int> VAR_INDEX_LIST;
 
 
 enum CNODE_TYPE
