@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: QueryTree Class Reference</title>
+<title>CS3201 Minions SPA: QueryTree Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">CS3201 Minions SPA
    </div>
   </td>
  </tr>
@@ -95,8 +95,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a2aa423c4bb4d55dcee8325f527bcde18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_tree.html#a2aa423c4bb4d55dcee8325f527bcde18">createQNode</a> (QNODE_TYPE QNODE_TYPE, <a class="el" href="class_synonym.html">Synonym</a> arg0, <a class="el" href="class_synonym.html">Synonym</a> arg1, <a class="el" href="class_synonym.html">Synonym</a> arg2)</td></tr>
 <tr class="separator:a2aa423c4bb4d55dcee8325f527bcde18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab818c38f20d674702ef37c2f25c5a391"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_tree.html#ab818c38f20d674702ef37c2f25c5a391">linkNode</a> (<a class="el" href="class_q_node.html">QNode</a> *parent_node, <a class="el" href="class_q_node.html">QNode</a> *child_node)</td></tr>
-<tr class="separator:ab818c38f20d674702ef37c2f25c5a391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3d8c5d2d15dc9aaf0b816d3bbc9b58b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_tree.html#ac3d8c5d2d15dc9aaf0b816d3bbc9b58b">linkNode</a> (<a class="el" href="class_q_node.html">QNode</a> *parent_node, <a class="el" href="class_q_node.html">QNode</a> *child_node)</td></tr>
+<tr class="separator:ac3d8c5d2d15dc9aaf0b816d3bbc9b58b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fd2a85e7ccc5c1a44697c57a8b17a4f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fd2a85e7ccc5c1a44697c57a8b17a4f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setResultNode</b> (<a class="el" href="class_q_node.html">QNode</a> *resultNode)</td></tr>
+<tr class="separator:a8fd2a85e7ccc5c1a44697c57a8b17a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acde4fe50706119e5a596673a2aee0218"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acde4fe50706119e5a596673a2aee0218"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setClausesNode</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
+<tr class="separator:acde4fe50706119e5a596673a2aee0218"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade07e83434c5fd377ca1cf340dda13a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_tree.html#ade07e83434c5fd377ca1cf340dda13a6">getRoot</a> ()</td></tr>
 <tr class="separator:ade07e83434c5fd377ca1cf340dda13a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae269eb5413c43d305ce516b2c50c4a4b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_query_tree.html#ae269eb5413c43d305ce516b2c50c4a4b">getResultNode</a> ()</td></tr>
@@ -224,12 +230,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printTree</b> ()</td>
 
 </div>
 </div>
-<a class="anchor" id="ab818c38f20d674702ef37c2f25c5a391"></a>
+<a class="anchor" id="ac3d8c5d2d15dc9aaf0b816d3bbc9b58b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool QueryTree::linkNode </td>
+          <td class="memname">STATUS QueryTree::linkNode </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
           <td class="paramname"><em>parent_node</em>, </td>
@@ -287,7 +293,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>printTree</b> ()</td>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 11 2015 10:33:52 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 29 2015 21:02:28 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

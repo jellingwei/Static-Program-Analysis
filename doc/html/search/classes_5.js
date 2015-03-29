@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['modifiestable',['ModifiesTable',['../class_modifies_table.html',1,'']]]
+  ['integerpair',['IntegerPair',['../struct_integer_pair.html',1,'']]]
 ];

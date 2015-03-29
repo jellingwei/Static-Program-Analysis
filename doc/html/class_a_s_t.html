@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: AST Class Reference</title>
+<title>CS3201 Minions SPA: AST Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">CS3201 Minions SPA
    </div>
   </td>
  </tr>
@@ -93,40 +93,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a69486adb9b58e648972d5a2730b940a7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a69486adb9b58e648972d5a2730b940a7"></a>
-<a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createTNode</b> (TNODE_TYPE ast_node_type, int stmtNo, int idx)</td></tr>
-<tr class="separator:a69486adb9b58e648972d5a2730b940a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a402e94f44f9a7c479816c4e7f1287145"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a402e94f44f9a7c479816c4e7f1287145"></a>
+<a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createTNode</b> (TNODE_TYPE ast_node_type, STATEMENT stmtNo, VAR_INDEX idx)</td></tr>
+<tr class="separator:a402e94f44f9a7c479816c4e7f1287145"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af92138be77648aa0c6bea999a6c1bf24"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af92138be77648aa0c6bea999a6c1bf24"></a>
 <a class="el" href="class_t_node.html">TNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getRoot</b> ()</td></tr>
 <tr class="separator:af92138be77648aa0c6bea999a6c1bf24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebde341b46387da09c308484ed66fa5f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#aebde341b46387da09c308484ed66fa5f">createLink</a> (LINK_TYPE link, <a class="el" href="class_t_node.html">TNode</a> *fromNode, <a class="el" href="class_t_node.html">TNode</a> *toNode)</td></tr>
-<tr class="separator:aebde341b46387da09c308484ed66fa5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05f6555b15bd47ab73cf35d450858095"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a05f6555b15bd47ab73cf35d450858095">getChildrenSize</a> (<a class="el" href="class_t_node.html">TNode</a> *parent)</td></tr>
-<tr class="separator:a05f6555b15bd47ab73cf35d450858095"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afafe9d3b4a0f3db1851b4b63aee6b2cb"><td class="memItemLeft" align="right" valign="top">STATUS&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#afafe9d3b4a0f3db1851b4b63aee6b2cb">createLink</a> (LINK_TYPE link, <a class="el" href="class_t_node.html">TNode</a> *fromNode, <a class="el" href="class_t_node.html">TNode</a> *toNode)</td></tr>
+<tr class="separator:afafe9d3b4a0f3db1851b4b63aee6b2cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3ba0f93b5ebf34b33458e1c37b13b66"><td class="memItemLeft" align="right" valign="top">INTEGER&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#ad3ba0f93b5ebf34b33458e1c37b13b66">getChildrenSize</a> (<a class="el" href="class_t_node.html">TNode</a> *parent)</td></tr>
+<tr class="separator:ad3ba0f93b5ebf34b33458e1c37b13b66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e6ce07473e97be9e99785e3ffcdaa46"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="class_t_node.html">TNode</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a1e6ce07473e97be9e99785e3ffcdaa46">getChildrenNode</a> (<a class="el" href="class_t_node.html">TNode</a> *parent)</td></tr>
 <tr class="separator:a1e6ce07473e97be9e99785e3ffcdaa46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b81dd32e82c1b6e8229d4160f4bf078"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a7b81dd32e82c1b6e8229d4160f4bf078">isChildNode</a> (<a class="el" href="class_t_node.html">TNode</a> *parent, <a class="el" href="class_t_node.html">TNode</a> *child)</td></tr>
-<tr class="separator:a7b81dd32e82c1b6e8229d4160f4bf078"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad802d5d3a47c0141f1fed4a3f175248c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#ad802d5d3a47c0141f1fed4a3f175248c">isExists</a> (<a class="el" href="class_t_node.html">TNode</a> *node)</td></tr>
-<tr class="separator:ad802d5d3a47c0141f1fed4a3f175248c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85d388f62041b3799b584d29687f09c3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a85d388f62041b3799b584d29687f09c3">getSize</a> ()</td></tr>
-<tr class="separator:a85d388f62041b3799b584d29687f09c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb89402dfd9a6115fdcbc2916b6b34fa"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#abb89402dfd9a6115fdcbc2916b6b34fa">patternMatchAssign</a> (string RHS)</td></tr>
-<tr class="separator:abb89402dfd9a6115fdcbc2916b6b34fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac482ed39b89268f77eadc6674f440984"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#ac482ed39b89268f77eadc6674f440984">patternMatchWhile</a> (string LHS)</td></tr>
-<tr class="separator:ac482ed39b89268f77eadc6674f440984"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73bff2832bde032ac8dc9b890628531f"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a73bff2832bde032ac8dc9b890628531f">patternMatchIf</a> (string LHS)</td></tr>
-<tr class="separator:a73bff2832bde032ac8dc9b890628531f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28bf426d4ccdcbe6002f98fc6636d495"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a28bf426d4ccdcbe6002f98fc6636d495">getControlVariable</a> (int stmtNum)</td></tr>
-<tr class="separator:a28bf426d4ccdcbe6002f98fc6636d495"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a037d8f3bc3632ba92e11db60e230a5a7"><td class="memItemLeft" align="right" valign="top">BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a037d8f3bc3632ba92e11db60e230a5a7">isChildNode</a> (<a class="el" href="class_t_node.html">TNode</a> *parent, <a class="el" href="class_t_node.html">TNode</a> *child)</td></tr>
+<tr class="separator:a037d8f3bc3632ba92e11db60e230a5a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3514acf6a8a0c392b1e97d91986c1838"><td class="memItemLeft" align="right" valign="top">BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a3514acf6a8a0c392b1e97d91986c1838">isExists</a> (<a class="el" href="class_t_node.html">TNode</a> *node)</td></tr>
+<tr class="separator:a3514acf6a8a0c392b1e97d91986c1838"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a361ddede12b85fa7e4c5fd0e37d638a5"><td class="memItemLeft" align="right" valign="top">INTEGER&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a361ddede12b85fa7e4c5fd0e37d638a5">getSize</a> ()</td></tr>
+<tr class="separator:a361ddede12b85fa7e4c5fd0e37d638a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a951cd1cdddb7cb17b3e835b040b261da"><td class="memItemLeft" align="right" valign="top">STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a951cd1cdddb7cb17b3e835b040b261da">patternMatchAssign</a> (EXPRESSION RHS)</td></tr>
+<tr class="separator:a951cd1cdddb7cb17b3e835b040b261da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e135026ef7e6e65a639b2bfe56aee86"><td class="memItemLeft" align="right" valign="top">STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a9e135026ef7e6e65a639b2bfe56aee86">patternMatchWhile</a> (VARNAME LHS)</td></tr>
+<tr class="separator:a9e135026ef7e6e65a639b2bfe56aee86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa02d2a179e742d226738f32816b53d7f"><td class="memItemLeft" align="right" valign="top">STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#aa02d2a179e742d226738f32816b53d7f">patternMatchIf</a> (VARNAME LHS)</td></tr>
+<tr class="separator:aa02d2a179e742d226738f32816b53d7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1867cb8e0e8aed64068b4a573e5833d2"><td class="memItemLeft" align="right" valign="top">VAR_INDEX&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_s_t.html#a1867cb8e0e8aed64068b4a573e5833d2">getControlVariable</a> (STATEMENT stmtNum)</td></tr>
+<tr class="separator:a1867cb8e0e8aed64068b4a573e5833d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16e3ad9736643aa1e774ef4552b4099d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16e3ad9736643aa1e774ef4552b4099d"></a>
+INTEGER&#160;</td><td class="memItemRight" valign="bottom"><b>getDescendent</b> (<a class="el" href="class_t_node.html">TNode</a> *curr)</td></tr>
+<tr class="separator:a16e3ad9736643aa1e774ef4552b4099d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="aebde341b46387da09c308484ed66fa5f"></a>
+<a class="anchor" id="afafe9d3b4a0f3db1851b4b63aee6b2cb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool AST::createLink </td>
+          <td class="memname">STATUS AST::createLink </td>
           <td>(</td>
           <td class="paramtype">LINK_TYPE&#160;</td>
           <td class="paramname"><em>link</em>, </td>
@@ -183,12 +186,12 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a05f6555b15bd47ab73cf35d450858095"></a>
+<a class="anchor" id="ad3ba0f93b5ebf34b33458e1c37b13b66"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int AST::getChildrenSize </td>
+          <td class="memname">INTEGER AST::getChildrenSize </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
           <td class="paramname"><em>parent</em></td><td>)</td>
@@ -206,14 +209,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a28bf426d4ccdcbe6002f98fc6636d495"></a>
+<a class="anchor" id="a1867cb8e0e8aed64068b4a573e5833d2"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int AST::getControlVariable </td>
+          <td class="memname">VAR_INDEX AST::getControlVariable </td>
           <td>(</td>
-          <td class="paramtype">int&#160;</td>
+          <td class="paramtype">STATEMENT&#160;</td>
           <td class="paramname"><em>stmtNum</em></td><td>)</td>
           <td></td>
         </tr>
@@ -233,12 +236,12 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a85d388f62041b3799b584d29687f09c3"></a>
+<a class="anchor" id="a361ddede12b85fa7e4c5fd0e37d638a5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int AST::getSize </td>
+          <td class="memname">INTEGER AST::getSize </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -249,12 +252,12 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7b81dd32e82c1b6e8229d4160f4bf078"></a>
+<a class="anchor" id="a037d8f3bc3632ba92e11db60e230a5a7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool AST::isChildNode </td>
+          <td class="memname">BOOLEAN_ AST::isChildNode </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
           <td class="paramname"><em>parent</em>, </td>
@@ -282,12 +285,12 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ad802d5d3a47c0141f1fed4a3f175248c"></a>
+<a class="anchor" id="a3514acf6a8a0c392b1e97d91986c1838"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool AST::isExists </td>
+          <td class="memname">BOOLEAN_ AST::isExists </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
           <td class="paramname"><em>node</em></td><td>)</td>
@@ -305,14 +308,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="abb89402dfd9a6115fdcbc2916b6b34fa"></a>
+<a class="anchor" id="a951cd1cdddb7cb17b3e835b040b261da"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; int &gt; AST::patternMatchAssign </td>
+          <td class="memname">STATEMENT_LIST AST::patternMatchAssign </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">EXPRESSION&#160;</td>
           <td class="paramname"><em>RHS</em></td><td>)</td>
           <td></td>
         </tr>
@@ -328,14 +331,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a73bff2832bde032ac8dc9b890628531f"></a>
+<a class="anchor" id="aa02d2a179e742d226738f32816b53d7f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; int &gt; AST::patternMatchIf </td>
+          <td class="memname">STATEMENT_LIST AST::patternMatchIf </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">VARNAME&#160;</td>
           <td class="paramname"><em>LHS</em></td><td>)</td>
           <td></td>
         </tr>
@@ -351,14 +354,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ac482ed39b89268f77eadc6674f440984"></a>
+<a class="anchor" id="a9e135026ef7e6e65a639b2bfe56aee86"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; int &gt; AST::patternMatchWhile </td>
+          <td class="memname">STATEMENT_LIST AST::patternMatchWhile </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">VARNAME&#160;</td>
           <td class="paramname"><em>LHS</em></td><td>)</td>
           <td></td>
         </tr>
@@ -381,7 +384,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 11 2015 10:33:50 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 29 2015 21:02:26 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

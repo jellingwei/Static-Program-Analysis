@@ -38,9 +38,9 @@ PKB::PKB()
 * @return a TNode for the given design entity together with its statement number and value. 
 * @exception exception if stmtNum is negative or 0 or value is negative.
 */
-TNode* PKB::createTNode(TNODE_TYPE astNodeType, STATEMENT stmtNo, VAR_INDEX value) 
+TNode* PKB::createTNode(TNODE_TYPE astNodeType, STATEMENT stmtNum, VAR_INDEX value) 
 {
-	return ast->createTNode(astNodeType, stmtNo, value);
+	return ast->createTNode(astNodeType, stmtNum, value);
 }
 
 /**
@@ -531,14 +531,14 @@ BOOLEAN_ PKB::isParentS(STATEMENT stmtNum1, STATEMENT stmtNum2) {
 * @return if transitiveClosure is false: all pairs of stmtNum1, stmtNum2 where Parent(stmtNum1, stmtNum2) is satisfied.
 *		  if transitiveClosure is true: all pairs of stmtNum1, stmtNum2 where Parent*(stmtNum1, stmtNum2) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllParentPairs(TRANS_CLOSURE transitiveClosure) {
+pair<STATEMENT_LIST, STATEMENT_LIST> PKB::getAllParentPairs(TRANS_CLOSURE transitiveClosure) {
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
 
 /**
 * @return all pairs of stmtNum1, stmtNum2 where Parent*(stmtNum1, stmtNum2) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllParentPairsS() {
+pair<STATEMENT_LIST, STATEMENT_LIST> PKB::getAllParentPairsS() {
 	bool transitiveClosure = true;
 	return parentTable->getAllParentPairs(transitiveClosure);
 }
@@ -642,14 +642,14 @@ BOOLEAN_ PKB::isFollowsS(STATEMENT stmtNum1, STATEMENT stmtNum2) {
 * @return if transitiveClosure is false: all pairs of stmtNum1, stmtNum2 where Follow(stmtNum1, stmtNum2) is satisfied.
 *		  if transitiveClosure is true: all pairs of stmtNum1, stmtNum2 where Follow*(stmtNum1, stmtNum2) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllFollowsPairs(TRANS_CLOSURE transitiveClosure) {
+pair<STATEMENT_LIST, STATEMENT_LIST> PKB::getAllFollowsPairs(TRANS_CLOSURE transitiveClosure) {
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
 
 /**
 * @return all pairs of stmtNum1, stmtNum2 where Follows*(stmtNum1, stmtNum2) is satisfied.
 */
-pair<vector<int>, vector<int>> PKB::getAllFollowsPairsS() {
+pair<STATEMENT_LIST, STATEMENT_LIST> PKB::getAllFollowsPairsS() {
 	bool transitiveClosure = true;
 	return followsTable->getAllFollowsPairs(transitiveClosure);
 }
@@ -754,14 +754,14 @@ PROCINDEX_LIST PKB::getProcsCalledByS(PROC_INDEX procIndex1) {
  * @return if transitiveClosure is false: all pairs of procIndex1, procIndex2 where Calls(procIndex1, procIndex2) is satisfied.
  *		   if transitiveClosure is true: all pairs of procIndex1, procIndex2 where Calls*(procIndex1, procIndex2) is satisfied.
  */
-pair<vector<int>, vector<int>> PKB::getAllCallsPairs(TRANS_CLOSURE transitiveClosure) {
+pair<PROCINDEX_LIST, PROCINDEX_LIST> PKB::getAllCallsPairs(TRANS_CLOSURE transitiveClosure) {
 	return callsTable->getAllCallsPairs(transitiveClosure);
 }
 
 /**
  * @return all pairs of procIndex1, procIndex2 where Calls*(procIndex1, procIndex2) is satisfied.
  */
-pair<vector<int>, vector<int>> PKB::getAllCallsPairsS() 
+pair<PROCINDEX_LIST, PROCINDEX_LIST> PKB::getAllCallsPairsS() 
 {
 	bool transitiveClosure = true;
 	return callsTable->getAllCallsPairs(transitiveClosure);
@@ -861,7 +861,7 @@ boost::dynamic_bitset<> PKB::getModVarInBitvectorForStmt(STATEMENT stmtNum) {
 /**
 * @return all pairs of statement numbers, stmtNum, and variable indexes, varIndex, where Modifies(stmtNum, varIndex) is satisfied.
 */
-pair<STATEMENT_LIST, STATEMENT_LIST> PKB::getAllModPair() {
+pair<STATEMENT_LIST, VARINDEX_LIST> PKB::getAllModPair() {
 	return modifiesTable->getAllModPair();
 }
 

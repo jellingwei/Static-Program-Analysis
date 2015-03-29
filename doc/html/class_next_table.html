@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: NextTable Class Reference</title>
+<title>CS3201 Minions SPA: NextTable Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">CS3201 Minions SPA
    </div>
   </td>
  </tr>
@@ -93,24 +93,51 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a29a35464ff51824497370f5cb92f076c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29a35464ff51824497370f5cb92f076c"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNextAfter</b> (int progLine1, bool transitiveClosure=false)</td></tr>
-<tr class="separator:a29a35464ff51824497370f5cb92f076c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f597eb58c0a407326c9122dd9f3a2d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f597eb58c0a407326c9122dd9f3a2d2"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNextBefore</b> (int progLine2, bool transitiveClosure=false)</td></tr>
-<tr class="separator:a2f597eb58c0a407326c9122dd9f3a2d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aebbd90b0e57e169367895a54c69e83b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aebbd90b0e57e169367895a54c69e83b9"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isNext</b> (int progLine1, int progLine2, bool transitiveClosure=false)</td></tr>
-<tr class="separator:aebbd90b0e57e169367895a54c69e83b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cafc9c8fde6f5b4bdaaae07fadc877a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4cafc9c8fde6f5b4bdaaae07fadc877a"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getLhs</b> ()</td></tr>
-<tr class="separator:a4cafc9c8fde6f5b4bdaaae07fadc877a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4145be400173c563952a053952df67eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4145be400173c563952a053952df67eb"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRhs</b> ()</td></tr>
-<tr class="separator:a4145be400173c563952a053952df67eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15e2a1cde310da965331c41a847bd024"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a15e2a1cde310da965331c41a847bd024"></a>
-<a class="el" href="class_c_node.html">CNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getCNodeForProgLine</b> (int)</td></tr>
-<tr class="separator:a15e2a1cde310da965331c41a847bd024"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa96df3524befe963de2ab21b496d21b9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa96df3524befe963de2ab21b496d21b9"></a>
+PROGLINE_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getNextAfter</b> (PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure=false)</td></tr>
+<tr class="separator:aa96df3524befe963de2ab21b496d21b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38afbd64b159187ee31cede885175b6a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38afbd64b159187ee31cede885175b6a"></a>
+PROGLINE_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getNextBefore</b> (PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure=false)</td></tr>
+<tr class="separator:a38afbd64b159187ee31cede885175b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a246a6bb4ceb00a2277c39a9c8520fe55"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a246a6bb4ceb00a2277c39a9c8520fe55"></a>
+BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><b>isNext</b> (PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure=false)</td></tr>
+<tr class="separator:a246a6bb4ceb00a2277c39a9c8520fe55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16ded8a3933594c74b4ace864f10bdb1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16ded8a3933594c74b4ace864f10bdb1"></a>
+PROGLINE_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getLhs</b> ()</td></tr>
+<tr class="separator:a16ded8a3933594c74b4ace864f10bdb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a831ded44084e50f35713fed3b7fc1bfe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a831ded44084e50f35713fed3b7fc1bfe"></a>
+PROGLINE_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getRhs</b> ()</td></tr>
+<tr class="separator:a831ded44084e50f35713fed3b7fc1bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae70769d0c406cc8281204036513beb9d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae70769d0c406cc8281204036513beb9d"></a>
+<a class="el" href="class_c_node.html">CNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getCNodeForProgLine</b> (PROG_LINE_ progLine)</td></tr>
+<tr class="separator:ae70769d0c406cc8281204036513beb9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac13a01bc06e23d3f70d88557f1ccd344"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac13a01bc06e23d3f70d88557f1ccd344"></a>
+PROG_LINE_&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstProgLineInProc</b> (PROC_INDEX procIndex)</td></tr>
+<tr class="separator:ac13a01bc06e23d3f70d88557f1ccd344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6249ff08c6ddc0a19d1a301d955b0341"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6249ff08c6ddc0a19d1a301d955b0341"></a>
+PROG_LINE_&#160;</td><td class="memItemRight" valign="bottom"><b>getLastProgLineInProc</b> (PROC_INDEX procIndex)</td></tr>
+<tr class="separator:a6249ff08c6ddc0a19d1a301d955b0341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8f293719bf990a58979ababc35bdc10"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad8f293719bf990a58979ababc35bdc10"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFirstProgLineInProc</b> (PROC_INDEX procIndex, PROG_LINE_ firstProgline)</td></tr>
+<tr class="separator:ad8f293719bf990a58979ababc35bdc10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0453d9f1490561a3b5ec25d0518caa82"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0453d9f1490561a3b5ec25d0518caa82"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setLastProgLineInProc</b> (PROC_INDEX procIndex, PROG_LINE_ lastProgline)</td></tr>
+<tr class="separator:a0453d9f1490561a3b5ec25d0518caa82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ffc049fe6073e2b21bf4925af13af6c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6ffc049fe6073e2b21bf4925af13af6c"></a>
+PROG_LINE_&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstProgLineInContainer</b> (CONTAINER_STATEMENT container)</td></tr>
+<tr class="separator:a6ffc049fe6073e2b21bf4925af13af6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b7a18b76173c18b391abfe389fe5c56"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2b7a18b76173c18b391abfe389fe5c56"></a>
+PROG_LINE_&#160;</td><td class="memItemRight" valign="bottom"><b>getLastProgLineInContainer</b> (CONTAINER_STATEMENT container)</td></tr>
+<tr class="separator:a2b7a18b76173c18b391abfe389fe5c56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d665f7bbd7e64293bb7888937797363"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d665f7bbd7e64293bb7888937797363"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFirstProgLineInElse</b> (CONTAINER_STATEMENT container, PROG_LINE_ progline)</td></tr>
+<tr class="separator:a1d665f7bbd7e64293bb7888937797363"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4e20c731a477b9410b493ce8eec9fa2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4e20c731a477b9410b493ce8eec9fa2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setLastProgLineInContainer</b> (CONTAINER_STATEMENT container, PROG_LINE_ progline)</td></tr>
+<tr class="separator:af4e20c731a477b9410b493ce8eec9fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3be747b85d517d18e8b8ff9cfbaf2d5f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3be747b85d517d18e8b8ff9cfbaf2d5f"></a>
+BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><b>setProgLineInWhile</b> (PROG_LINE_ progline)</td></tr>
+<tr class="separator:a3be747b85d517d18e8b8ff9cfbaf2d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/<a class="el" href="_next_table_8h_source.html">NextTable.h</a></li>
@@ -119,7 +146,7 @@ vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRhs
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 11 2015 10:33:51 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 29 2015 21:02:28 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

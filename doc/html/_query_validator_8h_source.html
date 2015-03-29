@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: source/QueryValidator.h Source File</title>
+<title>CS3201 Minions SPA: source/QueryValidator.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">CS3201 Minions SPA
    </div>
   </td>
  </tr>
@@ -106,36 +106,38 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;Synonym.h&quot;</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
 <div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="class_query_validator.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_query_validator.html">QueryValidator</a> {</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;     <a class="code" href="class_query_validator.html">QueryValidator</a>();</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;     ~<a class="code" href="class_query_validator.html"> QueryValidator</a>();</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_query_validator.html#a9d70eeb0ba5385ca1e15c099cda41225">initTable</a>(); <span class="comment">//creates a program design entity relationships table</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_query_validator.html#a0b8a89b0af3a6a1654b03b37e01ccb87">validateSuchThatQueries</a>(QNODE_TYPE type, <a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates all such that queries based on relationship table initialised. </span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_query_validator.html#ac77e452de4e51323728e8507ef5e8e58">validatePatternQueries</a>(<a class="code" href="class_synonym.html">Synonym</a> arg0, <a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates all pattern queries based on relationship table initialised. </span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="class_query_validator.html#a474d5ed91452d3923d6d5feef0db086a">validateWithQueries</a>(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">bool</span> validateModifiesOrUsesArgs(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates the inputs for modifies and uses</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordtype">bool</span> validateParentArgs(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates the inputs for parent</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordtype">bool</span> validateFollowsArgs(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates the inputs for follows</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    std::tr1::unordered_map&lt;QNODE_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; relationshipArg1Map; <span class="comment">//maps the relationship to its type of argument 1</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    std::tr1::unordered_map&lt;QNODE_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; relationshipArg2Map; <span class="comment">//maps the relationship to its type of argument 2</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::tr1::unordered_map&lt;SYNONYM_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; patternsArg1Map; <span class="comment">//maps the relationship to its type of argument 1</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    std::tr1::unordered_map&lt;SYNONYM_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; patternsArg2Map; <span class="comment">//maps the relationship to its type of argument 2</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    std::tr1::unordered_map&lt;SYNONYM_ATTRIBUTE, vector&lt;SYNONYM_TYPE&gt;&gt; withAttrRefMap;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;};</div>
-<div class="ttc" id="class_synonym_html"><div class="ttname"><a href="class_synonym.html">Synonym</a></div><div class="ttdef"><b>Definition:</b> Synonym.h:29</div></div>
-<div class="ttc" id="class_query_validator_html_ac77e452de4e51323728e8507ef5e8e58"><div class="ttname"><a href="class_query_validator.html#ac77e452de4e51323728e8507ef5e8e58">QueryValidator::validatePatternQueries</a></div><div class="ttdeci">bool validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)</div><div class="ttdef"><b>Definition:</b> QueryValidator.cpp:254</div></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;     <a class="code" href="class_query_validator.html">QueryValidator</a>();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;     ~<a class="code" href="class_query_validator.html"> QueryValidator</a>();</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="class_query_validator.html#a9d70eeb0ba5385ca1e15c099cda41225">initTable</a>(); <span class="comment">//creates a program design entity relationships table</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    BOOLEAN_ <a class="code" href="class_query_validator.html#a95737f65a74ff0400d7dd41c7b2f48e8">validateSuchThatQueries</a>(QNODE_TYPE type, <a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates all such that queries based on relationship table initialised. </span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    BOOLEAN_ <a class="code" href="class_query_validator.html#ac462f8ac580d8e669400b7fd25e347ef">validatePatternQueries</a>(<a class="code" href="class_synonym.html">Synonym</a> arg0, <a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates all pattern queries based on relationship table initialised. </span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    BOOLEAN_ <a class="code" href="class_query_validator.html#a1e91d83e9457acbc58ca662ceaac13c9">validateWithQueries</a>(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    BOOLEAN_ validateModifiesOrUsesArgs(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates the inputs for modifies and uses</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    BOOLEAN_ validateParentArgs(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates the inputs for parent</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    BOOLEAN_ validateFollowsArgs(<a class="code" href="class_synonym.html">Synonym</a> arg1, <a class="code" href="class_synonym.html">Synonym</a> arg2);<span class="comment">//Validates the inputs for follows</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    std::tr1::unordered_map&lt;QNODE_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; relationshipArg1Map; <span class="comment">//maps the relationship to its type of argument 1</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    std::tr1::unordered_map&lt;QNODE_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; relationshipArg2Map; <span class="comment">//maps the relationship to its type of argument 2</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    std::tr1::unordered_map&lt;SYNONYM_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; patternsArg1Map; <span class="comment">//maps the relationship to its type of argument 1</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    std::tr1::unordered_map&lt;SYNONYM_TYPE, vector&lt;SYNONYM_TYPE&gt;&gt; patternsArg2Map; <span class="comment">//maps the relationship to its type of argument 2</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    std::tr1::unordered_map&lt;SYNONYM_ATTRIBUTE, vector&lt;SYNONYM_TYPE&gt;&gt; withAttrRefMap;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;};</div>
+<div class="ttc" id="class_query_validator_html_a1e91d83e9457acbc58ca662ceaac13c9"><div class="ttname"><a href="class_query_validator.html#a1e91d83e9457acbc58ca662ceaac13c9">QueryValidator::validateWithQueries</a></div><div class="ttdeci">BOOLEAN_ validateWithQueries(Synonym arg1, Synonym arg2)</div><div class="ttdef"><b>Definition:</b> QueryValidator.cpp:284</div></div>
+<div class="ttc" id="class_synonym_html"><div class="ttname"><a href="class_synonym.html">Synonym</a></div><div class="ttdef"><b>Definition:</b> Synonym.h:5</div></div>
 <div class="ttc" id="class_query_validator_html_a9d70eeb0ba5385ca1e15c099cda41225"><div class="ttname"><a href="class_query_validator.html#a9d70eeb0ba5385ca1e15c099cda41225">QueryValidator::initTable</a></div><div class="ttdeci">void initTable()</div><div class="ttdef"><b>Definition:</b> QueryValidator.cpp:27</div></div>
-<div class="ttc" id="class_query_validator_html_a474d5ed91452d3923d6d5feef0db086a"><div class="ttname"><a href="class_query_validator.html#a474d5ed91452d3923d6d5feef0db086a">QueryValidator::validateWithQueries</a></div><div class="ttdeci">bool validateWithQueries(Synonym arg1, Synonym arg2)</div><div class="ttdef"><b>Definition:</b> QueryValidator.cpp:311</div></div>
-<div class="ttc" id="class_query_validator_html_a0b8a89b0af3a6a1654b03b37e01ccb87"><div class="ttname"><a href="class_query_validator.html#a0b8a89b0af3a6a1654b03b37e01ccb87">QueryValidator::validateSuchThatQueries</a></div><div class="ttdeci">bool validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)</div><div class="ttdef"><b>Definition:</b> QueryValidator.cpp:176</div></div>
+<div class="ttc" id="class_query_validator_html_a95737f65a74ff0400d7dd41c7b2f48e8"><div class="ttname"><a href="class_query_validator.html#a95737f65a74ff0400d7dd41c7b2f48e8">QueryValidator::validateSuchThatQueries</a></div><div class="ttdeci">BOOLEAN_ validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, Synonym arg2)</div><div class="ttdef"><b>Definition:</b> QueryValidator.cpp:176</div></div>
 <div class="ttc" id="class_query_validator_html"><div class="ttname"><a href="class_query_validator.html">QueryValidator</a></div><div class="ttdef"><b>Definition:</b> QueryValidator.h:20</div></div>
+<div class="ttc" id="class_query_validator_html_ac462f8ac580d8e669400b7fd25e347ef"><div class="ttname"><a href="class_query_validator.html#ac462f8ac580d8e669400b7fd25e347ef">QueryValidator::validatePatternQueries</a></div><div class="ttdeci">BOOLEAN_ validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)</div><div class="ttdef"><b>Definition:</b> QueryValidator.cpp:227</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 11 2015 10:33:50 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 29 2015 21:02:26 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

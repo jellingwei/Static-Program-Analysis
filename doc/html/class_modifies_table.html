@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: ModifiesTable Class Reference</title>
+<title>CS3201 Minions SPA: ModifiesTable Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">CS3201 Minions SPA
    </div>
   </td>
  </tr>
@@ -93,48 +93,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2c2a81aabf1f1ad883a27297c6410523"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2c2a81aabf1f1ad883a27297c6410523"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (int numVariables)</td></tr>
-<tr class="separator:a2c2a81aabf1f1ad883a27297c6410523"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeccc2fe670352ca1e3043af0d6a52284"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeccc2fe670352ca1e3043af0d6a52284"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setModifies</b> (int stmtNum, int varIndex)</td></tr>
-<tr class="separator:aeccc2fe670352ca1e3043af0d6a52284"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1830e5f7525cdbb557470eb553cb2d73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1830e5f7525cdbb557470eb553cb2d73"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isModifies</b> (int stmtNum, int varIndex)</td></tr>
-<tr class="separator:a1830e5f7525cdbb557470eb553cb2d73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6dda09ee78a13475749a9b68572f9b0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae6dda09ee78a13475749a9b68572f9b0"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getModStmtNum</b> (int varIndex)</td></tr>
-<tr class="separator:ae6dda09ee78a13475749a9b68572f9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2702eaf38ac7b12edd86b034a786e861"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2702eaf38ac7b12edd86b034a786e861"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getModVarForStmt</b> (int stmtNum)</td></tr>
-<tr class="separator:a2702eaf38ac7b12edd86b034a786e861"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a010d35ae12082730fd30cb9cabb08741"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a010d35ae12082730fd30cb9cabb08741"></a>
-boost::dynamic_bitset&#160;</td><td class="memItemRight" valign="bottom"><b>getModVarInBitvectorForStmt</b> (int stmtNum)</td></tr>
-<tr class="separator:a010d35ae12082730fd30cb9cabb08741"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeecd96e0e86184391c3a1e3feca5267a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeecd96e0e86184391c3a1e3feca5267a"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllModPair</b> ()</td></tr>
-<tr class="separator:aeecd96e0e86184391c3a1e3feca5267a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23c10d8516a5ad615ac7860785267612"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23c10d8516a5ad615ac7860785267612"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getLhs</b> ()</td></tr>
-<tr class="separator:a23c10d8516a5ad615ac7860785267612"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac46ba9a52051dcb4abcfcc3ac76d43f"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aac46ba9a52051dcb4abcfcc3ac76d43f"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRhs</b> ()</td></tr>
-<tr class="separator:aac46ba9a52051dcb4abcfcc3ac76d43f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc21866c89d4bd212fab85ba5d449a73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc21866c89d4bd212fab85ba5d449a73"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setModifiesProc</b> (int procIndex, int varIndex)</td></tr>
-<tr class="separator:abc21866c89d4bd212fab85ba5d449a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad872972375b25961ae50a4b12677a418"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad872972375b25961ae50a4b12677a418"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isModifiesProc</b> (int procIndex, int varIndex)</td></tr>
-<tr class="separator:ad872972375b25961ae50a4b12677a418"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc2bec1e1214116e59122b7c3f9787a9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc2bec1e1214116e59122b7c3f9787a9"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getModProcIndex</b> (int varIndex)</td></tr>
-<tr class="separator:acc2bec1e1214116e59122b7c3f9787a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c137eb769ce165aa6c0913882f064b3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7c137eb769ce165aa6c0913882f064b3"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getModVarForProc</b> (int procIndex)</td></tr>
-<tr class="separator:a7c137eb769ce165aa6c0913882f064b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef4f494207be1450eb21c59370448e70"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aef4f494207be1450eb21c59370448e70"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllModProcPair</b> ()</td></tr>
-<tr class="separator:aef4f494207be1450eb21c59370448e70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78eb6a5643091cb68ee901eedd129bd4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a78eb6a5643091cb68ee901eedd129bd4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (INTEGER numVariables)</td></tr>
+<tr class="separator:a78eb6a5643091cb68ee901eedd129bd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9642c31ede0d0afbb00589fb170256e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9642c31ede0d0afbb00589fb170256e"></a>
+STATUS&#160;</td><td class="memItemRight" valign="bottom"><b>setModifies</b> (STATEMENT stmtNum, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:ab9642c31ede0d0afbb00589fb170256e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27fc18db3e2870cfed1779dff53d24e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad27fc18db3e2870cfed1779dff53d24e"></a>
+BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><b>isModifies</b> (STATEMENT stmtNum, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:ad27fc18db3e2870cfed1779dff53d24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb19687e8de7230a2fc0b3d88941ace1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adb19687e8de7230a2fc0b3d88941ace1"></a>
+STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getModStmtNum</b> (VAR_INDEX varIndex)</td></tr>
+<tr class="separator:adb19687e8de7230a2fc0b3d88941ace1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c003e76d297fedda6d99281c1395136"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5c003e76d297fedda6d99281c1395136"></a>
+VARINDEX_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getModVarForStmt</b> (STATEMENT stmtNum)</td></tr>
+<tr class="separator:a5c003e76d297fedda6d99281c1395136"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c9fe9eb76492beaabf06c25842ce7b6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c9fe9eb76492beaabf06c25842ce7b6"></a>
+boost::dynamic_bitset&#160;</td><td class="memItemRight" valign="bottom"><b>getModVarInBitvectorForStmt</b> (STATEMENT stmtNum)</td></tr>
+<tr class="separator:a0c9fe9eb76492beaabf06c25842ce7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0edade67e6eed6aeb34ee3018ffbcb10"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0edade67e6eed6aeb34ee3018ffbcb10"></a>
+pair&lt; STATEMENT_LIST, VARINDEX_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllModPair</b> ()</td></tr>
+<tr class="separator:a0edade67e6eed6aeb34ee3018ffbcb10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a705c4bc1770b201160f0d87f6c6d7e88"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a705c4bc1770b201160f0d87f6c6d7e88"></a>
+STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getLhs</b> ()</td></tr>
+<tr class="separator:a705c4bc1770b201160f0d87f6c6d7e88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49749fc70a742b2bb04a25e251077294"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a49749fc70a742b2bb04a25e251077294"></a>
+STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getRhs</b> ()</td></tr>
+<tr class="separator:a49749fc70a742b2bb04a25e251077294"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e8962be29386d4ecb5dd3e73f0db7d3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e8962be29386d4ecb5dd3e73f0db7d3"></a>
+STATUS&#160;</td><td class="memItemRight" valign="bottom"><b>setModifiesProc</b> (PROC_INDEX procIndex, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:a5e8962be29386d4ecb5dd3e73f0db7d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d9245a486821011ac8b61b1e37933d8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2d9245a486821011ac8b61b1e37933d8"></a>
+BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><b>isModifiesProc</b> (PROC_INDEX procIndex, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:a2d9245a486821011ac8b61b1e37933d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8f163b9cf6a0e87204f2f3ae95056dc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8f163b9cf6a0e87204f2f3ae95056dc"></a>
+PROCINDEX_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getModProcIndex</b> (VAR_INDEX varIndex)</td></tr>
+<tr class="separator:af8f163b9cf6a0e87204f2f3ae95056dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7f5d13fefada287989e25632272224c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae7f5d13fefada287989e25632272224c"></a>
+VARINDEX_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getModVarForProc</b> (PROC_INDEX procIndex)</td></tr>
+<tr class="separator:ae7f5d13fefada287989e25632272224c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa82971601841c575db7f3d6075d90ed7"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa82971601841c575db7f3d6075d90ed7"></a>
+pair&lt; PROCINDEX_LIST, VARINDEX_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllModProcPair</b> ()</td></tr>
+<tr class="separator:aa82971601841c575db7f3d6075d90ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/<a class="el" href="_modifies_table_8h_source.html">ModifiesTable.h</a></li>
@@ -143,7 +143,7 @@ pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memI
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 11 2015 10:33:51 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 29 2015 21:02:27 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

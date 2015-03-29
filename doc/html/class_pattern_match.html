@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: PatternMatch Class Reference</title>
+<title>CS3201 Minions SPA: PatternMatch Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">CS3201 Minions SPA
    </div>
   </td>
  </tr>
@@ -93,18 +93,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a275e63be421438ca71704f59df11672b"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#a275e63be421438ca71704f59df11672b">PatternMatchAssign</a> (<a class="el" href="class_t_node.html">TNode</a> *queryASTroot, bool isExact)</td></tr>
-<tr class="separator:a275e63be421438ca71704f59df11672b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d91444563f3efafe44eb515f0260a9d"><td class="memItemLeft" align="right" valign="top">vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#a1d91444563f3efafe44eb515f0260a9d">patternMatchParentStmt</a> (string LHS, TNODE_TYPE type)</td></tr>
-<tr class="separator:a1d91444563f3efafe44eb515f0260a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0b478a16f767bf9c47e2d423a53338e"><td class="memItemLeft" align="right" valign="top">STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#ac0b478a16f767bf9c47e2d423a53338e">patternMatchAssign</a> (<a class="el" href="class_t_node.html">TNode</a> *queryASTroot, bool isExact, string usedOperand)</td></tr>
+<tr class="separator:ac0b478a16f767bf9c47e2d423a53338e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af962872e156e3a6690c013574c6c2f00"><td class="memItemLeft" align="right" valign="top">STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pattern_match.html#af962872e156e3a6690c013574c6c2f00">patternMatchParentStmt</a> (EXPRESSION LHS, TNODE_TYPE type)</td></tr>
+<tr class="separator:af962872e156e3a6690c013574c6c2f00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a275e63be421438ca71704f59df11672b"></a>
+<a class="anchor" id="ac0b478a16f767bf9c47e2d423a53338e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; int &gt; PatternMatch::PatternMatchAssign </td>
+          <td class="memname">STATEMENT_LIST PatternMatch::patternMatchAssign </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_t_node.html">TNode</a> *&#160;</td>
           <td class="paramname"><em>_rootNodeQ</em>, </td>
@@ -113,7 +113,13 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>isExact</em>&#160;</td>
+          <td class="paramname"><em>isExact</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>usedOperand</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -133,14 +139,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a1d91444563f3efafe44eb515f0260a9d"></a>
+<a class="anchor" id="af962872e156e3a6690c013574c6c2f00"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; int &gt; PatternMatch::patternMatchParentStmt </td>
+          <td class="memname">STATEMENT_LIST PatternMatch::patternMatchParentStmt </td>
           <td>(</td>
-          <td class="paramtype">string&#160;</td>
+          <td class="paramtype">EXPRESSION&#160;</td>
           <td class="paramname"><em>LHS</em>, </td>
         </tr>
         <tr>
@@ -174,7 +180,7 @@ Public Member Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 11 2015 10:33:52 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 29 2015 21:02:28 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

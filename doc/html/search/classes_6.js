@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nexttable',['NextTable',['../class_next_table.html',1,'']]]
+  ['modifiestable',['ModifiesTable',['../class_modifies_table.html',1,'']]]
 ];

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: UsesTable Class Reference</title>
+<title>CS3201 Minions SPA: UsesTable Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">CS3201 Minions SPA
    </div>
   </td>
  </tr>
@@ -93,46 +93,66 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a35938a0c9842529a80ba10dc0e42c6a5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a35938a0c9842529a80ba10dc0e42c6a5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (int numVariables)</td></tr>
-<tr class="separator:a35938a0c9842529a80ba10dc0e42c6a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83f8c0f13cb360bac8b9f0c0a4be118c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a83f8c0f13cb360bac8b9f0c0a4be118c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setUses</b> (int stmtNum, int varIndex)</td></tr>
-<tr class="separator:a83f8c0f13cb360bac8b9f0c0a4be118c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4054adafe737adddd3bad0716d6d8bbf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4054adafe737adddd3bad0716d6d8bbf"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isUses</b> (int stmtNum, int varIndex)</td></tr>
-<tr class="separator:a4054adafe737adddd3bad0716d6d8bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ce133440d9e22735fa50a2c53f9a257"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ce133440d9e22735fa50a2c53f9a257"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesStmtNum</b> (int varIndex)</td></tr>
-<tr class="separator:a4ce133440d9e22735fa50a2c53f9a257"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26b6353a456525e15f0cdc3a40d3b30e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a26b6353a456525e15f0cdc3a40d3b30e"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesVarForStmt</b> (int stmtNum)</td></tr>
-<tr class="separator:a26b6353a456525e15f0cdc3a40d3b30e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a509e26d2e3f69dbae1ab89cf64bf15a4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a509e26d2e3f69dbae1ab89cf64bf15a4"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllUsesPair</b> ()</td></tr>
-<tr class="separator:a509e26d2e3f69dbae1ab89cf64bf15a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fe627932f47d800dd860d2a488026eb"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1fe627932f47d800dd860d2a488026eb"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getLhs</b> ()</td></tr>
-<tr class="separator:a1fe627932f47d800dd860d2a488026eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7cd1a9931bc7880b0a7af2dced7d8d68"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7cd1a9931bc7880b0a7af2dced7d8d68"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getRhs</b> ()</td></tr>
-<tr class="separator:a7cd1a9931bc7880b0a7af2dced7d8d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a76d38127e243c93dd9c9ec8b333c0a29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a76d38127e243c93dd9c9ec8b333c0a29"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>setUsesProc</b> (int procIndex, int varIndex)</td></tr>
-<tr class="separator:a76d38127e243c93dd9c9ec8b333c0a29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afe460492ca5e64bd274f9d1772879175"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afe460492ca5e64bd274f9d1772879175"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isUsesProc</b> (int procIndex, int varIndex)</td></tr>
-<tr class="separator:afe460492ca5e64bd274f9d1772879175"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9605b9d8ed50631f6542fe892166ddd3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9605b9d8ed50631f6542fe892166ddd3"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesProcIndex</b> (int varIndex)</td></tr>
-<tr class="separator:a9605b9d8ed50631f6542fe892166ddd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1d2d74c61bd7007fa597f752ae966a8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1d2d74c61bd7007fa597f752ae966a8"></a>
-vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesVarForProc</b> (int procIndex)</td></tr>
-<tr class="separator:ac1d2d74c61bd7007fa597f752ae966a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac86d413198b781e348ee74e93d6dc29c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac86d413198b781e348ee74e93d6dc29c"></a>
-pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllUsesProcPair</b> ()</td></tr>
-<tr class="separator:ac86d413198b781e348ee74e93d6dc29c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9fa5ff98bea22224369c64407013c28"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9fa5ff98bea22224369c64407013c28"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>init</b> (INTEGER numVariables)</td></tr>
+<tr class="separator:ab9fa5ff98bea22224369c64407013c28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabbda7835f9d93c527762ff8cb02b737"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aabbda7835f9d93c527762ff8cb02b737"></a>
+STATUS&#160;</td><td class="memItemRight" valign="bottom"><b>setUses</b> (STATEMENT stmtNum, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:aabbda7835f9d93c527762ff8cb02b737"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c58df140568c0cb9cd3989aa571e4b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c58df140568c0cb9cd3989aa571e4b1"></a>
+BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><b>isUses</b> (STATEMENT stmtNum, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:a0c58df140568c0cb9cd3989aa571e4b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3736182c2d9aba808e7513bef39a4ced"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3736182c2d9aba808e7513bef39a4ced"></a>
+STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesStmtNum</b> (VAR_INDEX varIndex)</td></tr>
+<tr class="separator:a3736182c2d9aba808e7513bef39a4ced"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a5162db5e86139b3511cc17ec1be99c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2a5162db5e86139b3511cc17ec1be99c"></a>
+VARINDEX_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesVarForStmt</b> (STATEMENT stmtNum)</td></tr>
+<tr class="separator:a2a5162db5e86139b3511cc17ec1be99c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23860ba1c9402cee5b2616cf081bf847"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23860ba1c9402cee5b2616cf081bf847"></a>
+pair&lt; STATEMENT_LIST, VARINDEX_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllUsesPair</b> ()</td></tr>
+<tr class="separator:a23860ba1c9402cee5b2616cf081bf847"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade02b2c5eab241cc617370f14ce273f3"><td class="memItemLeft" align="right" valign="top">boost::dynamic_bitset&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_uses_table.html#ade02b2c5eab241cc617370f14ce273f3">getUseVarInBitvectorForStmt</a> (STATEMENT stmtNum)</td></tr>
+<tr class="separator:ade02b2c5eab241cc617370f14ce273f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9c47e26814b932ea32acce8a22a7f08"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af9c47e26814b932ea32acce8a22a7f08"></a>
+STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getLhs</b> ()</td></tr>
+<tr class="separator:af9c47e26814b932ea32acce8a22a7f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa00477b1e0d462dc8e12f021622b346"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaa00477b1e0d462dc8e12f021622b346"></a>
+STATEMENT_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getRhs</b> ()</td></tr>
+<tr class="separator:aaa00477b1e0d462dc8e12f021622b346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92477bfe3cbf7e58f805b82a0450d4a1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92477bfe3cbf7e58f805b82a0450d4a1"></a>
+STATUS&#160;</td><td class="memItemRight" valign="bottom"><b>setUsesProc</b> (PROC_INDEX procIndex, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:a92477bfe3cbf7e58f805b82a0450d4a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6f5b8db638e8c5aa68f73c8442aef95"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6f5b8db638e8c5aa68f73c8442aef95"></a>
+BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><b>isUsesProc</b> (PROC_INDEX procIndex, VAR_INDEX varIndex)</td></tr>
+<tr class="separator:af6f5b8db638e8c5aa68f73c8442aef95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2386014585029b65f371cbc5e219a90a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2386014585029b65f371cbc5e219a90a"></a>
+PROCINDEX_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesProcIndex</b> (VAR_INDEX varIndex)</td></tr>
+<tr class="separator:a2386014585029b65f371cbc5e219a90a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a248324b2d895cf17fe3b941c45e494d2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a248324b2d895cf17fe3b941c45e494d2"></a>
+VARINDEX_LIST&#160;</td><td class="memItemRight" valign="bottom"><b>getUsesVarForProc</b> (PROC_INDEX procIndex)</td></tr>
+<tr class="separator:a248324b2d895cf17fe3b941c45e494d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73a1709f26d2f3a7f7ba5a6ba68bdce8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a73a1709f26d2f3a7f7ba5a6ba68bdce8"></a>
+pair&lt; PROCINDEX_LIST, VARINDEX_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getAllUsesProcPair</b> ()</td></tr>
+<tr class="separator:a73a1709f26d2f3a7f7ba5a6ba68bdce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="ade02b2c5eab241cc617370f14ce273f3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::dynamic_bitset UsesTable::getUseVarInBitvectorForStmt </td>
+          <td>(</td>
+          <td class="paramtype">STATEMENT&#160;</td>
+          <td class="paramname"><em>stmtNum</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Unlike getModVarInBitvectorForStmt, this function returns an empty bitvector if the stmtNum is not a key. This is because it is possible for assign/call stmt to not use any variable. </p><dl class="section see"><dt>See also</dt><dd>ModifiesTable::getModVarInBitvectorForStmt </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>source/<a class="el" href="_uses_table_8h_source.html">UsesTable.h</a></li>
 <li>source/UsesTable.cpp</li>
@@ -140,7 +160,7 @@ pair&lt; vector&lt; int &gt;, vector&lt; int &gt; &gt;&#160;</td><td class="memI
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Mar 11 2015 10:33:52 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Mar 29 2015 21:02:28 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

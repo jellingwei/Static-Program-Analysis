@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['qnode',['QNode',['../class_q_node.html',1,'']]],
-  ['querytree',['QueryTree',['../class_query_tree.html',1,'']]],
-  ['queryvalidator',['QueryValidator',['../class_query_validator.html',1,'']]]
+  ['pair_5fhasher',['Pair_Hasher',['../struct_pair___hasher.html',1,'']]],
+  ['parenttable',['ParentTable',['../class_parent_table.html',1,'']]],
+  ['patternmatch',['PatternMatch',['../class_pattern_match.html',1,'']]],
+  ['pkb',['PKB',['../class_p_k_b.html',1,'']]],
+  ['pqlcontroller',['PQLController',['../class_p_q_l_controller.html',1,'']]],
+  ['proctable',['ProcTable',['../class_proc_table.html',1,'']]]
 ];
