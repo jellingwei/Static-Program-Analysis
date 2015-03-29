@@ -4,142 +4,219 @@
 
 StatisticsTable::StatisticsTable()
 {
-	initWeights();
-	tabulateWeights();
-}
-StatisticsTable::~StatisticsTable() {
+	initialize();
 }
 
-void StatisticsTable::initWeights()
-{	
-	affectsWeight = affectsSWeight = followsSWeight = 1;
-	parentSWeight = callsSWeight = nextSWeight = 1;
-	patternWeight = 1;
-}
-void StatisticsTable::tabulateWeights()
+StatisticsTable::~StatisticsTable() 
 {
-	tabulateAffects();
-	tabulateFollows();
-	tabulateParent();
-	tabulateCalls();
-	tabulateNext();
-	tabulatePattern();
-
-	//tabulateModifies();
-	//tabulateUses();
 }
-void StatisticsTable::tabulateAffects()
-{
 
-}
-void StatisticsTable::tabulateFollows()
+void StatisticsTable::initialize()
 {
 	PKB pkb = PKB::getInstance();
+	stmtSize = pkb.getStmtTableSize();
+	assignSize = pkb.getStmtNumForType(ASSIGN).size();
+	whileSize = pkb.getStmtNumForType(WHILE).size();
+	ifSize = pkb.getStmtNumForType(IF).size();
+	callSize = pkb.getStmtNumForType(CALL).size();
+	varSize = pkb.getVarTableSize();
+	constantSize = pkb.getConstantTableSize();
+	procedureSize = pkb.getProcTableSize();
+	progLineSize = stmtSize;
 
-	// Follows
-	int totalNumberOfStmts = pkb.getStmtTableSize();
-	int numberOfIf = pkb.getStmtNumForType("if").size();
-	int numberOfWhile = pkb.getStmtNumForType("while").size();
-	int numberOfProcedure = pkb.getProcTableSize();
-
-	/*TODO: The worst case would depend on the length of the longest stmtList. */
-
+	averageLinesPerProc = stmtSize / procedureSize;
+	averageContainersPerProc = (whileSize + ifSize) / procedureSize;
 }
 
-void StatisticsTable::tabulateParent()
+double StatisticsTable::getCountForType(SYNONYM_TYPE type)
 {
-	PKB pkb = PKB::getInstance();
-	vector<int> parent = pkb.getParentLhs();
-	vector<int> child = pkb.getParentRhs();
-
-	//Parent*
-	//Parent*(s,s)
-	int parentSS_S = parent.size() + child.size();
-
-	//Parent*(s,"#")
-	int childWithMostAncestors = 0;
-	for(vector<int>::iterator it = child.begin(); it != child.end(); ++it) {
-		if(pkb.getParentS(*it).size() > childWithMostAncestors) 
-			childWithMostAncestors = *it;
+	switch (type) {
+	case STMT:
+		return stmtSize;
+	case ASSIGN:
+		return assignSize;
+	case WHILE:
+		return whileSize;
+	case IF:
+		return ifSize;
+	case CALL:
+		return callSize;
+	case VARIABLE:
+		return varSize;
+	case CONSTANT:
+		return constantSize;
+	case PROCEDURE:
+		return procedureSize;
+	case PROG_LINE:
+		return stmtSize;
+	default:
+		return 50;  //An arbitrary number
 	}
-	int parentSS_ANY = childWithMostAncestors;
+}
 
-	//Parent*("#",s)
-	int parentWithMostDescendants = 0;
-	for(vector<int>::iterator it = parent.begin(); it != parent.end(); ++it) {
-		if(pkb.getChildS(*it).size() > parentWithMostDescendants) 
-			parentWithMostDescendants = *it;
+double StatisticsTable::getAffectsCost()
+{
+	return assignSize / 2;
+}
+
+double StatisticsTable::getAffectsSCost()
+{
+	return assignSize;
+}
+
+double StatisticsTable::getFollowsSCost()
+{
+	//Average number of assign and call statements per procedure
+	return averageLinesPerProc - averageContainersPerProc;
+}
+
+double StatisticsTable::getParentSCost()
+{
+	return averageContainersPerProc;
+}
+
+double StatisticsTable::getCallsSCost()
+{
+	return procedureSize - 1;
+}
+
+double StatisticsTable::getNextSCost()
+{
+	return averageLinesPerProc;
+}
+
+double StatisticsTable::getPatternCost()
+{
+	return assignSize / 3;
+}
+
+double StatisticsTable::getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
+{
+	switch (rel_type) {
+	case ModifiesP:
+	case ModifiesS:
+		getModifiesReductionFactor(typeLHS, typeRHS, direction);
+	case UsesP:
+	case UsesS:
+		getUsesReductionFactor(typeLHS, typeRHS, direction);
+	case Parent:
+		getParentReductionFactor(typeLHS, typeRHS, direction);
+	case ParentT:
+		getParentSReductionFactor(typeLHS, typeRHS, direction);
+	case Follows:
+		getFollowsReductionFactor(typeLHS, typeRHS, direction);
+	case FollowsT:
+		getFollowsSReductionFactor(typeLHS, typeRHS, direction);
+	case Calls:
+		getCallsReductionFactor(typeLHS, typeRHS, direction);
+	case CallsT:
+		getCallsSReductionFactor(typeLHS, typeRHS, direction);
+	case Next:
+		getNextReductionFactor(typeLHS, typeRHS, direction);
+	case NextT:
+		getNextSReductionFactor(typeLHS, typeRHS, direction);
+	case Affects:
+		getAffectsReductionFactor(typeLHS, typeRHS, direction);
+	case AffectsT:
+		getAffectsSReductionFactor(typeLHS, typeRHS, direction);
+	case Pattern:
+		getPatternReductionFactor(typeLHS, typeRHS, direction);
+	case With:
+		getWithReductionFactor(typeLHS, typeRHS, direction);
+	default:
+		return -1;  //It should never reach here
 	}
-	int parentSANY_S = parentWithMostDescendants;
-
-	/* Take the average of the 3 possible worst case scenerio */
-	int parentSCost = (1/3) * (parentSS_S + parentSS_ANY + parentSANY_S);
 }
 
-void StatisticsTable::tabulateCalls()
+double StatisticsTable::getModifiesReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	PKB pkb = PKB::getInstance();
-	int numberOfProcedure = pkb.getProcTableSize();
-
-	//TODO - compute callsSWeight
-	/* To compute Calls*("#",p2) all possible p2 is computed from a given procedure
-	   It's done using double-ended queue and DFS to get all p2, and each procedure 
-	   would only be visited once. Therefore getting all p1, or all p2 is O(V), 
-	   where V is the total number of procedures.
-
-	   This is also similar for get all pairs <p1,p2> Calls*(p1,p2). */
-
-
-	/* Take the average of the 3 possible worst case scenerio */
-	int callSCost = (1/3) * (numberOfProcedure + numberOfProcedure + numberOfProcedure);
+	switch (direction) {
+	case LeftToRight:
+		return 1 / varSize;
+	default:
+		return getCountForType(typeLHS) / stmtSize;
+	}
 }
 
-void StatisticsTable::tabulateNext()
+double StatisticsTable::getUsesReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	PKB pkb = PKB::getInstance();
-	int numberOfProcedure = pkb.getProcTableSize();
-
-	CFG* cfg = pkb.cfgTable.at(0);
-	int cfgSize = cfg->getInsideSize(cfg->getProcRoot());
-
-	//TODO - compute nextSWeight: 
-	/* The worst case is when Next*(1, k) where k the the last prog_line in the procedure. */
-	int nextSCost = cfgSize;
+	switch (direction) {
+	case LeftToRight:
+		return 1 / varSize;
+	default:
+		return getCountForType(typeLHS) / stmtSize;
+	}
 }
 
-void StatisticsTable::tabulatePattern()
+double StatisticsTable::getParentReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	//TODO - compute patternWeight: find the largest possible number of RHS operators/variables in an assignment stmt. 
-	/* Patterns match assign - builts a vector<string> and calls ExpressionParser to build the sub-expression tree. */
-
+	switch (direction) {
+	case LeftToRight:
+		return 1 / getCountForType(typeRHS);
+	default:
+		return 1 / getCountForType(typeLHS);
+	}
 }
 
-/** Getters **/
-int StatisticsTable::getAffectsCost()
+double StatisticsTable::getParentSReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return affectsWeight;
+	return 1 / procedureSize;
 }
-int StatisticsTable::getAffectsSCost()
+
+double StatisticsTable::getFollowsReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return affectsSWeight;
+	switch (direction) {
+	case LeftToRight:
+		return 1 / getCountForType(typeRHS);
+	default:
+		return 1 / getCountForType(typeLHS);
+	}
 }
-int StatisticsTable::getFollowsSCost()
+
+double StatisticsTable::getFollowsSReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return followsSWeight;
+	return 1 / procedureSize;
 }
-int StatisticsTable::getParentSCost()
+
+double StatisticsTable::getCallsReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return parentSWeight;
+	return 1 / procedureSize;
 }
-int StatisticsTable::getCallsSCost()
+
+double StatisticsTable::getCallsSReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return callsSWeight;
+	return 1 / 2;  //Arbitrary
 }
-int StatisticsTable::getNextSCost()
+
+double StatisticsTable::getNextReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return nextSWeight;
+	return 1 / stmtSize;
 }
-int StatisticsTable::getPatternCost()
+
+double StatisticsTable::getNextSReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return patternWeight;
+	return 1 / procedureSize;
+}
+
+double StatisticsTable::getAffectsReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
+{
+	return 1 / assignSize;
+}
+
+double StatisticsTable::getAffectsSReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
+{
+	return assignSize / averageLinesPerProc;
+}
+
+double StatisticsTable::getPatternReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
+{
+	return 1 / 10;  //Arbitrary
+}
+
+double StatisticsTable::getWithReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
+{
+	double sizeLHS = getCountForType(typeLHS);
+	double sizeRHS = getCountForType(typeRHS);
+	double minSize = std::min(sizeLHS, sizeRHS);
+	return 1 / minSize;
 }
