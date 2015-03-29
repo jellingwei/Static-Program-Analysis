@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include "TNode.h"
+#include "common.h"
 
 using namespace std;
 using namespace stdext;
@@ -17,18 +18,18 @@ private:
 	vector<int> rhs;
 
 public:
-	bool setFollows(TNode* stmt1, TNode* stmtNum2);
+	STATUS setFollows(TNode* stmt1, TNode* stmtNum2);
 	
 	// Given stmtNum2, return stmtNum1 such that Follows(stmt1, stmt2) is satisfied
-	vector<int> getStmtFollowedTo(int stmtNum2, bool transitiveClosure);
+	STATEMENT_LIST getStmtFollowedTo(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure);
 
 	// Given stmtNum1, return stmtNum2 such that Follows(stmt1, stmt2) is satisfied
-	vector<int> getStmtFollowedFrom(int stmtNum1, bool transitiveClosure);
+	STATEMENT_LIST getStmtFollowedFrom(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure);
 
-	bool isFollows(int stmtNum1, int stmtNum2, bool transitiveClosure);
+	BOOLEAN_ isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure);
 
-	pair<vector<int>, vector<int>> getAllFollowsPairs(bool transitiveClosure);
-	vector<int> getLhs();
-	vector<int> getRhs();
+	pair<vector<int>, vector<int>> getAllFollowsPairs(TRANS_CLOSURE transitiveClosure);
+	STATEMENT_LIST getLhs();
+	STATEMENT_LIST getRhs();
 
 };

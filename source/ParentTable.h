@@ -5,20 +5,21 @@
 #include <string>
 #include <vector>
 #include "TNode.h"
+#include "common.h"
 
 using namespace std;
 
 class ParentTable {
 public:
-	bool setParent(TNode* stmtNum1, TNode* stmtNum2);
+	STATUS setParent(TNode* stmtNum1, TNode* stmtNum2);
 	
-	vector<int> getParent(int stmtNum2, bool transitiveClosure);
-	vector<int> getChild(int stmtNum1, bool transitiveClosure);
+	STATEMENT_LIST getParent(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure);
+	STATEMENT_LIST getChild(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure);
 
-	bool isParent(int stmtNum1, int stmtNum2, bool transitiveClosure);
+	BOOLEAN_ isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure);
 
-	pair<vector<int>, vector<int>> getAllParentPairs(bool transitiveClosure);
-	vector<int> getAllChildren();
-	vector<int> getAllParents();
+	pair<vector<int>, vector<int>> getAllParentPairs(TRANS_CLOSURE transitiveClosure);
+	STATEMENT_LIST getAllChildren();
+	STATEMENT_LIST getAllParents();
 
 };

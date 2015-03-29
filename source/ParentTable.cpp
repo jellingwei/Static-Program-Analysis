@@ -16,7 +16,7 @@ using namespace std;
 using namespace stdext;
 
 
-bool ParentTable::setParent(TNode* stmt1, TNode* stmt2) 
+STATUS ParentTable::setParent(TNode* stmt1, TNode* stmt2) 
 {
 	if (stmt1 == NULL || stmt2 == NULL) 
 	{
@@ -30,7 +30,7 @@ bool ParentTable::setParent(TNode* stmt1, TNode* stmt2)
 }
 
 
-vector<int> ParentTable::getParent(int stmtNum2, bool transitiveClosure) 
+STATEMENT_LIST ParentTable::getParent(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
 {
 	vector<int> result;
 
@@ -138,7 +138,7 @@ vector<int> getChildDfs(TNode* node1, TNode* node2)
 }
 
 
-vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure) 
+STATEMENT_LIST ParentTable::getChild(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure) 
 {
 	vector<int> result;
 
@@ -214,7 +214,7 @@ vector<int> ParentTable::getChild(int stmtNum1, bool transitiveClosure)
 }
 
 
-bool ParentTable::isParent(int stmtNum1, int stmtNum2, bool transitiveClosure) 
+BOOLEAN_ ParentTable::isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
 {
 	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) 
 	{
@@ -306,7 +306,7 @@ void generateTransitiveParentPairs(vector<int> parentList, TNode* curNode, vecto
 }
 
 
-pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClosure) 
+pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(TRANS_CLOSURE transitiveClosure) 
 {
 	pair<vector<int>, vector<int> > result;
 
@@ -373,7 +373,7 @@ pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(bool transitiveClo
 	return result;
 }
 
-vector<int> ParentTable::getAllParents() {
+STATEMENT_LIST ParentTable::getAllParents() {
 	// obtain all while and if stmts
 	PKB pkb = PKB::getInstance();
 	vector<int> stmts = pkb.getStmtNumForType("if");
@@ -385,7 +385,7 @@ vector<int> ParentTable::getAllParents() {
 	return stmts;
 }
 
-vector<int> ParentTable::getAllChildren() {  // can be optimised further if needed, 
+STATEMENT_LIST ParentTable::getAllChildren() {  // can be optimised further if needed, 
 	// obtain all while and if stmts... 
 	PKB pkb = PKB::getInstance();
 	vector<int> ifStmts = pkb.getStmtNumForType("if");

@@ -6,6 +6,7 @@
 #include <vector>
 #include <unordered_map>
 #include "TNode.h"
+#include "common.h"
 
 using namespace std;
 using namespace stdext;
@@ -13,22 +14,22 @@ using namespace stdext;
 
 class CallsTable {
 public:
-	bool setCalls(int procIndex1, int procIndex2);
+	STATUS setCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2);
 
-	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure);
+	BOOLEAN_ isCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure);
 	
 	// Given procIndex2, return procIndex1 such that Calls(procIndex1, procIndex2) is satisfied
-	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure, bool terminateOnFinding = false, int lineToFind = -1);
+	PROCINDEX_LIST getProcsCalling(PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure, bool terminateOnFinding = false, int lineToFind = -1);
 
 	// Given procIndex1, return procIndex2 such that Calls(procIndex1, procIndex2) is satisfied
-	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure, bool terminateOnFinding = false, int lineToFind= -1);
+	PROCINDEX_LIST getProcsCalledBy(PROC_INDEX procIndex1, TRANS_CLOSURE transitiveClosure, bool terminateOnFinding = false, int lineToFind= -1);
 
-	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
+	pair<vector<int>, vector<int>> getAllCallsPairs(TRANS_CLOSURE transitiveClosure);
 
-	string getProcNameCalledByStatement(int);
+	PROCNAME getProcNameCalledByStatement(STATEMENT stmtNum);
 
-	vector<int> getLhs();
-	vector<int> getRhs();
+	PROCINDEX_LIST getLhs();
+	PROCINDEX_LIST getRhs();
 
 private: 
 

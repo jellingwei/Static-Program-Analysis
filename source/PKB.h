@@ -78,15 +78,15 @@ public:
 
 	// CallsTable methods
 	STATUS setCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2);
-	BOOLEAN_ isCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2, bool transitiveClosure = false);
+	BOOLEAN_ isCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure = false);
 	BOOLEAN_ isCallsS(PROC_INDEX procIndex1, PROC_INDEX procIndex2);
-	PROCINDEX_LIST getProcsCalling(PROC_INDEX procIndex2, bool transitiveClosure = false);
+	PROCINDEX_LIST getProcsCalling(PROC_INDEX procIndex2, TRANS_CLOSURE transitiveClosure = false);
 	PROCINDEX_LIST getProcsCallingS(PROC_INDEX procIndex2);
-	PROCINDEX_LIST getProcsCalledBy(PROC_INDEX procIndex1, bool transitiveClosure = false);
+	PROCINDEX_LIST getProcsCalledBy(PROC_INDEX procIndex1, TRANS_CLOSURE transitiveClosure = false);
 	PROCINDEX_LIST getProcsCalledByS(PROC_INDEX procIndex1);
-	pair<PROGLINE_LIST, PROGLINE_LIST> getAllCallsPairs(bool transitiveClosure = false);
+	pair<PROGLINE_LIST, PROGLINE_LIST> getAllCallsPairs(TRANS_CLOSURE transitiveClosure = false);
 	pair<PROGLINE_LIST, PROGLINE_LIST> getAllCallsPairsS();
-	string getProcNameCalledByStatement(STATEMENT);
+	PROCNAME getProcNameCalledByStatement(STATEMENT stmtNum);
 	PROCINDEX_LIST getCallsLhs();
 	PROCINDEX_LIST getCallsRhs();
 
@@ -107,26 +107,26 @@ public:
 
 	// Parent Table methods
 	STATUS setParent(TNode* stmtNum1, TNode* stmtNum2);
-	STATEMENT_LIST getParent(STATEMENT stmtNum2, bool transitiveClosure = false);
+	STATEMENT_LIST getParent(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure = false);
 	STATEMENT_LIST getParentS(STATEMENT stmtNum2);
-	STATEMENT_LIST getChild(STATEMENT stmtNum1, bool transitiveClosure = false);
+	STATEMENT_LIST getChild(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure = false);
 	STATEMENT_LIST getChildS(STATEMENT stmtNum1);
-	BOOLEAN_ isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, bool transitiveClosure = false);
+	BOOLEAN_ isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure = false);
 	BOOLEAN_ isParentS(STATEMENT stmtNum1, STATEMENT stmtNum2);
-	pair<STATEMENT_LIST, STATEMENT_LIST> getAllParentPairs(bool transitiveClosure = false);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllParentPairs(TRANS_CLOSURE transitiveClosure = false);
 	pair<STATEMENT_LIST, STATEMENT_LIST> getAllParentPairsS();
 	STATEMENT_LIST getParentLhs();  // get LHS of Parent(_, _)
 	STATEMENT_LIST getParentRhs(); // get RHS of Parent(_, _)
 
 	// Follow Table methods
 	STATUS setFollows(TNode* stmt1, TNode* stmt2);
-	STATEMENT_LIST getStmtFollowedTo(STATEMENT stmtNum2, bool transitiveClosure = false);
+	STATEMENT_LIST getStmtFollowedTo(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure = false);
 	STATEMENT_LIST getStmtFollowedToS(STATEMENT stmtNum2);
-	STATEMENT_LIST getStmtFollowedFrom(STATEMENT stmtNum1, bool transitiveClosure = false);
+	STATEMENT_LIST getStmtFollowedFrom(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure = false);
 	STATEMENT_LIST getStmtFollowedFromS(STATEMENT stmtNum1);
-	BOOLEAN_ isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, bool transitiveClosure = false);
+	BOOLEAN_ isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure = false);
 	BOOLEAN_ isFollowsS(STATEMENT stmtNum1, STATEMENT stmtNum2);
-	pair<STATEMENT_LIST, STATEMENT_LIST> getAllFollowsPairs(bool transitiveClosure = false);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllFollowsPairs(TRANS_CLOSURE transitiveClosure = false);
 	pair<STATEMENT_LIST, STATEMENT_LIST> getAllFollowsPairsS();
 	STATEMENT_LIST getFollowsLhs();
 	STATEMENT_LIST getFollowsRhs();
@@ -134,10 +134,10 @@ public:
 	// Modifies Table methods
 	void initModifiesTable(INTEGER numVariables);
 	STATUS setModifies(STATEMENT stmtNum, VAR_INDEX varIndex);
-	STATUS isModifies(STATEMENT stmtNum, VAR_INDEX varIndex);
+	BOOLEAN_ isModifies(STATEMENT stmtNum, VAR_INDEX varIndex);
 	STATEMENT_LIST getModStmtNum(VAR_INDEX varIndex);
-	STATEMENT_LIST getModVarForStmt(STATEMENT stmtNum);
-	pair<STATEMENT_LIST, STATEMENT_LIST> getAllModPair();
+	VARINDEX_LIST getModVarForStmt(STATEMENT stmtNum);
+	pair<STATEMENT_LIST, VARINDEX_LIST> getAllModPair();
 	STATEMENT_LIST getModifiesLhs();
 	STATEMENT_LIST getModifiesRhs();
 
@@ -147,7 +147,7 @@ public:
 	BOOLEAN_ isModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
 	PROCINDEX_LIST getModProcIndex(VAR_INDEX varIndex);
 	VARINDEX_LIST getModVarForProc(PROC_INDEX procIndex);
-	pair<vector<int>, vector<int>> getAllModProcPair();
+	pair<PROCINDEX_LIST, VARINDEX_LIST> getAllModProcPair();
 
 
 	// UsesTable methods
@@ -156,7 +156,7 @@ public:
 	BOOLEAN_ isUses(STATEMENT stmtNum, VAR_INDEX varIndex);
 	STATEMENT_LIST getUsesStmtNum(VAR_INDEX varIndex);
 	VARINDEX_LIST getUsesVarForStmt(STATEMENT stmtNum);
-	pair<STATEMENT_LIST, vector<int>> getAllUsesPair();
+	pair<STATEMENT_LIST, VARINDEX_LIST> getAllUsesPair();
 	STATEMENT_LIST getUsesLhs();
 	STATEMENT_LIST getUsesRhs();
 
@@ -166,17 +166,17 @@ public:
 	BOOLEAN_ isUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
 	PROCINDEX_LIST getUsesProcIndex(VAR_INDEX varIndex);
 	VARINDEX_LIST getUsesVarForProc(PROC_INDEX procIndex);
-	pair<vector<int>, vector<int>> getAllUsesProcPair();
+	pair<PROCINDEX_LIST, VARINDEX_LIST> getAllUsesProcPair();
 
 	// cfg
-	vector<int> getNextAfter(PROG_LINE_ progLine1, bool transitiveClosure = false);
-	vector<int> getNextBefore(PROG_LINE_ progLine2, bool transitiveClosure = false);
-	BOOLEAN_ isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, bool transitiveClosure = false);
-	vector<int> getNextAfterS(PROG_LINE_ progLine1);
-	vector<int> getNextBeforeS(PROG_LINE_ progLine2);
+	PROGLINE_LIST getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	BOOLEAN_ isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getNextAfterS(PROG_LINE_ progLine1);
+	PROGLINE_LIST getNextBeforeS(PROG_LINE_ progLine2);
 	BOOLEAN_ isNextS(PROG_LINE_ progLine1, PROG_LINE_ progLine2);
-	vector<int> getNextLhs();
-	vector<int> getNextRhs();
+	PROGLINE_LIST getNextLhs();
+	PROGLINE_LIST getNextRhs();
 	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
 
 	// functions for precomputations for next
@@ -194,14 +194,14 @@ public:
 	vector<CFG*> cfgTable;
 
 	// affects
-	BOOLEAN_ isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, bool transitiveClosure = false);
-	vector<int> getAffectedBy(PROG_LINE_ progLine1, bool transitiveClosure = false);
-	vector<int> getAffecting(PROG_LINE_ progLine2, bool transitiveClosure = false);
-	vector<int> getAffectsLhs();
-	vector<int> getAffectsRhs();
+	BOOLEAN_ isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getAffectedBy(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getAffecting(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getAffectsLhs();
+	PROGLINE_LIST getAffectsRhs();
 
-	static bool canSkipNodesBackwards(CNode* node);
-	static bool canSkipNodesForwards(CNode* node);
+	static BOOLEAN_ canSkipNodesBackwards(CNode* node);
+	static BOOLEAN_ canSkipNodesForwards(CNode* node);
 
 
 	//@todo 

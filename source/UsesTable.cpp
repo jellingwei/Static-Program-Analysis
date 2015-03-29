@@ -15,11 +15,11 @@ using namespace std;
 using namespace stdext;
 
 //@todo change to bool
-void UsesTable::init(int numVariables) {
+void UsesTable::init(INTEGER numVariables) {
 	this->numVariables = numVariables;
 }
 
-bool UsesTable::setUses(int stmtNum, int varIndex) {
+STATUS UsesTable::setUses(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	if (this->numVariables == 0) {
 		throw logic_error("init usesTable first");
 	}
@@ -73,7 +73,7 @@ bool UsesTable::setUses(int stmtNum, int varIndex) {
 }
 
 
-bool UsesTable::isUses(int stmtNum, int varIndex) {
+BOOLEAN_ UsesTable::isUses(STATEMENT stmtNum, VAR_INDEX varIndex) {
 	if (stmtNum <= 0 || varIndex <= 0) {
 		return false;
 	}
@@ -92,7 +92,7 @@ bool UsesTable::isUses(int stmtNum, int varIndex) {
 }
 
 
-vector<int> UsesTable::getUsesStmtNum(int varIndex) {
+STATEMENT_LIST UsesTable::getUsesStmtNum(VAR_INDEX varIndex) {
 	if (varIndex <= 0) {
 		return vector<int>();
 	}
@@ -107,7 +107,7 @@ vector<int> UsesTable::getUsesStmtNum(int varIndex) {
 }
 
 
-vector<int> UsesTable::getUsesVarForStmt(int stmtNum) {
+VARINDEX_LIST UsesTable::getUsesVarForStmt(STATEMENT stmtNum) {
 	if (stmtNum <= 0) {
 		return vector<int>();
 	}
@@ -133,7 +133,7 @@ vector<int> UsesTable::getUsesVarForStmt(int stmtNum) {
  * This is because it is possible for assign/call stmt to not use any variable.
  * @sa ModifiesTable::getModVarInBitvectorForStmt
  */
-boost::dynamic_bitset<> UsesTable::getUseVarInBitvectorForStmt(int stmtNum) {
+boost::dynamic_bitset<> UsesTable::getUseVarInBitvectorForStmt(STATEMENT stmtNum) {
 	if (varIndexMap.count(stmtNum) == 0) {
 		return boost::dynamic_bitset<>(numVariables);
 	}
@@ -141,7 +141,7 @@ boost::dynamic_bitset<> UsesTable::getUseVarInBitvectorForStmt(int stmtNum) {
 	return varIndexMap.at(stmtNum);
 }
 
-pair<vector<int>, vector<int>> UsesTable::getAllUsesPair() {
+pair<STATEMENT_LIST, VARINDEX_LIST> UsesTable::getAllUsesPair() {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
 		for (unsigned int i = 0; i < iter->second.size(); i++) {
@@ -156,7 +156,7 @@ pair<vector<int>, vector<int>> UsesTable::getAllUsesPair() {
 
 // for procedures
 
-bool UsesTable::setUsesProc(int procIndex, int varIndex) {
+STATUS UsesTable::setUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) {
 	if (procIndex < 0 || varIndex <= 0) {
 		throw exception("UsesTable error: Negative procedure index or varIndex");
 	}
@@ -207,7 +207,7 @@ bool UsesTable::setUsesProc(int procIndex, int varIndex) {
 }
 
 
-bool UsesTable::isUsesProc(int procIndex, int varIndex) {
+BOOLEAN_ UsesTable::isUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex) {
 	if (procIndex < 0 || varIndex <= 0) {
 		return false;
 	}
@@ -227,7 +227,7 @@ bool UsesTable::isUsesProc(int procIndex, int varIndex) {
 
 
 
-vector<int> UsesTable::getUsesProcIndex(int varIndex) {
+PROCINDEX_LIST UsesTable::getUsesProcIndex(VAR_INDEX varIndex) {
 	if (varIndex <= 0) {
 		return vector<int>();
 	}
@@ -243,7 +243,7 @@ vector<int> UsesTable::getUsesProcIndex(int varIndex) {
 
 
 
-vector<int> UsesTable::getUsesVarForProc(int procIndex) {
+VARINDEX_LIST UsesTable::getUsesVarForProc(PROC_INDEX procIndex) {
 	if (procIndex < 0) {
 		return vector<int>();
 	}
@@ -259,7 +259,7 @@ vector<int> UsesTable::getUsesVarForProc(int procIndex) {
 
 
 
-pair<vector<int>, vector<int>> UsesTable::getAllUsesProcPair() {
+pair<PROCINDEX_LIST, VARINDEX_LIST> UsesTable::getAllUsesProcPair() {
 	pair<vector<int>, vector<int>> result;
 	for (auto iter = procVarIndexMap.begin(); iter != procVarIndexMap.end(); ++iter) {
 		for (vector<int>::iterator varListIter = iter->second.begin(); varListIter != iter->second.end(); ++varListIter) {
@@ -272,7 +272,7 @@ pair<vector<int>, vector<int>> UsesTable::getAllUsesProcPair() {
 	return result;
 }
 
-vector<int> UsesTable::getLhs() {
+STATEMENT_LIST UsesTable::getLhs() {
 	vector<int> result;
 	for (auto iter = varIndexMap.begin(); iter != varIndexMap.end(); ++iter) {
 		result.push_back(iter->first);
@@ -280,7 +280,7 @@ vector<int> UsesTable::getLhs() {
 	return result;
 }
 
-vector<int> UsesTable::getRhs() {
+STATEMENT_LIST UsesTable::getRhs() {
 	vector<int> result;
 	for (auto iter = stmtNumMap.begin(); iter != stmtNumMap.end(); ++iter) {
 		result.push_back(iter->first);
