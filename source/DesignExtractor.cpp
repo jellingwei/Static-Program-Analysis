@@ -128,7 +128,7 @@ private:
  * Sorts the call statements in topological ordering.
  * @return a list of all the call statements in topological ordering.
  */
-vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
+vector<TNode*> obtainCallStatementsInTopologicalOrder() {
 	vector<int> topologicalOrder = getCallsInTopologicalOrder();
 
 	PKB pkb = PKB::getInstance();
@@ -155,7 +155,10 @@ vector<TNode*> DesignExtractor::obtainCallStatementsInTopologicalOrder() {
  * This function writes into the PKB.
  * @param callStmt a vector of sorted TNodes in order of setting Modifies on them
  */
-void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
+void DesignExtractor::setModifiesForCallStatements() {
+
+	vector<TNode*> callStmt = obtainCallStatementsInTopologicalOrder();
+
 	PKB pkb = PKB::getInstance();
 
 	for (auto stmt = callStmt.begin(); stmt != callStmt.end(); ++stmt) {
@@ -171,8 +174,7 @@ void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
 		}
 		
 		// for ancestors, set (parent, all variabled modified by the function called)
-		while (pkb.getParent(stmtNumber).size()) 
-		{
+		while (pkb.getParent(stmtNumber).size()) {
 			stmtNumber = pkb.getParent(stmtNumber).at(0);
 			if (stmtNumber <= 0) {
 				continue;
@@ -190,9 +192,10 @@ void DesignExtractor::setModifiesForCallStatements(vector<TNode*> callStmt) {
  * This function writes into the PKB
  * @param callStmt a vector of sorted TNodes in order of setting Uses on them
  */
-void DesignExtractor::setUsesForCallStatements(vector<TNode*> callStmt) {
+void DesignExtractor::setUsesForCallStatements() {
 
 	PKB pkb = PKB::getInstance();
+	vector<TNode*> callStmt = obtainCallStatementsInTopologicalOrder();
 
 	for (auto stmt = callStmt.begin(); stmt != callStmt.end(); ++stmt) {
 		int procCalled = (*stmt)->getNodeValueIdx();

@@ -16,9 +16,8 @@ using std::vector;
 class DesignExtractor {
 	public:
 		DesignExtractor();
-		vector<TNode*> obtainCallStatementsInTopologicalOrder();
-		void setModifiesForCallStatements(vector<TNode*>);
-		void setUsesForCallStatements(vector<TNode*>);
+		void setModifiesForCallStatements();
+		void setUsesForCallStatements();
 		void setModifiesForAssignmentStatements();
 		void setUsesForAssignmentStatements();
 		void setUsesForContainerStatements();

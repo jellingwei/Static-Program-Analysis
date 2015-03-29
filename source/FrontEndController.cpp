@@ -23,9 +23,9 @@ void FrontEndController::constructPkb(std::string filename)
 		}
 
 		try {
-			vector<TNode*> callNodes = extractor.obtainCallStatementsInTopologicalOrder();
-			extractor.setModifiesForCallStatements(callNodes);
-			extractor.setUsesForCallStatements(callNodes);
+			
+			extractor.setModifiesForCallStatements();
+			extractor.setUsesForCallStatements();
 		} catch (exception e) {
 			cout << "failure during design extraction for call statements" << endl;
 			throw e;
