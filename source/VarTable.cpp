@@ -11,7 +11,7 @@
 using namespace std;
 using namespace stdext;
 
-int VarTable::insertVar(string varName, int stmtNum) 
+VAR_INDEX VarTable::insertVar(VARNAME varName, int stmtNum) 
 {
 	if (stmtNum <= 0) {
 		throw exception("varTable error: Negative statement number");
@@ -39,17 +39,17 @@ int VarTable::insertVar(string varName, int stmtNum)
 	}
 }
 
-int VarTable::getVarTableSize() 
+INTEGER VarTable::getVarTableSize() 
 {
 	return varMap.size();
 }
 
-string VarTable::getVarName(int index) 
+VARNAME VarTable::getVarName(VAR_INDEX index) 
 {
 	return (varMap.count(index) > 0) ? varMap.at(index) : ""; 
 }
 
-int VarTable::getVarIndex(string varName) 
+VAR_INDEX VarTable::getVarIndex(VARNAME varName) 
 {
 	if (varName.empty()) {
 		throw exception("varTable error: Empty variable name");
@@ -58,7 +58,7 @@ int VarTable::getVarIndex(string varName)
 	return (indexMap.count(varName) > 0) ? indexMap.at(varName) : -1;
 }
 
-vector<int> VarTable::getAllVarIndex() 
+VARINDEX_LIST VarTable::getAllVarIndex() 
 {
 	vector<int> allKeys;
 

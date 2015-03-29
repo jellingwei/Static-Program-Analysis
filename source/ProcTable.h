@@ -6,15 +6,18 @@
 #include <vector>
 #include <unordered_map>
 
+#include "common.h"
+#include "common_list.h"
+
 using namespace std;
 
 class ProcTable {
 public:
-	int insertProc(string procName);
-	int getProcTableSize();
-	string getProcName(int index);
-	int getProcIndex(string varName);
-	vector<int> getAllProcIndex();
+	PROC_INDEX insertProc(PROCNAME procName);
+	INTEGER getProcTableSize();
+	PROCNAME getProcName(PROC_INDEX index);
+	PROC_INDEX getProcIndex(PROCNAME procName);
+	PROCINDEX_LIST getAllProcIndex();
 
 private: 
 	vector<string> procMap; 

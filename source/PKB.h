@@ -44,7 +44,7 @@ public:
 	TNode* getRoot();
 	STATUS createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode);
 	INTEGER getChildrenSize(TNode* parent);	
-	vector<TNode*>* getChildrenNode(TNode* parent);
+	TNODE_LIST getChildrenNode(TNode* parent);
 	BOOLEAN_ isChildNode(TNode* parent, TNode* child);
 	BOOLEAN_ isExists(TNode* node);
 	TNode* getLastImpt();
@@ -60,21 +60,18 @@ public:
 	INTEGER getVarTableSize();
 	VARNAME getVarName(VAR_INDEX index);
 	VAR_INDEX getVarIndex(VARNAME varName);
-	STATEMENT getStmtNum(VARNAME varName);
-	vector<int> getAllVarIndex();
+	VARINDEX_LIST getAllVarIndex();
 
 	// ProcTable methods
 	PROC_INDEX insertProc(PROCNAME procName);
 	INTEGER getProcTableSize();
 	PROCNAME getProcName(PROC_INDEX index);
 	PROC_INDEX getProcIndex(PROCNAME procName);
-	PROGLINE_LIST getAllProcIndex();
+	PROCINDEX_LIST getAllProcIndex();
 
 	// ConstantTable methods
 	STATUS insertConstant(VALUE constant, STATEMENT stmtNum);
 	INTEGER getConstantTableSize();
-	VALUE getConstant(VAR_INDEX index);
-	VAR_INDEX getConstantIndex(VALUE constant);
 	STATEMENT_LIST getStmtNum(VALUE constant);
 	BOOLEAN_ isConstant(INTEGER number);
 	CONSTANT_LIST getAllConstant();
@@ -83,30 +80,30 @@ public:
 	STATUS setCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2);
 	BOOLEAN_ isCalls(PROC_INDEX procIndex1, PROC_INDEX procIndex2, bool transitiveClosure = false);
 	BOOLEAN_ isCallsS(PROC_INDEX procIndex1, PROC_INDEX procIndex2);
-	PROGLINE_LIST getProcsCalling(PROC_INDEX procIndex2, bool transitiveClosure = false);
-	PROGLINE_LIST getProcsCallingS(PROC_INDEX procIndex2);
-	PROGLINE_LIST getProcsCalledBy(PROC_INDEX procIndex1, bool transitiveClosure = false);
-	PROGLINE_LIST getProcsCalledByS(PROC_INDEX procIndex1);
+	PROCINDEX_LIST getProcsCalling(PROC_INDEX procIndex2, bool transitiveClosure = false);
+	PROCINDEX_LIST getProcsCallingS(PROC_INDEX procIndex2);
+	PROCINDEX_LIST getProcsCalledBy(PROC_INDEX procIndex1, bool transitiveClosure = false);
+	PROCINDEX_LIST getProcsCalledByS(PROC_INDEX procIndex1);
 	pair<PROGLINE_LIST, PROGLINE_LIST> getAllCallsPairs(bool transitiveClosure = false);
 	pair<PROGLINE_LIST, PROGLINE_LIST> getAllCallsPairsS();
 	string getProcNameCalledByStatement(STATEMENT);
-	PROGLINE_LIST getCallsLhs();
-	PROGLINE_LIST getCallsRhs();
+	PROCINDEX_LIST getCallsLhs();
+	PROCINDEX_LIST getCallsRhs();
 
 	// StmtTable methods
-	STATUS insertStmt(STATEMENT, STATEMENT_TYPE, TNode*, PROC_INDEX);
-	STATEMENT_TYPE getType(STATEMENT);
+	STATUS insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC_INDEX procIndex);
+	STATEMENT_TYPE getType(STATEMENT stmtNum);
 	// @cond todo
-	STATEMENT_LIST getStmtNumForType(STATEMENT_TYPE);
+	STATEMENT_LIST getStmtNumForType(STATEMENT_TYPE type);
 	// @endcond todo
 	STATEMENT_LIST getStmtNumForType(SYNONYM_TYPE);
-	PROC_INDEX getProcIndexForStmt(STATEMENT stmtNo);
-	BOOLEAN_ isAssign(STATEMENT);
-	BOOLEAN_ isWhile(STATEMENT);
-	BOOLEAN_ isIf(STATEMENT);
-	BOOLEAN_ isCall(STATEMENT);
+	PROC_INDEX getProcIndexForStmt(STATEMENT stmtNum);
+	BOOLEAN_ isAssign(STATEMENT stmtNum);
+	BOOLEAN_ isWhile(STATEMENT stmtNum);
+	BOOLEAN_ isIf(STATEMENT stmtNum);
+	BOOLEAN_ isCall(STATEMENT stmtNum);
 	INTEGER getStmtTableSize();
-	TNode* getNodeForStmt(STATEMENT);
+	TNode* getNodeForStmt(STATEMENT stmtNum);
 
 	// Parent Table methods
 	STATUS setParent(TNode* stmtNum1, TNode* stmtNum2);
@@ -148,8 +145,8 @@ public:
 
 	STATUS setModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
 	BOOLEAN_ isModifiesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
-	vector<int> getModProcIndex(VAR_INDEX varIndex);
-	vector<int> getModVarForProc(PROC_INDEX procIndex);
+	PROCINDEX_LIST getModProcIndex(VAR_INDEX varIndex);
+	VARINDEX_LIST getModVarForProc(PROC_INDEX procIndex);
 	pair<vector<int>, vector<int>> getAllModProcPair();
 
 
@@ -158,7 +155,7 @@ public:
 	STATUS setUses(STATEMENT stmtNum, VAR_INDEX varIndex);
 	BOOLEAN_ isUses(STATEMENT stmtNum, VAR_INDEX varIndex);
 	STATEMENT_LIST getUsesStmtNum(VAR_INDEX varIndex);
-	vector<int> getUsesVarForStmt(STATEMENT stmtNum);
+	VARINDEX_LIST getUsesVarForStmt(STATEMENT stmtNum);
 	pair<STATEMENT_LIST, vector<int>> getAllUsesPair();
 	STATEMENT_LIST getUsesLhs();
 	STATEMENT_LIST getUsesRhs();
@@ -167,8 +164,8 @@ public:
 
 	STATUS setUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
 	BOOLEAN_ isUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
-	vector<int> getUsesProcIndex(VAR_INDEX varIndex);
-	vector<int> getUsesVarForProc(PROC_INDEX procIndex);
+	PROCINDEX_LIST getUsesProcIndex(VAR_INDEX varIndex);
+	VARINDEX_LIST getUsesVarForProc(PROC_INDEX procIndex);
 	pair<vector<int>, vector<int>> getAllUsesProcPair();
 
 	// cfg

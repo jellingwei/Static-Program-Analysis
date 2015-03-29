@@ -80,7 +80,7 @@ INTEGER PKB::getChildrenSize(TNode* parent)
 * If there are no children nodes, return an empty list.
 * @exception exception if parent is NULL.
 */
-vector<TNode*>* PKB::getChildrenNode(TNode* parent) 
+TNODE_LIST PKB::getChildrenNode(TNode* parent) 
 {
 	return ast->getChildrenNode(parent);
 }
@@ -171,7 +171,7 @@ VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum)
  * @return index of variable.
  * @exception exception if varName is empty or stmtNum is negative or 0.
  */
-int PKB::insertVar(string varName, int stmtNum) 
+VAR_INDEX PKB::insertVar(VARNAME varName, STATEMENT stmtNum) 
 {
 	return varTable->insertVar(varName, stmtNum);
 }
@@ -179,7 +179,7 @@ int PKB::insertVar(string varName, int stmtNum)
 /**
  * @return the total number of variables in the the VarTable.
  */
-int PKB::getVarTableSize() 
+INTEGER PKB::getVarTableSize() 
 {
 	return varTable->getVarTableSize();
 }
@@ -189,7 +189,7 @@ int PKB::getVarTableSize()
  * @return the name of the variable in the VarTable with the given index.
  * If index is out of range, return an empty string.
  */
-string PKB::getVarName(int index) 
+VARNAME PKB::getVarName(VAR_INDEX index) 
 {
 	return varTable->getVarName(index);
 }
@@ -203,7 +203,7 @@ string PKB::getVarName(int index)
  *			2. there is no such variable in the the VarTable
  * @exception exception if varName is empty
  */
-int PKB::getVarIndex(string varName) 
+VAR_INDEX PKB::getVarIndex(VARNAME varName) 
 {
 	return varTable->getVarIndex(varName);
 }
@@ -212,7 +212,7 @@ int PKB::getVarIndex(string varName)
  * @return all the index of the variables in the the VarTable.
  * If there is no answer, return an empty list.
  */
-vector<int> PKB::getAllVarIndex() 
+VARINDEX_LIST PKB::getAllVarIndex() 
 {
 	return varTable->getAllVarIndex();
 }
@@ -227,7 +227,7 @@ vector<int> PKB::getAllVarIndex()
  * @return index of procedure
  * @exception exception if procName is empty.
  */
-int PKB::insertProc(string procName) 
+PROC_INDEX PKB::insertProc(PROCNAME procName) 
 {
 	return procTable->insertProc(procName);
 }
@@ -235,7 +235,7 @@ int PKB::insertProc(string procName)
 /**
  * @return the total number of procedures in the the ProcTable.
  */
-int PKB::getProcTableSize() 
+INTEGER PKB::getProcTableSize() 
 {
 	return procTable->getProcTableSize();;
 }
@@ -245,7 +245,7 @@ int PKB::getProcTableSize()
  * @return the name of the procedure in the ProcTable with the given index.
  * If index is out of range, return an empty string.
  */
-string PKB::getProcName(int index) 
+PROCNAME PKB::getProcName(PROC_INDEX index) 
 {
 	return procTable->getProcName(index);
 }
@@ -258,7 +258,7 @@ string PKB::getProcName(int index)
  *			2. there is no such procedure in the the ProcTable
  * @exception exception if procName is empty
  */
-int PKB::getProcIndex(string procName) 
+PROC_INDEX PKB::getProcIndex(PROCNAME procName) 
 {
 	return procTable->getProcIndex(procName);
 }
@@ -267,7 +267,7 @@ int PKB::getProcIndex(string procName)
  * @return all the index of the variables in the the ProcTable.
  * If there is no answer, return an empty list.
  */
-vector<int> PKB::getAllProcIndex() 
+PROCINDEX_LIST PKB::getAllProcIndex() 
 {
 	return procTable->getAllProcIndex() ;
 }
@@ -283,7 +283,7 @@ vector<int> PKB::getAllProcIndex()
  *		   FALSE  if constantTable is not updated successfully.
  * @exception exception if constant is empty or stmtNum is negative or 0.
  */
-bool PKB::insertConstant(int constant, int stmtNum) 
+STATUS PKB::insertConstant(VALUE constant, STATEMENT stmtNum) 
 {
 	return constantTable->insertConstant(constant, stmtNum);
 }
@@ -291,19 +291,9 @@ bool PKB::insertConstant(int constant, int stmtNum)
 /**
  * @return the total number of constants in the the ConstantTable.
  */
-int PKB::getConstantTableSize() 
+INTEGER PKB::getConstantTableSize() 
 {
 	return constantTable->getSize();
-}
-
-/**
-* @param constant  a number that appears in the program
-* @return the index of a constant in ConstantTable using the constant as the key.
-* @exception exception if constant is negative.
-*/
-int PKB::getConstantIndex(int constant) 
-{
-	return constantTable->getConstantIndex(constant);
 }
 
 /**
@@ -311,7 +301,7 @@ int PKB::getConstantIndex(int constant)
 * @return the statement number the constant is in the ConstantTable.
 * @exception exception if constant is negative.
 */
-vector<int> PKB::getStmtNum(int constant) 
+STATEMENT_LIST PKB::getStmtNum(VALUE constant) 
 {
 	return constantTable->getStmtNum(constant);
 }
@@ -322,7 +312,7 @@ vector<int> PKB::getStmtNum(int constant)
 * @return TRUE if number is a constant in the ConstantTable.
 *		  FALSE if number is not a constant in the ConstantTable.
 */
-bool PKB::isConstant(int number) 
+BOOLEAN_ PKB::isConstant(INTEGER number) 
 {
 	return constantTable->isConstant(number);
 }
@@ -330,7 +320,7 @@ bool PKB::isConstant(int number)
 /**
 * @return the list of all the constant in the ConstantTable.
 */
-vector<int> PKB::getAllConstant() 
+CONSTANT_LIST PKB::getAllConstant() 
 {
 	return constantTable->getAllConstant();
 }
@@ -348,7 +338,7 @@ vector<int> PKB::getAllConstant()
 		   FALSE if StmtTable is not updated successfully.
  * @exception exception if stmtNum is negative or 0, or type is not while/assign/if/call.
  */
-bool PKB::insertStmt(int stmtNum, string type, TNode* node, int procIndex) 
+STATUS PKB::insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC_INDEX procIndex) 
 {
 	return stmtTable->insertStmt(stmtNum, type, node, procIndex);
 }
@@ -360,7 +350,7 @@ bool PKB::insertStmt(int stmtNum, string type, TNode* node, int procIndex)
  * If stmtNum is out of range, return an empty string.
  * @exception exception if stmtNum is negative or 0.
  */
-string PKB::getType(int stmtNum) 
+STATEMENT_TYPE PKB::getType(STATEMENT stmtNum) 
 {
 	return stmtTable->getType(stmtNum);
 }
@@ -372,7 +362,7 @@ string PKB::getType(int stmtNum)
  * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
  * @exception exception if type is not while/assign/if/call.
 */
-vector<int> PKB::getStmtNumForType(string type) 
+STATEMENT_LIST PKB::getStmtNumForType(STATEMENT_TYPE type) 
 {
 	 // @todo remove the whole function
 	return stmtTable->getStmtNumForType(type);
@@ -383,8 +373,8 @@ vector<int> PKB::getStmtNumForType(string type)
  * @param stmtNo  the statement number
  * @return the procIndex that the statement is in
  */
-int PKB::getProcIndexForStmt(int stmtNo) {
-	return stmtTable->getProcIndexForStmt(stmtNo);
+PROC_INDEX PKB::getProcIndexForStmt(STATEMENT stmtNum) {
+	return stmtTable->getProcIndexForStmt(stmtNum);
 }
 
 /**
@@ -394,7 +384,7 @@ int PKB::getProcIndexForStmt(int stmtNo) {
  * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
  * @exception exception if type is not while/assign/if/call.
 */
-vector<int> PKB::getStmtNumForType(SYNONYM_TYPE type) 
+STATEMENT_LIST PKB::getStmtNumForType(SYNONYM_TYPE type) 
 {
 	return stmtTable->getStmtNumForType(Synonym::convertToString(type));
 }
@@ -405,7 +395,7 @@ vector<int> PKB::getStmtNumForType(SYNONYM_TYPE type)
 * @return TRUE if stmtNum is of Assignment Type. 
 *		  FALSE if stmtNum is not of Assignment Type or stmtNum is out of range.
 */
-bool PKB::isAssign(int stmtNum) 
+BOOLEAN_ PKB::isAssign(STATEMENT stmtNum) 
 {
 	return stmtTable->isAssign(stmtNum);
 }
@@ -416,7 +406,7 @@ bool PKB::isAssign(int stmtNum)
 * @return TRUE if stmtNum is of While Type. 
 *		  FALSE if stmtNum is not of While Type or stmtNum is out of range.
 */
-bool PKB::isWhile(int stmtNum) {
+BOOLEAN_ PKB::isWhile(STATEMENT stmtNum) {
 	return stmtTable->isWhile(stmtNum);
 }
 
@@ -426,7 +416,7 @@ bool PKB::isWhile(int stmtNum) {
 * @return TRUE if stmtNum is of If Type. 
 *		  FALSE if stmtNum is not of If Type or stmtNum is out of range.
 */
-bool PKB::isIf(int stmtNum) {
+BOOLEAN_ PKB::isIf(STATEMENT stmtNum) {
 	return stmtTable->isIf(stmtNum);
 }
 
@@ -436,14 +426,14 @@ bool PKB::isIf(int stmtNum) {
 * @return TRUE if stmtNum is of Call Type. 
 *		  FALSE if stmtNum is not of Call Type or stmtNum is out of range.
 */
-bool PKB::isCall(int stmtNum) {
+BOOLEAN_ PKB::isCall(STATEMENT stmtNum) {
 	return stmtTable->isCall(stmtNum);
 }
 
 /**
  * @return the total number of statements in the the StmtTable.
  */
-int PKB::getStmtTableSize() {
+INTEGER PKB::getStmtTableSize() {
 	return stmtTable->getSize();
 }
 
@@ -451,7 +441,7 @@ int PKB::getStmtTableSize() {
  * @return the TNode in the AST for the statement number
  * @param stmtNum  the statement number to retrieve the TNode for
  */
-TNode* PKB::getNodeForStmt(int stmtNum) {
+TNode* PKB::getNodeForStmt(STATEMENT stmtNum) {
 	return stmtTable->getNodeForStmt(stmtNum);
 }
 

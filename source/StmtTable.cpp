@@ -13,7 +13,7 @@
 
 using namespace std;
 
-bool StmtTable::insertStmt(int stmtNum, string type, TNode* node, int procIndex) {
+STATUS StmtTable::insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC_INDEX procIndex) {
 	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
 	} else if(!(type=="while" || type=="assign" || type=="if" || type=="call")) {
@@ -53,7 +53,7 @@ bool StmtTable::insertStmt(int stmtNum, string type, TNode* node, int procIndex)
 	} 
 }
 
-string StmtTable::getType(int stmtNum) 
+STATEMENT_TYPE StmtTable::getType(STATEMENT stmtNum) 
 {
 	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
@@ -65,7 +65,7 @@ string StmtTable::getType(int stmtNum)
 	return "";
 }
 
-vector<int> StmtTable::getStmtNumForType(string type) 
+STATEMENT_LIST StmtTable::getStmtNumForType(STATEMENT_TYPE type) 
 {
 
 	string whileType = "while";
@@ -105,55 +105,55 @@ vector<int> StmtTable::getStmtNumForType(string type)
 	}
 }
 
-int StmtTable::getProcIndexForStmt(int stmtNo) {
+PROC_INDEX StmtTable::getProcIndexForStmt(STATEMENT stmtNum) {
 	throw exception("not implemented yet");
 }
 
-bool StmtTable::isAssign(int stmtNo) 
+BOOLEAN_ StmtTable::isAssign(STATEMENT stmtNum) 
 {
-	if(stmtNo <= 0) {
+	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
 	}
 
-	return stmtNumMap.at(stmtNo) == "assign";
+	return stmtNumMap.at(stmtNum) == "assign";
 }
 
-bool StmtTable::isWhile(int stmtNo) 
+BOOLEAN_ StmtTable::isWhile(STATEMENT stmtNum) 
 {
-	if(stmtNo <= 0) {
+	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
 	}
 
-	return stmtNumMap.at(stmtNo) == "while";
+	return stmtNumMap.at(stmtNum) == "while";
 	
 }
 
-bool StmtTable::isIf(int stmtNo) 
+BOOLEAN_ StmtTable::isIf(STATEMENT stmtNum) 
 {
-	if(stmtNo <= 0) {
+	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
 	}
 
-	return stmtNumMap.at(stmtNo) == "if";
+	return stmtNumMap.at(stmtNum) == "if";
 	
 }
 
-bool StmtTable::isCall(int stmtNo) 
+BOOLEAN_ StmtTable::isCall(STATEMENT stmtNum) 
 {
-	if(stmtNo <= 0) {
+	if(stmtNum <= 0) {
 		throw exception("StmtTable error: Negative statment number");
 	}
 
-	return stmtNumMap.at(stmtNo) == "call";
+	return stmtNumMap.at(stmtNum) == "call";
 	
 }
 
-int StmtTable::getSize() 
+INTEGER StmtTable::getSize() 
 {
 	return stmtNumMap.size();
 }
 
-TNode* StmtTable::getNodeForStmt(int stmtNum) {
+TNode* StmtTable::getNodeForStmt(STATEMENT stmtNum) {
 	if (nodeTable.count(stmtNum) > 0) {
 		return nodeTable.at(stmtNum);
 	} else {
