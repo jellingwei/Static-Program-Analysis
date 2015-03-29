@@ -1,5 +1,7 @@
 #pragma once
 
+#include "cmath"
+
 #include "StatisticsTable.h"
 #include "PKB.h"
 #include "Synonym.h"
