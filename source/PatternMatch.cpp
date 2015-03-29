@@ -228,29 +228,27 @@ bool recurseChecking(vector<TNode*> *GrandChildrenList, TNode* _rootNodeQ, bool 
 		if(GrandChildrenList->size() > 0 ) {
 			if((GrandChildrenList->at(0)->getNodeType() == Plus) || (GrandChildrenList->at(0)->getNodeType() == Minus) || (GrandChildrenList->at(0)->getNodeType() == Times)) {
 				_GrandChildNodeAA = GrandChildrenList->at(0);
-				
 				if(_GrandChildNodeAA->getDescendent() >= _rootNodeQ->getDescendent()) {
 					found = checkPatternMatchAssign(_GrandChildNodeAA, _rootNodeQ, isExact);
 				}
-			}
-			
+			} 
+
 			if((found==false) && ((GrandChildrenList->at(1)->getNodeType() == Plus) || (GrandChildrenList->at(1)->getNodeType() == Minus) || (GrandChildrenList->at(1)->getNodeType() == Times))) {
 				_GrandChildNodeAB = GrandChildrenList->at(1);
-
 				if(_GrandChildNodeAB->getDescendent() >= _rootNodeQ->getDescendent()) {
 					found = checkPatternMatchAssign(_GrandChildNodeAB, _rootNodeQ, isExact);
-				} else {
-					return false;
-				}
+				} 
 			}
 
-			if(found)
+			if(found) {
 				return true;
-			else {
+			} else {
+
 				//** Important **//
 				if(_GrandChildNodeAA != NULL) {
 					found = recurseChecking(_GrandChildNodeAA->getChildren(), _rootNodeQ, isExact);
 				}
+
 				if(found==false && _GrandChildNodeAB != NULL) {
 					found = recurseChecking(_GrandChildNodeAB->getChildren(), _rootNodeQ, isExact);
 				}
