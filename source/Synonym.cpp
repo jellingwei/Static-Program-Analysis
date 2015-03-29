@@ -92,7 +92,7 @@ Synonym::Synonym(SYNONYM_TYPE type, string name, vector<int> values)
  * @param name the name of the synonym, e.g a for ASSIGN
  * @param values a list of the possible kinds of values associated with the synonym which can be statement numbers, indexes.
  */
-Synonym::Synonym(SYNONYM_TYPE type, string name, VALUE_LIST values)
+Synonym::Synonym(SYNONYM_TYPE type, string name, VALUE_SET values)
 {
 	_isEmpty = false;
 	_type = type;
@@ -111,7 +111,7 @@ void Synonym::setValues(vector<int> values)
 	_valuesSet.clear();
 }
 
-void Synonym::setValues(VALUE_LIST values)
+void Synonym::setValues(VALUE_SET values)
 {
 	_valuesSet = values;
 	_values.clear();
@@ -154,7 +154,7 @@ vector<int> Synonym::getValues()
 	return _values;
 }
 
-VALUE_LIST Synonym::getValuesSet()
+VALUE_SET Synonym::getValuesSet()
 {
 	if (_valuesSet.size() != 0) {
 		return _valuesSet;
