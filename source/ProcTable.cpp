@@ -11,7 +11,7 @@
 using namespace std;
 using namespace stdext;
 
-int ProcTable::insertProc(string procName) 
+PROC_INDEX ProcTable::insertProc(PROCNAME procName) 
 {
 
 	if (procName.empty()) {
@@ -33,13 +33,13 @@ int ProcTable::insertProc(string procName)
 }
 
 
-int ProcTable::getProcTableSize() 
+INTEGER ProcTable::getProcTableSize() 
 {
 	return procMap.size();
 }
 
 
-string ProcTable::getProcName(int index) 
+PROCNAME ProcTable::getProcName(PROC_INDEX index) 
 {
 	if (index < 0) {
 		return "";
@@ -47,7 +47,7 @@ string ProcTable::getProcName(int index)
 	return (procMap.size() > index) ? procMap.at(index) : "";
 }
 
-int ProcTable::getProcIndex(string procName) 
+PROC_INDEX ProcTable::getProcIndex(PROCNAME procName) 
 {
 	if (procName.empty()) {
 		throw exception("procTable error: Empty variable name");
@@ -57,7 +57,7 @@ int ProcTable::getProcIndex(string procName)
 }
 
 
-vector<int> ProcTable::getAllProcIndex() 
+PROCINDEX_LIST ProcTable::getAllProcIndex() 
 {
 	vector<int> allKeys;
 

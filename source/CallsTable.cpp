@@ -16,8 +16,6 @@
 using namespace std;
 using namespace stdext;
 
-// @todo Fix all Transitive Closure Issues
-
 bool CallsTable::setCalls(int procIndex1, int procIndex2) 
 {
 	if (procIndex1 < 0) {
@@ -73,29 +71,30 @@ bool CallsTable::setCalls(int procIndex1, int procIndex2)
 }
 
 
-bool CallsTable::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) 
-{
+bool CallsTable::isCalls(int procIndex1, int procIndex2, bool transitiveClosure) {
 	if (procIndex1 < 0 || procIndex2 < 0) {
 		return false;
 	}
+	bool earlyTermination = true;
 
 	if (!transitiveClosure) {
 		if ((procIndex1Map.count(procIndex2) == 0) || (procIndex2Map.count(procIndex1) == 0)) {
 			return false;
 		}
-		vector<int> calledProcs = getProcsCalledBy(procIndex1, false);
+		
+		vector<int> calledProcs = getProcsCalledBy(procIndex1, false, true, procIndex2);
 
 		return find(calledProcs.begin(), calledProcs.end(), procIndex2) != calledProcs.end();
 	} else {
 		bool isTransitiveClosure = true;
-		vector<int> allCalledProcs = getProcsCalledBy(procIndex1, isTransitiveClosure);
+		vector<int> allCalledProcs = getProcsCalledBy(procIndex1, isTransitiveClosure, true, procIndex2);
 		
 		// return true if procIndex2 can be found in procs called by proc1
 		return find(allCalledProcs.begin(), allCalledProcs.end(), procIndex2) != allCalledProcs.end();
 	}
 }
 
-vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure) 
+vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure, bool terminateOnFinding, int lineToFind ) 
 {
 	if (procIndex2 < 0 || procIndex1Map.count(procIndex2) == 0) {
 		return vector<int>();
@@ -128,6 +127,12 @@ vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure)
 			}
 			frontier.push_back(*iter);
 			result.push_back(*iter);
+
+			if (terminateOnFinding && lineToFind == *iter) {
+				// early termination
+				vector<int> resultList(result.begin(), result.end());
+				return resultList;
+			}
 		}
 	}
 		
@@ -136,7 +141,7 @@ vector<int> CallsTable::getProcsCalling(int procIndex2, bool transitiveClosure)
 }
 
 
-vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure) 
+vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure, bool terminateOnFinding, int lineToFind) 
 {
 	if (procIndex1 < 0 || procIndex2Map.count(procIndex1) == 0) {
 		return vector<int>();
@@ -169,6 +174,12 @@ vector<int> CallsTable::getProcsCalledBy(int procIndex1, bool transitiveClosure)
 			}
 			frontier.push_back(*iter);
 			result.push_back(*iter);
+
+			if (terminateOnFinding && lineToFind == *iter) {
+				// early termination
+				vector<int> resultList(result.begin(), result.end());
+				return resultList;
+			}
 		}
 	}
 		

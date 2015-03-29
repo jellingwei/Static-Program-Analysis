@@ -44,7 +44,7 @@ procedure Two {
 }
 
 procedure Three {
-  while c {       \\25a,b
+  while c {       \\25
     call Four;      \\26
     while z {       \\27
       y = x - ((y - y) + z * (a * c));      \\28

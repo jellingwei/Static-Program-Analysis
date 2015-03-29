@@ -13,17 +13,17 @@ using namespace std;
 class StmtTable
 {
 public:
-	bool insertStmt(int, string, TNode*, int);
-	string getType(int);
-	vector<int> getStmtNumForType(string);
-	bool isAssign(int);
-	bool isWhile(int);
-	bool isIf(int);
-	bool isCall(int);
-	int getSize();
+	STATUS insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC_INDEX procIndex);
+	STATEMENT_TYPE getType(STATEMENT stmtNum);
+	STATEMENT_LIST getStmtNumForType(STATEMENT_TYPE type);
+	BOOLEAN_ isAssign(STATEMENT stmtNum);
+	BOOLEAN_ isWhile(STATEMENT stmtNum);
+	BOOLEAN_ isIf(STATEMENT stmtNum);
+	BOOLEAN_ isCall(STATEMENT stmtNum);
+	INTEGER getSize();
 
-	TNode* getNodeForStmt(int);
-	int getProcIndexForStmt(int);
+	TNode* getNodeForStmt(STATEMENT stmtNum);
+	PROC_INDEX getProcIndexForStmt(STATEMENT stmtNum);
 
 private:
 	unordered_map<int, string> stmtNumMap; //key is given by stmt#

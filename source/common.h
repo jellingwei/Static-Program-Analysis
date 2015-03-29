@@ -3,8 +3,44 @@
   */
 #pragma once
 
+#include <set>
+#include <string>
+#include <vector>
+#include <list>
+using std::set;
+using std::vector;
+using std::list;
+using std::string;
+using std::to_string;
 
-typedef short PROC;
+//different from SYNONYM_TYPE
+typedef int CONSTANT_;
+typedef int PROG_LINE_;
+typedef bool BOOLEAN_;
+
+typedef int VALUE;
+typedef int INTEGER;
+typedef int STATEMENT;
+typedef int VAR_INDEX;
+typedef int PROC_INDEX;
+typedef bool STATUS;
+typedef bool TRANS_CLOSURE;
+
+typedef string FILENAME;
+typedef string VARNAME;
+typedef string PROCNAME;
+typedef string EXPRESSION;
+typedef string STATEMENT_TYPE;
+
+typedef set<int> VALUE_SET;
+typedef vector<int> VALUE_LIST;
+typedef vector<int> CONSTANT_LIST;
+typedef vector<int> STATEMENT_LIST;
+typedef vector<int> PROGLINE_LIST;
+typedef vector<int> ASSIGNMENT_LIST;
+
+typedef vector<VAR_INDEX> VARINDEX_LIST;
+typedef vector<PROC_INDEX> PROCINDEX_LIST;
 
 
 enum CNODE_TYPE
@@ -62,11 +98,6 @@ enum TNODE_TYPE
 enum LINK_TYPE
 {
 	Par, Right_Sibling, Left_Sibling, Child
-};
-
-enum DIRECTION
-{
-	LeftToRight, RightToLeft
 };
 
 namespace QueryParser

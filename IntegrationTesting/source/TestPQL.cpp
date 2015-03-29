@@ -3,7 +3,6 @@
 #include <string>
 #include <list>
 #include "TestPQL.h"
-#include "InputQueryParser.h"
 #include "SourceParser.h"
 #include "QueryOptimiser.h"
 #include "QueryEvaluator.h"

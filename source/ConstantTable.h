@@ -6,16 +6,17 @@
 #include <vector>
 #include <unordered_map>
 
+#include "common.h"
+
 using namespace std;
 
 class ConstantTable {
 public:
-	bool insertConstant(int constant, int stmtNum);
-	int getSize();
-	int getConstantIndex(int constant);
-	vector<int> getStmtNum(int constant);
-	bool isConstant(int number);
-	vector<int> getAllConstant();
+	STATUS insertConstant(VALUE constant, STATEMENT stmtNum);
+	INTEGER getSize();
+	STATEMENT_LIST getStmtNum(VALUE constant);
+	BOOLEAN_ isConstant(INTEGER number);
+	CONSTANT_LIST getAllConstant();
 
 private: 
 	unordered_map<int, int> constantMap; // key is index

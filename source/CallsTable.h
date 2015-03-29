@@ -18,10 +18,10 @@ public:
 	bool isCalls(int procIndex1, int procIndex2, bool transitiveClosure);
 	
 	// Given procIndex2, return procIndex1 such that Calls(procIndex1, procIndex2) is satisfied
-	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure);
+	vector<int> getProcsCalling(int procIndex2, bool transitiveClosure, bool terminateOnFinding = false, int lineToFind = -1);
 
 	// Given procIndex1, return procIndex2 such that Calls(procIndex1, procIndex2) is satisfied
-	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure);
+	vector<int> getProcsCalledBy(int procIndex1, bool transitiveClosure, bool terminateOnFinding = false, int lineToFind= -1);
 
 	pair<vector<int>, vector<int>> getAllCallsPairs(bool transitiveClosure);
 

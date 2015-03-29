@@ -6,15 +6,18 @@
 #include <vector>
 #include <unordered_map>
 
+#include "common.h"
+#include "common_list.h"
+
 using namespace std;
 
 class VarTable {
 public:
-	int insertVar(string varName, int stmtNum);
-	int getVarTableSize();
-	string getVarName(int index);
-	int getVarIndex(string varName);
-	vector<int> getAllVarIndex();
+	VAR_INDEX insertVar(VARNAME varName, STATEMENT stmtNum);
+	INTEGER getVarTableSize();
+	VARNAME getVarName(VAR_INDEX index);
+	VAR_INDEX getVarIndex(VARNAME varName);
+	VARINDEX_LIST getAllVarIndex();
 
 private: 
 	unordered_map<int, string> varMap; // key is index

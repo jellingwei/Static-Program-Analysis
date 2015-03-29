@@ -1,9 +1,12 @@
+#pragma once
+
 #include <vector>
 #include <assert.h>
 #include <unordered_map>
 using std::string;
 using std::vector;
 #include "TNode.h"
+#include "PKB.h"
 
 /**
  * The DesignExtractor handles the setting of information that could not be set during parsing.
@@ -20,8 +23,9 @@ class DesignExtractor {
 		void setUsesForAssignmentStatements();
 		void setUsesForContainerStatements();
 		
-		bool constructCfg();
+		STATUS constructCfg();
 		void precomputeInformationForAffects();
+		void precomputeInformationForNext();
 		void constructStatisticsTable();
 
 };

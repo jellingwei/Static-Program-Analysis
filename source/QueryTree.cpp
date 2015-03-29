@@ -34,7 +34,7 @@ QNode* QueryTree::createQNode(QNODE_TYPE QNODE_TYPE,Synonym arg0, Synonym arg1, 
  * @param child_node
  * @return TRUE to indicate the link between the parent QNode and the child QNode is created successfully.
  */
-bool QueryTree::linkNode(QNode* parent_node, QNode* child_node)
+STATUS QueryTree::linkNode(QNode* parent_node, QNode* child_node)
 {
 	child_node->setParent(parent_node);
 	parent_node->setChild(child_node);

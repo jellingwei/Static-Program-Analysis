@@ -50,7 +50,7 @@ namespace Parser {
 	 * The file specified by filename is opened for parsing. 
 	 * Return TRUE if the file can be successfully opened. Otherwise, return FALSE.
 	 */
-	bool initParser(string filename) {
+	STATUS initParser(string filename) {
 		using namespace Parser::var;
 		inputFile.open(filename);
 		stmtNum = 0;
@@ -511,7 +511,7 @@ namespace Parser {
 			return true;
 		}
 
-		bool parseProcedure() {	
+		STATUS parseProcedure() {	
 			bool res; 
 
 			res = parse("procedure");

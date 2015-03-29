@@ -12,7 +12,7 @@ using namespace std;
 using namespace stdext;
 
 
-bool ConstantTable::insertConstant(int constant, int stmtNum) 
+STATUS ConstantTable::insertConstant(VALUE constant, STATEMENT stmtNum) 
 {
 	if (stmtNum <= 0) {
 		throw invalid_argument("constantTable error: Negative statement number");
@@ -46,22 +46,12 @@ bool ConstantTable::insertConstant(int constant, int stmtNum)
 }
 
 
-int ConstantTable::getSize() 
+INTEGER ConstantTable::getSize() 
 {
 	return stmtMap.size();
 }
 
-int ConstantTable::getConstantIndex(int constant) 
-{
-	if (constant < 0) {
-		throw exception("constantTable error: Negative constant input");
-	}
-
-	return (indexMap.count(constant) > 0) ? indexMap.at(constant) : -1;
-}
-
-
-vector<int> ConstantTable::getStmtNum(int constant) 
+STATEMENT_LIST ConstantTable::getStmtNum(VALUE constant) 
 {
 	if (constant < 0) {
 		throw exception("constantTable error: Negative constant input");
@@ -71,7 +61,7 @@ vector<int> ConstantTable::getStmtNum(int constant)
 }
 
 
-bool ConstantTable::isConstant(int number) 
+BOOLEAN_ ConstantTable::isConstant(INTEGER number) 
 {
 
 	if (indexMap.count(number) > 0) {
@@ -81,7 +71,7 @@ bool ConstantTable::isConstant(int number)
 	return false;
 }
 
-vector<int> ConstantTable::getAllConstant() 
+CONSTANT_LIST ConstantTable::getAllConstant() 
 {
 	vector<int> allValues;
 

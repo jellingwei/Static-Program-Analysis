@@ -1,10 +1,15 @@
-/* Program: QueryParser.h
-   Author: Si Ling
-*/
-
 #pragma once
+
+#include <string>
+#include <vector>
+#include <assert.h>
+#include "QueryTree.h"
+
 using namespace std;
 
-int Evaluate();
-//bool initParser(string);
-//bool parseQuery();
+namespace QueryParser {
+	BOOLEAN_ initParser(std::string);
+	std::string parseToken();
+	BOOLEAN_ parseQuery();
+	QueryTree* getQueryTree();
+}
