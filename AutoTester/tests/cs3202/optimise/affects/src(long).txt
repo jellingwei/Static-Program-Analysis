@@ -1,0 +1,88 @@
+procedure One { 
+  a = 1;      \\1
+  s = b + c;    \\2
+  while d {   \\3
+    b = c;      \\4
+    d = a + b;      \\5
+    while k {       \\6
+      m = 1 + 2;      \\7
+      k = d + l;      \\8
+      call Four;      \\9
+    }
+    d = c + b;      \\10
+    if x then {     \\11
+      while b {       \\12
+        x = x + 1;        \\13
+        n = a;          \\14
+        x = a - 1;        \\15
+      }
+    } else {            
+      b = c + y - z;        \\16
+      r = i * o - t;          \\17
+      b = b * b - b + b;        \\18
+      z = k * k;        \\19
+      if k then {             \\20
+        a = 1 + 2;          \\21
+        b = y * t - r;        \\22
+        call Three;       \\23
+        f = p - 1;        \\24
+      } else {
+        e = t * t * t;    \\25        
+      }
+      while h {           \\26
+        h = h -1;           \\27
+        y = 1 + 2 + k - g;        \\28
+        g = t * r * e - e;      \\29
+        w = o + o + t;      \\30
+      }
+      r = 1 + r;        \\31
+    }
+    l = n * 2 * 3;        \\32
+    l = 2 * 3 * n;          \\33
+    while p {               \\34
+      if j then {             \\35
+        e = y * d - w;          \\36
+        g = e * r * 2;          \\37
+      } else {
+        l = l * 1;              \\38 
+        while x {               \\39 
+          r = x - 1;            \\40
+          call Two;             \\41
+          q = v + v;            \\42
+        }
+        h = y * 2 + 1 - k;        \\43
+        d = y - t - u;          \\44
+      }
+      h = n + m;              \\45
+      while g {                 \\46
+        b = u + f + f + e + t;        \\47
+        h = u + n + g + r + y;      \\48
+        while g {                   \\49
+          x = i * a * o;            \\50 
+          l = o - n - g;              \\51
+          b = a - o;                \\52
+          call Two;             \\53
+        }
+        f = o * 0 * d;          \\54
+      }
+    }
+    n = o * o - 0 + 0;          \\55
+  }
+  z = c + d;                  \\56
+  x = y * a * z + k;        \\57
+}
+
+procedure Two {
+  a = 2 + b;        \\58
+  x = t - t;        \\59
+}
+
+procedure Three {
+  y = a + b + c;      \\60
+  z = 1 - s;          \\61
+  z = z;              \\62
+}
+
+procedure Four {
+  n = n + 1;            \\63
+}
