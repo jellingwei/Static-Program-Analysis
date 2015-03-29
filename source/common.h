@@ -24,6 +24,7 @@ typedef int STATEMENT;
 typedef int VAR_INDEX;
 typedef int PROC_INDEX;
 typedef bool STATUS;
+typedef bool TRANS_CLOSURE;
 
 typedef string FILENAME;
 typedef string VARNAME;
@@ -31,21 +32,18 @@ typedef string PROCNAME;
 typedef string EXPRESSION;
 typedef string STATEMENT_TYPE;
 
+
 typedef set<int> VALUE_LIST;
 typedef vector<int> CONSTANT_LIST;
 typedef vector<int> STATEMENT_LIST;
 typedef vector<int> PROGLINE_LIST;
+typedef vector<int> AFFECTS_LIST;
+typedef vector<int> AFFECTED_LIST; 
+typedef vector<int> NEXT_AFTER_LIST;
+typedef vector<int> NEXT_BEFORE_LIST;
+typedef vector<int> PROC_INDEX_LIST;
+typedef vector<int> VAR_INDEX_LIST;
 
-//RECOMMEDED ADDITIONS
-/*
-	typedef vector<int> AFFECTED_LIST 
-	typedef vector<int> AFFECTS_LIST
-	typedef bool TRANS_CLOSURE
-	typedef vector<int> NEXT_AFTER_LIST
-	typedef vector<int> NEXT_BEFORE_LIST
-	typedef vector<int> PROC_INDEX_LIST
-	typedef vector<int> VAR_INDEX_LIST
-*/
 
 enum CNODE_TYPE
 {
