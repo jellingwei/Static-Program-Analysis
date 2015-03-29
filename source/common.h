@@ -33,6 +33,7 @@ typedef string EXPRESSION;
 typedef string STATEMENT_TYPE;
 
 typedef set<int> VALUE_SET;
+typedef vector<int> VALUE_LIST;
 typedef vector<int> CONSTANT_LIST;
 typedef vector<int> STATEMENT_LIST;
 typedef vector<int> PROGLINE_LIST;
