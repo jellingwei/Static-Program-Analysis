@@ -7,31 +7,32 @@
 #include <boost/dynamic_bitset.hpp>
 
 #include "CNode.h"
+#include "common.h"
 
 class NextTable 
 {
 public:
 	NextTable();
-	vector<int> getNextAfter(int progLine1, bool transitiveClosure = false);
-	vector<int> getNextBefore(int progLine2, bool transitiveClosure = false);
+	PROGLINE_LIST getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
 
-	bool isNext(int progLine1, int progLine2, bool transitiveClosure = false);
-	vector<int> getLhs();
-	vector<int> getRhs();
+	BOOLEAN_ isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getLhs();
+	PROGLINE_LIST getRhs();
 
-	CNode* getCNodeForProgLine(int);
+	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
 
-	int getFirstProgLineInProc(int);
-	int getLastProgLineInProc(int);
-	void setFirstProgLineInProc(int, int);
-	void setLastProgLineInProc(int, int);
+	PROG_LINE_ getFirstProgLineInProc(PROC_INDEX procIndex);
+	PROG_LINE_ getLastProgLineInProc(PROC_INDEX procIndex);
+	void setFirstProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ firstProgline);
+	void setLastProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ lastProgline);
 
-	int getFirstProgLineInContainer(int);
-	int getLastProgLineInContainer(int);
-	void setFirstProgLineInElse(int, int);
-	void setLastProgLineInContainer(int, int);
+	PROG_LINE_ getFirstProgLineInContainer(CONTAINER_STATEMENT container);
+	PROG_LINE_ getLastProgLineInContainer(CONTAINER_STATEMENT container);
+	void setFirstProgLineInElse(CONTAINER_STATEMENT container, PROG_LINE_ progline);
+	void setLastProgLineInContainer(CONTAINER_STATEMENT container, PROG_LINE_ progline);
 
-	bool setProgLineInWhile(int); 
+	BOOLEAN_ setProgLineInWhile(PROG_LINE_ progline); 
 
 private:
 	vector<int> firstProgLineInProc;

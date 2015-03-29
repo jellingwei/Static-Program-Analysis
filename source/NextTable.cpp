@@ -29,7 +29,7 @@ void updateStateOfBfs(set<int>& visited, CNode* nextNode, deque<CNode*>& frontie
 	}
 }
 
-vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
+PROGLINE_LIST NextTable::getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
 		return vector<int>();
@@ -73,7 +73,7 @@ vector<int> NextTable::getNextAfter(int progLine1, bool transitiveClosure) {
 	return result;
 }
 
-vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
+PROGLINE_LIST NextTable::getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	if (pkb.cfgNodeTable.count(progLine2) == 0) { // progline does not have a cfg node
 		return vector<int>();
@@ -125,7 +125,7 @@ vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
 
 
 
-bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
+BOOLEAN_ NextTable::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
@@ -195,7 +195,7 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 }
 
 
-vector<int> NextTable::getLhs() {
+PROGLINE_LIST NextTable::getLhs() {
 	/*PKB pkb = PKB::getInstance();
 
 	vector<int> listOfProglinesToExclude;
@@ -277,7 +277,7 @@ vector<int> NextTable::getLhs() {
 	return result;
 }
 
-vector<int> NextTable::getRhs() {
+PROGLINE_LIST NextTable::getRhs() {
 	PKB pkb = PKB::getInstance();
 
 	vector<int> result;
@@ -296,11 +296,11 @@ vector<int> NextTable::getRhs() {
 	return result;
 }
 
-CNode* NextTable::getCNodeForProgLine(int progLine) {
+CNode* NextTable::getCNodeForProgLine(PROG_LINE_ progLine) {
 	throw exception("not implemented yet");
 }
 
-int NextTable::getFirstProgLineInContainer(int container) {
+PROG_LINE_ NextTable::getFirstProgLineInContainer(CONTAINER_STATEMENT container) {
 	if (firstProgLineInElse.count(container) != 0) {
 		return firstProgLineInElse[container];
 	} else {
@@ -308,7 +308,7 @@ int NextTable::getFirstProgLineInContainer(int container) {
 	}
 }
 
-int NextTable::getLastProgLineInContainer(int container) {
+PROG_LINE_ NextTable::getLastProgLineInContainer(CONTAINER_STATEMENT container) {
 	if (lastProgLineInContainer.count(container) != 0) {
 		return lastProgLineInContainer[container];
 	} else {
@@ -316,29 +316,29 @@ int NextTable::getLastProgLineInContainer(int container) {
 	}
 }
 
-void NextTable::setFirstProgLineInElse(int container, int firstline) {
+void NextTable::setFirstProgLineInElse(CONTAINER_STATEMENT container, PROG_LINE_ firstline) {
 	firstProgLineInElse.insert(pair<int, int>(container, firstline));
 }
-void NextTable::setLastProgLineInContainer(int container, int lastline) {
+void NextTable::setLastProgLineInContainer(CONTAINER_STATEMENT container, PROG_LINE_ lastline) {
 	lastProgLineInContainer.insert(pair<int, int>(container, lastline));
 }
 
-int NextTable::getFirstProgLineInProc(int procIndex) {
+PROG_LINE_ NextTable::getFirstProgLineInProc(PROC_INDEX procIndex) {
 	return firstProgLineInProc[procIndex];
 }
-int NextTable::getLastProgLineInProc(int procIndex) {
+PROG_LINE_ NextTable::getLastProgLineInProc(PROC_INDEX procIndex) {
 	return lastProgLineInProc[procIndex];
 }
 
-void NextTable::setFirstProgLineInProc(int procIndex, int firstlines) {
+void NextTable::setFirstProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ firstlines) {
 	firstProgLineInProc.push_back(firstlines);
 }
-void NextTable::setLastProgLineInProc(int procIndex, int lastlines) {
+void NextTable::setLastProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ lastlines) {
 	lastProgLineInProc.push_back(lastlines);
 
 }
 
-bool NextTable::setProgLineInWhile(int progline) {
+BOOLEAN_ NextTable::setProgLineInWhile(PROG_LINE_ progline) {
 	isProgLineInWhile = boost::dynamic_bitset<>(PKB::getInstance().getStmtTableSize() + 1);
 	isProgLineInWhile.set(progline);
 	return true;

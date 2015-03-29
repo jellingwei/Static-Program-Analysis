@@ -1148,40 +1148,85 @@ PROGLINE_LIST PKB::getNextRhs() {
 	return nextTable->getRhs();
 }
 
-
+/**
+* @param procIndex the index of a procedure
+* @return the first program line in the procedure.
+*/
 PROG_LINE_ PKB::getFirstProgLineInProc(PROC_INDEX procIndex) {
 	return nextTable->getFirstProgLineInProc(procIndex);
 }
+
+/**
+* @param procIndex the index of a procedure
+* @return the last program line in the procedure.
+*/
 PROG_LINE_ PKB::getLastProgLineInProc(PROC_INDEX procIndex) {
 	return nextTable->getLastProgLineInProc(procIndex);
 }
+
+/**
+* Sets the first program line in the procedure.
+* @param procIndex the index of a procedure
+* @param firstProgline the first program line
+*/
 void PKB::setFirstProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ firstProgline) {
 	nextTable->setFirstProgLineInProc(procIndex, firstProgline);
 }
+
+/**
+* Sets the last program line in the procedure.
+* @param procIndex the index of a procedure
+* @param lastProgline the last program line
+*/
 void PKB::setLastProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ lastProgline) {
 	nextTable->setLastProgLineInProc(procIndex, lastProgline);
 }
 
-
-PROG_LINE_ PKB::getFirstProgLineInContainer(int container) {
+/**
+* @param container the container statement
+* @return the first program line in the container statement.
+*/
+PROG_LINE_ PKB::getFirstProgLineInContainer(CONTAINER_STATEMENT container) {
 	return nextTable->getFirstProgLineInContainer(container);
 }
-PROG_LINE_ PKB::getLastProgLineInContainer(int container) {
+
+/**
+* @param container the container statement
+* @return the last program line in the container statement.
+*/
+PROG_LINE_ PKB::getLastProgLineInContainer(CONTAINER_STATEMENT container) {
 	return nextTable->getLastProgLineInContainer(container);
 }
-void PKB::setFirstProgLineInElse(int container, PROG_LINE_ progline) {
+
+/**
+* Sets the first program line in the else of the if statement
+* @param container the else of the if statement
+* @param progline the program line
+*/
+void PKB::setFirstProgLineInElse(CONTAINER_STATEMENT container, PROG_LINE_ progline) {
 	nextTable->setFirstProgLineInElse(container, progline);
 }
-void PKB::setLastProgLineInContainer(int container, PROG_LINE_ progline) {
+
+/**
+* Sets the last program line in the else of the if statement
+* @param container the else of the if statement
+* @param progline the program line
+*/
+void PKB::setLastProgLineInContainer(CONTAINER_STATEMENT container, PROG_LINE_ progline) {
 	nextTable->setLastProgLineInContainer(container, progline);
 }
+
+/**
+* Sets the program line in the while statement
+* @param progline the program line
+*/
 void PKB::setProgLineInWhile(PROG_LINE_ progLine) {
 	nextTable->setProgLineInWhile(progLine);
 }
 
 /**
 * @param progLine the program line
-* @return the CNode for the progline
+* @return the CNode for the program line.
 */
 CNode* PKB::getCNodeForProgLine(PROG_LINE_ progLine) {
 	return nextTable->getCNodeForProgLine(progLine);

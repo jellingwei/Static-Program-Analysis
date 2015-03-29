@@ -15,7 +15,7 @@
 #include "PKB.h"
 
 
-bool isVisitedBefore(unordered_map<int, boost::dynamic_bitset<> > variableTested, CNode* nextNode, pair<CNode*, boost::dynamic_bitset<>> nodePair, set<pair<CNode*, boost::dynamic_bitset<> >> visited, boost::dynamic_bitset<> variablesToMatch) {
+BOOLEAN_ isVisitedBefore(unordered_map<int, boost::dynamic_bitset<> > variableTested, CNode* nextNode, pair<CNode*, boost::dynamic_bitset<>> nodePair, set<pair<CNode*, boost::dynamic_bitset<> >> visited, boost::dynamic_bitset<> variablesToMatch) {
 	if (!nextNode) {
 		return false;
 	}

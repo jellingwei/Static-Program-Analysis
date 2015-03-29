@@ -21,6 +21,7 @@ typedef bool BOOLEAN_;
 typedef int VALUE;
 typedef int INTEGER;
 typedef int STATEMENT;
+typedef int CONTAINER_STATEMENT;
 typedef int VAR_INDEX;
 typedef int PROC_INDEX;
 typedef bool STATUS;
