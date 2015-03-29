@@ -1158,6 +1158,37 @@ vector<int> PKB::getNextRhs() {
 	return nextTable->getRhs();
 }
 
+
+int PKB::getFirstProgLineInProc(int procIndex) {
+	return nextTable->getFirstProgLineInProc(procIndex);
+}
+int PKB::getLastProgLineInProc(int procIndex) {
+	return nextTable->getLastProgLineInProc(procIndex);
+}
+void PKB::setFirstProgLineInProc(int procIndex, int firstProgline) {
+	nextTable->setFirstProgLineInProc(procIndex, firstProgline);
+}
+void PKB::setLastProgLineInProc(int procIndex, int lastProgline) {
+	nextTable->setLastProgLineInProc(procIndex, lastProgline);
+}
+
+
+int PKB::getFirstProgLineInContainer(int container) {
+	return nextTable->getFirstProgLineInContainer(container);
+}
+int PKB::getLastProgLineInContainer(int container) {
+	return nextTable->getLastProgLineInContainer(container);
+}
+void PKB::setFirstProgLineInElse(int container, int progline) {
+	nextTable->setFirstProgLineInElse(container, progline);
+}
+void PKB::setLastProgLineInContainer(int container, int progline) {
+	nextTable->setLastProgLineInContainer(container, progline);
+}
+void PKB::setProgLineInWhile(int progline) {
+	nextTable->setProgLineInWhile(progline);
+}
+
 /**
 * @param progLine the program line
 * @return the CNode for the progline

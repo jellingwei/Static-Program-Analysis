@@ -10,6 +10,9 @@
 
 using namespace std;
 
+
+bool optimiseNext = true;
+
 NextTable::NextTable() {
 }
 
@@ -120,6 +123,8 @@ vector<int> NextTable::getNextBefore(int progLine2, bool transitiveClosure) {
 	return result;
 }
 
+
+
 bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	
@@ -130,6 +135,20 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 	// early return if not in the same procedure
 	if (PKB::getInstance().stmtToProcMap[progLine1] != PKB::getInstance().stmtToProcMap[progLine2]) {
 		return false;
+	}
+
+	if (optimiseNext && isProgLineInWhile.test(progLine1) && transitiveClosure) {
+		vector<int> parents = pkb.getParent(progLine1);
+		if (parents.size() > 0){
+			int parent = parents[0];
+
+			int lastline = getLastProgLineInContainer(parent);
+
+			if (lastline >= progLine2) {
+				return true;
+			}
+		}
+
 	}
 
 	CNode* curNode = pkb.cfgNodeTable.at(progLine1);
@@ -177,13 +196,68 @@ bool NextTable::isNext(int progLine1, int progLine2, bool transitiveClosure) {
 
 
 vector<int> NextTable::getLhs() {
-	//@todo change after asking jin what is proglines. might be able to do it faster depending on which definition
+	/*PKB pkb = PKB::getInstance();
+
+	vector<int> listOfProglinesToExclude;
+	
+	vector<int> procs = pkb.getAllProcIndex();
+	for (auto iter = procs.begin(); iter != procs.end(); ++iter) {
+		int procNum = *iter;
+
+		int lastline = getLastProgLineInProc(procNum);
+		CNode* node = pkb.cfgNodeTable.at(lastline);
+
+		if (node->getNodeType() == EndIf_C ) {
+			vector<CNode*> frontier; 
+			frontier.push_back(node);
+
+			while (!frontier.empty()) {
+				node = frontier.back(); 
+				frontier.pop_back();
+				if (node->getNodeType() == EndIf_C) {
+					// add previous nodes 
+					vector<CNode*>* prevNodes = node->getBefore();
+
+					for (auto prevNodeIt = prevNodes->begin(); prevNodeIt != prevNodes->end(); ++prevNodeIt) {
+						frontier.push_back(*prevNodeIt);
+					}
+				} else if (node->getNodeType() != While_C) {
+					listOfProglinesToExclude.push_back(node->getProcLineNumber() );
+				}
+			}
+		} else {
+			if (node->getNodeType() != While_C) {
+				listOfProglinesToExclude.push_back(node->getProcLineNumber() );
+			}	
+		}
+	}
+
+	//sort in desc
+	sort(listOfProglinesToExclude.begin(), listOfProglinesToExclude.end(), std::greater<int>());
+
+	// include every line except the ones in listOfProglinesToExclude
+	vector<int> result;
+	for (unsigned int i = 1; i <= pkb.getStmtTableSize(); i++) {
+		if (!listOfProglinesToExclude.empty() && i == listOfProglinesToExclude.back()) {
+			listOfProglinesToExclude.pop_back();
+			continue;
+		}
+
+		result.push_back(i);
+	}
+	*/
 
 	PKB pkb = PKB::getInstance();
+	
 	vector<int> result;
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
 
-	for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
-		CNode* node = iter->second;
+		CNode* node = pkb.cfgNodeTable.at(i);
+
+		if (node->getNodeType() == While_C || node->getNodeType() == If_C) {
+			result.push_back(node->getProcLineNumber());
+			continue;
+		}
 
 		vector<CNode*>* after = node->getAfter();
 		bool isLastNode;
@@ -204,19 +278,18 @@ vector<int> NextTable::getLhs() {
 }
 
 vector<int> NextTable::getRhs() {
-	//@todo change after asking jin what is proglines. might be able to do it faster depending on which definition
-
 	PKB pkb = PKB::getInstance();
-	vector<int> result;
 
-	for (auto iter = pkb.cfgNodeTable.begin(); iter != pkb.cfgNodeTable.end(); ++iter) {
-		CNode* node = iter->second;
+	vector<int> result;
+	vector<int> assignStmts = pkb.getStmtNumForType(ASSIGN);
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
+		CNode* node = pkb.cfgNodeTable.at(i);
 
 		vector<CNode*>* before = node->getBefore();
 		bool isFirstNode = (before->size() == 1 && before->at(0)->getNodeType() == Proc_C);
 		
 		if (!isFirstNode) {
-			result.push_back(node->getProcLineNumber());
+			result.push_back(i);
 		}
 	}
 
@@ -225,4 +298,48 @@ vector<int> NextTable::getRhs() {
 
 CNode* NextTable::getCNodeForProgLine(int progLine) {
 	throw exception("not implemented yet");
+}
+
+int NextTable::getFirstProgLineInContainer(int container) {
+	if (firstProgLineInElse.count(container) != 0) {
+		return firstProgLineInElse[container];
+	} else {
+		return -1;
+	}
+}
+
+int NextTable::getLastProgLineInContainer(int container) {
+	if (lastProgLineInContainer.count(container) != 0) {
+		return lastProgLineInContainer[container];
+	} else {
+		return -1;
+	}
+}
+
+void NextTable::setFirstProgLineInElse(int container, int firstline) {
+	firstProgLineInElse.insert(pair<int, int>(container, firstline));
+}
+void NextTable::setLastProgLineInContainer(int container, int lastline) {
+	lastProgLineInContainer.insert(pair<int, int>(container, lastline));
+}
+
+int NextTable::getFirstProgLineInProc(int procIndex) {
+	return firstProgLineInProc[procIndex];
+}
+int NextTable::getLastProgLineInProc(int procIndex) {
+	return lastProgLineInProc[procIndex];
+}
+
+void NextTable::setFirstProgLineInProc(int procIndex, int firstlines) {
+	firstProgLineInProc.push_back(firstlines);
+}
+void NextTable::setLastProgLineInProc(int procIndex, int lastlines) {
+	lastProgLineInProc.push_back(lastlines);
+
+}
+
+bool NextTable::setProgLineInWhile(int progline) {
+	isProgLineInWhile = boost::dynamic_bitset<>(PKB::getInstance().getStmtTableSize() + 1);
+	isProgLineInWhile.set(progline);
+	return true;
 }

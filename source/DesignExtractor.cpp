@@ -278,6 +278,9 @@ CNode* createDummyEndIfNode(CFG* cfg, TNode* ifStmtListNode, CNode* lastNodeInIf
 		cfg->createLink(Inside, IfEndNode, insideNode);
 	}*/
 
+	pair<int, CNode*> progLineToNodePair(-1 * curCNode->getProcLineNumber() , IfEndNode); // so that can retrieve the EndIf node
+	PKB::getInstance().cfgNodeTable.insert(progLineToNodePair);
+
 	return IfEndNode;
 }
 
@@ -924,6 +927,55 @@ void DesignExtractor::precomputeInformationForAffects() {
 		// traverse through cfg and update reaching definitions
 		updateFirstUseOfVarThroughCfg(cfg->getProcEnd());
 	}
+}
+
+void DesignExtractor::precomputeInformationForNext() {
+	PKB pkb = PKB::getInstance();
+	// get first progline for each program's graph
+	vector<int> proc = pkb.getAllProcIndex();
+	for (auto iter = proc.begin(); iter != proc.end(); ++iter) {
+		CNode* procroot = pkb.cfgTable.at(*iter)->getProcRoot();
+		CNode* firstline = procroot->getAfter()->at(0);
+		pkb.setFirstProgLineInProc(*iter, firstline->getProcLineNumber());
+	}
+
+	// get last progline
+	for (auto iter = proc.begin(); iter != proc.end(); ++iter) {
+		CNode* procEnd = pkb.cfgTable.at(*iter)->getProcEnd();
+		CNode* lastline = procEnd->getBefore()->at(0);
+
+		pkb.setLastProgLineInProc(*iter, lastline->getProcLineNumber());
+	}
 
 
+	// first progline for each container
+	vector<int> stmt = pkb.getStmtNumForType(WHILE);
+
+	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
+		TNode* node = pkb.getNodeForStmt(*iter);
+		TNode* stmtListNode = node->getChildren()->at(1);
+		TNode* firstChildOfStmtListNode = stmtListNode->getChildren()->at(0);
+
+		pkb.setFirstProgLineInElse(node->getStmtNumber(), firstChildOfStmtListNode->getStmtNumber());
+	}
+
+	// set nodes inside while
+	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
+		vector<int> children = pkb.getChild(*iter, true);
+
+		for (auto childStmtNum = children.begin(); childStmtNum != children.end(); ++childStmtNum) {
+			pkb.setProgLineInWhile(*childStmtNum);
+		}
+	}
+
+	// last progline
+	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
+		TNode* node = pkb.getNodeForStmt(*iter);
+		TNode* stmtListNode = node->getChildren()->at(1);
+		TNode* lastChildOfStmtListNode = stmtListNode->getChildren()->back();
+
+		pkb.setLastProgLineInContainer(node->getStmtNumber(), lastChildOfStmtListNode->getStmtNumber());
+	}
+
+	
 }
