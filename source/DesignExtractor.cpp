@@ -641,14 +641,19 @@ void updateFirstUseOfVarThroughCfg(CNode* endNode) {
 		}
 		
 		// kill off use of variables used by the current node
-		if (currentNode->getNodeType() == Assign_C || currentNode->getNodeType() == Call_C) {
+		if (currentNode->getNodeType() == Assign_C) {
 			vector<int> varUseToRemove = pkb.getUsesVarForStmt(currentNode->getProcLineNumber());
 			vector<int> varMod = pkb.getModVarForStmt(currentNode->getProcLineNumber());
 			varUseToRemove.insert(varUseToRemove.end(), varMod.begin(), varMod.end());
 
 			currentFirstUse = resetVarsInMap(currentFirstUse, varUseToRemove);
-		
+		} else if (currentNode->getNodeType() == Call_C) {
+			// kill off variables modified
+			vector<int> varMod = pkb.getModVarForStmt(currentNode->getProcLineNumber());
+
+			currentFirstUse = resetVarsInMap(currentFirstUse, varMod);
 		}
+
 		// generate new use
 		if (currentNode->getNodeType() == Assign_C) {
 			vector<int> varUseToGenerate = pkb.getUsesVarForStmt(currentNode->getProcLineNumber());
