@@ -9,6 +9,8 @@ var searchData=
   ['addinside2',['addInside2',['../class_c_node.html#ab134fcbf248a11950303ae2c0986d287',1,'CNode']]],
   ['addleftsibling',['addLeftSibling',['../class_t_node.html#ab37c3df2f608068ceb0364ce348fd64c',1,'TNode']]],
   ['addrightsibling',['addRightSibling',['../class_t_node.html#a624465c60f04f33da47f71ab81ab94b8',1,'TNode']]],
+  ['addtosingletontable',['addToSingletonTable',['../namespace_values_handler.html#a2eb74f6571b93abeec25562f19fdeb73',1,'ValuesHandler']]],
+  ['addtosingletontablefortesting',['addToSingletonTableForTesting',['../namespace_values_handler.html#acf23e54d04d930219ca7a1c21b58f1e4',1,'ValuesHandler']]],
   ['affectstable',['AffectsTable',['../class_affects_table.html',1,'']]],
   ['ast',['AST',['../class_a_s_t.html',1,'']]]
 ];

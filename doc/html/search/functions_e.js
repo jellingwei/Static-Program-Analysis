@@ -1,28 +1,6 @@
 var searchData=
 [
-  ['setcalls',['setCalls',['../class_p_k_b.html#a7475a17561e9f90ee2d0798d19de8aa3',1,'PKB']]],
-  ['setchild',['setChild',['../class_q_node.html#a39ef3abafa6774e3e8ddbd1574363ba3',1,'QNode']]],
-  ['setend',['setEnd',['../class_c_node.html#a3a87f436aa716f30652424838474390c',1,'CNode']]],
-  ['setendnode',['setEndNode',['../class_c_f_g.html#a4346b2851a1246344a324846ef2c6a2e',1,'CFG']]],
-  ['setfirstproglineinelse',['setFirstProgLineInElse',['../class_p_k_b.html#aefe94a2b30fe9ca573ec5f0222d56084',1,'PKB']]],
-  ['setfirstproglineinproc',['setFirstProgLineInProc',['../class_p_k_b.html#aeb0ccc288af7290a0897e4fb0f0ee0d6',1,'PKB']]],
-  ['setfirstuseofvariable',['setFirstUseOfVariable',['../class_c_node.html#a54d343768712be0fd82901eae3a3a1c9',1,'CNode']]],
-  ['setfollows',['setFollows',['../class_p_k_b.html#a9292e525ecb43a27682f2af508b03da7',1,'PKB']]],
-  ['setheader',['setHeader',['../class_c_node.html#a657bc42c8047e27a581f8ab5ebc4064c',1,'CNode']]],
-  ['setlastproglineincontainer',['setLastProgLineInContainer',['../class_p_k_b.html#a776d44006b76960bd8d31749949a68c2',1,'PKB']]],
-  ['setlastproglineinproc',['setLastProgLineInProc',['../class_p_k_b.html#aee072abc3004b2c0c08ecea8a8713ec5',1,'PKB']]],
-  ['setmodifies',['setModifies',['../class_p_k_b.html#acf930c7399a35467a42dcf6c9d79af84',1,'PKB']]],
-  ['setmodifiesforassignmentstatements',['setModifiesForAssignmentStatements',['../class_design_extractor.html#a3fce14da2c6e19855781167b4de3f812',1,'DesignExtractor']]],
-  ['setmodifiesforcallstatements',['setModifiesForCallStatements',['../class_design_extractor.html#ae2c76011f9507532abb6e198bbc89870',1,'DesignExtractor']]],
-  ['setmodifiesproc',['setModifiesProc',['../class_p_k_b.html#a0814a8840620ce2915faae0c39bc84f7',1,'PKB']]],
-  ['setparent',['setParent',['../class_p_k_b.html#a5f5424aea7a93142ddcb6296ea1ed8ed',1,'PKB::setParent()'],['../class_q_node.html#a09b45baa3195be5e02292a614a6e0fcc',1,'QNode::setParent()'],['../class_t_node.html#a268a84ac70bea458a3fb9cc4d3e2c27e',1,'TNode::setParent()']]],
-  ['setproglineinwhile',['setProgLineInWhile',['../class_p_k_b.html#a59ef333f7e8c3511702b7902f71f12d7',1,'PKB']]],
-  ['setreachingdefinitions',['setReachingDefinitions',['../class_c_node.html#a558acf3575c7e31c9ba241c32745e9b9',1,'CNode']]],
-  ['setsynonymsmap',['setSynonymsMap',['../class_query_tree.html#a52d55e1b5df44fd1446b2cdbbaa9a530',1,'QueryTree']]],
-  ['setuses',['setUses',['../class_p_k_b.html#a2bff10a01497db14bba3a6202d7be703',1,'PKB']]],
-  ['setusesforassignmentstatements',['setUsesForAssignmentStatements',['../class_design_extractor.html#a1e677e805be01b6bc2ee40201469409a',1,'DesignExtractor']]],
-  ['setusesforcallstatements',['setUsesForCallStatements',['../class_design_extractor.html#a950d23ed5d28df67c0d2577f55d04c2b',1,'DesignExtractor']]],
-  ['setusesforcontainerstatements',['setUsesForContainerStatements',['../class_design_extractor.html#a8a218606e1a8256fe3b76e4a9bb87620',1,'DesignExtractor']]],
-  ['setusesproc',['setUsesProc',['../class_p_k_b.html#af57d27e2ab03eedb2262e9c40198a439',1,'PKB']]],
-  ['synonym',['Synonym',['../class_synonym.html#aaad455aa680dec09937a523aae2cafc8',1,'Synonym::Synonym(SYNONYM_TYPE type, string name)'],['../class_synonym.html#a25a2a39790cb836cb4b85a6786e6292b',1,'Synonym::Synonym(SYNONYM_TYPE type, int name)'],['../class_synonym.html#a4d15dc1279161f195608b12c2d17b616',1,'Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)'],['../class_synonym.html#a1b301ad426f84b6ba89674e4617c7c62',1,'Synonym::Synonym(SYNONYM_TYPE type, string name, vector&lt; int &gt; values)'],['../class_synonym.html#a9cd9d295f26955628f6a01c684fad1f6',1,'Synonym::Synonym(SYNONYM_TYPE type, string name, VALUE_SET values)']]]
+  ['reducesynonymscount',['reduceSynonymsCount',['../namespace_query_optimiser.html#aaaf15bd699fb8495ddc917394499795e',1,'QueryOptimiser']]],
+  ['removefromsingletontable',['removeFromSingletonTable',['../namespace_values_handler.html#ab390f7251ea12e0eb4b3dc477510a09c',1,'ValuesHandler']]],
+  ['reordernonconstantclauses',['reorderNonConstantClauses',['../namespace_query_optimiser.html#af864eec4ea5ea596160ab6e0d1aaddf4',1,'QueryOptimiser']]]
 ];

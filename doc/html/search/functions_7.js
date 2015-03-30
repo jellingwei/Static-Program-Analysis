@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['initialize',['initialize',['../namespace_intermediate_values_handler.html#a0286bc1727677a4613dfd7d18a49ee0f',1,'IntermediateValuesHandler::initialize()'],['../namespace_values_handler.html#aede110b755c245af1af919266f02b837',1,'ValuesHandler::initialize()']]],
+  ['initialize',['initialize',['../namespace_intermediate_values_handler.html#a0286bc1727677a4613dfd7d18a49ee0f',1,'IntermediateValuesHandler::initialize()'],['../namespace_query_optimiser.html#a5b4ed5d55db766524c74d80c2dbfed79',1,'QueryOptimiser::initialize()'],['../namespace_values_handler.html#aede110b755c245af1af919266f02b837',1,'ValuesHandler::initialize()']]],
   ['initmodifiestable',['initModifiesTable',['../class_p_k_b.html#a5650b215aef3b260379c276d2fc2c872',1,'PKB']]],
   ['initparser',['initParser',['../namespace_parser.html#a1da34bdcb2c0b1d569070936f49c5305',1,'Parser::initParser()'],['../namespace_query_parser.html#a1050d3930856035b7fbc77469683883a',1,'QueryParser::initParser()']]],
   ['initquerytreeandsymbolstable',['initQueryTreeAndSymbolsTable',['../namespace_query_parser.html#a00cc2d44cfff6dd5f28200c9a28a2b68',1,'QueryParser']]],
@@ -21,6 +21,8 @@ var searchData=
   ['iscallss',['isCallsS',['../class_p_k_b.html#a6a63f106a35eb22c7c59e14e0a6fae7c',1,'PKB']]],
   ['ischildnode',['isChildNode',['../class_a_s_t.html#a037d8f3bc3632ba92e11db60e230a5a7',1,'AST::isChildNode()'],['../class_p_k_b.html#a3e9c7fd0acf5d2b2f882cedda1099319',1,'PKB::isChildNode()']]],
   ['isconstant',['isConstant',['../class_p_k_b.html#a7a8bd91cf01fb2a75a0f7e2fd7f3f094',1,'PKB']]],
+  ['isexistinmaintable',['isExistInMainTable',['../namespace_values_handler.html#a9f527e4fbc4c4212d775eca1752153f9',1,'ValuesHandler']]],
+  ['isexistinsingletontable',['isExistInSingletonTable',['../namespace_values_handler.html#a00f9b914fa6ab0e667275aba93b4433d',1,'ValuesHandler']]],
   ['isexists',['isExists',['../class_a_s_t.html#a3514acf6a8a0c392b1e97d91986c1838',1,'AST::isExists()'],['../class_c_f_g.html#a4e37cf47347237e5b634847a5c73ef4a',1,'CFG::isExists()'],['../class_p_k_b.html#afcd26773c2e222bf9a30b19bc625a8be',1,'PKB::isExists()']]],
   ['isfactor',['isFactor',['../namespace_query_parser.html#a52a700cb3591b277eece92da637a6471',1,'QueryParser']]],
   ['isfollows',['isFollows',['../class_p_k_b.html#a30acae624f44a15ad9d350d27f0155cd',1,'PKB']]],

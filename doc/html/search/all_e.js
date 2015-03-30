@@ -49,6 +49,8 @@ var searchData=
   ['processifpattern',['processIfPattern',['../namespace_query_evaluator.html#a6dae5ab03372e6866ac22b2951498fa1',1,'QueryEvaluator']]],
   ['processmodifies',['processModifies',['../namespace_query_evaluator.html#af8fb1cb3dc9b49061d4ab65cf777c4af',1,'QueryEvaluator']]],
   ['processnextt',['processNextT',['../namespace_query_evaluator.html#aeb3f80fc8124258d0165e1db02e5f53e',1,'QueryEvaluator']]],
+  ['processpairwithmaintable',['processPairWithMainTable',['../namespace_values_handler.html#ac38b63e4bc7e78f08d9362f736a4a9f9',1,'ValuesHandler']]],
+  ['processpairwithsingletontable',['processPairWithSingletonTable',['../namespace_values_handler.html#a08f3e752bfad9274c256236cb8576c04',1,'ValuesHandler']]],
   ['processparentt',['processParentT',['../namespace_query_evaluator.html#a4786809e9f5b6c8498a7ac1a8dd4bf9e',1,'QueryEvaluator']]],
   ['processpatternclause',['processPatternClause',['../namespace_query_evaluator.html#a783c4e9aaf8903265d0412b4ed0b2fec',1,'QueryEvaluator']]],
   ['processquerytree',['processQueryTree',['../namespace_query_evaluator.html#a4c7714431bf311f6dba04ab2f08050ad',1,'QueryEvaluator']]],

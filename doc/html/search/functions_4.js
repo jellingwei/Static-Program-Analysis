@@ -1,9 +1,21 @@
 var searchData=
 [
+  ['filterequalnumberinmain',['filterEqualNumberInMain',['../namespace_values_handler.html#a40d43f995969229e78af7431de914303',1,'ValuesHandler']]],
+  ['filterequalnumberpairinsingleton',['filterEqualNumberPairInSingleton',['../namespace_values_handler.html#af0d30b35dd93f9b7ad578540f3bcbf0d',1,'ValuesHandler']]],
   ['filterequalpair',['filterEqualPair',['../namespace_intermediate_values_handler.html#af9810a9c6072b47649847a9a93d79290',1,'IntermediateValuesHandler::filterEqualPair()'],['../namespace_values_handler.html#aa83a5692ae395acba747b1d03e2d88d0',1,'ValuesHandler::filterEqualPair()']]],
   ['filterequalpairbynumber',['filterEqualPairByNumber',['../namespace_intermediate_values_handler.html#a8b3655468058f5a0497a004e159d4952',1,'IntermediateValuesHandler::filterEqualPairByNumber()'],['../namespace_values_handler.html#a49050ef6f2b56d1eb05b10cac49781f9',1,'ValuesHandler::filterEqualPairByNumber()']]],
   ['filterequalpairbystring',['filterEqualPairByString',['../namespace_intermediate_values_handler.html#a0acc36c64c2a03d80819e8b8e9095c7d',1,'IntermediateValuesHandler::filterEqualPairByString()'],['../namespace_values_handler.html#a80d34bc39cb81c4315f677ca039f33c9',1,'ValuesHandler::filterEqualPairByString()']]],
+  ['filterequalstringinmain',['filterEqualStringInMain',['../namespace_values_handler.html#a0bf9afa52c76940b9134fc593740128e',1,'ValuesHandler']]],
+  ['filterequalstringpairinsingleton',['filterEqualStringPairInSingleton',['../namespace_values_handler.html#a254421c4451520e84c26775b67e71f21',1,'ValuesHandler']]],
   ['filterequalvalue',['filterEqualValue',['../namespace_intermediate_values_handler.html#a328d1f50b0e036422f1f6e38f0075526',1,'IntermediateValuesHandler::filterEqualValue()'],['../namespace_values_handler.html#ad11ff5778f2697bef2611e6c65de937f',1,'ValuesHandler::filterEqualValue()']]],
+  ['filterequalvaluebynumber',['filterEqualValueByNumber',['../namespace_values_handler.html#a5e42942bac7b5eb39e2db17964f27651',1,'ValuesHandler']]],
+  ['filterequalvaluebystring',['filterEqualValueByString',['../namespace_values_handler.html#a4857774aad69d0cfd86e95ce26cffb9c',1,'ValuesHandler']]],
+  ['filtermaintablebynumber',['filterMainTableByNumber',['../namespace_values_handler.html#a71af86f14bd62851ab826e3eaf31824f',1,'ValuesHandler']]],
+  ['filtermaintablebystring',['filterMainTableByString',['../namespace_values_handler.html#ac33eb5d89f532211c98e992344b4f9d3',1,'ValuesHandler']]],
+  ['filtersingletontablebynumber',['filterSingletonTableByNumber',['../namespace_values_handler.html#a79b20de35ae793392db515f21d940001',1,'ValuesHandler']]],
+  ['filtersingletontablebystring',['filterSingletonTableByString',['../namespace_values_handler.html#a18c7a16fb65ad684746ce9b8c17b438e',1,'ValuesHandler']]],
+  ['findindexanddirectionwithsmallestcost',['findIndexAndDirectionWithSmallestCost',['../namespace_query_optimiser.html#ad479835607c036661265ac84100099ae',1,'QueryOptimiser']]],
   ['findindexinmaintable',['findIndexInMainTable',['../namespace_values_handler.html#a494b8ecf4986f19fc23102f0319e7d23',1,'ValuesHandler']]],
-  ['findintermediatesynonymindex',['findIntermediateSynonymIndex',['../namespace_intermediate_values_handler.html#a5878b37687fcaf459bc6c18d130d4f8f',1,'IntermediateValuesHandler']]]
+  ['findintermediatesynonymindex',['findIntermediateSynonymIndex',['../namespace_intermediate_values_handler.html#a5878b37687fcaf459bc6c18d130d4f8f',1,'IntermediateValuesHandler']]],
+  ['flattenquery',['flattenQuery',['../namespace_query_optimiser.html#a23e226e8c92890ee13e11576af50c55d',1,'QueryOptimiser']]]
 ];

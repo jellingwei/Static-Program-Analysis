@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3201 Minions SPA: source/DesignExtractor.h Source File</title>
+<title>CS3202 Minions SPA: source/DesignExtractor.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3201 Minions SPA
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -104,32 +104,30 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="class_design_extractor.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_design_extractor.html">DesignExtractor</a> {</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">public</span>:</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="class_design_extractor.html">DesignExtractor</a>();</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        vector&lt;TNode*&gt; <a class="code" href="class_design_extractor.html#a39bc8d7381b1a577dd857084bab8f05e">obtainCallStatementsInTopologicalOrder</a>();</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#ae2c76011f9507532abb6e198bbc89870">setModifiesForCallStatements</a>(vector&lt;TNode*&gt;);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a950d23ed5d28df67c0d2577f55d04c2b">setUsesForCallStatements</a>(vector&lt;TNode*&gt;);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a3fce14da2c6e19855781167b4de3f812">setModifiesForAssignmentStatements</a>();</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a1e677e805be01b6bc2ee40201469409a">setUsesForAssignmentStatements</a>();</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a8a218606e1a8256fe3b76e4a9bb87620">setUsesForContainerStatements</a>();</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        STATUS <a class="code" href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">constructCfg</a>();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a2010b43d351b791794e9710c28172654">precomputeInformationForAffects</a>();</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordtype">void</span> precomputeInformationForNext();</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keywordtype">void</span> constructStatisticsTable();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;};</div>
-<div class="ttc" id="class_design_extractor_html_a3fce14da2c6e19855781167b4de3f812"><div class="ttname"><a href="class_design_extractor.html#a3fce14da2c6e19855781167b4de3f812">DesignExtractor::setModifiesForAssignmentStatements</a></div><div class="ttdeci">void setModifiesForAssignmentStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:424</div></div>
-<div class="ttc" id="class_design_extractor_html_a950d23ed5d28df67c0d2577f55d04c2b"><div class="ttname"><a href="class_design_extractor.html#a950d23ed5d28df67c0d2577f55d04c2b">DesignExtractor::setUsesForCallStatements</a></div><div class="ttdeci">void setUsesForCallStatements(vector&lt; TNode * &gt;)</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:193</div></div>
-<div class="ttc" id="class_design_extractor_html_a8a218606e1a8256fe3b76e4a9bb87620"><div class="ttname"><a href="class_design_extractor.html#a8a218606e1a8256fe3b76e4a9bb87620">DesignExtractor::setUsesForContainerStatements</a></div><div class="ttdeci">void setUsesForContainerStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:515</div></div>
-<div class="ttc" id="class_design_extractor_html_a2010b43d351b791794e9710c28172654"><div class="ttname"><a href="class_design_extractor.html#a2010b43d351b791794e9710c28172654">DesignExtractor::precomputeInformationForAffects</a></div><div class="ttdeci">void precomputeInformationForAffects()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:909</div></div>
-<div class="ttc" id="class_design_extractor_html_a30ba4c59ea8642e2267ff0caa11c8356"><div class="ttname"><a href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">DesignExtractor::constructCfg</a></div><div class="ttdeci">STATUS constructCfg()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:390</div></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#afe053621d581626c68ebb7148c182d66">setModifiesForCallStatements</a>();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a441fd1f70f6ca07b67341fb492dd79f3">setUsesForCallStatements</a>();</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a3fce14da2c6e19855781167b4de3f812">setModifiesForAssignmentStatements</a>();</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a1e677e805be01b6bc2ee40201469409a">setUsesForAssignmentStatements</a>();</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a8a218606e1a8256fe3b76e4a9bb87620">setUsesForContainerStatements</a>();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        STATUS <a class="code" href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">constructCfg</a>();</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="class_design_extractor.html#a2010b43d351b791794e9710c28172654">precomputeInformationForAffects</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">void</span> precomputeInformationForNext();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordtype">void</span> constructStatisticsTable();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;};</div>
+<div class="ttc" id="class_design_extractor_html_a441fd1f70f6ca07b67341fb492dd79f3"><div class="ttname"><a href="class_design_extractor.html#a441fd1f70f6ca07b67341fb492dd79f3">DesignExtractor::setUsesForCallStatements</a></div><div class="ttdeci">void setUsesForCallStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:195</div></div>
+<div class="ttc" id="class_design_extractor_html_a3fce14da2c6e19855781167b4de3f812"><div class="ttname"><a href="class_design_extractor.html#a3fce14da2c6e19855781167b4de3f812">DesignExtractor::setModifiesForAssignmentStatements</a></div><div class="ttdeci">void setModifiesForAssignmentStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:427</div></div>
+<div class="ttc" id="class_design_extractor_html_a8a218606e1a8256fe3b76e4a9bb87620"><div class="ttname"><a href="class_design_extractor.html#a8a218606e1a8256fe3b76e4a9bb87620">DesignExtractor::setUsesForContainerStatements</a></div><div class="ttdeci">void setUsesForContainerStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:518</div></div>
+<div class="ttc" id="class_design_extractor_html_a2010b43d351b791794e9710c28172654"><div class="ttname"><a href="class_design_extractor.html#a2010b43d351b791794e9710c28172654">DesignExtractor::precomputeInformationForAffects</a></div><div class="ttdeci">void precomputeInformationForAffects()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:912</div></div>
+<div class="ttc" id="class_design_extractor_html_a30ba4c59ea8642e2267ff0caa11c8356"><div class="ttname"><a href="class_design_extractor.html#a30ba4c59ea8642e2267ff0caa11c8356">DesignExtractor::constructCfg</a></div><div class="ttdeci">STATUS constructCfg()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:393</div></div>
 <div class="ttc" id="class_design_extractor_html"><div class="ttname"><a href="class_design_extractor.html">DesignExtractor</a></div><div class="ttdef"><b>Definition:</b> DesignExtractor.h:18</div></div>
-<div class="ttc" id="class_design_extractor_html_a39bc8d7381b1a577dd857084bab8f05e"><div class="ttname"><a href="class_design_extractor.html#a39bc8d7381b1a577dd857084bab8f05e">DesignExtractor::obtainCallStatementsInTopologicalOrder</a></div><div class="ttdeci">vector&lt; TNode * &gt; obtainCallStatementsInTopologicalOrder()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:131</div></div>
-<div class="ttc" id="class_design_extractor_html_a1e677e805be01b6bc2ee40201469409a"><div class="ttname"><a href="class_design_extractor.html#a1e677e805be01b6bc2ee40201469409a">DesignExtractor::setUsesForAssignmentStatements</a></div><div class="ttdeci">void setUsesForAssignmentStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:481</div></div>
-<div class="ttc" id="class_design_extractor_html_ae2c76011f9507532abb6e198bbc89870"><div class="ttname"><a href="class_design_extractor.html#ae2c76011f9507532abb6e198bbc89870">DesignExtractor::setModifiesForCallStatements</a></div><div class="ttdeci">void setModifiesForCallStatements(vector&lt; TNode * &gt;)</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:158</div></div>
+<div class="ttc" id="class_design_extractor_html_a1e677e805be01b6bc2ee40201469409a"><div class="ttname"><a href="class_design_extractor.html#a1e677e805be01b6bc2ee40201469409a">DesignExtractor::setUsesForAssignmentStatements</a></div><div class="ttdeci">void setUsesForAssignmentStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:484</div></div>
+<div class="ttc" id="class_design_extractor_html_afe053621d581626c68ebb7148c182d66"><div class="ttname"><a href="class_design_extractor.html#afe053621d581626c68ebb7148c182d66">DesignExtractor::setModifiesForCallStatements</a></div><div class="ttdeci">void setModifiesForCallStatements()</div><div class="ttdef"><b>Definition:</b> DesignExtractor.cpp:158</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Mar 29 2015 21:02:26 for CS3201 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Mar 30 2015 11:42:14 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

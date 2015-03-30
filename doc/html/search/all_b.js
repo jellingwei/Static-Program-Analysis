@@ -13,5 +13,6 @@ var searchData=
   ['matchsynonymandident',['matchSynonymAndIdent',['../namespace_query_parser.html#ab745bcedc1eeb38fc78b26234fc8ce3b',1,'QueryParser']]],
   ['matchunderscore',['matchUnderscore',['../namespace_query_parser.html#a31f3f7e29eede9c7fad24a6cbcf9da0b',1,'QueryParser']]],
   ['matchvarref',['matchVarRef',['../namespace_query_parser.html#a36007e40d467e2fbebf63b5774bfd6ab',1,'QueryParser']]],
+  ['mergesingletontomain',['mergeSingletonToMain',['../namespace_values_handler.html#a8c98c210c1e7c8ad20cfb2453d0684e1',1,'ValuesHandler']]],
   ['modifiestable',['ModifiesTable',['../class_modifies_table.html',1,'']]]
 ];
