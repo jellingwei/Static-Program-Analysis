@@ -119,7 +119,7 @@ INTEGER CFG::getInsideSize(CNode* header) {
 * @return a list of all the CNodes inside the container statement header.
 * @exception exception if header is NULL.
 */
-vector<CNode*>* CFG::getInsideNodes(CNode* header) {
+CNODE_LIST CFG::getInsideNodes(CNode* header) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -176,7 +176,7 @@ INTEGER CFG::getInsideElseSize(CNode* header) {
 * @return a list of all the CNodes inside the 'else' section of the if statement header.
 * @exception exception if header is NULL.
 */
-vector<CNode*>* CFG::getInsideElseNodes(CNode* header) {
+CNODE_LIST CFG::getInsideElseNodes(CNode* header) {
 	if(header==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -234,7 +234,7 @@ INTEGER CFG::getBeforeSize(CNode* curr) {
 * @return a list of all the predecessor CNodes the current CNode is linked to.
 * @exception exception if curr is NULL.
 */
-vector<CNode*>* CFG::getBeforeNodes(CNode* curr) {
+CNODE_LIST CFG::getBeforeNodes(CNode* curr) {
 	if(curr==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}
@@ -290,7 +290,7 @@ INTEGER CFG::getAfterSize(CNode* curr) {
 * @return a list of all the successor CNodes the current CNode is linked to.
 * @exception exception if curr is NULL.
 */
-vector<CNode*>* CFG::getAfterNodes(CNode* curr) {
+CNODE_LIST CFG::getAfterNodes(CNode* curr) {
 	if(curr==NULL) {
 		throw exception("CFG error: CNode* not referenced");
 	}

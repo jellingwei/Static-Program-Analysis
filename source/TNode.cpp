@@ -19,7 +19,7 @@ TNode::TNode()
  * If astNodeType is neither Variable nor Constant, then value is not a meaningful value.
  * @exception if stmtNum is negative or 0.
  */
-TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value) 
+TNode::TNode(TNODE_TYPE astNodeType, STATEMENT stmtNum, VALUE value) 
 {
 	/*if(stmtNo <= 0) 
 	{
@@ -51,7 +51,7 @@ TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value)
  * If astNodeType is neither Variable nor Constant, then value is not a meaningful value.
  * @exception if stmtNum is negative or 0.
  */
-TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value, TNode* parent) 
+TNode::TNode(TNODE_TYPE astNodeType, STATEMENT stmtNum, VALUE value, TNode* parent) 
 {
 
 	_nodeType = astNodeType;
@@ -65,7 +65,7 @@ TNode::TNode(TNODE_TYPE astNodeType, int stmtNum, int value, TNode* parent)
 /**
  * @return the statement number of the TNode.
  */
-int TNode::getStmtNumber() 
+STATEMENT TNode::getStmtNumber() 
 {
 	return _stmtNumber;
 }
@@ -76,7 +76,7 @@ int TNode::getStmtNumber()
  * If the node is a Constant node, then value is a CONSTANT. 
  * If the node is neither a Variable node or Constant node, then value is not a meaningful value.
  */
-int TNode::getNodeValueIdx() 
+VAR_INDEX TNode::getNodeValueIdx() 
 {
 	return _nodeValueIdx;
 }
@@ -111,7 +111,7 @@ void TNode::addChild(TNode* node)
 /**
  * @return TRUE if the current node has any child node. FALSE if the current node does not have any child node.
  */
-bool TNode::hasChild() 
+BOOLEAN_ TNode::hasChild() 
 {
 	if(_children.size() < 1) return false;
 	else return true;
@@ -121,7 +121,7 @@ bool TNode::hasChild()
  * @return a list of all the children nodes of the current node.	 	
  * If the current node does not have any children nodes, return an empty list.
  */
-vector<TNode*>* TNode::getChildren() 
+TNODE_LIST TNode::getChildren() 
 {
 	return &_children;
 }
@@ -150,7 +150,7 @@ void TNode::addRightSibling(TNode* node)
  * Check if the current node has any left sibling.
  * @return TRUE if the current node has a left sibling. FALSE if the current node does not have any left sibling.
  */
-bool TNode::hasLeftSibling() 
+BOOLEAN_ TNode::hasLeftSibling() 
 {
 	if(_leftSibling != NULL) return true;
 	else return false;
@@ -160,7 +160,7 @@ bool TNode::hasLeftSibling()
  * Check if the current node has any right sibling.
  * @return TRUE if the current node has a right sibling. FALSE if the current node does not have any right sibling.
  */
-bool TNode::hasRightSibling() 
+BOOLEAN_ TNode::hasRightSibling() 
 {
 	if(_rightSibling != NULL) return true;
 	else return false;
@@ -193,7 +193,7 @@ void TNode::setParent(TNode* parent)
 }
 
 //@todo 
-void TNode::increaseDescendent(int toAdd) {
+void TNode::increaseDescendent(INTEGER toAdd) {
 	_descendents += toAdd;
 }
 

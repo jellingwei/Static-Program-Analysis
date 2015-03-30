@@ -11,6 +11,7 @@
 #include <boost\dynamic_bitset.hpp>
 
 #include "common.h"
+#include "common_list.h"
 #include "TNode.h"
 
 using std::string;
@@ -25,47 +26,47 @@ public:
 	//CNode(CNODE_TYPE ast_node_type, int stmtNo);
 	CNode(CNODE_TYPE cfg_node_type, int procLineNo, CNode* header, TNode* ast);
 	
-	int getProcLineNumber();
+	PROG_LINE_ getProcLineNumber();
 	CNODE_TYPE getNodeType();
-	bool isDummy();
+	BOOLEAN_ isDummy();
 	unordered_map<int, set<int>> getReachingDefinitions();
 	void setReachingDefinitions(unordered_map<int, set<int>>);
 	unordered_map<int, set<int>> getFirstUseOfVariable();
 	void setFirstUseOfVariable(unordered_map<int, set<int>>);
 	
-	vector<CNode*>* getBefore();
+	CNODE_LIST getBefore();
 	void addBefore(CNode* node);
-	bool hasBefore();
+	BOOLEAN_ hasBefore();
 	
-	vector<CNode*>* getAfter();
+	CNODE_LIST getAfter();
 	void addAfter(CNode* node);
-	bool hasAfter();
+	BOOLEAN_ hasAfter();
 	
 
 	void setHeader(CNode* header);
 	CNode* getHeader();
 	
 	//for While & If Then StmtLst
-	vector<CNode*>* getInside();
+	CNODE_LIST getInside();
 	void addInside(CNode* node);
-	bool hasInside();
+	BOOLEAN_ hasInside();
 	VARIABLES getVariablesInside();
 	void setVariablesInside(VARIABLES);
 
 	//for If Else StmtLst
-	vector<CNode*>* getInside2();
+	CNODE_LIST getInside2();
 	void addInside2(CNode* node);
-	bool hasInside2();
+	BOOLEAN_ hasInside2();
 	VARIABLES getVariablesInside2();
 	void setVariablesInside2(VARIABLES);
 
-	bool isVariableLive(int);
-	bool isVariableDefinedBefore(int);
+	BOOLEAN_ isVariableLive(VAR_INDEX varIndex);
+	BOOLEAN_ isVariableDefinedBefore(VAR_INDEX varIndex);
 	
 
 	TNode* getASTref();
 	void setEnd();
-	bool getEnd();
+	BOOLEAN_ getEnd();
 
 private:
 	CNODE_TYPE _nodeType;

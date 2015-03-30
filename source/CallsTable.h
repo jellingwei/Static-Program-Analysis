@@ -24,7 +24,7 @@ public:
 	// Given procIndex1, return procIndex2 such that Calls(procIndex1, procIndex2) is satisfied
 	PROCINDEX_LIST getProcsCalledBy(PROC_INDEX procIndex1, TRANS_CLOSURE transitiveClosure, bool terminateOnFinding = false, int lineToFind= -1);
 
-	pair<vector<int>, vector<int>> getAllCallsPairs(TRANS_CLOSURE transitiveClosure);
+	pair<PROCINDEX_LIST, PROCINDEX_LIST> getAllCallsPairs(TRANS_CLOSURE transitiveClosure);
 
 	PROCNAME getProcNameCalledByStatement(STATEMENT stmtNum);
 

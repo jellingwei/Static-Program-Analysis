@@ -20,7 +20,7 @@ CNode::CNode()
  * @param header  the container statement for if/while statements
  * @param ast  the TNode in AST that corresponds to the CNode in CFG
  */
-CNode::CNode(CNODE_TYPE cfgNodeType, int procLineNum, CNode* header, TNode* ast) 
+CNode::CNode(CNODE_TYPE cfgNodeType, PROG_LINE_ procLineNum, CNode* header, TNode* ast) 
 {
 	_nodeType = cfgNodeType;
 	_procLineNumber = procLineNum;
@@ -31,7 +31,7 @@ CNode::CNode(CNODE_TYPE cfgNodeType, int procLineNum, CNode* header, TNode* ast)
 /**
  * @return the program line number of the corresponding CNode.
  */
-int CNode::getProcLineNumber() 
+PROG_LINE_ CNode::getProcLineNumber() 
 {
 	return _procLineNumber;
 }
@@ -48,7 +48,7 @@ CNODE_TYPE CNode::getNodeType()
 /**
  * @return a list of all the predecessor CNodes of the current CNode.
  */
-vector<CNode*>* CNode::getBefore()
+CNODE_LIST CNode::getBefore()
 {
 	return &_before;
 }
@@ -66,7 +66,7 @@ void CNode::addBefore(CNode* node)
  * Check if the current CNode has any predecessor CNode. 
  * @return TRUE if the current CNode has at least 1 predecessor CNode. FALSE if the current CNode does not have any predecessor CNode.
  */
-bool CNode::hasBefore() 
+BOOLEAN_ CNode::hasBefore() 
 {
 	if(_before.size() < 1) return false;
 	else return true;
@@ -75,7 +75,7 @@ bool CNode::hasBefore()
 /**
  * @return a list of all the successor CNodes of the current CNode.
  */
-vector<CNode*>* CNode::getAfter()
+CNODE_LIST CNode::getAfter()
 {
 	return &_after;
 }
@@ -93,7 +93,7 @@ void CNode::addAfter(CNode* node)
  * Check if the current CNode has any successor CNode. 
  * @return TRUE if the current CNode has at least 1 successor CNode. FALSE if the current CNode does not have any successor CNode.
  */
-bool CNode::hasAfter() 
+BOOLEAN_ CNode::hasAfter() 
 {
 	if(_after.size() < 1) return false;
 	else return true;
@@ -119,7 +119,7 @@ CNode* CNode::getHeader()
 /**
  * @return a list of all the CNodes inside the container statement for if/while statements.
  */
-vector<CNode*>* CNode::getInside()
+CNODE_LIST CNode::getInside()
 {
 	return &_inside;
 }
@@ -138,7 +138,7 @@ void CNode::addInside(CNode* node)
  * @return TRUE if the current CNode has at least 1 CNode inside the container statement. 
  *		   FALSE if the current CNode does not have any CNode inside the container statement.
  */
-bool CNode::hasInside()
+BOOLEAN_ CNode::hasInside()
 {
 	if(_inside.size() < 1) return false;
 	else return true;
@@ -147,7 +147,7 @@ bool CNode::hasInside()
 /**
  * @return a list of all the CNodes inside the 'else' of the if/else statement.
  */
-vector<CNode*>* CNode::getInside2()
+CNODE_LIST CNode::getInside2()
 {
 	return &_inside2;
 }
@@ -166,7 +166,7 @@ void CNode::addInside2(CNode* node)
  * @return TRUE if the current CNode has at least 1 CNode inside the 'else' of the if/else statement. 
  *		   FALSE if the current CNode does not have any CNode inside the 'else' of the if/else statement.
  */
-bool CNode::hasInside2()
+BOOLEAN_ CNode::hasInside2()
 {
 	if(_inside2.size() < 1) return false;
 	else return true;
@@ -194,7 +194,7 @@ void CNode::setEnd()
  * @return TRUE if the the node is the end node in the CFG of a procedure.
  *		   FALSE if the the node is not the end node in the CFG of a procedure.
  */
-bool CNode::getEnd()
+BOOLEAN_ CNode::getEnd()
 {
 	return isEnd;
 }
@@ -248,10 +248,10 @@ void CNode::setFirstUseOfVariable(unordered_map<int, set<int>> varStmtMap) {
 }
 
 
-bool CNode::isVariableLive(int varIndex) {
+BOOLEAN_ CNode::isVariableLive(VAR_INDEX varIndex) {
 	return _liveVariables->test(varIndex);
 }
 
-bool CNode::isVariableDefinedBefore(int varIndex) {
+BOOLEAN_ CNode::isVariableDefinedBefore(VAR_INDEX varIndex) {
 	return _reachingDefinitionsVariables->test(varIndex);
 }

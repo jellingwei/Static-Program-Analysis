@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Synonym.h"
-#include "TNode.h"
-#include "CNode.h"
+class CNode;
+class TNode;
+class Synonym;
 
 typedef vector<Synonym> SYNONYM_LIST;
 typedef vector<TNode*>* TNODE_LIST;

@@ -28,7 +28,7 @@ public:
 
 	BOOLEAN_ isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure);
 
-	pair<vector<int>, vector<int>> getAllFollowsPairs(TRANS_CLOSURE transitiveClosure);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllFollowsPairs(TRANS_CLOSURE transitiveClosure);
 	STATEMENT_LIST getLhs();
 	STATEMENT_LIST getRhs();
 

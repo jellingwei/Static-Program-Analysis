@@ -18,7 +18,7 @@ public:
 
 	BOOLEAN_ isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure);
 
-	pair<vector<int>, vector<int>> getAllParentPairs(TRANS_CLOSURE transitiveClosure);
+	pair<STATEMENT_LIST, STATEMENT_LIST> getAllParentPairs(TRANS_CLOSURE transitiveClosure);
 	STATEMENT_LIST getAllChildren();
 	STATEMENT_LIST getAllParents();
 

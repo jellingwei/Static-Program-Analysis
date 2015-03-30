@@ -6,6 +6,8 @@
 #include <string>
 #include <utility>
 #include "common.h"
+#include "common_list.h"
+
 using std::string;
 using namespace std;
 
@@ -13,27 +15,27 @@ class TNode
 {
 public:
 	TNode();
-	TNode(TNODE_TYPE ast_node_type, int stmtNo, int idx);
-	TNode(TNODE_TYPE ast_node_type, int stmtNo, int idx, TNode* parent);
-	int getStmtNumber();
-	int getNodeValueIdx();
+	TNode(TNODE_TYPE ast_node_type, STATEMENT stmtNum, VALUE value);
+	TNode(TNODE_TYPE ast_node_type, STATEMENT stmtNum, VALUE value, TNode* parent);
+	STATEMENT getStmtNumber();
+	VAR_INDEX getNodeValueIdx();
 	TNODE_TYPE getNodeType();
 	TNode* getParent();
 
 	void addChild(TNode* node);
-	bool hasChild();
-	vector<TNode*>* getChildren();
+	BOOLEAN_ hasChild();
+	TNODE_LIST getChildren();
 
 	void addLeftSibling(TNode* node);
 	void addRightSibling(TNode* node);
-	bool hasLeftSibling();
-	bool hasRightSibling();
+	BOOLEAN_ hasLeftSibling();
+	BOOLEAN_ hasRightSibling();
 	TNode* getLeftSibling();
 	TNode* getRightSibling();
 
 	void setParent(TNode* parent);
 	
-	void increaseDescendent(int toAdd);
+	void increaseDescendent(INTEGER toAdd);
 	int getDescendent();
 
 private:

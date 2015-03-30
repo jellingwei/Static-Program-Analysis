@@ -4,6 +4,8 @@
 #include <string>
 #include <cassert>
 #include "CNode.h"
+#include "common.h"
+#include "common_list.h"
 
 using namespace std;
 
@@ -22,23 +24,23 @@ class CFG {
 		
 		BOOLEAN_ hasInside(CNode* header);
 		INTEGER getInsideSize(CNode* header);	
-		vector<CNode*>* getInsideNodes(CNode* header);
+		CNODE_LIST getInsideNodes(CNode* header);
 		BOOLEAN_ isInsideNode(CNode* parent, CNode* child);
 
 		//use for If Else StmtLst
 		BOOLEAN_ hasInsideElse(CNode* header);
 		INTEGER getInsideElseSize(CNode* header);	
-		vector<CNode*>* getInsideElseNodes(CNode* header);
+		CNODE_LIST getInsideElseNodes(CNode* header);
 		BOOLEAN_ isInsideElseNode(CNode* parent, CNode* child);
 
 		BOOLEAN_ hasBefore(CNode* curr);
 		INTEGER getBeforeSize(CNode* curr);	
-		vector<CNode*>* getBeforeNodes(CNode* curr);
+		CNODE_LIST getBeforeNodes(CNode* curr);
 		BOOLEAN_ isBeforeNode(CNode* curr, CNode* before);
 
 		BOOLEAN_ hasAfter(CNode* curr);
 		INTEGER getAfterSize(CNode* curr);	
-		vector<CNode*>* getAfterNodes(CNode* curr);
+		CNODE_LIST getAfterNodes(CNode* curr);
 		BOOLEAN_ isAfterNode(CNode* curr, CNode* after);
 
 		BOOLEAN_ isExists(CNode* node);

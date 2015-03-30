@@ -5,6 +5,7 @@
 #include <cassert>
 #include "TNode.h"
 #include "common.h"
+#include "common_list.h"
 
 using namespace std;
 
@@ -20,7 +21,7 @@ class AST {
 		STATUS createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode);
 		
 		INTEGER getChildrenSize(TNode* parent);	
-		vector<TNode*>* getChildrenNode(TNode* parent);
+		TNODE_LIST getChildrenNode(TNode* parent);
 		BOOLEAN_ isChildNode(TNode* parent, TNode* child);
 
 		BOOLEAN_ isExists(TNode* node);

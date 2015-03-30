@@ -7,6 +7,8 @@ using std::string;
 using std::vector;
 #include "TNode.h"
 #include "PKB.h"
+#include "common.h"
+#include "common_list.h"
 
 /**
  * The DesignExtractor handles the setting of information that could not be set during parsing.

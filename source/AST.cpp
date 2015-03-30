@@ -97,7 +97,7 @@ INTEGER AST::getChildrenSize(TNode* parent) {
 * If there is no answer, return an empty list.
 * @exception if parent is NULL.
 */
-vector<TNode*>* AST::getChildrenNode(TNode* parent) {
+TNODE_LIST AST::getChildrenNode(TNode* parent) {
 	if(parent==NULL) {
 		throw exception("AST error: TNode* not referenced");
 	}
