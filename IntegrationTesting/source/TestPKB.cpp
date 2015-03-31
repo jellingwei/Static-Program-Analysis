@@ -428,6 +428,13 @@ void PKBTest::testPKB()
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(22, 24)", false, pkb.isAffects(22, 24));
 
+	// NextBip
+	cout << "NextBip" << endl;
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(12,_)", 2, (int)pkb.getNextBipAfter(12).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip*(17,_), 17 is a call statement", 8, (int)pkb.getNextBipAfter(17, true).size());
+
+
 	cout << "End TestPkb" << endl;
 }
 

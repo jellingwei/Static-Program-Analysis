@@ -36,7 +36,7 @@ void updateStateOfBfs(set<NEXTBIP_STATE>* visited, NEXTBIP_STATE nextState, dequ
 CNode* getNodeCalledByProgLine(CNode* nextNode) {
 	PKB pkb = PKB::getInstance();
 
-	TNode* astNode = pkb.getNodeForStmt(nextNode->getProcLineNumber());
+	TNode* astNode = nextNode->getASTref();
 	int procIndex = astNode->getNodeValueIdx();
 	int procLineToGoTo = pkb.getFirstProgLineInProc(procIndex);
 
@@ -44,6 +44,36 @@ CNode* getNodeCalledByProgLine(CNode* nextNode) {
 	CNode* nodeOfProc = pkb.cfgNodeTable.at(procLineToGoTo);
 
 	return nodeOfProc;
+}
+
+vector<CNode*> getCallStatementsToProc(int procIndex) {
+	//todo: do this function as a precomputation
+	PKB pkb = PKB::getInstance();
+	
+	vector<int> possibleCallStmts = pkb.getStmtNumForType(CALL);
+	vector<CNode*> callStmtsToCurrentProc;
+
+	// filter out the calls to other procs
+	for (auto iter = possibleCallStmts.begin(); iter != possibleCallStmts.end(); ++iter) {
+		TNode* astNode = pkb.getNodeForStmt(*iter);
+		if (astNode->getNodeValueIdx() == procIndex) {
+			CNode* cNode = pkb.cfgNodeTable.at(*iter);
+			callStmtsToCurrentProc.push_back(cNode);
+		}
+	}
+
+	return callStmtsToCurrentProc;
+}
+
+vector<CNode*> getNextNodesOfNodes(vector<CNode*> nodes) {
+	vector<CNode*> result;
+	for (auto iter = nodes.begin(); iter != nodes.end(); ++iter) {
+		vector<CNode*>* nextNodes = (*iter)->getAfter();
+
+		result.insert(result.end(), nextNodes->begin(), nextNodes->end());
+	}
+
+	return result;
 }
 
 PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
@@ -75,7 +105,14 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 				CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
 				updateStateOfBfs(visited, NEXTBIP_STATE(nodeAfterCall, afterCall), frontier, result);
 			} else {
+				// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
+				int curProcIndex = curNode->getASTref()->getNodeValueIdx();
+				
+				vector<CNode*> possibleNodes = getNextNodesOfNodes(getCallStatementsToProc(curProcIndex));
 
+				for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
+					updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
+				}
 			}
 		} else if (curNode->getNodeType() == Call_C) {
 			// for call statement
@@ -120,53 +157,7 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 }
 
 PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
-	/*PKB pkb = PKB::getInstance();
-	if (pkb.cfgNodeTable.count(progLine2) == 0) { // progline does not have a cfg node
-		return vector<int>();
-	}
-	CNode* curNode = pkb.cfgNodeTable.at(progLine2);
-	vector<int> result;
 
-	deque<CNode*> frontier; 
-	set<int> visited;
-	frontier.push_back(curNode);
-
-	while (!frontier.empty()) {
-		curNode = frontier.back(); frontier.pop_back();
-
-		vector<CNode*>* nextNodes = curNode->getBefore();
-		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
-			CNode* node = *iter;
-			if (node->getNodeType() == Proc_C || node->getNodeType() == EndProc_C) {
-				continue;
-			}
-
-			// if the previous node is a dummy end_if node,
-			// skip it and go to its "before" nodes directly
-			if (node->getNodeType() == EndIf_C) {
-				
-				// jump to the next node immediately as an EndIf_C node should never be considered
-				assert(node->getBefore()->size() == 2);
-
-				CNode* nextNodeBeforeEndIf = node->getBefore()->at(0);
-				CNode* nextNodeBeforeEndIf1 = node->getBefore()->at(1);
-
-				updateStateOfBfs(visited, nextNodeBeforeEndIf, frontier, result);
-				updateStateOfBfs(visited, nextNodeBeforeEndIf1, frontier, result);
-				
-
-			} else  {
-				updateStateOfBfs(visited, node, frontier, result);
-			}
-		}
-
-		// break after the first iteration if we are not finding transitive closure
-		if (!transitiveClosure) {
-			break;
-		}
-	}
-
-	return result;*/
 	return vector<int>();
 }
 
