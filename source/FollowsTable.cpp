@@ -188,3 +188,7 @@ STATEMENT_LIST FollowsTable::getLhs() {
 STATEMENT_LIST FollowsTable::getRhs() {
 	return rhs;
 }
+
+BOOLEAN_ FollowsTable::isValid() {
+	return lhs.size() != 0;
+}

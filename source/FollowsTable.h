@@ -32,4 +32,5 @@ public:
 	STATEMENT_LIST getLhs();
 	STATEMENT_LIST getRhs();
 
+	BOOLEAN_ isValid();
 };

@@ -586,3 +586,20 @@ BOOLEAN_ AffectsTable::isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRA
 
 	return false;
 }
+
+BOOLEAN_ AffectsTable::isValid() {
+	PKB pkb = PKB::getInstance();
+	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
+	
+	for (auto iter = assignments.begin(); iter != assignments.end(); ++iter) {
+		bool transitiveClosure = false;
+		bool earlyTermination = true;
+		vector<int> ans = getProgLinesAffectedBy(*iter, transitiveClosure, earlyTermination); 
+		if (!ans.empty()) {
+			return true;
+		}
+	}
+
+	return false;
+
+}

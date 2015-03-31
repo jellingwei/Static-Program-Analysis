@@ -343,3 +343,17 @@ BOOLEAN_ NextTable::setProgLineInWhile(PROG_LINE_ progline) {
 	isProgLineInWhile.set(progline);
 	return true;
 }
+
+BOOLEAN_ NextTable::isValid() {
+	vector<int> procIndexes = PKB::getInstance().getAllProcIndex();
+
+	for (auto iter = procIndexes.begin(); iter != procIndexes.end(); ++iter) {
+		if (getFirstProgLineInProc(*iter) != getLastProgLineInProc(*iter)) {
+			// if the first and last lines in a proc are not the same,
+			// then there are more than one line in the proc, and Next is valid
+			return true;
+		}
+	}
+
+	return false;
+}

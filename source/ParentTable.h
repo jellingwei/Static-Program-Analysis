@@ -22,4 +22,6 @@ public:
 	STATEMENT_LIST getAllChildren();
 	STATEMENT_LIST getAllParents();
 
+	BOOLEAN_ isValid();
+
 };

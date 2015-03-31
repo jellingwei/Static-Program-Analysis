@@ -204,6 +204,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'c')", 5, (int)pkb.getUsesProcIndex(pkb.getVarIndex("c")).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(p, 'd')", 3, (int)pkb.getUsesProcIndex(pkb.getVarIndex("d")).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Uses(_, _)", true, pkb.isUsesValid());
+
 	// Modifies
 	cout << "Modifies" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Modifies(1, 'a')", true, pkb.isModifies(1, pkb.getVarIndex("a")));
@@ -313,12 +315,15 @@ void PKBTest::testPKB()
 	allFollows = pkb.getAllFollowsPairs(true);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Follows* pairs size", 34, (int)allFollows.first.size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Follows(_, _)", true, pkb.isFollowsValid());
+
 	// All pairs for parent
 	pair<vector<int>, vector<int>> allParent = pkb.getAllParentPairs(false);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent pairs size", 20, (int)allParent.first.size());
 
 	allParent = pkb.getAllParentPairs(true);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("All Parent* pairs size", 39, (int)allParent.first.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Parent(_, _)", true, pkb.isParentValid());
 
 
 	// Calls Table
@@ -336,6 +341,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("get procName of call statement", string("Test4"), pkb.getProcNameCalledByStatement(21));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("get procName of call statement", string("Test3"), pkb.getProcNameCalledByStatement(18));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("get procName of call statement", string("Test2"), pkb.getProcNameCalledByStatement(16));
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Calls(_, _)", true, pkb.isCallsValid());
 	
 	// ProcTable
 	cout << "Proc table" << endl;
@@ -389,6 +396,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next lhs", 33, (int)pkb.getNextLhs().size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next rhs", 34, (int)pkb.getNextRhs().size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, _)", true, pkb.isNextValid());
+
 	// Affects... 
 	cout << "Affects" << endl;
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(6, _)", 2, (int)pkb.getAffectedBy(6).size());
@@ -427,6 +436,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(35, 38)", true, pkb.isAffects(35, 38, true));
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(22, 24)", false, pkb.isAffects(22, 24));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, _)", true, pkb.isAffectsValid());
+
 
 	cout << "End TestPkb" << endl;
 }

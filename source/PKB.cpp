@@ -12,8 +12,7 @@ using namespace std;
 #include "Synonym.h"
 
 
-PKB::PKB() 
-{
+PKB::PKB() {
 	varTable = new VarTable();
 	procTable = new ProcTable();
 	stmtTable = new StmtTable();
@@ -557,6 +556,10 @@ STATEMENT_LIST PKB::getParentRhs(){
 	return parentTable->getAllChildren();
 }
 
+BOOLEAN_ PKB::isParentValid() {
+	return parentTable->isValid();
+}
+
 // FollowsTable 
 
 /**
@@ -666,6 +669,10 @@ STATEMENT_LIST PKB::getFollowsLhs() {
  */
 STATEMENT_LIST PKB::getFollowsRhs() {
 	return followsTable->getRhs();
+}
+
+BOOLEAN_ PKB::isFollowsValid() {
+	return followsTable->isValid();
 }
 
 // CallsTable methods
@@ -788,6 +795,10 @@ PROCINDEX_LIST PKB::getCallsLhs() {
  */
 PROCINDEX_LIST PKB::getCallsRhs() {
 	return callsTable->getRhs();
+}
+
+BOOLEAN_ PKB::isCallsValid() {
+	return callsTable->isValid();
 }
 
 
@@ -1016,6 +1027,11 @@ STATEMENT_LIST PKB::getUsesRhs() {
 	return usesTable->getRhs();
 }
 
+
+BOOLEAN_ PKB::isUsesValid() {
+	return usesTable->isValid();
+}
+
 /**
 * Sets the Uses relation for procedures.
 * @param procIndex  the index of a procedure that uses a particular variable
@@ -1146,6 +1162,10 @@ PROGLINE_LIST PKB::getNextLhs() {
 */
 PROGLINE_LIST PKB::getNextRhs() {
 	return nextTable->getRhs();
+}
+
+BOOLEAN_ PKB::isNextValid() {
+	return nextTable->isValid();
 }
 
 /**
@@ -1285,6 +1305,12 @@ PROGLINE_LIST PKB::getAffectsLhs() {
 PROGLINE_LIST PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
+
+
+BOOLEAN_ PKB::isAffectsValid() {
+	return affectsTable->isValid();
+}
+
 
 /**
 * Checks if the node has information about the variables modified previously on the control flow graph.

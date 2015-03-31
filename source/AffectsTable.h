@@ -27,6 +27,8 @@ public:
 	PROGLINE_LIST getLhs();
 	PROGLINE_LIST getRhs();
 
+	BOOLEAN_ isValid();
+
 	static BOOLEAN_ canSkipNodesBackwards(CNode* node);
 	static BOOLEAN_ canSkipNodesForwards(CNode* node);
 

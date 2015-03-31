@@ -26,6 +26,8 @@ public:
 	STATEMENT_LIST getLhs();
 	STATEMENT_LIST getRhs();
 
+	BOOLEAN_ isValid();
+
 	// for procedures 
 	STATUS setUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);
 	BOOLEAN_ isUsesProc(PROC_INDEX procIndex, VAR_INDEX varIndex);

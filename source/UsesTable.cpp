@@ -287,3 +287,7 @@ STATEMENT_LIST UsesTable::getRhs() {
 	}
 	return result;
 }
+
+BOOLEAN_ UsesTable::isValid() {
+	return !varIndexMap.empty();
+}
