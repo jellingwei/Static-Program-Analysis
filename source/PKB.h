@@ -14,6 +14,7 @@
 #include "ConstantTable.h"
 #include "CallsTable.h"
 #include "NextTable.h"
+#include "NextBipTable.h"
 #include "AffectsTable.h"
 #include "CFG.h"
 #include "AST.h"
@@ -203,6 +204,9 @@ public:
 	static BOOLEAN_ canSkipNodesBackwards(CNode* node);
 	static BOOLEAN_ canSkipNodesForwards(CNode* node);
 
+	//NextBip
+	PROGLINE_LIST getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+
 
 	//@todo 
 	// @cond todo
@@ -225,6 +229,7 @@ private:
 	AST* ast;
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
+	NextBipTable* nextBipTable;
 	PKB();
 	
 	
