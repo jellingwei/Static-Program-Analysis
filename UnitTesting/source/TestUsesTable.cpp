@@ -68,9 +68,13 @@ void UsesTableTest::testAllPairs() {
 	UsesTable usesTable;
 	usesTable.init(20);
 
+	CPPUNIT_ASSERT_EQUAL(false, usesTable.isValid());
+
 	usesTable.setUses(1, 1);
 	usesTable.setUses(1, 2);
 	usesTable.setUses(2, 3);
+
+	CPPUNIT_ASSERT_EQUAL(true, usesTable.isValid());
 
 }
 
