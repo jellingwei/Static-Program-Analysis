@@ -18,6 +18,10 @@ public:
 	Synonym getArg0();
 	Synonym getArg1();
 	Synonym getArg2();
+	void setArg0(Synonym);
+	void setArg1(Synonym);
+	void setArg2(Synonym);
+
 	QNODE_TYPE QNode::getNodeType();
 	void setParent(QNode* parent_node);
 	void setChild(QNode* child_node);

@@ -34,21 +34,6 @@ namespace QueryOptimiser
 	double COST_NEXTS = 0;
 	double COST_PATTERN = 0;
 	double COST_WITH = 1;
-	/*int COST_AFFECTS = 3;
-	int COST_AFFECTSS = 5;
-	int COST_FOLLOWSS = 3;
-	int COST_PARENTS = 2;
-	int COST_CALLSS = 2;
-	int COST_NEXTS = 4;
-	int COST_PATTERN = 2;
-	int COST_WITH = 1;*/
-	/*const int COST_AFFECTS = statsTable->getAffectsCost();
-	const int COST_AFFECTSS = statsTable->getAffectsSCost();
-	const int COST_FOLLOWSS = statsTable->getFollowsSCost();
-	const int COST_PARENTS = statsTable->getParentSCost();
-	const int COST_CALLSS = statsTable->getCallsSCost();
-	const int COST_NEXTS = statsTable->getNextSCost();
-	const int COST_PATTERN = statsTable->getPatternCost();*/
 
 	unordered_map<string, SYNONYM_TYPE> synonymNameToTypeMap;
 	unordered_map<string, unsigned int> synonymsCount;  //Maps synonyms to the expected number of values
@@ -100,7 +85,6 @@ namespace QueryOptimiser
 
 		for (auto itr = synonymNameToTypeMap.begin(); itr != synonymNameToTypeMap.end(); ++itr) {
 			synonymsCount[itr->first] = (unsigned int)statsTable->getCountForType(itr->second);
-			//synonymsCount[itr->first] = 30;
 		}
 	}
 
@@ -332,6 +316,24 @@ namespace QueryOptimiser
 	}
 
 	/**
+	* Method that sets the LHS and RHS appropriately given a clause
+	* e.g. LHS and RHS for usual clauses is at arg1 and arg 2
+	* e.g. LHS and RHS for pattern is at arg0 and arg1
+	* @param A QNode* object representing a clause, LHS and RHS Synonym objects
+	*/
+	void setClauseArguments(QNode* clause, Synonym LHS, Synonym RHS)
+	{
+		QNODE_TYPE qnode_type = clause->getNodeType();
+		if (qnode_type == Pattern) {
+			clause->setArg0(LHS);
+			clause->setArg1(RHS);
+		} else {
+			clause->setArg1(LHS);
+			clause->setArg2(LHS);
+		}
+	}
+
+	/**
 	* Method that returns the appropriate LHS and RHS given a clause
 	* e.g. LHS and RHS for usual clauses is at arg1 and arg 2
 	* e.g. LHS and RHS for pattern is at arg0 and arg1
@@ -361,44 +363,6 @@ namespace QueryOptimiser
 	{
 		return statsTable->getReductionFactor(rel_type, typeLHS, typeRHS, direction);
 	}
-
-	/*int getExpectedCount(QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output)
-	{
-	switch (rel_type) {
-	case ModifiesP:
-	case ModifiesS:
-	return 15;
-	case UsesP:
-	case UsesS:
-	return 15;
-	case Parent:
-	return 15;
-	case ParentT:
-	return 15;
-	case Follows:
-	return 1;  //Only one statement follows after another
-	case FollowsT:
-	return 15;
-	case Calls:
-	return 15;
-	case CallsT:
-	return 15;
-	case Next:
-	return 2;  //At most 2 statements can Next(s, _) given s
-	case NextT:
-	return 15;
-	case Affects:
-	return 15;
-	case AffectsT:
-	return 15;
-	case Pattern:
-	return 15;
-	case With:
-	return 15;
-	default:
-	return -1;  //It should never reach here
-	}
-	}*/
 
 	/**
 	* Method to get the estimated cost of evaluating this relation
@@ -472,16 +436,6 @@ namespace QueryOptimiser
 			return false;
 		}
 	}
-
-	/*void updateSynonymsCount(string name, int expectedCount)
-	{
-		auto mapItr = synonymsCount.find(name);
-		//Only set if the synonym exists in the map
-		if (mapItr != synonymsCount.end()) {
-			int currentCount = synonymsCount[name];
-			synonymsCount[name] = min(currentCount, expectedCount);
-		}
-	}*/
 
 	/**
 	* Method to reduce the synonym count by the reduction factor

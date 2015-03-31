@@ -48,6 +48,33 @@ Synonym QNode::getArg2()
 }
 
 /**
+ * Set arg0
+ * @param arg A Synonym object
+ */
+void QNode::setArg0(Synonym arg) 
+{
+	_arg0 = arg;
+}
+
+/**
+ * Set arg1
+ * @param arg A Synonym object
+ */
+void QNode::setArg1(Synonym arg) 
+{
+	_arg1 = arg;
+}
+
+/**
+ * Set arg2
+ * @param arg A Synonym object
+ */
+void QNode::setArg2(Synonym arg) 
+{
+	_arg2 = arg;
+}
+
+/**
  * @return the node type of the QNode.
  */
 QNODE_TYPE QNode::getNodeType()
