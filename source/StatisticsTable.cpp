@@ -61,7 +61,7 @@ double StatisticsTable::getAffectsCost()
 
 double StatisticsTable::getAffectsSCost()
 {
-	return assignSize;
+	return stmtSize / 2;
 }
 
 double StatisticsTable::getFollowsSCost()
@@ -87,7 +87,7 @@ double StatisticsTable::getNextSCost()
 
 double StatisticsTable::getPatternCost()
 {
-	return assignSize / 3;
+	return assignSize / 2;
 }
 
 double StatisticsTable::getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
@@ -95,34 +95,34 @@ double StatisticsTable::getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typ
 	switch (rel_type) {
 	case ModifiesP:
 	case ModifiesS:
-		getModifiesReductionFactor(typeLHS, typeRHS, direction);
+		return getModifiesReductionFactor(typeLHS, typeRHS, direction);
 	case UsesP:
 	case UsesS:
-		getUsesReductionFactor(typeLHS, typeRHS, direction);
+		return getUsesReductionFactor(typeLHS, typeRHS, direction);
 	case Parent:
-		getParentReductionFactor(typeLHS, typeRHS, direction);
+		return getParentReductionFactor(typeLHS, typeRHS, direction);
 	case ParentT:
-		getParentSReductionFactor(typeLHS, typeRHS, direction);
+		return getParentSReductionFactor(typeLHS, typeRHS, direction);
 	case Follows:
-		getFollowsReductionFactor(typeLHS, typeRHS, direction);
+		return getFollowsReductionFactor(typeLHS, typeRHS, direction);
 	case FollowsT:
-		getFollowsSReductionFactor(typeLHS, typeRHS, direction);
+		return getFollowsSReductionFactor(typeLHS, typeRHS, direction);
 	case Calls:
-		getCallsReductionFactor(typeLHS, typeRHS, direction);
+		return getCallsReductionFactor(typeLHS, typeRHS, direction);
 	case CallsT:
-		getCallsSReductionFactor(typeLHS, typeRHS, direction);
+		return getCallsSReductionFactor(typeLHS, typeRHS, direction);
 	case Next:
-		getNextReductionFactor(typeLHS, typeRHS, direction);
+		return getNextReductionFactor(typeLHS, typeRHS, direction);
 	case NextT:
-		getNextSReductionFactor(typeLHS, typeRHS, direction);
+		return getNextSReductionFactor(typeLHS, typeRHS, direction);
 	case Affects:
-		getAffectsReductionFactor(typeLHS, typeRHS, direction);
+		return getAffectsReductionFactor(typeLHS, typeRHS, direction);
 	case AffectsT:
-		getAffectsSReductionFactor(typeLHS, typeRHS, direction);
+		return getAffectsSReductionFactor(typeLHS, typeRHS, direction);
 	case Pattern:
-		getPatternReductionFactor(typeLHS, typeRHS, direction);
+		return getPatternReductionFactor(typeLHS, typeRHS, direction);
 	case With:
-		getWithReductionFactor(typeLHS, typeRHS, direction);
+		return getWithReductionFactor(typeLHS, typeRHS, direction);
 	default:
 		return -1;  //It should never reach here
 	}
@@ -205,7 +205,7 @@ double StatisticsTable::getAffectsReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_
 
 double StatisticsTable::getAffectsSReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 {
-	return assignSize / averageLinesPerProc;
+	return averageLinesPerProc / assignSize;
 }
 
 double StatisticsTable::getPatternReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)

@@ -33,7 +33,7 @@ namespace QueryOptimiser
 	double COST_CALLSS = 0;
 	double COST_NEXTS = 0;
 	double COST_PATTERN = 0;
-	double COST_WITH = 0;
+	double COST_WITH = 1;
 	/*int COST_AFFECTS = 3;
 	int COST_AFFECTSS = 5;
 	int COST_FOLLOWSS = 3;
@@ -42,18 +42,18 @@ namespace QueryOptimiser
 	int COST_NEXTS = 4;
 	int COST_PATTERN = 2;
 	int COST_WITH = 1;*/
-	/*const int COST_AFFECTS = statsTable.getAffectsCost();
-	const int COST_AFFECTSS = statsTable.getAffectsSCost();
-	const int COST_FOLLOWSS = statsTable.getFollowsSCost();
-	const int COST_PARENTS = statsTable.getParentSCost();
-	const int COST_CALLSS = statsTable.getCallsSCost();
-	const int COST_NEXTS = statsTable.getNextSCost();
-	const int COST_PATTERN = statsTable.getPatternCost();*/
+	/*const int COST_AFFECTS = statsTable->getAffectsCost();
+	const int COST_AFFECTSS = statsTable->getAffectsSCost();
+	const int COST_FOLLOWSS = statsTable->getFollowsSCost();
+	const int COST_PARENTS = statsTable->getParentSCost();
+	const int COST_CALLSS = statsTable->getCallsSCost();
+	const int COST_NEXTS = statsTable->getNextSCost();
+	const int COST_PATTERN = statsTable->getPatternCost();*/
 
 	unordered_map<string, SYNONYM_TYPE> synonymNameToTypeMap;
 	unordered_map<string, unsigned int> synonymsCount;  //Maps synonyms to the expected number of values
 	set<string> mainTableSynonyms;  //Denotes synonyms that are already in the main table
-	StatisticsTable statsTable;
+	StatisticsTable* statsTable;
 
 	QueryTree* optimiseQueryTree(QueryTree* qTreeRoot);
 	void initialize(QueryTree* qTreeRoot);
@@ -69,7 +69,7 @@ namespace QueryOptimiser
 
 	int getExpectedCount(QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output);
 	double getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction);
-	double calculateCost(QNODE_TYPE rel_type, int numberOfValues);
+	double calculateCost(QNODE_TYPE rel_type, double numberOfValues);
 	inline bool isContainedInMain(string wantedName);
 	void updateSynonymsCount(string name, int expectedCount);
 	void reduceSynonymsCount(string name, double reductionFactor);
@@ -94,11 +94,12 @@ namespace QueryOptimiser
 	*/
 	void initialize(QueryTree* qTreeRoot)
 	{
+		statsTable = new StatisticsTable();
 		synonymNameToTypeMap = qTreeRoot->getSynonymsMap();
 		int numberOfSynonyms = synonymNameToTypeMap.size();
 
 		for (auto itr = synonymNameToTypeMap.begin(); itr != synonymNameToTypeMap.end(); ++itr) {
-			synonymsCount[itr->first] = (unsigned int)statsTable.getCountForType(itr->second);
+			synonymsCount[itr->first] = (unsigned int)statsTable->getCountForType(itr->second);
 			//synonymsCount[itr->first] = 30;
 		}
 	}
@@ -309,7 +310,7 @@ namespace QueryOptimiser
 
 			//Check left to right direction
 			double numberOfValues = synonymsCount[nameLHS];
-			double cost = calculateCost(qnode_type, (int)numberOfValues);
+			double cost = calculateCost(qnode_type, numberOfValues);
 
 			if (cost < smallestCost) {
 				smallestCost = cost;
@@ -319,7 +320,7 @@ namespace QueryOptimiser
 
 			//Check right to left direction
 			numberOfValues = synonymsCount[nameRHS];
-			cost = calculateCost(qnode_type, (int)numberOfValues);
+			cost = calculateCost(qnode_type, numberOfValues);
 
 			if (cost < smallestCost) {
 				smallestCost = cost;
@@ -358,7 +359,7 @@ namespace QueryOptimiser
 	*/
 	double getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
 	{
-		return statsTable.getReductionFactor(rel_type, typeLHS, typeRHS, direction);
+		return statsTable->getReductionFactor(rel_type, typeLHS, typeRHS, direction);
 	}
 
 	/*int getExpectedCount(QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output)
@@ -404,7 +405,7 @@ namespace QueryOptimiser
 	* @param The relationship type
 	* @param The estimated number of times this relation will be called
 	*/
-	double calculateCost(QNODE_TYPE rel_type, int numberOfValues)
+	double calculateCost(QNODE_TYPE rel_type, double numberOfValues)
 	{
 		switch (rel_type) {
 		case ModifiesS:
@@ -417,41 +418,44 @@ namespace QueryOptimiser
 			return numberOfValues * COST_PARENT;
 		case ParentT:
 			if (COST_PARENTS == 0) {
-				COST_PARENTS = statsTable.getParentSCost();
+				COST_PARENTS = statsTable->getParentSCost();
 			}
 			return numberOfValues * COST_PARENTS;
 		case Follows:
 			return numberOfValues * COST_FOLLOWS;
 		case FollowsT:
 			if (COST_FOLLOWSS == 0) {
-				COST_FOLLOWSS = statsTable.getFollowsSCost();
+				COST_FOLLOWSS = statsTable->getFollowsSCost();
 			}
 			return numberOfValues * COST_FOLLOWSS;
 		case Calls:
 			return numberOfValues * COST_CALLS;
 		case CallsT:
 			if (COST_CALLSS == 0) {
-				COST_CALLSS = statsTable.getCallsSCost();
+				COST_CALLSS = statsTable->getCallsSCost();
 			}
 			return numberOfValues * COST_CALLSS;
 		case Next:
 			return numberOfValues * COST_NEXT;
 		case NextT:
 			if (COST_NEXTS == 0) {
-				COST_NEXTS = statsTable.getNextSCost();
+				COST_NEXTS = statsTable->getNextSCost();
 			}
 			return numberOfValues * COST_NEXTS;
 		case Affects:
 			if (COST_AFFECTS == 0) {
-				COST_AFFECTS = statsTable.getAffectsCost();
+				COST_AFFECTS = statsTable->getAffectsCost();
 			}
 			return numberOfValues * COST_AFFECTS;
 		case AffectsT:
 			if (COST_AFFECTSS == 0) {
-				COST_AFFECTSS = statsTable.getAffectsSCost();
+				COST_AFFECTSS = statsTable->getAffectsSCost();
 			}
 			return numberOfValues * COST_AFFECTSS;
 		case Pattern:
+			if (COST_PATTERN == 0) {
+				COST_PATTERN = statsTable->getPatternCost();
+			}
 			return numberOfValues * COST_PATTERN;
 		case With:
 			return numberOfValues * COST_WITH;
