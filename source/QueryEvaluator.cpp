@@ -1054,9 +1054,9 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
 
-		if (typeLHS == STRING_CHAR && STRING_INT) {
+		if (typeLHS == STRING_CHAR && typeRHS == STRING_INT) {
 			return false;
-		} else if (typeLHS == STRING_INT && STRING_CHAR) {
+		} else if (typeLHS == STRING_INT && typeRHS == STRING_CHAR) {
 			return false;
 		} else if (typeLHS == STRING_CHAR && typeRHS == STRING_CHAR) {
 			string arg1Value = LHS.getName();
