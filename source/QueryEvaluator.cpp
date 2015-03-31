@@ -447,9 +447,7 @@ namespace QueryEvaluator
 			LHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			//TODO: Shift the optimiser since this clause might be redundant
-			LHS.setValues(pkb.getParentLhs());
-			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+			return pkb.isParentValid();
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getParentRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -543,9 +541,7 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			//TODO: Shift to optimiser since this might be a redundant clause
-			LHS.setValues(pkb.getFollowsLhs());
-			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+			return pkb.isFollowsValid();
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getFollowsRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -637,9 +633,7 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			//TODO: This clause might be redundant
-			LHS.setValues(pkb.getCallsLhs());
-			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+			return pkb.isCallsValid();
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getCallsRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -731,9 +725,7 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			//TODO: This clause might be redundant
-			LHS.setValues(pkb.getNextLhs());
-			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+			return pkb.isNextValid();
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getNextRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
@@ -823,8 +815,7 @@ namespace QueryEvaluator
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
-			LHS.setValues(pkb.getAffectsLhs());
-			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+			return pkb.isAffectsValid();
 		} else if (typeLHS == UNDEFINED) {
 			RHS.setValues(pkb.getAffectsRhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
