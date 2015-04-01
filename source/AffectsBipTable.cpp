@@ -53,12 +53,12 @@ void populateFrontierWithNextBipAfter(priority_queue<pair<NEXTBIP_STATE, boost::
 void handleLastLine(CNode* node, priority_queue<pair<NEXTBIP_STATE, boost::dynamic_bitset<> >, vector<pair<NEXTBIP_STATE, boost::dynamic_bitset<> > >, CompareAffectsBip>& frontier, 
 	                set<pair<NEXTBIP_STATE, boost::dynamic_bitset<> >> visited, NEXTBIP_STATE curState, boost::dynamic_bitset<> variablesToMatch) {
 
-	if (node->getNodeType() == Call_C) {
-		// still need to expand if the last line is a Call stmt
+	if (node->getNodeType() == Call_C || curState.second.size() == 0) {
+		// expand as per normal, for call statements and if no traversal history
 		populateFrontierWithNextBipAfter(frontier, node, visited, curState, variablesToMatch);
 	}
 			
-	// since this is last line, pop from the stack and add the progline into the frontier
+	// pop from the stack and add the progline into the frontier, if stack has traversal history
 	if (curState.second.size() > 0) {
 		CNode* candidateNextNode = curState.second.top();
 		curState.second.pop();
@@ -122,6 +122,8 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 
 		NEXTBIP_STATE curState = frontier.top().first; variablesToMatch = frontier.top().second;
 		CNode* node = curState.first;
+		assert(node->getNodeType() != EndIf_C && node->getNodeType() != EndProc_C ); // don't store dummy nodes in frontier
+																					 // otherwise cannot make use of NextBip API
 
 		frontier.pop();
 
@@ -140,7 +142,28 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 
 			assert(callNode->getAfter()->size() == 1);
 			CNode* afterCallNode = callNode->getAfter()->at(0); 
-			curState.second.push(afterCallNode);
+
+			// skip dummy nodes,
+			stack<CNode*> tempStack = curState.second; // use this to not make changes to the state
+			while (afterCallNode != NULL && (afterCallNode->getNodeType() == EndIf_C || afterCallNode->getNodeType() == EndProc_C)) {
+				if (afterCallNode->getNodeType() == EndIf_C) {
+					// get next node
+					afterCallNode = afterCallNode->getAfter()->at(0);
+				} else {
+					// if EndProc C
+					// take node from the stack again
+					afterCallNode = NULL;
+					if (tempStack.size() > 0) {
+						afterCallNode = tempStack.top();
+						tempStack.pop();
+					}
+					
+				}
+			}
+			
+			if (afterCallNode) {
+				curState.second.push(afterCallNode);
+			}
 
 		} else if (node->getNodeType() == Assign_C) {
 			boost::dynamic_bitset<> variablesModified = pkb.getModVarInBitvectorForStmt(node->getProcLineNumber());
@@ -181,18 +204,15 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 
 		// update frontier with new nodes
 		PROGLINE_LIST nextNodeNums;
-		assert("node has incorrect number of after nodes in AffectsBip", node->getAfter()->size() > 0);
+		assert(node->getAfter()->size() > 0);
 		bool isLastLine = node->getAfter()->at(0)->getNodeType() == EndProc_C;
 
 		if (!isLastLine) {
 			populateFrontierWithNextBipAfter(frontier, node, visited, curState, variablesToMatch);
-			continue;
-		} 
-
-		handleLastLine(node, frontier, visited, curState, variablesToMatch);
-		// special handling for last node.. 
-		
-
+		} else {
+			// special handling for last node.. 
+			handleLastLine(node, frontier, visited, curState, variablesToMatch);
+		}
 		
 	}
 
