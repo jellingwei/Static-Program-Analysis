@@ -132,9 +132,19 @@ double StatisticsTable::getModifiesReductionFactor(SYNONYM_TYPE typeLHS, SYNONYM
 {
 	switch (direction) {
 	case LeftToRight:
-		return 1 / varSize;
+		if (typeLHS == STRING_INT) {
+			return 1 / varSize;
+		} else if (typeLHS == STRING_CHAR) {
+			return 1 / averageLinesPerProc;
+		} else {
+			return getCountForType(typeLHS) / stmtSize;
+		}
 	default:
-		return getCountForType(typeLHS) / stmtSize;
+		if (typeRHS == STRING_CHAR) {
+			return (getCountForType(typeLHS) / stmtSize) / 5;
+		} else {
+			return 1;   //Each stmt will modify something
+		}
 	}
 }
 

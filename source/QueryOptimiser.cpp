@@ -36,7 +36,7 @@ namespace QueryOptimiser
 	double COST_WITH = 1;
 
 	unordered_map<string, SYNONYM_TYPE> synonymNameToTypeMap;
-	unordered_map<string, int> selectSynonyms;  //Maps the synonyms that are being selected
+	unordered_multimap<string, int> selectSynonyms;  //Maps the synonyms that are being selected to the index
 	unordered_map<string, unsigned int> synonymsCount;  //Maps synonyms to the expected number of values
 	set<string> mainTableSynonyms;  //Denotes synonyms that are already in the main table after clause evaluation
 	StatisticsTable* statsTable;
@@ -44,8 +44,12 @@ namespace QueryOptimiser
 	void initialize(QueryTree* qTreeRoot);
 
 	QueryTree* flattenQuery(QueryTree* qTreeRoot);
-	unordered_map<string, int> populateSelectSynonyms(QNode* resultNode);
+	QueryTree* rewriteWithClauses(QueryTree* qTreeRoot);
+	vector<QNode*> populateSelectSynonyms(QNode* resultNode);
 	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode);
+	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS);
+	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, unordered_multimap<string, int> clauseIndex, 
+		Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
 	QNode* optimiseClausesNode(QNode* clausesNode);
@@ -55,17 +59,17 @@ namespace QueryOptimiser
 	QNode* getNextSmallestAndUpdate(vector<QNode*> &clauses);
 	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(vector<QNode*> clauses);
 	pair<Synonym, Synonym> getClauseArguments(QNode* clause);
-	void setClauseArguments(QNode* clause, Synonym LHS, Synonym RHS);
+	void setClauseArguments(QNode* &clause, Synonym LHS, Synonym RHS);
 
 	int getExpectedCount(QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output);
-	double getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction);
 	double calculateCost(QNODE_TYPE rel_type, double numberOfValues);
 	inline bool isContainedInMain(string wantedName);
 	void reduceSynonymsCount(string name, double reductionFactor);
 
 	QNode* createResultSubtree(vector<QNode*> resultClauses);
-	QNode* createClausesSubtree(vector<QNode*> constantClauses, vector<QNode*> nonConstantClauses);
+	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2);
 	unordered_multimap<string, int> indexSynonymsInClauses(vector<QNode*> clauses);
+	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS);
 
 	/**
 	* Method that is public to optimise the query tree
@@ -102,25 +106,52 @@ namespace QueryOptimiser
 	*/
 	QueryTree* flattenQuery(QueryTree* qTreeRoot)
 	{
-		//TODO: Remove redundant clauses and synonyms
-		//Rewrite with clauses
+		qTreeRoot = rewriteWithClauses(qTreeRoot);
+		
+		//todo: Remove redundant synonyms and clauses
 		return qTreeRoot;
 	}
 
 	QueryTree* rewriteWithClauses(QueryTree* qTreeRoot)
 	{
-		selectSynonyms = populateSelectSynonyms(qTreeRoot->getResultNode());
+		vector<QNode*> resultClauses = populateSelectSynonyms(qTreeRoot->getResultNode());
 		pair<vector<QNode*>, vector<QNode*>> clauses_with_pair = splitWithClauses(qTreeRoot->getClausesNode());
 		vector<QNode*> clauses = clauses_with_pair.first;
 		vector<QNode*> withClauses = clauses_with_pair.second;
+		vector<QNode*> finalWithClauses;
 		unordered_multimap<string, int> clausesIndexMap = indexSynonymsInClauses(clauses);
 		unordered_multimap<string, int> withIndexMap = indexSynonymsInClauses(withClauses);
 
 		for (unsigned int i = 0; i < withClauses.size(); i++) {
 			QNode* singleWithClause = withClauses[i];
+			Synonym LHS = singleWithClause->getArg1();
+			Synonym RHS = singleWithClause->getArg2();
+			pair<bool, DIRECTION> isRewriteable_direction_pair = isWithClauseRewritable(LHS, RHS);
+			bool isRewritable = isRewriteable_direction_pair.first;
 
+			if (isRewritable) {
+				DIRECTION direction = isRewriteable_direction_pair.second;
+				Synonym superset;
+				Synonym subset;
+				if (direction == LeftToRight) {
+					superset = LHS;
+					subset = RHS;
+				} else {
+					superset = RHS;
+					subset = LHS;
+				}
+				resultClauses = replaceSynonyms(resultClauses, selectSynonyms, superset, subset);
+				clauses = replaceSynonyms(clauses, clausesIndexMap, superset, subset);
+				finalWithClauses = replaceSynonyms(withClauses, withIndexMap, superset, subset);
+			} else {
+				finalWithClauses.push_back(singleWithClause);
+			}
 		}
-		return NULL;
+		QNode* resultSubtree = createResultSubtree(resultClauses);
+		QNode* clausesSubtree = combineClausesVectors(clauses, finalWithClauses);
+		qTreeRoot->setResultNode(resultSubtree);
+		qTreeRoot->setClausesNode(clausesSubtree);
+		return qTreeRoot;
 	}
 
 	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode)
@@ -142,21 +173,30 @@ namespace QueryOptimiser
 		return make_pair(clauses, withClauses);
 	}
 
-	unordered_map<string, int> populateSelectSynonyms(QNode* resultNode)
+	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, unordered_multimap<string, int> clauseIndex, 
+		Synonym original, Synonym replacement)
 	{
-		QNode* resultChildNode = resultNode->getChild();
-		int numberOfSynonyms = resultNode->getNumberOfChildren();
+		string replacedName = original.getName();
 
-		//Populate the select synonyms map
-		for (int i = 0; i < numberOfSynonyms; i++) {
-			Synonym wantedSynonym = resultChildNode->getArg1();
-			if (wantedSynonym.getType() == BOOLEAN) {
-				break;
+		auto range = clauseIndex.equal_range(original.getName());
+
+		for (auto itr = range.first; itr != range.second; ++itr) {
+			int index = itr->second;
+			QNode* singleClause = clausesVector[index];
+			pair<Synonym, Synonym> synonymPair = getClauseArguments(singleClause);
+			Synonym LHS = synonymPair.first;
+			Synonym RHS = synonymPair.second;
+
+			if (LHS.getName() == replacedName) {
+				LHS = replacement;
 			}
-			selectSynonyms[wantedSynonym.getName()] = i;
-			resultChildNode = resultNode->getNextChild();
+			if (RHS.getName() == replacedName) {
+				RHS = replacement;
+			}
+			setClauseArguments(singleClause, LHS, RHS);
+			swap(singleClause, clausesVector[index]);
 		}
-		return selectSynonyms;
+		return clausesVector;
 	}
 
 	/**
@@ -186,7 +226,7 @@ namespace QueryOptimiser
 		vector<QNode*> constantClauses = clauses.first;
 		vector<QNode*> nonConstantClauses = clauses.second;
 		nonConstantClauses = reorderNonConstantClauses(nonConstantClauses);
-		return createClausesSubtree(constantClauses, nonConstantClauses);
+		return combineClausesVectors(constantClauses, nonConstantClauses);
 	}
 
 	/**
@@ -210,13 +250,13 @@ namespace QueryOptimiser
 			SYNONYM_TYPE typeRHS = RHS.getType();
 
 			//If it is a constant, set the direction
-			if (typeLHS == STRING_INT || typeLHS == STRING_CHAR || typeLHS == STRING_PATTERNS) {
+			if (typeLHS == STRING_INT || typeLHS == STRING_CHAR || typeLHS == STRING_PATTERNS || typeRHS == UNDEFINED) {
 				clauseNode->setDirection(LeftToRight);
-				double reductionFactor = getReductionFactor(qnode_type, typeLHS, typeRHS, LeftToRight);
+				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, LeftToRight);
 				reduceSynonymsCount(LHS.getName(), reductionFactor);  //Set the new expected count
-			} else if (typeRHS == STRING_INT || typeRHS == STRING_CHAR || typeRHS == STRING_PATTERNS) {
+			} else if (typeRHS == STRING_INT || typeRHS == STRING_CHAR || typeRHS == STRING_PATTERNS || typeRHS == UNDEFINED) {
 				clauseNode->setDirection(RightToLeft);
-				double reductionFactor = getReductionFactor(qnode_type, typeLHS, typeRHS, LeftToRight);
+				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, LeftToRight);
 				reduceSynonymsCount(RHS.getName(), reductionFactor);  //Set the new expected count
 			} else {
 				nonConstantClauses.push_back(clauseNode);
@@ -272,7 +312,7 @@ namespace QueryOptimiser
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
 
-		double reductionFactor = getReductionFactor(qnode_type, typeLHS, typeRHS, direction);
+		double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, direction);
 
 		if (direction == LeftToRight) {
 			reduceSynonymsCount(nameRHS, reductionFactor);
@@ -346,7 +386,7 @@ namespace QueryOptimiser
 	* e.g. LHS and RHS for pattern is at arg0 and arg1
 	* @param A QNode* object representing a clause, LHS and RHS Synonym objects
 	*/
-	void setClauseArguments(QNode* clause, Synonym LHS, Synonym RHS)
+	void setClauseArguments(QNode* &clause, Synonym LHS, Synonym RHS)
 	{
 		QNODE_TYPE qnode_type = clause->getNodeType();
 		if (qnode_type == Pattern) {
@@ -380,6 +420,49 @@ namespace QueryOptimiser
 		return make_pair(LHS, RHS);
 	}
 
+	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS)
+	{
+		SYNONYM_TYPE typeLHS = LHS.getType();
+		SYNONYM_TYPE typeRHS = RHS.getType();
+		SYNONYM_ATTRIBUTE attributeLHS = LHS.getAttribute();
+		SYNONYM_ATTRIBUTE attributeRHS = RHS.getAttribute();
+
+		if (typeLHS == STRING_CHAR) {
+			if (typeRHS == VARIABLE || typeRHS == PROCEDURE) {
+				return make_pair(true, RightToLeft);  //Do not accept call stmts as a superset
+			} else {
+				return make_pair(false, RightToLeft);
+			}
+		} else if (typeLHS == STRING_INT) {
+			if (attributeRHS == stmtNo) {
+				return make_pair(true, RightToLeft);
+			} else {
+				return make_pair(false, RightToLeft);
+			}
+		} else if (typeLHS == STMT) {
+			if (typeRHS == ASSIGN || typeRHS == CALL || typeRHS == WHILE || typeRHS == IF || typeRHS == STRING_INT) {
+				return make_pair(true, LeftToRight);  //If RHS is also STMT, does it count? 
+			} else {
+				return make_pair(false, LeftToRight);
+			}
+		} else if (typeLHS == ASSIGN || typeLHS == CALL || typeLHS == WHILE || 
+			typeLHS == IF || typeLHS == PROG_LINE || typeLHS == CONSTANT) {
+				if (attributeRHS == STRING_INT) {
+					return make_pair(true, LeftToRight);
+				} else {
+					return make_pair(false, LeftToRight);
+				}
+		} else if (typeLHS == PROCEDURE || typeLHS == VARIABLE) {
+			if (attributeRHS == STRING_CHAR) {
+				return make_pair(true, LeftToRight);
+			} else {
+				return make_pair(false, LeftToRight);
+			}
+		} else {
+			return make_pair(false, LeftToRight);
+		}
+	}
+
 	unordered_multimap<string, int> indexSynonymsInClauses(vector<QNode*> clauses)
 	{
 		unordered_multimap<string, int> nameIndexMap;
@@ -404,15 +487,6 @@ namespace QueryOptimiser
 			}
 		}
 		return nameIndexMap;
-	}
-
-	/**
-	* Method to get the reduction factor of a given clause
-	* @return The reduction factor
-	*/
-	double getReductionFactor(QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)
-	{
-		return statsTable->getReductionFactor(rel_type, typeLHS, typeRHS, direction);
 	}
 
 	/**
@@ -479,6 +553,54 @@ namespace QueryOptimiser
 		}
 	}
 
+	vector<QNode*> populateSelectSynonyms(QNode* resultNode)
+	{
+		vector<QNode*> resultSynonyms;
+		QNode* resultChildNode = resultNode->getChild();
+		int numberOfSynonyms = resultNode->getNumberOfChildren();
+
+		//Populate the select synonyms map
+		for (int i = 0; i < numberOfSynonyms; i++) {
+			Synonym wantedSynonym = resultChildNode->getArg1();
+			if (wantedSynonym.getType() == BOOLEAN) {
+				break;
+			}
+			selectSynonyms.emplace(make_pair(wantedSynonym.getName(), i));
+			resultSynonyms.push_back(resultChildNode);
+			resultChildNode = resultNode->getNextChild();
+		}
+		return resultSynonyms;
+	}
+
+	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS)
+	{
+		pair<bool, DIRECTION> superset_subset_pair = determineSupersetSubset(LHS, RHS);
+		bool isSupersetSubset = superset_subset_pair.first;
+
+		if (!isSupersetSubset) {
+			return superset_subset_pair;
+		}
+
+		Synonym superset;
+		Synonym subset;
+		if (superset_subset_pair.second == LeftToRight) {
+			superset = LHS;
+			subset = RHS;
+		} else {
+			superset = RHS;
+			subset = LHS;
+		}
+		string nameSuperset = superset.getName();
+		SYNONYM_TYPE typeSubset = subset.getType();
+		
+		if (typeSubset == STRING_INT || typeSubset == STRING_CHAR) {
+			if (selectSynonyms.count(nameSuperset) != 0) {
+				return make_pair(false, LeftToRight);
+			}
+		}
+		return superset_subset_pair;
+	}
+
 	inline bool isContainedInMain(string wantedName)
 	{
 		if (mainTableSynonyms.count(wantedName) == 1) {
@@ -503,25 +625,37 @@ namespace QueryOptimiser
 		}
 	}
 
+	QNode* createResultSubtree(vector<QNode*> resultClauses)
+	{
+		Synonym empty;
+		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty);
+		for (unsigned int i = 0; i < resultClauses.size(); i++) {
+			QNode* clause = resultClauses[i];
+			clausesNode->setChild(clause);
+			clause->setParent(clausesNode);
+		}
+		return clausesNode;
+	}
+
 	/**
 	* Method to join constant clauses and non-constant clauses into one subtree
 	* @param a vector of constant clauses
 	* @param a vector of non-constant clauses
 	* @return A QNode object representing the subtree
 	*/
-	QNode* createClausesSubtree(vector<QNode*> constantClauses, vector<QNode*> nonConstantClauses)
+	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2)
 	{
 		Synonym empty;
 		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty);
 
-		for (unsigned int i = 0; i < constantClauses.size(); i++) {
-			QNode* clause = constantClauses[i];
+		for (unsigned int i = 0; i < clausesVector1.size(); i++) {
+			QNode* clause = clausesVector1[i];
 			clausesNode->setChild(clause);
 			clause->setParent(clausesNode);
 		}
 
-		for (unsigned int i = 0; i < nonConstantClauses.size(); i++) {
-			QNode* clause = nonConstantClauses[i];
+		for (unsigned int i = 0; i < clausesVector2.size(); i++) {
+			QNode* clause = clausesVector2[i];
 			clausesNode->setChild(clause);
 			clause->setParent(clausesNode);
 		}
