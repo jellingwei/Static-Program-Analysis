@@ -531,10 +531,9 @@ namespace QueryOptimiser
 		//Populate the select synonyms map
 		for (int i = 0; i < numberOfSynonyms; i++) {
 			Synonym wantedSynonym = resultChildNode->getArg1();
-			if (wantedSynonym.getType() == BOOLEAN) {
-				break;
+			if (wantedSynonym.getType() != BOOLEAN) {
+				selectSynonyms[wantedSynonym.getName()] = i;
 			}
-			selectSynonyms[wantedSynonym.getName()] = i;
 			resultSynonyms.push_back(resultChildNode);
 			resultChildNode = resultNode->getNextChild();
 		}
@@ -597,7 +596,7 @@ namespace QueryOptimiser
 	QNode* createResultSubtree(vector<QNode*> resultClauses)
 	{
 		Synonym empty;
-		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty);
+		QNode* clausesNode = new QNode(RESULT, empty, empty, empty);
 		for (unsigned int i = 0; i < resultClauses.size(); i++) {
 			QNode* clause = resultClauses[i];
 			clausesNode->setChild(clause);
