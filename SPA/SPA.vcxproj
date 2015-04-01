@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\AffectsBipTable.cpp" />
     <ClCompile Include="..\source\AffectsTable.cpp" />
     <ClCompile Include="..\source\AST.cpp" />
     <ClCompile Include="..\source\CallsTable.cpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="..\source\VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\AffectsBipTable.h" />
     <ClInclude Include="..\source\AffectsTable.h" />
     <ClInclude Include="..\source\AST.h" />
     <ClInclude Include="..\source\CallsTable.h" />

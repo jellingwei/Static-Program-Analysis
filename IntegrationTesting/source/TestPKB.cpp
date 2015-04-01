@@ -434,6 +434,20 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(12,_)", 2, (int)pkb.getNextBipAfter(12).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip*(17,_), 17 is a call statement", 8, (int)pkb.getNextBipAfter(17, true).size());
 
+	// AffectsBip
+	cout << "AffectsBip" << endl;
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(35,_), normal affects", 2, (int)pkb.getAffectsBipAfter(35).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(31,_), normal affects", 2, (int)pkb.getAffectsBipAfter(31).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(29,_), normal affects", 1, (int)pkb.getAffectsBipAfter(29).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(27,_), normal affects", 1, (int)pkb.getAffectsBipAfter(27).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(22,_)", 3, (int)pkb.getAffectsBipAfter(22).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(24,_)", 3, (int)pkb.getAffectsBipAfter(24).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(30,_), non-assign stmt", 0, (int)pkb.getAffectsBipAfter(30).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(15,_), ", 1, (int)pkb.getAffectsBipAfter(15).size());
+	
 
 	cout << "End TestPkb" << endl;
 }

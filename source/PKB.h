@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stack>
+
 #include "VarTable.h"
 #include "ProcTable.h"
 #include "StmtTable.h"
@@ -15,6 +17,7 @@
 #include "CallsTable.h"
 #include "NextTable.h"
 #include "NextBipTable.h"
+#include "AffectsBipTable.h"
 #include "AffectsTable.h"
 #include "CFG.h"
 #include "AST.h"
@@ -30,6 +33,7 @@ class TNode;
 class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
 class StmtTable;
 
+typedef pair<CNode*, stack<CNode*> > NEXTBIP_STATE;
 
 class PKB {
 public:
@@ -207,6 +211,8 @@ public:
 	//NextBip
 	PROGLINE_LIST getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
 
+	//AffectsBip
+	PROGLINE_LIST getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
 
 	//@todo 
 	// @cond todo
@@ -230,7 +236,9 @@ private:
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
 	NextBipTable* nextBipTable;
+	AffectsBipTable* affectsBipTable;
 	PKB();
 	
 	
 };
+
