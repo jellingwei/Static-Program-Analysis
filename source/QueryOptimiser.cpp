@@ -36,7 +36,7 @@ namespace QueryOptimiser
 	double COST_WITH = 1;
 
 	unordered_map<string, SYNONYM_TYPE> synonymNameToTypeMap;
-	unordered_multimap<string, int> selectSynonyms;  //Maps the synonyms that are being selected to the index
+	unordered_map<string, int> selectSynonyms;  //Maps the synonyms that are being selected to the index
 	unordered_map<string, unsigned int> synonymsCount;  //Maps synonyms to the expected number of values
 	set<string> mainTableSynonyms;  //Denotes synonyms that are already in the main table after clause evaluation
 	StatisticsTable* statsTable;
@@ -48,8 +48,7 @@ namespace QueryOptimiser
 	vector<QNode*> populateSelectSynonyms(QNode* resultNode);
 	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode);
 	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS);
-	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, unordered_multimap<string, int> clauseIndex, 
-		Synonym original, Synonym replacement);
+	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
 	QNode* optimiseClausesNode(QNode* clausesNode);
@@ -68,7 +67,6 @@ namespace QueryOptimiser
 
 	QNode* createResultSubtree(vector<QNode*> resultClauses);
 	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2);
-	unordered_multimap<string, int> indexSynonymsInClauses(vector<QNode*> clauses);
 	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS);
 
 	/**
@@ -119,8 +117,6 @@ namespace QueryOptimiser
 		vector<QNode*> clauses = clauses_with_pair.first;
 		vector<QNode*> withClauses = clauses_with_pair.second;
 		vector<QNode*> finalWithClauses;
-		unordered_multimap<string, int> clausesIndexMap = indexSynonymsInClauses(clauses);
-		unordered_multimap<string, int> withIndexMap = indexSynonymsInClauses(withClauses);
 
 		for (unsigned int i = 0; i < withClauses.size(); i++) {
 			QNode* singleWithClause = withClauses[i];
@@ -140,9 +136,11 @@ namespace QueryOptimiser
 					superset = RHS;
 					subset = LHS;
 				}
-				resultClauses = replaceSynonyms(resultClauses, selectSynonyms, superset, subset);
-				clauses = replaceSynonyms(clauses, clausesIndexMap, superset, subset);
-				finalWithClauses = replaceSynonyms(withClauses, withIndexMap, superset, subset);
+				resultClauses = replaceSynonyms(resultClauses, superset, subset);
+				clauses = replaceSynonyms(clauses, superset, subset);
+				withClauses.erase(withClauses.begin() + i);
+				i--;
+				finalWithClauses = replaceSynonyms(withClauses, superset, subset);
 			} else {
 				finalWithClauses.push_back(singleWithClause);
 			}
@@ -173,16 +171,13 @@ namespace QueryOptimiser
 		return make_pair(clauses, withClauses);
 	}
 
-	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, unordered_multimap<string, int> clauseIndex, 
-		Synonym original, Synonym replacement)
+	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement)
 	{
 		string replacedName = original.getName();
+		vector<QNode*> finalClauses;
 
-		auto range = clauseIndex.equal_range(original.getName());
-
-		for (auto itr = range.first; itr != range.second; ++itr) {
-			int index = itr->second;
-			QNode* singleClause = clausesVector[index];
+		for (unsigned int i = 0; i < clausesVector.size(); i++) {
+			QNode* singleClause = clausesVector[i];
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(singleClause);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
@@ -194,9 +189,9 @@ namespace QueryOptimiser
 				RHS = replacement;
 			}
 			setClauseArguments(singleClause, LHS, RHS);
-			swap(singleClause, clausesVector[index]);
+			finalClauses.push_back(singleClause);
 		}
-		return clausesVector;
+		return finalClauses;
 	}
 
 	/**
@@ -256,7 +251,7 @@ namespace QueryOptimiser
 				reduceSynonymsCount(LHS.getName(), reductionFactor);  //Set the new expected count
 			} else if (typeRHS == STRING_INT || typeRHS == STRING_CHAR || typeRHS == STRING_PATTERNS || typeRHS == UNDEFINED) {
 				clauseNode->setDirection(RightToLeft);
-				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, LeftToRight);
+				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, RightToLeft);
 				reduceSynonymsCount(RHS.getName(), reductionFactor);  //Set the new expected count
 			} else {
 				nonConstantClauses.push_back(clauseNode);
@@ -394,7 +389,7 @@ namespace QueryOptimiser
 			clause->setArg1(RHS);
 		} else {
 			clause->setArg1(LHS);
-			clause->setArg2(LHS);
+			clause->setArg2(RHS);
 		}
 	}
 
@@ -447,13 +442,13 @@ namespace QueryOptimiser
 			}
 		} else if (typeLHS == ASSIGN || typeLHS == CALL || typeLHS == WHILE || 
 			typeLHS == IF || typeLHS == PROG_LINE || typeLHS == CONSTANT) {
-				if (attributeRHS == STRING_INT) {
+				if (typeRHS == STRING_INT) {
 					return make_pair(true, LeftToRight);
 				} else {
 					return make_pair(false, LeftToRight);
 				}
 		} else if (typeLHS == PROCEDURE || typeLHS == VARIABLE) {
-			if (attributeRHS == STRING_CHAR) {
+			if (typeRHS == STRING_CHAR) {
 				return make_pair(true, LeftToRight);
 			} else {
 				return make_pair(false, LeftToRight);
@@ -461,32 +456,6 @@ namespace QueryOptimiser
 		} else {
 			return make_pair(false, LeftToRight);
 		}
-	}
-
-	unordered_multimap<string, int> indexSynonymsInClauses(vector<QNode*> clauses)
-	{
-		unordered_multimap<string, int> nameIndexMap;
-
-		for (unsigned int i = 0; i < clauses.size(); i++) {
-			pair<Synonym, Synonym> argumentPair = getClauseArguments(clauses[i]);
-			Synonym LHS = argumentPair.first;
-			Synonym RHS = argumentPair.second;
-			SYNONYM_TYPE typeLHS = LHS.getType();
-			SYNONYM_TYPE typeRHS = RHS.getType();
-			
-			string nameRHS = RHS.getName();
-
-			if (typeLHS != STRING_CHAR && typeLHS != STRING_INT && typeLHS != STRING_PATTERNS) {
-				string nameLHS = LHS.getName();
-				nameIndexMap.emplace(make_pair(nameLHS, i));
-			}
-
-			if (typeRHS != STRING_CHAR && typeRHS != STRING_INT && typeRHS != STRING_PATTERNS) {
-				string nameRHS = RHS.getName();
-				nameIndexMap.emplace(make_pair(nameRHS, i));
-			}
-		}
-		return nameIndexMap;
 	}
 
 	/**
@@ -565,7 +534,7 @@ namespace QueryOptimiser
 			if (wantedSynonym.getType() == BOOLEAN) {
 				break;
 			}
-			selectSynonyms.emplace(make_pair(wantedSynonym.getName(), i));
+			selectSynonyms[wantedSynonym.getName()] = i;
 			resultSynonyms.push_back(resultChildNode);
 			resultChildNode = resultNode->getNextChild();
 		}
