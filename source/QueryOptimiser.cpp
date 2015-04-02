@@ -48,6 +48,8 @@ namespace QueryOptimiser
 	vector<QNode*> populateSelectSynonyms(QNode* resultNode);
 	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode);
 	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS);
+
+	QueryTree* removeReduantSynonyms(QueryTree* qTreeRoot);
 	void scanAndReplaceRedudantSynonyms(QNode* &clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
 	void replaceRedundantSynonyms(QNode* &clausesNode, string name);
 	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
@@ -112,8 +114,7 @@ namespace QueryOptimiser
 	QueryTree* flattenQuery(QueryTree* qTreeRoot)
 	{
 		qTreeRoot = rewriteWithClauses(qTreeRoot);
-
-		//todo: Remove redundant synonyms and clauses
+		qTreeRoot = removeReduantSynonyms(qTreeRoot);
 		return qTreeRoot;
 	}
 
@@ -236,8 +237,6 @@ namespace QueryOptimiser
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
-			SYNONYM_TYPE typeLHS = LHS.getType();
-			SYNONYM_TYPE typeRHS = RHS.getType();
 
 			if (query_type == With) {
 				childNode = childNode->getNextChild();
