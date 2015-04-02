@@ -14,7 +14,7 @@ Affects*: 5
 */
 
 /**
-	@brief Namespace containing functions for the query optimisation
+@brief Namespace containing functions for the query optimisation
 
 */
 
@@ -74,7 +74,7 @@ namespace QueryOptimiser
 	unordered_map<string, int> indexSynonymsReferenced(QNode* resultNode, QNode* clausesNode);
 	void createSynonymGraph(QNode* clausesNode, vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map);
 	/*void createSynonymReference(QNode* resultNode, QNode* clausesNode, 
-		vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map);*/
+	vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map);*/
 
 	/**
 	* Method that is public to optimise the query tree
@@ -112,7 +112,7 @@ namespace QueryOptimiser
 	QueryTree* flattenQuery(QueryTree* qTreeRoot)
 	{
 		qTreeRoot = rewriteWithClauses(qTreeRoot);
-		
+
 		//todo: Remove redundant synonyms and clauses
 		return qTreeRoot;
 	}
@@ -261,7 +261,7 @@ namespace QueryOptimiser
 		}
 	}
 
-	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement)
+	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym toBeReplaced, Synonym replacement)
 	{
 		vector<QNode*> finalClauses;
 
@@ -271,10 +271,10 @@ namespace QueryOptimiser
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
 
-			if (LHS == original) {
+			if (LHS == toBeReplaced) {
 				LHS = replacement;
 			}
-			if (RHS == original) {
+			if (RHS == toBeReplaced) {
 				RHS = replacement;
 			}
 			setClauseArguments(singleClause, LHS, RHS);
@@ -338,7 +338,7 @@ namespace QueryOptimiser
 				clauseNode->setDirection(LeftToRight);
 				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, LeftToRight);
 				reduceSynonymsCount(LHS.getName(), reductionFactor);  //Set the new expected count
-			} else if (typeRHS == STRING_INT || typeRHS == STRING_CHAR || typeRHS == STRING_PATTERNS || typeRHS == UNDEFINED) {
+			} else if (typeRHS == STRING_INT || typeRHS == STRING_CHAR || typeRHS == STRING_PATTERNS || typeLHS == UNDEFINED) {
 				clauseNode->setDirection(RightToLeft);
 				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, RightToLeft);
 				reduceSynonymsCount(RHS.getName(), reductionFactor);  //Set the new expected count
@@ -649,7 +649,7 @@ namespace QueryOptimiser
 		}
 		string nameSuperset = superset.getName();
 		SYNONYM_TYPE typeSubset = subset.getType();
-		
+
 		if (typeSubset == STRING_INT || typeSubset == STRING_CHAR) {
 			if (isSelectSynonym(nameSuperset)) {
 				return make_pair(false, LeftToRight);  //Cannot replace a select synonym with constants
@@ -743,7 +743,7 @@ namespace QueryOptimiser
 	}
 
 	/*void createSynonymReference(QNode* resultNode, QNode* clausesNode, 
-		vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map)*/
+	vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map)*/
 
 	void createSynonymGraph(QNode* clausesNode, vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
