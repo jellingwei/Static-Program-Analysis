@@ -187,6 +187,14 @@ string Synonym::convertToString(SYNONYM_TYPE synonymType)
 		return "constant";
 	case PROG_LINE:
 		return "prog_line";
+	case STMTLST:
+		return "stmtlst";
+	case PLUS:
+		return "plus";
+	case MINUS:
+		return "minus";
+	case TIMES:
+		return "times";
 	case STRING_CHAR:
 		return "string_char";
 	case STRING_INT:
@@ -230,7 +238,15 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return STRING_PATTERNS;
 	}else if (synonymType == "boolean") {
 		return BOOLEAN;
-	} else {
+	}else if (synonymType == "stmtlst") {
+		return STMTLST;
+	}else if (synonymType == "plus") {
+		return PLUS;
+	}else if (synonymType == "minus") {
+		return MINUS;
+	}else if (synonymType == "times") {
+		return TIMES;
+	}else {
 		return UNDEFINED;
 	}
 }

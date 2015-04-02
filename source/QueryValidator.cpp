@@ -62,10 +62,8 @@ void QueryValidator::initTable()
 	//constant is invalid for Parent
 	//Parent argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Parent), list4));
-
 	//Parent argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Parent), list5));
-
 	//ParentS argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(ParentT), list4));
 	//ParentS argument 2
@@ -73,13 +71,10 @@ void QueryValidator::initTable()
 
 	//Follows argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Follows), list5));
-
 	//Follows argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Follows), list5));
-
 	//FollowsS argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(FollowsT), list5));
-
 	//FollowsS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(FollowsT), list5));
 
@@ -89,15 +84,23 @@ void QueryValidator::initTable()
 
 	//Affects argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Affects), list6));
-
 	//Affects argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Affects), list6));
-	
 	//AffectsS argument 1
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(AffectsT), list6));
-
 	//AffectsS argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsT), list6));
+
+
+	//AffectsBip argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(AffectsBip), list6));
+	//AffectsBip argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsBip), list6));
+	//AffectsBipT argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(AffectsBipT), list6));
+	//AffectsBipT argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(AffectsBipT), list6));
+
 
 	//Next
 	SYNONYM_TYPE list7array[] = { ASSIGN, CALL, IF, STMT, WHILE, PROG_LINE, STRING_INT, UNDEFINED };
@@ -112,6 +115,16 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(NextT), list7));
 
 
+	//NextBip argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(NextBip), list7));
+	//NextBip argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(NextBip), list7));
+	//NextBipT argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(NextBipT), list7));
+	//NextBipT argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(NextBipT), list7));
+
+
 	//Calls argument 1
 	SYNONYM_TYPE list8array[] = { PROCEDURE, STRING_CHAR, STRING_INT, UNDEFINED }; 
 	vector<SYNONYM_TYPE> list8; list8.insert(list8.begin(), list8array, list8array + 4);
@@ -124,22 +137,49 @@ void QueryValidator::initTable()
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(CallsT), list8));
 
 
+	/* Contains */
+	SYNONYM_TYPE list9array[] = { PROCEDURE, IF, WHILE, STMT, PROG_LINE, STMTLST, ASSIGN, PLUS, MINUS, TIMES, STRING_INT };
+	vector<SYNONYM_TYPE> list9; list9.insert(list9.begin(), list9array, list9array + 11);
+
+	SYNONYM_TYPE list10array[] = { ASSIGN, CALL, IF, WHILE, STMT, PROG_LINE, CONSTANT, VARIABLE, PLUS, MINUS, TIMES, STRING_INT }; 
+	vector<SYNONYM_TYPE> list10; list10.insert(list10.begin(), list10array, list10array + 12);
+
+	//constant is valid for Contains
+	//Contains argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Contains), list9));
+	//Contains argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Contains), list10));
+	//ContainsT argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(ContainsT), list9));
+	//ContainsT argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(ContainsT), list10));
+
+	/* Siblings */
+	SYNONYM_TYPE list11array[] = {PROCEDURE, STMTLST, STMT, ASSIGN, CALL, IF, WHILE, PROG_LINE, CONSTANT, VARIABLE, PLUS, MINUS, TIMES, STRING_INT }; 
+	vector<SYNONYM_TYPE> list11; list11.insert(list11.begin(), list11array, list11array + 14);
+
+	//Siblings argument 1
+	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Sibling), list11));
+	//Siblings argument 2
+	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Sibling), list11));
+
+
 	/* patterns queries */
 	//assign/while patterns argument 1
-	SYNONYM_TYPE list9array[] = { STRING_CHAR, VARIABLE, UNDEFINED };
-	vector<SYNONYM_TYPE> list9; list9.insert(list9.begin(), list9array, list9array + 3);
-	patternsArg1Map.insert(make_pair(ASSIGN, list9));  
-	patternsArg1Map.insert(make_pair(WHILE, list9));
-	patternsArg1Map.insert(make_pair(IF, list9));
+	SYNONYM_TYPE list12array[] = { STRING_CHAR, VARIABLE, UNDEFINED };
+	vector<SYNONYM_TYPE> list12; list12.insert(list12.begin(), list12array, list12array + 3);
+	patternsArg1Map.insert(make_pair(ASSIGN, list12));  
+	patternsArg1Map.insert(make_pair(WHILE, list12));
+	patternsArg1Map.insert(make_pair(IF, list12));
 
-	vector<SYNONYM_TYPE> list10; //empty vector means no restrictions on arg2 of pattern assign.
-	patternsArg2Map.insert(make_pair(ASSIGN, list10)); 
-	patternsArg2Map.insert(make_pair(IF, list10)); 
+	vector<SYNONYM_TYPE> list13; //empty vector means no restrictions on arg2 of pattern assign.
+	patternsArg2Map.insert(make_pair(ASSIGN, list13)); 
+	patternsArg2Map.insert(make_pair(IF, list13)); 
 
 	//while patterns argument 2
-	SYNONYM_TYPE list11array[] = { UNDEFINED };
-	vector<SYNONYM_TYPE> list11; list11.insert(list11.begin(), list11array, list11array + 1);
-	patternsArg2Map.insert(make_pair(WHILE, list11));
+	SYNONYM_TYPE list14array[] = { UNDEFINED };
+	vector<SYNONYM_TYPE> list14; list14.insert(list14.begin(), list14array, list14array + 1);
+	patternsArg2Map.insert(make_pair(WHILE, list14));
 
 
 

@@ -49,6 +49,7 @@ namespace QueryParser
 	unordered_map<string, QNODE_TYPE> nodetypeMap; //key: synonyms
 	unordered_map<QNODE_TYPE, tuple<REF_TYPE, REF_TYPE>> relRefMap; //key: relRef
 	unordered_map<string, SYNONYM_ATTRIBUTE> attrNameMap; //key: synonyms
+	vector<SYNONYM_TYPE> selectResultsList;  //allowed SYNONYM_TYPE in Select clause
 	QueryValidator* myQueryV;
 
 
@@ -304,6 +305,10 @@ namespace QueryParser
 		attrNameMap.insert(pairAttrNameType3);
 		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType4 ("stmt#", SYNONYM_ATTRIBUTE(stmtNo));
 		attrNameMap.insert(pairAttrNameType4);
+
+		//synonyms that can appear in query results: IDENT
+		SYNONYM_TYPE list[] = { PROCEDURE, STMTLST, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE};
+		selectResultsList.insert(selectResultsList.begin(), list, list + 10);
 
 	}
 
@@ -1545,23 +1550,45 @@ namespace QueryParser
 
 		if (synonymsMap.count(value) > 0){
 
-			DE_type = synonymsMap.at(value); 
+			DE_type = synonymsMap.at(value);
+
+			//Checks if the synonym used for Select clause is valid
+			auto result1 = std::find(std::begin(selectResultsList), std::end(selectResultsList), DE_type);
+			if(result1 == std::end(selectResultsList)){ // not a valid Select argument (eg plus add; Select add)
+				#ifdef DEBUG
+					throw exception("Query Parser error: invalid Select synonym used for results.");
+				#endif
+				
+				return false;
+			}
+
 			Synonym s1(DE_type,value);
 			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
 
 		}else{
 
 			// it must be an attrRef
-			if(synonymsMap.count(peekBackwards(2)) > 0)
-				DE_type = synonymsMap.at(peekBackwards(2));
-			else{
+			value = peekBackwards(2);
+			if(synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value);
+			
+				//Checks if the synonym used for Select clause is valid
+				auto result1 = std::find(std::begin(selectResultsList), std::end(selectResultsList), DE_type);
+				if(result1 == std::end(selectResultsList)){ // not a valid Select argument (eg plus add; Select add)
+					#ifdef DEBUG
+						throw exception("Query Parser error: invalid Select synonym used for results.");
+					#endif
+					
+					return false;
+				}
+
+			}else{
 
 				#ifdef DEBUG
 					cout<<"synonym can't be found : " <<peekBackwards(2)<<endl;
 				#endif
 				return false;  //error no such synonym
 			}
-			value = peekBackwards(2);
 
 			if(attrNameMap.count(peekBackwards(0)) > 0)
 				attribute = attrNameMap.at(peekBackwards(0));

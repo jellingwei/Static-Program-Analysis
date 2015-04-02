@@ -154,6 +154,27 @@ void QueryTree::printNode(QNode* node)
 	case AffectsT:
 		type = "Affects*";
 		break;
+	case Contains:
+		type = "Contains";
+		break;
+	case ContainsT:
+		type = "Contains*";
+		break;
+	case Sibling:
+		type = "Sibling";
+		break;
+	case NextBip:
+		type = "NextBip";
+		break;
+	case NextBipT:
+		type = "NextBip*";
+		break;
+	case AffectsBip:
+		type = "AffectsBip";
+		break;
+	case AffectsBipT:
+		type = "AffectsBip*";
+		break;
 	case Selection:
 		type = "Selection";
 		break;

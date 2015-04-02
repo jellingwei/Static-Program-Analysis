@@ -82,7 +82,8 @@ enum SYNONYM_TYPE
 	PROCEDURE, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE, 
 	STRING_CHAR, STRING_INT, STRING_PATTERNS, //Used to represent IDENT, INTEGER and expression-spec respectively
 	BOOLEAN,   //Used for select boolean clauses
-	UNDEFINED  //Used to denote "_"
+	UNDEFINED,  //Used to denote "_"
+	STMTLST, PLUS, MINUS, TIMES  //Used for Contains and Siblings
 };
 
 enum SYNONYM_ATTRIBUTE
