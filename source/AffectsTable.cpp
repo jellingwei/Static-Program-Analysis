@@ -601,5 +601,20 @@ BOOLEAN_ AffectsTable::isValid() {
 	}
 
 	return false;
+}
 
+BOOLEAN_ AffectsTable::isLhsValid(PROG_LINE_ lhs) {
+	bool transClosure = false; 
+	bool earlyTermination = true;
+	vector<int> ans = getProgLinesAffectedBy(lhs, transClosure, earlyTermination); // no transitive closure, early termination
+
+	return !ans.empty();
+}
+
+BOOLEAN_ AffectsTable::isRhsValid(PROG_LINE_ rhs) {
+	bool transClosure = false; 
+	bool earlyTermination = true;
+	vector<int> ans = getProgLinesAffecting(rhs, transClosure, earlyTermination); // no transitive closure, early termination
+
+	return !ans.empty();
 }

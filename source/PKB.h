@@ -183,6 +183,8 @@ public:
 	PROGLINE_LIST getNextRhs();
 	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
 	BOOLEAN_ isNextValid();
+	BOOLEAN_ isNextLhsValid(PROG_LINE_);
+	BOOLEAN_ isNextRhsValid(PROG_LINE_);
 
 	// functions for precomputations for next
 	int getFirstProgLineInProc(int);
@@ -205,6 +207,8 @@ public:
 	PROGLINE_LIST getAffectsLhs();
 	PROGLINE_LIST getAffectsRhs();
 	BOOLEAN_ isAffectsValid();
+	BOOLEAN_ isAffectsLhsValid(PROG_LINE_);
+	BOOLEAN_ isAffectsRhsValid(PROG_LINE_);
 
 	static BOOLEAN_ canSkipNodesBackwards(CNode* node);
 	static BOOLEAN_ canSkipNodesForwards(CNode* node);

@@ -21,6 +21,9 @@ public:
 	PROGLINE_LIST getRhs();
 	BOOLEAN_ isValid();
 
+	BOOLEAN_ isLhsValid(PROG_LINE_);
+	BOOLEAN_ isRhsValid(PROG_LINE_);
+
 	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
 
 	PROG_LINE_ getFirstProgLineInProc(PROC_INDEX procIndex);

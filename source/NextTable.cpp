@@ -196,57 +196,6 @@ BOOLEAN_ NextTable::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLO
 
 
 PROGLINE_LIST NextTable::getLhs() {
-	/*PKB pkb = PKB::getInstance();
-
-	vector<int> listOfProglinesToExclude;
-	
-	vector<int> procs = pkb.getAllProcIndex();
-	for (auto iter = procs.begin(); iter != procs.end(); ++iter) {
-		int procNum = *iter;
-
-		int lastline = getLastProgLineInProc(procNum);
-		CNode* node = pkb.cfgNodeTable.at(lastline);
-
-		if (node->getNodeType() == EndIf_C ) {
-			vector<CNode*> frontier; 
-			frontier.push_back(node);
-
-			while (!frontier.empty()) {
-				node = frontier.back(); 
-				frontier.pop_back();
-				if (node->getNodeType() == EndIf_C) {
-					// add previous nodes 
-					vector<CNode*>* prevNodes = node->getBefore();
-
-					for (auto prevNodeIt = prevNodes->begin(); prevNodeIt != prevNodes->end(); ++prevNodeIt) {
-						frontier.push_back(*prevNodeIt);
-					}
-				} else if (node->getNodeType() != While_C) {
-					listOfProglinesToExclude.push_back(node->getProcLineNumber() );
-				}
-			}
-		} else {
-			if (node->getNodeType() != While_C) {
-				listOfProglinesToExclude.push_back(node->getProcLineNumber() );
-			}	
-		}
-	}
-
-	//sort in desc
-	sort(listOfProglinesToExclude.begin(), listOfProglinesToExclude.end(), std::greater<int>());
-
-	// include every line except the ones in listOfProglinesToExclude
-	vector<int> result;
-	for (unsigned int i = 1; i <= pkb.getStmtTableSize(); i++) {
-		if (!listOfProglinesToExclude.empty() && i == listOfProglinesToExclude.back()) {
-			listOfProglinesToExclude.pop_back();
-			continue;
-		}
-
-		result.push_back(i);
-	}
-	*/
-
 	PKB pkb = PKB::getInstance();
 	
 	vector<int> result;
@@ -356,4 +305,35 @@ BOOLEAN_ NextTable::isValid() {
 	}
 
 	return false;
+}
+
+BOOLEAN_ NextTable::isLhsValid(PROG_LINE_ lhs) {
+	PKB pkb = PKB::getInstance();
+	CNode* node = pkb.cfgNodeTable.at(lhs);
+
+	if (node->getNodeType() == While_C || node->getNodeType() == If_C) {
+		return true;
+	}
+
+	vector<CNode*>* after = node->getAfter();
+	bool isLastNode;
+
+	// first handle special case for dummy node (End of if statement)
+	while (after->size() == 1 && after->at(0)->getNodeType() == EndIf_C) {
+		after = after->at(0)->getAfter();	
+	}
+
+	isLastNode = (after->size() == 1 && after->at(0)->getNodeType() == EndProc_C);
+		
+	return !isLastNode;
+}
+
+BOOLEAN_ NextTable::isRhsValid(PROG_LINE_ rhs) {
+	PKB pkb = PKB::getInstance();
+	CNode* node = pkb.cfgNodeTable.at(rhs);
+
+	vector<CNode*>* before = node->getBefore();
+	bool isFirstNode = (before->size() == 1 && before->at(0)->getNodeType() == Proc_C);
+		
+	return (!isFirstNode);
 }

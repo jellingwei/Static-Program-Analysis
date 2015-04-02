@@ -1168,6 +1168,14 @@ BOOLEAN_ PKB::isNextValid() {
 	return nextTable->isValid();
 }
 
+BOOLEAN_ PKB::isNextLhsValid(PROG_LINE_ lhs) { 
+	return nextTable->isLhsValid(lhs);
+}
+
+BOOLEAN_ PKB::isNextRhsValid(PROG_LINE_ rhs) {
+	return nextTable->isRhsValid(rhs);
+}
+
 /**
 * @param procIndex the index of a procedure
 * @return the first program line in the procedure.
@@ -1311,6 +1319,14 @@ BOOLEAN_ PKB::isAffectsValid() {
 	return affectsTable->isValid();
 }
 
+BOOLEAN_ PKB::isAffectsLhsValid(PROG_LINE_ lhs) { 
+	return affectsTable->isLhsValid(lhs);
+}
+
+BOOLEAN_ PKB::isAffectsRhsValid(PROG_LINE_ rhs) {
+	return affectsTable->isRhsValid(rhs);
+}
+
 
 /**
 * Checks if the node has information about the variables modified previously on the control flow graph.
@@ -1367,7 +1383,7 @@ PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transi
 	return vector<int>();
 }
 
-PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+PROGLINE_LIST PKB::getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	return vector<int>();
 }
 
