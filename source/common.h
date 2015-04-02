@@ -67,6 +67,10 @@ enum QNODE_TYPE
 	Follows, FollowsT,
 	Next, NextT,
 	Affects, AffectsT,
+	Contains,ContainsT,
+	Sibling,
+	NextBip, NextBipT, 
+	AffectsBip, AffectsBipT, 
 	AttrCompare,
 
 	// Select and Pattern QNODE_TYPEs
@@ -110,7 +114,7 @@ namespace QueryParser
 {
 	enum REF_TYPE
 	{
-		entRef, stmtRef, lineRef, varRef, ref
+		entRef, stmtRef, lineRef, varRef, stmtLstRef, nodeRef, ref
 	};
 }
 
