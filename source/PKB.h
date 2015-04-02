@@ -209,6 +209,19 @@ public:
 	static BOOLEAN_ canSkipNodesBackwards(CNode* node);
 	static BOOLEAN_ canSkipNodesForwards(CNode* node);
 
+	//NextBip
+	BOOLEAN_ isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure);
+ 	PROGLINE_LIST getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getNextBipLhs();
+	PROGLINE_LIST getNextBipRhs();
+
+	//AffectsBip
+	BOOLEAN_ isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure);
+	PROGLINE_LIST getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getAffectsBipLhs();
+	PROGLINE_LIST getAffectsBipRhs();
 
 	//@todo 
 	// @cond todo
