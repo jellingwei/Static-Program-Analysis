@@ -30,6 +30,11 @@ public:
 	static string convertSynonymAttrToString(SYNONYM_ATTRIBUTE synonymAttr);
 	static SYNONYM_ATTRIBUTE convertSynonymAttrToEnum(string synonymAttr);
 
+	bool operator== (const Synonym& synonym2) const
+	{
+		return (_type == synonym2._type && _name == synonym2._name);
+	}
+
 private:
 	SYNONYM_TYPE _type;  //Type of synonym (Can use "string" or "boolean")
 	string _name;  //Name of synonym (Name of constant if type is "string" e.g. "v") (also store "true" or "false")
