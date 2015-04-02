@@ -34,6 +34,8 @@ void updateStateOfBfs(set<NEXTBIP_STATE>* visited, NEXTBIP_STATE nextState, dequ
 }
 
 CNode* getNodeCalledByProgLine(CNode* nextNode) {
+	assert(nextNode->getNodeType() == Call_C);
+
 	PKB pkb = PKB::getInstance();
 
 	TNode* astNode = nextNode->getASTref();
@@ -46,14 +48,19 @@ CNode* getNodeCalledByProgLine(CNode* nextNode) {
 	return nodeOfProc;
 }
 
-CNode* getLastNodeInProcCalledByProgLine(CNode* nextNode) {
+vector<CNode*> getLastNodeInProcCalledByProgLine(CNode* nextNode) {
+	assert(nextNode->getNodeType() == Call_C);
+
 	PKB pkb = PKB::getInstance();
 
 	TNode* astNode = nextNode->getASTref();
 	int procIndex = astNode->getNodeValueIdx();
 	
 	CNode* nodeOfProc = pkb.cfgTable.at(procIndex)->getProcEnd();
-	return nodeOfProc;
+
+	assert( nodeOfProc->getBefore()->size() == 1);
+	return *(nodeOfProc->getBefore());
+	
 }
 
 vector<CNode*> getCallStatementsToProc(int procIndex) {
@@ -218,20 +225,29 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 
 		vector<CNode*>* nextNodes = curNode->getBefore();
 		 
-			// for non-call statement, follow the same thing as Next
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* node = *iter;
 
-			//
-			if (node->getNodeType() != EndIf_C) {
+			// call stmt: expand to the last nodes of the procedure called
+			if (node->getNodeType() == Call_C) {
+
+				vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(node);
+
+				for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
+					updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
+				}
+
+			} else if (node->getNodeType() != EndIf_C) {
+				// normal case: on a Start of Proc, pop the stack/ expand to all call statements calling the proc
 				if (node->getNodeType() == Proc_C) {
 					expandProc(node, afterCall, visited, frontier, result);
 				} else {
+					// otherwise just traverse
 					updateStateOfBfs(visited, NEXTBIP_STATE(node, afterCall), frontier, result);	
 				}
 
 			} else {
-				// 
+				// for EndIf nodes, need to get both branches
 				vector<CNode*> nodesToTraverseBack;
 				CNode* prevNodeAfterEndIf = node->getBefore()->at(0);
 				CNode* prevNodeAfterEndIf2 = node->getBefore()->at(1);

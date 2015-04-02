@@ -437,6 +437,9 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,25)", 4, (int)pkb.getNextBipBefore(25).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,38)", 1, (int)pkb.getNextBipBefore(38).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,23)", 1, (int)pkb.getNextBipBefore(23).size());
+	vector<int> nextBipBefore19 = pkb.getNextBipBefore(19);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,19)", 3, (int)nextBipBefore19.size());
+	CPPUNIT_ASSERT_MESSAGE("NextBip(,19)", find(nextBipBefore19.begin(), nextBipBefore19.end(), 25) != nextBipBefore19.end() );
 
 
 	cout << "End TestPkb" << endl;
