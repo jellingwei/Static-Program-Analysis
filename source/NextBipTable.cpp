@@ -20,9 +20,9 @@ NextBipTable::NextBipTable() {
 
 void updateStateOfBfs(set<NEXTBIP_STATE>* visited, NEXTBIP_STATE nextState, deque<NEXTBIP_STATE >& frontier, set<int>& result) {
 	CNode* node = nextState.first;
-	if (node->getNodeType() == Proc_C) {
-		return;
-	}
+	//if (node->getNodeType() == Proc_C) {    // what is this for?
+	//	return;
+	//}
 
 	if (visited->count(nextState) == 0) {
 		frontier.push_back(nextState);
@@ -43,6 +43,16 @@ CNode* getNodeCalledByProgLine(CNode* nextNode) {
 	assert(pkb.cfgNodeTable.count(procLineToGoTo) != 0);
 	CNode* nodeOfProc = pkb.cfgNodeTable.at(procLineToGoTo);
 
+	return nodeOfProc;
+}
+
+CNode* getLastNodeInProcCalledByProgLine(CNode* nextNode) {
+	PKB pkb = PKB::getInstance();
+
+	TNode* astNode = nextNode->getASTref();
+	int procIndex = astNode->getNodeValueIdx();
+	
+	CNode* nodeOfProc = pkb.cfgTable.at(procIndex)->getProcEnd();
 	return nodeOfProc;
 }
 
@@ -69,6 +79,17 @@ vector<CNode*> getNextNodesOfNodes(vector<CNode*> nodes) {
 	vector<CNode*> result;
 	for (auto iter = nodes.begin(); iter != nodes.end(); ++iter) {
 		vector<CNode*>* nextNodes = (*iter)->getAfter();
+
+		result.insert(result.end(), nextNodes->begin(), nextNodes->end());
+	}
+
+	return result;
+}
+
+vector<CNode*> getPrevNodesOfNodes(vector<CNode*> nodes) {
+	vector<CNode*> result;
+	for (auto iter = nodes.begin(); iter != nodes.end(); ++iter) {
+		vector<CNode*>* nextNodes = (*iter)->getBefore();
 
 		result.insert(result.end(), nextNodes->begin(), nextNodes->end());
 	}
@@ -108,7 +129,7 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 				// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
 				int curProcIndex = curNode->getASTref()->getNodeValueIdx();
 				
-				vector<CNode*> possibleNodes = getNextNodesOfNodes(getCallStatementsToProc(curProcIndex));
+				vector<CNode*> possibleNodes = getCallStatementsToProc(curProcIndex);
 
 				for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
 					updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
@@ -156,9 +177,101 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 	return resultAsVector;
 }
 
-PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+void expandProc(CNode* curNode, stack<CNode*> afterCall, set<NEXTBIP_STATE>* visited, deque<NEXTBIP_STATE> frontier, set<int>& result) {
+	// pop the top of the stack, and go to that node which was on the top
+	if (afterCall.size() > 0) {
+		CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
+		updateStateOfBfs(visited, NEXTBIP_STATE(nodeAfterCall, afterCall), frontier, result);
+	} else {
+		// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
+		int curProcIndex = curNode->getASTref()->getNodeValueIdx();
+			
+		vector<CNode*> possibleNodes = getCallStatementsToProc(curProcIndex);
+	
+		for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
+			updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
+		}
+	}
+	
+}
 
-	return vector<int>();
+PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+	PKB pkb = PKB::getInstance();
+	if (pkb.cfgNodeTable.count(progLine2) == 0) { // progline does not have a cfg node
+		return vector<int>();
+	}
+	CNode* curNode = pkb.cfgNodeTable.at(progLine2);
+	stack<CNode*> afterCall;
+	set<int> result;
+
+	deque<NEXTBIP_STATE > frontier;
+	set<NEXTBIP_STATE>* visited = new set<NEXTBIP_STATE>();
+
+	frontier.push_back(NEXTBIP_STATE(curNode, stack<CNode*>() ) );
+
+	while (!frontier.empty()) {
+		NEXTBIP_STATE curState = frontier.back();
+		curNode = curState.first; 
+		afterCall = curState.second;
+
+		frontier.pop_back();
+
+		vector<CNode*>* nextNodes = curNode->getBefore();
+		 
+			// for non-call statement, follow the same thing as Next
+		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
+			CNode* node = *iter;
+
+			//
+			if (node->getNodeType() != EndIf_C) {
+				if (node->getNodeType() == Proc_C) {
+					expandProc(node, afterCall, visited, frontier, result);
+				} else {
+					updateStateOfBfs(visited, NEXTBIP_STATE(node, afterCall), frontier, result);	
+				}
+
+			} else {
+				// 
+				vector<CNode*> nodesToTraverseBack;
+				CNode* prevNodeAfterEndIf = node->getBefore()->at(0);
+				CNode* prevNodeAfterEndIf2 = node->getBefore()->at(1);
+
+				nodesToTraverseBack.push_back(prevNodeAfterEndIf); 
+				nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+					
+				while (!nodesToTraverseBack.empty()) {
+					CNode* nodeToExpand = nodesToTraverseBack.back();
+					nodesToTraverseBack.pop_back();
+						
+					if (nodeToExpand->getNodeType() == Proc_C) {
+						expandProc(nodeToExpand, afterCall, visited, frontier, result);
+					} else {
+						updateStateOfBfs(visited, NEXTBIP_STATE(nodeToExpand, afterCall), frontier, result);	
+					}
+
+					if (nodeToExpand->getNodeType() == EndIf_C) {
+						prevNodeAfterEndIf = node->getBefore()->at(0);
+						prevNodeAfterEndIf2 = node->getBefore()->at(1);
+
+						nodesToTraverseBack.push_back(prevNodeAfterEndIf);
+						nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+					}
+				}
+
+			}	
+
+		}
+		
+
+		// break after the first iteration if we are not finding transitive closure
+		if (!transitiveClosure) {
+			break;
+		}
+	}
+
+	vector<int> resultAsVector;
+	resultAsVector.insert(resultAsVector.end(), result.begin(), result.end());
+	return resultAsVector;
 }
 
 

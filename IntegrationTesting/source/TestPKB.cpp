@@ -364,6 +364,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(12, _)", 2, (int)pkb.getNextAfter(12).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(12, _)", 13, pkb.getNextAfter(12).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 13)", 12, pkb.getNextBefore(13).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 25)", 2, (int)pkb.getNextBefore(25).size());
 
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(4, _)", 15, (int)pkb.getNextAfterS(4).size());
@@ -433,6 +434,9 @@ void PKBTest::testPKB()
 	
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(12,_)", 2, (int)pkb.getNextBipAfter(12).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip*(17,_), 17 is a call statement", 8, (int)pkb.getNextBipAfter(17, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,25)", 4, (int)pkb.getNextBipBefore(25).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,38)", 1, (int)pkb.getNextBipBefore(38).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,23)", 1, (int)pkb.getNextBipBefore(23).size());
 
 
 	cout << "End TestPkb" << endl;

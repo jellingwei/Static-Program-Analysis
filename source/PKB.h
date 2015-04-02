@@ -206,7 +206,7 @@ public:
 
 	//NextBip
 	PROGLINE_LIST getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
-
+	PROGLINE_LIST getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
 
 	//@todo 
 	// @cond todo

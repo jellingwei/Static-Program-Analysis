@@ -1312,6 +1312,10 @@ PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiv
 	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
 }
 
+PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
+}
+
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
 */
