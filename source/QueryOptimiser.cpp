@@ -48,6 +48,8 @@ namespace QueryOptimiser
 	vector<QNode*> populateSelectSynonyms(QNode* resultNode);
 	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode);
 	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS);
+	void scanAndReplaceRedudantSynonyms(QNode* &clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
+	void replaceRedundantSynonyms(QNode* &clausesNode, string name);
 	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
@@ -63,11 +65,16 @@ namespace QueryOptimiser
 	int getExpectedCount(QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output);
 	double calculateCost(QNODE_TYPE rel_type, double numberOfValues);
 	inline bool isContainedInMain(string wantedName);
+	inline bool isSelectSynonym(string wantedName);
 	void reduceSynonymsCount(string name, double reductionFactor);
 
 	QNode* createResultSubtree(vector<QNode*> resultClauses);
 	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2);
 	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS);
+	unordered_map<string, int> indexSynonymsReferenced(QNode* resultNode, QNode* clausesNode);
+	void createSynonymGraph(QNode* clausesNode, vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map);
+	/*void createSynonymReference(QNode* resultNode, QNode* clausesNode, 
+		vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map);*/
 
 	/**
 	* Method that is public to optimise the query tree
@@ -140,7 +147,7 @@ namespace QueryOptimiser
 				clauses = replaceSynonyms(clauses, superset, subset);
 				withClauses.erase(withClauses.begin() + i);
 				i--;
-				finalWithClauses = replaceSynonyms(withClauses, superset, subset);
+				withClauses = replaceSynonyms(withClauses, superset, subset);
 			} else {
 				finalWithClauses.push_back(singleWithClause);
 			}
@@ -171,9 +178,91 @@ namespace QueryOptimiser
 		return make_pair(clauses, withClauses);
 	}
 
+	QueryTree* removeReduantSynonyms(QueryTree* qTreeRoot)
+	{
+		QNode* resultNode = qTreeRoot->getResultNode();
+		QNode* clausesNode = qTreeRoot->getClausesNode();
+		unordered_map<string, int> name_index_map = indexSynonymsReferenced(resultNode, clausesNode);
+		unsigned int numberOfSynonyms = name_index_map.size();
+		vector<vector<int>> adjacencyMatrix;
+
+		//Resize the 2 dimensional vector
+		adjacencyMatrix.resize(numberOfSynonyms);
+		for (unsigned int i = 0; i < numberOfSynonyms; i++) {
+			adjacencyMatrix[i].resize(numberOfSynonyms, 0);
+		}
+
+		//createSynonymReference(resultNode, clausesNode, adjacencyMatrix, name_index_map);
+		createSynonymGraph(clausesNode, adjacencyMatrix, name_index_map);
+		scanAndReplaceRedudantSynonyms(clausesNode, adjacencyMatrix, name_index_map);
+		qTreeRoot->setResultNode(resultNode);
+		qTreeRoot->setClausesNode(clausesNode);
+		return qTreeRoot;
+	}
+
+	void scanAndReplaceRedudantSynonyms(QNode* &clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
+	{
+		for (auto itr = name_index_map.begin(); itr != name_index_map.end(); ++itr) {
+			string name = itr->first;
+			int index = itr->second;
+			int count = 0;
+			for (unsigned int i = 0; i < adjacencyMatrix.size(); i++) {
+				count += adjacencyMatrix[index][i];
+			}
+
+			if (count == 0 || count == 1) {
+				if (isSelectSynonym(name)) {
+					continue;
+				} else {
+					//Since this synonym can be replaced, attempt to replace it
+					replaceRedundantSynonyms(clausesNode, name);
+				}
+			}
+		}
+	}
+
+	void replaceRedundantSynonyms(QNode* &clausesNode, string name)
+	{
+		Synonym undefined(UNDEFINED, "_");
+
+		int numberOfClauses = clausesNode->getNumberOfChildren();
+		QNode* childNode = clausesNode->getChild();
+
+		for (int i = 0; i < numberOfClauses; i++) {
+			QNODE_TYPE query_type = childNode->getNodeType();
+			SYNONYM_TYPE type = synonymNameToTypeMap[name];
+			Synonym redundant(type, name);
+
+			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
+			Synonym LHS = synonymPair.first;
+			Synonym RHS = synonymPair.second;
+			SYNONYM_TYPE typeLHS = LHS.getType();
+			SYNONYM_TYPE typeRHS = RHS.getType();
+
+			if (query_type == With) {
+				childNode = childNode->getNextChild();
+				continue;
+			}
+
+			//Check for LHS if it is redundant but it cannot be a With, Modifies or Uses
+			if (LHS == redundant) {
+				if (query_type != ModifiesS && query_type != ModifiesP && 
+					query_type != UsesS && query_type != UsesP) {
+						LHS = undefined;
+				}
+			}
+
+			if (RHS == redundant) {
+				RHS = undefined;
+			}
+
+			setClauseArguments(childNode, LHS, RHS);
+			childNode = childNode->getNextChild();
+		}
+	}
+
 	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement)
 	{
-		string replacedName = original.getName();
 		vector<QNode*> finalClauses;
 
 		for (unsigned int i = 0; i < clausesVector.size(); i++) {
@@ -182,10 +271,10 @@ namespace QueryOptimiser
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
 
-			if (LHS.getName() == replacedName) {
+			if (LHS == original) {
 				LHS = replacement;
 			}
-			if (RHS.getName() == replacedName) {
+			if (RHS == original) {
 				RHS = replacement;
 			}
 			setClauseArguments(singleClause, LHS, RHS);
@@ -562,8 +651,8 @@ namespace QueryOptimiser
 		SYNONYM_TYPE typeSubset = subset.getType();
 		
 		if (typeSubset == STRING_INT || typeSubset == STRING_CHAR) {
-			if (selectSynonyms.count(nameSuperset) != 0) {
-				return make_pair(false, LeftToRight);
+			if (isSelectSynonym(nameSuperset)) {
+				return make_pair(false, LeftToRight);  //Cannot replace a select synonym with constants
 			}
 		}
 		return superset_subset_pair;
@@ -572,6 +661,15 @@ namespace QueryOptimiser
 	inline bool isContainedInMain(string wantedName)
 	{
 		if (mainTableSynonyms.count(wantedName) == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	inline bool isSelectSynonym(string wantedName)
+	{
+		if (selectSynonyms.count(wantedName) == 1) {
 			return true;
 		} else {
 			return false;
@@ -590,6 +688,93 @@ namespace QueryOptimiser
 		if (mapItr != synonymsCount.end()) {
 			unsigned int currentCount = synonymsCount[name];
 			synonymsCount[name] = (unsigned int)ceil(currentCount * reductionFactor);
+		}
+	}
+
+	unordered_map<string, int> indexSynonymsReferenced(QNode* resultNode, QNode* clausesNode)
+	{
+		int index = 0;
+		unordered_map<string, int> name_index_map;
+		int numberOfClauses = resultNode->getNumberOfChildren();
+		QNode* childNode = resultNode->getChild();
+
+		for (int i = 0; i < numberOfClauses; i++) {
+			Synonym synonym = childNode->getArg1();
+			if (synonym.getType() == BOOLEAN) {
+				break;
+			} else {
+				string name = synonym.getName();
+				if (name_index_map.count(name) == 0) {
+					name_index_map[name] = index;
+					index++;
+				}
+				childNode = childNode->getNextChild();
+			}
+		}
+
+		numberOfClauses = clausesNode->getNumberOfChildren();
+		childNode = clausesNode->getChild();
+
+		for (int i = 0; i < numberOfClauses; i++) {
+			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
+			Synonym LHS = synonymPair.first;
+			Synonym RHS = synonymPair.second;
+			SYNONYM_TYPE typeLHS = LHS.getType();
+			SYNONYM_TYPE typeRHS = RHS.getType();
+
+			if (typeLHS != STRING_CHAR && typeLHS != STRING_INT && typeLHS != STRING_PATTERNS && typeLHS != UNDEFINED) {
+				string name = LHS.getName();
+				if (name_index_map.count(name) == 0) {
+					name_index_map[name] = index;
+					index++;
+				}
+			}
+
+			if (typeRHS != STRING_CHAR && typeRHS != STRING_INT && typeRHS != STRING_PATTERNS && typeRHS != UNDEFINED) {
+				string name = RHS.getName();
+				if (name_index_map.count(name) == 0) {
+					name_index_map[name] = index;
+					index++;
+				}
+			}
+			childNode = childNode->getNextChild();
+		}
+		return name_index_map;
+	}
+
+	/*void createSynonymReference(QNode* resultNode, QNode* clausesNode, 
+		vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map)*/
+
+	void createSynonymGraph(QNode* clausesNode, vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map)
+	{
+		int numberOfClauses = clausesNode->getNumberOfChildren();
+		QNode* childNode = clausesNode->getChild();
+
+		for (int i = 0; i < numberOfClauses; i++) {
+			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
+			Synonym LHS = synonymPair.first;
+			Synonym RHS = synonymPair.second;
+			SYNONYM_TYPE typeLHS = LHS.getType();
+			SYNONYM_TYPE typeRHS = RHS.getType();
+			int indexLHS;
+			int indexRHS;
+
+			if (typeLHS != STRING_CHAR && typeLHS != STRING_INT && typeLHS != STRING_PATTERNS && typeLHS != UNDEFINED) {
+				indexLHS = name_index_map[LHS.getName()];
+			} else {
+				childNode = childNode->getNextChild();
+				continue;
+			}
+
+			if (typeRHS != STRING_CHAR && typeRHS != STRING_INT && typeRHS != STRING_PATTERNS && typeRHS != UNDEFINED) {
+				indexRHS = name_index_map[RHS.getName()];
+			} else {
+				childNode = childNode->getNextChild();
+				continue;
+			}
+			adjacencyMatrix[indexLHS][indexRHS] = 1;
+			adjacencyMatrix[indexRHS][indexLHS] = 1;
+			childNode = childNode->getNextChild();
 		}
 	}
 
