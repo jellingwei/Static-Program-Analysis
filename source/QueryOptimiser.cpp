@@ -238,8 +238,9 @@ namespace QueryOptimiser
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
 
-			if (query_type == With) {
-				childNode = childNode->getNextChild();
+			if (query_type == With || query_type == Pattern || query_type == Parent || 
+				query_type == ParentT || query_type == Follows || query_type == FollowsT) {
+				childNode = clausesNode->getNextChild();
 				continue;
 			}
 
@@ -256,7 +257,7 @@ namespace QueryOptimiser
 			}
 
 			setClauseArguments(childNode, LHS, RHS);
-			childNode = childNode->getNextChild();
+			childNode = clausesNode->getNextChild();
 		}
 	}
 
@@ -707,7 +708,7 @@ namespace QueryOptimiser
 					name_index_map[name] = index;
 					index++;
 				}
-				childNode = childNode->getNextChild();
+				childNode = resultNode->getNextChild();
 			}
 		}
 
@@ -736,7 +737,7 @@ namespace QueryOptimiser
 					index++;
 				}
 			}
-			childNode = childNode->getNextChild();
+			childNode = clausesNode->getNextChild();
 		}
 		return name_index_map;
 	}
@@ -761,19 +762,19 @@ namespace QueryOptimiser
 			if (typeLHS != STRING_CHAR && typeLHS != STRING_INT && typeLHS != STRING_PATTERNS && typeLHS != UNDEFINED) {
 				indexLHS = name_index_map[LHS.getName()];
 			} else {
-				childNode = childNode->getNextChild();
+				childNode = clausesNode->getNextChild();
 				continue;
 			}
 
 			if (typeRHS != STRING_CHAR && typeRHS != STRING_INT && typeRHS != STRING_PATTERNS && typeRHS != UNDEFINED) {
 				indexRHS = name_index_map[RHS.getName()];
 			} else {
-				childNode = childNode->getNextChild();
+				childNode = clausesNode->getNextChild();
 				continue;
 			}
 			adjacencyMatrix[indexLHS][indexRHS] = 1;
 			adjacencyMatrix[indexRHS][indexLHS] = 1;
-			childNode = childNode->getNextChild();
+			childNode = clausesNode->getNextChild();
 		}
 	}
 
