@@ -233,12 +233,6 @@ public:
 	PROGLINE_LIST getAffectsBipRhs();
 
 
-	//AffectsBip
-	PROGLINE_LIST getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
-	PROGLINE_LIST getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
-
-
-
 	//@todo 
 	// @cond todo
 	unordered_map<int, CNode*> cfgNodeTable; //@todo nextTable?

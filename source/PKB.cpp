@@ -1356,13 +1356,32 @@ BOOLEAN_ PKB::canSkipNodesForwards(CNode* node) {
 //NextBip
 
 BOOLEAN_ PKB::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
-	return false;
+	return nextBipTable->isNextBip(progLine1, progLine2, transitiveClosure);
 }
 
 PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiveClosure) {
 	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
 }
 
+
+PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
+}
+
+
+PROGLINE_LIST PKB::getNextBipLhs() {
+	return nextBipTable->getLhs();
+}
+
+PROGLINE_LIST PKB::getNextBipRhs() {
+	return nextBipTable->getRhs();
+}
+
+// AffectsBip
+
+BOOLEAN_ PKB::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+	return affectsBipTable->isAffectsBip(progLine1, progLine2, transitiveClosure);
+}
 
 PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	return affectsBipTable->getProgLinesAffectsBipAfter(progLine1, transitiveClosure);
@@ -1372,41 +1391,12 @@ PROGLINE_LIST PKB::getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE trans
 	return affectsBipTable->getProgLinesAffectsBipBefore(progLine2, transitiveClosure);
 }
 
-PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
-	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
-}
-
-
-PROGLINE_LIST PKB::getNextBipLhs() {
-	return vector<int>();
-}
-
-PROGLINE_LIST PKB::getNextBipRhs() {
-	return vector<int>();
-}
-
-// AffectsBip
-
-BOOLEAN_ PKB::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
-
-	return false;
-
-}
-
-PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
-	return vector<int>();
-}
-
-PROGLINE_LIST PKB::getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
-	return vector<int>();
-}
-
 PROGLINE_LIST PKB::getAffectsBipLhs() {
-	return vector<int>();
+	return affectsBipTable->getLhs();
 }
 
 PROGLINE_LIST PKB::getAffectsBipRhs() {
-	return vector<int>();
+	return affectsBipTable->getRhs();
 }
 
 /*
