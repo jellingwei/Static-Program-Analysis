@@ -11,7 +11,6 @@
 
 using namespace std;
 
-typedef pair<CNode*, stack<CNode*> > NEXTBIP_STATE;
 
 
 NextBipTable::NextBipTable() {
@@ -194,6 +193,7 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 
 	vector<int> resultAsVector;
 	resultAsVector.insert(resultAsVector.end(), result.begin(), result.end());
+	
 	return resultAsVector;
 }
 

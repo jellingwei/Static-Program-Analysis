@@ -28,6 +28,7 @@ PKB::PKB() {
 	affectsTable = new AffectsTable();
 
 	nextBipTable = new NextBipTable();
+	affectsBipTable = new AffectsBipTable();
 }
 
 //AST
@@ -1259,7 +1260,8 @@ void PKB::setProgLineInWhile(PROG_LINE_ progLine) {
 * @return the CNode for the program line.
 */
 CNode* PKB::getCNodeForProgLine(PROG_LINE_ progLine) {
-	return nextTable->getCNodeForProgLine(progLine);
+	//return nextTable->getCNodeForProgLine(progLine);
+	return cfgNodeTable.at(progLine);
 }
 
 // Affects Table methods
@@ -1359,6 +1361,15 @@ BOOLEAN_ PKB::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSUR
 
 PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiveClosure) {
 	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
+}
+
+
+PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
+	return affectsBipTable->getProgLinesAffectsBipAfter(progLine1, transitiveClosure);
+}
+
+PROGLINE_LIST PKB::getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+	return affectsBipTable->getProgLinesAffectsBipBefore(progLine2, transitiveClosure);
 }
 
 PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
