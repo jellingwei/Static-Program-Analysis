@@ -1754,12 +1754,16 @@ namespace QueryParser
 	bool parseQuerySelectClause()
 	{
 		bool res; 
-		res = parseDeclarations();
-		if (!res){
-			#ifdef DEBUG
-				throw exception("QueryParser error: declarations failed.");
-			#endif
-			return false;}
+
+		if(peekInToTheNextToken().compare("Select")!= 0){   //Check if there is any declarations in the first place.
+ 
+			res = parseDeclarations();
+			if (!res){
+				#ifdef DEBUG
+					throw exception("QueryParser error: declarations failed.");
+				#endif
+				return false;}
+		}
 
 		res = parseSelect();
 		if (!res){
