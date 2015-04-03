@@ -67,6 +67,15 @@ namespace QueryEvaluator
 	PKB pkb = PKB::getInstance();  //Get the instance of the PKB singleton
 
 	/**
+	* Proxy to reset the ValuesHandler from the query optimiser
+	* @param name_to_type_map Maps from the synonym name to its type
+	*/
+	inline void resetValues(unordered_map<string, SYNONYM_TYPE> name_to_type_map)
+	{
+		ValuesHandler::initialize(name_to_type_map);
+	}
+
+	/**
 	* Processes the query tree given a query tree node.
 	* @param qTreeRoot the root node of the query tree
 	* @return an empty vector if the Such That or Pattern clauses are invalid.
