@@ -364,6 +364,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(12, _)", 2, (int)pkb.getNextAfter(12).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(12, _)", 13, pkb.getNextAfter(12).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 13)", 12, pkb.getNextBefore(13).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 25)", 2, (int)pkb.getNextBefore(25).size());
 
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next*(4, _)", 15, (int)pkb.getNextAfterS(4).size());
@@ -433,6 +434,16 @@ void PKBTest::testPKB()
 	
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(12,_)", 2, (int)pkb.getNextBipAfter(12).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip*(17,_), 17 is a call statement", 8, (int)pkb.getNextBipAfter(17, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip*(18,_), 18 is a call statement and first line in proc", 20, (int)pkb.getNextBipAfter(18, true).size());
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,25)", 4, (int)pkb.getNextBipBefore(25).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,38)", 1, (int)pkb.getNextBipBefore(38).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,23)", 1, (int)pkb.getNextBipBefore(23).size());
+	vector<int> nextBipBefore19 = pkb.getNextBipBefore(19);
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,19), previous line is call", 3, (int)nextBipBefore19.size());
+	CPPUNIT_ASSERT_MESSAGE("NextBip(,19)", find(nextBipBefore19.begin(), nextBipBefore19.end(), 25) != nextBipBefore19.end() );
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,31), first line of proc", 37, (int)pkb.getNextBipBefore(31, true).size());
 
 	// AffectsBip
 	cout << "AffectsBip" << endl;
@@ -455,7 +466,18 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(27,_), normal affects", (int)pkb.getAffectedBy(27,true).size(), (int)pkb.getAffectsBipAfter(27,true).size());
 	
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(11,_)", 5, (int)pkb.getAffectsBipAfter(11,true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(11,_)", 5, (int)pkb.getAffectsBipAfter(11,true).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,5)", 0, (int)pkb.getAffectsBipBefore(5).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,5)", 0, (int)pkb.getAffectsBipBefore(5,true).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,6), normal affects", (int)pkb.getAffecting(6).size(), (int)pkb.getAffectsBipBefore(6).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,11), normal affects", (int)pkb.getAffecting(11).size(), (int)pkb.getAffectsBipBefore(11).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,15), normal affects", (int)pkb.getAffecting(15).size(), (int)pkb.getAffectsBipBefore(15).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,24), ", 3, (int)pkb.getAffectsBipBefore(24).size());	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,36), ", 8, (int)pkb.getAffectsBipBefore(36).size());
+
 
 	cout << "End TestPkb" << endl;
 }

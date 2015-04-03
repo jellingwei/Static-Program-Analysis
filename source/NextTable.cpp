@@ -100,14 +100,28 @@ PROGLINE_LIST NextTable::getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE trans
 			if (node->getNodeType() == EndIf_C) {
 				
 				// jump to the next node immediately as an EndIf_C node should never be considered
-				assert(node->getBefore()->size() == 2);
+				// for EndIf nodes, need to get both branches
+				vector<CNode*> nodesToTraverseBack;
+				CNode* prevNodeAfterEndIf = node->getBefore()->at(0);
+				CNode* prevNodeAfterEndIf2 = node->getBefore()->at(1);
 
-				CNode* nextNodeBeforeEndIf = node->getBefore()->at(0);
-				CNode* nextNodeBeforeEndIf1 = node->getBefore()->at(1);
+				nodesToTraverseBack.push_back(prevNodeAfterEndIf); 
+				nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+					
+				while (!nodesToTraverseBack.empty()) {
+					CNode* nodeToExpand = nodesToTraverseBack.back();
+					nodesToTraverseBack.pop_back();
+						
+					updateStateOfBfs(visited, nodeToExpand, frontier, result);	
 
-				updateStateOfBfs(visited, nextNodeBeforeEndIf, frontier, result);
-				updateStateOfBfs(visited, nextNodeBeforeEndIf1, frontier, result);
-				
+					if (nodeToExpand->getNodeType() == EndIf_C) {
+						prevNodeAfterEndIf = node->getBefore()->at(0);
+						prevNodeAfterEndIf2 = node->getBefore()->at(1);
+
+						nodesToTraverseBack.push_back(prevNodeAfterEndIf);
+						nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+					}
+				}
 
 			} else  {
 				updateStateOfBfs(visited, node, frontier, result);

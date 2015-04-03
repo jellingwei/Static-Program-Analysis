@@ -1319,6 +1319,14 @@ PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transi
 	return affectsBipTable->getProgLinesAffectsBipAfter(progLine1, transitiveClosure);
 }
 
+PROGLINE_LIST PKB::getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+	return affectsBipTable->getProgLinesAffectsBipBefore(progLine2, transitiveClosure);
+}
+
+PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
+}
+
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
 */
