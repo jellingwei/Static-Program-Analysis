@@ -253,6 +253,21 @@ BOOLEAN_ QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, 
 		return false;
 	}
 
+	/* Contains requires extra validation checks, checking for static semantic errors*/
+	if(type==Contains || type==ContainsT){
+
+		if(arg1Type==ASSIGN || arg1Type==PLUS || arg1Type==MINUS || arg1Type==TIMES){
+			
+			if(arg2Type==PROG_LINE || arg2Type==STMT || arg2Type==STRING_INT || arg2Type==ASSIGN || arg2Type==CALL || arg2Type==IF || arg2Type==WHILE){
+				return false;
+			}
+		}
+
+	}
+
+
+
+
 	return true;
 }
 
