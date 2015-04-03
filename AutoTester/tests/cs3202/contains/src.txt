@@ -1,0 +1,71 @@
+procedure One {
+  b = hamburger;   \\1
+  d = fries * chicken + a * b;    \\2
+  pork = (e + crab) * buffet;  \\3
+  while salmon {      \\4
+    chicken = pork - cheeseburger * 1; \\5
+    duckrice = a - b; \\6
+    call Two; \\7
+  }
+  a = 0;   \\8
+  d = (fries - crab) * z;      \\9
+  if f then { \\10
+    call Three; \\11
+    charsiew = salmon - 25;  \\12
+    d = 6 * fries - (f + 6) * coke; \\13
+  }
+  else {
+    a = 8 + a * (a * a) + 2;     \\14
+    call Two; \\15
+  }
+  b = hamburger;   \\16
+}
+
+procedure Two {
+  beef = chicken * 0 - buffet - cheeseburger; \\17
+  while c {       \\18
+    while d {     \\19
+      if f then {     \\20
+        f = 3;        \\21
+        while e {       \\22
+          pork = xiaolongbao + buffet + crab + buffet * 25; \\23
+          x = y + z * cheeseburger;        \\24
+        }
+      }
+      else {
+        call Three;       \\25
+      }
+    }
+    c = x + crab - a + 7;       \\26
+  }
+}
+
+procedure Three {
+  if salmon then {      \\27
+    if salmon then{       \\28
+      while x {           \\29
+        fries = coke;          \\30
+      }
+    }
+    else {
+      b = 1 + 2 + 3;       \\31
+      if xiaolongbao then {       \\32
+        buffet = xiaolongbao;       \\33
+      } else {
+        buffet = crab;        \\34
+      }
+      pork = beef + chicken;      \\35
+    }
+  }
+  else {
+    if chicken then{       \\36
+      d = fries - beef - crab;     \\37
+    }
+    else {
+      while chicken {            \\38
+        f = duckrice;       \\39
+        duckrice = 1 + 2;     \\40
+      }
+    }
+  }
+}

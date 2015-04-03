@@ -406,3 +406,11 @@ STATEMENT_LIST ParentTable::getAllChildren() {  // can be optimised further if n
 
 	return stmts;
 }
+
+BOOLEAN_ ParentTable::isValid() {
+	PKB pkb = PKB::getInstance();
+	vector<int> ifStmts = pkb.getStmtNumForType("if");
+	vector<int> whileStmts = pkb.getStmtNumForType("while");
+
+	return ifStmts.size() != 0 || whileStmts.size() != 0;
+}

@@ -31,6 +31,8 @@ public:
 	PROCINDEX_LIST getLhs();
 	PROCINDEX_LIST getRhs();
 
+	BOOLEAN_ isValid();
+
 private: 
 
 	unordered_map<int, vector<int>> procIndex1Map; // key is procIndex2

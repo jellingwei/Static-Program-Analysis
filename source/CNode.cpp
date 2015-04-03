@@ -255,3 +255,11 @@ BOOLEAN_ CNode::isVariableLive(VAR_INDEX varIndex) {
 BOOLEAN_ CNode::isVariableDefinedBefore(VAR_INDEX varIndex) {
 	return _reachingDefinitionsVariables->test(varIndex);
 }
+
+
+bool CNode::operator<(const CNode& b) {
+	cout << "~~~~~~~~~" << endl;
+	cout << "a is " << _procLineNumber;
+	cout << "b is " << b._procLineNumber;
+	return _procLineNumber < b._procLineNumber;
+}

@@ -19,6 +19,10 @@ public:
 	BOOLEAN_ isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
 	PROGLINE_LIST getLhs();
 	PROGLINE_LIST getRhs();
+	BOOLEAN_ isValid();
+
+	BOOLEAN_ isLhsValid(PROG_LINE_);
+	BOOLEAN_ isRhsValid(PROG_LINE_);
 
 	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
 

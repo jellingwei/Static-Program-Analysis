@@ -13,43 +13,45 @@ using std::swap;
 
 #include "Synonym.h"
 #include "PKB.h"
+#include "common.h"
+#include "common_list.h"
 
 namespace ValuesHandler 
 {
 	//Public functions to be used
 	void initialize(unordered_map<string, SYNONYM_TYPE> synonymMap);
-	bool addAndProcessIntermediateSynonym(Synonym synonym);
-	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
+	BOOLEAN_ addAndProcessIntermediateSynonym(Synonym synonym);
+	BOOLEAN_ addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
 	
 	Synonym getSynonym(string wantedName);
 	vector<Synonym> getSynonymTuples(vector<string> wantedNames);
-	bool filterEqualValue(Synonym synonym, string wantedValue);
-	bool filterEqualPair(Synonym LHS, Synonym RHS);
-	bool isValueExistInSet(set<int> setToSearch, int value);
+	BOOLEAN_ filterEqualValue(Synonym synonym, string wantedValue);
+	BOOLEAN_ filterEqualPair(Synonym LHS, Synonym RHS);
+	BOOLEAN_ isValueExistInSet(set<int> setToSearch, VALUE value);
 	vector<int> getDefaultValues(SYNONYM_TYPE type);
 	set<int> getIntermediateValuesSet(string wantedName);
 	vector<int> getIntermediateValues(string wantedName);
 
 	//Functions made public for testing purposes
 	void clearAll();
-	int findIndexInMainTable(string synonymName);
-	bool isExistInMainTable(string synonymName);
-	bool isExistInSingletonTable(string synonymName);
-	bool addToSingletonTableForTesting(Synonym synonym);
-	inline void removeFromSingletonTable(string synonymName);
-	set<int> getIntermediateValuesSetInMain(int synonymIndex);
-	vector<int> getIntermediateValuesInMain(int synonymIndex);
+	int findIndexInMainTable(SYNONYM_NAME synonymName);
+	BOOLEAN_ isExistInMainTable(SYNONYM_NAME synonymName);
+	BOOLEAN_ isExistInSingletonTable(SYNONYM_NAME synonymName);
+	BOOLEAN_ addToSingletonTableForTesting(Synonym synonym);
+	inline void removeFromSingletonTable(SYNONYM_NAME synonymName);
+	set<int> getIntermediateValuesSetInMain(SYNONYM_INDEX synonymIndex);
+	vector<int> getIntermediateValuesInMain(SYNONYM_INDEX synonymIndex);
 
-	bool hashIntersectWithMainTable(Synonym synonym);
-	bool hashIntersectWithMainTable(Synonym LHS, Synonym RHS);
-	bool hashJoinWithMainTable(Synonym mainSynonym, Synonym pairedSynonym);
-	bool joinWithMainTable(Synonym LHS, Synonym RHS);
+	BOOLEAN_ hashIntersectWithMainTable(Synonym synonym);
+	BOOLEAN_ hashIntersectWithMainTable(Synonym LHS, Synonym RHS);
+	BOOLEAN_ hashJoinWithMainTable(Synonym mainSynonym, Synonym pairedSynonym);
+	BOOLEAN_ joinWithMainTable(Synonym LHS, Synonym RHS);
 
 	pair<vector<int>, vector<int>> getPairBySingletonIntersect(Synonym singleton, Synonym singletonPair);
 	pair<vector<int>, vector<int>> getPairBySingletonStringIntersect(Synonym LHS, Synonym RHS);
-	bool hashIntersectWithSingletonTable(Synonym synonym);
+	BOOLEAN_ hashIntersectWithSingletonTable(Synonym synonym);
 
-	bool processPairWithMainTable(Synonym LHS, Synonym RHS);
-	bool processPairWithSingletonTable(Synonym LHS, Synonym RHS);
-	bool mergeSingletonToMain(Synonym mainSynonym, Synonym singleton);
+	BOOLEAN_ processPairWithMainTable(Synonym LHS, Synonym RHS);
+	BOOLEAN_ processPairWithSingletonTable(Synonym LHS, Synonym RHS);
+	BOOLEAN_ mergeSingletonToMain(Synonym mainSynonym, Synonym singleton);
 }

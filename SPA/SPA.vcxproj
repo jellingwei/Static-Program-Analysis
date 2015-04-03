@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\AffectsBipTable.cpp" />
     <ClCompile Include="..\source\AffectsTable.cpp" />
     <ClCompile Include="..\source\AST.cpp" />
     <ClCompile Include="..\source\CallsTable.cpp" />
@@ -22,6 +23,7 @@
     <ClCompile Include="..\source\FollowsTable.cpp" />
     <ClCompile Include="..\source\FrontEndController.cpp" />
     <ClCompile Include="..\source\ModifiesTable.cpp" />
+    <ClCompile Include="..\source\NextBipTable.cpp" />
     <ClCompile Include="..\source\NextTable.cpp" />
     <ClCompile Include="..\source\ParentTable.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
@@ -45,6 +47,7 @@
     <ClCompile Include="..\source\VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\AffectsBipTable.h" />
     <ClInclude Include="..\source\AffectsTable.h" />
     <ClInclude Include="..\source\AST.h" />
     <ClInclude Include="..\source\CallsTable.h" />
@@ -58,6 +61,7 @@
     <ClInclude Include="..\source\FollowsTable.h" />
     <ClInclude Include="..\source\FrontEndController.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
+    <ClInclude Include="..\source\NextBipTable.h" />
     <ClInclude Include="..\source\NextTable.h" />
     <ClInclude Include="..\source\ParentTable.h" />
     <ClInclude Include="..\source\PatternMatch.h" />

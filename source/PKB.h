@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stack>
+
 #include "VarTable.h"
 #include "ProcTable.h"
 #include "StmtTable.h"
@@ -14,6 +16,8 @@
 #include "ConstantTable.h"
 #include "CallsTable.h"
 #include "NextTable.h"
+#include "NextBipTable.h"
+#include "AffectsBipTable.h"
 #include "AffectsTable.h"
 #include "CFG.h"
 #include "AST.h"
@@ -29,6 +33,7 @@ class TNode;
 class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
 class StmtTable;
 
+typedef pair<CNode*, stack<CNode*> > NEXTBIP_STATE;
 
 class PKB {
 public:
@@ -89,6 +94,7 @@ public:
 	PROCNAME getProcNameCalledByStatement(STATEMENT stmtNum);
 	PROCINDEX_LIST getCallsLhs();
 	PROCINDEX_LIST getCallsRhs();
+	BOOLEAN_ isCallsValid();
 
 	// StmtTable methods
 	STATUS insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC_INDEX procIndex);
@@ -117,6 +123,7 @@ public:
 	pair<STATEMENT_LIST, STATEMENT_LIST> getAllParentPairsS();
 	STATEMENT_LIST getParentLhs();  // get LHS of Parent(_, _)
 	STATEMENT_LIST getParentRhs(); // get RHS of Parent(_, _)
+	BOOLEAN_ isParentValid();
 
 	// Follow Table methods
 	STATUS setFollows(TNode* stmt1, TNode* stmt2);
@@ -130,6 +137,7 @@ public:
 	pair<STATEMENT_LIST, STATEMENT_LIST> getAllFollowsPairsS();
 	STATEMENT_LIST getFollowsLhs();
 	STATEMENT_LIST getFollowsRhs();
+	BOOLEAN_ isFollowsValid();
 
 	// Modifies Table methods
 	void initModifiesTable(INTEGER numVariables);
@@ -159,6 +167,7 @@ public:
 	pair<STATEMENT_LIST, VARINDEX_LIST> getAllUsesPair();
 	STATEMENT_LIST getUsesLhs();
 	STATEMENT_LIST getUsesRhs();
+	BOOLEAN_ isUsesValid();
 
 	boost::dynamic_bitset<> getUseVarInBitvectorForStmt(STATEMENT stmtNum);
 
@@ -178,6 +187,9 @@ public:
 	PROGLINE_LIST getNextLhs();
 	PROGLINE_LIST getNextRhs();
 	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
+	BOOLEAN_ isNextValid();
+	BOOLEAN_ isNextLhsValid(PROG_LINE_);
+	BOOLEAN_ isNextRhsValid(PROG_LINE_);
 
 	// functions for precomputations for next
 	int getFirstProgLineInProc(int);
@@ -199,9 +211,26 @@ public:
 	PROGLINE_LIST getAffecting(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
 	PROGLINE_LIST getAffectsLhs();
 	PROGLINE_LIST getAffectsRhs();
+	BOOLEAN_ isAffectsValid();
+	BOOLEAN_ isAffectsLhsValid(PROG_LINE_);
+	BOOLEAN_ isAffectsRhsValid(PROG_LINE_);
 
 	static BOOLEAN_ canSkipNodesBackwards(CNode* node);
 	static BOOLEAN_ canSkipNodesForwards(CNode* node);
+
+	//NextBip
+	BOOLEAN_ isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure);
+ 	PROGLINE_LIST getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getNextBipLhs();
+	PROGLINE_LIST getNextBipRhs();
+
+	//AffectsBip
+	BOOLEAN_ isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure);
+	PROGLINE_LIST getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	PROGLINE_LIST getAffectsBipLhs();
+	PROGLINE_LIST getAffectsBipRhs();
 
 
 	//@todo 
@@ -225,7 +254,10 @@ private:
 	AST* ast;
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
+	NextBipTable* nextBipTable;
+	AffectsBipTable* affectsBipTable;
 	PKB();
 	
 	
 };
+

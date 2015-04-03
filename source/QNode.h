@@ -14,13 +14,15 @@ class QNode
 {
 public:
 	QNode();
-	QNode(QNODE_TYPE QNODE_TYPE,Synonym arg0,Synonym arg1, Synonym arg2);
+	QNode(QNODE_TYPE QNODE_TYPE,Synonym arg0,Synonym arg1, Synonym arg2, Synonym arg3);
 	Synonym getArg0();
 	Synonym getArg1();
 	Synonym getArg2();
+	Synonym getArg3();
 	void setArg0(Synonym);
 	void setArg1(Synonym);
 	void setArg2(Synonym);
+	void setArg3(Synonym);
 
 	QNODE_TYPE QNode::getNodeType();
 	void setParent(QNode* parent_node);
@@ -41,6 +43,7 @@ private:
 	Synonym _arg0;
 	Synonym _arg1;
 	Synonym _arg2;
+	Synonym _arg3;
 	QNode* _parent;
 	vector<QNode*> _child_list;
 	int _current_child_index;

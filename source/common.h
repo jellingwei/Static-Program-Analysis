@@ -24,6 +24,7 @@ typedef int STATEMENT;
 typedef int CONTAINER_STATEMENT;
 typedef int VAR_INDEX;
 typedef int PROC_INDEX;
+typedef int SYNONYM_INDEX;
 typedef bool STATUS;
 typedef bool TRANS_CLOSURE;
 
@@ -31,6 +32,7 @@ typedef string FILENAME;
 typedef string VARNAME;
 typedef string PROCNAME;
 typedef string EXPRESSION;
+typedef string SYNONYM_NAME;
 typedef string STATEMENT_TYPE;
 
 typedef set<int> VALUE_SET;
@@ -67,7 +69,12 @@ enum QNODE_TYPE
 	Follows, FollowsT,
 	Next, NextT,
 	Affects, AffectsT,
+	Contains,ContainsT,
+	Sibling,
+	NextBip, NextBipT, 
+	AffectsBip, AffectsBipT, 
 	AttrCompare,
+	PatternAssign, PatternIf, PatternWhile,
 
 	// Select and Pattern QNODE_TYPEs
 	Selection, Pattern, With
@@ -78,7 +85,8 @@ enum SYNONYM_TYPE
 	PROCEDURE, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE, 
 	STRING_CHAR, STRING_INT, STRING_PATTERNS, //Used to represent IDENT, INTEGER and expression-spec respectively
 	BOOLEAN,   //Used for select boolean clauses
-	UNDEFINED  //Used to denote "_"
+	UNDEFINED,  //Used to denote "_"
+	STMTLST, PLUS, MINUS, TIMES  //Used for Contains and Siblings
 };
 
 enum SYNONYM_ATTRIBUTE
@@ -110,7 +118,7 @@ namespace QueryParser
 {
 	enum REF_TYPE
 	{
-		entRef, stmtRef, lineRef, varRef, ref
+		entRef, stmtRef, lineRef, varRef, stmtLstRef, nodeRef, ref
 	};
 }
 

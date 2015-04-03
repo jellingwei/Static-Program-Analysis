@@ -12,8 +12,7 @@ using namespace std;
 #include "Synonym.h"
 
 
-PKB::PKB() 
-{
+PKB::PKB() {
 	varTable = new VarTable();
 	procTable = new ProcTable();
 	stmtTable = new StmtTable();
@@ -27,6 +26,9 @@ PKB::PKB()
 	ast = new AST();
 	nextTable = new NextTable();
 	affectsTable = new AffectsTable();
+
+	nextBipTable = new NextBipTable();
+	affectsBipTable = new AffectsBipTable();
 }
 
 //AST
@@ -557,6 +559,10 @@ STATEMENT_LIST PKB::getParentRhs(){
 	return parentTable->getAllChildren();
 }
 
+BOOLEAN_ PKB::isParentValid() {
+	return parentTable->isValid();
+}
+
 // FollowsTable 
 
 /**
@@ -666,6 +672,10 @@ STATEMENT_LIST PKB::getFollowsLhs() {
  */
 STATEMENT_LIST PKB::getFollowsRhs() {
 	return followsTable->getRhs();
+}
+
+BOOLEAN_ PKB::isFollowsValid() {
+	return followsTable->isValid();
 }
 
 // CallsTable methods
@@ -788,6 +798,10 @@ PROCINDEX_LIST PKB::getCallsLhs() {
  */
 PROCINDEX_LIST PKB::getCallsRhs() {
 	return callsTable->getRhs();
+}
+
+BOOLEAN_ PKB::isCallsValid() {
+	return callsTable->isValid();
 }
 
 
@@ -1016,6 +1030,11 @@ STATEMENT_LIST PKB::getUsesRhs() {
 	return usesTable->getRhs();
 }
 
+
+BOOLEAN_ PKB::isUsesValid() {
+	return usesTable->isValid();
+}
+
 /**
 * Sets the Uses relation for procedures.
 * @param procIndex  the index of a procedure that uses a particular variable
@@ -1148,6 +1167,18 @@ PROGLINE_LIST PKB::getNextRhs() {
 	return nextTable->getRhs();
 }
 
+BOOLEAN_ PKB::isNextValid() {
+	return nextTable->isValid();
+}
+
+BOOLEAN_ PKB::isNextLhsValid(PROG_LINE_ lhs) { 
+	return nextTable->isLhsValid(lhs);
+}
+
+BOOLEAN_ PKB::isNextRhsValid(PROG_LINE_ rhs) {
+	return nextTable->isRhsValid(rhs);
+}
+
 /**
 * @param procIndex the index of a procedure
 * @return the first program line in the procedure.
@@ -1229,7 +1260,8 @@ void PKB::setProgLineInWhile(PROG_LINE_ progLine) {
 * @return the CNode for the program line.
 */
 CNode* PKB::getCNodeForProgLine(PROG_LINE_ progLine) {
-	return nextTable->getCNodeForProgLine(progLine);
+	//return nextTable->getCNodeForProgLine(progLine);
+	return cfgNodeTable.at(progLine);
 }
 
 // Affects Table methods
@@ -1286,6 +1318,20 @@ PROGLINE_LIST PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
+
+BOOLEAN_ PKB::isAffectsValid() {
+	return affectsTable->isValid();
+}
+
+BOOLEAN_ PKB::isAffectsLhsValid(PROG_LINE_ lhs) { 
+	return affectsTable->isLhsValid(lhs);
+}
+
+BOOLEAN_ PKB::isAffectsRhsValid(PROG_LINE_ rhs) {
+	return affectsTable->isRhsValid(rhs);
+}
+
+
 /**
 * Checks if the node has information about the variables modified previously on the control flow graph.
 * @param node a CNode
@@ -1306,6 +1352,52 @@ BOOLEAN_ PKB::canSkipNodesForwards(CNode* node) {
 	return AffectsTable::canSkipNodesForwards(node);
 }
 
+
+//NextBip
+
+BOOLEAN_ PKB::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->isNextBip(progLine1, progLine2, transitiveClosure);
+}
+
+PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
+}
+
+
+PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
+}
+
+
+PROGLINE_LIST PKB::getNextBipLhs() {
+	return nextBipTable->getLhs();
+}
+
+PROGLINE_LIST PKB::getNextBipRhs() {
+	return nextBipTable->getRhs();
+}
+
+// AffectsBip
+
+BOOLEAN_ PKB::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+	return affectsBipTable->isAffectsBip(progLine1, progLine2, transitiveClosure);
+}
+
+PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
+	return affectsBipTable->getProgLinesAffectsBipAfter(progLine1, transitiveClosure);
+}
+
+PROGLINE_LIST PKB::getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+	return affectsBipTable->getProgLinesAffectsBipBefore(progLine2, transitiveClosure);
+}
+
+PROGLINE_LIST PKB::getAffectsBipLhs() {
+	return affectsBipTable->getLhs();
+}
+
+PROGLINE_LIST PKB::getAffectsBipRhs() {
+	return affectsBipTable->getRhs();
+}
 
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB

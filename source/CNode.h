@@ -68,6 +68,8 @@ public:
 	void setEnd();
 	BOOLEAN_ getEnd();
 
+	bool operator<(const CNode& b);
+
 private:
 	CNODE_TYPE _nodeType;
 	int _procLineNumber;

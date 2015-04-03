@@ -27,7 +27,6 @@ BOOLEAN_ isVisitedBefore(unordered_map<int, boost::dynamic_bitset<> > variableTe
 		}
 	}
 
-	isVisitedBefore |= visited.count(nodePair) != 0 ;
 	return isVisitedBefore;
 }
 
@@ -203,13 +202,23 @@ PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_C
 		node = frontier.top().first;
 		variablesToMatch = frontier.top().second;
 		visited.insert(frontier.top());
+
+		frontier.pop();
+
+
+		bool isNodeVisitedBefore = isVisitedBefore(variableTested, node,  pair<CNode*, boost::dynamic_bitset<> >(node,variablesToMatch), 
+			                          visited, variablesToMatch);
+
+
 		if (variableTested.count(node->getProcLineNumber()) != 0) {
 			variableTested[node->getProcLineNumber()] |=  variablesToMatch;
 		} else {
 			variableTested[node->getProcLineNumber()] =  variablesToMatch;
 		}
 
-		frontier.pop();
+		if (isNodeVisitedBefore) {
+			continue;
+		}
 
 		if (node->getNodeType() == Assign_C || node->getNodeType() == Call_C) {
 			boost::dynamic_bitset<> variablesModified = pkb.getModVarInBitvectorForStmt(node->getProcLineNumber());
@@ -281,7 +290,7 @@ PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_C
 		CNode* possibleNode = getInsideNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
 		
-		bool isNodeVisitedBefore = isVisitedBefore(variableTested, possibleNode,  nodePair, visited, variablesToMatch); 
+		isNodeVisitedBefore = isVisitedBefore(variableTested, possibleNode,  nodePair, visited, variablesToMatch); 
 		if (possibleNode && !isNodeVisitedBefore) {
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
 		}
@@ -327,13 +336,21 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 		node = frontier.top().first;
 		variablesToMatch = frontier.top().second;	
 		visited.insert(frontier.top());
+		frontier.pop();
+
+		bool isNodeVisitedBefore = isVisitedBefore(variableTested, node,  pair<CNode*, boost::dynamic_bitset<> >(node,variablesToMatch), 
+			                          visited, variablesToMatch);
+
 		if (variableTested.count(node->getProcLineNumber()) != 0) {
 			variableTested[node->getProcLineNumber()] |=  variablesToMatch;
 		} else {
 			variableTested[node->getProcLineNumber()] =  variablesToMatch;
 		}
+
+		if (isNodeVisitedBefore) {
+			continue;
+		}
 		
-		frontier.pop();
 
 		if (node->getNodeType() == Assign_C || node->getNodeType() == Call_C) {
 			boost::dynamic_bitset<> variablesModified = pkb.getModVarInBitvectorForStmt(node->getProcLineNumber());
@@ -397,7 +414,7 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 		CNode* prevNode = getMandatoryPrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch);
 
-		bool isNodeVisitedBefore = isVisitedBefore(variableTested, prevNode,  nodePair, visited, variablesToMatch);
+		isNodeVisitedBefore = isVisitedBefore(variableTested, prevNode,  nodePair, visited, variablesToMatch);
 		if (prevNode && !isNodeVisitedBefore ) {
 			frontier.push(nodePair);
 
@@ -585,4 +602,36 @@ BOOLEAN_ AffectsTable::isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRA
 	}
 
 	return false;
+}
+
+BOOLEAN_ AffectsTable::isValid() {
+	PKB pkb = PKB::getInstance();
+	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
+	
+	for (auto iter = assignments.begin(); iter != assignments.end(); ++iter) {
+		bool transitiveClosure = false;
+		bool earlyTermination = true;
+		vector<int> ans = getProgLinesAffectedBy(*iter, transitiveClosure, earlyTermination); 
+		if (!ans.empty()) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+BOOLEAN_ AffectsTable::isLhsValid(PROG_LINE_ lhs) {
+	bool transClosure = false; 
+	bool earlyTermination = true;
+	vector<int> ans = getProgLinesAffectedBy(lhs, transClosure, earlyTermination); // no transitive closure, early termination
+
+	return !ans.empty();
+}
+
+BOOLEAN_ AffectsTable::isRhsValid(PROG_LINE_ rhs) {
+	bool transClosure = false; 
+	bool earlyTermination = true;
+	vector<int> ans = getProgLinesAffecting(rhs, transClosure, earlyTermination); // no transitive closure, early termination
+
+	return !ans.empty();
 }

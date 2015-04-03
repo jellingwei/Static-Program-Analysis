@@ -222,3 +222,7 @@ PROCNAME CallsTable::getProcNameCalledByStatement(STATEMENT stmtNum) {
 
 	return pkb.getProcName(procIndex);
 }
+
+BOOLEAN_ CallsTable::isValid() {
+	return !procIndex2Map.empty();
+}

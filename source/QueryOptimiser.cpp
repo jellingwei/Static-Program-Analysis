@@ -799,7 +799,7 @@ namespace QueryOptimiser
 	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2)
 	{
 		Synonym empty;
-		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty);
+		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty, empty);
 
 		for (unsigned int i = 0; i < clausesVector1.size(); i++) {
 			QNode* clause = clausesVector1[i];
