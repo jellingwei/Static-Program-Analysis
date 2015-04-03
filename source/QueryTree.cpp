@@ -198,9 +198,9 @@ void QueryTree::printNode(QNode* node)
 	arg3_name = node->getArg3().getName();
 
 	cout << "(TYPE:" << type << ", " << 
-			"Arg0:" << arg0_type << "," << arg0_name << "," <<
-			"Arg1:" << arg1_type << "," << arg1_name << " ," <<
-			"Arg2:" << arg2_type << "," << arg2_name << " ," <<
+			"Arg0:" << arg0_type << "," << arg0_name << ", " <<
+			"Arg1:" << arg1_type << "," << arg1_name << ", " <<
+			"Arg2:" << arg2_type << "," << arg2_name << ", " <<
 			"Arg3:" << arg3_type << "," << arg3_name << ")"
 			<< endl;
 }
