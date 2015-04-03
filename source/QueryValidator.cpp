@@ -172,16 +172,15 @@ void QueryValidator::initTable()
 	patternsArg1Map.insert(make_pair(WHILE, list12));
 	patternsArg1Map.insert(make_pair(IF, list12));
 
-	vector<SYNONYM_TYPE> list13; //empty vector means no restrictions on arg2 of pattern assign.
-	patternsArg2Map.insert(make_pair(ASSIGN, list13)); 
-	patternsArg2Map.insert(make_pair(IF, list13)); 
+	vector<SYNONYM_TYPE> list14; // temporary no restrictions on patterns if and while arg2 and arg3
+	patternsArg2Map.insert(make_pair(IF, list14)); 
+	patternsArg2Map.insert(make_pair(WHILE, list14)); 
+	patternsArg3Map.insert(make_pair(IF, list14));
 
-	//while patterns argument 2
-	SYNONYM_TYPE list14array[] = { UNDEFINED };
-	vector<SYNONYM_TYPE> list14; list14.insert(list14.begin(), list14array, list14array + 1);
-	patternsArg2Map.insert(make_pair(WHILE, list14));
-
-
+	vector<SYNONYM_TYPE> list13; 
+	patternsArg2Map.insert(make_pair(ASSIGN, list13)); //empty vector means no restrictions on arg2 of pattern assign.
+	patternsArg3Map.insert(make_pair(ASSIGN, list13));
+	patternsArg3Map.insert(make_pair(WHILE, list13));
 
 
 	/* init withAttrRefMap */
@@ -262,20 +261,21 @@ BOOLEAN_ QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, 
  * @param arg0 
  * @param arg1 
  * @param arg2 
+ * @param arg3 
  * @return TRUE if the arguments are valid. FALSE if the arguments are not valid.
  */
-BOOLEAN_ QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2)
+BOOLEAN_ QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Synonym arg2, Synonym arg3)
 {
-	vector<SYNONYM_TYPE> listArg1;
-	vector<SYNONYM_TYPE> listArg2;
+	vector<SYNONYM_TYPE> listArg1, listArg2, listArg3;
 	
-	// can only be 'assign' or 'while' pattern type
+	// can only be 'assign','while' or 'if' pattern type
 	SYNONYM_TYPE patternType = arg0.getType();
 	
 	try {
 		//if string is not found it throws an out of range exception. 
 		listArg1 = patternsArg1Map.at(patternType);
 		listArg2 = patternsArg2Map.at(patternType); 
+		listArg3 = patternsArg3Map.at(patternType); 
 	
 	}catch (const std::out_of_range& oor){
 		throw exception("QueryValidator error: Out of Range");
@@ -283,11 +283,13 @@ BOOLEAN_ QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Syno
 
 	SYNONYM_TYPE arg1Type = arg1.getType();
 	SYNONYM_TYPE arg2Type = arg2.getType();
+	SYNONYM_TYPE arg3Type = arg3.getType();
 
 
 	#ifdef DEBUG
 		cout<<"arg1Type : "<<arg1Type<<endl;
 		cout<<"arg2Type : "<<arg2Type<<endl;
+		cout<<"arg3Type : "<<arg3Type<<endl;
 	#endif
 
 
@@ -305,6 +307,15 @@ BOOLEAN_ QueryValidator::validatePatternQueries(Synonym arg0, Synonym arg1, Syno
 		auto result2 = std::find(std::begin(listArg2), std::end(listArg2), arg2Type);
 
 		if(result2 == std::end(listArg2)){ // not inside list of type of argument 2
+			return false;
+		}
+	}
+
+	if(!listArg3.empty()){ // if there are restrictions place on argument 2
+
+		auto result3 = std::find(std::begin(listArg3), std::end(listArg3), arg3Type);
+
+		if(result3 == std::end(listArg3)){ // not inside list of type of argument 2
 			return false;
 		}
 	}

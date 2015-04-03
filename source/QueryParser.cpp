@@ -248,7 +248,8 @@ namespace QueryParser
 		auto node4 = make_tuple(REF_TYPE(entRef), REF_TYPE(varRef));  
 		auto node5 = make_tuple(REF_TYPE(stmtRef), REF_TYPE(varRef)); 
 		auto node6 = make_tuple(REF_TYPE(nodeRef), REF_TYPE(nodeRef)); 
-		auto node7 = make_tuple(REF_TYPE(ref), REF_TYPE(ref)); 
+		auto node7 = make_tuple(REF_TYPE(varRef), REF_TYPE(stmtLstRef));
+		auto node8 = make_tuple(REF_TYPE(ref), REF_TYPE(ref)); 
 
 		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode1 (ModifiesP, node4);
 		relRefMap.insert(pairRelNode1);
@@ -278,7 +279,7 @@ namespace QueryParser
 		relRefMap.insert(pairRelNode13);
 		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode14 (AffectsT, node3);
 		relRefMap.insert(pairRelNode14);
-		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode15 (AttrCompare, node7);
+		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode15 (AttrCompare, node8);
 		relRefMap.insert(pairRelNode15);
 		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode16 (Contains, node6);
 		relRefMap.insert(pairRelNode16);
@@ -294,7 +295,11 @@ namespace QueryParser
 		relRefMap.insert(pairRelNode21);
 		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode22 (AffectsBipT, node3);
 		relRefMap.insert(pairRelNode22);
-
+		//patterns
+		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode23 (PatternIf, node7);
+		relRefMap.insert(pairRelNode23);
+		pair<QNODE_TYPE,tuple<REF_TYPE,REF_TYPE>> pairRelNode24 (PatternWhile, node7);
+		relRefMap.insert(pairRelNode24);
 
 
 		pair<string,SYNONYM_ATTRIBUTE> pairAttrNameType1 ("procName", SYNONYM_ATTRIBUTE(procName));
@@ -539,6 +544,24 @@ namespace QueryParser
 	}
 
 	/**
+	 * Matches if the given token follows the naming convention
+	 * of a stmtLst reference. 
+	 * @return TRUE if it matches, FALSE otherwise.
+	 */
+	bool matchStmtLstRef(string token)
+	{
+		if(matchSynonymAndIdent(token,false))
+			return true;
+		else if(matchUnderscore(token))
+			return true;
+
+		#ifdef DEBUG
+			throw exception("QueryParser error: at matchStmtLstRef");
+		#endif
+		return false;
+	}
+
+	/**
 	 * Matches if the given token follows the naming convention of 
 	 * a reference.
 	 * @return TRUE if it matches, FALSE otherwise.
@@ -681,7 +704,6 @@ namespace QueryParser
 		return matchVarRef(nextToken) ? returnToken: "";
 	}
 
-
 	/**
 	 * Parses the next token and check if it is a nodeRef
 	 * @return an empty string if parsing fails.
@@ -690,6 +712,16 @@ namespace QueryParser
 	{
 		string nextToken = parseToken();
 		return matchNodeRef(nextToken) ? nextToken: "";
+	}
+
+	/**
+	 * Parses the next token and check if it is a nodeRef
+	 * @return an empty string if parsing fails.
+	 */
+	string parseStmtLstRef()
+	{
+		string nextToken = parseToken();
+		return matchStmtLstRef(nextToken) ? nextToken: "";
 	}
 
 	/**
@@ -861,7 +893,7 @@ namespace QueryParser
 		}
 
 		//build the tree
-		QNode* childNode = myQueryTree->createQNode(relRef, Synonym(), s1, s2);
+		QNode* childNode = myQueryTree->createQNode(relRef, Synonym(), s1, s2, Synonym());
 		res = myQueryTree->linkNode(myQueryTree->getClausesNode(), childNode);
 
 		return res;
@@ -949,6 +981,20 @@ namespace QueryParser
 			return Synonym(DE_type,value);
 
 
+		}else if(node==REF_TYPE(stmtLstRef)){
+
+			if (synonymsMap.count(value) > 0){
+				DE_type = synonymsMap.at(value); 
+			}else if(value.compare("_")==0){
+				DE_type = UNDEFINED;
+			}else{
+				return Synonym();  //error type mismatch
+			}
+
+			//build Synonym and return 
+			return Synonym(DE_type,value);
+
+
 		}else if(node==REF_TYPE(ref)){
 
 			if (std::regex_match(peekBackwards(0),apostrophe)){   //if it has apostrophe(ie it's """IDENT""")
@@ -1028,6 +1074,10 @@ namespace QueryParser
 		}else if(node==REF_TYPE(varRef)){
 
 			entRef_value = parseVarRef();  
+
+		}else if(node==REF_TYPE(stmtLstRef)){
+
+			entRef_value = parseStmtLstRef(); 
 
 		}else if(node==REF_TYPE(nodeRef)){
 
@@ -1172,12 +1222,16 @@ namespace QueryParser
 	bool parsePatternClause()
 	{
 		bool res;
-		SYNONYM_TYPE DE_type, DE_type2;
-		bool whilePatternExp = false, ifPatternExp = false;
+		//Patterns DE_type0(DE_type1, DE_type2, DE_type3)
+		SYNONYM_TYPE DE_type0, DE_type2; 
+		string pattern_arg1="";
+		string pattern_arg2="";
+		string pattern_arg3="";
 
-		//parse syn-assign
+
+		/*** 1. check what kind of pattern it is ***/
 		if(synonymsMap.count(parseToken()) > 0){
-			DE_type = synonymsMap.at(peekBackwards(0));
+			DE_type0 = synonymsMap.at(peekBackwards(0));
 		}else{
 			#ifdef DEBUG
 				throw exception("QueryParser error: parsePatternClause(), invalid synonym used.");
@@ -1185,79 +1239,77 @@ namespace QueryParser
 			return false;
 		}
 
-		if(DE_type==WHILE){
-			whilePatternExp = true;
-		}else if(DE_type==IF){
-			ifPatternExp = true;
-		}else if(DE_type!=ASSIGN){
+		if((DE_type0!=ASSIGN)&&(DE_type0!=WHILE)&&(DE_type0!=IF)){
 			//patterns can only be either while, if or assign.
 			#ifdef DEBUG
 				throw exception("QueryParser error: parsePatternClause(), synonym not 'assign' or 'while' or 'if' type. ");
 			#endif
-
 			return false;
 		}
 
-		Synonym pattern_arg0(DE_type, peekBackwards(0)); 
+		Synonym pattern_arg0(DE_type0, peekBackwards(0)); 
 		
 
 		res = parse("(");
-		if (!res){
-			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), missing '('.");
-			#endif
-
-			return false;
-		} 
-
-		string pattern_variable = parseVarRef();
-		if (pattern_variable.compare("")==0){
-			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), invalid entRef arg1.");
-			#endif
-
-			return false;
-		} 
+		if (!res){return false;} 
 
 
-		//Build Query Tree
-		std::regex apostrophe("[\"]");
-		if (std::regex_match(peekBackwards(0),apostrophe)){
-			DE_type = STRING_CHAR;
-		}else if(pattern_variable.compare("_")==0){
-			DE_type = UNDEFINED;
-		}else if(synonymsMap.count(pattern_variable) > 0){
-			DE_type = synonymsMap.at(pattern_variable);
-		}else{
+		/*** 2. parse first argument of patterns ***/
 
-			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), building query tree error.");
-			#endif
-			return false;
-		}
+		pattern_arg1 = parseVarRef();
+		if (pattern_arg1.compare("")==0){return false;} 
+
+		// for all the patterns(assign, while and if) the first argument is varRef. 
+		Synonym s1 = createSynonym(PatternIf,pattern_arg1,1);
+		if(s1.isEmpty()){ //unable to create synonym
+			return false;}
 
 		res = parse(",");
-		if (!res){
-			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), comma missing");
-			#endif
+		if (!res){return false;} 
 
-			return false;
-		} 
 
-		if(whilePatternExp){
+		/*** 3. parse the other arguments for patterns ***/
+		Synonym s2, s3;
+		if(DE_type0==WHILE){
 
-			res = parse("_");
-			if (!res) {return false;}
-		
-		}else if(ifPatternExp){
+			pattern_arg2 = parseStmtLstRef();
+			if (pattern_arg2.compare("")==0){
+				return false;
+			}
+		 
+		 	//create synonym for argument 2 of pattern-while.
+			s2 = createSynonym(PatternWhile,pattern_arg2,2);
+			if(s2.isEmpty()){ //unable to create synonym
+				return false;}
 
-			res = parse("_");
-			if (!res) {return false;}
+			s3 = Synonym(); 
+
+		}else if(DE_type0==IF){
+
+			pattern_arg2 = parseStmtLstRef();
+			if (pattern_arg2.compare("")==0){
+				return false;
+			}
+
+		 	//create synonym for argument 2 of pattern-if.
+			s2 = createSynonym(PatternIf,pattern_arg2,2);
+			if(s2.isEmpty()){ //unable to create synonym
+				return false;}
+
+
 			res = parse(",");
-			if (!res) {return false;}
-			res = parse("_");
-			if (!res) {return false;}
+			if (!res) {return false;}		
+
+			pattern_arg3 = parseStmtLstRef();
+			if (pattern_arg3.compare("")==0){
+				return false;
+			}
+
+			//create synonym for argument 3 of pattern-if, which is similar
+			//to pattern-if's argument 2.
+			s3 = createSynonym(PatternIf,pattern_arg3,2);
+			if(s3.isEmpty()){ //unable to create synonym
+				return false;}
 		
 		}else{
 
@@ -1265,43 +1317,38 @@ namespace QueryParser
 			if((peekInToTheNextToken().compare("_")==0) && (peekInToTheNextNextToken().compare(")")==0)){
 
 				res = parse("_"); //dont need to check res, checked in the if stmts. 
+				DE_type2 = UNDEFINED; 
+				pattern_arg2 = "_";
 
 			}else{
 				res = parseExpressionSpec();
 				if (!res) {return false;} 
+				
+				DE_type2 = STRING_PATTERNS;
+
+				//getting the patterns string for pattern-assign
+				int i = 1;
+				pattern_arg2 = "";
+				while(peekBackwards(i).compare(",")!=0){
+					i++;
+				}
+				for (i-=1; i>=0; i--){
+					pattern_arg2+=peekBackwards(i);
+				}
 			}
-		}
 
+			//create synonym for pattern-assign argument 2
+			s2 = Synonym(DE_type2, pattern_arg2);
 
-		//Build Query Tree
-		int i = 1;
-		string pattern_patterns = "";
-		while(peekBackwards(i).compare(",")!=0){
-			i++;
-		}
-		for (i-=1; i>=0; i--){
-			pattern_patterns+=peekBackwards(i);
+			s3 = Synonym(); 
+
 		}
 
 		res = parse(")");
-		if (!res){
-			#ifdef DEBUG
-				throw exception("QueryParser error: parsePatternClause(), missing ')' ");
-			#endif
-			return false;
-		} 
+		if (!res){return false;} 
 
-		if(pattern_patterns.compare("_")==0)
-			DE_type2 = UNDEFINED; //Used to denote "_"
-		else
-			DE_type2 = STRING_PATTERNS;
-
-
-		//Build Query Tree
-		Synonym pattern_var(DE_type, pattern_variable);
-		Synonym pattern_pattern(DE_type2, pattern_patterns);
 		
-		res = myQueryV->validatePatternQueries(pattern_arg0, pattern_var, pattern_pattern);
+		res = myQueryV->validatePatternQueries(pattern_arg0, s1, s2, s3);
 		if(!res){
 			#ifdef DEBUG
 				throw exception("QueryParser error: validatePatternQueries(), returns error ");
@@ -1309,7 +1356,7 @@ namespace QueryParser
 			return false;
 		}
 
-		QNode* patternQueryNode = myQueryTree->createQNode(Pattern,pattern_arg0, pattern_var, pattern_pattern);
+		QNode* patternQueryNode = myQueryTree->createQNode(Pattern,pattern_arg0, s1, s2, s3);
 		myQueryTree->linkNode(myQueryTree->getClausesNode(), patternQueryNode);
 
 
@@ -1358,7 +1405,7 @@ namespace QueryParser
 		}
 
 		//build query tree
-		QNode* withQueryNode = myQueryTree->createQNode(With,Synonym(),s1,s2);
+		QNode* withQueryNode = myQueryTree->createQNode(With,Synonym(),s1,s2,Synonym());
 		myQueryTree->linkNode(myQueryTree->getClausesNode(), withQueryNode);
 
 		return  true;
@@ -1563,7 +1610,7 @@ namespace QueryParser
 			}
 
 			Synonym s1(DE_type,value);
-			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym(), Synonym());
 
 		}else{
 
@@ -1602,7 +1649,7 @@ namespace QueryParser
 
 			
 			Synonym s1(DE_type,value, attribute);
-			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym(), Synonym());
 		}
 
 		res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
@@ -1664,7 +1711,7 @@ namespace QueryParser
 			parseToken();
 
 			Synonym s1(SYNONYM_TYPE(BOOLEAN),"");
-			QNode* childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym());
+			QNode* childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym(), Synonym());
 			res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
 
 		}else{

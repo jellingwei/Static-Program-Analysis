@@ -72,6 +72,7 @@ enum QNODE_TYPE
 	NextBip, NextBipT, 
 	AffectsBip, AffectsBipT, 
 	AttrCompare,
+	PatternAssign, PatternIf, PatternWhile,
 
 	// Select and Pattern QNODE_TYPEs
 	Selection, Pattern, With

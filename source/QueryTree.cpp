@@ -3,9 +3,9 @@
 QueryTree::QueryTree()
 {
 	Synonym empty;
-	_root = QNode(ROOT,empty, empty, empty);
-	_result = QNode(RESULT,empty, empty, empty);
-	_clauses = QNode(CLAUSES, empty, empty, empty);
+	_root = QNode(ROOT,empty, empty, empty, empty);
+	_result = QNode(RESULT,empty, empty, empty, empty);
+	_clauses = QNode(CLAUSES, empty, empty, empty, empty);
 
 	linkNode(&_root, &_result);
 	linkNode(&_root, &_clauses);
@@ -20,11 +20,12 @@ QueryTree::QueryTree()
  * @param arg0
  * @param arg1
  * @param arg2
+ * @param arg3
  * @return a QNode with its corresponding NODE_TYPE and SYNONYM arguments.
  */
-QNode* QueryTree::createQNode(QNODE_TYPE QNODE_TYPE,Synonym arg0, Synonym arg1, Synonym arg2)
+QNode* QueryTree::createQNode(QNODE_TYPE QNODE_TYPE,Synonym arg0, Synonym arg1, Synonym arg2, Synonym arg3)
 {
-	QNode* node = new QNode(QNODE_TYPE, arg0, arg1, arg2);
+	QNode* node = new QNode(QNODE_TYPE, arg0, arg1, arg2, arg3);
 	return node;
 }
 
@@ -112,8 +113,8 @@ void QueryTree::printTree()
 
 void QueryTree::printNode(QNode* node)
 {
-	string type, arg0_type, arg0_name, arg1_type, arg1_name, arg2_type, arg2_name;
-
+	string type, arg0_type, arg1_type, arg2_type, arg3_type;
+	string arg0_name, arg1_name, arg2_name, arg3_name;
 
 	switch(node->getNodeType()) {
 	case ModifiesP:
@@ -193,10 +194,13 @@ void QueryTree::printNode(QNode* node)
 	arg1_name = node->getArg1().getName();
 	arg2_type = Synonym::convertToString(node->getArg2().getType());
 	arg2_name = node->getArg2().getName();
+	arg3_type = Synonym::convertToString(node->getArg3().getType());
+	arg3_name = node->getArg3().getName();
 
 	cout << "(TYPE:" << type << ", " << 
 			"Arg0:" << arg0_type << "," << arg0_name << "," <<
 			"Arg1:" << arg1_type << "," << arg1_name << " ," <<
-			"Arg2:" << arg2_type << "," << arg2_name << ")"
+			"Arg2:" << arg2_type << "," << arg2_name << " ," <<
+			"Arg3:" << arg3_type << "," << arg3_name << ")"
 			<< endl;
 }

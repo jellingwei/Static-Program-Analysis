@@ -46,14 +46,16 @@ void QueryTreeTest::testQNode()
 	// Test QNode Constructor and Setters and Getters
 	Synonym syn1(Synonym::convertToEnum("type1"), "name1");
 	Synonym syn2(Synonym::convertToEnum("type2"), "name2");
-	QNode clausesNode(CLAUSES, Synonym(), syn1, syn2);
+	Synonym syn3(Synonym::convertToEnum("type3"), "name3");
+	QNode clausesNode(CLAUSES, Synonym(), syn1, syn2, syn3);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getNodeType", clausesNode.getNodeType(), CLAUSES);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg1", clausesNode.getArg1().getName(), (string) "name1");
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg2", clausesNode.getArg2().getType(), SYNONYM_TYPE(UNDEFINED));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg3", clausesNode.getArg3().getType(), SYNONYM_TYPE(UNDEFINED));
 	
 	// Test QNode Parent and Child Relations
-	QNode followsQueryNode(Follows, Synonym(), syn1, syn1);
-	QNode usesQueryNode(UsesP, Synonym(), syn2, syn2);
+	QNode followsQueryNode(Follows, Synonym(), syn1, syn1, Synonym());
+	QNode usesQueryNode(UsesP, Synonym(), syn2, syn2, Synonym());
 	clausesNode.setChild(&followsQueryNode);
 	clausesNode.setChild(&usesQueryNode);
 	followsQueryNode.setParent(&clausesNode);
@@ -82,7 +84,7 @@ void QueryTreeTest::testQueryTree()
 	
 	// Test Query Tree Link Node
 	Synonym syn(Synonym::convertToEnum("type"), "name");
-	QNode select(Selection, Synonym(), syn, syn);
+	QNode select(Selection, Synonym(), syn, syn, Synonym());
 	qT->linkNode(qT->getResultNode(), &select);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Link Node (child)", qT->getResultNode()->getChild()->getNodeType(), Selection);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QT Link Node (parent)", select.getParent()->getNodeType(), RESULT);

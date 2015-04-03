@@ -461,7 +461,7 @@ namespace QueryOptimiser
 	QNode* convertToTree(vector<QNode*> constantClauses, vector<QNode*> nonConstantClauses)
 	{
 		Synonym empty;
-		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty);
+		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty, empty);
 
 		for (unsigned int i = 0; i < constantClauses.size(); i++) {
 			QNode* clause = constantClauses[i];

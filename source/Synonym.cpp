@@ -188,7 +188,7 @@ string Synonym::convertToString(SYNONYM_TYPE synonymType)
 	case PROG_LINE:
 		return "prog_line";
 	case STMTLST:
-		return "stmtlst";
+		return "stmtLst";
 	case PLUS:
 		return "plus";
 	case MINUS:
@@ -238,7 +238,7 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return STRING_PATTERNS;
 	}else if (synonymType == "boolean") {
 		return BOOLEAN;
-	}else if (synonymType == "stmtlst") {
+	}else if (synonymType == "stmtLst") {
 		return STMTLST;
 	}else if (synonymType == "plus") {
 		return PLUS;
