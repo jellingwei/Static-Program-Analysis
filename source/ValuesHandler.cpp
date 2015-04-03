@@ -81,7 +81,7 @@ namespace ValuesHandler
 	* @return TRUE if the synonym exists in the table
 	*         FALSE if the synonym does not exist in the table
 	*/
-	bool isExistInMainTable(string synonymName)
+	BOOLEAN_ isExistInMainTable(string synonymName)
 	{
 		auto itr = mainTableIndex.find(synonymName);
 		
@@ -99,7 +99,7 @@ namespace ValuesHandler
 	* @return TRUE if the synonym exists in the table
 	*         FALSE if the synonym does not exist in the table
 	*/
-	bool isExistInSingletonTable(string synonymName)
+	BOOLEAN_ isExistInSingletonTable(string synonymName)
 	{
 		auto itr = singletonTable.find(synonymName);
 		
@@ -136,7 +136,7 @@ namespace ValuesHandler
 	* @return TRUE if the value exists in the set given
 	*         FALSE if the value does not exist in the set given
 	*/
-	bool isValueExistInSet(set<int> setToSearch, int value) 
+	BOOLEAN_ isValueExistInSet(set<int> setToSearch, VALUE value) 
 	{
 		int count = setToSearch.count(value);
 
@@ -173,7 +173,7 @@ namespace ValuesHandler
 	* @return TRUE if this synonym when added to the table does not return size 0
 	*		  FALSE otherwise
 	*/
-	inline bool addToSingletonTable(Synonym synonym)
+	inline BOOLEAN_ addToSingletonTable(Synonym synonym)
 	{
 		vector<int> defaultValues = getDefaultValues(synonym.getType());
 		singletonTable[synonym.getName()] = defaultValues;
@@ -186,7 +186,7 @@ namespace ValuesHandler
 	* @return TRUE if this synonym when added to the table does not return size 0
 	*		  FALSE otherwise
 	*/
-	bool addToSingletonTableForTesting(Synonym synonym)
+	BOOLEAN_ addToSingletonTableForTesting(Synonym synonym)
 	{
 		singletonTable[synonym.getName()] = synonym.getValues();
 		return true;
@@ -282,7 +282,7 @@ namespace ValuesHandler
 	* @param synonymIndex the index of the column
 	* @return A vector containing all the intermediate values so far
 	*/
-	vector<int> getIntermediateValuesInMain(int synonymIndex) 
+	vector<int> getIntermediateValuesInMain(SYNONYM_INDEX synonymIndex) 
 	{
 		vector<int> values;
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
@@ -298,7 +298,7 @@ namespace ValuesHandler
 	* @param synonymIndex the index of the column
 	* @return A set containing all the intermediate values with no duplicates
 	*/
-	set<int> getIntermediateValuesSetInMain(int synonymIndex) 
+	set<int> getIntermediateValuesSetInMain(SYNONYM_INDEX synonymIndex) 
 	{
 		set<int> values;
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
@@ -313,7 +313,7 @@ namespace ValuesHandler
 	* @return TRUE if the processing of intermediate values is successful.
 	*		  FALSE if the processing of intermediate values causes the table to have zero rows.
 	*/
-	bool addAndProcessIntermediateSynonym(Synonym synonym) 
+	BOOLEAN_ addAndProcessIntermediateSynonym(Synonym synonym) 
 	{
 		if (synonym.getValues().size() == 0) {
 			return false;
@@ -340,7 +340,7 @@ namespace ValuesHandler
 	* @return TRUE if the processing of intermediate values is successful.
 	*		  FALSE if the processing of intermediate values causes the table to have zero rows.
 	*/
-	bool addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
+	BOOLEAN_ addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS) 
 	{
 		//@TODO: Assert that both sizes are the same
 		if (LHS.getValues().size() == 0) {
@@ -390,7 +390,7 @@ namespace ValuesHandler
 	* @return TRUE if the set intersection does not have size 0
 	*		  FALSE if the set intersection produces size 0
 	*/
-	bool hashIntersectWithMainTable(Synonym synonym)
+	BOOLEAN_ hashIntersectWithMainTable(Synonym synonym)
 	{
 		int index = findIndexInMainTable(synonym.getName());
 		vector<int> newValues = synonym.getValues();
@@ -420,7 +420,7 @@ namespace ValuesHandler
 	* @return TRUE if the set intersection does not have size 0
 	*		  FALSE if the set intersection produces size 0
 	*/
-	bool hashIntersectWithMainTable(Synonym LHS, Synonym RHS)
+	BOOLEAN_ hashIntersectWithMainTable(Synonym LHS, Synonym RHS)
 	{
 		int indexLHS = findIndexInMainTable(LHS.getName());
 		int indexRHS = findIndexInMainTable(RHS.getName());
@@ -458,7 +458,7 @@ namespace ValuesHandler
 	* @return TRUE if the join does not have 0 rows
 	*		  FALSE if the join produces 0 rows
 	*/
-	bool hashJoinWithMainTable(Synonym mainSynonym, Synonym pairedSynonym)
+	BOOLEAN_ hashJoinWithMainTable(Synonym mainSynonym, Synonym pairedSynonym)
 	{
 		int mainIndex = findIndexInMainTable(mainSynonym.getName());
 		vector<int> newValues = mainSynonym.getValues();
@@ -499,7 +499,7 @@ namespace ValuesHandler
 	* @return TRUE if the join does not have 0 rows
 	*		  FALSE if the join produces 0 rows
 	*/
-	bool hashJoinWithMainTableOnNumber(string mainName, Synonym pairedSynonym)
+	BOOLEAN_ hashJoinWithMainTableOnNumber(string mainName, Synonym pairedSynonym)
 	{
 		//TODO: Assert main synonym and paired are not varName or procName
 		int mainIndex = findIndexInMainTable(mainName);
@@ -536,7 +536,7 @@ namespace ValuesHandler
 	* @return TRUE if the join does not have 0 rows
 	*		  FALSE if the join produces 0 rows
 	*/
-	bool hashJoinWithMainTableOnString(string mainName, Synonym pairedSynonym)
+	BOOLEAN_ hashJoinWithMainTableOnString(string mainName, Synonym pairedSynonym)
 	{
 		//TODO: Assert main synonym and paired are varName or procName
 		int mainIndex = findIndexInMainTable(mainName);
@@ -579,7 +579,7 @@ namespace ValuesHandler
 	* @return TRUE if the join does not have 0 rows
 	*		  FALSE if the join produces 0 rows
 	*/
-	bool joinWithMainTable(Synonym LHS, Synonym RHS)
+	BOOLEAN_ joinWithMainTable(Synonym LHS, Synonym RHS)
 	{
 		vector<int> valuesLHS = LHS.getValues();
 		vector<int> valuesRHS = RHS.getValues();
@@ -687,7 +687,7 @@ namespace ValuesHandler
 	* @param synonym
 	* @return The pairs of values that are left after elimination
 	*/
-	bool hashIntersectWithSingletonTable(Synonym synonym)
+	BOOLEAN_ hashIntersectWithSingletonTable(Synonym synonym)
 	{
 		string name = synonym.getName();
 		vector<int> existingValues = singletonTable[name];
@@ -716,7 +716,7 @@ namespace ValuesHandler
 	* @param RHS
 	* @return The status of this operation
 	*/
-	bool processPairWithMainTable(Synonym LHS, Synonym RHS)
+	BOOLEAN_ processPairWithMainTable(Synonym LHS, Synonym RHS)
 	{
 		//Either LHS or RHS is in the main table or both
 		string nameLHS = LHS.getName();
@@ -740,7 +740,7 @@ namespace ValuesHandler
 	* @param RHS
 	* @return The status of this operation
 	*/
-	bool processPairWithSingletonTable(Synonym LHS, Synonym RHS)
+	BOOLEAN_ processPairWithSingletonTable(Synonym LHS, Synonym RHS)
 	{
 		//These two synonyms do not exist in the main table
 		//Either LHS or RHS is in the singleton table or both
@@ -779,7 +779,7 @@ namespace ValuesHandler
 	* @param singleton
 	* @return The status of this operation
 	*/
-	bool mergeSingletonToMain(Synonym mainSynonym, Synonym singleton)
+	BOOLEAN_ mergeSingletonToMain(Synonym mainSynonym, Synonym singleton)
 	{
 		string singletonName = singleton.getName();
 
@@ -803,7 +803,7 @@ namespace ValuesHandler
 	* @return TRUE if there are rows left in the table after filtering
 	*         FALSE if there are no rows left in the table after filtering
 	*/
-	bool filterEqualValue(Synonym synonym, string wantedValue)
+	BOOLEAN_ filterEqualValue(Synonym synonym, string wantedValue)
 	{
 		if (synonym.getAttribute() == procName || synonym.getAttribute() == varName) {
 			return filterEqualValueByString(synonym.getName(), wantedValue);
@@ -819,7 +819,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterEqualValueByString(string synonymName, string wantedValue)
+	BOOLEAN_ filterEqualValueByString(string synonymName, string wantedValue)
 	{
 		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
 
@@ -851,7 +851,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterEqualValueByNumber(string synonymName, int wantedValue)
+	BOOLEAN_ filterEqualValueByNumber(string synonymName, int wantedValue)
 	{
 		if (isExistInMainTable(synonymName)) {
 			return filterMainTableByNumber(synonymName, wantedValue);
@@ -880,7 +880,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterMainTableByNumber(string synonymName, int wantedValue)
+	BOOLEAN_ filterMainTableByNumber(string synonymName, int wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
 		vector<vector<int>> acceptedValues;
@@ -902,7 +902,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterMainTableByString(string synonymName, string wantedValue)
+	BOOLEAN_ filterMainTableByString(string synonymName, string wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
 		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
@@ -926,7 +926,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterSingletonTableByNumber(string synonymName, int wantedValue)
+	BOOLEAN_ filterSingletonTableByNumber(string synonymName, int wantedValue)
 	{
 		vector<int> singletonValues = singletonTable[synonymName];
 		vector<int> acceptedValue;
@@ -948,7 +948,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterSingletonTableByString(string synonymName, string wantedValue)
+	BOOLEAN_ filterSingletonTableByString(SYNONYM_NAME synonymName, string wantedValue)
 	{
 		vector<int> singletonValues = singletonTable[synonymName];
 		vector<int> acceptedValue;
@@ -974,7 +974,7 @@ namespace ValuesHandler
 	* @return TRUE if there are rows left after filtering
 	*         FALSE if there are no rows left after filtering
 	*/
-	bool filterEqualPair(Synonym LHS, Synonym RHS)
+	BOOLEAN_ filterEqualPair(Synonym LHS, Synonym RHS)
 	{
 		SYNONYM_TYPE arg1Type = LHS.getType();
 		SYNONYM_TYPE arg2Type = RHS.getType();
@@ -1000,7 +1000,7 @@ namespace ValuesHandler
 	* @return TRUE if there are rows left after filtering
 	*         FALSE if there are no rows left after filtering
 	*/
-	bool filterEqualPairByNumber(Synonym LHS, Synonym RHS)
+	BOOLEAN_ filterEqualPairByNumber(Synonym LHS, Synonym RHS)
 	{
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
@@ -1035,7 +1035,7 @@ namespace ValuesHandler
 	* @return TRUE if there are rows left after filtering
 	*         FALSE if there are no rows left after filtering
 	*/
-	bool filterEqualPairByString(Synonym LHS, Synonym RHS)
+	BOOLEAN_ filterEqualPairByString(Synonym LHS, Synonym RHS)
 	{
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
@@ -1071,7 +1071,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterEqualNumberPairInSingleton(Synonym LHS, Synonym RHS)
+	BOOLEAN_ filterEqualNumberPairInSingleton(Synonym LHS, Synonym RHS)
 	{
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
@@ -1139,7 +1139,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterEqualStringPairInSingleton(Synonym LHS, Synonym RHS)
+	BOOLEAN_ filterEqualStringPairInSingleton(Synonym LHS, Synonym RHS)
 	{
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
@@ -1179,7 +1179,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterEqualNumberInMain(Synonym LHS, Synonym RHS)
+	BOOLEAN_ filterEqualNumberInMain(Synonym LHS, Synonym RHS)
 	{
 		//TODO: Assert that they both are in main
 		int indexLHS = findIndexInMainTable(LHS.getName());
@@ -1205,7 +1205,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	bool filterEqualStringInMain(Synonym LHS, Synonym RHS)
+	BOOLEAN_ filterEqualStringInMain(Synonym LHS, Synonym RHS)
 	{
 		//TODO: Assert that they both are in main
 		int indexLHS = findIndexInMainTable(LHS.getName());

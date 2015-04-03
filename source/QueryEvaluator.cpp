@@ -12,6 +12,8 @@ using std::make_pair;
 #include "PKB.h"
 #include "ValuesHandler.h"
 #include "AbstractWrapper.h"
+#include "common.h"
+#include "common_list.h"
 
 /**
 @brief Namespace containing functions for the evaluating of queries.
@@ -20,47 +22,47 @@ using std::make_pair;
 namespace QueryEvaluator 
 {
 	//Private functions to evaluate the query tree
-	vector<Synonym> processResultNode(QNode* resultNode, bool isValid);
-	inline bool processClausesNode(QNode* clausesNode);
-	inline bool processClause(QNode* clauseNode);
+	SYNONYM_LIST processResultNode(QNode* resultNode, BOOLEAN_ isValid);
+	inline BOOLEAN_ processClausesNode(QNode* clausesNode);
+	inline BOOLEAN_ processClause(QNode* clauseNode);
 
 	//Functions to process clauses
-	bool processModifies(Synonym LHS, Synonym RHS, DIRECTION direction);
+	BOOLEAN_ processModifies(Synonym LHS, Synonym RHS, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS);
 
-	bool processUses(Synonym LHS, Synonym RHS, DIRECTION direction);
+	BOOLEAN_ processUses(Synonym LHS, Synonym RHS, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS);
 
-	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, bool isTrans);
-	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, bool isTrans);
+	BOOLEAN_ processParentT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
-	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
-	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
+	BOOLEAN_ processFollowsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
-	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
-	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
+	BOOLEAN_ processCallsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
-	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, bool isTrans);
-	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, bool isTrans);
+	BOOLEAN_ processNextT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
-	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, bool isTrans);
-	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, bool isTrans);
+	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	//Functions to process pattern clauses
-	inline bool processPatternClause(QNode* patternClause);
-	bool processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS);
-	bool processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS);
-	bool processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS);
+	inline BOOLEAN_ processPatternClause(QNode* patternClause);
+	BOOLEAN_ processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS);
+	BOOLEAN_ processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS);
+	BOOLEAN_ processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS);
 
 	//Functions to process with clauses
-	bool processWithClause(QNode* withClause);
+	BOOLEAN_ processWithClause(QNode* withClause);
 
 	PKB pkb = PKB::getInstance();  //Get the instance of the PKB singleton
 
@@ -69,7 +71,7 @@ namespace QueryEvaluator
 	* @param qTreeRoot the root node of the query tree
 	* @return an empty vector if the Such That or Pattern clauses are invalid.
 	*/
-	vector<Synonym> processQueryTree(QueryTree* qTreeRoot) 
+	SYNONYM_LIST processQueryTree(QueryTree* qTreeRoot) 
 	{
 		ValuesHandler::initialize(qTreeRoot->getSynonymsMap());
 		vector<Synonym> synonymResult;
@@ -86,7 +88,7 @@ namespace QueryEvaluator
 	* @param isValid
 	* @return the wanted synonym in a vector
 	*/
-	vector<Synonym> processResultNode(QNode* resultNode, bool isValid) 
+	SYNONYM_LIST processResultNode(QNode* resultNode, BOOLEAN_ isValid) 
 	{
 		vector<Synonym> result;
 
@@ -131,7 +133,7 @@ namespace QueryEvaluator
 	* @param clausesNode
 	* @eturn TRUE if the clauses are valid. FALSE if the clauses are not valid.
 	*/
-	inline bool processClausesNode(QNode* clausesNode) 
+	inline BOOLEAN_ processClausesNode(QNode* clausesNode) 
 	{
 		int numberOfClauses = clausesNode->getNumberOfChildren();
 		QNode* clauseNode = clausesNode->getChild();
@@ -153,7 +155,7 @@ namespace QueryEvaluator
 	* @param clausesNode
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	inline bool processClause(QNode* clauseNode) 
+	inline BOOLEAN_ processClause(QNode* clauseNode) 
 	{
 		QNODE_TYPE qnode_type = clauseNode->getNodeType();
 		DIRECTION direction = clauseNode->getDirection();
@@ -202,7 +204,7 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processModifies(Synonym LHS, Synonym RHS, DIRECTION direction) 
+	BOOLEAN_ processModifies(Synonym LHS, Synonym RHS, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -316,7 +318,7 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processUses(Synonym LHS, Synonym RHS, DIRECTION direction) 
+	BOOLEAN_ processUses(Synonym LHS, Synonym RHS, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -429,7 +431,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processParentT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
+	BOOLEAN_ processParentT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -521,7 +523,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processFollowsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
+	BOOLEAN_ processFollowsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -615,7 +617,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processCallsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processCallsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -707,7 +709,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processNextT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processNextT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -799,7 +801,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processAffectsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -887,7 +889,7 @@ namespace QueryEvaluator
 	* @param patternClause
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	inline bool processPatternClause(QNode* patternClause) 
+	inline BOOLEAN_ processPatternClause(QNode* patternClause) 
 	{
 		Synonym arg0 = patternClause->getArg0();
 		Synonym LHS = patternClause->getArg1();
@@ -913,7 +915,7 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
+	BOOLEAN_ processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
 		vector<int> isMatchStmts = pkb.patternMatchAssign(RHS.getName());
 
@@ -965,7 +967,7 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
+	BOOLEAN_ processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 
@@ -1002,7 +1004,7 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS) 
+	BOOLEAN_ processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 
@@ -1037,7 +1039,7 @@ namespace QueryEvaluator
 	* @param withClause
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	bool processWithClause(QNode* withClause)
+	BOOLEAN_ processWithClause(QNode* withClause)
 	{
 		//Assume that var and int cannot be compared (should be checked by the query validator)
 		Synonym LHS = withClause->getArg1();

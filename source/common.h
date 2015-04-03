@@ -24,6 +24,7 @@ typedef int STATEMENT;
 typedef int CONTAINER_STATEMENT;
 typedef int VAR_INDEX;
 typedef int PROC_INDEX;
+typedef int SYNONYM_INDEX;
 typedef bool STATUS;
 typedef bool TRANS_CLOSURE;
 
@@ -31,6 +32,7 @@ typedef string FILENAME;
 typedef string VARNAME;
 typedef string PROCNAME;
 typedef string EXPRESSION;
+typedef string SYNONYM_NAME;
 typedef string STATEMENT_TYPE;
 
 typedef set<int> VALUE_SET;
