@@ -1350,13 +1350,6 @@ BOOLEAN_ PKB::canSkipNodesForwards(CNode* node) {
 	return AffectsTable::canSkipNodesForwards(node);
 }
 
-PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiveClosure) {
-	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
-}
-
-PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
-	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
-}
 
 //NextBip
 
@@ -1365,12 +1358,13 @@ BOOLEAN_ PKB::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSUR
 }
 
 PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiveClosure) {
- 	return vector<int>();
+	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
 }
- 
+
 PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
-	return vector<int>();
+	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
 }
+
 
 PROGLINE_LIST PKB::getNextBipLhs() {
 	return vector<int>();
