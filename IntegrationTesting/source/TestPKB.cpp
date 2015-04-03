@@ -434,13 +434,16 @@ void PKBTest::testPKB()
 	
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(12,_)", 2, (int)pkb.getNextBipAfter(12).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip*(17,_), 17 is a call statement", 8, (int)pkb.getNextBipAfter(17, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip*(18,_), 18 is a call statement and first line in proc", 20, (int)pkb.getNextBipAfter(18, true).size());
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,25)", 4, (int)pkb.getNextBipBefore(25).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,38)", 1, (int)pkb.getNextBipBefore(38).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,23)", 1, (int)pkb.getNextBipBefore(23).size());
 	vector<int> nextBipBefore19 = pkb.getNextBipBefore(19);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,19)", 3, (int)nextBipBefore19.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,19), previous line is call", 3, (int)nextBipBefore19.size());
 	CPPUNIT_ASSERT_MESSAGE("NextBip(,19)", find(nextBipBefore19.begin(), nextBipBefore19.end(), 25) != nextBipBefore19.end() );
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,31), first line of proc", 37, (int)pkb.getNextBipBefore(31, true).size());
 
 	cout << "End TestPkb" << endl;
 }
