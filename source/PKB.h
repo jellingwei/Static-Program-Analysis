@@ -14,6 +14,7 @@
 #include "ConstantTable.h"
 #include "CallsTable.h"
 #include "NextTable.h"
+#include "NextBipTable.h"
 #include "AffectsTable.h"
 #include "CFG.h"
 #include "AST.h"
@@ -227,6 +228,7 @@ public:
 	PROGLINE_LIST getAffectsBipLhs();
 	PROGLINE_LIST getAffectsBipRhs();
 
+
 	//@todo 
 	// @cond todo
 	unordered_map<int, CNode*> cfgNodeTable; //@todo nextTable?
@@ -248,6 +250,7 @@ private:
 	AST* ast;
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
+	NextBipTable* nextBipTable;
 	PKB();
 	
 	

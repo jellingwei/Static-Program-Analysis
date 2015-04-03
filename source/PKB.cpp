@@ -26,6 +26,8 @@ PKB::PKB() {
 	ast = new AST();
 	nextTable = new NextTable();
 	affectsTable = new AffectsTable();
+
+	nextBipTable = new NextBipTable();
 }
 
 //AST
@@ -1348,6 +1350,13 @@ BOOLEAN_ PKB::canSkipNodesForwards(CNode* node) {
 	return AffectsTable::canSkipNodesForwards(node);
 }
 
+PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
+}
+
+PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
+	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
+}
 
 //NextBip
 

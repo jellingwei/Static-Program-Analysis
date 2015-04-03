@@ -13,7 +13,7 @@ using namespace std;
 CFG::CFG(TNode* procNode) {
 	_procNode = new CNode(Proc_C, 0, NULL, procNode);
 
-	_endNode = new CNode(EndProc_C, 0, NULL, NULL);
+	_endNode = new CNode(EndProc_C, 0, NULL, procNode);
 	_endNode->setEnd();
 }
 
