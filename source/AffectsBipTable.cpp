@@ -460,12 +460,26 @@ PROGLINE_LIST AffectsBipTable::getLhs() {
 	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
 	vector<int> results;
 
+	for (auto stmt = assignments.begin(); stmt != assignments.end(); ++ stmt) {
+		PROGLINE_LIST rhs = getProgLinesAffectsBipAfter(*stmt, false);
+		if (rhs.size() > 0) {
+			results.push_back(*stmt);
+		}
+	}
 
 	return results;
 }
 
 PROGLINE_LIST AffectsBipTable::getRhs() {
+	vector<int> assignments = PKB::getInstance().getStmtNumForType(ASSIGN);
 	vector<int> results;
+
+	for (auto stmt = assignments.begin(); stmt != assignments.end(); ++ stmt) {
+		vector<int> lhs = getProgLinesAffectsBipBefore(*stmt, false);
+		if (lhs.size() > 0) {
+			results.push_back(*stmt);
+		}
+	}
 
 	return results;
 }
@@ -477,6 +491,7 @@ BOOLEAN_ AffectsBipTable::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine
 		return false;
 	}
 
+	PROGLINE_LIST rhs = getProgLinesAffectsBipAfter(progLine1, false);
 
-	return false;
+	return find(rhs.begin(), rhs.end(), progLine2) != rhs.end();
 }

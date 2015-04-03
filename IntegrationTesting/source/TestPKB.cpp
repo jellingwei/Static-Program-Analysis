@@ -469,7 +469,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(11,_)", 5, (int)pkb.getAffectsBipAfter(11,true).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,5)", 0, (int)pkb.getAffectsBipBefore(5).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,5)", 0, (int)pkb.getAffectsBipBefore(5,true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(,5)", 0, (int)pkb.getAffectsBipBefore(5,true).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,6), normal affects", (int)pkb.getAffecting(6).size(), (int)pkb.getAffectsBipBefore(6).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,11), normal affects", (int)pkb.getAffecting(11).size(), (int)pkb.getAffectsBipBefore(11).size());
@@ -477,6 +477,8 @@ void PKBTest::testPKB()
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,24), ", 3, (int)pkb.getAffectsBipBefore(24).size());	
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,36), ", 8, (int)pkb.getAffectsBipBefore(36).size());
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(,36), ", 14, (int)pkb.getAffectsBipBefore(36, true).size());
 
 
 	cout << "End TestPkb" << endl;
