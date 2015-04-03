@@ -893,7 +893,8 @@ namespace QueryParser
 		}
 
 		//build the tree
-		QNode* childNode = myQueryTree->createQNode(relRef, Synonym(), s1, s2, Synonym());
+		Synonym empty;
+		QNode* childNode = myQueryTree->createQNode(relRef, empty, s1, s2, empty);
 		res = myQueryTree->linkNode(myQueryTree->getClausesNode(), childNode);
 
 		return res;
@@ -901,23 +902,24 @@ namespace QueryParser
 
 	/**
 	 * Supporting function to create synonyms.
-	 * @return Synonym() if it is unable to create a Synonym.
+	 * @return 'Synonym emptySynonym' if it is unable to create a Synonym.
 	 */
 	Synonym createSynonym(QNODE_TYPE relRef,string value, int arg)
 	{
+		Synonym emptySynonym;
 		SYNONYM_TYPE DE_type;
 		REF_TYPE node;
 		SYNONYM_ATTRIBUTE attribute;
 		std::regex apostrophe("[\"]");
 
 		auto nodeTuple = relRefMap.at(relRef);
-		if(arg==1)
+		if(arg==1){
 			node = std::get<0>(nodeTuple);
-		else if(arg==2)
+		}else if(arg==2){
 			node = std::get<1>(nodeTuple);
-		else
-			return Synonym(); //arg can only be 1 or 2 
-
+		}else{
+			return emptySynonym; //arg can only be 1 or 2 
+		}
 
 		if(node==REF_TYPE(stmtRef) || node==REF_TYPE(lineRef)){
 
@@ -928,7 +930,7 @@ namespace QueryParser
 			}else if(matchInteger(value)){
 				DE_type = STRING_INT;
 			}else{
-				return Synonym();  //error type mismatch
+				return emptySynonym;  //error type mismatch
 			}
 
 			//build Synonym and return 
@@ -945,7 +947,7 @@ namespace QueryParser
 			}else if(matchInteger(value)){
 				DE_type = STRING_INT;
 			}else{
-				return Synonym();  //error type mismatch
+				return emptySynonym;  //error type mismatch
 			}
 
 			//build Synonym and return
@@ -960,7 +962,7 @@ namespace QueryParser
 			}else if(synonymsMap.count(value) > 0){
 				DE_type = synonymsMap.at(value);
 			}else{
-				return Synonym();  //error type mismatch
+				return emptySynonym;  //error type mismatch
 			}
 
 			//build Synonym and return
@@ -974,7 +976,7 @@ namespace QueryParser
 			}else if(matchInteger(value)){
 				DE_type = STRING_INT;
 			}else{
-				return Synonym();  //error type mismatch
+				return emptySynonym;  //error type mismatch
 			}
 
 			//build Synonym and return 
@@ -988,7 +990,7 @@ namespace QueryParser
 			}else if(value.compare("_")==0){
 				DE_type = UNDEFINED;
 			}else{
-				return Synonym();  //error type mismatch
+				return emptySynonym;  //error type mismatch
 			}
 
 			//build Synonym and return 
@@ -1014,7 +1016,7 @@ namespace QueryParser
 						cout<<"####error no such synonym ##### "	<<endl;
 						cout<<"synonym can't be found : " <<peekBackwards(2)<<endl;
 					#endif
-					return Synonym();  //error no such synonym
+					return emptySynonym;  //error no such synonym
 				}
 				value = peekBackwards(2);
 
@@ -1026,7 +1028,7 @@ namespace QueryParser
 						cout<<"####error no such attrName ##### "	<<endl;
 						cout<<"attrName can't be found : " <<peekBackwards(0)<<endl;
 					#endif
-					return Synonym();  //error no such attrName
+					return emptySynonym;  //error no such attrName
 				}
 
 				
@@ -1038,7 +1040,7 @@ namespace QueryParser
 			return Synonym(DE_type,value,SYNONYM_ATTRIBUTE(empty));
 		}
 
-		return Synonym(); //wont reach here
+		return emptySynonym; //wont reach here
 
 	}
 
@@ -1282,7 +1284,7 @@ namespace QueryParser
 			if(s2.isEmpty()){ //unable to create synonym
 				return false;}
 
-			s3 = Synonym(); 
+			//s3 is empty
 
 		}else if(DE_type0==IF){
 
@@ -1339,9 +1341,7 @@ namespace QueryParser
 
 			//create synonym for pattern-assign argument 2
 			s2 = Synonym(DE_type2, pattern_arg2);
-
-			s3 = Synonym(); 
-
+			//s3 is empty. 
 		}
 
 		res = parse(")");
@@ -1405,7 +1405,8 @@ namespace QueryParser
 		}
 
 		//build query tree
-		QNode* withQueryNode = myQueryTree->createQNode(With,Synonym(),s1,s2,Synonym());
+		Synonym empty;
+		QNode* withQueryNode = myQueryTree->createQNode(With,empty,s1,s2,empty);
 		myQueryTree->linkNode(myQueryTree->getClausesNode(), withQueryNode);
 
 		return  true;
@@ -1610,7 +1611,8 @@ namespace QueryParser
 			}
 
 			Synonym s1(DE_type,value);
-			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym(), Synonym());
+			Synonym empty;
+			childNode = myQueryTree->createQNode(Selection, empty, s1, empty, empty);
 
 		}else{
 
@@ -1649,7 +1651,8 @@ namespace QueryParser
 
 			
 			Synonym s1(DE_type,value, attribute);
-			childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym(), Synonym());
+			Synonym empty;
+			childNode = myQueryTree->createQNode(Selection, empty, s1, empty, empty);
 		}
 
 		res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
@@ -1711,7 +1714,8 @@ namespace QueryParser
 			parseToken();
 
 			Synonym s1(SYNONYM_TYPE(BOOLEAN),"");
-			QNode* childNode = myQueryTree->createQNode(Selection, Synonym(), s1, Synonym(), Synonym());
+			Synonym empty;
+			QNode* childNode = myQueryTree->createQNode(Selection, empty, s1, empty, empty);
 			res = myQueryTree->linkNode(myQueryTree->getResultNode(), childNode);
 
 		}else{
@@ -1793,10 +1797,13 @@ namespace QueryParser
 		bool res = parseQuerySelectClause();
 		//If there's an error in parsing the queries, return an empty query tree.  
 		if(!res){
+
 			#ifdef DEBUG
 				throw exception("QueryParser error: Error in parsing query. Empty query tree and synonymsMap is passed.");
 			#endif
-			initQueryTreeAndSymbolsTable();
+
+			myQueryTree = new QueryTree();
+			synonymsMap.clear();
 		}
 
 

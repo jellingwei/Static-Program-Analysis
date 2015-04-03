@@ -51,7 +51,7 @@ void QueryTreeTest::testQNode()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getNodeType", clausesNode.getNodeType(), CLAUSES);
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg1", clausesNode.getArg1().getName(), (string) "name1");
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg2", clausesNode.getArg2().getType(), SYNONYM_TYPE(UNDEFINED));
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg3", clausesNode.getArg3().getType(), SYNONYM_TYPE(UNDEFINED));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Test QNode getArg3", clausesNode.getArg3().getName(), (string) "name");
 	
 	// Test QNode Parent and Child Relations
 	QNode followsQueryNode(Follows, Synonym(), syn1, syn1, Synonym());
