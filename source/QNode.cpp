@@ -11,14 +11,16 @@ QNode::QNode()
  * @param arg0 
  * @param arg1 
  * @param arg2
+ * @param arg3
  * @return the QNode for Query Tree with the its corresponding QNODETYPE and SYNONYM arguments.
  */
-QNode::QNode(QNODE_TYPE QNODE_TYPE,Synonym arg0,Synonym arg1, Synonym arg2)
+QNode::QNode(QNODE_TYPE QNODE_TYPE,Synonym arg0,Synonym arg1, Synonym arg2, Synonym arg3)
 {
 	_QNODE_TYPE = QNODE_TYPE;
 	_arg0 = arg0;
 	_arg1 = arg1;
 	_arg2 = arg2;
+	_arg3 = arg3;
 	_current_child_index = -1;
 
 }
@@ -48,6 +50,14 @@ Synonym QNode::getArg2()
 }
 
 /**
+ * @return SYNONYM argument 3.
+ */
+Synonym QNode::getArg3() 
+{
+	return _arg3;
+}
+
+/**
  * Set arg0
  * @param arg A Synonym object
  */
@@ -72,6 +82,15 @@ void QNode::setArg1(Synonym arg)
 void QNode::setArg2(Synonym arg) 
 {
 	_arg2 = arg;
+}
+
+/**
+ * Set arg3
+ * @param arg A Synonym object
+ */
+void QNode::setArg3(Synonym arg) 
+{
+	_arg3 = arg;
 }
 
 /**

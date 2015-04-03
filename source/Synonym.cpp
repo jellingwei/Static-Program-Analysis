@@ -1,7 +1,6 @@
 #include <algorithm>
-using std::sort;
-
 #include "Synonym.h"
+using std::sort;
 
 Synonym::Synonym()
 {
@@ -187,6 +186,14 @@ string Synonym::convertToString(SYNONYM_TYPE synonymType)
 		return "constant";
 	case PROG_LINE:
 		return "prog_line";
+	case STMTLST:
+		return "stmtLst";
+	case PLUS:
+		return "plus";
+	case MINUS:
+		return "minus";
+	case TIMES:
+		return "times";
 	case STRING_CHAR:
 		return "string_char";
 	case STRING_INT:
@@ -228,8 +235,16 @@ SYNONYM_TYPE Synonym::convertToEnum(string synonymType)
 		return STRING_INT;
 	} else if (synonymType == "string_patterns") {
 		return STRING_PATTERNS;
-	}else if (synonymType == "boolean") {
+	} else if (synonymType == "boolean") {
 		return BOOLEAN;
+	} else if (synonymType == "stmtLst") {
+		return STMTLST;
+	} else if (synonymType == "plus") {
+		return PLUS;
+	} else if (synonymType == "minus") {
+		return MINUS;
+	} else if (synonymType == "times") {
+		return TIMES;
 	} else {
 		return UNDEFINED;
 	}
