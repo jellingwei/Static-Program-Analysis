@@ -428,27 +428,40 @@ void PKBTest::testPKB()
 
 	//Contains
 	cout << "Contains" << endl;
-	vector<pair<TNode*, vector<TNode*>>> testing;
-	testing = pkb.contains(Program, If, false);
+	/*vector<pair<TNode*, vector<TNode*>>> testing;
+	testing = pkb.contains(Plus, Times, true);
 	for(int i=0; i<testing.size(); i++) {
 		pair <TNode*, vector<TNode*>> tester = testing.at(i);
-		cout << (i+1) << ". Prog at stmtNo " << tester.first->getStmtNumber() << endl;
+		cout << (i+1) << ". Plus at stmtNo " << tester.first->getStmtNumber() << " with desc " << tester.first->getDescendent() << " " << tester.first << endl;
 		for(int j=0; j<tester.second.size(); j++) {
-			cout << "If StmtNo " << tester.second.at(j)->getStmtNumber() << endl;
+			cout << "Times StmtNo " << tester.second.at(j)->getStmtNumber() << " with desc " << tester.second.at(j)->getDescendent() << " " << tester.second.at(j) << endl;
 		}
-	}
+	}*/
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(While, Assign)", 7, (int)pkb.contains(While, Assign, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Procedure, If)", 4, (int)pkb.contains(Procedure, If, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(If, While)", 1, (int)pkb.contains(If, While, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(While, StmtLst)", 7, (int)pkb.contains(While, StmtLst, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(While, Assign)", 7, (int)pkb.contains(While, Assign, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Procedure, StmtLst)", 5, (int)pkb.contains(Procedure, StmtLst, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Procedure, If)", 4, (int)pkb.contains(Procedure, If, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(If, StmtLst)", 5, (int)pkb.contains(If, StmtLst, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(If, StmtLst)", 5, (int)pkb.contains(If, StmtLst, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(If, Var)", 5, (int)pkb.contains(If, Variable, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(If, While)", 1, (int)pkb.contains(If, While, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Assign, Plus)", 10, (int)pkb.contains(Assign, Plus, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, While)", 7, (int)pkb.contains(StmtLst, While, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, StmtLst)", 11, (int)pkb.contains(StmtLst, StmtLst, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, If)", 9, (int)pkb.contains(StmtLst, If, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Plus, Variable)", 12, (int)pkb.contains(Plus, Variable, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Plus, Times)", 4, (int)pkb.contains(Plus, Times, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Program, Assign)", 1, (int)pkb.contains(Program, Assign, false).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Program, If)", 1, (int)pkb.contains(Program, If, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Assign, Plus)", 10, (int)pkb.contains(Assign, Plus, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, While)", 6, (int)pkb.contains(StmtLst, While, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(StmtLst, While)", 7, (int)pkb.contains(StmtLst, While, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, StmtLst)", 0, (int)pkb.contains(StmtLst, StmtLst, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(StmtLst, StmtLst)", 10, (int)pkb.contains(StmtLst, StmtLst, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, If)", 5, (int)pkb.contains(StmtLst, If, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(StmtLst, If)", 8, (int)pkb.contains(StmtLst, If, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Plus, Variable)", 11, (int)pkb.contains(Plus, Variable, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Plus, Variable)", 12, (int)pkb.contains(Plus, Variable, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Plus, Times)", 3, (int)pkb.contains(Plus, Times, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Plus, Times)", 4, (int)pkb.contains(Plus, Times, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Program, Assign)", 0, (int)pkb.contains(Program, Assign, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Program, Assign)", 1, (int)pkb.contains(Program, Assign, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Program, If)", 0, (int)pkb.contains(Program, If, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Program, If)", 1, (int)pkb.contains(Program, If, true).size());
 
 
 	cout << "End TestPkb" << endl;
