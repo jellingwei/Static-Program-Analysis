@@ -427,21 +427,29 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(22, 24)", false, pkb.isAffects(22, 24));
 
 	//Contains
-	cout << "Affects" << endl;
-	/*vector<pair<TNode*, vector<TNode*>>> testing;
-	testing = pkb.contains(StmtLst, While, false);
+	cout << "Contains" << endl;
+	vector<pair<TNode*, vector<TNode*>>> testing;
+	testing = pkb.contains(Program, If, false);
 	for(int i=0; i<testing.size(); i++) {
 		pair <TNode*, vector<TNode*>> tester = testing.at(i);
-		cout << "StmtLst at stmtNo " << tester.first->getStmtNumber() << endl;
+		cout << (i+1) << ". Prog at stmtNo " << tester.first->getStmtNumber() << endl;
 		for(int j=0; j<tester.second.size(); j++) {
-			cout << "While StmtNo " << tester.second.at(j)->getStmtNumber() << endl;
+			cout << "If StmtNo " << tester.second.at(j)->getStmtNumber() << endl;
 		}
-	}*/
+	}
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(While, Assign)", 7, (int)pkb.contains(While, Assign, false).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Procedure, If)", 4, (int)pkb.contains(Procedure, If, false).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(If, While)", 1, (int)pkb.contains(If, While, false).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Assign, Plus)", 10, (int)pkb.contains(Assign, Plus, false).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, While)", 7, (int)pkb.contains(StmtLst, While, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, StmtLst)", 11, (int)pkb.contains(StmtLst, StmtLst, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(StmtLst, If)", 9, (int)pkb.contains(StmtLst, If, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Plus, Variable)", 12, (int)pkb.contains(Plus, Variable, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Plus, Times)", 4, (int)pkb.contains(Plus, Times, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Program, Assign)", 1, (int)pkb.contains(Program, Assign, false).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Program, If)", 1, (int)pkb.contains(Program, If, false).size());
+
 
 	cout << "End TestPkb" << endl;
 }
