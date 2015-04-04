@@ -51,6 +51,7 @@ namespace QueryOptimiser
 
 	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot);
 	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
+	void scanAndRemoveRedundantSynonyms(vector<QNode*> &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
 	void replaceRedundantSynonymInClauses(QNode* &clausesNode, string name);
 	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
 
@@ -259,7 +260,6 @@ namespace QueryOptimiser
 
 	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
-		QueryEvaluator::resetValues(synonymNameToTypeMap);
 		set<int> synonymsReachable = scanSynonymsReachable(adjacencyMatrix);
 		pair<vector<QNode*>, vector<QNode*>> clausesPair = splitRedundantClauses(clausesNode, synonymsReachable, name_index_map);
 		vector<QNode*> clausesVector = clausesPair.first;
@@ -268,6 +268,7 @@ namespace QueryOptimiser
 		scanAndRemoveRedundantSynonyms(redundantVector, adjacencyMatrix, name_index_map);
 		QNode* redundantClauses = createSubtree(CLAUSES, redundantVector);
 		redundantClauses = optimiseClausesNode(redundantClauses);
+		QueryEvaluator::resetValues(synonymNameToTypeMap);
 		bool isRedundantClausesValid = QueryEvaluator::processClausesNode(redundantClauses);
 
 		if (!isRedundantClausesValid) {
@@ -276,60 +277,67 @@ namespace QueryOptimiser
 			scanAndRemoveRedundantSynonyms(clausesVector, adjacencyMatrix, name_index_map);
 			return createSubtree(CLAUSES, clausesVector);
 		}
-
-		/*for (auto itr = name_index_map.begin(); itr != name_index_map.end(); ++itr) {
-			string name = itr->first;
-			int index = itr->second;
-			int count = 0;
-			for (unsigned int i = 0; i < adjacencyMatrix.size(); i++) {
-				count += adjacencyMatrix[index][i];
-			}
-
-			if (count == 0 || count == 1) {
-				if (isSelectSynonym(name)) {
-					continue;  //Cannot replace a synonym that is being selected
-				} else {
-					//Since this synonym can be replaced, attempt to replace it in the clauses
-					replaceRedundantSynonymInClauses(clausesNode, name);
-				}
-			}
-		}*/
-		throw exception();
 	}
 
-	void scanAndRemoveRedundantSynonyms(vector<QNode*> clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
+	void scanAndRemoveRedundantSynonyms(vector<QNode*> &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
-		Synonym undefined(UNDEFINED, "_");
 		unordered_map<string, int> synonymOccurrence;
 
 		for (unsigned int i = 0; i < clauses.size(); i++) {
 			QNode* clause = clauses[i];
 			QNODE_TYPE query_type = clause->getNodeType();
-			SYNONYM_TYPE type = synonymNameToTypeMap[name];
-			Synonym redundant(type, name);
-
-			pair<Synonym, Synonym> synonymPair = getClauseArguments(clause);
-			Synonym LHS = synonymPair.first;
-			Synonym RHS = synonymPair.second;
 
 			if (query_type == With || query_type == Pattern || query_type == Parent || 
 				query_type == ParentT || query_type == Follows || query_type == FollowsT) {
-				continue;
+					continue;  //Cannot replace synonyms in these clauses
 			}
 
-			//Check for LHS if it is redundant but it cannot be a With, Modifies or Uses
-			if (LHS == redundant) {
-				if (query_type != ModifiesS && query_type != ModifiesP && 
-					query_type != UsesS && query_type != UsesP) {
-						LHS = undefined;
+			Synonym undefined(UNDEFINED, "_");
+			pair<Synonym, Synonym> synonymPair = getClauseArguments(clause);
+			Synonym LHS = synonymPair.first;
+			Synonym RHS = synonymPair.second;
+			string nameLHS = LHS.getName();
+			string nameRHS = RHS.getName();
+
+			if (LHS.isSynonym()) {
+				if (synonymOccurrence.count(nameLHS) == 0) {
+					//Count the number of occurrences this synonym appears in the clause
+					int index = name_index_map[nameLHS];
+					int count = 0;
+					for (unsigned int i = 0; i < adjacencyMatrix.size(); i++) {
+						count += adjacencyMatrix[index][i];
+					}
+					synonymOccurrence[nameLHS] = count;
+				} 
+
+				int count = synonymOccurrence[nameLHS];
+				if (count == 0 || count == 1) {
+					//This synonym is likely to be redundant
+					if (query_type != ModifiesS && query_type != ModifiesP && 
+						query_type != UsesS && query_type != UsesP) {
+							LHS = undefined;  //LHS cannot be "_" in the these clauses
+					}
 				}
 			}
 
-			if (RHS == redundant) {
-				RHS = undefined;
-			}
+			if (RHS.isSynonym()) {
+				if (synonymOccurrence.count(nameRHS) == 0) {
+					//Count the number of occurrences this synonym appears in the clause
+					int index = name_index_map[nameRHS];
+					int count = 0;
+					for (unsigned int i = 0; i < adjacencyMatrix.size(); i++) {
+						count += adjacencyMatrix[index][i];
+					}
+					synonymOccurrence[nameRHS] = count;
+				} 
 
+				int count = synonymOccurrence[nameRHS];
+				if (count == 0 || count == 1) {
+					RHS = undefined;
+				}
+			}
 			setClauseArguments(clause, LHS, RHS);
+			swap(clause, clauses[i]);
 		}
 	}
 
@@ -506,7 +514,7 @@ namespace QueryOptimiser
 			bool hasJoinSynonym = (isContainedInMain(nameLHS) || isContainedInMain(nameRHS));
 
 			if (isJoinClauseFound && !hasJoinSynonym) {
-				continue;
+				continue;  //Do not take other clauses that have no synonym to join on
 			}
 
 			if (hasJoinSynonym) {
@@ -517,7 +525,7 @@ namespace QueryOptimiser
 			double numberOfValues = synonymsCount[nameLHS];
 			double cost = calculateCost(qnode_type, numberOfValues);
 
-			if (cost < smallestCost) {
+			if (cost <= smallestCost) {
 				smallestCost = cost;
 				smallestIndex = i;
 				direction = LeftToRight;
@@ -527,7 +535,7 @@ namespace QueryOptimiser
 			numberOfValues = synonymsCount[nameRHS];
 			cost = calculateCost(qnode_type, numberOfValues);
 
-			if (cost < smallestCost) {
+			if (cost <= smallestCost) {
 				smallestCost = cost;
 				smallestIndex = i;
 				direction = RightToLeft;

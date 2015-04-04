@@ -14,6 +14,6 @@ namespace QueryEvaluator
 	vector<Synonym> processQueryTree(QueryTree* queryTree);
 
 	//Expose this function for use in the query optimiser
-	inline void resetValues(unordered_map<string, SYNONYM_TYPE> name_to_type_map);
+	void resetValues(unordered_map<string, SYNONYM_TYPE> name_to_type_map);
 	inline BOOLEAN_ processClausesNode(QNode* clausesNode);
 }

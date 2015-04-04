@@ -69,7 +69,7 @@ namespace QueryEvaluator
 	* Proxy to reset the ValuesHandler from the query optimiser
 	* @param name_to_type_map Maps from the synonym name to its type
 	*/
-	inline void resetValues(unordered_map<string, SYNONYM_TYPE> name_to_type_map)
+	void resetValues(unordered_map<string, SYNONYM_TYPE> name_to_type_map)
 	{
 		ValuesHandler::initialize(name_to_type_map);
 	}
@@ -744,13 +744,13 @@ namespace QueryEvaluator
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
 			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> callsPair = evaluateNextByLHS(LHS, RHS, isTrans);
-				LHS.setValues(callsPair.first);
-				RHS.setValues(callsPair.second);
+				pair<vector<int>, vector<int>> nextPair = evaluateNextByLHS(LHS, RHS, isTrans);
+				LHS.setValues(nextPair.first);
+				RHS.setValues(nextPair.second);
 			} else {
-				pair<vector<int>, vector<int>> callsPair = evaluateNextByRHS(LHS, RHS, isTrans);
-				LHS.setValues(callsPair.first);
-				RHS.setValues(callsPair.second);
+				pair<vector<int>, vector<int>> nextPair = evaluateNextByRHS(LHS, RHS, isTrans);
+				LHS.setValues(nextPair.first);
+				RHS.setValues(nextPair.second);
 			}
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
