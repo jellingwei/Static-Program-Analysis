@@ -463,6 +463,19 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Program, If)", 0, (int)pkb.contains(Program, If, false).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Program, If)", 1, (int)pkb.contains(Program, If, true).size());
 
+	//New Pattern Syntax
+	cout << "New Pattern Syntax" << endl;
+	vector<int> testing = pkb.patternMatchIfElse("b", Variable);
+	//vector<int> testing = pkb.patternMatchIf("a", Plus);
+	for(int i=0; i<testing.size(); i++) {
+		cout << "stmtNo " << testing.at(i) << endl;
+	}
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', Plus)", 9, pkb.patternMatchWhile("b", Plus).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', Plus)", 2, (int)pkb.patternMatchWhile("b", Plus).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', Plus, _)", 2, (int)pkb.patternMatchIfThen("b", Plus).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _, Variable)", 4, (int)pkb.patternMatchIfElse("b", Variable).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', Plus, Variable)", 36, pkb.patternMatchIf("b", Plus, Variable).front());
 
 	cout << "End TestPkb" << endl;
 }

@@ -144,7 +144,7 @@ vector<pair<TNode*, vector<TNode*>>> Contains::contains(TNODE_TYPE predecessorTy
 			}
 		}
 
-		case Variable: case Constant: {
+		case Variable: case Constant: case Call: {
 			break;
 		}
 
@@ -342,4 +342,30 @@ vector<TNode*> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, 
 		}
 	}
 	return LHS;
+}
+
+vector<int> Contains::checkForWhileThen(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+	vector<TNode*> test = checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
+
+	vector<int> result;
+	for(int i=0; i<test.size(); i++) {
+		//to avoid duplicate entry of stmtNo, remove this condition if not needed
+		if(find(result.begin(), result.end(), test.at(i)->getStmtNumber()) == result.end())  
+			result.push_back(test.at(i)->getStmtNumber());
+	}
+
+	return result;
+}
+
+vector<int> Contains::checkForIfThenElse(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+	vector<TNode*> test = checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
+
+	vector<int> result;
+	for(int i=0; i<test.size(); i++) {
+		//to avoid duplicate entry of stmtNo, remove this condition if not needed
+		if(find(result.begin(), result.end(), test.at(i)->getStmtNumber()) == result.end())  
+			result.push_back(test.at(i)->getStmtNumber());
+	}
+
+	return result;
 }

@@ -55,6 +55,11 @@ public:
 	vector<int> patternMatchIf(string LHS);
 	int getControlVariable(int stmtNum);
 
+	vector<int> PKB::patternMatchWhile(string LHS, TNODE_TYPE then);
+	vector<int> PKB::patternMatchIfThen(string LHS, TNODE_TYPE then);
+	vector<int> PKB::patternMatchIfElse(string LHS, TNODE_TYPE then);
+	vector<int> PKB::patternMatchIf(string LHS, TNODE_TYPE thenS, TNODE_TYPE elseS);
+
 	// VarTable methods
 	int insertVar(string varName, int stmtNum);
 	int getVarTableSize();

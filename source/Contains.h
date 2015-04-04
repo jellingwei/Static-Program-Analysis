@@ -26,5 +26,8 @@ public:
 	
 	vector<TNode*> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);*/
 
+	vector<int> checkForWhileThen(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
+	vector<int> checkForIfThenElse(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
+
 private:
 };

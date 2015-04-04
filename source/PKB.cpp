@@ -137,6 +137,12 @@ vector<int> PKB::patternMatchWhile(string LHS)
 	return ast->patternMatchWhile(LHS);
 }
 
+//@todo
+vector<int> PKB::patternMatchWhile(string LHS, TNODE_TYPE then) 
+{
+	return ast->patternMatchWhile(LHS, then);
+}
+
 /**
  * Pattern matching for if statements.
  * @param LHS  the name of the variable that acts as the control variable for the if statements we are interested in
@@ -145,6 +151,24 @@ vector<int> PKB::patternMatchWhile(string LHS)
 vector<int> PKB::patternMatchIf(string LHS) 
 {
 	return ast->patternMatchIf(LHS);
+}
+
+//@todo
+vector<int> PKB::patternMatchIfThen(string LHS, TNODE_TYPE then) 
+{
+	return ast->patternMatchIfThen(LHS, then);
+}
+
+//@todo
+vector<int> PKB::patternMatchIfElse(string LHS, TNODE_TYPE then) 
+{
+	return ast->patternMatchIfElse(LHS, then);
+}
+
+//@todo
+vector<int> PKB::patternMatchIf(string LHS, TNODE_TYPE thenS, TNODE_TYPE elseS) 
+{
+	return ast->patternMatchIf(LHS, thenS, elseS);
 }
 
 /**

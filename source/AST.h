@@ -29,6 +29,11 @@ class AST {
 		vector<int> patternMatchWhile(string LHS);
 		vector<int> patternMatchIf(string LHS);
 
+		vector<int> patternMatchWhile(string LHS, TNODE_TYPE then);
+		vector<int> patternMatchIfThen(string LHS, TNODE_TYPE thenS);
+		vector<int> patternMatchIfElse(string LHS, TNODE_TYPE thenS);
+		vector<int> patternMatchIf(string LHS, TNODE_TYPE thenS, TNODE_TYPE elseS);
+
 		int getControlVariable(int stmtNum);
 
 		int getDescendent(TNode* curr);
