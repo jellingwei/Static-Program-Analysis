@@ -1,0 +1,465 @@
+0001 - 
+stmt s; 
+Select s
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,41,42,43,44,45,5,6,7,8,9
+5000
+0002 - 
+variable v; 
+Select v
+a,b,c,d,e,f,k,x,y,z
+5000
+0003 -
+constant c; 
+Select c
+1,2,5
+5000
+0004 -  
+prog_line l;
+Select l
+1,10,11,12,13,14,15,16,17,18,19,2,20,21,22,23,24,25,26,27,28,29,3,30,31,32,33,34,35,36,37,38,39,4,40,41,42,43,44,45,5,6,7,8,9
+5000
+0005 - 
+procedure p; 
+Select p
+Five,Four,One,Six,Three,Two
+5000
+0006 - 
+assign a; 
+Select a
+1,10,11,12,14,15,17,18,19,20,22,25,26,28,3,30,31,32,33,34,36,38,39,4,40,42,43,44,45,6,7,8,9
+5000
+0007 - 
+while w; 
+Select w
+13,29,35,37
+5000
+0008 - 
+if i; 
+Select i
+21,27,41
+5000
+0009 -
+call c;
+Select c
+16,2,23,24,5
+5000
+1001 - Valid NextBip same proc
+prog_line l;
+Select BOOLEAN such that NextBip(3,4)
+TRUE
+5000
+1002 - Valid NextBip call to other proc
+prog_line l;
+Select BOOLEAN such that NextBip(5,7)
+TRUE
+5000
+1003 - Valid NextBip back from other proc
+prog_line l;
+Select BOOLEAN such that NextBip(11,6)
+TRUE
+5000
+1004 - Valid NextBip if to child of if
+prog_line l;
+Select BOOLEAN such that NextBip(21, 22)
+TRUE
+5000
+1005 - Valid NextBip if to child of else
+prog_line l;
+Select BOOLEAN such that NextBip(21, 24)
+TRUE
+5000
+1006 - Valid NextBip if to outside if
+prog_line l;
+Select BOOLEAN such that NextBip(29, 33)
+TRUE
+5000
+1007 - Valid NextBip else to outside if
+prog_line l;
+Select BOOLEAN such that NextBip(32, 33)
+TRUE
+5000
+1008 - Valid NextBip while to in while
+prog_line l;
+Select BOOLEAN such that NextBip(13,14)
+TRUE
+5000
+1009 - Valid NextBip while loop back
+prog_line l;
+Select BOOLEAN such that NextBip(25, 13)
+TRUE
+5000
+1010 - Valid NextBip while to after while
+prog_line l;
+Select BOOLEAN such that NextBip(29, 33)
+TRUE
+5000
+1011 - Valid NextBip all l2 that is after l1 
+prog_line l1,l2;
+Select l2 such that NextBip(l1,l2)
+2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+1012 - Valid NextBip all l1 that is before l2
+prog_line l1,l2;
+Select l1 such that NextBip(l1,l2) 
+1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+1013 - Valid NextBip redundant
+variable v;
+Select v such that NextBip(1,2)
+a,b,c,d,e,f,k,x,y,z
+5000
+1014 - Valid NextBip wildcard
+variable v;
+Select BOOLEAN such that NextBip(_,_)
+TRUE
+5000
+1015 - Valid NextBip wildcard
+prog_line l;
+Select l such that NextBip(l,_)
+1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+1016 - Valid NextBip wildcard
+prog_line l;
+Select l such that NextBip(_,l)
+2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+1017 - Valid NextBip assign
+assign a;
+Select a such that NextBip(a, 2)
+1
+5000
+1018 - Valid NextBip assign
+assign a;
+Select a such that NextBip(2, a)
+12
+5000
+1019 - Valid NextBip call
+call c;
+Select c such that NextBip(1,c)
+2
+5000
+1020 - Valid NextBip call
+call c;
+Select c such that NextBip(c,7)
+5
+5000
+1021 - Valid NextBip if
+if i;
+Select i such that NextBip(i,22)
+21
+5000
+1022 - Valid NextBip if
+if i;
+Select i such that NextBip(20,i)
+21
+5000
+1023 - Valid NextBip stmt
+stmt s;
+Select s such that NextBip(9,s)
+10
+5000
+1024 - Valid NextBip stmt
+stmt s;
+Select s such that NextBip(s,11)
+10
+5000
+1025 - Valid NextBip while
+while w;
+Select w such that NextBip(w,14)
+13
+500
+1026 - Valid NextBip while
+while w;
+Select w such that NextBip(12, w)
+13
+5000
+2001 - Invalid NextBip
+prog_line l;
+Select BOOLEAN such that NextBip(2,1)
+FALSE
+5000
+2002 - Invalid NextBip indirect
+prog_line l;
+Select BOOLEAN such that NextBip(14,16)
+FALSE
+5000
+2003 - Invalid NextBip cross proc skip call
+prog_line l;
+Select BOOLEAN such that NextBip(1,12)
+FALSE
+5000
+2004 - Invalid NextBip over if
+prog_line l;
+Select BOOLEAN such that NextBip(27,33)
+FALSE
+5000
+2005 - Invalid NextBip before first line
+prog_line l;
+Select l such that NextBip(l,1)
+none
+5000
+2006 - Invalid NextBip after last line
+prog_line l;
+Select l such that NextBip(6,l)
+none
+5000
+2007 - Invalid NextBip constant
+constant c; prog_line l;
+Select BOOLEAN such that NextBip(c,l)
+FALSE
+5000
+2008 - Invalid NextBip constant
+constant c; prog_line l;
+Select BOOLEAN such that NextBip(l,c)
+FALSE
+5000
+2009 - Invalid NextBip procedure
+procedure p; prog_line l;
+Select BOOLEAN such that NextBip(l,p)
+FALSE
+5000
+2010 - Invalid NextBip procedure
+procedure p; prog_line l;
+Select BOOLEAN such that NextBip(p,l)
+FALSE
+5000
+2011 - Invalid NextBip variable
+variable v; prog_line l;
+Select BOOLEAN such that NextBip(v,l)
+FALSE
+5000
+2012 - Invalid NextBip variable
+variable v; prog_line l;
+Select BOOLEAN such that NextBip(l,v)
+FALSE
+5000
+2013 - Invalid NextBip end of while skip while
+prog_line l;
+Select BOOLEAN such that NextBip(25,17)
+FALSE
+5000
+3001 - Valid NextBip* direct
+prog_line l;
+Select BOOLEAN such that NextBip*(7,8)
+TRUE
+5000
+3002 - Valid NextBip* indirect
+prog_line l;
+Select BOOLEAN such that NextBip*(7,11)
+TRUE
+5000
+3003 - Valid NextBip* indirect cross proc
+prog_line l;
+Select BOOLEAN such that NextBip*(1, 13)
+TRUE
+5000
+3004 - Valid NextBip* indirect cross call
+prog_line l;
+Select BOOLEAN such that NextBip*(4,6)
+TRUE
+5000
+3005 - Valid NextBip* outside while to in while
+prog_line l;
+Select BOOLEAN such that NextBip*(1, 14)
+TRUE
+5000
+3006 - Valid NextBip* loop while same line
+prog_line l;
+Select BOOLEAN such that NextBip*(14,14)
+TRUE
+5000
+3007 - Valid NextBip* while loop back
+prog_line l;
+Select BOOLEAN such that NextBip*(15,13)
+TRUE
+5000
+3008 - Valid NextBip* in while to outside while
+prog_line l;
+Select BOOLEAN such that NextBip*(14,17)
+TRUE
+5000
+3009 - Valid NextBip* jump over while
+prog_line l;
+Select BOOLEAN such that NextBip*(12,17)
+TRUE
+5000
+3010 - Valid NextBip* outside if to if
+prog_line l;
+Select BOOLEAN such that NextBip*(19, 23)
+TRUE
+5000
+3011 - Valid NextBip* outside if to else
+prog_line l;
+Select BOOLEAN such that NextBip*(26, 32)
+TRUE
+5000
+3012 - Valid NextBip* in if to outside if
+prog_line l;
+Select BOOLEAN such that NextBip*(28, 33)
+TRUE
+5000
+3013 - Valid NextBip* in else to outside if
+prog_line l;
+Select BOOLEAN such that NextBip*(31, 33)
+TRUE
+5000
+3014 - Valid NextBip* if to else with while loop
+prog_line l;
+Select BOOLEAN such that NextBip*(42,43)
+TRUE
+5000
+3015 - Valid NextBip* else to if with while loop
+prog_line l;
+Select BOOLEAN such that NextBip*(43,42)
+TRUE
+5000
+3016 - Valid NextBip* same stmt in proc called by while loop
+prog_line l;
+Select BOOLEAN such that NextBip*(19,19)
+TRUE
+5000
+3017 - Valid NextBip* while control stmt 
+prog_line l;
+Select BOOLEAN such that NextBip*(13,13)
+TRUE
+5000
+3018 - Valid NextBip* all lines from line 1
+prog_line l;
+Select l such that NextBip*(1,l)
+2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+3019 - Valid NextBip* all lines before last line 6
+prog_line l;
+Select l such that NextBip*(l,6)
+1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+3020 - Valid NextBip* redundant
+procedure p;
+Select p such that NextBip*(7,11)
+One,Two,Three,Four,Five,Six
+5000
+3021 - Valid NextBip* wildcard
+prog_line l;
+Select BOOLEAN such that NextBip*(_,_)
+TRUE
+5000
+3022 - Valid NextBip* wildcard
+prog_line l;
+Select l such that NextBip*(l,_)
+1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+3023 - Valid NextBip* wildcard
+prog_line l;
+Select l such that NextBip*(_,l)
+2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+3024 - Valid NextBip* assign 
+assign a;
+Select a such that NextBip*(1,a)
+10,11,12,14,15,17,18,19,20,22,25,26,28,3,30,31,32,33,34,36,38,39,4,40,42,43,44,45,6,7,8,9
+5000
+3025 - Valid NextBip* assign
+assign a;
+Select a such that NextBip*(a,6)
+1,10,11,12,14,15,17,18,19,20,22,25,26,28,3,30,31,32,33,34,36,38,39,4,40,42,43,44,45,7,8,9
+5000
+3026 - Valid NextBip* call
+call c;
+Select c such that NextBip*(1,c)
+16,2,23,24,5
+5000
+3027 - Valid NextBip* call
+call c;
+Select c such that NextBip*(c, 6)
+16,2,23,24,5
+5000
+3028 - Valid NextBip* if 
+if i;
+Select i such that NextBip*(1,i)
+21,27,41
+5000
+3029 - Valid NextBip* if 
+if i;
+Select i such that NextBip*(i,6)
+21,27,41
+5000
+3030 - Valid NextBip* stmt
+stmt s;
+Select s such that NextBip*(1,s)
+2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+3031 - Valid NextBip* stmt
+stmt s;
+Select s such that NextBip*(s,6)
+1,2,3,4,5,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45
+5000
+3032 - Valid NextBip* while
+while w;
+Select w such that NextBip*(1,w)
+13,29,35,37
+5000
+3033 - Valid NextBip* while
+while w;
+Select w such that NextBip*(w,6)
+13,29,35,37
+5000
+4001 - Invalid NextBip* backwards no loop
+prog_line l;
+Select BOOLEAN such that NextBip*(3, 1)
+FALSE
+5000
+4002 - Invalid NextBip* before first line
+prog_line l;
+Select BOOLEAN such that NextBip*(l,1)
+FALSE
+5000
+4003 - Invalid NextBip* after last line
+prog_line l;
+Select BOOLEAN such that NextBip*(6,l)
+FALSE
+5000
+4004 - Invalid NextBip* no path
+prog_line l;
+Select BOOLEAN such that NextBip*(4, 12)
+FALSE
+5000
+4005 - Invalid NextBip* same line no loop
+prog_line l;
+Select BOOLEAN such that NextBip*(11,11)
+FALSE
+5000
+4006 - Invalid NextBip* constant
+prog_line l;
+Select l such that NextBip*(l,c)
+none
+5000
+4007 - Invalid NextBip* constant
+prog_line l;
+Select l such that NextBip*(c,l)
+none
+5000
+4008 - Invalid NextBip* variable
+variable v;
+Select l such that NextBip*(v,l)
+none
+5000
+4009 - Invalid NextBip* variable
+variable v;
+Select l such that NextBip*(l,v)
+none
+5000
+4010 - Invalid NextBip* procedure
+procedure p;
+Select l such that NextBip*(l,p)
+none
+5000
+4011 - Invalid NextBip* procedure
+procedure p;
+Select l such that NextBip*(p,l)
+none
+5000
+4012 - Invalid NextBip* redundant
+prog_line l;
+Select BOOLEAN such that NextBip*(7,12)
+FALSE
+5000

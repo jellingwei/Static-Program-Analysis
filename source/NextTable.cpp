@@ -115,8 +115,8 @@ PROGLINE_LIST NextTable::getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE trans
 					updateStateOfBfs(visited, nodeToExpand, frontier, result);	
 
 					if (nodeToExpand->getNodeType() == EndIf_C) {
-						prevNodeAfterEndIf = node->getBefore()->at(0);
-						prevNodeAfterEndIf2 = node->getBefore()->at(1);
+						prevNodeAfterEndIf = nodeToExpand->getBefore()->at(0);
+						prevNodeAfterEndIf2 = nodeToExpand->getBefore()->at(1);
 
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf);
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf2);

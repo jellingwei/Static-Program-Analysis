@@ -201,7 +201,7 @@ PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_C
 	while (!frontier.empty()) {
 		node = frontier.top().first;
 		variablesToMatch = frontier.top().second;
-		visited.insert(frontier.top());
+		//visited.insert(frontier.top());
 
 		frontier.pop();
 
@@ -270,9 +270,10 @@ PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_C
 					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
 
 					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
-					bool isNodeVisitedBefore = isVisitedBefore(variableTested, skipToNode,  nodePair, visited, variablesToMatch);
-					if (skipToNode && !isNodeVisitedBefore ) {
+					
+					if (skipToNode ) {
 						frontier.push(nodePair);
+						
 					}
 				}		
 			}
@@ -283,16 +284,20 @@ PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_C
 		CNode* nextNode = getMandatoryNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(nextNode, variablesToMatch);
 		
-		if (nextNode && visited.count(nodePair) == 0 ) {
+
+		if (nextNode ) {
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(nextNode, variablesToMatch));
+
+			
 		}
 
 		CNode* possibleNode = getInsideNextNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
 		
-		isNodeVisitedBefore = isVisitedBefore(variableTested, possibleNode,  nodePair, visited, variablesToMatch); 
-		if (possibleNode && !isNodeVisitedBefore) {
+		
+		if (possibleNode ) {
 			frontier.push(make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch));
+			
 		}
 	}
 
@@ -335,7 +340,7 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 	while (!frontier.empty()) {
 		node = frontier.top().first;
 		variablesToMatch = frontier.top().second;	
-		visited.insert(frontier.top());
+		//visited.insert(frontier.top());
 		frontier.pop();
 
 		bool isNodeVisitedBefore = isVisitedBefore(variableTested, node,  pair<CNode*, boost::dynamic_bitset<> >(node,variablesToMatch), 
@@ -401,8 +406,8 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
 
 					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
-					bool isNodeVisitedBefore = isVisitedBefore(variableTested, skipToNode,  nodePair, visited, variablesToMatch);
-					if (skipToNode && !isNodeVisitedBefore ) {
+					
+					if (skipToNode ) {
 						frontier.push(nodePair);
 					}
 				}		
@@ -414,8 +419,8 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 		CNode* prevNode = getMandatoryPrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(prevNode, variablesToMatch);
 
-		isNodeVisitedBefore = isVisitedBefore(variableTested, prevNode,  nodePair, visited, variablesToMatch);
-		if (prevNode && !isNodeVisitedBefore ) {
+		
+		if (prevNode  ) {
 			frontier.push(nodePair);
 
 		}
@@ -423,8 +428,8 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 		CNode* possibleNode = getInsidePrevNode(node, pkb.cfgTable.at(0), variablesToMatch);
 		nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(possibleNode, variablesToMatch);
 
-		isNodeVisitedBefore = isVisitedBefore(variableTested, possibleNode,  nodePair, visited, variablesToMatch);
-		if (possibleNode && !isNodeVisitedBefore) {
+
+		if (possibleNode ) {
 			frontier.push(nodePair);
 		}
 		
