@@ -248,9 +248,10 @@ namespace QueryOptimiser
 	{
 		QNode* resultNode = qTreeRoot->getResultNode();
 		QNode* clausesNode = qTreeRoot->getClausesNode();
+		populateSelectSynonyms(resultNode);
 		unordered_map<string, int> name_index_map = indexSynonymsReferenced(resultNode, clausesNode);
 		vector<vector<int>> adjacencyMatrix = createSynonymGraph(clausesNode, name_index_map);
-		set<int> synonymIndexReachable = scanSynonymsReachable(adjacencyMatrix);
+		//set<int> synonymIndexReachable = scanSynonymsReachable(adjacencyMatrix);
 
 		clausesNode = scanAndReplaceRedundantItems(clausesNode, adjacencyMatrix, name_index_map);
 		qTreeRoot->setResultNode(resultNode);
@@ -299,7 +300,7 @@ namespace QueryOptimiser
 			string nameLHS = LHS.getName();
 			string nameRHS = RHS.getName();
 
-			if (LHS.isSynonym()) {
+			if (LHS.isSynonym() && !isSelectSynonym(nameLHS)) {
 				if (synonymOccurrence.count(nameLHS) == 0) {
 					//Count the number of occurrences this synonym appears in the clause
 					int index = name_index_map[nameLHS];
@@ -320,7 +321,7 @@ namespace QueryOptimiser
 				}
 			}
 
-			if (RHS.isSynonym()) {
+			if (RHS.isSynonym() && !isSelectSynonym(nameRHS)) {
 				if (synonymOccurrence.count(nameRHS) == 0) {
 					//Count the number of occurrences this synonym appears in the clause
 					int index = name_index_map[nameRHS];
@@ -696,6 +697,7 @@ namespace QueryOptimiser
 		vector<QNode*> resultSynonyms;
 		QNode* resultChildNode = resultNode->getChild();
 		int numberOfSynonyms = resultNode->getNumberOfChildren();
+		selectSynonyms.clear();
 
 		//Populate the select synonyms map
 		for (int i = 0; i < numberOfSynonyms; i++) {
@@ -848,6 +850,7 @@ namespace QueryOptimiser
 
 			if (typeLHS != STRING_CHAR && typeLHS != STRING_INT && typeLHS != STRING_PATTERNS && typeLHS != UNDEFINED) {
 				indexLHS = name_index_map[LHS.getName()];
+				adjacencyMatrix[indexLHS][indexLHS]++;
 			} else {
 				childNode = clausesNode->getNextChild();
 				continue;
@@ -855,12 +858,13 @@ namespace QueryOptimiser
 
 			if (typeRHS != STRING_CHAR && typeRHS != STRING_INT && typeRHS != STRING_PATTERNS && typeRHS != UNDEFINED) {
 				indexRHS = name_index_map[RHS.getName()];
+				adjacencyMatrix[indexRHS][indexRHS]++;
 			} else {
 				childNode = clausesNode->getNextChild();
 				continue;
 			}
-			adjacencyMatrix[indexLHS][indexRHS] = 1;
-			adjacencyMatrix[indexRHS][indexLHS] = 1;
+			adjacencyMatrix[indexLHS][indexRHS]++;
+			adjacencyMatrix[indexRHS][indexLHS]++;
 			childNode = clausesNode->getNextChild();
 		}
 		return adjacencyMatrix;
@@ -890,7 +894,7 @@ namespace QueryOptimiser
 				visited[synonymIndex] = true;
 
 				for (int i = 0; i < numberOfSynonyms; i++) {
-					if (adjacencyMatrix[synonymIndex][i] == 1 && visited[i] == false) {
+					if (adjacencyMatrix[synonymIndex][i] >= 1 && visited[i] == false) {
 						dfsStack.push(i);
 					}
 				}

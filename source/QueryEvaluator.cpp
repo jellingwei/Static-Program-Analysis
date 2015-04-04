@@ -943,12 +943,10 @@ namespace QueryEvaluator
 
 			arg0.setValues(isMatchStmts);
 			LHS.setValues(vars);
-			ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
-			return true;
+			return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
 		} else if (typeLHS == UNDEFINED) {
 			arg0.setValues(isMatchStmts);
-			ValuesHandler::addAndProcessIntermediateSynonym(arg0);
-			return true;
+			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 		} else {
 			//LHS is a constant
 			string nameLHS = LHS.getName();
