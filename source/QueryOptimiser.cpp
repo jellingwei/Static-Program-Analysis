@@ -285,7 +285,7 @@ namespace QueryOptimiser
 			bool hasJoinSynonym = (isContainedInMain(nameLHS) || isContainedInMain(nameRHS));
 
 			if (isJoinClauseFound && !hasJoinSynonym) {
-				continue;
+				continue;  //Do not take other clauses that have no synonym to join on
 			}
 
 			if (hasJoinSynonym) {
@@ -296,7 +296,7 @@ namespace QueryOptimiser
 			double numberOfValues = synonymsCount[nameLHS];
 			double cost = calculateCost(qnode_type, numberOfValues);
 
-			if (cost < smallestCost) {
+			if (cost <= smallestCost) {
 				smallestCost = cost;
 				smallestIndex = i;
 				direction = LeftToRight;
@@ -306,7 +306,7 @@ namespace QueryOptimiser
 			numberOfValues = synonymsCount[nameRHS];
 			cost = calculateCost(qnode_type, numberOfValues);
 
-			if (cost < smallestCost) {
+			if (cost <= smallestCost) {
 				smallestCost = cost;
 				smallestIndex = i;
 				direction = RightToLeft;
