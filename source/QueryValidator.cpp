@@ -172,15 +172,16 @@ void QueryValidator::initTable()
 	patternsArg1Map.insert(make_pair(WHILE, list12));
 	patternsArg1Map.insert(make_pair(IF, list12));
 
-	vector<SYNONYM_TYPE> list14; // temporary no restrictions on patterns if and while arg2 and arg3
-	patternsArg2Map.insert(make_pair(IF, list14)); 
-	patternsArg2Map.insert(make_pair(WHILE, list14)); 
-	patternsArg3Map.insert(make_pair(IF, list14));
+	SYNONYM_TYPE list13array[] = {STMTLST, UNDEFINED};
+	vector<SYNONYM_TYPE> list13; list13.insert(list13.begin(), list13array, list13array + 2);
+	patternsArg2Map.insert(make_pair(IF, list13)); 
+	patternsArg2Map.insert(make_pair(WHILE, list13)); 
+	patternsArg3Map.insert(make_pair(IF, list13));
 
-	vector<SYNONYM_TYPE> list13; 
-	patternsArg2Map.insert(make_pair(ASSIGN, list13)); //empty vector means no restrictions on arg2 of pattern assign.
-	patternsArg3Map.insert(make_pair(ASSIGN, list13));
-	patternsArg3Map.insert(make_pair(WHILE, list13));
+	vector<SYNONYM_TYPE> list14; 
+	patternsArg2Map.insert(make_pair(ASSIGN, list14)); //empty vector means no restrictions on arg2 of pattern assign.
+	patternsArg3Map.insert(make_pair(ASSIGN, list14));
+	patternsArg3Map.insert(make_pair(WHILE, list14));
 
 
 	/* init withAttrRefMap */
