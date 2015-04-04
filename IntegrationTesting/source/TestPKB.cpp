@@ -398,6 +398,17 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next rhs", 34, (int)pkb.getNextRhs().size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, _)", true, pkb.isNextValid());
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(26, _) is valid", true, pkb.isNextLhsValid(26));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(27, _) is valid", true, pkb.isNextLhsValid(27));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(17, _) is valid", false, pkb.isNextLhsValid(17));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(16, _) is valid", false, pkb.isNextLhsValid(16));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(30, _) is valid", false, pkb.isNextLhsValid(30));
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 18) is valid", false, pkb.isNextRhsValid(18));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 25) is valid", true, pkb.isNextRhsValid(25));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 12) is valid", true, pkb.isNextRhsValid(12));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Next(_, 9) is valid", true, pkb.isNextRhsValid(9));
 
 	// Affects... 
 	cout << "Affects" << endl;
@@ -439,6 +450,18 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(22, 24)", false, pkb.isAffects(22, 24));
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, _)", true, pkb.isAffectsValid());
 
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(31, _) is valid", true, pkb.isAffectsLhsValid(31));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(37, _) is valid", true, pkb.isAffectsLhsValid(37));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(38, _) is valid", false, pkb.isAffectsLhsValid(38));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(29, _) is valid", true, pkb.isAffectsLhsValid(29));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(3,_) is valid", false, pkb.isAffectsLhsValid(3));
+	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 19) is valid", false, pkb.isAffectsRhsValid(19));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 24) is valid", false, pkb.isAffectsRhsValid(24));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects(_, 31) is valid", false, pkb.isAffectsRhsValid(31));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(_, 27) is valid", false, pkb.isAffectsRhsValid(27));
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Affects*(_,6) is valid", true, pkb.isAffectsRhsValid(6));
 
 	// NextBip
 	cout << "NextBip" << endl;
