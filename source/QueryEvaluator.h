@@ -15,5 +15,5 @@ namespace QueryEvaluator
 
 	//Expose this function for use in the query optimiser
 	inline void resetValues(unordered_map<string, SYNONYM_TYPE> name_to_type_map);
-	inline bool processClause(QNode* clauseNode);
+	inline BOOLEAN_ processClausesNode(QNode* clausesNode);
 }

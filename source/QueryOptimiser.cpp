@@ -49,9 +49,9 @@ namespace QueryOptimiser
 	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode);
 	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS);
 
-	QueryTree* removeReduantSynonyms(QueryTree* qTreeRoot);
-	void scanAndReplaceRedudantSynonyms(QNode* &clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
-	void replaceRedundantSynonyms(QNode* &clausesNode, string name);
+	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot);
+	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
+	void replaceRedundantSynonymInClauses(QNode* &clausesNode, string name);
 	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
@@ -70,13 +70,12 @@ namespace QueryOptimiser
 	inline bool isSelectSynonym(string wantedName);
 	void reduceSynonymsCount(string name, double reductionFactor);
 
-	QNode* createResultSubtree(vector<QNode*> resultClauses);
+	QNode* createSubtree(QNODE_TYPE type, vector<QNode*> clausesVector);
 	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2);
 	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS);
 	unordered_map<string, int> indexSynonymsReferenced(QNode* resultNode, QNode* clausesNode);
-	void createSynonymGraph(QNode* clausesNode, vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map);
-	/*void createSynonymReference(QNode* resultNode, QNode* clausesNode, 
-	vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map);*/
+	vector<vector<int>> createSynonymGraph(QNode* clausesNode, unordered_map<string, int> name_index_map);
+	set<int> scanSynonymsReachable(vector<vector<int>> adjacencyMatrix);
 
 	/**
 	* Method that is public to optimise the query tree
@@ -114,7 +113,7 @@ namespace QueryOptimiser
 	QueryTree* flattenQuery(QueryTree* qTreeRoot)
 	{
 		qTreeRoot = rewriteWithClauses(qTreeRoot);
-		qTreeRoot = removeReduantSynonyms(qTreeRoot);
+		qTreeRoot = removeReduantClausesAndSynonyms(qTreeRoot);
 		return qTreeRoot;
 	}
 
@@ -153,7 +152,7 @@ namespace QueryOptimiser
 				finalWithClauses.push_back(singleWithClause);
 			}
 		}
-		QNode* resultSubtree = createResultSubtree(resultClauses);
+		QNode* resultSubtree = createSubtree(RESULT, resultClauses);
 		QNode* clausesSubtree = combineClausesVectors(clauses, finalWithClauses);
 		qTreeRoot->setResultNode(resultSubtree);
 		qTreeRoot->setClausesNode(clausesSubtree);
@@ -179,31 +178,106 @@ namespace QueryOptimiser
 		return make_pair(clauses, withClauses);
 	}
 
-	QueryTree* removeReduantSynonyms(QueryTree* qTreeRoot)
+	pair<vector<QNode*>, vector<QNode*>> splitRedundantClauses(QNode* clausesNode, set<int> synonymsReachable, unordered_map<string, int> name_index_map)
+	{
+		vector<QNode*> redundantVector;
+		vector<QNode*> clausesVector;
+		int numberOfClauses = clausesNode->getNumberOfChildren();
+		QNode* childNode = clausesNode->getChild();
+
+		for (int i = 0; i < numberOfClauses; i++) {
+			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
+			Synonym LHS = synonymPair.first;
+			Synonym RHS = synonymPair.second;
+			string nameLHS = LHS.getName();
+			string nameRHS = RHS.getName();
+			int indexLHS = -1;
+			int indexRHS = -1;
+
+			if (name_index_map.count(nameLHS) == 1) {
+				//This synonym is referenced in the query
+				indexLHS = name_index_map[nameLHS];
+				if (synonymsReachable.count(indexLHS) == 0) {
+					//todo: assert that RHS is also not reachable
+					//Since LHS is not reachable, RHS must also not be reachable
+					//This clause might be redundant
+					redundantVector.push_back(childNode);
+					childNode = clausesNode->getNextChild();
+					continue;
+				} else {
+					//LHS is reachable
+					clausesVector.push_back(childNode);
+					childNode = clausesNode->getNextChild();
+					continue;
+				}
+			} else {
+				//LHS is a constant
+				//Do nothing and check the RHS
+			}
+
+			if (name_index_map.count(nameRHS) == 1) {
+				//This synonym is referenced in the query
+				indexRHS = name_index_map[nameRHS];
+				if (synonymsReachable.count(indexRHS) == 0) {
+					//todo: assert that RHS is also not reachable
+					//Since RHS is not reachable, LHS must also not be reachable
+					//This clause might be redundant
+					redundantVector.push_back(childNode);
+					childNode = clausesNode->getNextChild();
+					continue;
+				} else {
+					//RHS is reachable
+					clausesVector.push_back(childNode);
+					childNode = clausesNode->getNextChild();
+					continue;
+				}
+			} else {
+				//LHS and RHS are constants
+				//They are possibly redundant
+				//Push to redundant vector
+				redundantVector.push_back(childNode);
+				childNode = clausesNode->getNextChild();
+				continue;
+			}
+		}
+		return make_pair(clausesVector, redundantVector);
+	}
+
+	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot)
 	{
 		QNode* resultNode = qTreeRoot->getResultNode();
 		QNode* clausesNode = qTreeRoot->getClausesNode();
 		unordered_map<string, int> name_index_map = indexSynonymsReferenced(resultNode, clausesNode);
-		unsigned int numberOfSynonyms = name_index_map.size();
-		vector<vector<int>> adjacencyMatrix;
+		vector<vector<int>> adjacencyMatrix = createSynonymGraph(clausesNode, name_index_map);
+		set<int> synonymIndexReachable = scanSynonymsReachable(adjacencyMatrix);
 
-		//Resize the 2 dimensional vector
-		adjacencyMatrix.resize(numberOfSynonyms);
-		for (unsigned int i = 0; i < numberOfSynonyms; i++) {
-			adjacencyMatrix[i].resize(numberOfSynonyms, 0);
-		}
-
-		//createSynonymReference(resultNode, clausesNode, adjacencyMatrix, name_index_map);
-		createSynonymGraph(clausesNode, adjacencyMatrix, name_index_map);
-		scanAndReplaceRedudantSynonyms(clausesNode, adjacencyMatrix, name_index_map);
+		clausesNode = scanAndReplaceRedundantItems(clausesNode, adjacencyMatrix, name_index_map);
 		qTreeRoot->setResultNode(resultNode);
 		qTreeRoot->setClausesNode(clausesNode);
 		return qTreeRoot;
 	}
 
-	void scanAndReplaceRedudantSynonyms(QNode* &clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
+	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
-		for (auto itr = name_index_map.begin(); itr != name_index_map.end(); ++itr) {
+		QueryEvaluator::resetValues(synonymNameToTypeMap);
+		set<int> synonymsReachable = scanSynonymsReachable(adjacencyMatrix);
+		pair<vector<QNode*>, vector<QNode*>> clausesPair = splitRedundantClauses(clausesNode, synonymsReachable, name_index_map);
+		vector<QNode*> clausesVector = clausesPair.first;
+		vector<QNode*> redundantVector = clausesPair.second;  //A vector of potentially redundant clauses
+
+		scanAndRemoveRedundantSynonyms(redundantVector, adjacencyMatrix, name_index_map);
+		QNode* redundantClauses = createSubtree(CLAUSES, redundantVector);
+		redundantClauses = optimiseClausesNode(redundantClauses);
+		bool isRedundantClausesValid = QueryEvaluator::processClausesNode(redundantClauses);
+
+		if (!isRedundantClausesValid) {
+			throw exception();
+		} else {
+			scanAndRemoveRedundantSynonyms(clausesVector, adjacencyMatrix, name_index_map);
+			return createSubtree(CLAUSES, clausesVector);
+		}
+
+		/*for (auto itr = name_index_map.begin(); itr != name_index_map.end(); ++itr) {
 			string name = itr->first;
 			int index = itr->second;
 			int count = 0;
@@ -213,34 +287,33 @@ namespace QueryOptimiser
 
 			if (count == 0 || count == 1) {
 				if (isSelectSynonym(name)) {
-					continue;
+					continue;  //Cannot replace a synonym that is being selected
 				} else {
-					//Since this synonym can be replaced, attempt to replace it
-					replaceRedundantSynonyms(clausesNode, name);
+					//Since this synonym can be replaced, attempt to replace it in the clauses
+					replaceRedundantSynonymInClauses(clausesNode, name);
 				}
 			}
-		}
+		}*/
+		throw exception();
 	}
 
-	void replaceRedundantSynonyms(QNode* &clausesNode, string name)
+	void scanAndRemoveRedundantSynonyms(vector<QNode*> clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
 		Synonym undefined(UNDEFINED, "_");
+		unordered_map<string, int> synonymOccurrence;
 
-		int numberOfClauses = clausesNode->getNumberOfChildren();
-		QNode* childNode = clausesNode->getChild();
-
-		for (int i = 0; i < numberOfClauses; i++) {
-			QNODE_TYPE query_type = childNode->getNodeType();
+		for (unsigned int i = 0; i < clauses.size(); i++) {
+			QNode* clause = clauses[i];
+			QNODE_TYPE query_type = clause->getNodeType();
 			SYNONYM_TYPE type = synonymNameToTypeMap[name];
 			Synonym redundant(type, name);
 
-			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
+			pair<Synonym, Synonym> synonymPair = getClauseArguments(clause);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
 
 			if (query_type == With || query_type == Pattern || query_type == Parent || 
 				query_type == ParentT || query_type == Follows || query_type == FollowsT) {
-				childNode = clausesNode->getNextChild();
 				continue;
 			}
 
@@ -256,8 +329,7 @@ namespace QueryOptimiser
 				RHS = undefined;
 			}
 
-			setClauseArguments(childNode, LHS, RHS);
-			childNode = clausesNode->getNextChild();
+			setClauseArguments(clause, LHS, RHS);
 		}
 	}
 
@@ -693,8 +765,9 @@ namespace QueryOptimiser
 
 	unordered_map<string, int> indexSynonymsReferenced(QNode* resultNode, QNode* clausesNode)
 	{
-		int index = 0;
-		unordered_map<string, int> name_index_map;
+		unordered_map<string, int> name_index_map = selectSynonyms;
+		int index = selectSynonyms.size();
+		/*
 		int numberOfClauses = resultNode->getNumberOfChildren();
 		QNode* childNode = resultNode->getChild();
 
@@ -710,10 +783,10 @@ namespace QueryOptimiser
 				}
 				childNode = resultNode->getNextChild();
 			}
-		}
+		}*/
 
-		numberOfClauses = clausesNode->getNumberOfChildren();
-		childNode = clausesNode->getChild();
+		int numberOfClauses = clausesNode->getNumberOfChildren();
+		QNode* childNode = clausesNode->getChild();
 
 		for (int i = 0; i < numberOfClauses; i++) {
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
@@ -742,11 +815,17 @@ namespace QueryOptimiser
 		return name_index_map;
 	}
 
-	/*void createSynonymReference(QNode* resultNode, QNode* clausesNode, 
-	vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map)*/
-
-	void createSynonymGraph(QNode* clausesNode, vector<vector<int>> &adjacencyMatrix, unordered_map<string, int> name_index_map)
+	vector<vector<int>> createSynonymGraph(QNode* clausesNode, unordered_map<string, int> name_index_map)
 	{
+		//todo: need to mark itself inside the graph?
+		vector<vector<int>> adjacencyMatrix;
+		int numberOfSynonyms = name_index_map.size();
+
+		adjacencyMatrix.resize(numberOfSynonyms);
+		for (int i = 0; i < numberOfSynonyms; i++) {
+			adjacencyMatrix[i].resize(numberOfSynonyms, 0);
+		}
+
 		int numberOfClauses = clausesNode->getNumberOfChildren();
 		QNode* childNode = clausesNode->getChild();
 
@@ -776,14 +855,49 @@ namespace QueryOptimiser
 			adjacencyMatrix[indexRHS][indexLHS] = 1;
 			childNode = clausesNode->getNextChild();
 		}
+		return adjacencyMatrix;
 	}
 
-	QNode* createResultSubtree(vector<QNode*> resultClauses)
+	set<int> scanSynonymsReachable(vector<vector<int>> adjacencyMatrix)
+	{
+		int numberOfSynonyms = adjacencyMatrix.size();
+		set<int> synonymsReachable;
+
+		for (auto itr = selectSynonyms.begin(); itr != selectSynonyms.end(); ++itr) {
+			string name = itr->first;
+			int index = selectSynonyms[name];
+
+			bool* visited = new bool[numberOfSynonyms];
+			for (int i = 0; i < numberOfSynonyms; i++) {
+				visited[i] = false;
+			}
+
+			stack<int> dfsStack;
+			dfsStack.push(index);
+
+			while (!dfsStack.empty()) {
+				int synonymIndex = dfsStack.top();
+				dfsStack.pop();
+				synonymsReachable.insert(synonymIndex);
+				visited[synonymIndex] = true;
+
+				for (int i = 0; i < numberOfSynonyms; i++) {
+					if (adjacencyMatrix[synonymIndex][i] == 1 && visited[i] == false) {
+						dfsStack.push(i);
+					}
+				}
+			}
+			delete visited;
+		}
+		return synonymsReachable;
+	}
+
+	QNode* createSubtree(QNODE_TYPE type, vector<QNode*> clausesVector)
 	{
 		Synonym empty;
-		QNode* clausesNode = new QNode(RESULT, empty, empty, empty);
-		for (unsigned int i = 0; i < resultClauses.size(); i++) {
-			QNode* clause = resultClauses[i];
+		QNode* clausesNode = new QNode(type, empty, empty, empty, empty);
+		for (unsigned int i = 0; i < clausesVector.size(); i++) {
+			QNode* clause = clausesVector[i];
 			clausesNode->setChild(clause);
 			clause->setParent(clausesNode);
 		}

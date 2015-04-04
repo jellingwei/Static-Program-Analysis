@@ -23,7 +23,6 @@ namespace QueryEvaluator
 {
 	//Private functions to evaluate the query tree
 	SYNONYM_LIST processResultNode(QNode* resultNode, BOOLEAN_ isValid);
-	inline BOOLEAN_ processClausesNode(QNode* clausesNode);
 	inline BOOLEAN_ processClause(QNode* clauseNode);
 
 	//Functions to process clauses
