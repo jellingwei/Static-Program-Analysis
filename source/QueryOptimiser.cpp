@@ -527,8 +527,23 @@ namespace QueryOptimiser
 				continue;  //Do not take other clauses that have no synonym to join on
 			}
 
-			if (hasJoinSynonym) {
+			if (hasJoinSynonym && !isJoinClauseFound) {
 				isJoinClauseFound = true;
+				double numberOfValues = synonymsCount[nameLHS];
+				double costLHS = calculateCost(qnode_type, numberOfValues);
+				numberOfValues = synonymsCount[nameRHS];
+				double costRHS = calculateCost(qnode_type, numberOfValues);
+				
+				if (costLHS <= costRHS) {
+					smallestCost = costLHS;
+					smallestIndex = i;
+					direction = LeftToRight;
+				} else {
+					smallestCost = costRHS;
+					smallestIndex = i;
+					direction = RightToLeft;
+				}
+				continue;
 			}
 
 			//Check left to right direction
@@ -711,7 +726,8 @@ namespace QueryOptimiser
 		//Populate the select synonyms map
 		for (int i = 0; i < numberOfSynonyms; i++) {
 			Synonym wantedSynonym = resultChildNode->getArg1();
-			if (wantedSynonym.getType() != BOOLEAN) {
+			string name = wantedSynonym.getName();
+			if (wantedSynonym.getType() != BOOLEAN && selectSynonyms.count(name) == 0) {
 				selectSynonyms[wantedSynonym.getName()] = i;
 			}
 			resultSynonyms.push_back(resultChildNode);
@@ -856,26 +872,19 @@ namespace QueryOptimiser
 			SYNONYM_TYPE typeRHS = RHS.getType();
 			int indexLHS;
 			int indexRHS;
-
-			if (typeLHS != STRING_CHAR && typeLHS != STRING_INT && typeLHS != STRING_PATTERNS && typeLHS != UNDEFINED) {
+			
+			if (LHS.isSynonym() && RHS.isSynonym()) {
+				indexLHS = name_index_map[LHS.getName()];
+				indexRHS = name_index_map[RHS.getName()];
+				adjacencyMatrix[indexLHS][indexRHS]++;
+				adjacencyMatrix[indexRHS][indexLHS]++;
+			} else if (LHS.isSynonym()) {
 				indexLHS = name_index_map[LHS.getName()];
 				adjacencyMatrix[indexLHS][indexLHS]++;
-			} else {
-				childNode = clausesNode->getNextChild();
-				continue;
-			}
-
-			if (typeRHS != STRING_CHAR && typeRHS != STRING_INT && typeRHS != STRING_PATTERNS && typeRHS != UNDEFINED) {
+			} else if (RHS.isSynonym()) {
 				indexRHS = name_index_map[RHS.getName()];
 				adjacencyMatrix[indexRHS][indexRHS]++;
-			} else {
-				childNode = clausesNode->getNextChild();
-				continue;
 			}
-			adjacencyMatrix[indexLHS][indexLHS]--;
-			adjacencyMatrix[indexRHS][indexRHS]--;
-			adjacencyMatrix[indexLHS][indexRHS]++;
-			adjacencyMatrix[indexRHS][indexLHS]++;
 			childNode = clausesNode->getNextChild();
 		}
 		return adjacencyMatrix;
