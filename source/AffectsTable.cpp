@@ -630,6 +630,10 @@ BOOLEAN_ AffectsTable::isValid() {
 }
 
 BOOLEAN_ AffectsTable::isLhsValid(PROG_LINE_ lhs) {
+	if (PKB::getInstance().cfgNodeTable.count(lhs) == 0) {
+		return false;
+	}
+
 	bool transClosure = false; 
 	bool earlyTermination = true;
 	vector<int> ans = getProgLinesAffectedBy(lhs, transClosure, earlyTermination); // no transitive closure, early termination
@@ -638,6 +642,9 @@ BOOLEAN_ AffectsTable::isLhsValid(PROG_LINE_ lhs) {
 }
 
 BOOLEAN_ AffectsTable::isRhsValid(PROG_LINE_ rhs) {
+	if (PKB::getInstance().cfgNodeTable.count(rhs) == 0) {
+		return false;
+	}
 	bool transClosure = false; 
 	bool earlyTermination = true;
 	vector<int> ans = getProgLinesAffecting(rhs, transClosure, earlyTermination); // no transitive closure, early termination

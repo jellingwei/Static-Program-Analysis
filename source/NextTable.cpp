@@ -323,6 +323,9 @@ BOOLEAN_ NextTable::isValid() {
 
 BOOLEAN_ NextTable::isLhsValid(PROG_LINE_ lhs) {
 	PKB pkb = PKB::getInstance();
+	if (pkb.cfgNodeTable.count(lhs) == 0) {
+		return false;
+	}
 	CNode* node = pkb.cfgNodeTable.at(lhs);
 
 	if (node->getNodeType() == While_C || node->getNodeType() == If_C) {
@@ -344,6 +347,10 @@ BOOLEAN_ NextTable::isLhsValid(PROG_LINE_ lhs) {
 
 BOOLEAN_ NextTable::isRhsValid(PROG_LINE_ rhs) {
 	PKB pkb = PKB::getInstance();
+	if (pkb.cfgNodeTable.count(rhs) == 0) {
+		return false;
+	}
+
 	CNode* node = pkb.cfgNodeTable.at(rhs);
 
 	vector<CNode*>* before = node->getBefore();
