@@ -756,8 +756,9 @@ namespace QueryEvaluator
 			vector<int> existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
 			vector<int> acceptedValues;
 			for (unsigned int i = 0; i < existingRHSValues.size(); i++) {
-				if (pkb.isNextRhsValid(i)) {
-					acceptedValues.push_back(i);
+				int value = existingRHSValues[i];
+				if (pkb.isNextRhsValid(value)) {
+					acceptedValues.push_back(value);
 				}
 			}
 			RHS.setValues(acceptedValues);
@@ -766,8 +767,9 @@ namespace QueryEvaluator
 			vector<int> existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
 			vector<int> acceptedValues;
 			for (unsigned int i = 0; i < existingLHSValues.size(); i++) {
-				if (pkb.isNextLhsValid(i)) {
-					acceptedValues.push_back(i);
+				int value = existingLHSValues[i];
+				if (pkb.isNextLhsValid(value)) {
+					acceptedValues.push_back(value);
 				}
 			}
 			LHS.setValues(acceptedValues);
@@ -862,8 +864,9 @@ namespace QueryEvaluator
 			vector<int> existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
 			vector<int> acceptedValues;
 			for (unsigned int i = 0; i < existingRHSValues.size(); i++) {
-				if (pkb.isAffectsRhsValid(i)) {
-					acceptedValues.push_back(i);
+				int value = existingRHSValues[i];
+				if (pkb.isAffectsRhsValid(value)) {
+					acceptedValues.push_back(value);
 				}
 			}
 			RHS.setValues(acceptedValues);
@@ -872,8 +875,9 @@ namespace QueryEvaluator
 			vector<int> existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
 			vector<int> acceptedValues;
 			for (unsigned int i = 0; i < existingLHSValues.size(); i++) {
-				if (pkb.isAffectsLhsValid(i)) {
-					acceptedValues.push_back(i);
+				int value = existingLHSValues[i];
+				if (pkb.isAffectsLhsValid(value)) {
+					acceptedValues.push_back(value);
 				}
 			}
 			LHS.setValues(acceptedValues);
