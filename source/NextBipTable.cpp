@@ -114,8 +114,6 @@ vector<CNode*> getPrevNodesOfNodes(vector<CNode*> nodes) {
 	return result;
 }
 
-
-
 PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
@@ -179,6 +177,25 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 					}
 					CNode* nextNodeAfterEndIf = node->getAfter()->at(0);
 					node = nextNodeAfterEndIf;
+
+					if (node->getNodeType() == EndProc_C) {
+						// pop the top of the stack, and go to that node which was on the top
+
+						if (afterCall.size() > 0) {
+							CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
+							updateStateOfBfs(visited, NEXTBIP_STATE(nodeAfterCall, afterCall), frontier, result);
+						} else {
+							// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
+							int curProcIndex = node->getASTref()->getNodeValueIdx();
+				
+							vector<CNode*> possibleNodes = getNextNodesOfNodes(getCallStatementsToProc(curProcIndex));
+
+							for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
+								updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
+							}
+						}
+					}
+
 				}
 
 				updateStateOfBfs(visited, NEXTBIP_STATE(node, afterCall), frontier, result);			
@@ -316,7 +333,7 @@ PROGLINE_LIST NextBipTable::getLhs() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 
-	for (size_t i = 0; i < pkb.getStmtTableSize(); i++) {
+	for (size_t i = 1; i <= pkb.getStmtTableSize(); i++) {
 		vector<int> rhs = getNextBipAfter(i);
 		if (rhs.size() > 0) {
 			result.push_back(i);
@@ -330,7 +347,7 @@ PROGLINE_LIST NextBipTable::getRhs() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 
-	for (size_t i = 0; i < pkb.getStmtTableSize(); i++) {
+	for (size_t i = 1; i <= pkb.getStmtTableSize(); i++) {
 		vector<int> lhs = getNextBipBefore(i);
 		if (lhs.size() > 0) {
 			result.push_back(i);
