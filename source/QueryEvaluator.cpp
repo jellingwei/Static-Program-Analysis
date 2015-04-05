@@ -455,7 +455,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processParentT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
+	BOOLEAN_ processParentT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -500,7 +500,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -523,7 +523,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -547,7 +547,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processFollowsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction) 
+	BOOLEAN_ processFollowsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction) 
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -594,7 +594,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -617,7 +617,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -641,7 +641,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processCallsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processCallsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -686,7 +686,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -709,7 +709,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -733,7 +733,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processNextT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processNextT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -794,7 +794,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -817,7 +817,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -841,7 +841,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -902,7 +902,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -925,7 +925,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -949,7 +949,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -994,7 +994,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -1017,7 +1017,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -1041,7 +1041,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -1084,7 +1084,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
 		vector<int> acceptedLHS;
@@ -1107,7 +1107,7 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	pair<vector<int>, vector<int>> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
 		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
 		vector<int> acceptedLHS;
