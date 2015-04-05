@@ -53,6 +53,14 @@ namespace QueryEvaluator
 	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	
+	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	
+	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<vector<int>, vector<int>> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	//Functions to process pattern clauses
 	inline BOOLEAN_ processPatternClause(QNode* patternClause);
@@ -197,6 +205,14 @@ namespace QueryEvaluator
 			return processAffectsT(LHS, RHS, false, direction);
 		case AffectsT:
 			return processAffectsT(LHS, RHS, true, direction);
+		case NextBip:
+			return processNextBipT(LHS, RHS, false, direction);
+		case NextBipT:
+			return processNextBipT(LHS, RHS, true, direction);
+		case AffectsBip:
+			return processAffectsBipT(LHS, RHS, false, direction);
+		case AffectsBipT:
+			return processAffectsBipT(LHS, RHS, true, direction);
 		case Pattern:
 			return processPatternClause(clauseNode);
 		case With:
@@ -737,10 +753,24 @@ namespace QueryEvaluator
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
 			return pkb.isNextValid();
 		} else if (typeLHS == UNDEFINED) {
-			RHS.setValues(pkb.getNextRhs());
+			vector<int> existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
+			vector<int> acceptedValues;
+			for (unsigned int i = 0; i < existingRHSValues.size(); i++) {
+				if (pkb.isNextRhsValid(i)) {
+					acceptedValues.push_back(i);
+				}
+			}
+			RHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == UNDEFINED) {
-			LHS.setValues(pkb.getNextLhs());
+			vector<int> existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
+			vector<int> acceptedValues;
+			for (unsigned int i = 0; i < existingLHSValues.size(); i++) {
+				if (pkb.isNextLhsValid(i)) {
+					acceptedValues.push_back(i);
+				}
+			}
+			LHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
 			if (direction == LeftToRight) {
@@ -813,24 +843,40 @@ namespace QueryEvaluator
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
-			return pkb.isAffects(stoi(LHS.getName()), stoi(RHS.getName()), isTrans);
+			return pkb.isAffects(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffectedBy(stoi(LHS.getName()), isTrans);
+			vector<int> stmt = pkb.getAffectedBy(stoi(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffecting(stoi(RHS.getName()), isTrans);
+			vector<int> stmt = pkb.getAffecting(stoi(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
 			return pkb.isAffectsValid();
 		} else if (typeLHS == UNDEFINED) {
-			RHS.setValues(pkb.getAffectsRhs());
+			vector<int> existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
+			vector<int> acceptedValues;
+			for (unsigned int i = 0; i < existingRHSValues.size(); i++) {
+				if (pkb.isAffectsRhsValid(i)) {
+					acceptedValues.push_back(i);
+				}
+			}
+			RHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == UNDEFINED) {
-			LHS.setValues(pkb.getAffectsLhs());
+			vector<int> existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
+			vector<int> acceptedValues;
+			for (unsigned int i = 0; i < existingLHSValues.size(); i++) {
+				if (pkb.isAffectsLhsValid(i)) {
+					acceptedValues.push_back(i);
+				}
+			}
+			LHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
 			if (direction == LeftToRight) {
@@ -883,6 +929,188 @@ namespace QueryEvaluator
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
 			vector<int> stmts = pkb.getAffecting(valuesRHS[i], isTrans);
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
+	}
+	
+	/**
+	* Processes the NextBip clause.
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
+	*/
+	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	{
+		SYNONYM_TYPE typeLHS = LHS.getType();
+		SYNONYM_TYPE typeRHS = RHS.getType();
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
+
+		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
+			return pkb.isNextBip(stoi(nameLHS), stoi(nameRHS), isTrans);
+		} else if (typeLHS == STRING_INT) {
+			vector<int> stmt = pkb.getNextBipAfter(stoi(nameLHS), isTrans);
+			RHS.setValues(stmt);
+			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
+		} else if (typeRHS == STRING_INT) {
+			vector<int> stmt = pkb.getNextBipBefore(stoi(nameRHS), isTrans);
+			LHS.setValues(stmt);
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
+			return true;  //Waiting for isNextBipValid();
+		} else if (typeLHS == UNDEFINED) {
+			RHS.setValues(pkb.getNextBipRhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
+		} else if (typeRHS == UNDEFINED) {
+			LHS.setValues(pkb.getNextBipLhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+		} else {
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> nextBipPair = evaluateNextBipByLHS(LHS, RHS, isTrans);
+				LHS.setValues(nextBipPair.first);
+				RHS.setValues(nextBipPair.second);
+			} else {
+				pair<vector<int>, vector<int>> nextBipPair = evaluateNextBipByRHS(LHS, RHS, isTrans);
+				LHS.setValues(nextBipPair.first);
+				RHS.setValues(nextBipPair.second);
+			}
+			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
+		}
+	}
+
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
+	* @return A pair of vectors denoting the pairs of values returned by the relation
+	*/
+	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	{
+		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts = pkb.getNextBipAfter(valuesLHS[i], isTrans);
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
+	}
+
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
+	* @return A pair of vectors denoting the pairs of values returned by the relation
+	*/
+	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	{
+		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+			vector<int> stmts = pkb.getNextBipBefore(valuesRHS[i], isTrans);
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(stmts[j]);
+				acceptedRHS.push_back(valuesRHS[i]);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
+	}
+	
+	/**
+	* Processes the AffectsBip clause.
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
+	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
+	*/
+	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, bool isTrans, DIRECTION direction)
+	{
+		SYNONYM_TYPE typeLHS = LHS.getType();
+		SYNONYM_TYPE typeRHS = RHS.getType();
+
+		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
+			return pkb.isAffectsBip(stoi(LHS.getName()), stoi(RHS.getName()), isTrans);
+		} else if (typeLHS == STRING_INT) {
+			vector<int> stmt = pkb.getAffectsBipAfter(stoi(LHS.getName()), isTrans);
+			RHS.setValues(stmt);
+			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
+		} else if (typeRHS == STRING_INT) {
+			vector<int> stmt = pkb.getAffectsBipBefore(stoi(RHS.getName()), isTrans);
+			LHS.setValues(stmt);
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
+			return true;  //Waiting for isAffectsBipValid()
+		} else if (typeLHS == UNDEFINED) {
+			RHS.setValues(pkb.getAffectsBipRhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
+		} else if (typeRHS == UNDEFINED) {
+			LHS.setValues(pkb.getAffectsBipLhs());
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
+		} else {
+			if (direction == LeftToRight) {
+				pair<vector<int>, vector<int>> affectsBipPair = evaluateAffectsBipByLHS(LHS, RHS, isTrans);
+				LHS.setValues(affectsBipPair.first);
+				RHS.setValues(affectsBipPair.second);
+			} else {
+				pair<vector<int>, vector<int>> affectsBipPair = evaluateAffectsBipByRHS(LHS, RHS, isTrans);
+				LHS.setValues(affectsBipPair.first);
+				RHS.setValues(affectsBipPair.second);
+			}
+			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
+		}
+	}
+
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
+	* @return A pair of vectors denoting the pairs of values returned by the relation
+	*/
+	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, bool isTrans)
+	{
+		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			vector<int> stmts = pkb.getAffectsBipAfter(valuesLHS[i], isTrans);
+
+			for (unsigned int j = 0; j < stmts.size(); j++) {
+				acceptedLHS.push_back(valuesLHS[i]);
+				acceptedRHS.push_back(stmts[j]);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
+	}
+
+	/**
+	* @param LHS
+	* @param RHS
+	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
+	* @return A pair of vectors denoting the pairs of values returned by the relation
+	*/
+	pair<vector<int>, vector<int>> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, bool isTrans)
+	{
+		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
+			vector<int> stmts = pkb.getAffectsBipBefore(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
