@@ -39,6 +39,7 @@ namespace QueryParser
 	ifstream inputFile;
 	vector<string> buffer;
 	vector<string>::iterator bufferIter;
+	vector<string>::iterator bufferBegin;
 	string currentParsedLine;
 
 	string attrName[] = { "procName", "varName", "value", "stmt#" };
@@ -109,6 +110,9 @@ namespace QueryParser
 		#endif
 
 		bufferIter = buffer.begin();
+		
+		//as a track pointer
+		bufferBegin = buffer.begin();
 
 		return buffer.size() > 0;
 	}
@@ -169,7 +173,11 @@ namespace QueryParser
 	 */
 	string peekInToTheNextNextToken()
 	{
-		return (*(bufferIter+1));
+		if ((buffer.size()-1 != 0) && bufferIter+1 != buffer.end()){
+			return (*(bufferIter+1));
+		}
+
+		return ""; 
 	}
 
 	/**
@@ -179,8 +187,23 @@ namespace QueryParser
 	 */
 	string peekBackwards(int steps)
 	{
-		if((steps==-1) && (buffer.size()==0 || bufferIter == buffer.end())) // if there is no next token
+		bool maxStep = false; 
+
+		if((steps==-1) && (buffer.size()==0 || bufferIter == buffer.end())){ // if there is no next token
 			return "";
+		}
+		
+		//for i number of steps
+		for (int i=0; i<=steps; i++){
+
+			if(maxStep)
+				return ""; // cannot loop again, you will be looking backwards to something that don't exist. 
+
+			if(bufferIter-1-i == bufferBegin){
+				maxStep = true;
+			}
+		}
+
 
 		return (*(bufferIter-1-steps));
 	}
@@ -362,9 +385,6 @@ namespace QueryParser
 	bool matchFactor(string token)
 	{
 		if(!(matchInteger(token) || matchName(token))){
-
-			cout<<endl;
-			cout<<"token : "<<token<<endl;
 
 			#ifdef DEBUG
 				throw exception("QueryParser error: at matchFactor.");
@@ -1585,7 +1605,6 @@ namespace QueryParser
 		}
 		returnToken = nextToken;
 		
-
 	 	return matchElem(nextToken) ? returnToken: "";
 	}
 
@@ -1735,6 +1754,7 @@ namespace QueryParser
 	 */
 	bool parseSelect()
 	{
+
 		bool res = parse("Select");
 		if (!res){
 			#ifdef DEBUG
