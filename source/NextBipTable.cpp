@@ -22,7 +22,7 @@ void updateStateOfBfs(set<NEXTBIP_STATE>* visited, NEXTBIP_STATE nextState, dequ
 
 	if (visited->count(nextState) == 0) {
 		frontier.push_back(nextState);
-		if (node->getNodeType() != EndIf_C && node->getNodeType() != EndProc_C){
+		if (node->getNodeType() != EndIf_C && node->getNodeType() != EndProc_C) {
 			result.insert(node->getProcLineNumber());
 		}
 		visited->insert(nextState);
@@ -133,7 +133,7 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 		curNode = curState.first; 
 		afterCall = curState.second;
 		frontier.pop_back();
-
+		
 		vector<CNode*>* nextNodes = curNode->getAfter();
 
 		if (curNode->getNodeType() == EndProc_C) {
@@ -152,7 +152,8 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 					updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
 				}
 			}
-		} else if (curNode->getNodeType() == Call_C) {
+		}
+		else if (curNode->getNodeType() == Call_C) {
 			// for call statement
 			// update afterCall to include the progline after the call
 			assert(nextNodes->size() == 1);
@@ -178,27 +179,26 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 					CNode* nextNodeAfterEndIf = node->getAfter()->at(0);
 					node = nextNodeAfterEndIf;
 
-					if (node->getNodeType() == EndProc_C) {
-						// pop the top of the stack, and go to that node which was on the top
+				}
+				if (node->getNodeType() == EndProc_C) {
+					// pop the top of the stack, and go to that node which was on the top
 
-						if (afterCall.size() > 0) {
-							CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
-							updateStateOfBfs(visited, NEXTBIP_STATE(nodeAfterCall, afterCall), frontier, result);
-						} else {
-							// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
-							int curProcIndex = node->getASTref()->getNodeValueIdx();
+					if (afterCall.size() > 0) {
+						CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
+						updateStateOfBfs(visited, NEXTBIP_STATE(nodeAfterCall, afterCall), frontier, result);
+					} else {
+						// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
+						int curProcIndex = node->getASTref()->getNodeValueIdx();
 				
-							vector<CNode*> possibleNodes = getNextNodesOfNodes(getCallStatementsToProc(curProcIndex));
+						vector<CNode*> possibleNodes = getNextNodesOfNodes(getCallStatementsToProc(curProcIndex));
 
-							for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
-								updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
-							}
+						for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
+							updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
 						}
 					}
-
+				} else {
+					updateStateOfBfs(visited, NEXTBIP_STATE(node, afterCall), frontier, result);			
 				}
-
-				updateStateOfBfs(visited, NEXTBIP_STATE(node, afterCall), frontier, result);			
 			}
 		}
 
@@ -210,7 +210,6 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 
 	vector<int> resultAsVector;
 	resultAsVector.insert(resultAsVector.end(), result.begin(), result.end());
-	
 	return resultAsVector;
 }
 
