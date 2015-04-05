@@ -1167,14 +1167,29 @@ PROGLINE_LIST PKB::getNextRhs() {
 	return nextTable->getRhs();
 }
 
+/**
+* Check if the procedure can perform the Next relationship.
+* @return TRUE if the first and last lines in a procedure are not the same, then there are more than one line in the procedure, and Next is valid.
+*	      FALSE if the first and last lines in a procedure are the same, then there is only one line in the procedure, and Next is invalid.
+*/
 BOOLEAN_ PKB::isNextValid() {
 	return nextTable->isValid();
 }
 
+/**
+* @param lhs a program line
+* @return TRUE if the program line is not the last line in the procedure, and Next relationship is valid.
+*		  FALSE if the program line is the last line in the procedure, and Next relationship is invalid.
+*/
 BOOLEAN_ PKB::isNextLhsValid(PROG_LINE_ lhs) { 
 	return nextTable->isLhsValid(lhs);
 }
 
+/**
+* @param rhs a program line
+* @return TRUE if the program line is not the first line in the procedure, and Next relationship is valid.
+*		  FALSE if the program line is the first line in the procedure, and Next relationship is invalid.
+*/
 BOOLEAN_ PKB::isNextRhsValid(PROG_LINE_ rhs) {
 	return nextTable->isRhsValid(rhs);
 }
@@ -1318,15 +1333,29 @@ PROGLINE_LIST PKB::getAffectsRhs() {
 	return affectsTable->getRhs();
 }
 
-
+/**
+* Check if the procedure can perform the Affects relationship.
+* @return TRUE if there exists at least one assignment statement that affects other statements, and Affects is valid.
+*	      FALSE if there is no assignment statement that affects other statements, and Affects is invalid.
+*/
 BOOLEAN_ PKB::isAffectsValid() {
 	return affectsTable->isValid();
 }
 
+/**
+* @param lhs a program line
+* @return TRUE if the program line affects other program lines, and Affects relationship is valid.
+*		  FALSE if the program line affects other program lines, and Affects relationship is invalid.
+*/
 BOOLEAN_ PKB::isAffectsLhsValid(PROG_LINE_ lhs) { 
 	return affectsTable->isLhsValid(lhs);
 }
 
+/**
+* @param rhs a program line
+* @return TRUE if the program line is affected by other program line, and Affects relationship is valid.
+*		  FALSE if the program line is affected by other program line, and Affects relationship is invalid.
+*/
 BOOLEAN_ PKB::isAffectsRhsValid(PROG_LINE_ rhs) {
 	return affectsTable->isRhsValid(rhs);
 }
@@ -1355,46 +1384,101 @@ BOOLEAN_ PKB::canSkipNodesForwards(CNode* node) {
 
 //NextBip
 
+/**
+* @param progLine1  the program line that is the predecessor of progLine2
+* @param progLine2  the program line that is the successor of progLine1
+* @param transitiveClosure  a flag to indicate the computation of NextBip or NextBip* relation
+* @return if transitiveClosure is false: TRUE if NextBip(progLine1, progLine2) is satisfied. FALSE if NextBip(progLine1, progLine2) is not satisfied.
+*		  if transitiveClosure is true: TRUE if NextBip*(progLine1, progLine2) is satisfied. 
+*										 FALSE if NextBip*(progLine1, progLine2) is not satisfied.
+*		   FALSE if either progLine1 or progLine2 is negative or 0.
+*/
 BOOLEAN_ PKB::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	return nextBipTable->isNextBip(progLine1, progLine2, transitiveClosure);
 }
 
+/**
+* @param progLine1  the program line that is the predecessor of progLine2
+* @param transitiveClosure  a flag to indicate the computation of NextBip or NextBip* relation
+* @return if transitiveClosure is false: a list of program lines, progLine2, where NextBip(progLine1, progLine2) is satisfied.
+*		  if transitiveClosure is true: a list of program lines, progLine2, where NextBip*(progLine1, progLine2) is satisfied.
+*		  an empty list if progLine1 is invalid or negative or 0.
+*/
 PROGLINE_LIST PKB::getNextBipAfter(PROG_LINE_ progline1, TRANS_CLOSURE transitiveClosure) {
 	return nextBipTable->getNextBipAfter(progline1, transitiveClosure);
 }
 
-
+/**
+* @param progLine2  the program line that is the succesor of progLine1
+* @param transitiveClosure  a flag to indicate the computation of NextBip or NextBip* relation
+* @return if transitiveClosure is false: a list of program lines, progLine1, where NextBip(progLine1, progLine2) is satisfied.
+*		  if transitiveClosure is true: a list of program lines, progLine1, where NextBip*(progLine1, progLine2) is satisfied.
+*		  an empty list if progLine2 is invalid or negative or 0.
+*/
 PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transitiveClosure) {
 	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
 }
 
-
+/**
+* @return a list of all program lines, progLine1, where NextBip(progLine1, progLine2) is true.
+*/
 PROGLINE_LIST PKB::getNextBipLhs() {
 	return nextBipTable->getLhs();
 }
 
+/**
+* @return a list of all program lines, progLine2, where NextBip(progLine1, progLine2) is true.
+*/
 PROGLINE_LIST PKB::getNextBipRhs() {
 	return nextBipTable->getRhs();
 }
 
 // AffectsBip
 
+/**
+* @param progLine1  the program line that affectsBip progline2
+* @param progLine2  the program line that is affected(Bip) by progline1
+* @param transitiveClosure  a flag to indicate the computation of AffectsBip or AffectsBip* relation
+* @return TRUE if AffectBip(progLine1,progLine2) is satisfied.
+*		  FALSE if AffectBip(progLine1,progLine2) is not satisfied or either progline1 or progLine2 is negative or 0.
+*/
 BOOLEAN_ PKB::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	return affectsBipTable->isAffectsBip(progLine1, progLine2, transitiveClosure);
 }
 
+/**
+* @param progLine1  the program line that affectsBip progline2
+* @param transitiveClosure  a flag to indicate the computation of AffectsBip or AffectsBip* relation
+* @return if transitiveClosure is false: a list of program lines, progLine2, where AffectsBip(progLine1, progLine2) is satisfied.
+*		  if transitiveClosure is true: a list of program lines, progLine2, where AffectsBip*(progLine1, progLine2) is satisfied.
+*		  an empty list if progLine1 is invalid or negative or 0.
+*/
 PROGLINE_LIST PKB::getAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	return affectsBipTable->getProgLinesAffectsBipAfter(progLine1, transitiveClosure);
 }
 
+/**
+* @param progLine2  the program line that is affected(Bip) by progline1
+* @param transitiveClosure  a flag to indicate the computation of AffectsBip or AffectsBip* relation
+* @return if transitiveClosure is false: a list of program lines, progLine2, where AffectsBip(progLine1, progLine2) is satisfied.
+*		  if transitiveClosure is true: a list of program lines, progLine2, where AffectsBip*(progLine1, progLine2) is satisfied.
+*		  an empty list if progLine1 is invalid or negative or 0.
+*/
 PROGLINE_LIST PKB::getAffectsBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	return affectsBipTable->getProgLinesAffectsBipBefore(progLine2, transitiveClosure);
 }
 
+/**
+* @return a list of all program lines, progLine1, where AffectsBip(progLine1, progLine2) is true.
+*/
 PROGLINE_LIST PKB::getAffectsBipLhs() {
 	return affectsBipTable->getLhs();
 }
 
+
+/**
+* @return a list of all program lines, progLine2, where AffectsBip(progLine1, progLine2) is true.
+*/
 PROGLINE_LIST PKB::getAffectsBipRhs() {
 	return affectsBipTable->getRhs();
 }
