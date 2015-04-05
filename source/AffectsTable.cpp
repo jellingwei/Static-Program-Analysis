@@ -268,8 +268,10 @@ PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_C
 				set<int> procLinesToSkipTo = currentFirstUse[i];
 				for (auto skipIter = procLinesToSkipTo.begin(); skipIter != procLinesToSkipTo.end(); ++skipIter) {
 					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
+					boost::dynamic_bitset<> variableForSkipping(pkb.getVarTableSize() + 1);
+					variableForSkipping.set(i);
 
-					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
+					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variableForSkipping);
 					
 					if (skipToNode ) {
 						frontier.push(nodePair);
@@ -405,7 +407,9 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 				for (auto skipIter = procLinesToSkipTo.begin(); skipIter != procLinesToSkipTo.end(); ++skipIter) {
 					CNode* skipToNode = pkb.cfgNodeTable.at(*skipIter);
 
-					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variablesToMatch);
+					boost::dynamic_bitset<> variableForSkipping(pkb.getVarTableSize() + 1);
+					variableForSkipping.set(i);
+					pair<CNode*, boost::dynamic_bitset<>> nodePair = make_pair<CNode*, boost::dynamic_bitset<> >(skipToNode, variableForSkipping);
 					
 					if (skipToNode ) {
 						frontier.push(nodePair);
