@@ -13,6 +13,8 @@ void PQLController::evaluate(std::string query, std::list<std::string> &results)
 		queryResults = QueryEvaluator::processQueryTree(qT);
 		ResultProjector::projectResultToList(queryResults, results);
 	} catch (exception e) {
-		results.push_front(e.what());
+		#ifdef DEBUG
+			results.push_front(e.what());
+		#endif
 	}
 }

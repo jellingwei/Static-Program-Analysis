@@ -24,11 +24,18 @@ public:
 	vector<int> getValues();
 	VALUE_SET getValuesSet();
 	BOOLEAN_ isEmpty(); //Check if Synonym() is created. ie an empty Synonym
+	BOOLEAN_ isSynonym();
+	BOOLEAN_ isConstant();
 	
 	static string convertToString(SYNONYM_TYPE synonymType);
 	static SYNONYM_TYPE convertToEnum(string synonymType);
 	static string convertSynonymAttrToString(SYNONYM_ATTRIBUTE synonymAttr);
 	static SYNONYM_ATTRIBUTE convertSynonymAttrToEnum(string synonymAttr);
+
+	bool operator== (const Synonym& synonym2) const
+	{
+		return (_type == synonym2._type && _name == synonym2._name);
+	}
 
 private:
 	SYNONYM_TYPE _type;  //Type of synonym (Can use "string" or "boolean")

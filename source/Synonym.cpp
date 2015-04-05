@@ -104,6 +104,19 @@ BOOLEAN_ Synonym::isEmpty()
 	return _isEmpty;
 }
 
+BOOLEAN_ Synonym::isSynonym()
+{
+	return _type == PROCEDURE || _type == STMT || _type == PROCEDURE || _type ==STMT ||
+		_type == ASSIGN || _type == CALL || _type == WHILE || _type == IF || _type == VARIABLE ||
+		_type == CONSTANT || _type == PROG_LINE || _type == STMTLST || 
+		_type == PLUS || _type == MINUS || _type == TIMES;
+}
+
+BOOLEAN_ Synonym::isConstant()
+{
+	return _type == STRING_CHAR || _type == STRING_INT || _type == STRING_PATTERNS;
+}
+
 void Synonym::setValues(vector<int> values)
 {
 	_values = values;

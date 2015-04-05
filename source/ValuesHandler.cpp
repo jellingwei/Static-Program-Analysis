@@ -329,7 +329,9 @@ namespace ValuesHandler
 		} else if (isExistInSingletonTable(name)) {
 			return hashIntersectWithSingletonTable(synonym);
 		} else {
-			return addToSingletonTable(synonym);
+			Synonym defaultSynonym = getSynonym(name);
+			addToSingletonTable(defaultSynonym);
+			return hashIntersectWithSingletonTable(synonym);
 		}
 	}
 

@@ -1,6 +1,7 @@
 #pragma once
 
-#include "cmath"
+#include <cmath>
+#include <stack>
 
 #include "StatisticsTable.h"
 #include "PKB.h"
@@ -8,6 +9,9 @@
 #include "QueryTree.h" 
 #include "common.h"
 #include "QNode.h"
+#include "QueryEvaluator.h"
+
+using std::stack;
 
 namespace QueryOptimiser
 {
