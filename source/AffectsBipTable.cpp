@@ -84,6 +84,22 @@ void populateFrontierWithNextBipAfter(priority_queue<pair<NEXTBIP_STATE, boost::
 	}
 }
 
+void populateFrontierWithNextAfter(priority_queue<pair<NEXTBIP_STATE, boost::dynamic_bitset<> >, vector<pair<NEXTBIP_STATE, boost::dynamic_bitset<> > >, CompareAffectsBip>& frontier, 
+								      CNode* node, set<pair<NEXTBIP_STATE, boost::dynamic_bitset<> >> visited, NEXTBIP_STATE curState, 
+									  boost::dynamic_bitset<> variablesToMatch) {
+	PKB pkb = PKB::getInstance();
+	PROGLINE_LIST nextNodeNums = pkb.getNextAfter(node->getProcLineNumber());
+		
+	for (auto nodeIter = nextNodeNums.begin(); nodeIter != nextNodeNums.end(); ++nodeIter) {
+		CNode* nextNode = pkb.cfgNodeTable.at(*nodeIter);
+		pair<NEXTBIP_STATE, boost::dynamic_bitset<>> nodePair = make_pair<NEXTBIP_STATE, boost::dynamic_bitset<> >(NEXTBIP_STATE(nextNode, curState.second), variablesToMatch);
+			
+		if (nextNode && visited.count(nodePair) == 0 ) {
+			frontier.push(nodePair);
+		}
+	}
+}
+
 void populateFrontierWithNextBipBefore(priority_queue<pair<NEXTBIP_STATE, boost::dynamic_bitset<> >, vector<pair<NEXTBIP_STATE, boost::dynamic_bitset<> > >, CompareAffectsBip>& frontier, 
 	                                   CNode* node, set<pair<NEXTBIP_STATE, boost::dynamic_bitset<> >> visited, 
 									   map<NEXTBIP_STATE, boost::dynamic_bitset<>, VariableTestedCompare > variableTested,
@@ -119,11 +135,16 @@ void handleLastLine(CNode* node, priority_queue<pair<NEXTBIP_STATE, boost::dynam
 		// expand as per normal, for call statements or if no traversal history
 		populateFrontierWithNextBipAfter(frontier, node, visited, curState, variablesToMatch);
 	}
-			
+	else		
 	// pop from the stack and add the progline into the frontier, if stack has traversal history
 	if (curState.second.size() > 0) {
 		CNode* candidateNextNode = curState.second.top();
 		curState.second.pop();
+
+		// test for special dummy 'termination' node
+		if (candidateNextNode->getNodeType() == EndProc_C && candidateNextNode->getProcLineNumber() == -1) {
+			return;
+		}
 
 		while (candidateNextNode->getNodeType() == EndIf_C || candidateNextNode->getNodeType() == EndProc_C) {
 			if (candidateNextNode->getNodeType() == EndIf_C) {
@@ -227,15 +248,35 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 
 	set<int> addedToAnswer;
 	set<pair<NEXTBIP_STATE, boost::dynamic_bitset<> >> visited;	
+	map<NEXTBIP_STATE, boost::dynamic_bitset<>, VariableTestedCompare > variableTested;
+
+	//dummy termination node
+	CNode* terminateNode = new CNode(EndProc_C, -1, NULL, NULL);
 
 	while (!frontier.empty()) {
+		if (visited.count(frontier.top()) != 0) {
+			frontier.pop();
+			continue;
+		}
 		visited.insert(frontier.top());
 
 		NEXTBIP_STATE curState = frontier.top().first; variablesToMatch = frontier.top().second;
 		CNode* node = curState.first;
+
+		if (variableTested.count(curState) != 0) {
+			if (variablesToMatch.is_subset_of(variableTested.at(curState) ) ) {
+				frontier.pop();
+				continue;
+			}
+		}
+		if (variableTested.count(curState) != 0) {
+			variableTested[curState] |=  variablesToMatch;
+		} else {
+			variableTested[curState] =  variablesToMatch;
+		}
+		
 		assert(node->getNodeType() != EndIf_C && node->getNodeType() != EndProc_C ); // don't store dummy nodes in frontier
 																					 // otherwise cannot make use of NextBip API
-
 		frontier.pop();
 
 		// maintain the stack of nodes after call, partially duplicated from NextBip
@@ -267,13 +308,14 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 					if (tempStack.size() > 0) {
 						afterCallNode = tempStack.top();
 						tempStack.pop();
-					}
-					
+					} 
 				}
 			}
 			
 			if (afterCallNode) {
 				curState.second.push(afterCallNode);
+			} else {
+				curState.second.push(terminateNode);
 			}
 
 		} else if (node->getNodeType() == Assign_C) {
@@ -314,14 +356,17 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 
 
 		// update frontier with new nodes
-		PROGLINE_LIST nextNodeNums;
 		assert(node->getAfter()->size() > 0);
-		bool isLastLine = node->getAfter()->at(0)->getNodeType() == EndProc_C;
-
+		bool isLastLine = false;
+		vector<CNode*>* afterNodes =  node->getAfter();
+		for (auto afterNodeIter = afterNodes->begin(); afterNodeIter != afterNodes->end(); ++afterNodeIter) {
+			isLastLine = (*afterNodeIter)->getNodeType() == EndProc_C;
+		}
 		if (!isLastLine) {
 			populateFrontierWithNextBipAfter(frontier, node, visited, curState, variablesToMatch);
 		} else {
 			// special handling for last node.. 
+			populateFrontierWithNextAfter(frontier, node, visited, curState, variablesToMatch);
 			handleLastLine(node, frontier, visited, curState, variablesToMatch);
 		}
 		
@@ -370,15 +415,23 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipBefore(PROG_LINE_ progLine2
 			continue;
 		}
 		visited.insert(frontier.top());
-		
+
+		NEXTBIP_STATE curState = frontier.top().first; variablesToMatch = frontier.top().second;
+		CNode* node = curState.first;
+
+		if (variableTested.count(curState) != 0) {
+			if (variablesToMatch.is_subset_of(variableTested.at(curState) ) ) {
+				frontier.pop();
+				continue;
+			}
+		}
 		if (variableTested.count(frontier.top().first) != 0) {
 			variableTested[frontier.top().first] |=  variablesToMatch;
 		} else {
 			variableTested[frontier.top().first] =  variablesToMatch;
 		}
 
-		NEXTBIP_STATE curState = frontier.top().first; variablesToMatch = frontier.top().second;
-		CNode* node = curState.first;
+		
 		assert(node->getNodeType() != EndIf_C && node->getNodeType() != EndProc_C ); // don't store dummy nodes in frontier
 																					 // otherwise cannot make use of NextBip API
 
