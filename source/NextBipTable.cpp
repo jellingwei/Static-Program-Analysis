@@ -16,6 +16,7 @@ using namespace std;
 NextBipTable::NextBipTable() {
 }
 
+vector<CNode*> getNextNodesOfNodes(vector<CNode*> nodes);
 
 void updateStateOfBfs(set<NEXTBIP_STATE>* visited, NEXTBIP_STATE nextState, deque<NEXTBIP_STATE >& frontier, set<int>& result) {
 	CNode* node = nextState.first;
@@ -92,10 +93,42 @@ vector<CNode*> getCallStatementsToProc(int procIndex) {
 	return callStmtsToCurrentProc;
 }
 
+/**
+ * Get next nodes, accounting for nested consecutive EndProcs
+ */
+vector<CNode*>* getAfterNode(CNode* node) {
+	vector<CNode*>* candidateList = node->getAfter();
+	vector<CNode*>* resultList = new vector<CNode*>();
+	for (unsigned int i = 0; i < candidateList->size(); i++) {
+		CNode* candidateNode = candidateList->at(i);
+		while (candidateNode->getNodeType() == EndIf_C) {
+			assert(candidateNode->getAfter()->size() <= 1);
+
+			if (candidateNode->getAfter()->size() == 0) { // if is the last progline
+				continue;
+			}
+			CNode* nextNodeAfterEndIf = candidateNode->getAfter()->at(0);
+			candidateNode = nextNodeAfterEndIf;
+		}
+
+		if (candidateNode->getNodeType() == EndProc_C) {
+			vector<CNode*> callStmts = getNextNodesOfNodes(getCallStatementsToProc(candidateNode->getASTref()->getNodeValueIdx()));
+			resultList->insert(resultList->end(), callStmts.begin(), callStmts.end());
+
+		} else {
+			// default case: add to result
+			resultList->push_back(candidateNode);
+		}
+	}
+
+	return resultList;
+}
+
 vector<CNode*> getNextNodesOfNodes(vector<CNode*> nodes) {
 	vector<CNode*> result;
 	for (auto iter = nodes.begin(); iter != nodes.end(); ++iter) {
-		vector<CNode*>* nextNodes = (*iter)->getAfter();
+		
+		vector<CNode*>* nextNodes = getAfterNode(*iter);
 
 		result.insert(result.end(), nextNodes->begin(), nextNodes->end());
 	}
