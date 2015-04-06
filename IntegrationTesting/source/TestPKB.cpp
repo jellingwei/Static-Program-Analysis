@@ -498,9 +498,9 @@ void PKBTest::testPKB()
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(35,_)", 5, (int)pkb.getAffectsBipAfter(35,true).size());
 	
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(31,_), normal affects", (int)pkb.getAffectedBy(31,true).size(), (int)pkb.getAffectsBipAfter(31,true).size());
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(29,_), normal affects", (int)pkb.getAffectedBy(29,true).size(), (int)pkb.getAffectsBipAfter(29,true).size());
-	//CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(27,_), normal affects", (int)pkb.getAffectedBy(27,true).size(), (int)pkb.getAffectsBipAfter(27,true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(31,_), normal affects", 5, (int)pkb.getAffectsBipAfter(31,true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(29,_), normal affects", (int)pkb.getAffectedBy(29,true).size(), (int)pkb.getAffectsBipAfter(29,true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(27,_), normal affects", (int)pkb.getAffectedBy(27,true).size(), (int)pkb.getAffectsBipAfter(27,true).size());
 	
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(11,_)", 5, (int)pkb.getAffectsBipAfter(11,true).size());
