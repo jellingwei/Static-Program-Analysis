@@ -1,18 +1,5 @@
 #include "QueryOptimiser.h"
 
-/*
-cost: 
-All * relation 
-Modifies: 1
-Uses: 1
-Follows*: 3
-Parent*: 2
-Call*: 1.5
-Next*: 3.5
-Affects: 3
-Affects*: 5
-*/
-
 /**
 @brief Namespace containing functions for the query optimisation
 
@@ -20,21 +7,6 @@ Affects*: 5
 
 namespace QueryOptimiser
 {
-	double COST_MODIFIES = 1;
-	double COST_USES = 1;
-	double COST_FOLLOWS = 1;
-	double COST_PARENT = 1;
-	double COST_CALLS = 1;
-	double COST_NEXT = 1;
-	double COST_AFFECTS = 0;
-	double COST_AFFECTSS = 0;
-	double COST_FOLLOWSS = 0;
-	double COST_PARENTS = 0;
-	double COST_CALLSS = 0;
-	double COST_NEXTS = 0;
-	double COST_PATTERN = 0;
-	double COST_WITH = 1;
-
 	unordered_map<string, SYNONYM_TYPE> synonymNameToTypeMap;
 	unordered_map<string, int> selectSynonyms;  //Maps the synonyms that are being selected to the index
 	unordered_map<string, unsigned int> synonymsCount;  //Maps synonyms to the expected number of values
@@ -52,12 +24,12 @@ namespace QueryOptimiser
 	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot);
 	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
 	void scanAndRemoveRedundantSynonyms(vector<QNode*> &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
-	//void replaceRedundantSynonymInClauses(QNode* &clausesNode, string name);
 	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
 	QNode* optimiseClausesNode(QNode* clausesNode);
 	pair<vector<QNode*>, vector<QNode*>> splitConstantClauses(QNode* clausesNode);
+	vector<QNode*> reorderConstantClauses(vector<QNode*> constantClauses);
 	vector<QNode*> reorderNonConstantClauses(vector<QNode*> clauses);
 
 	QNode* getNextSmallestAndUpdate(vector<QNode*> &clauses);
@@ -65,16 +37,13 @@ namespace QueryOptimiser
 	pair<Synonym, Synonym> getClauseArguments(QNode* clause);
 	void setClauseArguments(QNode* &clause, Synonym LHS, Synonym RHS);
 
-	int getExpectedCount(QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output);
-	double calculateCost(QNODE_TYPE rel_type, double numberOfValues);
 	inline bool isContainedInMain(string wantedName);
 	inline bool isSelectSynonym(string wantedName);
-	void reduceSynonymsCount(string name, double reductionFactor);
 
 	QNode* createSubtree(QNODE_TYPE type, vector<QNode*> clausesVector);
 	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2);
 	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS);
-	unordered_map<string, int> indexSynonymsReferenced(QNode* resultNode, QNode* clausesNode);
+	unordered_map<string, int> indexSynonymsReferenced(QNode* clausesNode);
 	vector<vector<int>> createSynonymGraph(QNode* clausesNode, unordered_map<string, int> name_index_map);
 	set<int> scanSynonymsReachable(vector<vector<int>> adjacencyMatrix);
 
@@ -97,8 +66,8 @@ namespace QueryOptimiser
 	*/
 	void initialize(QueryTree* qTreeRoot)
 	{
-		statsTable = new StatisticsTable();
 		synonymNameToTypeMap = qTreeRoot->getSynonymsMap();
+		statsTable = new StatisticsTable(synonymNameToTypeMap);
 		int numberOfSynonyms = synonymNameToTypeMap.size();
 
 		for (auto itr = synonymNameToTypeMap.begin(); itr != synonymNameToTypeMap.end(); ++itr) {
@@ -155,6 +124,7 @@ namespace QueryOptimiser
 				}
 			}
 		} else {
+			//Cannot remove with clauses if there are no other clauses
 			finalWithClauses = withClauses;
 		}
 		QNode* resultSubtree = createSubtree(RESULT, resultClauses);
@@ -252,7 +222,7 @@ namespace QueryOptimiser
 		QNode* resultNode = qTreeRoot->getResultNode();
 		QNode* clausesNode = qTreeRoot->getClausesNode();
 		populateSelectSynonyms(resultNode);
-		unordered_map<string, int> name_index_map = indexSynonymsReferenced(resultNode, clausesNode);
+		unordered_map<string, int> name_index_map = indexSynonymsReferenced(clausesNode);
 		vector<vector<int>> adjacencyMatrix = createSynonymGraph(clausesNode, name_index_map);
 		//set<int> synonymIndexReachable = scanSynonymsReachable(adjacencyMatrix);
 
@@ -309,6 +279,7 @@ namespace QueryOptimiser
 			string nameLHS = LHS.getName();
 			string nameRHS = RHS.getName();
 
+			//Check LHS and cannot replace it if it is going to be selected
 			if (LHS.isSynonym() && !isSelectSynonym(nameLHS)) {
 				if (synonymOccurrence.count(nameLHS) == 0) {
 					//Count the number of occurrences this synonym appears in the clause
@@ -330,6 +301,7 @@ namespace QueryOptimiser
 				}
 			}
 
+			//Check RHS and cannot replace it if it is going to be selected
 			if (RHS.isSynonym() && !isSelectSynonym(nameRHS)) {
 				if (synonymOccurrence.count(nameRHS) == 0) {
 					//Count the number of occurrences this synonym appears in the clause
@@ -343,7 +315,7 @@ namespace QueryOptimiser
 
 				int count = synonymOccurrence[nameRHS];
 				if (count == 0 || count == 1) {
-					RHS = undefined;
+					RHS = undefined;  //Replace RHS
 				}
 			}
 			setClauseArguments(clause, LHS, RHS);
@@ -399,6 +371,7 @@ namespace QueryOptimiser
 		pair<vector<QNode*>, vector<QNode*>> clauses = splitConstantClauses(clausesNode);
 		vector<QNode*> constantClauses = clauses.first;
 		vector<QNode*> nonConstantClauses = clauses.second;
+		constantClauses = reorderConstantClauses(constantClauses);
 		nonConstantClauses = reorderNonConstantClauses(nonConstantClauses);
 		return combineClausesVectors(constantClauses, nonConstantClauses);
 	}
@@ -420,18 +393,14 @@ namespace QueryOptimiser
 			pair<Synonym, Synonym> argumentPair = getClauseArguments(clauseNode);
 			Synonym LHS = argumentPair.first;
 			Synonym RHS = argumentPair.second;
-			SYNONYM_TYPE typeLHS = LHS.getType();
-			SYNONYM_TYPE typeRHS = RHS.getType();
 
 			//If it is a constant, set the direction
-			if (typeLHS == STRING_INT || typeLHS == STRING_CHAR || typeLHS == STRING_PATTERNS || typeRHS == UNDEFINED) {
+			if (LHS.isConstant() || RHS.isUndefined()) {
 				clauseNode->setDirection(LeftToRight);
-				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, LeftToRight);
-				reduceSynonymsCount(LHS.getName(), reductionFactor);  //Set the new expected count
-			} else if (typeRHS == STRING_INT || typeRHS == STRING_CHAR || typeRHS == STRING_PATTERNS || typeLHS == UNDEFINED) {
+				statsTable->reduceCount(qnode_type, LHS, RHS, LeftToRight);  //Set the new expected count
+			} else if (RHS.isConstant() || LHS.isUndefined()) {
 				clauseNode->setDirection(RightToLeft);
-				double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, RightToLeft);
-				reduceSynonymsCount(RHS.getName(), reductionFactor);  //Set the new expected count
+				statsTable->reduceCount(qnode_type, LHS, RHS, RightToLeft);  //Set the new expected count
 			} else {
 				nonConstantClauses.push_back(clauseNode);
 				clauseNode = clausesNode->getNextChild();
@@ -442,6 +411,44 @@ namespace QueryOptimiser
 			clauseNode = clausesNode->getNextChild();
 		}
 		return make_pair(constantClauses, nonConstantClauses);
+	}
+	
+	vector<QNode*> reorderConstantClauses(vector<QNode*> clauses)
+	{
+		//TODO: Check that the vector is not of size zero
+		vector<QNode*> bothConstants;
+		vector<QNode*> oneSynonym;
+		vector<QNode*> oneUndefined;
+		
+		for (unsigned int i = 0; i < clauses.size(); i++) {
+			QNode* clause = clauses[i];
+			pair<Synonym, Synonym> argumentPair = getClauseArguments(clause);
+			Synonym LHS = argumentPair.first;
+			Synonym RHS = argumentPair.second;
+			
+			if (LHS.isConstant() && RHS.isConstant()) {
+				bothConstants.push_back(clause);
+				continue;
+			}
+			
+			if (LHS.isUndefined() && RHS.isUndefined()) {
+				bothConstants.push_back(clause);
+				continue;
+			}
+			
+			if (LHS.isUndefined() || RHS.isUndefined()) {
+				oneUndefined.push_back(clause);
+				continue;
+			}
+			
+			oneSynonym.push_back(clause);
+		}
+		
+		vector<QNode*> reorderedClauses;
+		reorderedClauses.insert(reorderedClauses.begin(), bothConstants.begin(), bothConstants.end());
+		reorderedClauses.insert(reorderedClauses.begin(), oneSynonym.begin(), oneSynonym.end());
+		reorderedClauses.insert(reorderedClauses.begin(), oneUndefined.begin(), oneUndefined.end());
+		return reorderedClauses;
 	}
 
 	/**
@@ -481,18 +488,10 @@ namespace QueryOptimiser
 		pair<Synonym, Synonym> argumentPair = getClauseArguments(smallestNode);
 		Synonym LHS = argumentPair.first;
 		Synonym RHS = argumentPair.second;
-		SYNONYM_TYPE typeLHS = LHS.getType();
-		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
 
-		double reductionFactor = statsTable->getReductionFactor(qnode_type, typeLHS, typeRHS, direction);
-
-		if (direction == LeftToRight) {
-			reduceSynonymsCount(nameRHS, reductionFactor);
-		} else {
-			reduceSynonymsCount(nameLHS, reductionFactor);
-		}
+		statsTable->reduceCount(qnode_type, LHS, RHS, direction);
 
 		mainTableSynonyms.insert(nameLHS);
 		mainTableSynonyms.insert(nameRHS);
@@ -517,8 +516,6 @@ namespace QueryOptimiser
 			pair<Synonym, Synonym> argumentPair = getClauseArguments(clauses[i]);
 			Synonym LHS = argumentPair.first;
 			Synonym RHS = argumentPair.second;
-			SYNONYM_TYPE typeLHS = LHS.getType();
-			SYNONYM_TYPE typeRHS = RHS.getType();
 			string nameLHS = LHS.getName();
 			string nameRHS = RHS.getName();
 			bool hasJoinSynonym = (isContainedInMain(nameLHS) || isContainedInMain(nameRHS));
@@ -530,9 +527,9 @@ namespace QueryOptimiser
 			if (hasJoinSynonym && !isJoinClauseFound) {
 				isJoinClauseFound = true;
 				double numberOfValues = synonymsCount[nameLHS];
-				double costLHS = calculateCost(qnode_type, numberOfValues);
+				double costLHS = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, LeftToRight);
 				numberOfValues = synonymsCount[nameRHS];
-				double costRHS = calculateCost(qnode_type, numberOfValues);
+				double costRHS = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, RightToLeft);
 				
 				if (costLHS <= costRHS) {
 					smallestCost = costLHS;
@@ -548,7 +545,7 @@ namespace QueryOptimiser
 
 			//Check left to right direction
 			double numberOfValues = synonymsCount[nameLHS];
-			double cost = calculateCost(qnode_type, numberOfValues);
+			double cost = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, LeftToRight);
 
 			if (cost <= smallestCost) {
 				smallestCost = cost;
@@ -558,7 +555,7 @@ namespace QueryOptimiser
 
 			//Check right to left direction
 			numberOfValues = synonymsCount[nameRHS];
-			cost = calculateCost(qnode_type, numberOfValues);
+			cost = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, RightToLeft);
 
 			if (cost <= smallestCost) {
 				smallestCost = cost;
@@ -652,70 +649,6 @@ namespace QueryOptimiser
 		}
 	}
 
-	/**
-	* Method to get the estimated cost of evaluating this relation
-	* @param The relationship type
-	* @param The estimated number of times this relation will be called
-	*/
-	double calculateCost(QNODE_TYPE rel_type, double numberOfValues)
-	{
-		switch (rel_type) {
-		case ModifiesS:
-		case ModifiesP:
-			return numberOfValues * COST_MODIFIES;
-		case UsesS:
-		case UsesP:
-			return numberOfValues * COST_USES;
-		case Parent:
-			return numberOfValues * COST_PARENT;
-		case ParentT:
-			if (COST_PARENTS == 0) {
-				COST_PARENTS = statsTable->getParentSCost();
-			}
-			return numberOfValues * COST_PARENTS;
-		case Follows:
-			return numberOfValues * COST_FOLLOWS;
-		case FollowsT:
-			if (COST_FOLLOWSS == 0) {
-				COST_FOLLOWSS = statsTable->getFollowsSCost();
-			}
-			return numberOfValues * COST_FOLLOWSS;
-		case Calls:
-			return numberOfValues * COST_CALLS;
-		case CallsT:
-			if (COST_CALLSS == 0) {
-				COST_CALLSS = statsTable->getCallsSCost();
-			}
-			return numberOfValues * COST_CALLSS;
-		case Next:
-			return numberOfValues * COST_NEXT;
-		case NextT:
-			if (COST_NEXTS == 0) {
-				COST_NEXTS = statsTable->getNextSCost();
-			}
-			return numberOfValues * COST_NEXTS;
-		case Affects:
-			if (COST_AFFECTS == 0) {
-				COST_AFFECTS = statsTable->getAffectsCost();
-			}
-			return numberOfValues * COST_AFFECTS;
-		case AffectsT:
-			if (COST_AFFECTSS == 0) {
-				COST_AFFECTSS = statsTable->getAffectsSCost();
-			}
-			return numberOfValues * COST_AFFECTSS;
-		case Pattern:
-			if (COST_PATTERN == 0) {
-				COST_PATTERN = statsTable->getPatternCost();
-			}
-			return numberOfValues * COST_PATTERN;
-		case With:
-			return numberOfValues * COST_WITH;
-		default:
-			return 1;  //It should never reach here
-		}
-	}
-
 	vector<QNode*> populateSelectSynonyms(QNode* resultNode)
 	{
 		vector<QNode*> resultSynonyms;
@@ -728,7 +661,7 @@ namespace QueryOptimiser
 			Synonym wantedSynonym = resultChildNode->getArg1();
 			string name = wantedSynonym.getName();
 			if (wantedSynonym.getType() != BOOLEAN && selectSynonyms.count(name) == 0) {
-				selectSynonyms[wantedSynonym.getName()] = i;
+				selectSynonyms[name] = i;
 			}
 			resultSynonyms.push_back(resultChildNode);
 			resultChildNode = resultNode->getNextChild();
@@ -783,43 +716,10 @@ namespace QueryOptimiser
 		}
 	}
 
-	/**
-	* Method to reduce the synonym count by the reduction factor
-	* @param name The name of the synonym
-	* @param reductionFactor the reduction factor that is given
-	*/
-	void reduceSynonymsCount(string name, double reductionFactor)
+	unordered_map<string, int> indexSynonymsReferenced(QNode* clausesNode)
 	{
-		auto mapItr = synonymsCount.find(name);
-		//Only set if the synonym exists in the map
-		if (mapItr != synonymsCount.end()) {
-			unsigned int currentCount = synonymsCount[name];
-			synonymsCount[name] = (unsigned int)ceil(currentCount * reductionFactor);
-		}
-	}
-
-	unordered_map<string, int> indexSynonymsReferenced(QNode* resultNode, QNode* clausesNode)
-	{
-		unordered_map<string, int> name_index_map = selectSynonyms;
-		int index = selectSynonyms.size();
-		/*
-		int numberOfClauses = resultNode->getNumberOfChildren();
-		QNode* childNode = resultNode->getChild();
-
-		for (int i = 0; i < numberOfClauses; i++) {
-			Synonym synonym = childNode->getArg1();
-			if (synonym.getType() == BOOLEAN) {
-				break;
-			} else {
-				string name = synonym.getName();
-				if (name_index_map.count(name) == 0) {
-					name_index_map[name] = index;
-					index++;
-				}
-				childNode = resultNode->getNextChild();
-			}
-		}*/
-
+		unordered_map<string, int> name_index_map = selectSynonyms;  //Index the selected synonyms first
+		int index = selectSynonyms.size();  //Initialize the index value to the number of select synonyms
 		int numberOfClauses = clausesNode->getNumberOfChildren();
 		QNode* childNode = clausesNode->getChild();
 
@@ -827,10 +727,8 @@ namespace QueryOptimiser
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
-			SYNONYM_TYPE typeLHS = LHS.getType();
-			SYNONYM_TYPE typeRHS = RHS.getType();
 
-			if (typeLHS != STRING_CHAR && typeLHS != STRING_INT && typeLHS != STRING_PATTERNS && typeLHS != UNDEFINED) {
+			if (LHS.isSynonym()) {
 				string name = LHS.getName();
 				if (name_index_map.count(name) == 0) {
 					name_index_map[name] = index;
@@ -838,7 +736,7 @@ namespace QueryOptimiser
 				}
 			}
 
-			if (typeRHS != STRING_CHAR && typeRHS != STRING_INT && typeRHS != STRING_PATTERNS && typeRHS != UNDEFINED) {
+			if (RHS.isSynonym()) {
 				string name = RHS.getName();
 				if (name_index_map.count(name) == 0) {
 					name_index_map[name] = index;
@@ -852,7 +750,6 @@ namespace QueryOptimiser
 
 	vector<vector<int>> createSynonymGraph(QNode* clausesNode, unordered_map<string, int> name_index_map)
 	{
-		//todo: need to mark itself inside the graph?
 		vector<vector<int>> adjacencyMatrix;
 		int numberOfSynonyms = name_index_map.size();
 
@@ -868,8 +765,6 @@ namespace QueryOptimiser
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
-			SYNONYM_TYPE typeLHS = LHS.getType();
-			SYNONYM_TYPE typeRHS = RHS.getType();
 			int indexLHS;
 			int indexRHS;
 			
