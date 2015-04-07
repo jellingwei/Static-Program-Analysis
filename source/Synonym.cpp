@@ -117,6 +117,11 @@ BOOLEAN_ Synonym::isConstant()
 	return _type == STRING_CHAR || _type == STRING_INT || _type == STRING_PATTERNS;
 }
 
+BOOLEAN_ Synonym::isUndefined()
+{
+	return _type == UNDEFINED;
+}
+
 void Synonym::setValues(vector<int> values)
 {
 	_values = values;

@@ -26,6 +26,7 @@ public:
 	BOOLEAN_ isEmpty(); //Check if Synonym() is created. ie an empty Synonym
 	BOOLEAN_ isSynonym();
 	BOOLEAN_ isConstant();
+	BOOLEAN_ isUndefined();
 	
 	static string convertToString(SYNONYM_TYPE synonymType);
 	static SYNONYM_TYPE convertToEnum(string synonymType);
