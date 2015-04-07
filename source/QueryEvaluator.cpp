@@ -126,20 +126,17 @@ namespace QueryEvaluator
 				return result;
 			}
 
-			string wantedSynonymName = wantedSynonym.getName();
-			Synonym s = ValuesHandler::getSynonym(wantedSynonymName);
+			Synonym s = ValuesHandler::getSynonym(wantedSynonym);
 			result.push_back(s);
 		} else if (numberOfSynonyms > 1 && isValid) {
-			vector<string> wantedNames;
+			vector<Synonym> wantedSynonyms;
 
 			for (int i = 0; i < numberOfSynonyms; i++) {
 				Synonym wantedSynonym = resultChildNode->getArg1();
-				string wantedSynonymName = wantedSynonym.getName();
-				wantedNames.push_back(wantedSynonymName);
+				wantedSynonyms.push_back(wantedSynonym);
 				resultChildNode = resultNode->getNextChild();
 			}
-
-			result = ValuesHandler::getSynonymTuples(wantedNames);
+			result = ValuesHandler::getSynonymTuples(wantedSynonyms);
 		} 
 		return result;
 	}

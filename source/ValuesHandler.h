@@ -24,7 +24,8 @@ namespace ValuesHandler
 	BOOLEAN_ addAndProcessIntermediateSynonyms(Synonym LHS, Synonym RHS);
 	
 	Synonym getSynonym(string wantedName);
-	vector<Synonym> getSynonymTuples(vector<string> wantedNames);
+	Synonym getSynonym(Synonym wantedSynonym);
+	vector<Synonym> getSynonymTuples(vector<Synonym> wantedNames);
 	BOOLEAN_ filterEqualValue(Synonym synonym, string wantedValue);
 	BOOLEAN_ filterEqualPair(Synonym LHS, Synonym RHS);
 	BOOLEAN_ isValueExistInSet(set<int> setToSearch, VALUE value);

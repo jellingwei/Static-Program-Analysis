@@ -148,6 +148,7 @@ namespace ValuesHandler
 	
 	/**
 	* Helper method to convert an index to it's actual name
+	* Only used for joins using strings instead of numbers
 	* e.g. converting index 1 of procedure type yields "ProcOne"
 	* @param index the variable or procedure index
 	* @param type the type of synonym (e.g. procedure)
@@ -204,7 +205,7 @@ namespace ValuesHandler
 	}
 	
 	/**
-	* Helper method to get the synonym with its final values
+	* Helper method to get the synonym with its values
 	* Gets the default values if this synonym is not in the intermediate values
 	* Otherwise, performs gets the existing intermediate values
 	* @param wantedName the name of the wanted synonym
@@ -230,6 +231,26 @@ namespace ValuesHandler
 		}
 	}
 	
+	Synonym getSynonym(Synonym wantedSynonym) 
+	{
+		string wantedName = wantedSynonym.getName();
+
+		if (isExistInMainTable(wantedName)) {
+			int index = findIndexInMainTable(wantedName);
+			set<int> valuesSet = getIntermediateValuesSetInMain(index);
+			wantedSynonym.setValues(valuesSet);
+			return wantedSynonym;
+		} else if (isExistInSingletonTable(wantedName)) {
+			vector<int> values = singletonTable[wantedName];
+			wantedSynonym.setValues(values);
+			return wantedSynonym;
+		} else {
+			vector<int> values = getDefaultValues(wantedSynonym.getType());
+			wantedSynonym.setValues(values);
+			return wantedSynonym;
+		}
+	}
+	
 	/**
 	* Helper method to get the synonym tuples with its final values
 	* Gets the default values if this synonym is not in the intermediate values
@@ -237,42 +258,25 @@ namespace ValuesHandler
 	* @param wantedName the name of the wanted synonyms
 	* @return vector of Synonym objects with their values
 	*/
-	vector<Synonym> getSynonymTuples(vector<string> wantedNames)
+	vector<Synonym> getSynonymTuples(vector<Synonym> wantedSynonyms)
 	{
-		vector<Synonym> returnSynonyms;
-		vector<pair<string, int>> mainTableSynonyms;
-		set<string> singletonSynonyms;
-		unordered_map<string, vector<int>> valuesMap;
+		for (unsigned int i = 0; i < wantedSynonyms.size(); i++) {
+			Synonym synonym = wantedSynonyms[i];
+			string name = synonym.getName();
+			vector<int> values;
+			int mainIndex = findIndexInMainTable(name);
 
-		for (unsigned int i = 0; i < wantedNames.size(); i++) {
-			int index = findIndexInMainTable(wantedNames[i]);
-			if (index != -1) {
-				mainTableSynonyms.push_back(make_pair(wantedNames[i], index));
+			if (mainIndex != -1) {
+				values = getIntermediateValuesInMain(mainIndex);
+			} else if (isExistInSingletonTable(name)) {
+				values = singletonTable[name];
 			} else {
-				singletonSynonyms.insert(wantedNames[i]);
+				values = getDefaultValues(synonym.getType());
 			}
+			synonym.setValues(values);
+			swap(wantedSynonyms[i], synonym);
 		}
-
-		for (unsigned int i = 0; i < mainTableSynonyms.size(); i++) {
-			string name = mainTableSynonyms[i].first;
-			SYNONYM_TYPE type = mapSynonymNameToType[name];
-			vector<int> values = getIntermediateValuesInMain(mainTableSynonyms[i].second);
-			valuesMap[name] = values;
-		}
-
-		for (auto itr = singletonSynonyms.begin(); itr != singletonSynonyms.end(); ++itr) {
-			Synonym synonym = getSynonym(*itr);
-			valuesMap[synonym.getName()] = synonym.getValues();
-		}
-
-		for (unsigned int i = 0; i < wantedNames.size(); i++) {
-			string name = wantedNames[i];
-			SYNONYM_TYPE type = mapSynonymNameToType[name];
-			vector<int> values = valuesMap[name];
-			Synonym synonym(type, name, values);
-			returnSynonyms.push_back(synonym);
-		}
-		return returnSynonyms;
+		return wantedSynonyms;
 	}
 
 	/**

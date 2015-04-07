@@ -15,13 +15,14 @@ namespace ResultProjector {
 	void projectResultToList(vector<Synonym> resultVector, list<string>& resultList) { 
 		if (resultVector.size() == 1) {
 			SYNONYM_TYPE synonymType = resultVector[0].getType();
+			SYNONYM_ATTRIBUTE synonymAttribute = resultVector[0].getAttribute();
 			
 			if (synonymType == BOOLEAN) {
 				resultList.push_back(resultVector[0].getName());
 			} else {
 				vector<int> resultSet = resultVector[0].getValues();
 				for (vector<int>::iterator itr = resultSet.begin(); itr != resultSet.end(); ++itr) {
-					string value = ResultProjector::convertValueToString(*itr, synonymType);
+					string value = ResultProjector::convertValueToString(*itr, synonymType, synonymAttribute);
 					resultList.push_back(value);
 				}
 			}
@@ -56,6 +57,7 @@ namespace ResultProjector {
 		unordered_map<string, vector<string>> stringValuesMap;
 		set<string> insertedNames;
 
+		//Calculate the factors to replicate the rows
 		for (unsigned int i = 0; i < resultVector.size(); i++) {
 			Synonym synonym = resultVector[i];
 			string name = synonym.getName();
@@ -82,11 +84,12 @@ namespace ResultProjector {
 			Synonym synonym = resultVector[i];
 			string name = synonym.getName();
 			SYNONYM_TYPE type = synonym.getType();
+			SYNONYM_ATTRIBUTE attribute = synonym.getAttribute();
 			vector<int> valuesNumbers = synonym.getValues();
 			vector<string> valuesStrings;
 
 			for (unsigned int j = 0; j < valuesNumbers.size(); j++) {
-				valuesStrings.push_back(ResultProjector::convertValueToString(valuesNumbers[j], type));
+				valuesStrings.push_back(ResultProjector::convertValueToString(valuesNumbers[j], type, attribute));
 			}
 
 			if (isInMainTableMap[name] == true) {
@@ -133,12 +136,18 @@ namespace ResultProjector {
 	* Helper function to convert index to variable strings and to convert int to strings
 	* Returns the converted value as a string
 	*/
-	string convertValueToString(int value, SYNONYM_TYPE type) {
+	string convertValueToString(int value, SYNONYM_TYPE type, SYNONYM_ATTRIBUTE attribute) {
 		switch (type) {
 		case VARIABLE:
 			return pkb.getVarName(value);
 		case PROCEDURE:
 			return pkb.getProcName(value);
+		case CALL:
+			if (attribute == procName) {
+				return pkb.getProcNameCalledByStatement(value);
+			} else {
+				return to_string(static_cast<long long>(value));
+			}
 		default:
 			return to_string(static_cast<long long>(value));
 		}
