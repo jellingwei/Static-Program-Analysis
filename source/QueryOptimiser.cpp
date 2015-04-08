@@ -445,9 +445,9 @@ namespace QueryOptimiser
 		}
 		
 		vector<QNode*> reorderedClauses;
-		reorderedClauses.insert(reorderedClauses.begin(), bothConstants.begin(), bothConstants.end());
-		reorderedClauses.insert(reorderedClauses.begin(), oneSynonym.begin(), oneSynonym.end());
-		reorderedClauses.insert(reorderedClauses.begin(), oneUndefined.begin(), oneUndefined.end());
+		reorderedClauses.insert(reorderedClauses.end(), bothConstants.begin(), bothConstants.end());
+		reorderedClauses.insert(reorderedClauses.end(), oneSynonym.begin(), oneSynonym.end());
+		reorderedClauses.insert(reorderedClauses.end(), oneUndefined.begin(), oneUndefined.end());
 		return reorderedClauses;
 	}
 
