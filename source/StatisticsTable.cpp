@@ -235,7 +235,7 @@ void StatisticsTable::reduceCountModifies(Synonym LHS, Synonym RHS, DIRECTION di
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
-			double estimated = _synonymsCount[LHS.getName()];
+			double estimated = min(_synonymsCount[LHS.getName()], _assignSize);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
@@ -247,7 +247,11 @@ void StatisticsTable::reduceCountModifies(Synonym LHS, Synonym RHS, DIRECTION di
 
 void StatisticsTable::reduceCountUses(Synonym LHS, Synonym RHS, DIRECTION direction)
 {
-	if (LHS.isConstant() && RHS.isSynonym()) {
+	if (RHS.isUndefined()) {
+		double original = _synonymsCount[LHS.getName()];
+		double estimated = ceil(_stmtSize * 0.75);
+		_synonymsCount[LHS.getName()] = min(original, estimated);
+	} else if (LHS.isConstant() && RHS.isSynonym()) {
 		double original = _synonymsCount[RHS.getName()];
 		double estimated = ceil(_varSize / 3);
 		_synonymsCount[RHS.getName()] = min(original, estimated);
@@ -277,11 +281,11 @@ void StatisticsTable::reduceCountParent(Synonym LHS, Synonym RHS, DIRECTION dire
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
-			double estimated = _synonymsCount[LHS.getName()];
+			double estimated = ceil(_synonymsCount[LHS.getName()] / 2);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
-			double estimated = _synonymsCount[RHS.getName()];
+			double estimated = ceil(_synonymsCount[RHS.getName()] / 2);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
 		}
 	}
@@ -321,11 +325,11 @@ void StatisticsTable::reduceCountFollows(Synonym LHS, Synonym RHS, DIRECTION dir
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
-			double estimated = _synonymsCount[LHS.getName()];
+			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.75);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
-			double estimated = _synonymsCount[RHS.getName()];
+			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.75);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
 		}
 	}
@@ -365,11 +369,11 @@ void StatisticsTable::reduceCountCalls(Synonym LHS, Synonym RHS, DIRECTION direc
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
-			double estimated = _averageCallsPerProc * _synonymsCount[LHS.getName()];
+			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.75);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
-			double estimated = _averageCallsPerProc * _synonymsCount[RHS.getName()];
+			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.75);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
 		}
 	}
@@ -409,11 +413,11 @@ void StatisticsTable::reduceCountNext(Synonym LHS, Synonym RHS, DIRECTION direct
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
-			double estimated = _synonymsCount[LHS.getName()];
+			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.8);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
-			double estimated = _synonymsCount[RHS.getName()];
+			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.8);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
 		}
 	}
@@ -454,11 +458,11 @@ void StatisticsTable::reduceCountAffects(Synonym LHS, Synonym RHS, DIRECTION dir
 		//Assume that each statement affects another
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
-			double estimated = _synonymsCount[LHS.getName()];
+			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.6);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
-			double estimated = _synonymsCount[RHS.getName()];
+			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.6);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
 		}
 	}
