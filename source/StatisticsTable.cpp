@@ -513,6 +513,11 @@ void StatisticsTable::reduceCountPatternAssign(Synonym LHS, Synonym RHS)
 		double originalRHS = _synonymsCount[RHS.getName()];
 		double estimatedRHS = ceil(_assignSize / 5);  //Arbitrary
 		_synonymsCount[RHS.getName()] = min(originalRHS, estimatedRHS);
+	} else if (RHS.isUndefined()) {
+		//The clause is pattern assign(_, expression)
+		double originalLHS = _synonymsCount[LHS.getName()];
+		double estimatedLHS = ceil(_assignSize / 5);  //Arbitrary
+		_synonymsCount[LHS.getName()] = min(originalLHS, estimatedLHS);
 	} else if (RHS.isConstant()) {
 		//The clause is pattern assign("variable", expression)
 		double originalLHS = _synonymsCount[LHS.getName()];
@@ -532,6 +537,11 @@ void StatisticsTable::reduceCountPatternIf(Synonym LHS, Synonym RHS)
 		double originalRHS = _synonymsCount[RHS.getName()];
 		double estimatedRHS = ceil(_ifSize / 3);  //Arbitrary
 		_synonymsCount[RHS.getName()] = min(originalRHS, estimatedRHS);
+	} else if (RHS.isUndefined()) {
+		//The clause is pattern if(_, _, _)
+		double originalLHS = _synonymsCount[LHS.getName()];
+		double estimatedLHS = ceil(_ifSize / 3);  //Arbitrary
+		_synonymsCount[LHS.getName()] = min(originalLHS, estimatedLHS);
 	} else if (RHS.isConstant()) {
 		//The clause is pattern if("variable", _, _)
 		double originalLHS = _synonymsCount[LHS.getName()];
@@ -551,6 +561,11 @@ void StatisticsTable::reduceCountPatternWhile(Synonym LHS, Synonym RHS)
 		double originalRHS = _synonymsCount[RHS.getName()];
 		double estimatedRHS = ceil(_whileSize / 3);  //Arbitrary
 		_synonymsCount[RHS.getName()] = min(originalRHS, estimatedRHS);
+	} else if (RHS.isUndefined()) {
+		//The clause is pattern while(_, _)
+		double originalLHS = _synonymsCount[LHS.getName()];
+		double estimatedLHS = ceil(_whileSize / 3);  //Arbitrary
+		_synonymsCount[LHS.getName()] = min(originalLHS, estimatedLHS);
 	} else if (RHS.isConstant()) {
 		//The clause is pattern while("variable", _)
 		double originalLHS = _synonymsCount[LHS.getName()];
