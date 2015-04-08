@@ -266,9 +266,7 @@ namespace QueryOptimiser
 			QNode* clause = clauses[i];
 			QNODE_TYPE query_type = clause->getNodeType();
 
-			if (query_type == With || query_type == Pattern || query_type == Parent || 
-				query_type == ParentT || query_type == Follows || query_type == FollowsT ||
-				query_type == Next || query_type == NextT) {
+			if (query_type == With || query_type == Pattern) {
 					continue;  //Cannot replace synonyms in these clauses
 			}
 
@@ -294,7 +292,12 @@ namespace QueryOptimiser
 				int count = synonymOccurrence[nameLHS];
 				if (count == 0 || count == 1) {
 					//This synonym is likely to be redundant
-					if (query_type != ModifiesS && query_type != ModifiesP && 
+					if (query_type == Parent || query_type == ParentT || query_type == Follows || 
+						query_type == FollowsT || query_type == Next || query_type == NextT) {
+							if (LHS.getType() == STMT || LHS.getType() == PROG_LINE) {
+								LHS = undefined;  //Only stmt/progline can be replaced in the above clauses
+							}
+					} else if (query_type != ModifiesS && query_type != ModifiesP && 
 						query_type != UsesS && query_type != UsesP) {
 							LHS = undefined;  //LHS cannot be "_" in the these clauses
 					}
@@ -315,7 +318,14 @@ namespace QueryOptimiser
 
 				int count = synonymOccurrence[nameRHS];
 				if (count == 0 || count == 1) {
-					RHS = undefined;  //Replace RHS
+					if (query_type == Parent || query_type == ParentT || query_type == Follows || 
+						query_type == FollowsT || query_type == Next || query_type == NextT) {
+							if (RHS.getType() == STMT || RHS.getType() == PROG_LINE) {
+								RHS = undefined;
+							}
+					} else {
+						RHS = undefined;  //Can replace RHS directly if clause is not one of the above
+					}
 				}
 			}
 			setClauseArguments(clause, LHS, RHS);
@@ -412,38 +422,38 @@ namespace QueryOptimiser
 		}
 		return make_pair(constantClauses, nonConstantClauses);
 	}
-	
+
 	vector<QNode*> reorderConstantClauses(vector<QNode*> clauses)
 	{
 		//TODO: Check that the vector is not of size zero
 		vector<QNode*> bothConstants;
 		vector<QNode*> oneSynonym;
 		vector<QNode*> oneUndefined;
-		
+
 		for (unsigned int i = 0; i < clauses.size(); i++) {
 			QNode* clause = clauses[i];
 			pair<Synonym, Synonym> argumentPair = getClauseArguments(clause);
 			Synonym LHS = argumentPair.first;
 			Synonym RHS = argumentPair.second;
-			
+
 			if (LHS.isConstant() && RHS.isConstant()) {
 				bothConstants.push_back(clause);
 				continue;
 			}
-			
+
 			if (LHS.isUndefined() && RHS.isUndefined()) {
 				bothConstants.push_back(clause);
 				continue;
 			}
-			
+
 			if (LHS.isUndefined() || RHS.isUndefined()) {
 				oneUndefined.push_back(clause);
 				continue;
 			}
-			
+
 			oneSynonym.push_back(clause);
 		}
-		
+
 		vector<QNode*> reorderedClauses;
 		reorderedClauses.insert(reorderedClauses.end(), bothConstants.begin(), bothConstants.end());
 		reorderedClauses.insert(reorderedClauses.end(), oneSynonym.begin(), oneSynonym.end());
@@ -530,7 +540,7 @@ namespace QueryOptimiser
 				double costLHS = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, LeftToRight);
 				numberOfValues = synonymsCount[nameRHS];
 				double costRHS = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, RightToLeft);
-				
+
 				if (costLHS <= costRHS) {
 					smallestCost = costLHS;
 					smallestIndex = i;
@@ -767,7 +777,7 @@ namespace QueryOptimiser
 			Synonym RHS = synonymPair.second;
 			int indexLHS;
 			int indexRHS;
-			
+
 			if (LHS.isSynonym() && RHS.isSynonym()) {
 				indexLHS = name_index_map[LHS.getName()];
 				indexRHS = name_index_map[RHS.getName()];
