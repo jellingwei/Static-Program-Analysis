@@ -429,9 +429,23 @@ namespace QueryOptimiser
 		vector<QNode*> bothConstants;
 		vector<QNode*> oneSynonym;
 		vector<QNode*> oneUndefined;
+		vector<QNode*> nextTClauses;
+		vector<QNode*> affectsTClauses;
 
 		for (unsigned int i = 0; i < clauses.size(); i++) {
 			QNode* clause = clauses[i];
+			QNODE_TYPE qnode_type = clause->getNodeType();
+
+			if (qnode_type == NextT) {
+				nextTClauses.push_back(clause);
+				continue;
+			}
+			
+			if (qnode_type == AffectsT) {
+				affectsTClauses.push_back(clause);
+				continue;
+			}
+
 			pair<Synonym, Synonym> argumentPair = getClauseArguments(clause);
 			Synonym LHS = argumentPair.first;
 			Synonym RHS = argumentPair.second;
@@ -458,6 +472,8 @@ namespace QueryOptimiser
 		reorderedClauses.insert(reorderedClauses.end(), bothConstants.begin(), bothConstants.end());
 		reorderedClauses.insert(reorderedClauses.end(), oneSynonym.begin(), oneSynonym.end());
 		reorderedClauses.insert(reorderedClauses.end(), oneUndefined.begin(), oneUndefined.end());
+		reorderedClauses.insert(reorderedClauses.end(), nextTClauses.begin(), nextTClauses.end());
+		reorderedClauses.insert(reorderedClauses.end(), affectsTClauses.begin(), affectsTClauses.end());
 		return reorderedClauses;
 	}
 
@@ -697,12 +713,9 @@ namespace QueryOptimiser
 			subset = LHS;
 		}
 		string nameSuperset = superset.getName();
-		SYNONYM_TYPE typeSubset = subset.getType();
 
-		if (typeSubset == STRING_INT || typeSubset == STRING_CHAR) {
-			if (isSelectSynonym(nameSuperset)) {
-				return make_pair(false, LeftToRight);  //Cannot replace a select synonym with constants
-			}
+		if (isSelectSynonym(nameSuperset) && subset.isConstant()) {
+			return make_pair(false, LeftToRight);  //Cannot replace a select synonym with constants
 		}
 		return superset_subset_pair;
 	}
