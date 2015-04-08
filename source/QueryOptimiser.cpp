@@ -266,8 +266,8 @@ namespace QueryOptimiser
 			QNode* clause = clauses[i];
 			QNODE_TYPE query_type = clause->getNodeType();
 
-			if (query_type == With || query_type == Pattern) {
-					continue;  //Cannot replace synonyms in these clauses
+			if (query_type == With) {
+					continue;  //Cannot replace synonyms in with clause
 			}
 
 			Synonym undefined(UNDEFINED, "_");
@@ -298,7 +298,7 @@ namespace QueryOptimiser
 								LHS = undefined;  //Only stmt/progline can be replaced in the above clauses
 							}
 					} else if (query_type != ModifiesS && query_type != ModifiesP && 
-						query_type != UsesS && query_type != UsesP) {
+						query_type != UsesS && query_type != UsesP && query_type != Pattern) {
 							LHS = undefined;  //LHS cannot be "_" in the these clauses
 					}
 				}
