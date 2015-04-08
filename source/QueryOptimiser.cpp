@@ -635,14 +635,13 @@ namespace QueryOptimiser
 			} else {
 				return make_pair(false, RightToLeft);
 			}
-		} else if (typeLHS == STMT) {
+		} else if (typeLHS == STMT || typeLHS == PROG_LINE) {
 			if (typeRHS == ASSIGN || typeRHS == CALL || typeRHS == WHILE || typeRHS == IF || typeRHS == STRING_INT) {
 				return make_pair(true, LeftToRight);  //If RHS is also STMT, does it count? 
 			} else {
 				return make_pair(false, LeftToRight);
 			}
-		} else if (typeLHS == ASSIGN || typeLHS == CALL || typeLHS == WHILE || 
-			typeLHS == IF || typeLHS == PROG_LINE || typeLHS == CONSTANT) {
+		} else if (typeLHS == ASSIGN || typeLHS == CALL || typeLHS == WHILE || typeLHS == IF || typeLHS == CONSTANT) {
 				if (typeRHS == STRING_INT) {
 					return make_pair(true, LeftToRight);
 				} else {
