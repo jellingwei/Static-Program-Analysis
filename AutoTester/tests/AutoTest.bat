@@ -1,7 +1,9 @@
 @echo off
 
-set src=case0\test_src.txt
-set qry=case0\test_qry.txt
+rem Change runMode to Debug or Release of your choice
+set runMode=Debug
+set src=cs3202\mix\src.txt
+set qry=cs3202\mix\qry.txt
 set out=out.xml
 
 set /p params="Enter AutoTester Additional Args: " %=%
@@ -10,7 +12,7 @@ set /p params="Enter AutoTester Additional Args: " %=%
 :: No additional arguments, run normally
 if "%params%" == "" (
   echo Running AutoTester with
-  call "..\..\Debug\AutoTester.exe" %src% %qry% %out%
+  call "..\..\%runMode%\AutoTester.exe" %src% %qry% %out%
   pause
   exit
 )
@@ -22,7 +24,7 @@ for /f "tokens=2" %%G IN ("%params%") DO set p2=%%G
 if "%p1%" == "-f" (
   if "%p2%" NEQ "" (
     echo Running AutoTester with
-    call "..\..\Debug\AutoTester.exe" %src% %qry% %out% %p1% %p2%
+    call "..\..\%runMode%\AutoTester.exe" %src% %qry% %out% %p1% %p2%
     pause
     exit
   )
@@ -34,7 +36,7 @@ for /f "tokens=4" %%G IN ("%params%") DO set p4=%%G
 if "%p1%" == "-n" (
   if "%p3%" == "-t" (
     echo Running AutoTester with
-    call "..\..\Debug\AutoTester.exe" %src% %qry% %out% %p1% %p2% %p3% %p4%
+    call "..\..\%runMode%\AutoTester.exe" %src% %qry% %out% %p1% %p2% %p3% %p4%
     pause
     exit
   )
