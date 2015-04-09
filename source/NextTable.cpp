@@ -210,53 +210,11 @@ BOOLEAN_ NextTable::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLO
 
 
 PROGLINE_LIST NextTable::getLhs() {
-	PKB pkb = PKB::getInstance();
-	
-	vector<int> result;
-	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
-
-		CNode* node = pkb.cfgNodeTable.at(i);
-
-		if (node->getNodeType() == While_C || node->getNodeType() == If_C) {
-			result.push_back(node->getProcLineNumber());
-			continue;
-		}
-
-		vector<CNode*>* after = node->getAfter();
-		bool isLastNode;
-
-		// first handle special case for dummy node (End of if statement)
-		while (after->size() == 1 && after->at(0)->getNodeType() == EndIf_C) {
-			after = after->at(0)->getAfter();	
-		}
-
-		isLastNode = (after->size() == 1 && after->at(0)->getNodeType() == EndProc_C);
-		
-		if (!isLastNode) {
-			result.push_back(node->getProcLineNumber());
-		}
-	}
-
-	return result;
+	return lhs;
 }
 
 PROGLINE_LIST NextTable::getRhs() {
-	PKB pkb = PKB::getInstance();
-
-	vector<int> result;
-	vector<int> assignStmts = pkb.getStmtNumForType(ASSIGN);
-	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
-		CNode* node = pkb.cfgNodeTable.at(i);
-
-		vector<CNode*>* before = node->getBefore();
-		bool isFirstNode = (before->size() == 1 && before->at(0)->getNodeType() == Proc_C);
-		
-		if (!isFirstNode) {
-			result.push_back(i);
-		}
-	}
-
-	return result;
+	return rhs;
 }
 
 CNode* NextTable::getCNodeForProgLine(PROG_LINE_ progLine) {
@@ -337,4 +295,4 @@ BOOLEAN_ NextTable::isLhsValid(PROG_LINE_ lhs) {
 
 BOOLEAN_ NextTable::isRhsValid(PROG_LINE_ rhs) {
 	return find(this->rhs.begin(), this->rhs.end(), rhs) != this->rhs.end();
-}
+}	

@@ -30,18 +30,13 @@ using namespace std;
 
 class TNode;
 
-class VarTable;  // no need to #include "VarTable.h" as all I need is pointer
+class VarTable;  
 class StmtTable;
 
 typedef pair<CNode*, stack<CNode*> > NEXTBIP_STATE;
 
 class PKB {
 public:
-	// @cond todo
-
-
-	// @endcond
-
 	static PKB& getInstance();
 
 	// AST methods
