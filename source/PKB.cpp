@@ -1296,12 +1296,7 @@ void PKB::setNextRhs(int rhs) {
 *		  FALSE if Affect(progLine1,progLine2) is not satisfied or either progline1 or progLine2 is negative or 0.
 */
 BOOLEAN_ PKB::isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
-	//@todo optimise in future
-	// do this now to prevent regressions, as Affects will change a lot in the next week
-	vector<int> ans = getAffectedBy(progLine1, transitiveClosure);
-
-	return find(ans.begin(), ans.end(), progLine2) != ans.end();
-
+	return affectsTable->isAffects(progLine1, progLine2, transitiveClosure);
 }
 
 /**
