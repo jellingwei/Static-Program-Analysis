@@ -1279,6 +1279,13 @@ CNode* PKB::getCNodeForProgLine(PROG_LINE_ progLine) {
 	return cfgNodeTable.at(progLine);
 }
 
+void PKB::setNextLhs(int lhs) {
+	nextTable->setLhs(lhs);
+}
+void PKB::setNextRhs(int rhs) {
+	nextTable->setRhs(rhs);
+}
+
 // Affects Table methods
 
 /**

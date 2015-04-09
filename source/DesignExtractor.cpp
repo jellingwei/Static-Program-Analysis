@@ -985,5 +985,37 @@ void DesignExtractor::precomputeInformationForNext() {
 		pkb.setLastProgLineInContainer(node->getStmtNumber(), lastChildOfStmtListNode->getStmtNumber());
 	}
 
-	
-}
+	// set lhs and rhs
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
+		CNode* node = pkb.cfgNodeTable.at(i);
+
+		vector<CNode*>* after = node->getAfter();
+
+		if (node->getNodeType() == While_C || node->getNodeType() == If_C) {
+			pkb.setNextLhs(i);
+			continue;
+		}
+
+		// first handle special case for dummy node (End of if statement)
+		while (after->at(0)->getNodeType() == EndIf_C) {
+			after = after->at(0)->getAfter();	
+		}
+
+		bool isLastNode = (after->size() == 1 && after->at(0)->getNodeType() == EndProc_C);
+		if (!isLastNode) {
+			pkb.setNextLhs(i);
+		}
+	}
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
+		CNode* node = pkb.cfgNodeTable.at(i);
+
+		vector<CNode*>* before = node->getBefore();
+		bool isFirstNode = (before->size() == 1 && before->at(0)->getNodeType() == Proc_C);
+		
+		if (!isFirstNode) {
+			pkb.setNextRhs(i);
+		}
+	}
+
+
+}	

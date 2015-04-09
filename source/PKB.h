@@ -202,6 +202,8 @@ public:
 	void setFirstProgLineInElse(int, int);
 	void setLastProgLineInContainer(int, int);
 	void setProgLineInWhile(int);
+	void setNextLhs(int);
+	void setNextRhs(int);
 
 	vector<CFG*> cfgTable;
 

@@ -24,6 +24,10 @@ public:
 	BOOLEAN_ isLhsValid(PROG_LINE_);
 	BOOLEAN_ isRhsValid(PROG_LINE_);
 
+	BOOLEAN_ setLhs(PROG_LINE_);
+	BOOLEAN_ setRhs(PROG_LINE_);
+
+
 	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
 
 	PROG_LINE_ getFirstProgLineInProc(PROC_INDEX procIndex);
@@ -39,6 +43,9 @@ public:
 	BOOLEAN_ setProgLineInWhile(PROG_LINE_ progline); 
 
 private:
+	vector<int> lhs;
+	vector<int> rhs;
+
 	vector<int> firstProgLineInProc;
 	vector<int> lastProgLineInProc;
 

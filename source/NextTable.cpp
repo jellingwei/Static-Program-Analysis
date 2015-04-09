@@ -321,40 +321,21 @@ BOOLEAN_ NextTable::isValid() {
 	return false;
 }
 
+BOOLEAN_ NextTable::setLhs(PROG_LINE_ newLine) {
+	cout << "add lhs " << newLine << endl;
+	lhs.push_back(newLine);
+	return true;
+}
+BOOLEAN_ NextTable::setRhs(PROG_LINE_ newLine) {
+	rhs.push_back(newLine);
+	return true;
+}
+
+
 BOOLEAN_ NextTable::isLhsValid(PROG_LINE_ lhs) {
-	PKB pkb = PKB::getInstance();
-	if (pkb.cfgNodeTable.count(lhs) == 0) {
-		return false;
-	}
-	CNode* node = pkb.cfgNodeTable.at(lhs);
-
-	if (node->getNodeType() == While_C || node->getNodeType() == If_C) {
-		return true;
-	}
-
-	vector<CNode*>* after = node->getAfter();
-	bool isLastNode;
-
-	// first handle special case for dummy node (End of if statement)
-	while (after->size() == 1 && after->at(0)->getNodeType() == EndIf_C) {
-		after = after->at(0)->getAfter();	
-	}
-
-	isLastNode = (after->size() == 1 && after->at(0)->getNodeType() == EndProc_C);
-		
-	return !isLastNode;
+	return find(this->lhs.begin(), this->lhs.end(), lhs) != this->lhs.end();
 }
 
 BOOLEAN_ NextTable::isRhsValid(PROG_LINE_ rhs) {
-	PKB pkb = PKB::getInstance();
-	if (pkb.cfgNodeTable.count(rhs) == 0) {
-		return false;
-	}
-
-	CNode* node = pkb.cfgNodeTable.at(rhs);
-
-	vector<CNode*>* before = node->getBefore();
-	bool isFirstNode = (before->size() == 1 && before->at(0)->getNodeType() == Proc_C);
-		
-	return (!isFirstNode);
+	return find(this->rhs.begin(), this->rhs.end(), rhs) != this->rhs.end();
 }
