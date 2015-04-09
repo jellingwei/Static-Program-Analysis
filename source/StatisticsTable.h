@@ -32,14 +32,14 @@ public:
 	
 	double getCountForType(SYNONYM_TYPE);
 
-	double calculateCost(QNODE_TYPE rel_type, string nameLHS, string nameRHS, DIRECTION direction);
+	double calculateCost(QNODE_TYPE rel_type, Synonym LHS, Synonym RHS, DIRECTION direction);
 	double getAffectsCost();
 	double getAffectsSCost();
 	double getFollowsSCost();
 	double getParentSCost();
 	double getCallsSCost();
 	double getNextSCost();
-	double getPatternCost();
+	double getPatternCost(Synonym synonym);
 	
 	void reduceCount(QNODE_TYPE rel_type, Synonym LHS, Synonym RHS, DIRECTION direction);
 	void reduceCountModifies(Synonym LHS, Synonym RHS, DIRECTION direction);

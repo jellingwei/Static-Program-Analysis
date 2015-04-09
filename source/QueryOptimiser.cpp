@@ -404,11 +404,12 @@ namespace QueryOptimiser
 			Synonym LHS = argumentPair.first;
 			Synonym RHS = argumentPair.second;
 
-			//If it is a constant, set the direction
-			if (LHS.isConstant() || RHS.isUndefined()) {
+			if (LHS.isUndefined() && RHS.isUndefined()) {
+				clauseNode->setDirection(LeftToRight);
+			} else if (LHS.isConstant()) {
 				clauseNode->setDirection(LeftToRight);
 				statsTable->reduceCount(qnode_type, LHS, RHS, LeftToRight);  //Set the new expected count
-			} else if (RHS.isConstant() || LHS.isUndefined()) {
+			} else if (RHS.isConstant()) {
 				clauseNode->setDirection(RightToLeft);
 				statsTable->reduceCount(qnode_type, LHS, RHS, RightToLeft);  //Set the new expected count
 			} else {
@@ -427,24 +428,11 @@ namespace QueryOptimiser
 	{
 		//TODO: Check that the vector is not of size zero
 		vector<QNode*> bothConstants;
-		vector<QNode*> oneSynonym;
-		vector<QNode*> oneUndefined;
-		vector<QNode*> nextTClauses;
-		vector<QNode*> affectsTClauses;
+		vector<QNode*> oneConstant;
 
 		for (unsigned int i = 0; i < clauses.size(); i++) {
 			QNode* clause = clauses[i];
 			QNODE_TYPE qnode_type = clause->getNodeType();
-
-			if (qnode_type == NextT) {
-				nextTClauses.push_back(clause);
-				continue;
-			}
-			
-			if (qnode_type == AffectsT) {
-				affectsTClauses.push_back(clause);
-				continue;
-			}
 
 			pair<Synonym, Synonym> argumentPair = getClauseArguments(clause);
 			Synonym LHS = argumentPair.first;
@@ -460,20 +448,12 @@ namespace QueryOptimiser
 				continue;
 			}
 
-			if (LHS.isUndefined() || RHS.isUndefined()) {
-				oneUndefined.push_back(clause);
-				continue;
-			}
-
-			oneSynonym.push_back(clause);
+			oneConstant.push_back(clause);
 		}
 
 		vector<QNode*> reorderedClauses;
 		reorderedClauses.insert(reorderedClauses.end(), bothConstants.begin(), bothConstants.end());
-		reorderedClauses.insert(reorderedClauses.end(), oneSynonym.begin(), oneSynonym.end());
-		reorderedClauses.insert(reorderedClauses.end(), oneUndefined.begin(), oneUndefined.end());
-		reorderedClauses.insert(reorderedClauses.end(), nextTClauses.begin(), nextTClauses.end());
-		reorderedClauses.insert(reorderedClauses.end(), affectsTClauses.begin(), affectsTClauses.end());
+		reorderedClauses.insert(reorderedClauses.end(), oneConstant.begin(), oneConstant.end());
 		return reorderedClauses;
 	}
 
@@ -552,10 +532,8 @@ namespace QueryOptimiser
 
 			if (hasJoinSynonym && !isJoinClauseFound) {
 				isJoinClauseFound = true;
-				double numberOfValues = synonymsCount[nameLHS];
-				double costLHS = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, LeftToRight);
-				numberOfValues = synonymsCount[nameRHS];
-				double costRHS = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, RightToLeft);
+				double costLHS = statsTable->calculateCost(qnode_type, LHS, RHS, LeftToRight);
+				double costRHS = statsTable->calculateCost(qnode_type, LHS, RHS, RightToLeft);
 
 				if (costLHS <= costRHS) {
 					smallestCost = costLHS;
@@ -570,9 +548,7 @@ namespace QueryOptimiser
 			}
 
 			//Check left to right direction
-			double numberOfValues = synonymsCount[nameLHS];
-			double cost = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, LeftToRight);
-
+			double cost = statsTable->calculateCost(qnode_type, LHS, RHS, LeftToRight);
 			if (cost <= smallestCost) {
 				smallestCost = cost;
 				smallestIndex = i;
@@ -580,9 +556,7 @@ namespace QueryOptimiser
 			}
 
 			//Check right to left direction
-			numberOfValues = synonymsCount[nameRHS];
-			cost = statsTable->calculateCost(qnode_type, nameLHS, nameRHS, RightToLeft);
-
+			cost = statsTable->calculateCost(qnode_type, LHS, RHS, RightToLeft);
 			if (cost <= smallestCost) {
 				smallestCost = cost;
 				smallestIndex = i;
