@@ -322,7 +322,6 @@ BOOLEAN_ NextTable::isValid() {
 }
 
 BOOLEAN_ NextTable::setLhs(PROG_LINE_ newLine) {
-	cout << "add lhs " << newLine << endl;
 	lhs.push_back(newLine);
 	return true;
 }
