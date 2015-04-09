@@ -438,6 +438,16 @@ void PKBTest::testPKB()
 		}
 	}*/
 
+	vector<pair<int, vector<int>>> testing;
+	testing = pkb.contains(While, Assign, true);
+	for(int i=0; i<testing.size(); i++) {
+		pair <int, vector<int>> tester = testing.at(i);
+		cout << (i+1) << ". While at stmtNo " << tester.first << endl;
+		for(int j=0; j<tester.second.size(); j++) {
+			cout << "Assign StmtNo " << tester.second.at(j) << endl;
+		}
+	}
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(While, StmtLst)", 7, (int)pkb.contains(While, StmtLst, false).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(While, Assign)", 7, (int)pkb.contains(While, Assign, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Procedure, StmtLst)", 5, (int)pkb.contains(Procedure, StmtLst, false).size());
@@ -465,10 +475,10 @@ void PKBTest::testPKB()
 
 	//New Pattern Syntax
 	cout << "New Pattern Syntax" << endl;
-	vector<int> testing = pkb.patternMatchIfElse("b", Variable);
+	vector<int> testing2 = pkb.patternMatchIfElse("b", Variable);
 	//vector<int> testing = pkb.patternMatchIf("a", Plus);
-	for(int i=0; i<testing.size(); i++) {
-		cout << "stmtNo " << testing.at(i) << endl;
+	for(int i=0; i<testing2.size(); i++) {
+		cout << "stmtNo " << testing2.at(i) << endl;
 	}
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', Plus)", 9, pkb.patternMatchWhile("b", Plus).front());

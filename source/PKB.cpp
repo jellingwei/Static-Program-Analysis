@@ -1206,7 +1206,7 @@ bool PKB::canSkipNodesForwards(CNode* node) {
 }
 
 //contains
-vector<pair<TNode*, vector<TNode*>>> PKB::contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure) {
+vector<pair<int, vector<int>>> PKB::contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure) {
 	return contain->contains(parentType, childType, transitiveClosure);
 }
 

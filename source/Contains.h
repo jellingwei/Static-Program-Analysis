@@ -15,16 +15,9 @@ using namespace std;
 class Contains
 {
 public:
-	vector<pair<TNode*, vector<TNode*>>> contains(TNODE_TYPE predecessorType, TNODE_TYPE descendentType, bool transitiveClosure);
-	
-	/*vector<TNode*> checkForProcCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
-	vector<TNode*> checkForWhileCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
-	vector<TNode*> checkForIfCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
-	vector<TNode*> checkForStmtLstCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
-	
-	vector<TNode*> checkForAssignCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
-	
-	vector<TNode*> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);*/
+	vector<pair<int, vector<int>>> contains(TNODE_TYPE predecessorType, TNODE_TYPE descendentType, bool transitiveClosure);
+
+	//vector<pair<int, vector<int>>> containsConstVar(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
 
 	vector<int> checkForWhileThen(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
 	vector<int> checkForIfThenElse(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);

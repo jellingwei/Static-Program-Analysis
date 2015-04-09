@@ -200,8 +200,7 @@ public:
 	static bool canSkipNodesForwards(CNode* node);
 
 	//contains 
-	vector<pair<TNode*, vector<TNode*>>> contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
-
+	vector<pair<int, vector<int>>> contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
 
 	//@todo 
 	// @cond todo
