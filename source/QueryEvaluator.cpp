@@ -27,38 +27,47 @@ namespace QueryEvaluator
 
 	//Functions to process clauses
 	BOOLEAN_ processModifies(Synonym LHS, Synonym RHS, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateModifiesByPair(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS);
 
 	BOOLEAN_ processUses(Synonym LHS, Synonym RHS, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateUsesByPair(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS);
 	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS);
 
 	BOOLEAN_ processParentT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processFollowsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processCallsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processNextT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	
 	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	
 	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
+	pair<vector<int>, vector<int>> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
@@ -266,17 +275,49 @@ namespace QueryEvaluator
 			}
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> modifiesPair = evaluateModifiesByLHS(LHS, RHS);
-				LHS.setValues(modifiesPair.first);
-				RHS.setValues(modifiesPair.second);
+			pair<vector<int>, vector<int>> modifiesPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				modifiesPair = evaluateModifiesByPair(LHS, RHS);
+			} else if (direction == LeftToRight) {
+				modifiesPair = evaluateModifiesByLHS(LHS, RHS);
 			} else {
-				pair<vector<int>, vector<int>> modifiesPair = evaluateModifiesByRHS(LHS, RHS);
-				LHS.setValues(modifiesPair.first);
-				RHS.setValues(modifiesPair.second);
+				modifiesPair = evaluateModifiesByRHS(LHS, RHS);
 			}
+			LHS.setValues(modifiesPair.first);
+			RHS.setValues(modifiesPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateModifiesByPair(Synonym LHS, Synonym RHS)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		if (LHS.getType() == PROCEDURE) {
+			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+				int valueLHS = valuesLHS[i];
+				int valueRHS = valuesRHS[i];
+				if (pkb.isModifiesProc(valueLHS, valueRHS)) {
+					acceptedLHS.push_back(valueLHS);
+					acceptedRHS.push_back(valueRHS);
+				}
+			}
+		} else {
+			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+				int valueLHS = valuesLHS[i];
+				int valueRHS = valuesRHS[i];
+				if (pkb.isModifies(valueLHS, valueRHS)) {
+					acceptedLHS.push_back(valueLHS);
+					acceptedRHS.push_back(valueRHS);
+				}
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -378,17 +419,49 @@ namespace QueryEvaluator
 			}
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> usesPair = evaluateUsesByLHS(LHS, RHS);
-				LHS.setValues(usesPair.first);
-				RHS.setValues(usesPair.second);
+			pair<vector<int>, vector<int>> usesPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				usesPair = evaluateUsesByPair(LHS, RHS);
+			} else if (direction == LeftToRight) {
+				usesPair = evaluateUsesByLHS(LHS, RHS);
 			} else {
-				pair<vector<int>, vector<int>> usesPair = evaluateUsesByRHS(LHS, RHS);
-				LHS.setValues(usesPair.first);
-				RHS.setValues(usesPair.second);
+				usesPair = evaluateUsesByRHS(LHS, RHS);
 			}
+			LHS.setValues(usesPair.first);
+			RHS.setValues(usesPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateUsesByPair(Synonym LHS, Synonym RHS)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		if (LHS.getType() == PROCEDURE) {
+			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+				int valueLHS = valuesLHS[i];
+				int valueRHS = valuesRHS[i];
+				if (pkb.isUsesProc(valueLHS, valueRHS)) {
+					acceptedLHS.push_back(valueLHS);
+					acceptedRHS.push_back(valueRHS);
+				}
+			}
+		} else {
+			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+				int valueLHS = valuesLHS[i];
+				int valueRHS = valuesRHS[i];
+				if (pkb.isUses(valueLHS, valueRHS)) {
+					acceptedLHS.push_back(valueLHS);
+					acceptedRHS.push_back(valueRHS);
+				}
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -478,17 +551,38 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getParentLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
-				LHS.setValues(parentsPair.first);
-				RHS.setValues(parentsPair.second);
+			pair<vector<int>, vector<int>> parentsPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				parentsPair = evaluateParentByPair(LHS, RHS, isTrans);
+			} else if (direction == LeftToRight) {
+				parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
 			} else {
-				pair<vector<int>, vector<int>> parentsPair = evaluateParentByRHS(LHS, RHS, isTrans);
-				LHS.setValues(parentsPair.first);
-				RHS.setValues(parentsPair.second);
+				parentsPair = evaluateParentByRHS(LHS, RHS, isTrans);
 			}
+			LHS.setValues(parentsPair.first);
+			RHS.setValues(parentsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			int valueLHS = valuesLHS[i];
+			int valueRHS = valuesRHS[i];
+			if (pkb.isParent(valueLHS, valueRHS, isTrans)) {
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -572,17 +666,38 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getFollowsLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
-				LHS.setValues(followsPair.first);
-				RHS.setValues(followsPair.second);
+			pair<vector<int>, vector<int>> followsPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				followsPair = evaluateFollowsByPair(LHS, RHS, isTrans);
+			} else if (direction == LeftToRight) {
+				followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
 			} else {
-				pair<vector<int>, vector<int>> followsPair = evaluateFollowsByRHS(LHS, RHS, isTrans);
-				LHS.setValues(followsPair.first);
-				RHS.setValues(followsPair.second);
+				followsPair = evaluateFollowsByRHS(LHS, RHS, isTrans);
 			}
+			LHS.setValues(followsPair.first);
+			RHS.setValues(followsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			int valueLHS = valuesLHS[i];
+			int valueRHS = valuesRHS[i];
+			if (pkb.isFollows(valueLHS, valueRHS, isTrans)) {
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -664,17 +779,38 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getCallsLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
-				LHS.setValues(callsPair.first);
-				RHS.setValues(callsPair.second);
+			pair<vector<int>, vector<int>> callsPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				callsPair = evaluateCallsByPair(LHS, RHS, isTrans);
+			} else if (direction == LeftToRight) {
+				callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
 			} else {
-				pair<vector<int>, vector<int>> callsPair = evaluateCallsByRHS(LHS, RHS, isTrans);
-				LHS.setValues(callsPair.first);
-				RHS.setValues(callsPair.second);
+				callsPair = evaluateCallsByRHS(LHS, RHS, isTrans);
 			}
+			LHS.setValues(callsPair.first);
+			RHS.setValues(callsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			int valueLHS = valuesLHS[i];
+			int valueRHS = valuesRHS[i];
+			if (pkb.isCalls(valueLHS, valueRHS, isTrans)) {
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -772,17 +908,38 @@ namespace QueryEvaluator
 			LHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> nextPair = evaluateNextByLHS(LHS, RHS, isTrans);
-				LHS.setValues(nextPair.first);
-				RHS.setValues(nextPair.second);
+			pair<vector<int>, vector<int>> nextPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				nextPair = evaluateNextByPair(LHS, RHS, isTrans);
+			} else if (direction == LeftToRight) {
+				nextPair = evaluateNextByLHS(LHS, RHS, isTrans);
 			} else {
-				pair<vector<int>, vector<int>> nextPair = evaluateNextByRHS(LHS, RHS, isTrans);
-				LHS.setValues(nextPair.first);
-				RHS.setValues(nextPair.second);
+				nextPair = evaluateNextByRHS(LHS, RHS, isTrans);
 			}
+			LHS.setValues(nextPair.first);
+			RHS.setValues(nextPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			int valueLHS = valuesLHS[i];
+			int valueRHS = valuesRHS[i];
+			if (pkb.isNext(valueLHS, valueRHS, isTrans)) {
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -880,17 +1037,38 @@ namespace QueryEvaluator
 			LHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
-				LHS.setValues(affectsPair.first);
-				RHS.setValues(affectsPair.second);
+			pair<vector<int>, vector<int>> affectsPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				affectsPair = evaluateAffectsByPair(LHS, RHS, isTrans);
+			} else if (direction == LeftToRight) {
+				affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
 			} else {
-				pair<vector<int>, vector<int>> affectsPair = evaluateAffectsByRHS(LHS, RHS, isTrans);
-				LHS.setValues(affectsPair.first);
-				RHS.setValues(affectsPair.second);
+				affectsPair = evaluateAffectsByRHS(LHS, RHS, isTrans);
 			}
+			LHS.setValues(affectsPair.first);
+			RHS.setValues(affectsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			int valueLHS = valuesLHS[i];
+			int valueRHS = valuesRHS[i];
+			if (pkb.isAffects(valueLHS, valueRHS, isTrans)) {
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -972,17 +1150,38 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getNextBipLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> nextBipPair = evaluateNextBipByLHS(LHS, RHS, isTrans);
-				LHS.setValues(nextBipPair.first);
-				RHS.setValues(nextBipPair.second);
+			pair<vector<int>, vector<int>> nextBipPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				nextBipPair = evaluateNextBipByPair(LHS, RHS, isTrans);
+			} else if (direction == LeftToRight) {
+				nextBipPair = evaluateNextBipByLHS(LHS, RHS, isTrans);
 			} else {
-				pair<vector<int>, vector<int>> nextBipPair = evaluateNextBipByRHS(LHS, RHS, isTrans);
-				LHS.setValues(nextBipPair.first);
-				RHS.setValues(nextBipPair.second);
+				nextBipPair = evaluateNextBipByRHS(LHS, RHS, isTrans);
 			}
+			LHS.setValues(nextBipPair.first);
+			RHS.setValues(nextBipPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			int valueLHS = valuesLHS[i];
+			int valueRHS = valuesRHS[i];
+			if (pkb.isNextBip(valueLHS, valueRHS, isTrans)) {
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -1042,15 +1241,17 @@ namespace QueryEvaluator
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
-			return pkb.isAffectsBip(stoi(LHS.getName()), stoi(RHS.getName()), isTrans);
+			return pkb.isAffectsBip(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffectsBipAfter(stoi(LHS.getName()), isTrans);
+			vector<int> stmt = pkb.getAffectsBipAfter(stoi(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffectsBipBefore(stoi(RHS.getName()), isTrans);
+			vector<int> stmt = pkb.getAffectsBipBefore(stoi(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
@@ -1062,17 +1263,38 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getAffectsBipLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			if (direction == LeftToRight) {
-				pair<vector<int>, vector<int>> affectsBipPair = evaluateAffectsBipByLHS(LHS, RHS, isTrans);
-				LHS.setValues(affectsBipPair.first);
-				RHS.setValues(affectsBipPair.second);
+			pair<vector<int>, vector<int>> affectsBipPair;
+
+			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+				affectsBipPair = evaluateAffectsBipByPair(LHS, RHS, isTrans);
+			} else if (direction == LeftToRight) {
+				affectsBipPair = evaluateAffectsBipByLHS(LHS, RHS, isTrans);
 			} else {
-				pair<vector<int>, vector<int>> affectsBipPair = evaluateAffectsBipByRHS(LHS, RHS, isTrans);
-				LHS.setValues(affectsBipPair.first);
-				RHS.setValues(affectsBipPair.second);
+				affectsBipPair = evaluateAffectsBipByRHS(LHS, RHS, isTrans);
 			}
+			LHS.setValues(affectsBipPair.first);
+			RHS.setValues(affectsBipPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
+	}
+
+	pair<vector<int>, vector<int>> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		vector<int> valuesLHS = valuesPair.first;
+		vector<int> valuesRHS = valuesPair.second;
+		vector<int> acceptedLHS;
+		vector<int> acceptedRHS;
+
+		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
+			int valueLHS = valuesLHS[i];
+			int valueRHS = valuesRHS[i];
+			if (pkb.isAffectsBip(valueLHS, valueRHS, isTrans)) {
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**

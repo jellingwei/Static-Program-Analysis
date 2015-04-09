@@ -30,8 +30,6 @@ namespace ValuesHandler
 	BOOLEAN_ filterEqualPair(Synonym LHS, Synonym RHS);
 	BOOLEAN_ isValueExistInSet(set<int> setToSearch, VALUE value);
 	vector<int> getDefaultValues(SYNONYM_TYPE type);
-	set<int> getIntermediateValuesSet(string wantedName);
-	vector<int> getIntermediateValues(string wantedName);
 
 	//Functions made public for testing purposes
 	void clearAll();
@@ -42,6 +40,7 @@ namespace ValuesHandler
 	inline void removeFromSingletonTable(SYNONYM_NAME synonymName);
 	set<int> getIntermediateValuesSetInMain(SYNONYM_INDEX synonymIndex);
 	vector<int> getIntermediateValuesInMain(SYNONYM_INDEX synonymIndex);
+	pair<vector<int>, vector<int>> getIntermediateValuesPair(SYNONYM_NAME synonym1, SYNONYM_NAME synonym2);
 
 	BOOLEAN_ hashIntersectWithMainTable(Synonym synonym);
 	BOOLEAN_ hashIntersectWithMainTable(Synonym LHS, Synonym RHS);

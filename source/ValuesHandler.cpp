@@ -311,6 +311,21 @@ namespace ValuesHandler
 		return values;
 	}
 
+	pair<vector<int>, vector<int>> getIntermediateValuesPair(SYNONYM_NAME synonym1, SYNONYM_NAME synonym2)
+	{
+		//TODO: Assert that these synonyms exist in the main table
+		int index1 = findIndexInMainTable(synonym1);
+		int index2 = findIndexInMainTable(synonym2);
+		vector<int> values1;
+		vector<int> values2;
+
+		for (unsigned int i = 0; i < mainTable.size(); i++) {
+			values1.push_back(mainTable[i][index1]);
+			values2.push_back(mainTable[i][index2]);
+		}
+		return make_pair(values1, values2);
+	}
+
 	/**
 	* Check if the adding and processing of intermediate synonym is successful.
 	* @param synonym
