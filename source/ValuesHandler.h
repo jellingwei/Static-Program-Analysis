@@ -28,8 +28,8 @@ namespace ValuesHandler
 	vector<Synonym> getSynonymTuples(vector<Synonym> wantedNames);
 	BOOLEAN_ filterEqualValue(Synonym synonym, string wantedValue);
 	BOOLEAN_ filterEqualPair(Synonym LHS, Synonym RHS);
-	BOOLEAN_ isValueExistInSet(set<int> setToSearch, VALUE value);
-	vector<int> getDefaultValues(SYNONYM_TYPE type);
+	BOOLEAN_ isValueExistInSet(VALUE_SET setToSearch, VALUE value);
+	VALUE_LIST getDefaultValues(SYNONYM_TYPE type);
 
 	//Functions made public for testing purposes
 	void clearAll();
@@ -38,17 +38,17 @@ namespace ValuesHandler
 	BOOLEAN_ isExistInSingletonTable(SYNONYM_NAME synonymName);
 	BOOLEAN_ addToSingletonTableForTesting(Synonym synonym);
 	inline void removeFromSingletonTable(SYNONYM_NAME synonymName);
-	set<int> getIntermediateValuesSetInMain(SYNONYM_INDEX synonymIndex);
-	vector<int> getIntermediateValuesInMain(SYNONYM_INDEX synonymIndex);
-	pair<vector<int>, vector<int>> getIntermediateValuesPair(SYNONYM_NAME synonym1, SYNONYM_NAME synonym2);
+	VALUE_SET getIntermediateValuesSetInMain(SYNONYM_INDEX synonymIndex);
+	VALUE_LIST getIntermediateValuesInMain(SYNONYM_INDEX synonymIndex);
+	pair<VALUE_LIST, VALUE_LIST> getIntermediateValuesPair(SYNONYM_NAME synonym1, SYNONYM_NAME synonym2);
 
 	BOOLEAN_ hashIntersectWithMainTable(Synonym synonym);
 	BOOLEAN_ hashIntersectWithMainTable(Synonym LHS, Synonym RHS);
 	BOOLEAN_ hashJoinWithMainTable(Synonym mainSynonym, Synonym pairedSynonym);
 	BOOLEAN_ joinWithMainTable(Synonym LHS, Synonym RHS);
 
-	pair<vector<int>, vector<int>> getPairBySingletonIntersect(Synonym singleton, Synonym singletonPair);
-	pair<vector<int>, vector<int>> getPairBySingletonStringIntersect(Synonym LHS, Synonym RHS);
+	pair<VALUE_LIST, VALUE_LIST> getPairBySingletonIntersect(Synonym singleton, Synonym singletonPair);
+	pair<VALUE_LIST, VALUE_LIST> getPairBySingletonStringIntersect(Synonym LHS, Synonym RHS);
 	BOOLEAN_ hashIntersectWithSingletonTable(Synonym synonym);
 
 	BOOLEAN_ processPairWithMainTable(Synonym LHS, Synonym RHS);

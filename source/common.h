@@ -13,6 +13,8 @@ using std::list;
 using std::string;
 using std::to_string;
 
+#define MAX_SYNONYMS_ASSUMED 100
+
 //different from SYNONYM_TYPE
 typedef int CONSTANT_;
 typedef int PROG_LINE_;
@@ -121,8 +123,6 @@ namespace QueryParser
 		entRef, stmtRef, lineRef, varRef, stmtLstRef, nodeRef, ref
 	};
 }
-
-#define MAX_SYNONYMS_ASSUMED 100
 
 struct IntegerPair
 {

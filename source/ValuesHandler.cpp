@@ -11,11 +11,11 @@ namespace ValuesHandler
 	unordered_map<string, SYNONYM_TYPE> mapSynonymNameToType;  //Maps from the name to the synonym type
 
 	//This table should only store 2 or more synonyms
-	vector<vector<int>> mainTable;  //[i][j] where i denotes the row number and j denotes the column number
+	vector<VALUE_LIST> mainTable;  //[i][j] where i denotes the row number and j denotes the column number
 	unordered_map<string, int> mainTableIndex;  //Maps from synonym name to main table column number
 
 	//This table is used to store singleton synonyms with no dependent synonyms
-	unordered_map<string, vector<int>> singletonTable;  //Maps the singleton synonym name to its values
+	unordered_map<string, VALUE_LIST> singletonTable;  //Maps the singleton synonym name to its values
 
 	//Private functions
 	inline bool addToSingletonTable(Synonym synonym);
@@ -116,7 +116,7 @@ namespace ValuesHandler
 	* @param type the type of synonym which can be VARIABLE/CONSTANT/PROCEDURE/STATEMENT
 	* @return the list of values of the SYNONYM_TYPE, type.
 	*/
-	vector<int> getDefaultValues(SYNONYM_TYPE type) 
+	VALUE_LIST getDefaultValues(SYNONYM_TYPE type) 
 	{
 		if (type == VARIABLE) {
 			return pkb.getAllVarIndex();
@@ -136,7 +136,7 @@ namespace ValuesHandler
 	* @return TRUE if the value exists in the set given
 	*         FALSE if the value does not exist in the set given
 	*/
-	BOOLEAN_ isValueExistInSet(set<int> setToSearch, VALUE value) 
+	BOOLEAN_ isValueExistInSet(VALUE_SET setToSearch, VALUE value) 
 	{
 		int count = setToSearch.count(value);
 
@@ -176,7 +176,7 @@ namespace ValuesHandler
 	*/
 	inline BOOLEAN_ addToSingletonTable(Synonym synonym)
 	{
-		vector<int> defaultValues = getDefaultValues(synonym.getType());
+		VALUE_LIST defaultValues = getDefaultValues(synonym.getType());
 		singletonTable[synonym.getName()] = defaultValues;
 		return hashIntersectWithSingletonTable(synonym);
 	}
@@ -217,15 +217,15 @@ namespace ValuesHandler
 
 		if (isExistInMainTable(wantedName)) {
 			int index = findIndexInMainTable(wantedName);
-			set<int> valuesSet = getIntermediateValuesSetInMain(index);
+			VALUE_SET valuesSet = getIntermediateValuesSetInMain(index);
 			Synonym synonym(type, wantedName, valuesSet);
 			return synonym;
 		} else if (isExistInSingletonTable(wantedName)) {
-			vector<int> values = singletonTable[wantedName];
+			VALUE_LIST values = singletonTable[wantedName];
 			Synonym synonym(type, wantedName, values);
 			return synonym;
 		} else {
-			vector<int> values = getDefaultValues(type);
+			VALUE_LIST values = getDefaultValues(type);
 			Synonym synonym(type, wantedName, values);
 			return synonym;
 		}
@@ -237,15 +237,15 @@ namespace ValuesHandler
 
 		if (isExistInMainTable(wantedName)) {
 			int index = findIndexInMainTable(wantedName);
-			set<int> valuesSet = getIntermediateValuesSetInMain(index);
+			VALUE_SET valuesSet = getIntermediateValuesSetInMain(index);
 			wantedSynonym.setValues(valuesSet);
 			return wantedSynonym;
 		} else if (isExistInSingletonTable(wantedName)) {
-			vector<int> values = singletonTable[wantedName];
+			VALUE_LIST values = singletonTable[wantedName];
 			wantedSynonym.setValues(values);
 			return wantedSynonym;
 		} else {
-			vector<int> values = getDefaultValues(wantedSynonym.getType());
+			VALUE_LIST values = getDefaultValues(wantedSynonym.getType());
 			wantedSynonym.setValues(values);
 			return wantedSynonym;
 		}
@@ -263,7 +263,7 @@ namespace ValuesHandler
 		for (unsigned int i = 0; i < wantedSynonyms.size(); i++) {
 			Synonym synonym = wantedSynonyms[i];
 			string name = synonym.getName();
-			vector<int> values;
+			VALUE_LIST values;
 			int mainIndex = findIndexInMainTable(name);
 
 			if (mainIndex != -1) {
@@ -286,9 +286,9 @@ namespace ValuesHandler
 	* @param synonymIndex the index of the column
 	* @return A vector containing all the intermediate values so far
 	*/
-	vector<int> getIntermediateValuesInMain(SYNONYM_INDEX synonymIndex) 
+	VALUE_LIST getIntermediateValuesInMain(SYNONYM_INDEX synonymIndex) 
 	{
-		vector<int> values;
+		VALUE_LIST values;
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
 			values.push_back(mainTable[i][synonymIndex]);
 		}
@@ -302,22 +302,22 @@ namespace ValuesHandler
 	* @param synonymIndex the index of the column
 	* @return A set containing all the intermediate values with no duplicates
 	*/
-	set<int> getIntermediateValuesSetInMain(SYNONYM_INDEX synonymIndex) 
+	VALUE_SET getIntermediateValuesSetInMain(SYNONYM_INDEX synonymIndex) 
 	{
-		set<int> values;
+		VALUE_SET values;
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
 			values.insert(mainTable[i][synonymIndex]);
 		}
 		return values;
 	}
 
-	pair<vector<int>, vector<int>> getIntermediateValuesPair(SYNONYM_NAME synonym1, SYNONYM_NAME synonym2)
+	pair<VALUE_LIST, VALUE_LIST> getIntermediateValuesPair(SYNONYM_NAME synonym1, SYNONYM_NAME synonym2)
 	{
 		//TODO: Assert that these synonyms exist in the main table
 		int index1 = findIndexInMainTable(synonym1);
 		int index2 = findIndexInMainTable(synonym2);
-		vector<int> values1;
-		vector<int> values2;
+		VALUE_LIST values1;
+		VALUE_LIST values2;
 
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
 			values1.push_back(mainTable[i][index1]);
@@ -372,9 +372,9 @@ namespace ValuesHandler
 		string nameRHS = RHS.getName();
 
 		if (nameLHS == nameRHS) {
-			vector<int> valuesLHS = LHS.getValues();
-			vector<int> valuesRHS = RHS.getValues();
-			vector<int> acceptedValues;
+			VALUE_LIST valuesLHS = LHS.getValues();
+			VALUE_LIST valuesRHS = RHS.getValues();
+			VALUE_LIST acceptedValues;
 
 			//Can take any side for the looping
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
@@ -414,9 +414,9 @@ namespace ValuesHandler
 	BOOLEAN_ hashIntersectWithMainTable(Synonym synonym)
 	{
 		int index = findIndexInMainTable(synonym.getName());
-		vector<int> newValues = synonym.getValues();
+		VALUE_LIST newValues = synonym.getValues();
 		unordered_map<int, int> hashTable;
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		//Hash the rows in the new values into the hash table
 		for (unsigned int i = 0; i < newValues.size(); i++) {
@@ -445,10 +445,10 @@ namespace ValuesHandler
 	{
 		int indexLHS = findIndexInMainTable(LHS.getName());
 		int indexRHS = findIndexInMainTable(RHS.getName());
-		vector<int> newValuesLHS = LHS.getValues();
-		vector<int> newValuesRHS = RHS.getValues();
+		VALUE_LIST newValuesLHS = LHS.getValues();
+		VALUE_LIST newValuesRHS = RHS.getValues();
 		unordered_map<IntegerPair , int, Pair_Hasher> hashTable;
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		//Hash the rows in the new values into the hash table
 		for (unsigned int i = 0; i < newValuesLHS.size(); i++) {
@@ -482,23 +482,23 @@ namespace ValuesHandler
 	BOOLEAN_ hashJoinWithMainTable(Synonym mainSynonym, Synonym pairedSynonym)
 	{
 		int mainIndex = findIndexInMainTable(mainSynonym.getName());
-		vector<int> newValues = mainSynonym.getValues();
-		vector<int> newValuesPair = pairedSynonym.getValues();
+		VALUE_LIST newValues = mainSynonym.getValues();
+		VALUE_LIST newValuesPair = pairedSynonym.getValues();
 		unordered_multimap<int, int> hashTable;
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		for (unsigned int i = 0; i < newValues.size(); i++) {
 			hashTable.emplace(make_pair(newValues[i], newValuesPair[i]));
 		}
 
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
-			vector<int> oneRow = mainTable[i];
+			VALUE_LIST oneRow = mainTable[i];
 			int value = oneRow[mainIndex];
 			auto range = hashTable.equal_range(value);
 
 			for (auto itr = range.first; itr != range.second; ++itr) {
 				int joinValue = itr->second;
-				vector<int> newRow(oneRow);
+				VALUE_LIST newRow(oneRow);
 				newRow.push_back(joinValue);
 				acceptedValues.push_back(newRow);
 			}
@@ -524,9 +524,9 @@ namespace ValuesHandler
 	{
 		//TODO: Assert main synonym and paired are not varName or procName
 		int mainIndex = findIndexInMainTable(mainName);
-		vector<int> pairedValues = pairedSynonym.getValues();
+		VALUE_LIST pairedValues = pairedSynonym.getValues();
 		unordered_map<int, int> hashTable;
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		for (unsigned int i = 0; i < pairedValues.size(); i++) {
 			hashTable[pairedValues[i]] = 1;
@@ -535,7 +535,7 @@ namespace ValuesHandler
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
 			int value = mainTable[i][mainIndex];
 			if (hashTable.count(value) != 0) {
-				vector<int> oneRow(mainTable[i]);
+				VALUE_LIST oneRow(mainTable[i]);
 				oneRow.push_back(value);
 				acceptedValues.push_back(oneRow);
 			}
@@ -563,9 +563,9 @@ namespace ValuesHandler
 		int mainIndex = findIndexInMainTable(mainName);
 		SYNONYM_TYPE pairedType = pairedSynonym.getType();
 		SYNONYM_TYPE mainType = mapSynonymNameToType[mainName];
-		vector<int> pairedValues = pairedSynonym.getValues();
+		VALUE_LIST pairedValues = pairedSynonym.getValues();
 		unordered_multimap<string, int> hashTable;
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		for (unsigned int i = 0; i < pairedValues.size(); i++) {
 			int index = pairedValues[i];
@@ -579,7 +579,7 @@ namespace ValuesHandler
 
 			for (auto itr = range.first; itr != range.second; ++itr) {
 				int index = itr->second;
-				vector<int> oneRow(mainTable[i]);
+				VALUE_LIST oneRow(mainTable[i]);
 				oneRow.push_back(index);
 				acceptedValues.push_back(oneRow);
 			}
@@ -602,14 +602,14 @@ namespace ValuesHandler
 	*/
 	BOOLEAN_ joinWithMainTable(Synonym LHS, Synonym RHS)
 	{
-		vector<int> valuesLHS = LHS.getValues();
-		vector<int> valuesRHS = RHS.getValues();
-		vector<vector<int>> acceptedValues;
+		VALUE_LIST valuesLHS = LHS.getValues();
+		VALUE_LIST valuesRHS = RHS.getValues();
+		vector<VALUE_LIST> acceptedValues;
 		int mainTableSize = mainTable.size();
 
 		if (mainTableSize == 0) {
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-				vector<int> values;
+				VALUE_LIST values;
 				values.push_back(valuesLHS[i]);
 				values.push_back(valuesRHS[i]);
 				acceptedValues.push_back(values);
@@ -617,7 +617,7 @@ namespace ValuesHandler
 		} else {
 			for (int i = 0; i < mainTableSize; i++) {
 				for (unsigned int j = 0; j < valuesLHS.size(); j++) {
-					vector<int> values = mainTable[i];
+					VALUE_LIST values = mainTable[i];
 					values.push_back(valuesLHS[j]);
 					values.push_back(valuesRHS[j]);
 					acceptedValues.push_back(values);
@@ -642,14 +642,14 @@ namespace ValuesHandler
 	* @param singletonPair
 	* @return The pairs of values that are left after elimination
 	*/
-	pair<vector<int>, vector<int>> getPairBySingletonIntersect(Synonym singleton, Synonym singletonPair)
+	pair<VALUE_LIST, VALUE_LIST> getPairBySingletonIntersect(Synonym singleton, Synonym singletonPair)
 	{
-		vector<int> existingValues = singletonTable[singleton.getName()];
-		vector<int> newValues = singleton.getValues();
-		vector<int> newValuesPair = singletonPair.getValues();
+		VALUE_LIST existingValues = singletonTable[singleton.getName()];
+		VALUE_LIST newValues = singleton.getValues();
+		VALUE_LIST newValuesPair = singletonPair.getValues();
 		unordered_map<int, int> hashTable;
-		vector<int> acceptedValues;
-		vector<int> acceptedValuesPair;
+		VALUE_LIST acceptedValues;
+		VALUE_LIST acceptedValuesPair;
 
 		for (unsigned int i = 0; i < existingValues.size(); i++) {
 			hashTable[existingValues[i]] = 1;
@@ -672,16 +672,16 @@ namespace ValuesHandler
 	* @param RHS
 	* @return The pairs of values that are left after elimination
 	*/
-	pair<vector<int>, vector<int>> getPairBySingletonStringIntersect(Synonym LHS, Synonym RHS)
+	pair<VALUE_LIST, VALUE_LIST> getPairBySingletonStringIntersect(Synonym LHS, Synonym RHS)
 	{
 		//TODO: Assert that both are either varName or procName and exists in the singleton table
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
-		vector<int> existingLHS = singletonTable[LHS.getName()];
-		vector<int> existingRHS = singletonTable[RHS.getName()];
+		VALUE_LIST existingLHS = singletonTable[LHS.getName()];
+		VALUE_LIST existingRHS = singletonTable[RHS.getName()];
 		unordered_multimap<string, int> hashLHS;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < existingLHS.size(); i++) {
 			int indexValue = existingLHS[i];
@@ -711,10 +711,10 @@ namespace ValuesHandler
 	BOOLEAN_ hashIntersectWithSingletonTable(Synonym synonym)
 	{
 		string name = synonym.getName();
-		vector<int> existingValues = singletonTable[name];
-		vector<int> newValues = synonym.getValues();
+		VALUE_LIST existingValues = singletonTable[name];
+		VALUE_LIST newValues = synonym.getValues();
 		unordered_map<int, int> hashTable;
-		vector<int> acceptedValues;
+		VALUE_LIST acceptedValues;
 
 		//Hash the rows in the new values into the hash table
 		for (unsigned int i = 0; i < newValues.size(); i++) {
@@ -780,7 +780,7 @@ namespace ValuesHandler
 			addToSingletonTable(defaultRHS);
 		}
 
-		pair<vector<int>, vector<int>> synonymPair = getPairBySingletonIntersect(LHS, RHS);
+		pair<VALUE_LIST, VALUE_LIST> synonymPair = getPairBySingletonIntersect(LHS, RHS);
 		LHS.setValues(synonymPair.first);
 		RHS.setValues(synonymPair.second);
 
@@ -809,7 +809,7 @@ namespace ValuesHandler
 			addToSingletonTable(defaultSingleton);
 		}
 
-		pair<vector<int>, vector<int>> synonymPair = getPairBySingletonIntersect(singleton, mainSynonym);
+		pair<VALUE_LIST, VALUE_LIST> synonymPair = getPairBySingletonIntersect(singleton, mainSynonym);
 		singleton.setValues(synonymPair.first);
 		mainSynonym.setValues(synonymPair.second);
 		removeFromSingletonTable(singletonName);
@@ -850,12 +850,12 @@ namespace ValuesHandler
 			return filterSingletonTableByString(synonymName, wantedValue);
 		} else {
 			//This synonym does not exist in both tables
-			vector<int> values = getDefaultValues(type);
+			VALUE_LIST values = getDefaultValues(type);
 			for (unsigned int i = 0; i < values.size(); i++) {
 				int valueIndex = values[i];
 				string valueString = convertIndexToString(valueIndex, type);
 				if (valueString == wantedValue) {
-					vector<int> finalValue;
+					VALUE_LIST finalValue;
 					finalValue.push_back(valueIndex);
 					singletonTable[synonymName] = finalValue;  //Insert into singleton table
 					return true;
@@ -881,10 +881,10 @@ namespace ValuesHandler
 		} else {
 			//This synonym does not exist in both tables
 			SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
-			vector<int> values = getDefaultValues(type);
+			VALUE_LIST values = getDefaultValues(type);
 			for (unsigned int i = 0; i < values.size(); i++) {
 				if (values[i] == wantedValue) {
-					vector<int> finalValue;
+					VALUE_LIST finalValue;
 					finalValue.push_back(wantedValue);
 					singletonTable[synonymName] = finalValue;  //Insert into singleton table
 					return true;
@@ -904,10 +904,10 @@ namespace ValuesHandler
 	BOOLEAN_ filterMainTableByNumber(string synonymName, int wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
-			vector<int> oneRow = mainTable[i];
+			VALUE_LIST oneRow = mainTable[i];
 			if (oneRow[index] == wantedValue) {
 				acceptedValues.push_back(oneRow);
 			}
@@ -927,10 +927,10 @@ namespace ValuesHandler
 	{
 		int index = findIndexInMainTable(synonymName);
 		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
-			vector<int> oneRow = mainTable[i];
+			VALUE_LIST oneRow = mainTable[i];
 			string valueString = convertIndexToString(oneRow[index], type);
 			if (valueString == wantedValue) {
 				acceptedValues.push_back(oneRow);
@@ -949,8 +949,8 @@ namespace ValuesHandler
 	*/
 	BOOLEAN_ filterSingletonTableByNumber(string synonymName, int wantedValue)
 	{
-		vector<int> singletonValues = singletonTable[synonymName];
-		vector<int> acceptedValue;
+		VALUE_LIST singletonValues = singletonTable[synonymName];
+		VALUE_LIST acceptedValue;
 
 		for (unsigned int i = 0; i < singletonValues.size(); i++) {
 			if (singletonValues[i] == wantedValue) {
@@ -971,8 +971,8 @@ namespace ValuesHandler
 	*/
 	BOOLEAN_ filterSingletonTableByString(SYNONYM_NAME synonymName, string wantedValue)
 	{
-		vector<int> singletonValues = singletonTable[synonymName];
-		vector<int> acceptedValue;
+		VALUE_LIST singletonValues = singletonTable[synonymName];
+		VALUE_LIST acceptedValue;
 		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
 
 		for (unsigned int i = 0; i < singletonValues.size(); i++) {
@@ -1106,7 +1106,7 @@ namespace ValuesHandler
 			RHS.setValues(LHS.getValues());  //Assign RHS to the same values as LHS
 
 			//Get the reduced pair by intersecting with RHS
-			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(RHS, LHS);
+			pair<VALUE_LIST, VALUE_LIST> pair = getPairBySingletonIntersect(RHS, LHS);
 			RHS.setValues(pair.first);
 			LHS.setValues(pair.second);
 			removeFromSingletonTable(nameLHS);
@@ -1118,7 +1118,7 @@ namespace ValuesHandler
 			LHS.setValues(RHS.getValues());  //Assign LHS to the RHS values
 
 			//Get the reduced pair by intersecting with LHS
-			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(LHS, RHS);
+			pair<VALUE_LIST, VALUE_LIST> pair = getPairBySingletonIntersect(LHS, RHS);
 			LHS.setValues(pair.first);
 			RHS.setValues(pair.second);
 			removeFromSingletonTable(nameLHS);
@@ -1129,7 +1129,7 @@ namespace ValuesHandler
 			RHS.setValues(LHS.getValues());  //Assign RHS to the LHS values
 
 			//Get the reduced pair by intersecting with LHS
-			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(RHS, LHS);
+			pair<VALUE_LIST, VALUE_LIST> pair = getPairBySingletonIntersect(RHS, LHS);
 			RHS.setValues(pair.first);
 			LHS.setValues(pair.second);
 			removeFromSingletonTable(nameRHS);
@@ -1142,7 +1142,7 @@ namespace ValuesHandler
 			RHS = getSynonym(nameRHS);  //Assign RHS to its default values
 			LHS.setValues(RHS.getValues());  //Assign LHS to the values of RHS
 
-			pair<vector<int>, vector<int>> pair = getPairBySingletonIntersect(LHS, RHS);
+			pair<VALUE_LIST, VALUE_LIST> pair = getPairBySingletonIntersect(LHS, RHS);
 			LHS.setValues(pair.first);
 			RHS.setValues(pair.second);
 			removeFromSingletonTable(nameLHS);
@@ -1183,7 +1183,7 @@ namespace ValuesHandler
 			addToSingletonTable(LHS);
 		}
 
-		pair<vector<int>, vector<int>> pair = getPairBySingletonStringIntersect(LHS, RHS);
+		pair<VALUE_LIST, VALUE_LIST> pair = getPairBySingletonStringIntersect(LHS, RHS);
 		LHS.setValues(pair.first);
 		RHS.setValues(pair.second);
 		removeFromSingletonTable(nameLHS);
@@ -1205,10 +1205,10 @@ namespace ValuesHandler
 		//TODO: Assert that they both are in main
 		int indexLHS = findIndexInMainTable(LHS.getName());
 		int indexRHS = findIndexInMainTable(RHS.getName());
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
-			vector<int> oneRow = mainTable[i];
+			VALUE_LIST oneRow = mainTable[i];
 			if (oneRow[indexLHS] == oneRow[indexRHS]) {
 				acceptedValues.push_back(oneRow);
 			}
@@ -1231,10 +1231,10 @@ namespace ValuesHandler
 		//TODO: Assert that they both are in main
 		int indexLHS = findIndexInMainTable(LHS.getName());
 		int indexRHS = findIndexInMainTable(RHS.getName());
-		vector<vector<int>> acceptedValues;
+		vector<VALUE_LIST> acceptedValues;
 
 		for (unsigned int i = 0; i < mainTable.size(); i++) {
-			vector<int> oneRow = mainTable[i];
+			VALUE_LIST oneRow = mainTable[i];
 			string valueLHS = convertIndexToString(oneRow[indexLHS], LHS.getType());
 			string valueRHS = convertIndexToString(oneRow[indexRHS], RHS.getType());
 			if (valueLHS == valueRHS) {

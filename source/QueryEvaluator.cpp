@@ -27,49 +27,49 @@ namespace QueryEvaluator
 
 	//Functions to process clauses
 	BOOLEAN_ processModifies(Synonym LHS, Synonym RHS, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateModifiesByPair(Synonym LHS, Synonym RHS);
-	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
-	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS);
+	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByPair(Synonym LHS, Synonym RHS);
+	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
+	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByRHS(Synonym LHS, Synonym RHS);
 
 	BOOLEAN_ processUses(Synonym LHS, Synonym RHS, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateUsesByPair(Synonym LHS, Synonym RHS);
-	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS);
-	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS);
+	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByPair(Synonym LHS, Synonym RHS);
+	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByLHS(Synonym LHS, Synonym RHS);
+	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByRHS(Synonym LHS, Synonym RHS);
 
 	BOOLEAN_ processParentT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processFollowsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processCallsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processNextT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<vector<int>, vector<int>> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	pair<vector<int>, vector<int>> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	//Functions to process pattern clauses
 	inline BOOLEAN_ processPatternClause(QNode* patternClause);
@@ -248,17 +248,17 @@ namespace QueryEvaluator
 			return pkb.isModifiesProc(pkb.getProcIndex(nameLHS), pkb.getVarIndex(nameRHS));
 		} else if (typeLHS == STRING_INT) {
 			//LHS is the line number, find the variables that are modified
-			vector<int> stmts = pkb.getModVarForStmt(stoi(nameLHS));
+			VALUE_LIST stmts = pkb.getModVarForStmt(stoi(nameLHS));
 			RHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeLHS == STRING_CHAR) {
 			//LHS is the proc name, find the variables that are modified
-			vector<int> stmts = pkb.getModVarForProc(pkb.getProcIndex(nameLHS));
+			VALUE_LIST stmts = pkb.getModVarForProc(pkb.getProcIndex(nameLHS));
 			RHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_CHAR) {
 			//RHS is the variable that is modified, find the statements
-			vector<int> stmts;
+			VALUE_LIST stmts;
 			if (typeLHS == PROCEDURE) {
 				stmts = pkb.getModProcIndex(pkb.getVarIndex(nameRHS));
 			} else {
@@ -275,7 +275,7 @@ namespace QueryEvaluator
 			}
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> modifiesPair;
+			pair<VALUE_LIST, VALUE_LIST> modifiesPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			modifiesPair = evaluateModifiesByPair(LHS, RHS);
@@ -295,13 +295,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateModifiesByPair(Synonym LHS, Synonym RHS)
+	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByPair(Synonym LHS, Synonym RHS)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		if (LHS.getType() == PROCEDURE) {
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
@@ -330,12 +330,12 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateModifiesByLHS(Synonym LHS, Synonym RHS)
+	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByLHS(Synonym LHS, Synonym RHS)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
-		vector<int> stmts;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
+		VALUE_LIST stmts;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			if (LHS.getType() == PROCEDURE) {
@@ -357,14 +357,14 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateModifiesByRHS(Synonym LHS, Synonym RHS)
+	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByRHS(Synonym LHS, Synonym RHS)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts;
+			VALUE_LIST stmts;
 			if (LHS.getType() == PROCEDURE) {
 				stmts = pkb.getModProcIndex(valuesRHS[i]);
 			} else {
@@ -399,16 +399,16 @@ namespace QueryEvaluator
 			return pkb.isUsesProc(pkb.getProcIndex(nameLHS), pkb.getVarIndex(nameRHS));
 		} else if (typeLHS == STRING_INT) {
 			//LHS is the line number, find the variable that is used
-			vector<int> vars = pkb.getUsesVarForStmt(stoi(nameLHS));
+			VALUE_LIST vars = pkb.getUsesVarForStmt(stoi(nameLHS));
 			RHS.setValues(vars);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeLHS == STRING_CHAR) {
-			vector<int> vars = pkb.getUsesVarForProc(pkb.getProcIndex(nameLHS));
+			VALUE_LIST vars = pkb.getUsesVarForProc(pkb.getProcIndex(nameLHS));
 			RHS.setValues(vars);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_CHAR) {
 			//RHS is the variable that is used, find the statements that uses it
-			vector<int> stmts;
+			VALUE_LIST stmts;
 			if (typeLHS == PROCEDURE) {
 				stmts = pkb.getUsesProcIndex(pkb.getVarIndex(nameRHS));
 			} else {
@@ -424,7 +424,7 @@ namespace QueryEvaluator
 			}
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> usesPair;
+			pair<VALUE_LIST, VALUE_LIST> usesPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			usesPair = evaluateUsesByPair(LHS, RHS);
@@ -444,13 +444,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateUsesByPair(Synonym LHS, Synonym RHS)
+	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByPair(Synonym LHS, Synonym RHS)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		if (LHS.getType() == PROCEDURE) {
 			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
@@ -479,14 +479,14 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateUsesByLHS(Synonym LHS, Synonym RHS)
+	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByLHS(Synonym LHS, Synonym RHS)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts;
+			VALUE_LIST stmts;
 			if (LHS.getType() == PROCEDURE) {
 				stmts = pkb.getUsesVarForProc(valuesLHS[i]);
 			} else {
@@ -506,14 +506,14 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateUsesByRHS(Synonym LHS, Synonym RHS)
+	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByRHS(Synonym LHS, Synonym RHS)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts;
+			VALUE_LIST stmts;
 			if (LHS.getType() == PROCEDURE) {
 				stmts = pkb.getUsesProcIndex(valuesRHS[i]);
 			} else {
@@ -545,11 +545,11 @@ namespace QueryEvaluator
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isParent(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmts = pkb.getChild(stoi(nameLHS), isTrans);
+			VALUE_LIST stmts = pkb.getChild(stoi(nameLHS), isTrans);
 			RHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmts = pkb.getParent(stoi(nameRHS), isTrans);
+			VALUE_LIST stmts = pkb.getParent(stoi(nameRHS), isTrans);
 			LHS.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
@@ -561,7 +561,7 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getParentLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> parentsPair;
+			pair<VALUE_LIST, VALUE_LIST> parentsPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			parentsPair = evaluateParentByPair(LHS, RHS, isTrans);
@@ -581,13 +581,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			int valueLHS = valuesLHS[i];
@@ -606,14 +606,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getChild(valuesLHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getChild(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(valuesLHS[i]);
@@ -629,14 +629,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Parent or Parent* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getParent(valuesRHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getParent(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
@@ -664,12 +664,12 @@ namespace QueryEvaluator
 			return pkb.isFollows(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
 			// Given stmtNum1, get stmtNum2 such that Follows(stmt1, stmt2) is satisfied
-			vector<int> stmt = pkb.getStmtFollowedFrom(stoi(nameLHS), isTrans);
+			VALUE_LIST stmt = pkb.getStmtFollowedFrom(stoi(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
 			// Given stmtNum2, get stmtNum1 such that Follows(stmt1, stmt2) is satisfied
-			vector<int> stmt = pkb.getStmtFollowedTo(stoi(nameRHS), isTrans);
+			VALUE_LIST stmt = pkb.getStmtFollowedTo(stoi(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
@@ -681,7 +681,7 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getFollowsLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> followsPair;
+			pair<VALUE_LIST, VALUE_LIST> followsPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			followsPair = evaluateFollowsByPair(LHS, RHS, isTrans);
@@ -701,13 +701,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			int valueLHS = valuesLHS[i];
@@ -726,14 +726,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getStmtFollowedFrom(valuesLHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getStmtFollowedFrom(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(valuesLHS[i]);
@@ -749,14 +749,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Follows or Follows* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getStmtFollowedTo(valuesRHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getStmtFollowedTo(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
@@ -783,11 +783,11 @@ namespace QueryEvaluator
 		if (typeLHS == STRING_CHAR && typeRHS == STRING_CHAR) {
 			return pkb.isCalls(pkb.getProcIndex(nameLHS), pkb.getProcIndex(nameRHS), isTrans);
 		} else if (typeLHS == STRING_CHAR) {
-			vector<int> stmt = pkb.getProcsCalledBy(pkb.getProcIndex(nameLHS), isTrans);
+			VALUE_LIST stmt = pkb.getProcsCalledBy(pkb.getProcIndex(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_CHAR) {
-			vector<int> stmt = pkb.getProcsCalling(pkb.getProcIndex(nameRHS), isTrans);
+			VALUE_LIST stmt = pkb.getProcsCalling(pkb.getProcIndex(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
@@ -799,7 +799,7 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getCallsLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> callsPair;
+			pair<VALUE_LIST, VALUE_LIST> callsPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			callsPair = evaluateCallsByPair(LHS, RHS, isTrans);
@@ -819,13 +819,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			int valueLHS = valuesLHS[i];
@@ -844,14 +844,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getProcsCalledBy(valuesLHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getProcsCalledBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(valuesLHS[i]);
@@ -867,14 +867,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Calls or Calls* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getProcsCalling(valuesRHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getProcsCalling(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
@@ -901,18 +901,18 @@ namespace QueryEvaluator
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isNext(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmt = pkb.getNextAfter(stoi(nameLHS), isTrans);
+			VALUE_LIST stmt = pkb.getNextAfter(stoi(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmt = pkb.getNextBefore(stoi(nameRHS), isTrans);
+			VALUE_LIST stmt = pkb.getNextBefore(stoi(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
 			return pkb.isNextValid();
 		} else if (typeLHS == UNDEFINED) {
-			vector<int> existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
-			vector<int> acceptedValues;
+			VALUE_LIST existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
+			VALUE_LIST acceptedValues;
 			for (unsigned int i = 0; i < existingRHSValues.size(); i++) {
 				int value = existingRHSValues[i];
 				if (pkb.isNextRhsValid(value)) {
@@ -922,8 +922,8 @@ namespace QueryEvaluator
 			RHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == UNDEFINED) {
-			vector<int> existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
-			vector<int> acceptedValues;
+			VALUE_LIST existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
+			VALUE_LIST acceptedValues;
 			for (unsigned int i = 0; i < existingLHSValues.size(); i++) {
 				int value = existingLHSValues[i];
 				if (pkb.isNextLhsValid(value)) {
@@ -933,7 +933,7 @@ namespace QueryEvaluator
 			LHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> nextPair;
+			pair<VALUE_LIST, VALUE_LIST> nextPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			nextPair = evaluateNextByPair(LHS, RHS, isTrans);
@@ -953,13 +953,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			int valueLHS = valuesLHS[i];
@@ -978,14 +978,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getNextAfter(valuesLHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getNextAfter(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(valuesLHS[i]);
@@ -1001,14 +1001,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Next or Next* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getNextBefore(valuesRHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getNextBefore(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
@@ -1035,18 +1035,18 @@ namespace QueryEvaluator
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isAffects(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffectedBy(stoi(nameLHS), isTrans);
+			VALUE_LIST stmt = pkb.getAffectedBy(stoi(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffecting(stoi(nameRHS), isTrans);
+			VALUE_LIST stmt = pkb.getAffecting(stoi(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
 			return pkb.isAffectsValid();
 		} else if (typeLHS == UNDEFINED) {
-			vector<int> existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
-			vector<int> acceptedValues;
+			VALUE_LIST existingRHSValues = ValuesHandler::getSynonym(nameRHS).getValues();
+			VALUE_LIST acceptedValues;
 			for (unsigned int i = 0; i < existingRHSValues.size(); i++) {
 				int value = existingRHSValues[i];
 				if (pkb.isAffectsRhsValid(value)) {
@@ -1056,8 +1056,8 @@ namespace QueryEvaluator
 			RHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == UNDEFINED) {
-			vector<int> existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
-			vector<int> acceptedValues;
+			VALUE_LIST existingLHSValues = ValuesHandler::getSynonym(nameLHS).getValues();
+			VALUE_LIST acceptedValues;
 			for (unsigned int i = 0; i < existingLHSValues.size(); i++) {
 				int value = existingLHSValues[i];
 				if (pkb.isAffectsLhsValid(value)) {
@@ -1067,7 +1067,7 @@ namespace QueryEvaluator
 			LHS.setValues(acceptedValues);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> affectsPair;
+			pair<VALUE_LIST, VALUE_LIST> affectsPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			affectsPair = evaluateAffectsByPair(LHS, RHS, isTrans);
@@ -1087,13 +1087,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			int valueLHS = valuesLHS[i];
@@ -1112,14 +1112,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getAffectedBy(valuesLHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getAffectedBy(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(valuesLHS[i]);
@@ -1135,14 +1135,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of Affects or Affects* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getAffecting(valuesRHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getAffecting(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
@@ -1169,11 +1169,11 @@ namespace QueryEvaluator
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isNextBip(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmt = pkb.getNextBipAfter(stoi(nameLHS), isTrans);
+			VALUE_LIST stmt = pkb.getNextBipAfter(stoi(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmt = pkb.getNextBipBefore(stoi(nameRHS), isTrans);
+			VALUE_LIST stmt = pkb.getNextBipBefore(stoi(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
@@ -1185,7 +1185,7 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getNextBipLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> nextBipPair;
+			pair<VALUE_LIST, VALUE_LIST> nextBipPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			nextBipPair = evaluateNextBipByPair(LHS, RHS, isTrans);
@@ -1205,13 +1205,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			int valueLHS = valuesLHS[i];
@@ -1230,14 +1230,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getNextBipAfter(valuesLHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getNextBipAfter(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(valuesLHS[i]);
@@ -1253,14 +1253,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of NextBip or NextBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getNextBipBefore(valuesRHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getNextBipBefore(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
@@ -1287,11 +1287,11 @@ namespace QueryEvaluator
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isAffectsBip(stoi(nameLHS), stoi(nameRHS), isTrans);
 		} else if (typeLHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffectsBipAfter(stoi(nameLHS), isTrans);
+			VALUE_LIST stmt = pkb.getAffectsBipAfter(stoi(nameLHS), isTrans);
 			RHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT) {
-			vector<int> stmt = pkb.getAffectsBipBefore(stoi(nameRHS), isTrans);
+			VALUE_LIST stmt = pkb.getAffectsBipBefore(stoi(nameRHS), isTrans);
 			LHS.setValues(stmt);
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeLHS == UNDEFINED && typeRHS == UNDEFINED) {
@@ -1303,7 +1303,7 @@ namespace QueryEvaluator
 			LHS.setValues(pkb.getAffectsBipLhs());
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			pair<vector<int>, vector<int>> affectsBipPair;
+			pair<VALUE_LIST, VALUE_LIST> affectsBipPair;
 
 			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
 			affectsBipPair = evaluateAffectsBipByPair(LHS, RHS, isTrans);
@@ -1323,13 +1323,13 @@ namespace QueryEvaluator
 		}
 	}
 
-	pair<vector<int>, vector<int>> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		pair<vector<int>, vector<int>> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		vector<int> valuesLHS = valuesPair.first;
-		vector<int> valuesRHS = valuesPair.second;
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
+		VALUE_LIST valuesLHS = valuesPair.first;
+		VALUE_LIST valuesRHS = valuesPair.second;
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
 			int valueLHS = valuesLHS[i];
@@ -1348,14 +1348,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesLHS = ValuesHandler::getSynonym(LHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			vector<int> stmts = pkb.getAffectsBipAfter(valuesLHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getAffectsBipAfter(valuesLHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(valuesLHS[i]);
@@ -1371,14 +1371,14 @@ namespace QueryEvaluator
 	* @param isTrans a flag to indicate the computation of AffectsBip or AffectsBip* relation
 	* @return A pair of vectors denoting the pairs of values returned by the relation
 	*/
-	pair<vector<int>, vector<int>> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
 	{
-		vector<int> valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
-		vector<int> acceptedLHS;
-		vector<int> acceptedRHS;
+		VALUE_LIST valuesRHS = ValuesHandler::getSynonym(RHS.getName()).getValues();
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
 
 		for (unsigned int i = 0; i < valuesRHS.size(); i++) {
-			vector<int> stmts = pkb.getAffectsBipBefore(valuesRHS[i], isTrans);
+			VALUE_LIST stmts = pkb.getAffectsBipBefore(valuesRHS[i], isTrans);
 
 			for (unsigned int j = 0; j < stmts.size(); j++) {
 				acceptedLHS.push_back(stmts[j]);
@@ -1421,7 +1421,7 @@ namespace QueryEvaluator
 	*/
 	BOOLEAN_ processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
 	{
-		vector<int> isMatchStmts = pkb.patternMatchAssign(RHS.getName());
+		VALUE_LIST isMatchStmts = pkb.patternMatchAssign(RHS.getName());
 
 		if (isMatchStmts.size() == 0) {
 			return false;
@@ -1430,10 +1430,10 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		if (typeLHS == VARIABLE) {
 			//If LHS is a variable synonym, use the return statements to probe the ModifiesTable
-			vector<int> vars;
+			VALUE_LIST vars;
 
-			for (vector<int>::iterator itr = isMatchStmts.begin(); itr != isMatchStmts.end(); ++itr) {
-				vector<int> var = pkb.getModVarForStmt(*itr);  //Get the LHS of the assign statement
+			for (VALUE_LIST::iterator itr = isMatchStmts.begin(); itr != isMatchStmts.end(); ++itr) {
+				VALUE_LIST var = pkb.getModVarForStmt(*itr);  //Get the LHS of the assign statement
 				vars.push_back(var[0]);  //Variable for assignment stmts must be in index 0
 			}
 
@@ -1446,12 +1446,12 @@ namespace QueryEvaluator
 		} else {
 			//LHS is a constant
 			string nameLHS = LHS.getName();
-			vector<int> matchingStmts;
+			VALUE_LIST matchingStmts;
 
 			//Check that the assignment statements modifies the LHS
-			for (vector<int>::iterator itr = isMatchStmts.begin(); itr != isMatchStmts.end(); ++itr) {
+			for (VALUE_LIST::iterator itr = isMatchStmts.begin(); itr != isMatchStmts.end(); ++itr) {
 				int stmt = *itr;
-				vector<int> vars = pkb.getModVarForStmt(stmt);
+				VALUE_LIST vars = pkb.getModVarForStmt(stmt);
 				string var = pkb.getVarName(vars[0]);  //Variable for assignment stmts must be in index 0
 				if (var == nameLHS) {
 					matchingStmts.push_back(stmt);
@@ -1475,20 +1475,20 @@ namespace QueryEvaluator
 
 		//Find all if statements that uses LHS
 		if (LHS.getType() == STRING_CHAR) {
-			vector<int> stmts = pkb.patternMatchIf(LHS.getName());
+			VALUE_LIST stmts = pkb.patternMatchIf(LHS.getName());
 			arg0.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 		} else if (typeLHS == UNDEFINED) {
-			vector<int> ifStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
+			VALUE_LIST ifStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			return (ifStmts.size() != 0);  //Do nothing because pattern i(_, _, _) is always true if there are if statements
 		} else {
 			//LHS is a variable synonym
-			vector<int> arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
+			VALUE_LIST arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			if (arg0Values.size() == 0) {
 				return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
 			}
 
-			vector<int> vars;
+			VALUE_LIST vars;
 			for (unsigned int i = 0; i < arg0Values.size(); i++) {
 				int var = pkb.getControlVariable(arg0Values[i]);
 				vars.push_back(var);
@@ -1512,20 +1512,20 @@ namespace QueryEvaluator
 
 		//Find all while statements that uses LHS
 		if (LHS.getType() == STRING_CHAR) {
-			vector<int> stmts = pkb.patternMatchWhile(LHS.getName());
+			VALUE_LIST stmts = pkb.patternMatchWhile(LHS.getName());
 			arg0.setValues(stmts);
 			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 		} else if (typeLHS == UNDEFINED) {
-			vector<int> whileStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
+			VALUE_LIST whileStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			return (whileStmts.size() != 0);  //Do nothing because pattern w(_, _) is always true if there are while statements
 		} else {
 			//LHS is a variable synonym
-			vector<int> arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
+			VALUE_LIST arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
 			if (arg0Values.size() == 0) {
 				return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
 			}
 
-			vector<int> vars;
+			VALUE_LIST vars;
 			for (unsigned int i = 0; i < arg0Values.size(); i++) {
 				int var = pkb.getControlVariable(arg0Values[i]);
 				vars.push_back(var);
