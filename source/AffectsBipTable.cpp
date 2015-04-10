@@ -380,7 +380,11 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 		bool isLastLine = false;
 		vector<CNode*>* afterNodes =  node->getAfter();
 		for (auto afterNodeIter = afterNodes->begin(); afterNodeIter != afterNodes->end(); ++afterNodeIter) {
-			isLastLine = (*afterNodeIter)->getNodeType() == EndProc_C;
+			CNode* possibleLastLineNode = *afterNodeIter;
+			while (possibleLastLineNode->getNodeType() == EndIf_C) {
+				possibleLastLineNode = possibleLastLineNode->getAfter()->at(0);
+			}
+			isLastLine = possibleLastLineNode->getNodeType() == EndProc_C;
 		}
 		if (!isLastLine) {
 			populateFrontierWithNextBipAfter(frontier, node, visited, curState, variablesToMatch);
@@ -511,7 +515,7 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipBefore(PROG_LINE_ progLine2
 				isFirstLine = true;
 			}
 		}
-
+		
 		if (!isFirstLine) {
 			populateFrontierWithNextBipBefore(frontier, node, visited, variableTested, curState, variablesToMatch);
 		} else {
