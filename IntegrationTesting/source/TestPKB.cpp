@@ -477,7 +477,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,23)", 1, (int)pkb.getNextBipBefore(23).size());
 
 	vector<int> nextBipBefore19 = pkb.getNextBipBefore(19);
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,19), previous line is call", 3, (int)nextBipBefore19.size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,19), previous line is call", 2, (int)nextBipBefore19.size());
 	CPPUNIT_ASSERT_MESSAGE("NextBip(,19)", find(nextBipBefore19.begin(), nextBipBefore19.end(), 25) != nextBipBefore19.end() );
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("NextBip(,31), first line of proc", 37, (int)pkb.getNextBipBefore(31, true).size());
