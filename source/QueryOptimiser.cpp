@@ -267,7 +267,7 @@ namespace QueryOptimiser
 			QNODE_TYPE query_type = clause->getNodeType();
 
 			if (query_type == With) {
-					continue;  //Cannot replace synonyms in with clause
+				continue;  //Cannot replace synonyms in with clause
 			}
 
 			Synonym undefined(UNDEFINED, "_");
@@ -632,11 +632,11 @@ namespace QueryOptimiser
 				return make_pair(false, LeftToRight);
 			}
 		} else if (typeLHS == ASSIGN || typeLHS == CALL || typeLHS == WHILE || typeLHS == IF || typeLHS == CONSTANT) {
-				if (typeRHS == STRING_INT) {
-					return make_pair(true, LeftToRight);
-				} else {
-					return make_pair(false, LeftToRight);
-				}
+			if (typeRHS == STRING_INT) {
+				return make_pair(true, LeftToRight);
+			} else {
+				return make_pair(false, LeftToRight);
+			}
 		} else if (typeLHS == PROCEDURE || typeLHS == VARIABLE) {
 			if (typeRHS == STRING_CHAR) {
 				return make_pair(true, LeftToRight);

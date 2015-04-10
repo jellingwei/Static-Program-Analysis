@@ -60,12 +60,12 @@ namespace QueryEvaluator
 	pair<vector<int>, vector<int>> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	
+
 	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	
+
 	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
 	pair<vector<int>, vector<int>> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<vector<int>, vector<int>> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
@@ -277,9 +277,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> modifiesPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				modifiesPair = evaluateModifiesByPair(LHS, RHS);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			modifiesPair = evaluateModifiesByPair(LHS, RHS);
 			} else if (direction == LeftToRight) {
+			modifiesPair = evaluateModifiesByLHS(LHS, RHS);
+			} else {
+			modifiesPair = evaluateModifiesByRHS(LHS, RHS);
+			}*/
+			if (direction == LeftToRight) {
 				modifiesPair = evaluateModifiesByLHS(LHS, RHS);
 			} else {
 				modifiesPair = evaluateModifiesByRHS(LHS, RHS);
@@ -421,9 +426,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> usesPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				usesPair = evaluateUsesByPair(LHS, RHS);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			usesPair = evaluateUsesByPair(LHS, RHS);
 			} else if (direction == LeftToRight) {
+			usesPair = evaluateUsesByLHS(LHS, RHS);
+			} else {
+			usesPair = evaluateUsesByRHS(LHS, RHS);
+			}*/
+			if (direction == LeftToRight) {
 				usesPair = evaluateUsesByLHS(LHS, RHS);
 			} else {
 				usesPair = evaluateUsesByRHS(LHS, RHS);
@@ -553,9 +563,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> parentsPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				parentsPair = evaluateParentByPair(LHS, RHS, isTrans);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			parentsPair = evaluateParentByPair(LHS, RHS, isTrans);
 			} else if (direction == LeftToRight) {
+			parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
+			} else {
+			parentsPair = evaluateParentByRHS(LHS, RHS, isTrans);
+			}*/
+			if (direction == LeftToRight) {
 				parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
 			} else {
 				parentsPair = evaluateParentByRHS(LHS, RHS, isTrans);
@@ -668,9 +683,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> followsPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				followsPair = evaluateFollowsByPair(LHS, RHS, isTrans);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			followsPair = evaluateFollowsByPair(LHS, RHS, isTrans);
 			} else if (direction == LeftToRight) {
+			followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
+			} else {
+			followsPair = evaluateFollowsByRHS(LHS, RHS, isTrans);
+			}*/
+			if (direction == LeftToRight) {
 				followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
 			} else {
 				followsPair = evaluateFollowsByRHS(LHS, RHS, isTrans);
@@ -781,9 +801,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> callsPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				callsPair = evaluateCallsByPair(LHS, RHS, isTrans);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			callsPair = evaluateCallsByPair(LHS, RHS, isTrans);
 			} else if (direction == LeftToRight) {
+			callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
+			} else {
+			callsPair = evaluateCallsByRHS(LHS, RHS, isTrans);
+			}*/
+			if (direction == LeftToRight) {
 				callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
 			} else {
 				callsPair = evaluateCallsByRHS(LHS, RHS, isTrans);
@@ -910,9 +935,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> nextPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				nextPair = evaluateNextByPair(LHS, RHS, isTrans);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			nextPair = evaluateNextByPair(LHS, RHS, isTrans);
 			} else if (direction == LeftToRight) {
+			nextPair = evaluateNextByLHS(LHS, RHS, isTrans);
+			} else {
+			nextPair = evaluateNextByRHS(LHS, RHS, isTrans);
+			}*/
+			if (direction == LeftToRight) {
 				nextPair = evaluateNextByLHS(LHS, RHS, isTrans);
 			} else {
 				nextPair = evaluateNextByRHS(LHS, RHS, isTrans);
@@ -1039,9 +1069,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> affectsPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				affectsPair = evaluateAffectsByPair(LHS, RHS, isTrans);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			affectsPair = evaluateAffectsByPair(LHS, RHS, isTrans);
 			} else if (direction == LeftToRight) {
+			affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
+			} else {
+			affectsPair = evaluateAffectsByRHS(LHS, RHS, isTrans);
+			}*/
+			if (direction == LeftToRight) {
 				affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
 			} else {
 				affectsPair = evaluateAffectsByRHS(LHS, RHS, isTrans);
@@ -1116,7 +1151,7 @@ namespace QueryEvaluator
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
-	
+
 	/**
 	* Processes the NextBip clause.
 	* @param LHS
@@ -1152,9 +1187,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> nextBipPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				nextBipPair = evaluateNextBipByPair(LHS, RHS, isTrans);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			nextBipPair = evaluateNextBipByPair(LHS, RHS, isTrans);
 			} else if (direction == LeftToRight) {
+			nextBipPair = evaluateNextBipByLHS(LHS, RHS, isTrans);
+			} else {
+			nextBipPair = evaluateNextBipByRHS(LHS, RHS, isTrans);
+			}*/
+			if (direction == LeftToRight) {
 				nextBipPair = evaluateNextBipByLHS(LHS, RHS, isTrans);
 			} else {
 				nextBipPair = evaluateNextBipByRHS(LHS, RHS, isTrans);
@@ -1229,7 +1269,7 @@ namespace QueryEvaluator
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
 	}
-	
+
 	/**
 	* Processes the AffectsBip clause.
 	* @param LHS
@@ -1265,9 +1305,14 @@ namespace QueryEvaluator
 		} else {
 			pair<vector<int>, vector<int>> affectsBipPair;
 
-			if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-				affectsBipPair = evaluateAffectsBipByPair(LHS, RHS, isTrans);
+			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
+			affectsBipPair = evaluateAffectsBipByPair(LHS, RHS, isTrans);
 			} else if (direction == LeftToRight) {
+			affectsBipPair = evaluateAffectsBipByLHS(LHS, RHS, isTrans);
+			} else {
+			affectsBipPair = evaluateAffectsBipByRHS(LHS, RHS, isTrans);
+			}*/
+			if (direction == LeftToRight) {
 				affectsBipPair = evaluateAffectsBipByLHS(LHS, RHS, isTrans);
 			} else {
 				affectsBipPair = evaluateAffectsBipByRHS(LHS, RHS, isTrans);
