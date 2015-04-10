@@ -1210,6 +1210,12 @@ vector<pair<int, vector<int>>> PKB::contains(TNODE_TYPE parentType, TNODE_TYPE c
 	return contain->contains(parentType, childType, transitiveClosure);
 }
 
+//siblings
+vector<pair<int, vector<int>>> PKB::siblings(TNODE_TYPE first_siblingType, TNODE_TYPE second_siblingType) {
+	return sibling->siblings(first_siblingType, second_siblingType);
+}
+
+
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
 */

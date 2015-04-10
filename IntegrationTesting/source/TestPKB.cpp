@@ -428,23 +428,14 @@ void PKBTest::testPKB()
 
 	//Contains
 	cout << "Contains" << endl;
-	/*vector<pair<TNode*, vector<TNode*>>> testing;
-	testing = pkb.contains(Plus, Times, true);
-	for(int i=0; i<testing.size(); i++) {
-		pair <TNode*, vector<TNode*>> tester = testing.at(i);
-		cout << (i+1) << ". Plus at stmtNo " << tester.first->getStmtNumber() << " with desc " << tester.first->getDescendent() << " " << tester.first << endl;
-		for(int j=0; j<tester.second.size(); j++) {
-			cout << "Times StmtNo " << tester.second.at(j)->getStmtNumber() << " with desc " << tester.second.at(j)->getDescendent() << " " << tester.second.at(j) << endl;
-		}
-	}*/
 
 	vector<pair<int, vector<int>>> testing;
-	testing = pkb.contains(While, Assign, true);
+	testing = pkb.contains(StmtLst, StmtLst, true);
 	for(int i=0; i<testing.size(); i++) {
 		pair <int, vector<int>> tester = testing.at(i);
-		cout << (i+1) << ". While at stmtNo " << tester.first << endl;
+		cout << (i+1) << ". StmtLst at stmtNo " << tester.first << endl;
 		for(int j=0; j<tester.second.size(); j++) {
-			cout << "Assign StmtNo " << tester.second.at(j) << endl;
+			cout << "StmtLst StmtNo " << tester.second.at(j) << endl;
 		}
 	}
 
@@ -475,17 +466,38 @@ void PKBTest::testPKB()
 
 	//New Pattern Syntax
 	cout << "New Pattern Syntax" << endl;
-	vector<int> testing2 = pkb.patternMatchIfElse("b", Variable);
+	/*vector<int> testing2 = pkb.patternMatchIfElse("b", Variable);
 	//vector<int> testing = pkb.patternMatchIf("a", Plus);
 	for(int i=0; i<testing2.size(); i++) {
 		cout << "stmtNo " << testing2.at(i) << endl;
-	}
+	}*/
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', Plus)", 9, pkb.patternMatchWhile("b", Plus).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', Plus)", 2, (int)pkb.patternMatchWhile("b", Plus).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', Plus, _)", 2, (int)pkb.patternMatchIfThen("b", Plus).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _, Variable)", 4, (int)pkb.patternMatchIfElse("b", Variable).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', Plus, Variable)", 36, pkb.patternMatchIf("b", Plus, Variable).front());
+
+	//Siblings
+	cout << "Siblings" << endl;
+	/*vector<pair<int, vector<int>>> testing3;
+	testing3 = pkb.siblings(StmtLst, StmtLst);
+	for(int i=0; i<testing3.size(); i++) {
+		pair <int, vector<int>> tester2 = testing3.at(i);
+		cout << (i+1) << ". StmtLst at stmtNo " << tester2.first << endl;
+		for(int j=0; j<tester2.second.size(); j++) {
+			cout << "StmtLst StmtNo " << tester2.second.at(j) << endl;
+		}
+	}*/
+
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Procedure, Procedure)", 5, (int)pkb.siblings(Procedure, Procedure).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Plus, Times)", 1, (int)pkb.siblings(Plus, Times).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Plus, Variable)", 11, (int)pkb.siblings(Plus, Variable).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Times, Variable)", 3, (int)pkb.siblings(Times, Variable).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Variable, Times)", 3, (int)pkb.siblings(Variable, Times).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(While, Assign)", 4, (int)pkb.siblings(While, Assign).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Constant, Variable)", 14, (int)pkb.siblings(Constant, Variable).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(StmtLst, StmtLst)", 5, (int)pkb.siblings(StmtLst, StmtLst).size());
 
 	cout << "End TestPkb" << endl;
 }

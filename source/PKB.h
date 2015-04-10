@@ -21,6 +21,7 @@
 #include "Synonym.h"
 #include "common.h"
 #include "Contains.h"
+#include "Siblings.h"
 
 using namespace std;
 
@@ -199,8 +200,11 @@ public:
 	static bool canSkipNodesBackwards(CNode* node);
 	static bool canSkipNodesForwards(CNode* node);
 
-	//contains 
+	// contains 
 	vector<pair<int, vector<int>>> contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
+
+	// siblings
+	vector<pair<int, vector<int>>> siblings(TNODE_TYPE first_siblingType, TNODE_TYPE second_siblingType);
 
 	//@todo 
 	// @cond todo
@@ -224,6 +228,7 @@ private:
 	NextTable* nextTable;
 	AffectsTable* affectsTable;
 	class Contains* contain;
+	class Siblings* sibling;
 	PKB();	
 	
 };
