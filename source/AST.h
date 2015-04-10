@@ -31,6 +31,12 @@ class AST {
 		STATEMENT_LIST patternMatchWhile(VARNAME LHS);
 		STATEMENT_LIST patternMatchIf(VARNAME LHS);
 
+		STATEMENT_LIST patternMatchWhile(VARNAME LHS, TNODE_TYPE then);
+		STATEMENT_LIST patternMatchIfThen(VARNAME LHS, TNODE_TYPE thenS);
+		STATEMENT_LIST patternMatchIfElse(VARNAME LHS, TNODE_TYPE thenS);
+		STATEMENT_LIST patternMatchIf(VARNAME LHS, TNODE_TYPE thenS, TNODE_TYPE elseS);
+
+
 		VAR_INDEX getControlVariable(STATEMENT stmtNum);
 
 		INTEGER getDescendent(TNode* curr);

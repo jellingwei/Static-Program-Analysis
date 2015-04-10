@@ -162,6 +162,30 @@ VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum)
 	return ast->getControlVariable(stmtNum);
 }
 
+//@todo
+STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, TNODE_TYPE then) 
+{
+	return ast->patternMatchWhile(LHS, then);
+}
+
+//@todo
+STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, TNODE_TYPE then) 
+{
+	return ast->patternMatchIfThen(LHS, then);
+}
+
+//@todo
+STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, TNODE_TYPE then) 
+{
+	return ast->patternMatchIfElse(LHS, then);
+}
+
+//@todo
+STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, TNODE_TYPE thenS, TNODE_TYPE elseS) 
+{
+	return ast->patternMatchIf(LHS, thenS, elseS);
+}
+
 // VarTable
 
 /**
@@ -1482,6 +1506,16 @@ PROGLINE_LIST PKB::getAffectsBipLhs() {
 */
 PROGLINE_LIST PKB::getAffectsBipRhs() {
 	return affectsBipTable->getRhs();
+}
+
+//contains
+vector<pair<int, vector<int>>> PKB::contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure) {
+	return contain->contains(parentType, childType, transitiveClosure);
+}
+
+//siblings
+vector<pair<int, vector<int>>> PKB::siblings(TNODE_TYPE first_siblingType, TNODE_TYPE second_siblingType) {
+	return sibling->siblings(first_siblingType, second_siblingType);
 }
 
 /*

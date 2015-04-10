@@ -13,6 +13,7 @@ using namespace std;
 #include "PKB.h"
 #include "ExpressionParser.h"
 #include "PatternMatch.h"
+#include "Contain.h"
 
 AST::AST() {
 	_rootNode = createTNode(Program, 0, 0);
@@ -292,4 +293,68 @@ STATEMENT_LIST AST::patternMatchIf(VARNAME LHS) {
 //@todo
 INTEGER AST::getDescendent(TNode* curr) {
 	return curr->getDescendent();
+}
+
+//@todo
+vector<int> AST::patternMatchWhile(string LHS, TNODE_TYPE then) {
+	PatternMatch pattern;
+	vector<int> whileStmts, result, temp;
+	whileStmts = pattern.patternMatchParentStmt(LHS, While);
+	TNode* currentNode;
+	Contain contain;
+	PKB pkb = PKB::getInstance();
+	for(int i=0; i<(int)whileStmts.size(); i++) {
+		currentNode = pkb.getNodeForStmt(whileStmts.at(i))->getChildren()->at(1);
+		temp = contain.checkForWhileThen(currentNode, then, true);
+		result.insert( result.end(), temp.begin(), temp.end() );
+	}
+
+	return result;
+}
+
+vector<int> AST::patternMatchIfThen(string LHS, TNODE_TYPE thenS) {
+	PatternMatch pattern;
+	vector<int> IfStmts, result, temp;
+	IfStmts = pattern.patternMatchParentStmt(LHS, If);
+	TNode* currentNode;
+	Contain contain;
+	PKB pkb = PKB::getInstance();
+	for(int i=0; i<(int)IfStmts.size(); i++) {
+		//Then is Child 1
+		currentNode = pkb.getNodeForStmt(IfStmts.at(i))->getChildren()->at(1);
+		temp = contain.checkForIfThenElse(currentNode, thenS, true);
+		result.insert( result.end(), temp.begin(), temp.end() );
+	}
+
+	return result;
+}
+
+vector<int> AST::patternMatchIfElse(string LHS, TNODE_TYPE thenS) {
+	PatternMatch pattern;
+	vector<int> IfStmts, result, temp;
+	IfStmts = pattern.patternMatchParentStmt(LHS, If);
+	TNode* currentNode;
+	Contain contain;
+	PKB pkb = PKB::getInstance();
+	for(int i=0; i<(int)IfStmts.size(); i++) {
+		//Else is Child 2
+		currentNode = pkb.getNodeForStmt(IfStmts.at(i))->getChildren()->at(2);
+		temp = contain.checkForIfThenElse(currentNode, thenS, true);
+		result.insert( result.end(), temp.begin(), temp.end() );
+	}
+
+	return result;
+}
+
+vector<int> AST::patternMatchIf(string LHS, TNODE_TYPE thenS, TNODE_TYPE elseS) {
+	vector<int> finalResult, result1, result2;
+	result1 = patternMatchIfElse(LHS, thenS);
+	result2 = patternMatchIfElse(LHS, elseS);
+
+	sort(result1.begin(), result1.end());
+    sort(result2.begin(), result2.end());
+
+	set_intersection(result1.begin(),result1.end(),result2.begin(),result2.end(),back_inserter(finalResult));
+
+	return finalResult;
 }

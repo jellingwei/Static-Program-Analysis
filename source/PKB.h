@@ -19,12 +19,15 @@
 #include "NextBipTable.h"
 #include "AffectsBipTable.h"
 #include "AffectsTable.h"
+#include "Contain.h"
+#include "Siblings.h"
 #include "CFG.h"
 #include "AST.h"
 #include "TNode.h"
 #include "Synonym.h"
 #include "common.h"
 #include "common_list.h"
+
 
 using namespace std;
 
@@ -54,6 +57,13 @@ public:
 	STATEMENT_LIST patternMatchWhile(VARNAME LHS);
 	STATEMENT_LIST patternMatchIf(VARNAME LHS);
 	VAR_INDEX getControlVariable(STATEMENT stmtNum);
+	
+	// Extended Pattern Matching for While and If
+	STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, TNODE_TYPE then);
+	STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, TNODE_TYPE then);
+	STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, TNODE_TYPE then);
+	STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, TNODE_TYPE thenS, TNODE_TYPE elseS);
+
 
 	// VarTable methods
 	VAR_INDEX insertVar(VARNAME varName, STATEMENT stmtNum);
@@ -238,6 +248,13 @@ public:
 	unordered_map<int, int> stmtNumToProcLineMap; // @todo not needed anymore
 	// @endcond
 
+	// contains 
+	vector<pair<int, vector<int>>> contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
+
+	// siblings
+	vector<pair<int, vector<int>>> siblings(TNODE_TYPE first_siblingType, TNODE_TYPE second_siblingType);
+
+
 private:
 	VarTable* varTable; 
 	ProcTable* procTable;
@@ -253,6 +270,8 @@ private:
 	AffectsTable* affectsTable;
 	NextBipTable* nextBipTable;
 	AffectsBipTable* affectsBipTable;
+	class Contain* contain;
+	class Siblings* sibling;
 	PKB();
 	
 	

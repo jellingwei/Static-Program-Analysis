@@ -103,7 +103,7 @@ enum SYNONYM_ATTRIBUTE
 
 enum TNODE_TYPE
 {
-	Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant, Minus, Times, Program, Call
+	Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant, Minus, Times, Program, Call, Stmt
 };
 
 enum LINK_TYPE
