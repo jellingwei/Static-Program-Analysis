@@ -1,0 +1,100 @@
+procedure One { 
+  a = 2;              \\1
+  call Three;         \\2
+  b = a;              \\3
+  c = a + b - z;        \\4
+  f = z + x - y;      \\5
+  call Seven;           \\6
+  f = f - c;            \\7
+  call Eight;         \\8
+  call Nine;            \\9
+  z = f * b;          \\10
+  call Two;           \\11
+  f = f + 2;          \\12
+}
+procedure Two { 
+  x = 5;            \\13
+  y = x * 5 + z;    \\14
+  z = x + y;        \\15
+  x = x - x;        \\16
+  a = z;            \\17
+}
+procedure Three { 
+  f = a * c;        \\18
+  while x {           \\19
+    b = f - c;        \\20
+    c = b * c;        \\21
+    call Four;        \\22 
+  }
+  e = f + a;          \\23
+  a = a + b + c;        \\24
+}
+procedure Four {
+  x = b;                \\25
+  b = x + a;            \\26
+  if x then {             \\27
+    x = a - c;              \\28
+    call Five;            \\29
+  } else {
+    call Six;             \\30
+    b = b + x;          \\31
+  }
+}
+procedure Five {
+  b = c + d;          \\32
+  if k then {       \\33
+    b = b + 1;        \\34
+    while x {         \\35
+      x = y;          \\36
+    } 
+  } else {
+    x = y;              \\37
+    y = b + a;          \\38
+ }
+  z = y * a;            \\39
+  x = b;                \\40
+}
+procedure Six {
+ while y {            \\41
+    f = z + x;      \\42
+    while x {         \\43
+      f = a + b;       \\44
+      a = b + f;        \\45
+    }
+    z = b * c * f;      \\46
+    if a then {         \\47
+      b = z + a - c;          \\48
+    } else {
+      c = a - z + b;          \\49
+    } 
+    x = x * z;        \\50
+  } 
+  z = x + z;          \\51
+}
+
+procedure Seven {
+  z = f - z;      \\52
+  c = 5 - 2;        \\53
+}
+
+procedure Eight {
+  f = 1;              \\54
+  while c {             \\55
+    b = 1 + a - c;        \\56
+    call Seven;           \\57
+    c = b - c;          \\58
+  }
+  z = f - x;             \\59
+}
+
+procedure Nine {
+  c = z + x + y;          \\60
+  if e then {             \\61
+    e = e + 1;            \\62
+    call Eight;           \\63
+  } else {            
+    y = a + b;              \\64
+    y = y - 1;            \\65
+  }
+  a = z + c;            \\66
+}
