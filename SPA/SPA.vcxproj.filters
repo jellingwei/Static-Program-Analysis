@@ -117,6 +117,12 @@
     <ClCompile Include="..\source\AffectsBipTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\Contain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Siblings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h">
@@ -225,6 +231,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\AffectsBipTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Contain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

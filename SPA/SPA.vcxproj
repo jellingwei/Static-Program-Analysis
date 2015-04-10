@@ -18,6 +18,7 @@
     <ClCompile Include="..\source\CFG.cpp" />
     <ClCompile Include="..\source\CNode.cpp" />
     <ClCompile Include="..\source\ConstantTable.cpp" />
+    <ClCompile Include="..\source\Contain.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\ExpressionParser.cpp" />
     <ClCompile Include="..\source\FollowsTable.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="..\source\QueryTree.cpp" />
     <ClCompile Include="..\source\QueryValidator.cpp" />
     <ClCompile Include="..\source\ResultProjector.cpp" />
+    <ClCompile Include="..\source\Siblings.cpp" />
     <ClCompile Include="..\source\StatisticsTable.cpp" />
     <ClCompile Include="..\source\StmtTable.cpp" />
     <ClCompile Include="..\source\Synonym.cpp" />
@@ -56,6 +58,7 @@
     <ClInclude Include="..\source\common.h" />
     <ClInclude Include="..\source\common_list.h" />
     <ClInclude Include="..\source\ConstantTable.h" />
+    <ClInclude Include="..\source\Contain.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExpressionParser.h" />
     <ClInclude Include="..\source\FollowsTable.h" />
