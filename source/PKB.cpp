@@ -376,7 +376,7 @@ STATEMENT_LIST PKB::getStmtNumForType(STATEMENT_TYPE type)
  * @return the procIndex that the statement is in
  */
 PROC_INDEX PKB::getProcIndexForStmt(STATEMENT stmtNum) {
-	return stmtTable->getProcIndexForStmt(stmtNum);
+	return stmtNumToProcLineMap.at(stmtNum);
 }
 
 /**
@@ -1275,7 +1275,6 @@ void PKB::setProgLineInWhile(PROG_LINE_ progLine) {
 * @return the CNode for the program line.
 */
 CNode* PKB::getCNodeForProgLine(PROG_LINE_ progLine) {
-	//return nextTable->getCNodeForProgLine(progLine);
 	return cfgNodeTable.at(progLine);
 }
 

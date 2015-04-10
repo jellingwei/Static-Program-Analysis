@@ -217,9 +217,6 @@ PROGLINE_LIST NextTable::getRhs() {
 	return rhs;
 }
 
-CNode* NextTable::getCNodeForProgLine(PROG_LINE_ progLine) {
-	throw exception("not implemented yet");
-}
 
 PROG_LINE_ NextTable::getFirstProgLineInContainer(CONTAINER_STATEMENT container) {
 	if (firstProgLineInElse.count(container) != 0) {

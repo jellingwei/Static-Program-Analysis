@@ -28,8 +28,6 @@ public:
 	BOOLEAN_ setRhs(PROG_LINE_);
 
 
-	CNode* getCNodeForProgLine(PROG_LINE_ progLine);
-
 	PROG_LINE_ getFirstProgLineInProc(PROC_INDEX procIndex);
 	PROG_LINE_ getLastProgLineInProc(PROC_INDEX procIndex);
 	void setFirstProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ firstProgline);

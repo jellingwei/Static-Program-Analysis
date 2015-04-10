@@ -105,9 +105,7 @@ STATEMENT_LIST StmtTable::getStmtNumForType(STATEMENT_TYPE type)
 	}
 }
 
-PROC_INDEX StmtTable::getProcIndexForStmt(STATEMENT stmtNum) {
-	throw exception("not implemented yet");
-}
+
 
 BOOLEAN_ StmtTable::isAssign(STATEMENT stmtNum) 
 {

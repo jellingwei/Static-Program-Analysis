@@ -23,7 +23,6 @@ public:
 	INTEGER getSize();
 
 	TNode* getNodeForStmt(STATEMENT stmtNum);
-	PROC_INDEX getProcIndexForStmt(STATEMENT stmtNum);
 
 private:
 	unordered_map<int, string> stmtNumMap; //key is given by stmt#
