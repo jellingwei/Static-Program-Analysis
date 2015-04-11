@@ -263,7 +263,6 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 
 set<NEXTBIP_STATE> NextBipTable::getNextBipAfterWithState(CNode* progLine1, std::stack<CNode*> afterCall) {
 	PKB pkb = PKB::getInstance();
-	cout << "in next bip .... "  << progLine1 << endl;
 	
 	CNode* curNode = progLine1;
 	set<NEXTBIP_STATE> result;

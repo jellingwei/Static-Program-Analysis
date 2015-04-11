@@ -514,7 +514,7 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,11), normal affects", (int)pkb.getAffecting(11).size(), (int)pkb.getAffectsBipBefore(11).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,15), normal affects", (int)pkb.getAffecting(15).size(), (int)pkb.getAffectsBipBefore(15).size());
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,24), ", 3, (int)pkb.getAffectsBipBefore(24).size());	
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,24), ", 2, (int)pkb.getAffectsBipBefore(24).size());	
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip(,36), ", 8, (int)pkb.getAffectsBipBefore(36).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("AffectsBip*(,36), ", 14, (int)pkb.getAffectsBipBefore(36, true).size());
