@@ -405,6 +405,8 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 		NEXTBIP_STATE curState = frontier.back();
 		curNode = curState.first; 
 		afterCall = curState.second;
+		cout << "node .. " << curNode->getProcLineNumber() << endl;
+		cout << "stack sz: " << afterCall.size() << endl;
 
 		frontier.pop_back();
 
@@ -412,6 +414,7 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 		 
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* node = *iter;
+			cout << "... " << node->getProcLineNumber() << endl;
 
 			// call stmt: expand to the last nodes of the procedure called
 			if (node->getNodeType() == Call_C) {
@@ -422,6 +425,7 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 				for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
 					updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
 				}
+				afterCall.pop();
 
 			} else if (node->getNodeType() != EndIf_C) {
 				// normal case: on a Start of Proc, pop the stack/ expand to all call statements calling the proc
@@ -516,6 +520,7 @@ set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(PROG_LINE_ progLine2,
 					//updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
 					result.insert(NEXTBIP_STATE(*lastNodeIter, afterCall));
 				}
+				afterCall.pop();
 
 			} else if (node->getNodeType() != EndIf_C) {
 				// normal case: on a Start of Proc, pop the stack/ expand to all call statements calling the proc
