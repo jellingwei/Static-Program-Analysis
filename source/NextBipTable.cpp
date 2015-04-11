@@ -45,7 +45,8 @@ CNode* getNodeCalledByProgLine(CNode* nextNode) {
 	return nodeOfProc;
 }
 
-vector<CNode*> getLastNodeInProcCalledByProgLine(CNode* nextNode) {
+vector<NEXTBIP_STATE> getLastNodeInProcCalledByProgLine(NEXTBIP_STATE state) {
+	CNode* nextNode = state.first;
 	assert(nextNode->getNodeType() == Call_C);
 
 	PKB pkb = PKB::getInstance();
@@ -57,34 +58,44 @@ vector<CNode*> getLastNodeInProcCalledByProgLine(CNode* nextNode) {
 
 	assert( nodeOfProc->getBefore()->size() == 1);
 
-	vector<CNode*> previousNodes;
+	vector<NEXTBIP_STATE> previousNodes;
 	vector<CNode*>* candidateNodes = nodeOfProc->getBefore();
 
-	for (auto iter = candidateNodes->begin(); iter != candidateNodes->end(); ++iter) {
-		CNode* node = *iter;
-		if (node->getNodeType() != Call_C) {
-			deque<CNode*> candidateResultNodes;
-			candidateResultNodes.push_back(node);
+	stack<CNode*> afterCallStack = state.second;
+	afterCallStack.push(state.first);
 
-			while (!candidateResultNodes.empty()) {
-				node = candidateResultNodes.back();
-				candidateResultNodes.pop_back();
+	deque<NEXTBIP_STATE> candidateResultNodes;
+	for (size_t i = 0; i < candidateNodes->size(); i++) {
+		CNode* stateToAdd = candidateNodes->at(i);
+		candidateResultNodes.push_back(NEXTBIP_STATE(stateToAdd, afterCallStack));
+	}
 
-				if (node->getNodeType() != EndIf_C && node->getNodeType() != EndProc_C  && node->getNodeType() != Proc_C) {
-					previousNodes.push_back(node);
-				} else {
-					vector<CNode*>* expandedNodes = node->getBefore();
-					candidateResultNodes.insert(candidateResultNodes.end(), expandedNodes->begin(), expandedNodes->end());
-				}
+	while (!candidateResultNodes.empty()) {
+		NEXTBIP_STATE candidateState = candidateResultNodes.back();
+		CNode* candidateNode = candidateState.first;
+		candidateResultNodes.pop_back();
+		
+		if (candidateNode->getNodeType() == EndIf_C || candidateNode->getNodeType() == EndProc_C || candidateNode->getNodeType() == Proc_C) {
+			vector<CNode*>* expandedNodes = candidateNode->getBefore();
+			
+			for (size_t i = 0; i < expandedNodes->size(); i++) {
+				CNode* stateToAdd = expandedNodes->at(i);
+				candidateResultNodes.push_back(NEXTBIP_STATE(stateToAdd, candidateState.second));
+			}
+
+		} else if (candidateNode->getNodeType() == Call_C) {
+			vector<NEXTBIP_STATE> nodesFromNestedCallProcedure = getLastNodeInProcCalledByProgLine(candidateState);
+			candidateResultNodes.insert(candidateResultNodes.end(), nodesFromNestedCallProcedure.begin(), nodesFromNestedCallProcedure.end());
+			for (size_t i = 0; i < nodesFromNestedCallProcedure.size(); i++) {
+				NEXTBIP_STATE stateToAdd = nodesFromNestedCallProcedure.at(i);
+				candidateResultNodes.push_back(stateToAdd);
 			}
 		} else {
-			vector<CNode*> nodesFromNestedCallProcedure = getLastNodeInProcCalledByProgLine(node);
-			previousNodes.insert(previousNodes.end(), nodesFromNestedCallProcedure.begin(), nodesFromNestedCallProcedure.end());
+			previousNodes.push_back(candidateState);
 		}
 	}
 
 	return previousNodes;
-	
 }
 
 vector<CNode*> getCallStatementsToProc(int procIndex) {
@@ -420,11 +431,11 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 			// call stmt: expand to the last nodes of the procedure called
 			if (node->getNodeType() == Call_C) {
 
-				vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(node);
+				vector<NEXTBIP_STATE> lastNodes = getLastNodeInProcCalledByProgLine(NEXTBIP_STATE(node, afterCall));
 				afterCall.push(node);
 
 				for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
-					updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
+					updateStateOfBfs(visited, *lastNodeIter, frontier, result);	
 				}
 				afterCall.pop();
 
@@ -455,10 +466,10 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 						expandProc(nodeToExpand, afterCall, visited, frontier, result);
 						continue;
 					} else if (nodeToExpand->getNodeType() == Call_C) {
-						vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(nodeToExpand);
+						vector<NEXTBIP_STATE> lastNodes = getLastNodeInProcCalledByProgLine(NEXTBIP_STATE(nodeToExpand, afterCall));
 
 						for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
-							updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
+							updateStateOfBfs(visited, *lastNodeIter, frontier, result);	
 						}
 					} else if (nodeToExpand->getNodeType() == EndIf_C) {
 						prevNodeAfterEndIf = node->getBefore()->at(0);
@@ -514,12 +525,11 @@ set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std
 			// call stmt: expand to the last nodes of the procedure called
 			if (node->getNodeType() == Call_C) {
 
-				vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(node);
+				vector<NEXTBIP_STATE> lastNodes = getLastNodeInProcCalledByProgLine(NEXTBIP_STATE(node, afterCall));
 				afterCall.push(node);
 
 				for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
-					//updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
-					result.insert(NEXTBIP_STATE(*lastNodeIter, afterCall));
+					result.insert(*lastNodeIter);
 				}
 				afterCall.pop();
 
@@ -529,7 +539,6 @@ set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std
 					expandProcWithState(node, afterCall, result);
 				} else {
 					// otherwise just traverse
-					//updateStateOfBfs(visited, NEXTBIP_STATE(node, afterCall), frontier, result);	
 					result.insert(NEXTBIP_STATE(node, afterCall));
 				}
 
@@ -551,10 +560,10 @@ set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std
 						expandProcWithState(nodeToExpand, afterCall, result);
 						continue;
 					} else if (nodeToExpand->getNodeType() == Call_C) {
-						vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(nodeToExpand);
+						vector<NEXTBIP_STATE> lastNodes = getLastNodeInProcCalledByProgLine(NEXTBIP_STATE(nodeToExpand, afterCall));
 
 						for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
-							result.insert(NEXTBIP_STATE(*lastNodeIter, afterCall));
+							result.insert(*lastNodeIter);
 						}
 					} else if (nodeToExpand->getNodeType() == EndIf_C) {
 						prevNodeAfterEndIf = node->getBefore()->at(0);
@@ -589,7 +598,7 @@ PROGLINE_LIST NextBipTable::getLhs() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 
-	for (size_t i = 1; i <= pkb.getStmtTableSize(); i++) {
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
 		vector<int> rhs = getNextBipAfter(i);
 		if (rhs.size() > 0) {
 			result.push_back(i);
@@ -603,7 +612,7 @@ PROGLINE_LIST NextBipTable::getRhs() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 
-	for (size_t i = 1; i <= pkb.getStmtTableSize(); i++) {
+	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
 		vector<int> lhs = getNextBipBefore(i);
 		if (lhs.size() > 0) {
 			result.push_back(i);
