@@ -522,8 +522,7 @@ PROGLINE_LIST AffectsBipTable::getRhs() {
 
 
 BOOLEAN_ AffectsBipTable::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
-
-	PROGLINE_LIST rhs = getProgLinesAffectsBipAfter(progLine1, false);
+	PROGLINE_LIST rhs = getProgLinesAffectsBipAfter(progLine1, transitiveClosure);
 
 	return find(rhs.begin(), rhs.end(), progLine2) != rhs.end();
 }
