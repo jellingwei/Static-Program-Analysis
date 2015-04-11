@@ -1444,6 +1444,16 @@ PROGLINE_LIST PKB::getNextBipBefore(PROG_LINE_ progline2, TRANS_CLOSURE transiti
 	return nextBipTable->getNextBipBefore(progline2, transitiveClosure);
 }
 
+
+set<NEXTBIP_STATE> PKB::getNextBipAfterWithState(CNode* progLine1, stack<CNode*> afterCall) {
+	return nextBipTable->getNextBipAfterWithState(progLine1, afterCall);
+}
+
+set<NEXTBIP_STATE> PKB::getNextBipBeforeWithState(CNode* progLine2, stack<CNode*> afterCall) {
+	return nextBipTable->getNextBipBeforeWithState(progLine2, afterCall);
+}
+
+
 /**
 * @return a list of all program lines, progLine1, where NextBip(progLine1, progLine2) is true.
 */

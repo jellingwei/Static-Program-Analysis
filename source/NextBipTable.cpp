@@ -209,6 +209,8 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 			CNode* nodeOfProc = getNodeCalledByProgLine(curNode);
 
 			updateStateOfBfs(visited, NEXTBIP_STATE(nodeOfProc, afterCall), frontier, result);
+
+			afterCall.pop();
 		} else {
 			// for non-call statement, follow the same thing as Next
 			for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
@@ -259,21 +261,22 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 	return resultAsVector;
 }
 
-set<NEXTBIP_STATE> NextBipTable::getNextBipAfterWithState(PROG_LINE_ progLine1) {
+set<NEXTBIP_STATE> NextBipTable::getNextBipAfterWithState(CNode* progLine1, std::stack<CNode*> afterCall) {
 	PKB pkb = PKB::getInstance();
+	cout << "in next bip .... "  << progLine1 << endl;
 	
-	CNode* curNode = pkb.cfgNodeTable.at(progLine1);
+	CNode* curNode = progLine1;
 	set<NEXTBIP_STATE> result;
 
 	deque<NEXTBIP_STATE > frontier; 
 	set<NEXTBIP_STATE>* visited = new set<NEXTBIP_STATE>();
 
-	frontier.push_back(NEXTBIP_STATE(curNode, stack<CNode*>() ) );
+	frontier.push_back(NEXTBIP_STATE(curNode, afterCall ) );
 
 	//while (!frontier.empty()) {
 		NEXTBIP_STATE curState = frontier.back();
 		curNode = curState.first; 
-		stack<CNode*> afterCall = curState.second;
+		afterCall = curState.second;
 		frontier.pop_back();
 		
 		vector<CNode*>* nextNodes = curNode->getAfter();
@@ -306,6 +309,8 @@ set<NEXTBIP_STATE> NextBipTable::getNextBipAfterWithState(PROG_LINE_ progLine1) 
 			CNode* nodeOfProc = getNodeCalledByProgLine(curNode);
 
 			result.insert(NEXTBIP_STATE(nodeOfProc, afterCall));
+
+			afterCall.pop();
 		} else {
 			// for non-call statement, follow the same thing as Next
 			for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
@@ -405,16 +410,13 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 		NEXTBIP_STATE curState = frontier.back();
 		curNode = curState.first; 
 		afterCall = curState.second;
-		cout << "node .. " << curNode->getProcLineNumber() << endl;
-		cout << "stack sz: " << afterCall.size() << endl;
-
+		
 		frontier.pop_back();
 
 		vector<CNode*>* nextNodes = curNode->getBefore();
 		 
 		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
 			CNode* node = *iter;
-			cout << "... " << node->getProcLineNumber() << endl;
 
 			// call stmt: expand to the last nodes of the procedure called
 			if (node->getNodeType() == Call_C) {
@@ -486,17 +488,17 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 
 
 
-set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(PROG_LINE_ progLine2, std::stack<CNode*> afterCall) {
+set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std::stack<CNode*> afterCall) {
 	PKB pkb = PKB::getInstance();
 	
-	CNode* curNode = pkb.cfgNodeTable.at(progLine2);
+	CNode* curNode = progLine2;
 
 	set<NEXTBIP_STATE> result;
 
 	deque<NEXTBIP_STATE > frontier;
 	set<NEXTBIP_STATE>* visited = new set<NEXTBIP_STATE>();
 
-	frontier.push_back(NEXTBIP_STATE(curNode, stack<CNode*>() ) );
+	frontier.push_back(NEXTBIP_STATE(curNode, afterCall) );
 
 	//while (!frontier.empty()) {
 		NEXTBIP_STATE curState = frontier.back();
