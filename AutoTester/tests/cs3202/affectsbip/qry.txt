@@ -263,3 +263,168 @@ assign a; variable v;
 Select a such that AffectsBip(a, v)
 none
 5000
+3001 - Valid AffectsBip* no bip direct
+
+Select BOOLEAN such that AffectsBip*(13,15)
+TRUE
+5000
+3002 - Valid AffectsBip* bip direct
+
+Select BOOLEAN such that AffectsBip*(1,18)
+TRUE
+5000
+3003 - Valid AffectsBip* no bip indirect
+
+Select BOOLEAN such that AffectsBip*(13, 17)
+TRUE
+5000
+3004 - Valid AffectsBip* bip indirect
+
+Select BOOLEAN such that AffectsBip*(5, 59)
+TRUE
+5000
+3005 - Valid AffectsBip* no bip while direct
+
+Select BOOLEAN such that AffectsBip*(18, 20)
+TRUE
+5000
+3006 - Valid AffectsBip* no bip while indirect
+
+Select BOOLEAN such that AffectsBip*(18,21)
+TRUE
+5000
+3007 - Valid AffectsBip* no bip loop 
+
+Select BOOLEAN such that AffectsBip*(45, 44)
+TRUE
+5000
+3008 - Valid AffectsBip* no bip loop 
+
+Select BOOLEAN such that AffectsBip*(45, 45)
+TRUE
+5000
+3009 - Valid AffectsBip* no bip over loop
+
+Select BOOLEAN such that AffectsBip*(17, 23)
+TRUE
+5000
+3010 - Valid AffectsBip* bip proc loop if else no skips
+
+Select BOOLEAN such that AffectsBip*(20, 20)
+TRUE
+5000
+3011 - Valid AffectsBip* bip proc loop if else skips
+
+Select BOOLEAN such that AffectsBip*(49, 45)
+TRUE
+5000
+3012 - Valid AffectsBip* bip proc loop if else skips
+assign a;
+Select BOOLEAN such that AffectsBip*(3, a) 
+4, 64, 65, 10, 14, 15, 17
+5000
+3013 - Valid AffectsBip* bip proc loop if else skips
+assign a;
+Select BOOLEAN such that AffectsBip*(a, 3) 
+1, 18, 20, 21, 24, 26, 31, 32, 34, 39, 40, 42, 44,45, 46, 48, 49, 50, 51
+5000
+3014 - Valid AffectsBip* wild card
+
+Select BOOLEAN such that AffectsBip*(_, 4) 
+TRUE
+5000
+3015 - Valid AffectsBip* wild card
+
+Select BOOLEAN such that AffectsBip*(4, _) 
+TRUE
+5000
+3016 - Valid AffectsBip* wild card
+
+Select BOOLEAN such that AffectsBip*(_, _) 
+TRUE
+5000
+4001 - Invalid AffectsBip* not affects
+
+Select BOOLEAN such that AffectsBip*(3, 5)
+FALSE
+5000
+4002 - Invalid AffectsBip* bip blocked
+
+Select BOOLEAN such that AffectsBip*(40, 26)
+FALSE
+5000
+4003 - Invalid AffectsBip* call
+
+Select BOOLEAN such that AffectsBip*(2, 18)
+FALSE
+5000
+4004 - Invalid AffectsBip* call
+call c; assign a;
+Select a such that AffectsBip*(c, a)
+none
+5000;
+4005 - Invalid AffectsBip* call
+call c; assign a;
+Select a such that AffectsBip*(a, c)
+none
+5000
+4006 - Invalid AffectsBip* if
+
+Select BOOLEAN such that AffectsBip*(27, 31)
+FALSE
+5000
+4007 - Invalid AffectsBip* if
+if i; assign a;
+Select a such that AffectsBip*(i, a)
+none
+5000
+4008 - Invalid AffectsBip* if
+if i; assign a;
+Select a such that AffectsBip*(a, i)
+none
+5000
+4009 - Invalid AffectsBip* while
+
+Select BOOLEAN such that AffectsBip*(55, 56)
+FALSE
+5000
+4010 - Invalid AffectsBip* while
+while w; assign a;
+Select a such that AffectsBip*(a,w)
+none
+5000
+4011 - Invalid AffectsBip* while
+while w; assign a;
+Select a such that AffectsBip*(w,a)
+none
+5000
+4012 - Invalid AffectsBip* constant
+
+Select BOOLEAN such that AffectsBip*("13", "15")
+FALSE
+5000
+4013 - Invalid AffectsBip* constant
+constant c;assign a;
+Select a such that AffectsBip*(c, a)
+none
+5000
+4014 - Invalid AffectsBip* constant
+constant c; assign a;
+Select a such that AffectsBip*(a, c)
+none
+5000
+4015 - Invalid AffectsBip* variable
+assign a;
+Select BOOLEAN such that AffectsBip*("a", a)
+FALSE
+5000
+4016 - Invalid AffectsBip* variable
+assign a; variable v;
+Select a such that AffectsBip*(v, a)
+none
+5000
+4017 - Invalid AffectsBip* variable
+assign a; variable v;
+Select a such that AffectsBip*(a, v)
+none
+5000
