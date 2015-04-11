@@ -35,7 +35,7 @@ procedure Four {
   if x then {             \\27
     x = a - c;              \\28
     call Five;            \\29
-  } else {
+  } else { 
     call Six;             \\30
     b = b + x;          \\31
   }
@@ -50,7 +50,7 @@ procedure Five {
   } else {
     x = y;              \\37
     y = b + a;          \\38
- }
+  }
   z = y * a;            \\39
   x = b;                \\40
 }
