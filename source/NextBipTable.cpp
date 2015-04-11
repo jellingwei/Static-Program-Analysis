@@ -63,7 +63,20 @@ vector<CNode*> getLastNodeInProcCalledByProgLine(CNode* nextNode) {
 	for (auto iter = candidateNodes->begin(); iter != candidateNodes->end(); ++iter) {
 		CNode* node = *iter;
 		if (node->getNodeType() != Call_C) {
-			previousNodes.push_back(node);
+			deque<CNode*> candidateResultNodes;
+			candidateResultNodes.push_back(node);
+
+			while (!candidateResultNodes.empty()) {
+				node = candidateResultNodes.back();
+				candidateResultNodes.pop_back();
+
+				if (node->getNodeType() != EndIf_C && node->getNodeType() != EndProc_C  && node->getNodeType() != Proc_C) {
+					previousNodes.push_back(node);
+				} else {
+					vector<CNode*>* expandedNodes = node->getBefore();
+					candidateResultNodes.insert(candidateResultNodes.end(), expandedNodes->begin(), expandedNodes->end());
+				}
+			}
 		} else {
 			vector<CNode*> nodesFromNestedCallProcedure = getLastNodeInProcCalledByProgLine(node);
 			previousNodes.insert(previousNodes.end(), nodesFromNestedCallProcedure.begin(), nodesFromNestedCallProcedure.end());
@@ -196,6 +209,8 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 			CNode* nodeOfProc = getNodeCalledByProgLine(curNode);
 
 			updateStateOfBfs(visited, NEXTBIP_STATE(nodeOfProc, afterCall), frontier, result);
+
+			afterCall.pop();
 		} else {
 			// for non-call statement, follow the same thing as Next
 			for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
@@ -246,6 +261,100 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 	return resultAsVector;
 }
 
+set<NEXTBIP_STATE> NextBipTable::getNextBipAfterWithState(CNode* progLine1, std::stack<CNode*> afterCall) {
+	PKB pkb = PKB::getInstance();
+	
+	CNode* curNode = progLine1;
+	set<NEXTBIP_STATE> result;
+
+	deque<NEXTBIP_STATE > frontier; 
+	set<NEXTBIP_STATE>* visited = new set<NEXTBIP_STATE>();
+
+	frontier.push_back(NEXTBIP_STATE(curNode, afterCall ) );
+
+	//while (!frontier.empty()) {
+		NEXTBIP_STATE curState = frontier.back();
+		curNode = curState.first; 
+		afterCall = curState.second;
+		frontier.pop_back();
+		
+		vector<CNode*>* nextNodes = curNode->getAfter();
+
+		if (curNode->getNodeType() == EndProc_C) {
+			// pop the top of the stack, and go to that node which was on the top
+
+			if (afterCall.size() > 0) {
+				CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
+				//updateStateOfBfs(visited, NEXTBIP_STATE(nodeAfterCall, afterCall), frontier, result);
+				result.insert(NEXTBIP_STATE(nodeAfterCall, afterCall));
+			} else {
+				// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
+				int curProcIndex = curNode->getASTref()->getNodeValueIdx();
+				
+				vector<CNode*> possibleNodes = getNextNodesOfNodes(getCallStatementsToProc(curProcIndex));
+
+				for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
+					result.insert(NEXTBIP_STATE(*iter, afterCall));
+				}
+			}
+		}
+		else if (curNode->getNodeType() == Call_C) {
+			// for call statement
+			// update afterCall to include the progline after the call
+			assert(nextNodes->size() == 1);
+			afterCall.push(nextNodes->at(0)); // for call-statements, only one possible next node so no need to iterate through the list
+
+			// get the first node of the procedure
+			CNode* nodeOfProc = getNodeCalledByProgLine(curNode);
+
+			result.insert(NEXTBIP_STATE(nodeOfProc, afterCall));
+
+			afterCall.pop();
+		} else {
+			// for non-call statement, follow the same thing as Next
+			for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
+				CNode* node = *iter;
+
+				// if the previous node is a dummy end_if node,
+				// skip it and go to its "after" nodes directly
+				while (node->getNodeType() == EndIf_C) {
+					assert(node->getAfter()->size() <= 1);
+
+					if (node->getAfter()->size() == 0) { // if is the last progline
+						continue;
+					}
+					CNode* nextNodeAfterEndIf = node->getAfter()->at(0);
+					node = nextNodeAfterEndIf;
+
+				}
+				if (node->getNodeType() == EndProc_C) {
+					// pop the top of the stack, and go to that node which was on the top
+
+					if (afterCall.size() > 0) {
+						CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
+						result.insert(NEXTBIP_STATE(nodeAfterCall, afterCall));
+					} else {
+						// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
+						int curProcIndex = node->getASTref()->getNodeValueIdx();
+				
+						vector<CNode*> possibleNodes = getNextNodesOfNodes(getCallStatementsToProc(curProcIndex));
+
+						for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
+							
+							result.insert(NEXTBIP_STATE(*iter, afterCall));
+						}
+					}
+				} else {
+					result.insert(NEXTBIP_STATE(node, afterCall));
+				}
+			}
+		}
+
+	//}
+
+	return result;
+}
+
 void expandProc(CNode* curNode, stack<CNode*> afterCall, set<NEXTBIP_STATE>* visited, deque<NEXTBIP_STATE>& frontier, set<int>& result) {
 	// pop the top of the stack, and go to that node which was on the top
 	if (afterCall.size() > 0) {
@@ -261,7 +370,25 @@ void expandProc(CNode* curNode, stack<CNode*> afterCall, set<NEXTBIP_STATE>* vis
 			updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
 		}
 	}
+}
+
+
+void expandProcWithState(CNode* curNode, stack<CNode*> afterCall, set<NEXTBIP_STATE>& result) {
+	// pop the top of the stack, and go to that node which was on the top
+	if (afterCall.size() > 0) {
+		CNode* nodeAfterCall = afterCall.top(); afterCall.pop();
+		result.insert(NEXTBIP_STATE(nodeAfterCall, afterCall));
+	} else {
+		// if there is no history of which line called this procedure, need to find all possible execution paths in SIMPLE
+		int curProcIndex = curNode->getASTref()->getNodeValueIdx();
+			
+		vector<CNode*> possibleNodes = getCallStatementsToProc(curProcIndex);
 	
+		for (auto iter = possibleNodes.begin(); iter != possibleNodes.end(); ++iter) {
+			//updateStateOfBfs(visited, NEXTBIP_STATE(*iter, afterCall), frontier, result);
+			result.insert(NEXTBIP_STATE(*iter, afterCall));
+		}
+	}
 }
 
 PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
@@ -282,7 +409,7 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 		NEXTBIP_STATE curState = frontier.back();
 		curNode = curState.first; 
 		afterCall = curState.second;
-
+		
 		frontier.pop_back();
 
 		vector<CNode*>* nextNodes = curNode->getBefore();
@@ -294,10 +421,12 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 			if (node->getNodeType() == Call_C) {
 
 				vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(node);
+				afterCall.push(node);
 
 				for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
 					updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
 				}
+				afterCall.pop();
 
 			} else if (node->getNodeType() != EndIf_C) {
 				// normal case: on a Start of Proc, pop the stack/ expand to all call statements calling the proc
@@ -325,17 +454,22 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 					if (nodeToExpand->getNodeType() == Proc_C) {
 						expandProc(nodeToExpand, afterCall, visited, frontier, result);
 						continue;
-					} 
+					} else if (nodeToExpand->getNodeType() == Call_C) {
+						vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(nodeToExpand);
 
-					updateStateOfBfs(visited, NEXTBIP_STATE(nodeToExpand, afterCall), frontier, result);	
-
-					if (nodeToExpand->getNodeType() == EndIf_C) {
+						for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
+							updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
+						}
+					} else if (nodeToExpand->getNodeType() == EndIf_C) {
 						prevNodeAfterEndIf = node->getBefore()->at(0);
 						prevNodeAfterEndIf2 = node->getBefore()->at(1);
 
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf);
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+					} else {
+						updateStateOfBfs(visited, NEXTBIP_STATE(nodeToExpand, afterCall), frontier, result);	
 					}
+				
 				}
 			}	
 		}
@@ -349,6 +483,96 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 	vector<int> resultAsVector;
 	resultAsVector.insert(resultAsVector.end(), result.begin(), result.end());
 	return resultAsVector;
+}
+
+
+
+set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std::stack<CNode*> afterCall) {
+	PKB pkb = PKB::getInstance();
+	
+	CNode* curNode = progLine2;
+
+	set<NEXTBIP_STATE> result;
+
+	deque<NEXTBIP_STATE > frontier;
+	set<NEXTBIP_STATE>* visited = new set<NEXTBIP_STATE>();
+
+	frontier.push_back(NEXTBIP_STATE(curNode, afterCall) );
+
+	//while (!frontier.empty()) {
+		NEXTBIP_STATE curState = frontier.back();
+		curNode = curState.first; 
+		afterCall = curState.second;
+
+		frontier.pop_back();
+
+		vector<CNode*>* nextNodes = curNode->getBefore();
+		 
+		for (auto iter = nextNodes->begin(); iter != nextNodes->end(); ++iter) {
+			CNode* node = *iter;
+
+			// call stmt: expand to the last nodes of the procedure called
+			if (node->getNodeType() == Call_C) {
+
+				vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(node);
+				afterCall.push(node);
+
+				for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
+					//updateStateOfBfs(visited, NEXTBIP_STATE(*lastNodeIter, afterCall), frontier, result);	
+					result.insert(NEXTBIP_STATE(*lastNodeIter, afterCall));
+				}
+				afterCall.pop();
+
+			} else if (node->getNodeType() != EndIf_C) {
+				// normal case: on a Start of Proc, pop the stack/ expand to all call statements calling the proc
+				if (node->getNodeType() == Proc_C) {
+					expandProcWithState(node, afterCall, result);
+				} else {
+					// otherwise just traverse
+					//updateStateOfBfs(visited, NEXTBIP_STATE(node, afterCall), frontier, result);	
+					result.insert(NEXTBIP_STATE(node, afterCall));
+				}
+
+			} else {
+				// for EndIf nodes, need to get both branches
+				vector<CNode*> nodesToTraverseBack;
+				CNode* prevNodeAfterEndIf = node->getBefore()->at(0);
+				CNode* prevNodeAfterEndIf2 = node->getBefore()->at(1);
+
+				nodesToTraverseBack.push_back(prevNodeAfterEndIf); 
+				nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+				
+				// updates results and frontier, accounting of EndIf nodes possibly leading to multiple nodes
+				while (!nodesToTraverseBack.empty()) {
+					CNode* nodeToExpand = nodesToTraverseBack.back();
+					nodesToTraverseBack.pop_back();
+
+					if (nodeToExpand->getNodeType() == Proc_C) {
+						expandProcWithState(nodeToExpand, afterCall, result);
+						continue;
+					} else if (nodeToExpand->getNodeType() == Call_C) {
+						vector<CNode*> lastNodes = getLastNodeInProcCalledByProgLine(nodeToExpand);
+
+						for (auto lastNodeIter = lastNodes.begin(); lastNodeIter != lastNodes.end(); ++lastNodeIter) {
+							result.insert(NEXTBIP_STATE(*lastNodeIter, afterCall));
+						}
+					} else if (nodeToExpand->getNodeType() == EndIf_C) {
+						prevNodeAfterEndIf = node->getBefore()->at(0);
+						prevNodeAfterEndIf2 = node->getBefore()->at(1);
+
+						nodesToTraverseBack.push_back(prevNodeAfterEndIf);
+						nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+					} else {
+						
+						result.insert(NEXTBIP_STATE(nodeToExpand, afterCall));
+					}
+				}
+			}	
+		}
+		
+	//}
+
+	return result;
 }
 
 

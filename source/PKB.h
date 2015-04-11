@@ -22,6 +22,7 @@
 #include "Contain.h"
 #include "Siblings.h"
 #include "CFG.h"
+#include "CNode.h"
 #include "AST.h"
 #include "TNode.h"
 #include "Synonym.h"
@@ -36,7 +37,6 @@ class TNode;
 class VarTable;  
 class StmtTable;
 
-typedef pair<CNode*, stack<CNode*> > NEXTBIP_STATE;
 
 class PKB {
 public:
@@ -229,6 +229,8 @@ public:
 	BOOLEAN_ isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure);
  	PROGLINE_LIST getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
 	PROGLINE_LIST getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
+	set<NEXTBIP_STATE> getNextBipAfterWithState(CNode* progLine1, stack<CNode*> afterCall);
+	set<NEXTBIP_STATE> getNextBipBeforeWithState(CNode* progLine2, stack<CNode*> afterCall);
 	PROGLINE_LIST getNextBipLhs();
 	PROGLINE_LIST getNextBipRhs();
 
