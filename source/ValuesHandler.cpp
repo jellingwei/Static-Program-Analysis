@@ -1244,4 +1244,243 @@ namespace ValuesHandler
 		swap(acceptedValues, mainTable);
 		return mainTable.size() != 0;
 	}
+	
+	//------------------------------------------------------------------------------
+	// New functions for the bonus features
+	// These functions are for inserting 3 or more synonyms at once
+	//------------------------------------------------------------------------------
+	BOOLEAN_ addAndProcessIntermediateSynonyms(vector<Synonym> synonyms);
+	BOOLEAN_ processWithMainTable(vector<Synonym> synonyms);
+	BOOLEAN_ processWithSingletonTable(vector<Synonym> synonyms);
+	vector<Synonym> intersectWithSingleton(unsigned int singletonIndex, vector<Synonym> synonyms);
+	BOOLEAN_ productWithMainTable(vector<Synonym> synonyms);
+	BOOLEAN_ setJoinWithMainTable(vector<unsigned int> singletons, vector<unsigned int> mains, vector<Synonym> synonyms);
+
+	/**
+	* Check if the adding and processing of intermediate synonyms is successful.
+	* @param A vector of synonyms that are to be processed
+	* @return TRUE if the processing of intermediate values is successful.
+	*		  FALSE if the processing of intermediate values causes the table to have zero rows.
+	*/
+	BOOLEAN_ addAndProcessIntermediateSynonyms(vector<Synonym> synonyms)
+	{
+		vector<Synonym> definedSynonyms;
+		for (unsigned int i = 0; i < synonyms.size(); i++) {
+			if (!synonyms[i].isUndefined()) {
+				definedSynonyms.push_back(synonyms[i]);
+			}
+		}
+		
+		if (definedSynonyms.size() == 0) {
+			return false;
+		} else if (definedSynonyms.size() == 1) {
+			return addAndProcessIntermediateSynonym(definedSynonyms[0]);
+		} else if (definedSynonyms.size() == 2) {
+			return addAndProcessIntermediateSynonyms(definedSynonyms[0], definedSynonyms[1]);
+		} else {
+			bool isInMain = false;
+			for (unsigned int i = 0; i < definedSynonyms.size(); i++) {
+				if (isExistInMainTable(definedSynonyms[i].getName())) {
+					isInMain = true;
+					break;
+				}
+			}
+			if (isInMain) {
+				return processWithMainTable(definedSynonyms);
+			} else {
+				return processWithSingletonTable(definedSynonyms);
+			}
+		}
+	}
+	
+	BOOLEAN_ processWithMainTable(vector<Synonym> synonyms)
+	{
+		vector<unsigned int> singletonIndexes;
+		vector<unsigned int> mainIndexes;
+		
+		for (unsigned int i = 0; i < synonyms.size(); i++) {
+			if (isExistInMainTable(synonyms[i].getName())) {
+				mainIndexes.push_back(i);
+			} else {
+				singletonIndexes.push_back(i);
+			}
+		}
+		
+		for (unsigned int i = 0; i < singletonIndexes.size(); i++) {
+			int index = singletonIndexes[i];
+			synonyms = intersectWithSingleton(index, synonyms);
+			removeFromSingletonTable(synonyms[index].getName());
+		}
+		return setJoinWithMainTable(singletonIndexes, mainIndexes, synonyms);
+	}
+	
+	BOOLEAN_ processWithSingletonTable(vector<Synonym> synonyms)
+	{
+		//Treat all synonyms in this function as singletons
+		for (unsigned int i = 0; i < synonyms.size(); i++) {
+			synonyms = intersectWithSingleton(i, synonyms);
+			removeFromSingletonTable(synonyms[i].getName());
+		}
+		return productWithMainTable(synonyms);
+	}
+	
+	vector<Synonym> intersectWithSingleton(unsigned int singletonIndex, vector<Synonym> synonyms)
+	{
+		Synonym singleton = getSynonym(synonyms[singletonIndex].getName());
+		VALUE_LIST singletonValues = singleton.getValues();
+		VALUE_LIST probeValues = synonyms[singletonIndex].getValues();
+		vector<VALUE_LIST> convertedValues;
+		vector<VALUE_LIST> acceptedValues;
+		unordered_multimap<int, VALUE_LIST> hashTable;
+		
+		//Convert the individual values of the synonyms into rows of all synonym values
+		for (unsigned int i = 0; i < probeValues.size(); i++) {
+			VALUE_LIST oneRow;
+			for (unsigned int j = 0; j < synonyms.size(); j++) {
+				int value = synonyms[j].getValues()[i];
+				oneRow.push_back(value);
+			}
+			convertedValues.push_back(oneRow);
+		}
+		
+		//Build the hash table using the existing values
+		for (unsigned int i = 0; i < convertedValues.size(); i++) {
+			VALUE_LIST oneRow = convertedValues[i];
+			int value = oneRow[singletonIndex];
+			hashTable.emplace(make_pair(value, oneRow));
+		}
+		
+		//Probe the hash table using the singleton values
+		for (unsigned int i = 0; i < singletonValues.size(); i++) {
+			auto range = hashTable.equal_range(singletonValues[i]);
+			
+			for (auto itr = range.first; itr != range.second; ++itr) {
+				VALUE_LIST oneRow = itr->second;
+				acceptedValues.push_back(oneRow);
+			}
+		}
+		
+		//Convert back the final values into their individual values
+		convertedValues.clear();
+		for (unsigned int i = 0; i < synonyms.size(); i++) {
+			VALUE_LIST oneColumn;
+			for (unsigned int j = 0; j < acceptedValues.size(); j++) {
+				oneColumn.push_back(acceptedValues[j][singletonIndex]);
+			}
+			synonyms[i].setValues(oneColumn);  //TODO: check if the set values stick
+		}
+		return synonyms;
+	}
+	
+	BOOLEAN_ productWithMainTable(vector<Synonym> synonyms)
+	{
+		vector<VALUE_LIST> convertedValues;
+		vector<VALUE_LIST> acceptedValues;
+		VALUE_LIST probeValues = synonyms[0].getValues();
+		
+		//Convert the individual values of the synonyms into rows of all synonym values
+		for (unsigned int i = 0; i < probeValues.size(); i++) {
+			VALUE_LIST oneRow;
+			for (unsigned int j = 0; j < synonyms.size(); j++) {
+				int value = synonyms[j].getValues()[i];
+				oneRow.push_back(value);
+			}
+			convertedValues.push_back(oneRow);
+		}
+		
+		for (unsigned int i = 0; i < mainTable.size(); i++) {
+			VALUE_LIST oneRow(mainTable[i]);
+			for (unsigned int j = 0; j < convertedValues.size(); j++) {
+				oneRow.insert(oneRow.end(), convertedValues[j].begin(), convertedValues[j].end());
+			}
+			acceptedValues.push_back(oneRow);
+		}
+		
+		swap(mainTable, acceptedValues);
+		if (mainTable.size() == 0) {
+			return false;
+		} else {
+			//Since there will always be values inside, can directly access row 0
+			unsigned int size = synonyms.size();
+			for (unsigned int i = 0; i < size; i++) {
+				mainTableIndex[synonyms[i].getName()] = mainTable[0].size() - size + i;
+			}
+			return true;
+		}
+	}
+	
+	BOOLEAN_ setJoinWithMainTable(vector<unsigned int> singletons, vector<unsigned int> mains, vector<Synonym> synonyms)
+	{
+		vector<int> existingMainIndexes;
+		for (unsigned int i = 0; i < mains.size(); i++) {
+			int index = mains[i];
+			int mainIndex = findIndexInMainTable(synonyms[index].getName());
+			existingMainIndexes.push_back(mainIndex);
+		}
+		
+		VALUE_LIST probeValues = synonyms[0].getValues();
+		vector<VALUE_LIST> acceptedValues;
+		vector<VALUE_LIST> convertedMainValues;
+		vector<VALUE_LIST> convertedSingletonValues;
+		
+		//Convert the individual values of the singleton synonyms into rows of the values
+		for (unsigned int i = 0; i < probeValues.size(); i++) {
+			VALUE_LIST oneRow;
+			for (unsigned int j = 0; j < singletons.size(); j++) {
+				int index = singletons[j];
+				int value = synonyms[index].getValues()[i];
+				oneRow.push_back(value);
+			}
+			convertedSingletonValues.push_back(oneRow);
+		}
+		
+		//Convert the individual values of the main synonyms into rows of the values
+		for (unsigned int i = 0; i < probeValues.size(); i++) {
+			VALUE_LIST oneRow;
+			for (unsigned int j = 0; j < mains.size(); j++) {
+				int index = mains[j];
+				int value = synonyms[index].getValues()[i];
+				oneRow.push_back(value);
+			}
+			convertedMainValues.push_back(oneRow);
+		}
+		
+		for (unsigned int i = 0; i < mainTable.size(); i++) {
+			//Populate the existing values from the main table
+			VALUE_LIST existingValues;
+			for (unsigned int j = 0; j < existingMainIndexes.size(); j++) {
+				int index = existingMainIndexes[j];
+				int value = mainTable[i][index];
+				existingValues.push_back(value);
+			}
+			
+			for (unsigned int j = 0; j < convertedMainValues.size(); j++) {
+				bool isMatch = true;
+				for (unsigned int k = 0; k < existingValues.size(); k++) {
+					if (convertedMainValues[j][k] != existingValues[k]) {
+						isMatch = false;
+						break;
+					}
+				}
+				
+				if (isMatch) {
+					VALUE_LIST oneRow(mainTable[i]);
+					oneRow.insert(oneRow.begin(), convertedSingletonValues[j].begin(), convertedSingletonValues[j].end());
+					acceptedValues.push_back(oneRow);
+				}
+			}
+		}
+		swap(acceptedValues, mainTable);
+		if (mainTable.size() == 0) {
+			return false;
+		} else {
+			//Since there will always be values inside, can directly access row 0
+			unsigned int size = singletons.size();
+			for (unsigned int i = 0; i < size; i++) {
+				int index = singletons[i];
+				mainTableIndex[synonyms[index].getName()] = mainTable[0].size() - size + i;
+			}
+			return true;
+		}
+	}
 }
