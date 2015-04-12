@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>CS3202 Minions SPA: QueryOptimiser Namespace Reference</title>
+<title>My Project: QueryOptimiser Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">CS3202 Minions SPA
+   <div id="projectname">My Project
    </div>
   </td>
  </tr>
@@ -95,18 +95,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a850d40db88447e119dabee1f525f6fee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a850d40db88447e119dabee1f525f6fee">optimiseQueryTree</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
-<tr class="separator:a850d40db88447e119dabee1f525f6fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b4ed5d55db766524c74d80c2dbfed79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a5b4ed5d55db766524c74d80c2dbfed79">initialize</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a5b4ed5d55db766524c74d80c2dbfed79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e226e8c92890ee13e11576af50c55d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a23e226e8c92890ee13e11576af50c55d">flattenQuery</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a23e226e8c92890ee13e11576af50c55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a612be54ac8b59918f4b534c1b44206fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a612be54ac8b59918f4b534c1b44206fa"></a>
+<a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>rewriteWithClauses</b> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
+<tr class="separator:a612be54ac8b59918f4b534c1b44206fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79d9b22bb0ac9cea7f8a8445fe1f60ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79d9b22bb0ac9cea7f8a8445fe1f60ed"></a>
+vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>populateSelectSynonyms</b> (<a class="el" href="class_q_node.html">QNode</a> *resultNode)</td></tr>
+<tr class="separator:a79d9b22bb0ac9cea7f8a8445fe1f60ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a8fc3f8eb68df89c8c5ada9e0e2ff77"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a8fc3f8eb68df89c8c5ada9e0e2ff77"></a>
+pair&lt; vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>splitWithClauses</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
+<tr class="separator:a7a8fc3f8eb68df89c8c5ada9e0e2ff77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fd8b4efd2dc4aec44752faf4f1ddf52"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fd8b4efd2dc4aec44752faf4f1ddf52"></a>
+pair&lt; bool, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>isWithClauseRewritable</b> (<a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
+<tr class="separator:a8fd8b4efd2dc4aec44752faf4f1ddf52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a636915927e4e13b0b43a88ecb4923222"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a636915927e4e13b0b43a88ecb4923222"></a>
+<a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>removeReduantClausesAndSynonyms</b> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
+<tr class="separator:a636915927e4e13b0b43a88ecb4923222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7340776012d92fd7ba28e5810c11019"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af7340776012d92fd7ba28e5810c11019"></a>
+<a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>scanAndReplaceRedundantItems</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="separator:af7340776012d92fd7ba28e5810c11019"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f80b4a4e2af7420ff3b9650372bfed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16f80b4a4e2af7420ff3b9650372bfed"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>scanAndRemoveRedundantSynonyms</b> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &amp;clauses, vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="separator:a16f80b4a4e2af7420ff3b9650372bfed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad00fab730dc38da2278155682437a3b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad00fab730dc38da2278155682437a3b1"></a>
+vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>replaceSynonyms</b> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector, <a class="el" href="class_synonym.html">Synonym</a> original, <a class="el" href="class_synonym.html">Synonym</a> replacement)</td></tr>
+<tr class="separator:ad00fab730dc38da2278155682437a3b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a403b8fc81e593cc84e7931d1e2f8e0b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a403b8fc81e593cc84e7931d1e2f8e0b1">optimiseClauses</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a403b8fc81e593cc84e7931d1e2f8e0b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f70297abac43b8d62c1068c9779a6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ac0f70297abac43b8d62c1068c9779a6c">optimiseClausesNode</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
 <tr class="separator:ac0f70297abac43b8d62c1068c9779a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d443f7f59455230d72a639b5e876a04"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a5d443f7f59455230d72a639b5e876a04">splitConstantClauses</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
 <tr class="separator:a5d443f7f59455230d72a639b5e876a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93cf8061c9f02f37a48f8fb84c6b27b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a93cf8061c9f02f37a48f8fb84c6b27b5"></a>
+vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>reorderConstantClauses</b> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; constantClauses)</td></tr>
+<tr class="separator:a93cf8061c9f02f37a48f8fb84c6b27b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af864eec4ea5ea596160ab6e0d1aaddf4"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#af864eec4ea5ea596160ab6e0d1aaddf4">reorderNonConstantClauses</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clauses)</td></tr>
 <tr class="separator:af864eec4ea5ea596160ab6e0d1aaddf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac58cd85c1661026bda3151a09037a34d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ac58cd85c1661026bda3151a09037a34d">getNextSmallestAndUpdate</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &amp;clauses)</td></tr>
@@ -115,132 +140,73 @@ Functions</h2></td></tr>
 <tr class="separator:ad479835607c036661265ac84100099ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4477669a327e72a70888e6f7d2b38b20"><td class="memItemLeft" align="right" valign="top">pair&lt; <a class="el" href="class_synonym.html">Synonym</a>, <a class="el" href="class_synonym.html">Synonym</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a4477669a327e72a70888e6f7d2b38b20">getClauseArguments</a> (<a class="el" href="class_q_node.html">QNode</a> *clause)</td></tr>
 <tr class="separator:a4477669a327e72a70888e6f7d2b38b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f893ff28b0b57830802969fcd8021cf"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0f893ff28b0b57830802969fcd8021cf"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>getExpectedCount</b> (QNODE_TYPE rel_type, SYNONYM_TYPE type_probe, SYNONYM_TYPE type_output)</td></tr>
-<tr class="separator:a0f893ff28b0b57830802969fcd8021cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6693264bc84ba366af1f09b0e47b552c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a6693264bc84ba366af1f09b0e47b552c">getReductionFactor</a> (QNODE_TYPE rel_type, SYNONYM_TYPE typeLHS, SYNONYM_TYPE typeRHS, DIRECTION direction)</td></tr>
-<tr class="separator:a6693264bc84ba366af1f09b0e47b552c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a541ee3e6717a34a25c5a171f8a54f2d2"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a541ee3e6717a34a25c5a171f8a54f2d2">calculateCost</a> (QNODE_TYPE rel_type, int numberOfValues)</td></tr>
-<tr class="separator:a541ee3e6717a34a25c5a171f8a54f2d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae817744e6813b7da84dcd4bd9cb902cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ae817744e6813b7da84dcd4bd9cb902cf">setClauseArguments</a> (<a class="el" href="class_q_node.html">QNode</a> *&amp;clause, <a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
+<tr class="separator:ae817744e6813b7da84dcd4bd9cb902cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a587079200d91746d0abd1ab68ab5d36c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a587079200d91746d0abd1ab68ab5d36c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isContainedInMain</b> (string wantedName)</td></tr>
 <tr class="separator:a587079200d91746d0abd1ab68ab5d36c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad303dfccf3ca9c3b1b288b6050f2268c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad303dfccf3ca9c3b1b288b6050f2268c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>updateSynonymsCount</b> (string name, int expectedCount)</td></tr>
-<tr class="separator:ad303dfccf3ca9c3b1b288b6050f2268c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaaf15bd699fb8495ddc917394499795e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#aaaf15bd699fb8495ddc917394499795e">reduceSynonymsCount</a> (string name, double reductionFactor)</td></tr>
-<tr class="separator:aaaf15bd699fb8495ddc917394499795e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf44d90ac6318df93d009351b4bfe564"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#aaf44d90ac6318df93d009351b4bfe564">convertToTree</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; constantClauses, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; nonConstantClauses)</td></tr>
-<tr class="separator:aaf44d90ac6318df93d009351b4bfe564"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1729d0f56505d29f7ac133fa26ccd30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1729d0f56505d29f7ac133fa26ccd30"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSelectSynonym</b> (string wantedName)</td></tr>
+<tr class="separator:ae1729d0f56505d29f7ac133fa26ccd30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0faeccbb19001ea43040da3cfcd8048d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0faeccbb19001ea43040da3cfcd8048d"></a>
+<a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createSubtree</b> (QNODE_TYPE type, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector)</td></tr>
+<tr class="separator:a0faeccbb19001ea43040da3cfcd8048d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b5b1c06e60df62977a49d8f43386b86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a2b5b1c06e60df62977a49d8f43386b86">combineClausesVectors</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector1, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector2)</td></tr>
+<tr class="separator:a2b5b1c06e60df62977a49d8f43386b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a859ed3cb29b9435b8bd7691cf74e2862"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a859ed3cb29b9435b8bd7691cf74e2862"></a>
+pair&lt; bool, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>determineSupersetSubset</b> (<a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
+<tr class="separator:a859ed3cb29b9435b8bd7691cf74e2862"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa82a36b3e636941864ac3a899903482a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa82a36b3e636941864ac3a899903482a"></a>
+unordered_map&lt; string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>indexSynonymsReferenced</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
+<tr class="separator:aa82a36b3e636941864ac3a899903482a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6963c3f5bea7bae726f757edcb013c7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6963c3f5bea7bae726f757edcb013c7b"></a>
+vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createSynonymGraph</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="separator:a6963c3f5bea7bae726f757edcb013c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89dd6d7ff281287d110d620f47ce7b56"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a89dd6d7ff281287d110d620f47ce7b56"></a>
+set&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>scanSynonymsReachable</b> (vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix)</td></tr>
+<tr class="separator:a89dd6d7ff281287d110d620f47ce7b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a850d40db88447e119dabee1f525f6fee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a850d40db88447e119dabee1f525f6fee">optimiseQueryTree</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
+<tr class="separator:a850d40db88447e119dabee1f525f6fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e3f5aa9c78457813c84379c3b362cfc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e3f5aa9c78457813c84379c3b362cfc"></a>
+pair&lt; vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>splitRedundantClauses</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, set&lt; int &gt; synonymsReachable, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="separator:a5e3f5aa9c78457813c84379c3b362cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a38a29c4d7e02975e7d341a055d24a9fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38a29c4d7e02975e7d341a055d24a9fe"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_MODIFIES</b> = 1</td></tr>
-<tr class="separator:a38a29c4d7e02975e7d341a055d24a9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a707a72bf703f34d9b4828f84bfdb9975"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a707a72bf703f34d9b4828f84bfdb9975"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_USES</b> = 1</td></tr>
-<tr class="separator:a707a72bf703f34d9b4828f84bfdb9975"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a588f0b49e3b3f0dc212d6f156b478b88"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a588f0b49e3b3f0dc212d6f156b478b88"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_FOLLOWS</b> = 1</td></tr>
-<tr class="separator:a588f0b49e3b3f0dc212d6f156b478b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3771f44d915967f22a2273bafce7aea"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa3771f44d915967f22a2273bafce7aea"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_PARENT</b> = 1</td></tr>
-<tr class="separator:aa3771f44d915967f22a2273bafce7aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92a1b33c8e319aee5ef4faac13786918"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a92a1b33c8e319aee5ef4faac13786918"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_CALLS</b> = 1</td></tr>
-<tr class="separator:a92a1b33c8e319aee5ef4faac13786918"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca1906cd748a477406ff313d8663d2f6"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aca1906cd748a477406ff313d8663d2f6"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_NEXT</b> = 1</td></tr>
-<tr class="separator:aca1906cd748a477406ff313d8663d2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc884e546ca69157292488bd56ef4c51"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="acc884e546ca69157292488bd56ef4c51"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_AFFECTS</b> = 0</td></tr>
-<tr class="separator:acc884e546ca69157292488bd56ef4c51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1344a3724dfcffe547b728fa06fce37"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac1344a3724dfcffe547b728fa06fce37"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_AFFECTSS</b> = 0</td></tr>
-<tr class="separator:ac1344a3724dfcffe547b728fa06fce37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af68e6181d1e7cb6170d584b0e930c9bd"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af68e6181d1e7cb6170d584b0e930c9bd"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_FOLLOWSS</b> = 0</td></tr>
-<tr class="separator:af68e6181d1e7cb6170d584b0e930c9bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a291c706faf6392f9d62315be03ef7c61"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a291c706faf6392f9d62315be03ef7c61"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_PARENTS</b> = 0</td></tr>
-<tr class="separator:a291c706faf6392f9d62315be03ef7c61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1273813ba43b632968c677708a734f3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af1273813ba43b632968c677708a734f3"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_CALLSS</b> = 0</td></tr>
-<tr class="separator:af1273813ba43b632968c677708a734f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aa67cfddb54dbfdce9bb46ba048c4e8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1aa67cfddb54dbfdce9bb46ba048c4e8"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_NEXTS</b> = 0</td></tr>
-<tr class="separator:a1aa67cfddb54dbfdce9bb46ba048c4e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fec47679b59439081d19b4005c00d61"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2fec47679b59439081d19b4005c00d61"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_PATTERN</b> = 0</td></tr>
-<tr class="separator:a2fec47679b59439081d19b4005c00d61"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac93cb9268398beefb8a1e7b4709def2e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac93cb9268398beefb8a1e7b4709def2e"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>COST_WITH</b> = 0</td></tr>
-<tr class="separator:ac93cb9268398beefb8a1e7b4709def2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00d73f0fdd99708c48d25cadce549722"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a00d73f0fdd99708c48d25cadce549722"></a>
 unordered_map&lt; string, SYNONYM_TYPE &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>synonymNameToTypeMap</b></td></tr>
 <tr class="separator:a00d73f0fdd99708c48d25cadce549722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0894b06b43342a370a290dafb5e7e705"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0894b06b43342a370a290dafb5e7e705"></a>
+unordered_map&lt; string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>selectSynonyms</b></td></tr>
+<tr class="separator:a0894b06b43342a370a290dafb5e7e705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67d960b611c39bb324b681893311b5e9"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a67d960b611c39bb324b681893311b5e9"></a>
 unordered_map&lt; string, unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>synonymsCount</b></td></tr>
 <tr class="separator:a67d960b611c39bb324b681893311b5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a442069a15dc7c4d9593fbddd7c49484e"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a442069a15dc7c4d9593fbddd7c49484e"></a>
 set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTableSynonyms</b></td></tr>
 <tr class="separator:a442069a15dc7c4d9593fbddd7c49484e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f99593a0b50fc6aaf299cb5122eef9d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7f99593a0b50fc6aaf299cb5122eef9d"></a>
-<a class="el" href="class_statistics_table.html">StatisticsTable</a>&#160;</td><td class="memItemRight" valign="bottom"><b>statsTable</b></td></tr>
-<tr class="separator:a7f99593a0b50fc6aaf299cb5122eef9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0251318673ebd4fda093a5859f320c8"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac0251318673ebd4fda093a5859f320c8"></a>
+<a class="el" href="class_statistics_table.html">StatisticsTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>statsTable</b></td></tr>
+<tr class="separator:ac0251318673ebd4fda093a5859f320c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Namespace containing functions for the query optimisation. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a541ee3e6717a34a25c5a171f8a54f2d2"></a>
+<a class="anchor" id="a2b5b1c06e60df62977a49d8f43386b86"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double QueryOptimiser::calculateCost </td>
-          <td>(</td>
-          <td class="paramtype">QNODE_TYPE&#160;</td>
-          <td class="paramname"><em>rel_type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>numberOfValues</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Method to get the estimated cost of evaluating this relation </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">The</td><td>relationship type </td></tr>
-    <tr><td class="paramname">The</td><td>estimated number of times this relation will be called </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="aaf44d90ac6318df93d009351b4bfe564"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_q_node.html">QNode</a> * QueryOptimiser::convertToTree </td>
+          <td class="memname"><a class="el" href="class_q_node.html">QNode</a> * QueryOptimiser::combineClausesVectors </td>
           <td>(</td>
           <td class="paramtype">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td>
-          <td class="paramname"><em>constantClauses</em>, </td>
+          <td class="paramname"><em>clausesVector1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td>
-          <td class="paramname"><em>nonConstantClauses</em>&#160;</td>
+          <td class="paramname"><em>clausesVector2</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -352,45 +318,6 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 
 </div>
 </div>
-<a class="anchor" id="a6693264bc84ba366af1f09b0e47b552c"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">double QueryOptimiser::getReductionFactor </td>
-          <td>(</td>
-          <td class="paramtype">QNODE_TYPE&#160;</td>
-          <td class="paramname"><em>rel_type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SYNONYM_TYPE&#160;</td>
-          <td class="paramname"><em>typeLHS</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">SYNONYM_TYPE&#160;</td>
-          <td class="paramname"><em>typeRHS</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">DIRECTION&#160;</td>
-          <td class="paramname"><em>direction</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Method to get the reduction factor of a given clause </p><dl class="section return"><dt>Returns</dt><dd>The reduction factor </dd></dl>
-
-</div>
-</div>
 <a class="anchor" id="a5b4ed5d55db766524c74d80c2dbfed79"></a>
 <div class="memitem">
 <div class="memproto">
@@ -482,39 +409,6 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 
 </div>
 </div>
-<a class="anchor" id="aaaf15bd699fb8495ddc917394499795e"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void QueryOptimiser::reduceSynonymsCount </td>
-          <td>(</td>
-          <td class="paramtype">string&#160;</td>
-          <td class="paramname"><em>name</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>reductionFactor</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Method to reduce the synonym count by the reduction factor </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The name of the synonym </td></tr>
-    <tr><td class="paramname">reductionFactor</td><td>the reduction factor that is given </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a class="anchor" id="af864eec4ea5ea596160ab6e0d1aaddf4"></a>
 <div class="memitem">
 <div class="memproto">
@@ -535,6 +429,44 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a vector of <a class="el" href="class_q_node.html">QNode</a> objects that are re-ordered </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae817744e6813b7da84dcd4bd9cb902cf"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QueryOptimiser::setClauseArguments </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&amp;&#160;</td>
+          <td class="paramname"><em>clause</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>LHS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>RHS</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method that sets the LHS and RHS appropriately given a clause e.g. LHS and RHS for usual clauses is at arg1 and arg 2 e.g. LHS and RHS for pattern is at arg0 and arg1 </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">A</td><td>QNode* object representing a clause, LHS and RHS <a class="el" href="class_synonym.html">Synonym</a> objects </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -564,7 +496,7 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Mar 30 2015 11:42:18 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Apr 12 2015 21:12:40 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

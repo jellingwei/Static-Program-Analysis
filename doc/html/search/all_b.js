@@ -7,12 +7,14 @@ var searchData=
   ['matchfactor',['matchFactor',['../namespace_query_parser.html#ac5c72d66b652adb017e44b4ea03ff8d8',1,'QueryParser']]],
   ['matchinteger',['matchInteger',['../namespace_parser.html#a79c52f03c3b8a1a1cc287fdb6b3ebc41',1,'Parser::matchInteger()'],['../namespace_query_parser.html#a3bbf9683c2cc435cb24b9a24847f3c11',1,'QueryParser::matchInteger()']]],
   ['matchname',['matchName',['../namespace_parser.html#a35e8f86210f5615cfefd8769138b1e5f',1,'Parser::matchName()'],['../namespace_query_parser.html#af471aced791eaf7f28d268a6920f05d4',1,'QueryParser::matchName()']]],
+  ['matchnoderef',['matchNodeRef',['../namespace_query_parser.html#a1e0c6eb4a93dd08e8220adaac00ef34d',1,'QueryParser']]],
   ['matchoperator',['matchOperator',['../namespace_parser.html#a7a1347b54d0cd28f146ece8d08637d12',1,'Parser']]],
   ['matchref',['matchRef',['../namespace_query_parser.html#a1d31f5404d49bc43f5e42b035d3db9b4',1,'QueryParser']]],
+  ['matchstmtlstref',['matchStmtLstRef',['../namespace_query_parser.html#a0e6eb7f3424dfa7f7c64f5c5580cf195',1,'QueryParser']]],
   ['matchstmtorlineref',['matchStmtOrLineRef',['../namespace_query_parser.html#a72f511211eaba419b80468c624026e8d',1,'QueryParser']]],
   ['matchsynonymandident',['matchSynonymAndIdent',['../namespace_query_parser.html#ab745bcedc1eeb38fc78b26234fc8ce3b',1,'QueryParser']]],
   ['matchunderscore',['matchUnderscore',['../namespace_query_parser.html#a31f3f7e29eede9c7fad24a6cbcf9da0b',1,'QueryParser']]],
   ['matchvarref',['matchVarRef',['../namespace_query_parser.html#a36007e40d467e2fbebf63b5774bfd6ab',1,'QueryParser']]],
-  ['mergesingletontomain',['mergeSingletonToMain',['../namespace_values_handler.html#a8c98c210c1e7c8ad20cfb2453d0684e1',1,'ValuesHandler']]],
+  ['mergesingletontomain',['mergeSingletonToMain',['../namespace_values_handler.html#aa9be600163b0132b8f6f02edb182c150',1,'ValuesHandler']]],
   ['modifiestable',['ModifiesTable',['../class_modifies_table.html',1,'']]]
 ];

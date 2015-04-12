@@ -1,7 +1,12 @@
 var searchData=
 [
+  ['setarg0',['setArg0',['../class_q_node.html#a2fa7a0285fc1a72f1d4c769d610f5627',1,'QNode']]],
+  ['setarg1',['setArg1',['../class_q_node.html#aec209e1ed028344e741ea73440441962',1,'QNode']]],
+  ['setarg2',['setArg2',['../class_q_node.html#a20fc418b707d532a4b348cd181198444',1,'QNode']]],
+  ['setarg3',['setArg3',['../class_q_node.html#a92fdf035302243ecebfec13a8d229ae9',1,'QNode']]],
   ['setcalls',['setCalls',['../class_p_k_b.html#a7475a17561e9f90ee2d0798d19de8aa3',1,'PKB']]],
   ['setchild',['setChild',['../class_q_node.html#a39ef3abafa6774e3e8ddbd1574363ba3',1,'QNode']]],
+  ['setclausearguments',['setClauseArguments',['../namespace_query_optimiser.html#ae817744e6813b7da84dcd4bd9cb902cf',1,'QueryOptimiser']]],
   ['setend',['setEnd',['../class_c_node.html#a3a87f436aa716f30652424838474390c',1,'CNode']]],
   ['setendnode',['setEndNode',['../class_c_f_g.html#a4346b2851a1246344a324846ef2c6a2e',1,'CFG']]],
   ['setfirstproglineinelse',['setFirstProgLineInElse',['../class_p_k_b.html#aefe94a2b30fe9ca573ec5f0222d56084',1,'PKB']]],
