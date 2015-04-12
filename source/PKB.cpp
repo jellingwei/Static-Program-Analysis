@@ -163,25 +163,25 @@ VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum)
 }
 
 //@todo
-STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, TNODE_TYPE then) 
+STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then) 
 {
 	return ast->patternMatchWhile(LHS, then);
 }
 
 //@todo
-STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, TNODE_TYPE then) 
+STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then) 
 {
 	return ast->patternMatchIfThen(LHS, then);
 }
 
 //@todo
-STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, TNODE_TYPE then) 
+STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then) 
 {
 	return ast->patternMatchIfElse(LHS, then);
 }
 
 //@todo
-STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, TNODE_TYPE thenS, TNODE_TYPE elseS) 
+STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) 
 {
 	return ast->patternMatchIf(LHS, thenS, elseS);
 }
@@ -1519,12 +1519,12 @@ PROGLINE_LIST PKB::getAffectsBipRhs() {
 }
 
 //contains
-vector<pair<int, vector<int>>> PKB::contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure) {
+vector<pair<int, vector<int>>> PKB::contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, bool transitiveClosure) {
 	return contain->contains(parentType, childType, transitiveClosure);
 }
 
 //siblings
-vector<pair<int, vector<int>>> PKB::siblings(TNODE_TYPE first_siblingType, TNODE_TYPE second_siblingType) {
+vector<pair<int, vector<int>>> PKB::siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType) {
 	return sibling->siblings(first_siblingType, second_siblingType);
 }
 

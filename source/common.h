@@ -89,7 +89,7 @@ enum SYNONYM_TYPE
 	STRING_CHAR, STRING_INT, STRING_PATTERNS, //Used to represent IDENT, INTEGER and expression-spec respectively
 	BOOLEAN,   //Used for select boolean clauses
 	UNDEFINED,  //Used to denote "_"
-	STMTLST, PLUS, MINUS, TIMES  //Used for Contains and Siblings
+	PROGRAM, STMTLST, PLUS, MINUS, TIMES  //Used for Contains and Siblings
 };
 
 enum SYNONYM_ATTRIBUTE
@@ -104,7 +104,7 @@ enum SYNONYM_ATTRIBUTE
 
 enum TNODE_TYPE
 {
-	Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant, Minus, Times, Program, Call, Stmt
+	Procedure, Assign, Plus, Variable, StmtLst, While, If, Constant, Minus, Times, Program, Call, Stmt, Nil
 };
 
 enum LINK_TYPE

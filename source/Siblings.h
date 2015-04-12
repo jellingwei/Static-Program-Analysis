@@ -15,7 +15,7 @@ using namespace std;
 class Siblings
 {
 public:
-	vector<pair<int, vector<int>>> siblings(TNODE_TYPE first_siblingType, TNODE_TYPE second_siblingType);
+	vector<pair<int, vector<int>>> siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);
 
 private:
 };

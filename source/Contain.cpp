@@ -20,8 +20,9 @@ vector<TNode*> checkForIfCase2(TNode* currentNode, TNODE_TYPE descendentType, bo
 vector<TNode*> checkForStmtLstCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
 vector<TNode*> checkForAssignCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
 vector<TNode*> checkForOtherCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
+TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type);
 
-vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<pair<int, vector<int>>> Contain::contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	vector<pair<int, vector<int>>> results;
 	vector<int> LHS;
@@ -31,14 +32,18 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 	TNode* currentNode;
 	vector<int> temp;
 	//TNODE_TYPE childType;
+	TNODE_TYPE predecessorType2, descendentType2;
+
+	predecessorType2 = convertFromSynonym(predecessorType);
+	descendentType2 = convertFromSynonym(descendentType);
 
 	//switch(parentNode->getNodeType()) {
-	switch(predecessorType) {
+	switch(predecessorType2) {
 		case Program: {
 			vector<TNode*> sample;
 			allToCheck = &sample;
 			allToCheck->push_back(pkb.getRoot());
-			LHS = checkForProgCase(pkb.getRoot(), descendentType, transitiveClosure);
+			LHS = checkForProgCase(pkb.getRoot(), descendentType2, transitiveClosure);
 			if(LHS.size() != 0) results.push_back(make_pair(0, LHS));
 			break;
 		}
@@ -47,7 +52,7 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheck = pkb.getRoot()->getChildren();
 			for(int i=0; i<(int)allToCheck->size(); i++) {
 				currentNode = allToCheck->at(i);
-				LHS = checkForProcCase(currentNode, descendentType, transitiveClosure);
+				LHS = checkForProcCase(currentNode, descendentType2, transitiveClosure);
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getNodeValueIdx(), LHS));
 				LHS.clear();
 			}
@@ -58,7 +63,7 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheckInt = pkb.getStmtNumForType("while");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
-				LHS = checkForWhileCase(currentNode, descendentType, transitiveClosure);
+				LHS = checkForWhileCase(currentNode, descendentType2, transitiveClosure);
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), LHS));
 				LHS.clear();
 			}
@@ -69,7 +74,7 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheckInt = pkb.getStmtNumForType("if");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
-				LHS = checkForIfCase(currentNode, descendentType, transitiveClosure);
+				LHS = checkForIfCase(currentNode, descendentType2, transitiveClosure);
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), LHS));
 				LHS.clear();
 			}
@@ -81,7 +86,7 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			//procedue
 			for(int i=0; i<(int)pkb.getRoot()->getChildren()->size(); i++) {
 				currentNode = pkb.getRoot()->getChildren()->at(i)->getChildren()->at(0);
-				temp = checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
+				temp = checkForStmtLstCase(currentNode, descendentType2, transitiveClosure);
 				LHS.insert( LHS.end(), temp.begin(), temp.end() );
 
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getChildren()->at(0)->getStmtNumber(), LHS));  //return first Stmt in StmtLst
@@ -92,7 +97,7 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheckInt = pkb.getStmtNumForType("while");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i))->getChildren()->at(1);
-				temp = checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
+				temp = checkForStmtLstCase(currentNode, descendentType2, transitiveClosure);
 				LHS.insert( LHS.end(), temp.begin(), temp.end() );
 
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getChildren()->at(0)->getStmtNumber(), LHS));  //return first Stmt in StmtLst
@@ -103,14 +108,14 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheckInt = pkb.getStmtNumForType("if");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i))->getChildren()->at(1);
-				temp = checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
+				temp = checkForStmtLstCase(currentNode, descendentType2, transitiveClosure);
 				LHS.insert( LHS.end(), temp.begin(), temp.end() );
 
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getChildren()->at(0)->getStmtNumber(), LHS));  //return first Stmt in StmtLst
 				LHS.clear();
 
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i))->getChildren()->at(2);
-				temp = checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
+				temp = checkForStmtLstCase(currentNode, descendentType2, transitiveClosure);
 				LHS.insert( LHS.end(), temp.begin(), temp.end() );
 
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getChildren()->at(0)->getStmtNumber(), LHS));  //return first Stmt in StmtLst
@@ -124,7 +129,7 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheckInt = pkb.getStmtNumForType("assign");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
-				LHS = checkForAssignCase(currentNode, descendentType, transitiveClosure);
+				LHS = checkForAssignCase(currentNode, descendentType2, transitiveClosure);
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), LHS));
 				LHS.clear();
 			}
@@ -132,12 +137,12 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 		}
 
 		//@todo - Enum Stmt
-		/*case Stmt: {
+		case Stmt: {
 			//while
 			allToCheckInt = pkb.getStmtNumForType("while");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
-				LHS = checkForWhileCase(currentNode, descendentType, transitiveClosure);
+				LHS = checkForWhileCase(currentNode, descendentType2, transitiveClosure);
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), LHS));
 				LHS.clear();
 			}
@@ -146,7 +151,7 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheckInt = pkb.getStmtNumForType("if");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
-				LHS = checkForIfCase(currentNode, descendentType, transitiveClosure);
+				LHS = checkForIfCase(currentNode, descendentType2, transitiveClosure);
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), LHS));
 				LHS.clear();
 			}
@@ -155,12 +160,12 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			allToCheckInt = pkb.getStmtNumForType("assign");
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
-				LHS = checkForAssignCase(currentNode, descendentType, transitiveClosure);
+				LHS = checkForAssignCase(currentNode, descendentType2, transitiveClosure);
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), LHS));
 				LHS.clear();
 			}
 			break;		   
-		}*/
+		}
 
 		case Plus: case Minus: case Times: {
 			//@todo
@@ -169,10 +174,10 @@ vector<pair<int, vector<int>>> Contain::contains(TNODE_TYPE predecessorType, TNO
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 				if(currentNode->getDescendent() > 2) {
-					queue = getOperatorNodes(currentNode->getChildren()->at(1), predecessorType, transitiveClosure);
+					queue = getOperatorNodes(currentNode->getChildren()->at(1), predecessorType2, transitiveClosure);
 					for(int j=0; j<(int)queue.size(); j++) {
 						checkThisOperator = queue.at(j);
-						LHS = checkForOtherCase(checkThisOperator, descendentType, transitiveClosure);
+						LHS = checkForOtherCase(checkThisOperator, descendentType2, transitiveClosure);
 						if(LHS.size() != 0) results.push_back(make_pair(checkThisOperator->getStmtNumber(), LHS));
 						LHS.clear();
 					}
@@ -337,6 +342,12 @@ vector<int> checkForStmtLstCase(TNode* currentNode, TNODE_TYPE descendentType, b
 			if(allToCheck->at(i)->getNodeType() == descendentType) {
 				LHS.push_back(allToCheck->at(i)->getStmtNumber());
 			}
+
+			if(descendentType == Stmt) {
+				if(allToCheck->at(i)->getNodeType() == While || allToCheck->at(i)->getNodeType() == If || allToCheck->at(i)->getNodeType() == Assign)
+					LHS.push_back(allToCheck->at(i)->getStmtNumber());
+			}
+
 			if(transitiveClosure) {
 				if(allToCheck->at(i)->getNodeType() == While) {
 					temp = checkForWhileCase(allToCheck->at(i), descendentType, transitiveClosure);
@@ -416,7 +427,7 @@ vector<int> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, boo
 	vector<int> temp;
 
 	allToCheck = currentNode->getChildren();
-	if(descendentType!= Procedure && descendentType!= Program && descendentType!=While && descendentType!=If && descendentType!=StmtLst && descendentType!=Assign) {
+	if(descendentType!= Procedure && descendentType!= Program && descendentType!=While && descendentType!=If && descendentType!=StmtLst && descendentType!=Assign && descendentType!=Stmt) {
 		for(int i=0; i<(int)allToCheck->size(); i++) {
 			if(allToCheck->at(i)->getNodeType() == descendentType) {
 				if(descendentType == Times || descendentType == Plus || descendentType == Minus) {
@@ -442,8 +453,11 @@ vector<int> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, boo
 
 // For Pattern Match Extension
 
-vector<int> Contain::checkForWhileThen(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
-	vector<TNode*> test = checkForStmtLstCase2(currentNode, descendentType, transitiveClosure);
+vector<int> Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+	TNODE_TYPE descendentType2;
+	descendentType2 = convertFromSynonym(descendentType);
+
+	vector<TNode*> test = checkForStmtLstCase2(currentNode, descendentType2, transitiveClosure);
 
 	vector<int> result;
 	for(int i=0; i<test.size(); i++) {
@@ -456,8 +470,11 @@ vector<int> Contain::checkForWhileThen(TNode* currentNode, TNODE_TYPE descendent
 	//return checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
 }
 
-vector<int> Contain::checkForIfThenElse(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
-	vector<TNode*> test = checkForStmtLstCase2(currentNode, descendentType, transitiveClosure);
+vector<int> Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+	TNODE_TYPE descendentType2;
+	descendentType2 = convertFromSynonym(descendentType);
+
+	vector<TNode*> test = checkForStmtLstCase2(currentNode, descendentType2, transitiveClosure);
 
 	vector<int> result;
 	for(int i=0; i<test.size(); i++) {
@@ -596,4 +613,53 @@ vector<TNode*> checkForOtherCase2(TNode* currentNode, TNODE_TYPE descendentType,
 		}
 	}
 	return LHS;
+}
+
+TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type) {
+	TNODE_TYPE returnType;
+	switch(type) {
+		case PROGRAM:
+			returnType = Program;
+			break;
+		case PROCEDURE:
+			returnType = Procedure;
+			break;
+		case WHILE:
+			returnType = While;
+			break;
+		case IF:
+			returnType = If;
+			break;
+		case STMTLST:
+			returnType = StmtLst;
+			break;
+		case STMT:
+			returnType= Stmt;
+			break;
+		case ASSIGN:
+			returnType = Assign;
+			break;
+		case PLUS:
+			returnType = Plus;
+			break;
+		case MINUS:
+			returnType = Minus;
+			break;
+		case TIMES:
+			returnType = Times;
+			break;
+		case CONSTANT:
+			returnType = Constant;
+			break;
+		case VARIABLE:
+			returnType = Variable;
+			break;
+		case CALL:
+			returnType = Call;
+			break;
+		default:
+			returnType = Nil;
+			break;
+	}
+	return returnType;
 }

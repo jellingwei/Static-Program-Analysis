@@ -15,12 +15,12 @@ using namespace std;
 class Contain
 {
 public:
-	vector<pair<int, vector<int>>> contains(TNODE_TYPE predecessorType, TNODE_TYPE descendentType, bool transitiveClosure);
+	vector<pair<int, vector<int>>> contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, bool transitiveClosure);
 
 	//vector<pair<int, vector<int>>> containsConstVar(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
 
-	vector<int> checkForWhileThen(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
-	vector<int> checkForIfThenElse(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
+	vector<int> checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure);
+	vector<int> checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure);
 
 private:
 };

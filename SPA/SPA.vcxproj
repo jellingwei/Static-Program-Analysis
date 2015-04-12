@@ -78,6 +78,7 @@
     <ClInclude Include="..\source\QueryTree.h" />
     <ClInclude Include="..\source\QueryValidator.h" />
     <ClInclude Include="..\source\ResultProjector.h" />
+    <ClInclude Include="..\source\Siblings.h" />
     <ClInclude Include="..\source\SourceParser.h" />
     <ClInclude Include="..\source\StatisticsTable.h" />
     <ClInclude Include="..\source\StmtTable.h" />

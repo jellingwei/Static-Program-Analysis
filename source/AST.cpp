@@ -296,7 +296,7 @@ INTEGER AST::getDescendent(TNode* curr) {
 }
 
 //@todo
-vector<int> AST::patternMatchWhile(string LHS, TNODE_TYPE then) {
+vector<int> AST::patternMatchWhile(string LHS, SYNONYM_TYPE then) {
 	PatternMatch pattern;
 	vector<int> whileStmts, result, temp;
 	whileStmts = pattern.patternMatchParentStmt(LHS, While);
@@ -312,7 +312,7 @@ vector<int> AST::patternMatchWhile(string LHS, TNODE_TYPE then) {
 	return result;
 }
 
-vector<int> AST::patternMatchIfThen(string LHS, TNODE_TYPE thenS) {
+vector<int> AST::patternMatchIfThen(string LHS, SYNONYM_TYPE thenS) {
 	PatternMatch pattern;
 	vector<int> IfStmts, result, temp;
 	IfStmts = pattern.patternMatchParentStmt(LHS, If);
@@ -329,7 +329,7 @@ vector<int> AST::patternMatchIfThen(string LHS, TNODE_TYPE thenS) {
 	return result;
 }
 
-vector<int> AST::patternMatchIfElse(string LHS, TNODE_TYPE thenS) {
+vector<int> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE thenS) {
 	PatternMatch pattern;
 	vector<int> IfStmts, result, temp;
 	IfStmts = pattern.patternMatchParentStmt(LHS, If);
@@ -346,7 +346,7 @@ vector<int> AST::patternMatchIfElse(string LHS, TNODE_TYPE thenS) {
 	return result;
 }
 
-vector<int> AST::patternMatchIf(string LHS, TNODE_TYPE thenS, TNODE_TYPE elseS) {
+vector<int> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
 	vector<int> finalResult, result1, result2;
 	result1 = patternMatchIfElse(LHS, thenS);
 	result2 = patternMatchIfElse(LHS, elseS);

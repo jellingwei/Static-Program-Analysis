@@ -59,10 +59,10 @@ public:
 	VAR_INDEX getControlVariable(STATEMENT stmtNum);
 	
 	// Extended Pattern Matching for While and If
-	STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, TNODE_TYPE then);
-	STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, TNODE_TYPE then);
-	STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, TNODE_TYPE then);
-	STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, TNODE_TYPE thenS, TNODE_TYPE elseS);
+	STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
+	STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);
+	STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);
+	STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
 
 
 	// VarTable methods
@@ -251,10 +251,10 @@ public:
 	// @endcond
 
 	// contains 
-	vector<pair<int, vector<int>>> contains(TNODE_TYPE parentType, TNODE_TYPE childType, bool transitiveClosure);
+	vector<pair<int, vector<int>>> contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, bool transitiveClosure);
 
 	// siblings
-	vector<pair<int, vector<int>>> siblings(TNODE_TYPE first_siblingType, TNODE_TYPE second_siblingType);
+	vector<pair<int, vector<int>>> siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);
 
 
 private:
