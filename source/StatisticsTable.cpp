@@ -569,7 +569,7 @@ void StatisticsTable::reduceCountPatternAssign(Synonym LHS, Synonym RHS)
 		_synonymsCount[LHS.getName()] = min(originalLHS, estimatedLHS);
 
 		double originalRHS = _synonymsCount[RHS.getName()];
-		double estimatedRHS = ceil(_assignSize / 3);  //Arbitrary
+		double estimatedRHS = ceil(_varSize * 0.75);  //Arbitrary
 		_synonymsCount[RHS.getName()] = min(originalRHS, estimatedRHS);
 	} else if (RHS.isUndefined()) {
 		//The clause is pattern assign(_, expression)
@@ -593,7 +593,7 @@ void StatisticsTable::reduceCountPatternIf(Synonym LHS, Synonym RHS)
 		_synonymsCount[LHS.getName()] = min(originalLHS, estimatedLHS);
 
 		double originalRHS = _synonymsCount[RHS.getName()];
-		double estimatedRHS = ceil(_ifSize / 3);  //Arbitrary
+		double estimatedRHS = ceil(_varSize * 0.75);  //Arbitrary
 		_synonymsCount[RHS.getName()] = min(originalRHS, estimatedRHS);
 	} else if (RHS.isUndefined()) {
 		//The clause is pattern if(_, _, _)
@@ -617,7 +617,7 @@ void StatisticsTable::reduceCountPatternWhile(Synonym LHS, Synonym RHS)
 		_synonymsCount[LHS.getName()] = min(originalLHS, estimatedLHS);
 
 		double originalRHS = _synonymsCount[RHS.getName()];
-		double estimatedRHS = ceil(_whileSize / 3);  //Arbitrary
+		double estimatedRHS = ceil(_varSize * 0.75);  //Arbitrary
 		_synonymsCount[RHS.getName()] = min(originalRHS, estimatedRHS);
 	} else if (RHS.isUndefined()) {
 		//The clause is pattern while(_, _)
