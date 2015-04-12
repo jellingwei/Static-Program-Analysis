@@ -86,7 +86,7 @@ namespace QueryEvaluator
 	* Proxy to reset the ValuesHandler from the query optimiser
 	* @param name_to_type_map Maps from the synonym name to its type
 	*/
-	void resetValues(unordered_map<string, SYNONYM_TYPE> name_to_type_map)
+	void resetValues(unordered_map<SYNONYM_NAME, SYNONYM_TYPE> name_to_type_map)
 	{
 		ValuesHandler::initialize(name_to_type_map);
 	}

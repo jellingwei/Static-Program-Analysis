@@ -18,22 +18,22 @@ namespace ValuesHandler
 	unordered_map<string, VALUE_LIST> singletonTable;  //Maps the singleton synonym name to its values
 
 	//Private functions
-	inline bool addToSingletonTable(Synonym synonym);
-	string convertIndexToString(int index, SYNONYM_TYPE type);
-	bool filterEqualValueByString(string synonymName, string wantedValue);
-	bool filterEqualValueByNumber(string synonymName, int wantedValue);
-	bool filterMainTableByNumber(string synonymName, int wantedValue);
-	bool filterMainTableByString(string synonymName, string wantedValue);
-	bool filterSingletonTableByNumber(string synonymName, int wantedValue);
-	bool filterSingletonTableByString(string synonymName, string wantedValue);
+	inline BOOLEAN_ addToSingletonTable(Synonym synonym);
+	SYNONYM_NAME convertIndexToString(int index, SYNONYM_TYPE type);
+	BOOLEAN_ filterEqualValueByString(SYNONYM_NAME synonymName, string wantedValue);
+	BOOLEAN_ filterEqualValueByNumber(SYNONYM_NAME synonymName, int wantedValue);
+	BOOLEAN_ filterMainTableByNumber(SYNONYM_NAME synonymName, int wantedValue);
+	BOOLEAN_ filterMainTableByString(SYNONYM_NAME synonymName, string wantedValue);
+	BOOLEAN_ filterSingletonTableByNumber(SYNONYM_NAME synonymName, int wantedValue);
+	BOOLEAN_ filterSingletonTableByString(SYNONYM_NAME synonymName, string wantedValue);
 
-	bool filterEqualPairByNumber(Synonym LHS, Synonym RHS);
-	bool filterEqualNumberInMain(Synonym LHS, Synonym RHS);
-	bool filterEqualNumberPairInSingleton(Synonym LHS, Synonym RHS);
+	BOOLEAN_ filterEqualPairByNumber(Synonym LHS, Synonym RHS);
+	BOOLEAN_ filterEqualNumberInMain(Synonym LHS, Synonym RHS);
+	BOOLEAN_ filterEqualNumberPairInSingleton(Synonym LHS, Synonym RHS);
 
-	bool filterEqualPairByString(Synonym LHS, Synonym RHS);
-	bool filterEqualStringInMain(Synonym LHS, Synonym RHS);
-	bool filterEqualStringPairInSingleton(Synonym LHS, Synonym RHS);
+	BOOLEAN_ filterEqualPairByString(Synonym LHS, Synonym RHS);
+	BOOLEAN_ filterEqualStringInMain(Synonym LHS, Synonym RHS);
+	BOOLEAN_ filterEqualStringPairInSingleton(Synonym LHS, Synonym RHS);
 
 	/**
 	* Initialize the handler for intermediate values.
@@ -63,7 +63,7 @@ namespace ValuesHandler
 	* @return the column number if the synonym exists in the table
 	*         -1 if the synonym does not exist in the table
 	*/
-	int findIndexInMainTable(string synonymName)
+	int findIndexInMainTable(SYNONYM_NAME synonymName)
 	{
 		auto itr = mainTableIndex.find(synonymName);
 
@@ -81,7 +81,7 @@ namespace ValuesHandler
 	* @return TRUE if the synonym exists in the table
 	*         FALSE if the synonym does not exist in the table
 	*/
-	BOOLEAN_ isExistInMainTable(string synonymName)
+	BOOLEAN_ isExistInMainTable(SYNONYM_NAME synonymName)
 	{
 		auto itr = mainTableIndex.find(synonymName);
 
@@ -99,7 +99,7 @@ namespace ValuesHandler
 	* @return TRUE if the synonym exists in the table
 	*         FALSE if the synonym does not exist in the table
 	*/
-	BOOLEAN_ isExistInSingletonTable(string synonymName)
+	BOOLEAN_ isExistInSingletonTable(SYNONYM_NAME synonymName)
 	{
 		auto itr = singletonTable.find(synonymName);
 
@@ -197,7 +197,7 @@ namespace ValuesHandler
 	* Public helper method to remove a synonym object from the singleton table
 	* @param synonym
 	*/
-	inline void removeFromSingletonTable(string synonymName)
+	inline void removeFromSingletonTable(SYNONYM_NAME synonymName)
 	{
 		if (isExistInSingletonTable(synonymName)) {
 			singletonTable.erase(synonymName);
@@ -211,7 +211,7 @@ namespace ValuesHandler
 	* @param wantedName the name of the wanted synonym
 	* @return Synonym object with the type, name and values
 	*/
-	Synonym getSynonym(string wantedName) 
+	Synonym getSynonym(SYNONYM_NAME wantedName) 
 	{
 		SYNONYM_TYPE type = mapSynonymNameToType[wantedName];
 
@@ -514,13 +514,13 @@ namespace ValuesHandler
 
 	/**
 	* Perform a hash join with one synonym in the main table.
-	* This is used for with clauses involving numbers
+	* This is used for with clauses involving numbers.
 	* @param mainName The name of the synonym to join on
 	* @param pairedSynonym A synonym with values that are to be the same
 	* @return TRUE if the join does not have 0 rows
 	*		  FALSE if the join produces 0 rows
 	*/
-	BOOLEAN_ hashJoinWithMainTableOnNumber(string mainName, Synonym pairedSynonym)
+	BOOLEAN_ hashJoinWithMainTableOnNumber(SYNONYM_NAME mainName, Synonym pairedSynonym)
 	{
 		//TODO: Assert main synonym and paired are not varName or procName
 		int mainIndex = findIndexInMainTable(mainName);
@@ -557,7 +557,7 @@ namespace ValuesHandler
 	* @return TRUE if the join does not have 0 rows
 	*		  FALSE if the join produces 0 rows
 	*/
-	BOOLEAN_ hashJoinWithMainTableOnString(string mainName, Synonym pairedSynonym)
+	BOOLEAN_ hashJoinWithMainTableOnString(SYNONYM_NAME mainName, Synonym pairedSynonym)
 	{
 		//TODO: Assert main synonym and paired are varName or procName
 		int mainIndex = findIndexInMainTable(mainName);
@@ -872,7 +872,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	BOOLEAN_ filterEqualValueByNumber(string synonymName, int wantedValue)
+	BOOLEAN_ filterEqualValueByNumber(SYNONYM_NAME synonymName, int wantedValue)
 	{
 		if (isExistInMainTable(synonymName)) {
 			return filterMainTableByNumber(synonymName, wantedValue);
@@ -901,7 +901,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	BOOLEAN_ filterMainTableByNumber(string synonymName, int wantedValue)
+	BOOLEAN_ filterMainTableByNumber(SYNONYM_NAME synonymName, int wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
 		vector<VALUE_LIST> acceptedValues;
@@ -923,7 +923,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	BOOLEAN_ filterMainTableByString(string synonymName, string wantedValue)
+	BOOLEAN_ filterMainTableByString(SYNONYM_NAME synonymName, string wantedValue)
 	{
 		int index = findIndexInMainTable(synonymName);
 		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
@@ -947,7 +947,7 @@ namespace ValuesHandler
 	* @return TRUE if the ending number of rows is not 0
 	*         FALSE if the ending number of rows is 0
 	*/
-	BOOLEAN_ filterSingletonTableByNumber(string synonymName, int wantedValue)
+	BOOLEAN_ filterSingletonTableByNumber(SYNONYM_NAME synonymName, int wantedValue)
 	{
 		VALUE_LIST singletonValues = singletonTable[synonymName];
 		VALUE_LIST acceptedValue;
