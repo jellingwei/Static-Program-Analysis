@@ -43,238 +43,238 @@ call c;
 Select c
 11,15,25,7
 5000
-1001 - Valid Siblings direct
+1001 - Valid Sibling direct
 stmt s;
-Select BOOLEAN such that Siblings(1,2)
+Select BOOLEAN such that Sibling(1,2)
 TRUE
 5000
-1002 - Valid Siblings indirect
+1002 - Valid Sibling indirect
 stmt s;
-Select BOOLEAN such that Siblings(1, 16)
+Select BOOLEAN such that Sibling(1, 16)
 TRUE
 5000
-1003 - Valid Siblings reverse direct
+1003 - Valid Sibling reverse direct
 stmt s;
-Select BOOLEAN such that Siblings(3,2)
+Select BOOLEAN such that Sibling(3,2)
 TRUE
 5000
-1004 - Valid Siblings reverse indirect
+1004 - Valid Sibling reverse indirect
 stmt s;
-Select BOOLEAN such that Siblings(10, 2)
+Select BOOLEAN such that Sibling(10, 2)
 TRUE
 5000
-1005 - Valid Siblings of s on RHS
+1005 - Valid Sibling of s on RHS
 stmt s;
-Select s such that Siblings(9, s)
+Select s such that Sibling(9, s)
 1,2,3,4,8,10,16
 5000
-1006 - Valid Siblings of s on LHS
+1006 - Valid Sibling of s on LHS
 stmt s;
-Select s such that Siblings(s, 9)
+Select s such that Sibling(s, 9)
 1,2,3,4,8,10,16
 5000
-1007 - Valid Siblings all that have siblings LHS
+1007 - Valid Sibling all that have siblings LHS
 stmt s1,s2;
-Select s1 such that Siblings(s1, s2)
+Select s1 such that Sibling(s1, s2)
 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
 5000
-1008 - Valid Siblings all that have siblings RHS
+1008 - Valid Sibling all that have siblings RHS
 stmt s1,s2;
-Select s2 such that Siblings(s1, s2)
+Select s2 such that Sibling(s1, s2)
 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
 5000
-1009 - Valid Siblings Redundant
+1009 - Valid Sibling Redundant
 procedure p;
-Select p such that Siblings(1,2)
+Select p such that Sibling(1,2)
 One,Two,Three
 5000
-1010 - Valid Siblings Procedures
+1010 - Valid Sibling Procedures
 procedure p;
-Select BOOLEAN such that Siblings(One,Two)
+Select BOOLEAN such that Sibling(One,Two)
 TRUE
 5000
-1011 - Valid Siblings Procedures
+1011 - Valid Sibling Procedures
 procedure p;
-Select BOOLEAN such that Siblings(p,Two)
+Select BOOLEAN such that Sibling(p,Two)
 One,Three
 5000
-1012 - Valid Siblings Procedures
+1012 - Valid Sibling Procedures
 procedure p;
-Select BOOLEAN such that Siblings(p,Two)
+Select BOOLEAN such that Sibling(p,Two)
 One,Three
 5000
-1013 - Valid Siblings expression tree var assign 1
+1013 - Valid Sibling expression tree var assign 1
 variable v;
-Select BOOLEAN such that Siblings("b", "hamburger")
+Select BOOLEAN such that Sibling("b", "hamburger")
 TRUE
 5000
-1014 - Valid Siblings expression tree var and constant assign 8
+1014 - Valid Sibling expression tree var and constant assign 8
 variable v;
-Select BOOLEAN such that Siblings("a", "0")
+Select BOOLEAN such that Sibling("a", "0")
 TRUE
 5000
-1015 - Valid Siblings expression tree var and op assign 2
+1015 - Valid Sibling expression tree var and op assign 2
 variable v;
-Select BOOLEAN such that Siblings("d", "+")
+Select BOOLEAN such that Sibling("d", "+")
 TRUE
 5000
-1016 - Valid Siblings expression tree op and op assign 2
+1016 - Valid Sibling expression tree op and op assign 2
 variable v;
-Select BOOLEAN such that Siblings("*", "*")
+Select BOOLEAN such that Sibling("*", "*")
 TRUE
 5000
-1017 - Valid Siblings expression tree var var assign 12
+1017 - Valid Sibling expression tree var var assign 12
 variable v;
-Select BOOLEAN such that Siblings("salmon", "c")
+Select BOOLEAN such that Sibling("salmon", "c")
 TRUE
 5000
-1018 - Valid Siblings stmtLst if 10
+1018 - Valid Sibling stmtLst if 10
 stmtLst then, else;
-Select BOOLEAN such that Siblings("f", then)
+Select BOOLEAN such that Sibling("f", then)
 TRUE
 5000
-1019 - Valid Siblings stmtLst if 10
+1019 - Valid Sibling stmtLst if 10
 stmtLst else;
-Select BOOLEAN such that Siblings("f", else)
+Select BOOLEAN such that Sibling("f", else)
 TRUE
 5000
-1020 - Valid Siblings stmtLst while 4
+1020 - Valid Sibling stmtLst while 4
 stmtLst while;
-Select BOOLEAN such that Siblings("salmon", while)
+Select BOOLEAN such that Sibling("salmon", while)
 TRUE
 5000
-1021 - Valid Siblings stmtLst if 10
+1021 - Valid Sibling stmtLst if 10
 stmtLst thenAndElse;
-Select thenAndElse such that Siblings("f", thenAndElse)
+Select thenAndElse such that Sibling("f", thenAndElse)
 11, 14, 21, 25
 5000
-1022 - Valid Siblings stmtLst while 38
+1022 - Valid Sibling stmtLst while 38
 stmtLst while;
-Select while such that Siblings(while, "chicken")
+Select while such that Sibling(while, "chicken")
 39
 5000
-1023 - Valid Siblings expression tree op plus
+1023 - Valid Sibling expression tree op plus
 assign a; plus add; minus oppositeOfAdd; times multiply;
-Select a such that Siblings("coke", add) pattern a(_,_"coke"_)
+Select a such that Sibling("coke", add) pattern a(_,_"coke"_)
 13
 5000
-1024 - Valid Siblings expression tree op multiply
+1024 - Valid Sibling expression tree op multiply
 assign a; plus add; minus oppositeOfAdd; times multiply;
-Select a such that Siblings(multiply, "pork") pattern a(_,_"pork"_)
+Select a such that Sibling(multiply, "pork") pattern a(_,_"pork"_)
 5
 5000
-1025 - Valid Siblings expression tree op minus
+1025 - Valid Sibling expression tree op minus
 assign a; plus add; minus oppositeOfAdd; times multiply;
-Select a such that Siblings(minus, "z") pattern a("d",_)
+Select a such that Sibling(minus, "z") pattern a("d",_)
 9
 5000
-1026 - Valid Siblings expression tree constant
+1026 - Valid Sibling expression tree constant
 assign a; constant c; times multi;
-Select c such that Siblings(multi, c)
+Select c such that Sibling(multi, c)
 14
 5000
-1027 - Valid Siblings filter a LHS
+1027 - Valid Sibling filter a LHS
 assign a; stmt s;
-Select a such that Siblings(a, s)
+Select a such that Sibling(a, s)
 1,12,13,14,16,17,2,21,23,24,3,31,35,39,40,5,6,8,9
 5000
-1028 - Valid Siblings filter c LHS
+1028 - Valid Sibling filter c LHS
 call c; stmt s;
-Select c such that Siblings(c, s)
+Select c such that Sibling(c, s)
 11,15,7
 5000
-1029 - Valid Siblings filter i LHS
+1029 - Valid Sibling filter i LHS
 if i; stmt s;
-Select i such that Siblings(i, s)
+Select i such that Sibling(i, s)
 10,32
 5000
-1030 - Valid Siblings filter w LHS
+1030 - Valid Sibling filter w LHS
 while w; stmt s;
-Select w such that Siblings(w, s)
+Select w such that Sibling(w, s)
 19,22,4
 5000
-1031 - Valid Siblings filter l LHS
+1031 - Valid Sibling filter l LHS
 prog_line l; stmt s;
-Select l such that Siblings(l, s)
+Select l such that Sibling(l, s)
 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
 5000
-1032 - Valid Siblings filter a RHS
+1032 - Valid Sibling filter a RHS
 assign a; stmt s;
-Select a such that Siblings(s, a)
+Select a such that Sibling(s, a)
 1,12,13,14,16,17,2,21,23,24,3,31,35,39,40,5,6,8,9
 5000
-1033 - Valid Siblings filter c RHS
+1033 - Valid Sibling filter c RHS
 call c; stmt s;
-Select c such that Siblings(s, c)
+Select c such that Sibling(s, c)
 11,15,7
 5000
-1034 - Valid Siblings filter i RHS
+1034 - Valid Sibling filter i RHS
 if i; stmt s;
-Select i such that Siblings(s, i)
+Select i such that Sibling(s, i)
 10,32
 5000
-1035 - Valid Siblings filter w RHS
+1035 - Valid Sibling filter w RHS
 while w; stmt s;
-Select w such that Siblings(s, w)
+Select w such that Sibling(s, w)
 19,22,4
 5000
-1036 - Valid Siblings filter l RHS
+1036 - Valid Sibling filter l RHS
 prog_line l; stmt s;
-Select l such that Siblings(s, l)
+Select l such that Sibling(s, l)
 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
 5000
-1037 - Valid Siblings op op assign 3
+1037 - Valid Sibling op op assign 3
 times multi;
-Select BOOLEAN such that Siblings(multi, multi)
+Select BOOLEAN such that Sibling(multi, multi)
 TRUE
 5000
-2001 - Invalid Siblings different procedure
+2001 - Invalid Sibling different procedure
 stmt s;
-Select BOOLEAN such that Siblings(16,17)
+Select BOOLEAN such that Sibling(16,17)
 FALSE
 5000
-2002 - Invalid Siblings same entity
+2002 - Invalid Sibling same entity
 stmt s;
-Select BOOLEAN such that Siblings(s,s)
+Select BOOLEAN such that Sibling(s,s)
 FALSE
 5000
-2003 - Invalid Siblings different nesting level while
+2003 - Invalid Sibling different nesting level while
 stmt s;
-Select BOOLEAN such that Siblings(4,5)
+Select BOOLEAN such that Sibling(4,5)
 FALSE
 5000
-2004 - Invalid Siblings different nesting level if
+2004 - Invalid Sibling different nesting level if
 stmt s;
-Select BOOLEAN such that Siblings(10,11)
+Select BOOLEAN such that Sibling(10,11)
 FALSE
 5000
-2005 - Invalid Siblings different nesting level else
+2005 - Invalid Sibling different nesting level else
 stmt s;
-Select BOOLEAN such that Siblings(10,14)
+Select BOOLEAN such that Sibling(10,14)
 FALSE
 5000
-2006 - Invalid Siblings same level different parent whileif
+2006 - Invalid Sibling same level different parent whileif
 stmt s;
-Select BOOLEAN such that Siblings(5,11)
+Select BOOLEAN such that Sibling(5,11)
 FALSE
 5000
-2007 - Invalid Siblings same level different parent ifelse
+2007 - Invalid Sibling same level different parent ifelse
 stmt s;
-Select BOOLEAN such that Siblings(12,15)
+Select BOOLEAN such that Sibling(12,15)
 FALSE
 5000
-2008 - Invalid Siblings plus
+2008 - Invalid Sibling plus
 plus add;
-Select add such that Siblings(plus, "pork")
+Select add such that Sibling(plus, "pork")
 none
 5000
-2009 - Invalid Siblings minus
+2009 - Invalid Sibling minus
 minus reduce;
-Select reduce such that Siblings(minus,"c")
+Select reduce such that Sibling(minus,"c")
 none
 5000
-2010 - Invalid Siblings times
+2010 - Invalid Sibling times
 times multi;
-Select multi such that Siblings(multi,multi)
+Select multi such that Sibling(multi,multi)
 none
 5000
