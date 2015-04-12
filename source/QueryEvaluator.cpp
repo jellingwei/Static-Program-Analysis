@@ -71,6 +71,9 @@ namespace QueryEvaluator
 	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
+	BOOLEAN_ processContainsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	BOOLEAN_ processSiblingT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+
 	//Functions to process pattern clauses
 	inline BOOLEAN_ processPatternClause(QNode* patternClause);
 	BOOLEAN_ processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS);
@@ -219,6 +222,12 @@ namespace QueryEvaluator
 			return processAffectsBipT(LHS, RHS, false, direction);
 		case AffectsBipT:
 			return processAffectsBipT(LHS, RHS, true, direction);
+		case Contains:
+			return processContainsT(LHS, RHS, false);
+		case ContainsT:
+			return processContainsT(LHS, RHS, true);
+		case Sibling:
+			return processSiblingT(LHS, RHS, false);
 		case Pattern:
 			return processPatternClause(clauseNode);
 		case With:
@@ -1386,6 +1395,54 @@ namespace QueryEvaluator
 			}
 		}
 		return make_pair(acceptedLHS, acceptedRHS);
+	}
+
+	BOOLEAN_ processContainsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		SYNONYM_TYPE typeLHS = LHS.getType();
+		SYNONYM_TYPE typeRHS = RHS.getType();
+		vector<pair<int, VALUE_LIST>> containsPair = pkb.contains(typeLHS, typeRHS, isTrans);
+
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
+
+		for (unsigned int i = 0; i < containsPair.size(); i++) {
+			int valueLHS = containsPair[i].first;
+			VALUE_LIST valuesRHS = containsPair[i].second;
+			
+			for (unsigned int j = 0; j < valuesRHS.size(); j++) {
+				int valueRHS = valuesRHS[j];
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		LHS.setValues(acceptedLHS);
+		RHS.setValues(acceptedRHS);
+		return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
+	}
+
+	BOOLEAN_ processSiblingT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
+	{
+		SYNONYM_TYPE typeLHS = LHS.getType();
+		SYNONYM_TYPE typeRHS = RHS.getType();
+		vector<pair<int, VALUE_LIST>> containsPair = pkb.siblings(typeLHS, typeRHS);
+
+		VALUE_LIST acceptedLHS;
+		VALUE_LIST acceptedRHS;
+
+		for (unsigned int i = 0; i < containsPair.size(); i++) {
+			int valueLHS = containsPair[i].first;
+			VALUE_LIST valuesRHS = containsPair[i].second;
+			
+			for (unsigned int j = 0; j < valuesRHS.size(); j++) {
+				int valueRHS = valuesRHS[j];
+				acceptedLHS.push_back(valueLHS);
+				acceptedRHS.push_back(valueRHS);
+			}
+		}
+		LHS.setValues(acceptedLHS);
+		RHS.setValues(acceptedRHS);
+		return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 	}
 
 	/**
