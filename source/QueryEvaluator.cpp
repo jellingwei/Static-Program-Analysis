@@ -1136,6 +1136,13 @@ namespace QueryEvaluator
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
+
+		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
+			return pkb.isParent(stoi(nameLHS), stoi(nameRHS));
+		}
+
 		vector<pair<int, VALUE_LIST>> containsPair = pkb.contains(typeLHS, typeRHS, isTrans);
 
 		VALUE_LIST acceptedLHS;
@@ -1160,6 +1167,13 @@ namespace QueryEvaluator
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
+		string nameLHS = LHS.getName();
+		string nameRHS = RHS.getName();
+
+		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
+			return pkb.isFollows(stoi(nameLHS), stoi(nameRHS));
+		}
+
 		vector<pair<int, VALUE_LIST>> containsPair = pkb.siblings(typeLHS, typeRHS);
 
 		VALUE_LIST acceptedLHS;
