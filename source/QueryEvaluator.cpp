@@ -27,52 +27,43 @@ namespace QueryEvaluator
 
 	//Functions to process clauses
 	BOOLEAN_ processModifies(Synonym LHS, Synonym RHS, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByPair(Synonym LHS, Synonym RHS);
 	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByLHS(Synonym LHS, Synonym RHS);
 	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByRHS(Synonym LHS, Synonym RHS);
 
 	BOOLEAN_ processUses(Synonym LHS, Synonym RHS, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByPair(Synonym LHS, Synonym RHS);
 	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByLHS(Synonym LHS, Synonym RHS);
 	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByRHS(Synonym LHS, Synonym RHS);
 
 	BOOLEAN_ processParentT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateParentByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateParentByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processFollowsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processCallsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processNextT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateNextByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateNextByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processAffectsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processNextBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
 	BOOLEAN_ processAffectsBipT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans, DIRECTION direction);
-	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByLHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByRHS(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
 
-	BOOLEAN_ processContainsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
-	BOOLEAN_ processSiblingT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);
+	BOOLEAN_ processContainsT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);  //Bonus feature
+	BOOLEAN_ processSiblingT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans);  //Bonus feature
 
 	//Functions to process pattern clauses
 	inline BOOLEAN_ processPatternClause(QNode* patternClause);
@@ -286,13 +277,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> modifiesPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			modifiesPair = evaluateModifiesByPair(LHS, RHS);
-			} else if (direction == LeftToRight) {
-			modifiesPair = evaluateModifiesByLHS(LHS, RHS);
-			} else {
-			modifiesPair = evaluateModifiesByRHS(LHS, RHS);
-			}*/
 			if (direction == LeftToRight) {
 				modifiesPair = evaluateModifiesByLHS(LHS, RHS);
 			} else {
@@ -302,36 +286,6 @@ namespace QueryEvaluator
 			RHS.setValues(modifiesPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateModifiesByPair(Synonym LHS, Synonym RHS)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		if (LHS.getType() == PROCEDURE) {
-			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-				int valueLHS = valuesLHS[i];
-				int valueRHS = valuesRHS[i];
-				if (pkb.isModifiesProc(valueLHS, valueRHS)) {
-					acceptedLHS.push_back(valueLHS);
-					acceptedRHS.push_back(valueRHS);
-				}
-			}
-		} else {
-			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-				int valueLHS = valuesLHS[i];
-				int valueRHS = valuesRHS[i];
-				if (pkb.isModifies(valueLHS, valueRHS)) {
-					acceptedLHS.push_back(valueLHS);
-					acceptedRHS.push_back(valueRHS);
-				}
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -435,13 +389,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> usesPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			usesPair = evaluateUsesByPair(LHS, RHS);
-			} else if (direction == LeftToRight) {
-			usesPair = evaluateUsesByLHS(LHS, RHS);
-			} else {
-			usesPair = evaluateUsesByRHS(LHS, RHS);
-			}*/
 			if (direction == LeftToRight) {
 				usesPair = evaluateUsesByLHS(LHS, RHS);
 			} else {
@@ -451,36 +398,6 @@ namespace QueryEvaluator
 			RHS.setValues(usesPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateUsesByPair(Synonym LHS, Synonym RHS)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		if (LHS.getType() == PROCEDURE) {
-			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-				int valueLHS = valuesLHS[i];
-				int valueRHS = valuesRHS[i];
-				if (pkb.isUsesProc(valueLHS, valueRHS)) {
-					acceptedLHS.push_back(valueLHS);
-					acceptedRHS.push_back(valueRHS);
-				}
-			}
-		} else {
-			for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-				int valueLHS = valuesLHS[i];
-				int valueRHS = valuesRHS[i];
-				if (pkb.isUses(valueLHS, valueRHS)) {
-					acceptedLHS.push_back(valueLHS);
-					acceptedRHS.push_back(valueRHS);
-				}
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -572,13 +489,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> parentsPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			parentsPair = evaluateParentByPair(LHS, RHS, isTrans);
-			} else if (direction == LeftToRight) {
-			parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
-			} else {
-			parentsPair = evaluateParentByRHS(LHS, RHS, isTrans);
-			}*/
 			if (direction == LeftToRight) {
 				parentsPair = evaluateParentByLHS(LHS, RHS, isTrans);
 			} else {
@@ -588,25 +498,6 @@ namespace QueryEvaluator
 			RHS.setValues(parentsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateParentByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			int valueLHS = valuesLHS[i];
-			int valueRHS = valuesRHS[i];
-			if (pkb.isParent(valueLHS, valueRHS, isTrans)) {
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -692,13 +583,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> followsPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			followsPair = evaluateFollowsByPair(LHS, RHS, isTrans);
-			} else if (direction == LeftToRight) {
-			followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
-			} else {
-			followsPair = evaluateFollowsByRHS(LHS, RHS, isTrans);
-			}*/
 			if (direction == LeftToRight) {
 				followsPair = evaluateFollowsByLHS(LHS, RHS, isTrans);
 			} else {
@@ -708,25 +592,6 @@ namespace QueryEvaluator
 			RHS.setValues(followsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateFollowsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			int valueLHS = valuesLHS[i];
-			int valueRHS = valuesRHS[i];
-			if (pkb.isFollows(valueLHS, valueRHS, isTrans)) {
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -810,13 +675,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> callsPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			callsPair = evaluateCallsByPair(LHS, RHS, isTrans);
-			} else if (direction == LeftToRight) {
-			callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
-			} else {
-			callsPair = evaluateCallsByRHS(LHS, RHS, isTrans);
-			}*/
 			if (direction == LeftToRight) {
 				callsPair = evaluateCallsByLHS(LHS, RHS, isTrans);
 			} else {
@@ -826,25 +684,6 @@ namespace QueryEvaluator
 			RHS.setValues(callsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateCallsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			int valueLHS = valuesLHS[i];
-			int valueRHS = valuesRHS[i];
-			if (pkb.isCalls(valueLHS, valueRHS, isTrans)) {
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -944,13 +783,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> nextPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			nextPair = evaluateNextByPair(LHS, RHS, isTrans);
-			} else if (direction == LeftToRight) {
-			nextPair = evaluateNextByLHS(LHS, RHS, isTrans);
-			} else {
-			nextPair = evaluateNextByRHS(LHS, RHS, isTrans);
-			}*/
 			if (direction == LeftToRight) {
 				nextPair = evaluateNextByLHS(LHS, RHS, isTrans);
 			} else {
@@ -960,25 +792,6 @@ namespace QueryEvaluator
 			RHS.setValues(nextPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateNextByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			int valueLHS = valuesLHS[i];
-			int valueRHS = valuesRHS[i];
-			if (pkb.isNext(valueLHS, valueRHS, isTrans)) {
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -1078,13 +891,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> affectsPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			affectsPair = evaluateAffectsByPair(LHS, RHS, isTrans);
-			} else if (direction == LeftToRight) {
-			affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
-			} else {
-			affectsPair = evaluateAffectsByRHS(LHS, RHS, isTrans);
-			}*/
 			if (direction == LeftToRight) {
 				affectsPair = evaluateAffectsByLHS(LHS, RHS, isTrans);
 			} else {
@@ -1094,25 +900,6 @@ namespace QueryEvaluator
 			RHS.setValues(affectsPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			int valueLHS = valuesLHS[i];
-			int valueRHS = valuesRHS[i];
-			if (pkb.isAffects(valueLHS, valueRHS, isTrans)) {
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -1196,13 +983,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> nextBipPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			nextBipPair = evaluateNextBipByPair(LHS, RHS, isTrans);
-			} else if (direction == LeftToRight) {
-			nextBipPair = evaluateNextBipByLHS(LHS, RHS, isTrans);
-			} else {
-			nextBipPair = evaluateNextBipByRHS(LHS, RHS, isTrans);
-			}*/
 			if (direction == LeftToRight) {
 				nextBipPair = evaluateNextBipByLHS(LHS, RHS, isTrans);
 			} else {
@@ -1212,25 +992,6 @@ namespace QueryEvaluator
 			RHS.setValues(nextBipPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateNextBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			int valueLHS = valuesLHS[i];
-			int valueRHS = valuesRHS[i];
-			if (pkb.isNextBip(valueLHS, valueRHS, isTrans)) {
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
@@ -1314,13 +1075,6 @@ namespace QueryEvaluator
 		} else {
 			pair<VALUE_LIST, VALUE_LIST> affectsBipPair;
 
-			/*if (ValuesHandler::isExistInMainTable(nameLHS) && ValuesHandler::isExistInMainTable(nameRHS)) {
-			affectsBipPair = evaluateAffectsBipByPair(LHS, RHS, isTrans);
-			} else if (direction == LeftToRight) {
-			affectsBipPair = evaluateAffectsBipByLHS(LHS, RHS, isTrans);
-			} else {
-			affectsBipPair = evaluateAffectsBipByRHS(LHS, RHS, isTrans);
-			}*/
 			if (direction == LeftToRight) {
 				affectsBipPair = evaluateAffectsBipByLHS(LHS, RHS, isTrans);
 			} else {
@@ -1330,25 +1084,6 @@ namespace QueryEvaluator
 			RHS.setValues(affectsBipPair.second);
 			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-	}
-
-	pair<VALUE_LIST, VALUE_LIST> evaluateAffectsBipByPair(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
-	{
-		pair<VALUE_LIST, VALUE_LIST> valuesPair = ValuesHandler::getIntermediateValuesPair(LHS.getName(), RHS.getName());
-		VALUE_LIST valuesLHS = valuesPair.first;
-		VALUE_LIST valuesRHS = valuesPair.second;
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
-
-		for (unsigned int i = 0; i < valuesLHS.size(); i++) {
-			int valueLHS = valuesLHS[i];
-			int valueRHS = valuesRHS[i];
-			if (pkb.isAffectsBip(valueLHS, valueRHS, isTrans)) {
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
-			}
-		}
-		return make_pair(acceptedLHS, acceptedRHS);
 	}
 
 	/**
