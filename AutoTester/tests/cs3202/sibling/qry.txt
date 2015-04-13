@@ -104,68 +104,68 @@ Select BOOLEAN such that Sibling(p,Two)
 One,Three
 5000
 1013 - Valid Sibling expression tree var assign 1
-variable v;
-Select BOOLEAN such that Sibling("b", "hamburger")
+variable v1,v2;
+Select BOOLEAN such that Sibling(v1, v2) with v1.varName = "b" with v2.varName = "hamburger"
 TRUE
 5000
 1014 - Valid Sibling expression tree var and constant assign 8
-variable v;
-Select BOOLEAN such that Sibling("a", "0")
+variable v; constant c; 
+Select BOOLEAN such that Sibling(v, c) with v.varName = "a" with c.value = 0
 TRUE
 5000
 1015 - Valid Sibling expression tree var and op assign 2
-variable v;
-Select BOOLEAN such that Sibling("d", "+")
+variable v; plus add;
+Select BOOLEAN such that Sibling(v, add) with v.varName = "d"
 TRUE
 5000
 1016 - Valid Sibling expression tree op and op assign 2
-variable v;
-Select BOOLEAN such that Sibling("*", "*")
+times multi;
+Select BOOLEAN such that Sibling(multi, multi)
 TRUE
 5000
 1017 - Valid Sibling expression tree var var assign 12
-variable v;
-Select BOOLEAN such that Sibling("salmon", "c")
+variable v1,v2;
+Select BOOLEAN such that Sibling(v1, v2) with v1.varName = "salmon" with v2.varName = "c"
 TRUE
 5000
 1018 - Valid Sibling stmtLst if 10
-stmtLst then, else;
-Select BOOLEAN such that Sibling("f", then)
+stmtLst then, else; variable v;
+Select BOOLEAN such that Sibling(v, then) with v.varName = "f"
 TRUE
 5000
 1019 - Valid Sibling stmtLst if 10
-stmtLst else;
-Select BOOLEAN such that Sibling("f", else)
+stmtLst else; variable v;
+Select BOOLEAN such that Sibling(v, else) with v.varName = "f"
 TRUE
 5000
 1020 - Valid Sibling stmtLst while 4
-stmtLst while;
-Select BOOLEAN such that Sibling("salmon", while)
+stmtLst while; variable v;
+Select BOOLEAN such that Sibling(v, while) with v.varName = "salmon"
 TRUE
 5000
 1021 - Valid Sibling stmtLst if 10
-stmtLst thenAndElse;
-Select thenAndElse such that Sibling("f", thenAndElse)
+stmtLst thenAndElse; variable v;
+Select thenAndElse such that Sibling(v, thenAndElse) with v.varName = "f"
 11, 14, 21, 25
 5000
 1022 - Valid Sibling stmtLst while 38
-stmtLst while;
-Select while such that Sibling(while, "chicken")
+stmtLst while; variable v;
+Select while such that Sibling(while, v) with v.varName = "chicken"
 39
 5000
 1023 - Valid Sibling expression tree op plus
-assign a; plus add; minus oppositeOfAdd; times multiply;
-Select a such that Sibling("coke", add) pattern a(_,_"coke"_)
+assign a; plus add; minus oppositeOfAdd; times multiply; variable v;
+Select a such that Sibling(v, add) pattern a(_,_"coke"_) with v.varName = "coke"
 13
 5000
 1024 - Valid Sibling expression tree op multiply
-assign a; plus add; minus oppositeOfAdd; times multiply;
-Select a such that Sibling(multiply, "pork") pattern a(_,_"pork"_)
+assign a; plus add; minus oppositeOfAdd; times multiply; variable v;
+Select a such that Sibling(multiply, v) pattern a(_,_"pork"_) with v.varName = "pork"
 5
 5000
 1025 - Valid Sibling expression tree op minus
-assign a; plus add; minus oppositeOfAdd; times multiply;
-Select a such that Sibling(minus, "z") pattern a("d",_)
+assign a; plus add; minus oppositeOfAdd; times multiply; variable v;
+Select a such that Sibling(minus, v) pattern a("d",_) with v.varName = "z"
 9
 5000
 1026 - Valid Sibling expression tree constant
@@ -264,13 +264,13 @@ Select BOOLEAN such that Sibling(12,15)
 FALSE
 5000
 2008 - Invalid Sibling plus
-plus add;
-Select add such that Sibling(plus, "pork")
+plus add; variable v;
+Select add such that Sibling(add, v) with v.varName = "pork"
 none
 5000
 2009 - Invalid Sibling minus
-minus reduce;
-Select reduce such that Sibling(minus,"c")
+minus reduce; variable v;
+Select reduce such that Sibling(reduce,v) with v.varName = "c"
 none
 5000
 2010 - Invalid Sibling times
