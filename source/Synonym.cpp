@@ -106,10 +106,10 @@ BOOLEAN_ Synonym::isEmpty()
 
 BOOLEAN_ Synonym::isSynonym()
 {
-	return _type == PROCEDURE || _type == STMT || _type == PROCEDURE || _type ==STMT ||
-		_type == ASSIGN || _type == CALL || _type == WHILE || _type == IF || _type == VARIABLE ||
+	return _type == PROCEDURE || _type == STMT || _type == ASSIGN || 
+		_type == CALL || _type == WHILE || _type == IF || _type == VARIABLE ||
 		_type == CONSTANT || _type == PROG_LINE || _type == STMTLST || 
-		_type == PLUS || _type == MINUS || _type == TIMES;
+		_type == PLUS || _type == MINUS || _type == TIMES || _type == PROGRAM;
 }
 
 BOOLEAN_ Synonym::isConstant()
