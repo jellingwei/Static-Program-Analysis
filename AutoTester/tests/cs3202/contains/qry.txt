@@ -54,7 +54,7 @@ Select BOOLEAN such that Contains(10,12)
 TRUE
 5000
 1003 - Valid Contains as Parents else
-stmts s;
+stmt s;
 Select BOOLEAN such that Contains(10,14)
 TRUE
 5000
