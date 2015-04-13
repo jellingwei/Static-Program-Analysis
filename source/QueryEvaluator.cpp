@@ -68,8 +68,8 @@ namespace QueryEvaluator
 	//Functions to process pattern clauses
 	inline BOOLEAN_ processPatternClause(QNode* patternClause);
 	BOOLEAN_ processAssignPattern(Synonym arg0, Synonym LHS, Synonym RHS);
-	BOOLEAN_ processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS);
-	BOOLEAN_ processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS);
+	BOOLEAN_ processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS, Synonym arg3);
+	BOOLEAN_ processWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2);
 
 	//Functions to process with clauses
 	BOOLEAN_ processWithClause(QNode* withClause);
@@ -1202,17 +1202,18 @@ namespace QueryEvaluator
 	inline BOOLEAN_ processPatternClause(QNode* patternClause) 
 	{
 		Synonym arg0 = patternClause->getArg0();
-		Synonym LHS = patternClause->getArg1();
-		Synonym RHS = patternClause->getArg2();
+		Synonym arg1 = patternClause->getArg1();
+		Synonym arg2 = patternClause->getArg2();
+		Synonym arg3 = patternClause->getArg3();
 		SYNONYM_TYPE patternType = arg0.getType();
 
 		switch (patternType) {
 		case ASSIGN:
-			return processAssignPattern(arg0, LHS, RHS);
+			return processAssignPattern(arg0, arg1, arg2);
 		case IF:
-			return processIfPattern(arg0, LHS, RHS);
+			return processIfPattern(arg0, arg1, arg2, arg3);
 		case WHILE:
-			return processWhilePattern(arg0, LHS, RHS);
+			return processWhilePattern(arg0, arg1, arg2);
 		default:
 			return false;
 		}
@@ -1275,34 +1276,42 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processIfPattern(Synonym arg0, Synonym LHS, Synonym RHS) 
+	BOOLEAN_ processIfPattern(Synonym arg0, Synonym arg1, Synonym arg2, Synonym arg3) 
 	{
-		SYNONYM_TYPE typeLHS = LHS.getType();
+		//TODO: If arg1 is v
+		VALUE_LIST ifStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
+		VALUE_LIST acceptedArg0;
+		VALUE_LIST acceptedArg1;
+		VALUE_LIST acceptedArg2;
+		VALUE_LIST acceptedArg3;
 
-		//Find all if statements that uses LHS
-		if (LHS.getType() == STRING_CHAR) {
-			VALUE_LIST stmts = pkb.patternMatchIf(LHS.getName());
-			arg0.setValues(stmts);
-			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
-		} else if (typeLHS == UNDEFINED) {
-			VALUE_LIST ifStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
-			return (ifStmts.size() != 0);  //Do nothing because pattern i(_, _, _) is always true if there are if statements
+		if (arg2.isUndefined() && arg3.isUndefined()) {
+			if (arg1.isSynonym()) {
+				for (unsigned int i = 0; i < ifStmts.size(); i++) {
+					int var = pkb.getControlVariable(ifStmts[i]);
+					acceptedArg1.push_back(var);
+				}
+				if (acceptedArg1.size() == 0) {
+					return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
+				}
+				arg0.setValues(ifStmts);
+				arg1.setValues(acceptedArg1);
+				return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, arg1);
+			} if (arg1.isUndefined()) {
+				return ifStmts.size() != 0;
+			} else {
+				ifStmts = pkb.patternMatchIf(arg1.getName());
+				arg0.setValues(ifStmts);
+				return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
+			}
+		} else if (arg2.isSynonym() && arg3.isUndefined()) {
+			ifStmts = pkb.patternMatchIfElse(arg1.getName(), arg2.getType());
+		} else if (arg2.isUndefined() && arg3.isSynonym()) {
+			ifStmts = pkb.patternMatchIfThen(arg1.getName(), arg3.getType());
 		} else {
-			//LHS is a variable synonym
-			VALUE_LIST arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
-			if (arg0Values.size() == 0) {
-				return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
-			}
-
-			VALUE_LIST vars;
-			for (unsigned int i = 0; i < arg0Values.size(); i++) {
-				int var = pkb.getControlVariable(arg0Values[i]);
-				vars.push_back(var);
-			}
-			arg0.setValues(arg0Values);
-			LHS.setValues(vars);
-			return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
+			ifStmts = pkb.patternMatchIf(arg1.getName(), arg2.getType(), arg3.getType());
 		}
+		return false;  //To be replaced
 	}
 
 	/**
@@ -1312,34 +1321,35 @@ namespace QueryEvaluator
 	* @param RHS
 	* @return TRUE if the clause is valid. FALSE if the clause is not valid.
 	*/
-	BOOLEAN_ processWhilePattern(Synonym arg0, Synonym LHS, Synonym RHS) 
+	BOOLEAN_ processWhilePattern(Synonym arg0, Synonym arg1, Synonym arg2) 
 	{
-		SYNONYM_TYPE typeLHS = LHS.getType();
+		if (arg2.isUndefined()) {
+			//Find all while statements that uses LHS
+			if (arg1.isConstant()) {
+				VALUE_LIST stmts = pkb.patternMatchWhile(arg1.getName());
+				arg0.setValues(stmts);
+				return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
+			} else if (arg1.isUndefined()) {
+				VALUE_LIST whileStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
+				return (whileStmts.size() != 0);  //Do nothing because pattern w(_, _) is always true if there are while statements
+			} else {
+				//LHS is a variable synonym
+				VALUE_LIST arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
+				if (arg0Values.size() == 0) {
+					return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
+				}
 
-		//Find all while statements that uses LHS
-		if (LHS.getType() == STRING_CHAR) {
-			VALUE_LIST stmts = pkb.patternMatchWhile(LHS.getName());
-			arg0.setValues(stmts);
-			return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
-		} else if (typeLHS == UNDEFINED) {
-			VALUE_LIST whileStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
-			return (whileStmts.size() != 0);  //Do nothing because pattern w(_, _) is always true if there are while statements
-		} else {
-			//LHS is a variable synonym
-			VALUE_LIST arg0Values = ValuesHandler::getSynonym(arg0.getName()).getValues();
-			if (arg0Values.size() == 0) {
-				return false;  //This check is necessary to prevent pairs with only one side filled to enter the values handler
+				VALUE_LIST vars;
+				for (unsigned int i = 0; i < arg0Values.size(); i++) {
+					int var = pkb.getControlVariable(arg0Values[i]);
+					vars.push_back(var);
+				}
+				arg0.setValues(arg0Values);
+				arg1.setValues(vars);
+				return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, arg1);
 			}
-
-			VALUE_LIST vars;
-			for (unsigned int i = 0; i < arg0Values.size(); i++) {
-				int var = pkb.getControlVariable(arg0Values[i]);
-				vars.push_back(var);
-			}
-			arg0.setValues(arg0Values);
-			LHS.setValues(vars);
-			return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, LHS);
 		}
+		return false;  //To be replaced
 	}
 
 	/**
