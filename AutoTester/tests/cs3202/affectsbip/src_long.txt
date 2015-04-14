@@ -1,0 +1,464 @@
+procedure a {
+	call b;  	\\1
+    x = x;   	\\2
+	call c;	}	\\3
+
+procedure b {
+	call b1; }	\\4
+
+procedure c {
+    if x then {		\\5
+	    call c1;	\\6
+	} else {
+		call c1; }	\\7
+}
+
+procedure b1 {
+	call b2;		\\8
+}
+
+procedure b2 {
+	x = x;}		\\9  test if AffectsBip(9, 2), AffectsBip(9, 10)
+
+
+procedure c1 {
+	x = x;		\\10
+}
+
+procedure alpha {
+    x = 1;		\\11
+	call beta;	\\12
+    x = x;		\\13
+	call gamma;	\\14
+	x = x;		\\15
+}
+
+procedure beta {
+    if x then {	\\16
+	   call beta1;	\\17
+	} else {		
+       x = x;   \\18
+	}
+}
+
+procedure gamma {
+    while x {		\\19
+	   call gamma1;	\\20
+	}
+}
+
+procedure beta1 {
+	x = x;			\\21
+}
+
+procedure gamma1 {
+	x = x;			\\22
+}
+
+procedure omega {
+	a = 1;			\\23  test for possible problems for affects due to information on every 4 nodes
+	a = 2;			\\24
+	a = 3;			\\25
+	a = 4;			\\26
+	a = 5;			\\27
+	a = 6;			\\28
+	a = 7;			\\29
+	a = 8;			\\30
+	a = 9;			\\31
+	a = 10;			\\32
+	a = a;			\\33
+	call omega1;  \\ 34 a killed in both affects and affectsbip
+    b = a;			\\35
+    a = b;			\\36
+    while a {		\\37
+    	while a {		\\38
+    		while b {		\\39
+    			while c {		\\40
+    				while b { 	\\41
+    					while a {	\\42
+    						call modifyA;	\\43
+    					}
+    				}
+    				while b {	\\44
+    					while t {	\\45
+    						t = q;		\\46
+    						q = 1;		\\47
+    						while q {		\\48
+    							q = q;		\\49
+    						}
+    					}
+    				}
+    			}
+    			call omega1;		\\50
+    		}
+    	}
+    }
+    c = b; 	\\51
+}
+
+procedure omega1 {
+	if a then {			\\52
+		if a then {		\\53
+			call modifyA;	\\54
+		} else {
+			call modifyA;		\\55
+		}
+	} else {
+		if a then {			\\56
+			a = 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + a;	\\57
+		} else {
+			a = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + b;		\\58
+		}
+	}
+}
+
+procedure modifyA {
+	a = 1;			\\59
+}
+
+procedure useA {
+	dummyVar = a;			\\60
+}
+
+procedure mayModifyA {
+	if a then {		\\61
+		call modifyA;		\\62
+	} else {
+		b = 5;		\\63
+	}
+}
+
+procedure bread {
+    while f {			\\64
+		if f then {			\\65
+			a = 1;			\\66
+			call mayModifyA;		\\67
+			b = a;				\\68
+		} else {
+			b = a;			\\69
+			call useA;		\\70
+		}
+		if b then {			\\71  
+			b = 1;			\\72
+		} else {
+			call mayModifyA;	\\73
+		}
+		if a then {			\\74
+			b = b; 			 \\ 75  die in the first 'if'
+		} else {
+			call useA;		\\76
+		}
+	}
+}
+
+
+procedure garlic {
+	if f then {			\\77
+		while f {			\\78
+            q = q;			\\79
+		}
+	} else {	
+		while f {			\\80
+			q = q;			\\81
+		}
+	}
+	t = q;				\\82
+	q = 0;				\\83
+	q = t + q;			\\84
+}
+
+procedure nestedGarlic {
+	call garlic;		\\85
+	while a {			\\86
+		t = t;			\\87
+	} 
+	q = t;				\\88
+}
+
+procedure nestedNestedGarlic {
+	call nestedGarlic;	\\89
+	call garlic;		\\90
+}
+
+procedure lettuce {
+	a = a;				\\91
+	b = b;				\\92
+	t = t;				\\93
+	q = q;				\\94
+
+}
+
+procedure makeASandwich {
+	q = 1000000;		\\95
+	q = 10000000 + q + t + a + b + c + d + e + f + g + h + i + j; \\96
+	call nestedNestedGarlic;		\\97
+	call bread;			\\98
+	call lettuce;		\\99
+}
+
+procedure eat {
+	q = 1000000;		\\100  does not affect/affectsbip anything
+	call makeASandwich; 	\\101
+}
+
+procedure allifs {
+	a = 10;				\\102
+	if a then {			\\103
+		call useA;		\\104
+	} else {
+		call useA;		\\105
+	}
+	b = a; 				\\106
+	if a then {			\\107
+		call mayModifyA;	\\108
+	} else {
+		call mayModifyA;	\\109
+	}
+	if a then {				\\110
+		call modifyA;		\\111
+	} else {
+		call modifyA;		\\112
+	}
+	b = a;					\\113
+}
+
+procedure allwhiles {
+	a = 10;					\\114
+	while a {				\\115
+		while b {			\\116
+			while c{		\\117
+				call modifyA;	\\118
+			}
+		}
+		while b {			\\119
+			while c{		\\120
+				call modifyA;	\\121
+			}
+			call mayModifyA;	\\122
+		}
+		while b {			\\123
+			while c{		\\124
+				q = q;		\\125
+			}
+			call mayModifyA;	\\126
+		}
+	}
+	b = a;				\\127
+	call useA;			\\128
+}
+
+procedure ifwhile {
+	call allifs;		\\129
+	call allwhiles;		\\130
+}
+
+procedure many {
+	if x then {		\\131
+		if x then {	\\132
+			p = q;	\\133
+		} else {
+			p = q;	\\134
+		}
+	} else {
+		while p {	\\135
+			p = q;	\\136
+		}
+		while p {	\\137
+			p = q;	\\138
+		}
+	}
+	call modifyp;	\\139
+}
+
+procedure modifyp {
+	p = p;	\\140
+}
+
+procedure doNothing {
+	asdfasdasfasdasfasfasd = asdasfasdasdasd + pasdasd;	\\141
+}
+
+procedure p {
+	while p {			\\142
+		p = p;			\\143
+		call doNothing;	\\144
+	}
+	p = p;				\\145
+}
+
+procedure abc {
+	abc = 1;	\\146
+}
+
+procedure def {
+	def = abc;	\\147
+}
+
+procedure callabc {
+	call abc;	\\148
+}
+
+procedure abcdef {
+	call callabc; \\149
+	call def; \\150
+	call def; \\151
+}
+
+procedure abcdef2 {
+	call def;		\\152
+	call abc;		\\153
+	call callabc;	\\154
+	call def;		\\155
+	a = 1;			\\156
+	abc = abc;		\\157
+	call modifyA;	\\158
+	b = a;			\\159
+	call makeASandwich;	\\160
+	call doNothing;		\\161
+}
+
+procedure abcdef3 {
+	call abcdef2;		\\162
+	if a then {			\\163
+		a = 5;			\\164
+	} else {
+		b = a + a + a + a + b * q * q * q * t;	\\165
+	}
+	a = a;			\\166
+}
+
+procedure buffet {
+	call abcdef3;	\\167
+	def = def;		\\168
+	call def;		\\169
+	abc = def;		\\170
+	a = abc;		\\171
+}
+
+procedure killAllVars {
+	a = 0;		\\172
+	b = 0;		\\173
+	c = 0;		\\174
+	d = 0;		\\175
+	abc = 0;	\\176
+	def = 0;	\\177
+	q = 0;		\\178
+	t = 0;		\\179
+	p = 0;		\\180
+}
+
+procedure radioactiveLunch {
+	call doNothing;		\\181
+	call gamma;			\\182
+	call makeASandwich;	\\183
+	call killAllVars;	\\184
+	call buffet;		\\185
+	p = p;				\\186
+	t = p;				\\187
+}
+
+procedure eat2 {
+	if a then {			\\188
+		if a then {		\\189
+			call radioactiveLunch;	\\190
+		} else {
+			call radioactiveLunch;	\\191
+		}
+	} else {
+		call radioactiveLunch;	\\192
+	}
+}
+
+procedure lastProc {
+	notSpiderman = 1;	\\193
+	while notSpiderman {	\\194
+		if abc then {		\\195
+			abc = 0;		\\196
+		} else {
+			call modifyA;	\\197			
+			def = abc * def;	\\198
+		}
+		call eat2;	\\199
+		if a then {			\\200
+			call useA;		\\201
+			notSpiderman = 0;	\\202
+		} else {
+			notSpiderman = 1;	\\203
+		}
+		b = a; 				\\204
+		call buffet;		\\205
+	}
+}
+
+procedure longProc {
+	call killAllVars;	\\206
+	while a {			\\207
+		q = abc;		\\208
+		while q {		\\209
+			call killAllVars;	\\210
+		}
+		if a then {		\\211
+			while q {	\\212
+				abc = d;	\\213
+			}
+			while a {		\\214
+				abc = abc;	\\215
+			}
+			while a {		\\216
+				abc = abc;	\\217
+				call killAllVars;	\\218
+			}
+		} else {
+			d = c;		\\219
+		}	
+		if a then {		\\220
+			c = b;		\\221
+		} else {
+			b = a;		\\222
+		}
+		while q {	\\223
+			a = a;	\\224
+		}
+		while q {			\\225
+			call doNothing; \\ 226
+			call buffet;	\\227
+			while t {		\\228
+				a = b * c;	\\229
+				call modifyA; \\230
+			}
+			if notSpiderman then {	\\231
+				a = 1;			\\232
+			} else {
+				a = 4;			\\233
+				call modifyA;	\\234
+			}
+			a = 1;				\\235
+		}
+		q = 5;	\\236
+		if a then {	\\237
+			if b then {	\\238
+				abc = 2;	\\239
+			} else {
+				if c then {	\\240
+					abc = 3;	\\241
+				} else {
+					def = abc;	\\242
+				}
+			}
+		} else {
+			if b then {	\\243
+				call killAllVars;		\\244
+			} else {
+				call killAllVars;		\\245
+				while p {			\\246
+					t = q;			\\247
+					p = t;			\\248
+				}
+				while p {			\\249
+					t = 3;			\\250
+					p = 3535353;	\\251
+				}
+			}
+		}
+	}
+}
