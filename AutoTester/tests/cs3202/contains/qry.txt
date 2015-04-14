@@ -121,7 +121,7 @@ Select sl such that Contains(p, sl)
 1016 - Valid Contains Procedure
 procedure p; stmtLst sl;
 Select p such that Contains(p, sl)
-"One","Two","Three"
+One,Two,Three
 5000
 1017 - Valid Contains Assign LHS var 
 assign a; variable v;
@@ -131,7 +131,7 @@ TRUE
 1018 - Valid Contains Assign LHS var
 variable v;
 Select v such that Contains(3, v)
-pork
+pork,e,crab,buffet
 5000
 1019 - Valid Contains Assign RHS var
 assign a; variable v;

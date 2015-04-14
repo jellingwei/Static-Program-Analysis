@@ -258,10 +258,12 @@ void StatisticsTable::reduceCountModifies(Synonym LHS, Synonym RHS, DIRECTION di
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = min(_synonymsCount[LHS.getName()], _assignSize);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = ceil(_assignSize / _varSize * _synonymsCount[RHS.getName()]);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -287,10 +289,12 @@ void StatisticsTable::reduceCountUses(Synonym LHS, Synonym RHS, DIRECTION direct
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = ceil(_varSize / 3 * _synonymsCount[LHS.getName()]);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = ceil(_synonymsCount[LHS.getName()] / 5 * _synonymsCount[RHS.getName()]);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -310,10 +314,12 @@ void StatisticsTable::reduceCountParent(Synonym LHS, Synonym RHS, DIRECTION dire
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = ceil(_synonymsCount[LHS.getName()] / 2);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = ceil(_synonymsCount[RHS.getName()] / 2);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -337,10 +343,12 @@ void StatisticsTable::reduceCountParentS(Synonym LHS, Synonym RHS, DIRECTION dir
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = min(_averageLinesPerProc, ceil(_synonymsCount[LHS.getName()] / _averageContainersPerProc) * _averageContainersPerProc);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = min(_averageLinesPerProc, ceil(_synonymsCount[RHS.getName()] / _averageContainersPerProc) * _averageContainersPerProc);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -360,10 +368,12 @@ void StatisticsTable::reduceCountFollows(Synonym LHS, Synonym RHS, DIRECTION dir
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.75);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.75);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -387,10 +397,12 @@ void StatisticsTable::reduceCountFollowsS(Synonym LHS, Synonym RHS, DIRECTION di
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = min(_stmtSize, ceil(_synonymsCount[LHS.getName()] / _averageLinesPerProc) * (_averageLinesPerProc - _averageContainersPerProc));
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = min(_stmtSize, ceil(_synonymsCount[RHS.getName()] / _averageLinesPerProc) * (_averageLinesPerProc - _averageContainersPerProc));
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -410,10 +422,12 @@ void StatisticsTable::reduceCountCalls(Synonym LHS, Synonym RHS, DIRECTION direc
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.75);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.75);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -437,10 +451,12 @@ void StatisticsTable::reduceCountCallsS(Synonym LHS, Synonym RHS, DIRECTION dire
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = min(_callSize, ceil(_synonymsCount[LHS.getName()] / _averageCallsPerProc) * _averageCallsPerProc);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = min(_callSize, ceil(_synonymsCount[RHS.getName()] / _averageCallsPerProc) * _averageCallsPerProc);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -460,10 +476,12 @@ void StatisticsTable::reduceCountNext(Synonym LHS, Synonym RHS, DIRECTION direct
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.8);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.8);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -487,10 +505,12 @@ void StatisticsTable::reduceCountNextS(Synonym LHS, Synonym RHS, DIRECTION direc
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = min(_stmtSize, ceil(_synonymsCount[LHS.getName()] / _averageLinesPerProc) * _averageLinesPerProc);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = min(_stmtSize, ceil(_synonymsCount[RHS.getName()] / _averageLinesPerProc) * _averageLinesPerProc);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -511,10 +531,12 @@ void StatisticsTable::reduceCountAffects(Synonym LHS, Synonym RHS, DIRECTION dir
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = ceil(_synonymsCount[LHS.getName()] * 0.6);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = ceil(_synonymsCount[RHS.getName()] * 0.6);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
@@ -538,10 +560,12 @@ void StatisticsTable::reduceCountAffectsS(Synonym LHS, Synonym RHS, DIRECTION di
 			double original = _synonymsCount[RHS.getName()];
 			double estimated = min(_assignSize / 2, ceil(_synonymsCount[LHS.getName()] / _averageAssignPerProc) * _averageAssignPerProc / 2);
 			_synonymsCount[RHS.getName()] = min(original, estimated);
+			_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 		} else {
 			double original = _synonymsCount[LHS.getName()];
 			double estimated = min(_assignSize / 2, ceil(_synonymsCount[RHS.getName()] / _averageAssignPerProc) * _averageAssignPerProc / 2);
 			_synonymsCount[LHS.getName()] = min(original, estimated);
+			_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
 		}
 	}
 }
