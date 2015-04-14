@@ -458,6 +458,7 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 
 				nodesToTraverseBack.push_back(prevNodeAfterEndIf); 
 				nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
+
 				
 				// updates results and frontier, accounting of EndIf nodes possibly leading to multiple nodes
 				while (!nodesToTraverseBack.empty()) {
@@ -474,8 +475,8 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 							updateStateOfBfs(visited, *lastNodeIter, frontier, result);	
 						}
 					} else if (nodeToExpand->getNodeType() == EndIf_C) {
-						prevNodeAfterEndIf = node->getBefore()->at(0);
-						prevNodeAfterEndIf2 = node->getBefore()->at(1);
+						prevNodeAfterEndIf = nodeToExpand->getBefore()->at(0);
+						prevNodeAfterEndIf2 = nodeToExpand->getBefore()->at(1);
 
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf);
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
@@ -570,8 +571,8 @@ set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std
 							result.insert(*lastNodeIter);
 						}
 					} else if (nodeToExpand->getNodeType() == EndIf_C) {
-						prevNodeAfterEndIf = node->getBefore()->at(0);
-						prevNodeAfterEndIf2 = node->getBefore()->at(1);
+						prevNodeAfterEndIf = nodeToExpand->getBefore()->at(0);
+						prevNodeAfterEndIf2 = nodeToExpand->getBefore()->at(1);
 
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf);
 						nodesToTraverseBack.push_back(prevNodeAfterEndIf2);
