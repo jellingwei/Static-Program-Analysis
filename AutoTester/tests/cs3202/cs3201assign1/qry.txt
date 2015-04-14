@@ -481,132 +481,132 @@ Select s with s.stmt# = co.value
 42001 - Q42
 while w; constant co;
 Select BOOLEAN pattern w ("m", _) with co.value = 2
-TRUE
+true
 5000
 43001 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 1 with n2 = 2
-TRUE
+true
 5000
 43002 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 6 with n2 = 8
-FALSE
+false
 5000
 43003 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 8 with n2 = 9
-TRUE
+true
 5000
 43004 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 10 with n2 = 11
-TRUE
+true
 5000
 43005 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 12 with n2 = 10
-TRUE
+true
 5000
 43006 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 12 with n2 = 11
-FALSE
+false
 5000
 43007 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 13 with n2 = 14
-FALSE
+false
 5000
 43008 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 16 with n2 = 17
-TRUE
+true
 5000
 43009 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 17 with n2 = 18
-FALSE
+false
 5000
 43010 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 23 with n2 = 27
-TRUE
+true
 5000
 43011 - Q43
 prog_line n1, n2;
 Select BOOLEAN such that Next (n1, n2) with n1 = 26 with n2 = 27
-FALSE
+false
 5000
 44001 - Q44
 prog_line n;
 Select BOOLEAN such that Next* (n, n) with n = 9
-FALSE
+false
 5000
 44002 - Q44
 prog_line n;
 Select BOOLEAN such that Next* (n, n) with n = 13
-FALSE
+false
 5000
 44003 - Q44
 prog_line n;
 Select BOOLEAN such that Next* (n, n) with n = 18
-TRUE
+true
 5000
 44004 - Q44
 prog_line n;
 Select BOOLEAN such that Next* (n, n) with n = 26
-TRUE
+true
 5000
 45001 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 1 with a2.stmt# = 2
-TRUE
+true
 5000
 45002 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 1 with a2.stmt# = 3
-TRUE
+true
 5000
 45003 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 1 with a2.stmt# = 4
-FALSE
+false
 5000
 45004 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 2 with a2.stmt# = 5
-FALSE
+false
 5000
 45005 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 2 with a2.stmt# = 7
-FALSE
+false
 5000
 45006 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 3 with a2.stmt# = 11
-FALSE
+false
 5000
 45007 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 3 with a2.stmt# = 12
-FALSE
+false
 5000
 45008 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 14 with a2.stmt# = 28
-FALSE
+false
 5000
 45009 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 25 with a2.stmt# = 26
-TRUE
+true
 5000
 45010 - Q45
 assign a1, a2;
 Select BOOLEAN such that Affects (a1, a2) with a1.stmt# = 25 with a2.stmt# = 27
-FALSE
+false
 5000
 46001 - Q46
 assign a1, a2;
@@ -661,32 +661,32 @@ none
 48001 - Q48
 assign a1, a2;
 Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 2
-TRUE
+true
 5000
 48002 - Q48
 assign a1, a2;
 Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 3
-TRUE
+true
 5000
 48003 - Q48
 assign a1, a2;
 Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 5
-TRUE
+true
 5000
 48004 - Q48
 assign a1, a2;
 Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 1 with a2.stmt# = 7
-FALSE
+false
 5000
 48005 - Q48
 assign a1, a2;
 Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 11 with a2.stmt# = 11
-TRUE
+true
 5000
 48006 - Q48
 assign a1, a2;
 Select BOOLEAN such that Affects* (a1, a2) with a1.stmt# = 11 with a2.stmt# = 13
-TRUE
+true
 5000
 49001 - Q49
 assign a1, a2;

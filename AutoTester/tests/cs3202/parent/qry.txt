@@ -46,17 +46,17 @@ Select c
 1001 - Valid Parent while
 stmt s;
 Select BOOLEAN such that Parent(4, 5)
-TRUE
+true
 5000
 1002 - Valid Parent if in if
 stmt s;
 Select BOOLEAN such that Parent(10,11)
-TRUE
+true
 5000
 1003 - Valid Parent if in else
 stmt s;
 Select BOOLEAN such that Parent(10, 15)
-TRUE
+true
 5000
 1004 - Valid redundant
 call c;
@@ -146,67 +146,67 @@ Select w such that Parent(18,w)
 2001 - Invalid Parent LHS not container
 stmt s;
 Select BOOLEAN such that Parent(17,18)
-FALSE
+false
 5000
 2002 - Invalid Parent RHS container LHS child
 stmt s;
 Select BOOLEAN such that Parent(11,10)
-FALSE
+false
 5000
 2003 - Invalid Parent not real parent
 stmt s;
 Select BOOLEAN such that Parent(4,11)
-FALSE
+false
 5000
 2004 - Invalid Parent indirect while
 stmt s;
 Select BOOLEAN such that Parent(18,20)
-FALSE
+false
 5000
 2005 - Invalid Parent indirect if in while
 stmt s;
 Select BOOLEAN such that Parent(19,21)
-FALSE
+false
 5000
 2006 - Invalid Parent indirect else in while
 stmt s;
 Select BOOLEAN such that Parent(19,25)
-FALSE
+false
 5000
 2007 - Invalid Parent while in if
 stmt s;
 Select BOOLEAN such that Parent(28,30)
-FALSE
+false
 5000
 2008 - Invalid Parent if in if
 stmt s;
 Select BOOLEAN such that Parent(27,29)
-FALSE
+false
 5000
 2009 - Invalid Parent else in if
 stmt s;
 Select BOOLEAN such that Parent(27,38)
-FALSE
+false
 5000
 2010 - Invalid Parent no a child
 stmt s;
 Select BOOLEAN such that Parent(4,8)
-FALSE
+false
 5000
 2011 - Invalid Parent RHS someone else child while
 stmt s;
 Select BOOLEAN such that Parent(20,23)
-FALSE
+false
 5000
 2012 - Invalid Parent RHS someone else child if
 stmt s;
 Select BOOLEAN such that Parent(4, 12)
-FALSE
+false
 5000
 2013 - Invalid Parent RHS someone else child else
 stmt s;
 Select BOOLEAN such that Parent(4,14)
-FALSE
+false
 5000
 2014 - Invalid Parent Redundant
 procedure p;
@@ -266,7 +266,7 @@ none
 2024 - Invalid Parent same variable
 stmt s;
 Select BOOLEAN such that Parent(s,s)
-FALSE
+false
 5000
 2025 - Invalid Parent same variable
 stmt s;
@@ -276,12 +276,12 @@ none
 3001 - Valid Parent* direct
 stmt s;
 Select BOOLEAN such that Parent*(18,19)
-TRUE
+true
 5000
 3002 - Valid Parent* indirect
 stmt s;
 Select BOOLEAN such that Parent*(18,23)
-TRUE
+true
 5000
 3003 - Valid Parent* redundant
 constant c;
@@ -361,22 +361,22 @@ Select w such that Parent*(27, w)
 4001 - Invalid Parent* not a container
 stmt s;
 Select BOOLEAN such that Parent*(3, 5)
-FALSE
+false
 5000
 4002 - Invalid Parent* RHS container LHS child
 stmt s;
 Select BOOLEAN such that Parent*(30,27)
-FALSE
+false
 5000
 4003 - Invalid Parent* RHS not a child
 stmt s;
 Select BOOLEAN such that Parent*(19, 26)
-FALSE
+false
 5000
 4004 - Invalid Parent* others child while
 stmt s;
 Select BOOLEAN such that Parent*(4, 11)
-FALSE
+false
 5000
 4005 - Invalid Parent* redundant
 stmt s;
@@ -431,7 +431,7 @@ none
 4016 - Invalid Parent* n,n
 stmt s;
 Select BOOLEAN such that Parent*(s,s)
-FALSE
+false
 5000
 4017 - Invalid Parent* n,n
 stmt s;

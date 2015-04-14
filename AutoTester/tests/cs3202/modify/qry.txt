@@ -46,22 +46,22 @@ Select c
 1001 - Valid assign variable
 stmt s;
 Select BOOLEAN such that Modifies(2, "d")
-TRUE
+true
 5000
 1002 - Valid if variable
 stmt s;
 Select BOOLEAN such that Modifies(10, "d")
-TRUE
+true
 5000
 1003 - Valid if else variable
 stmt s;
 Select BOOLEAN such that Modifies(10, "a")
-TRUE
+true
 5000
 1004 - Valid while variable
 stmt s;
 Select BOOLEAN such that Modifies(4, "chicken")
-TRUE
+true
 5000
 1005 - Valid redundant
 stmt s;
@@ -176,17 +176,17 @@ Select s such that Modifies(s, _)
 2001 - Invalid assign variable
 assign a;
 Select BOOLEAN such that Modifies(1, "hamburger")
-FALSE
+false
 5000
 2002 - Invalid if variable
 if a;
 Select BOOLEAN such that Modifies(36, "beef")
-FALSE
+false
 5000
 2003 - Invalid while variable
 while w;
 Select BOOLEAN such that Modifies(29, "coke")
-FALSE
+false
 5000
 2004 - Invalid redundant
 stmt s;
@@ -246,7 +246,7 @@ none
 3001 - Valid procedure variable
 procedure p;
 Select BOOLEAN such that Modifies("Three", "buffet")
-TRUE
+true
 5000
 3002 - Valid procedures that modify variable
 procedure p;
@@ -271,7 +271,7 @@ a,b,beef,buffet,c,charsiew,chicken,d,duckrice,f,fries,pork,x
 3006 - Valid call varaible
 call c; 
 Select BOOLEAN such that Modifies(25, "f")
-TRUE
+true
 5000
 3007 - Valid call that modifies variable v
 call c; 
@@ -306,12 +306,12 @@ beef, f, pork, x, c, fries, b, buffet, d,duckrice
 4001 - Invalid procedure variable
 procedure p;
 Select BOOLEAN such that Modifies("Three", "salmon")
-FALSE
+false
 5000
 4002 - Invalid call variable
 call c;
 Select BOOLEAN such that Modifies(7, "salmon")
-FALSE
+false
 5000
 4003 - Invalid RHS procedure
 procedure p; stmt s;

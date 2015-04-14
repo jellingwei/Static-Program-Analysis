@@ -1,7 +1,7 @@
 300 - MIX QUERIES
 assign a; call c;
 Select BOOLEAN such that Follows(a, c) with a.stmt# =  33
-TRUE
+true
 5000
 301 - 
 stmt s; call c;
@@ -66,7 +66,7 @@ Select i such that Parent*(w, i) with w.stmt# = 8
 313 - 
 if i; while w;
 Select BOOLEAN such that Parent*(w, i) with w.stmt# = 5
-FALSE
+false
 5000
 314 - 
 if i; assign a;

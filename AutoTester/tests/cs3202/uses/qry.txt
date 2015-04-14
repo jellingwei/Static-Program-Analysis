@@ -46,32 +46,32 @@ Select c
 1001 - Valid assign variable
 stmt s;
 Select BOOLEAN such that Uses(1, "hamburger")
-TRUE
+true
 5000
 1002 - Valid if variable for assign
 stmt s;
 Select BOOLEAN such that Uses(32, "xiaolongbao")
-TRUE
+true
 5000
 1003 - Valid if else variable for assign
 stmt s;
 Select BOOLEAN such that Uses(32, "crab")
-TRUE
+true
 5000
 1004 - Valid if variable for control variable
 stmt s;
 Select BOOLEAN such that Uses(36, "chicken")
-TRUE
+true
 5000
 1005 - Valid while variable for assign
 stmt s;
 Select BOOLEAN such that Uses(38, "duckrice")
-TRUE
+true
 5000
 1006 - Valid while variable for control variable
 stmt s;
 Select BOOLEAN such that Uses(38, "chicken")
-TRUE
+true
 5000
 1007 - Valid redundant
 stmt s;
@@ -186,17 +186,17 @@ Select s such that Uses(s, _)
 2001 - Invalid assign variable
 assign a;
 Select BOOLEAN such that Uses(1, "b")
-FALSE
+false
 5000
 2002 - Invalid if variable
 if a;
 Select BOOLEAN such that Uses(36, "d")
-FALSE
+false
 5000
 2003 - Invalid while variable
 while w;
 Select BOOLEAN such that Uses(29, "fries")
-FALSE
+false
 5000
 2004 - Invalid redundant
 stmt s;
@@ -256,7 +256,7 @@ none
 3001 - Valid procedure variable
 procedure p;
 Select BOOLEAN such that Uses("Three", "salmon")
-TRUE
+true
 5000
 3002 - Valid procedures that use variable
 procedure p;
@@ -281,7 +281,7 @@ a,b,beef,buffet,c,cheeseburger,chicken,coke,crab,d,duckrice,e,f,fries,hamburger,
 3006 - Valid call variable
 call c; 
 Select BOOLEAN such that Uses(25, "salmon")
-TRUE
+true
 5000
 3007 - Valid call that modifies variable v
 call c; 
@@ -316,12 +316,12 @@ chicken, buffet, cheeseburger, c, d, f, e, xiaolongbao, crab, y, z, x, a, salmon
 4001 - Invalid procedure variable
 procedure p;
 Select BOOLEAN such that Uses("Three", "pork")
-FALSE
+false
 5000
 4002 - Invalid call variable
 call c;
 Select BOOLEAN such that Uses(7, "charsiew")
-FALSE
+false
 5000
 4003 - Invalid RHS procedure
 procedure p; stmt s;

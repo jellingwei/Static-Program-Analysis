@@ -66,12 +66,12 @@ none
 1005 - 
 assign a;
 Select BOOLEAN with a.stmt# = 4
-TRUE
+true
 5000
 1006 - 
 assign a;
 Select BOOLEAN with a.stmt# = 16
-FALSE
+false
 5000
 1007 - 
 assign a;
@@ -81,7 +81,7 @@ none
 1008 - 
 stmt s;
 Select BOOLEAN with s.stmt# = 25
-TRUE
+true
 5000
 1009 - 
 variable v; stmt s;
@@ -111,7 +111,7 @@ none
 1014 - 
 procedure p;
 Select BOOLEAN with p.procName = "ONE"
-FALSE
+false
 5000
 1015 - 
 call c;
@@ -131,7 +131,7 @@ none
 1018 - 
 call c;
 Select BOOLEAN with c.procName = "Seven"
-FALSE
+false
 5000
 1019 - 
 call c;
@@ -151,17 +151,17 @@ none
 1022 - 
 call c;
 Select BOOLEAN with c.stmt# = 15
-FALSE
+false
 5000
 1023 - 
 call c; procedure p;
 Select BOOLEAN with c.procName = p.procName
-TRUE
+true
 5000
 1024 - 
 call c; variable v;
 Select BOOLEAN with c.procName = v.varName
-FALSE
+false
 5000
 1025 - 
 stmt s; assign a;
@@ -171,7 +171,7 @@ Select s with s.stmt# = a.stmt#
 1026 - 
 prog_line l; while w;
 Select w with w.stmt# = l
-none
+18,19,2,25,27,37,8
 5000
 1027 - 
 prog_line l; 
@@ -181,7 +181,7 @@ Select l with l = 10
 1028 - 
 prog_line l; while w;
 Select w with w.stmt# = l
-none
+18,19,2,25,27,37,8
 5000
 1029 - 
 constant c; 
@@ -216,5 +216,5 @@ Select i with i.stmt# = l
 1035 - 
 constant c; prog_line l;
 Select c with c.value = l
-0,1,10,2,3,4,5
+1,10,2,3,4,5
 5000

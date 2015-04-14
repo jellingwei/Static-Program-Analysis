@@ -18,7 +18,7 @@ public:
 	vector<pair<int, vector<int>>> siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);
 
 	//bool siblings(int stmtNo, int stmtNo2);
-	vector<pair<int, vector<int>>> siblings(int stmtNo, SYNONYM_TYPE second_siblingType);
-	vector<pair<int, vector<int>>> siblings(SYNONYM_TYPE first_siblingType, int stmtNo);
+	vector<int> siblings(int stmtNo, SYNONYM_TYPE second_siblingType);
+	vector<int> siblings(SYNONYM_TYPE first_siblingType, int stmtNo);
 private:
 };

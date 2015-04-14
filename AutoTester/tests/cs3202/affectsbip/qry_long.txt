@@ -1,0 +1,370 @@
+1 - all affects
+assign a1, a2;
+Select a1 such that Affects(a1, _)
+32,35,47,49,72,79,81,82,83,87,95,102,114,125,143,164,170,186,213,215,219,221,222,224,235,239,241,247
+30000
+2 - all affects
+assign a1, a2;
+Select a2 such that Affects(a1, a2)
+106,125,127,143,145,166,171,187,208,213,215,217,219,221,222,224,229,242,248,33,36,46,49,51,75,79,81,82,84,87,88,96
+30000
+3 - all affectsbip
+assign a1, a2;
+Select a1 such that AffectsBip(a1, a2)
+102,11,114,125,13,133,134,136,138,143,146,147,157,159,164,165,170,171,172,173,174,175,176,178,179,18,180,186,187,2,21,213,215,219,22,221,222,224,235,239,241,247,250,32,33,35,36,47,49,57,58,59,63,66,68,69,72,75,79,81,82,83,84,87,88,9,91,92,93,94,95,96
+600000
+8 - affectsbip
+stmt s;
+Select BOOLEAN such that AffectsBip(146, 146)
+false
+5000
+9 - affectsbip
+
+Select BOOLEAN such that AffectsBip(9, 2)
+true
+35000
+10 - affectsbip
+
+Select BOOLEAN such that AffectsBip(9, 10)
+false
+35000
+11 - affectsbip
+
+Select BOOLEAN such that AffectsBip*(9, 10)
+true
+35000
+12 - affectsbip
+
+Select BOOLEAN such that AffectsBip(11, 13)
+false
+35000
+13 - affectsbip
+
+Select BOOLEAN such that AffectsBip(11, 18)
+true
+35000
+14 - affectsbip
+prog_line p;
+Select p such that AffectsBip(11, p)
+21,18
+35000
+15 - affectsbip
+prog_line p;
+Select p such that AffectsBip(p, 21)
+11
+35000
+16 - affectsbip
+
+Select BOOLEAN such that AffectsBip(13, 15)
+true
+35000
+17 - affectsbip
+
+Select BOOLEAN such that AffectsBip(22, 15)
+true
+35000
+18 - affectsbip
+
+Select BOOLEAN such that AffectsBip(22, _)
+true
+35000
+19 - affects
+prog_line p;
+Select p such that AffectsBip(1, p)
+
+35000
+20 - affects
+prog_line p;
+Select BOOLEAN such that AffectsBip(1, _)
+false
+35000
+21 - affects
+prog_line p;
+Select p such that AffectsBip(33, p)
+57
+35000
+22 - affects
+assign p;
+Select p such that AffectsBip(p, 35)
+59,57,58
+35000
+23 - affects
+assign p;
+Select p such that Affects*(32, p)
+33
+35000
+24 - affects
+assign a;
+Select a such that Affects*(p, 35)
+
+35000
+25 - affectsbip
+prog_line p;
+Select p such that AffectsBip(32, p)
+33
+35000
+26 - affectsbip
+prog_line p;
+Select p such that AffectsBip*(32, p)
+33,57,35,36,51,58
+35000
+27 - affectsbip
+
+Select BOOLEAN such that AffectsBip(49, _)
+true
+35000
+28 - affectsbip
+
+Select BOOLEAN such that AffectsBip*(49, _)
+true
+35000
+29 - affectsbip
+stmt s;
+Select s such that AffectsBip*(49, s)
+46,49
+35000
+30 - affectsbip
+stmt s;
+Select s such that AffectsBip(s, 46)
+47,49
+35000
+31 - affectsbip
+stmt s;
+Select s such that AffectsBip*(57,  s)
+51,57,35,36,58
+35000
+32 - affectsbip
+stmt s;
+Select s such that AffectsBip(59, s)
+35,57,60,68,69,91,113,127,159,96
+35000
+33 - affectsbip
+stmt s;
+Select s such that AffectsBip(69, s)
+75,92
+35000
+34 - affectsbip
+stmt s;
+Select BOOLEAN such that AffectsBip(75, s)
+true
+35000
+35 - affectsbip
+stmt s;
+Select s such that AffectsBip(79, s)
+79,82
+35000
+36 - affects
+stmt s;
+Select s such that Affects(79, s)
+79,82
+35000
+37 - affectsbip
+stmt s;
+Select s such that AffectsBip*(79, s)
+79,81,82,84,87,88,93,94,147,165,208,213,215,217,219,221,229,242,92,96
+35000
+38 - affects
+stmt s;
+Select s such that Affects(87, s)
+87,88
+35000
+39 - affectsbip
+stmt s;
+Select s such that AffectsBip(87, s)
+87,88
+35000
+40 - what reaches here?
+stmt s;
+Select s such that Affects(s, 91)
+
+35000
+41 - what reaches here?
+stmt s;
+Select s such that Affects(s, 92)
+
+35000
+42 - what reaches here?
+stmt s;
+Select s such that AffectsBip(s, 91)
+59,66,171
+35000
+43 - what reaches here?
+stmt s;
+Select s such that AffectsBip(s, 92)
+75,159,165,63,68,69,72,92
+35000
+44 - what reaches here?
+stmt s;
+Select s such that AffectsBip(s, 93)
+82
+35000
+45 - what reaches here?
+stmt s;
+Select s such that AffectsBip(s, 94)
+84
+35000
+46 - what reaches here?
+stmt s;
+Select s such that AffectsBip*(s, 92)
+88,146,147,157,159,165,170,171,174,175,180,186,187,59,63,66,68,69,72,75,79,81,82,83,84,87,91,92,93,94,95,96
+35000
+47 - what reaches here?
+stmt s;
+Select s such that AffectsBip*(s, 93)
+88,146,147,157,159,165,170,171,172,173,174,175,178,179,180,186,187,219,221,222,224,235,247,250,59,63,66,68,69,72,75,79,81,82,83,84,87,91,92,93,94,95,96
+35000
+48 - 
+stmt s;
+Select s such that AffectsBip*(100, s)
+
+35000
+49 - 
+stmt s;
+Select s such that AffectsBip*(s, 100)
+
+35000
+50 - 
+stmt s;
+Select s such that AffectsBip*(102, s)
+106,60
+35000
+51 - 
+stmt s;
+Select BOOLEAN such that AffectsBip*(102, 106)
+true
+35000
+52 - 
+stmt s;
+Select s such that AffectsBip*(s, 112)
+
+35000
+53 - 
+stmt s;
+Select s such that AffectsBip*(113, s)
+
+35000
+54 - 
+stmt s;
+Select s such that AffectsBip*(114, s)
+127,60
+35000
+55 - 
+stmt s;
+Select BOOLEAN such that AffectsBip*(114, 60)
+true
+35000
+63 - AffectsBip
+assign a;
+Select a such that AffectsBip(143 ,a)
+145,143
+35000
+64 - AffectsBip
+assign a;
+Select a such that AffectsBip(146 ,a)
+147,157
+35000
+65 - AffectsBip
+assign a;
+Select a such that AffectsBip(147 ,a)
+168,170,198
+35000
+66 - AffectsBip
+assign a;
+Select BOOLEAN such that AffectsBip(148 ,a)
+false
+35000
+67 - AffectsBip
+assign a;
+Select a such that AffectsBip(156 ,a)
+
+35000
+70 - AffectsBip
+stmt s;
+Select s such that AffectsBip(159, s)
+92,96
+35000
+71 - AffectsBip
+stmt s;
+Select s such that AffectsBip*(164, s)
+166
+35000
+72 - AffectsBip
+stmt s;
+Select s such that AffectsBip*(s, 164)
+
+35000
+73 - AffectsBip
+stmt s;
+Select s such that AffectsBip*(s, 164)
+
+35000
+74 - AffectsBip
+stmt s;
+Select s such that AffectsBip*(s, 171)
+146,147,157,170
+35000
+75 - AffectsBip
+stmt s;
+Select s such that AffectsBip*(168, s)
+
+35000
+76 - AffectsBip
+stmt s;
+Select s such that NextBip*(168, s)
+141,146,147,148,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,19,190,191,192,194,195,196,197,198,199,20,200,201,202,203,204,205,207,208,209,210,211,212,213,214,215,216,217,218,219,22,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99
+35000
+79 - AffectsBip
+stmt s;
+Select s such that AffectsBip(196, s)
+
+35000
+80 - AffectsBip
+stmt s;
+Select s such that AffectsBip(s,204)
+171
+35000
+81 - AffectsBip
+stmt s;
+Select s such that AffectsBip(s,204)
+171
+35000
+82 - AffectsBip
+stmt s;
+Select s such that AffectsBip*(204, s)
+
+35000
+87 - Affects
+stmt s;
+Select s such that AffectsBip(s, 202)
+
+35000
+89 - Affects
+stmt s;
+Select BOOLEAN such that Affects*(235, 208)
+true
+35000
+90 - Affects
+stmt s;
+Select BOOLEAN such that AffectsBip*(235, 208)
+true
+35000
+91 - Affects
+stmt s;
+Select BOOLEAN such that AffectsBip*(235, s)
+true
+35000
+92 : oh no
+assign a;
+Select a such that AffectsBip*(_, a)
+10,106,113,125,127,13,140,143,145,147,15,157,159,165,166,168,170,171,18,186,187,198,2,204,208,21,213,215,217,219,22,221,222,224,229,242,247,248,33,35,36,46,49,51,57,58,60,68,69,75,79,81,82,84,87,88,91,92,93,94,96
+35000
+93 - Affects
+stmt s;
+Select BOOLEAN such that AffectsBip*(234, s)
+false
+35000
+94 - Affects
+assign a;
+Select BOOLEAN such that AffectsBip(a, 96)
+true
+35000

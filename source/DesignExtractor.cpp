@@ -956,35 +956,6 @@ void DesignExtractor::precomputeInformationForNext() {
 	}
 
 
-	// first progline for each container
-	vector<int> stmt = pkb.getStmtNumForType(WHILE);
-
-	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
-		TNode* node = pkb.getNodeForStmt(*iter);
-		TNode* stmtListNode = node->getChildren()->at(1);
-		TNode* firstChildOfStmtListNode = stmtListNode->getChildren()->at(0);
-
-		pkb.setFirstProgLineInElse(node->getStmtNumber(), firstChildOfStmtListNode->getStmtNumber());
-	}
-
-	// set nodes inside while
-	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
-		vector<int> children = pkb.getChild(*iter, true);
-
-		for (auto childStmtNum = children.begin(); childStmtNum != children.end(); ++childStmtNum) {
-			pkb.setProgLineInWhile(*childStmtNum);
-		}
-	}
-
-	// last progline
-	for (auto iter = stmt.begin(); iter != stmt.end(); ++iter) {
-		TNode* node = pkb.getNodeForStmt(*iter);
-		TNode* stmtListNode = node->getChildren()->at(1);
-		TNode* lastChildOfStmtListNode = stmtListNode->getChildren()->back();
-
-		pkb.setLastProgLineInContainer(node->getStmtNumber(), lastChildOfStmtListNode->getStmtNumber());
-	}
-
 	// set lhs and rhs
 	for (int i = 1; i <= pkb.getStmtTableSize(); i++) {
 		CNode* node = pkb.cfgNodeTable.at(i);
