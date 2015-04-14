@@ -275,10 +275,10 @@ BOOLEAN_ QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, 
 
 			}else if(arg1Type==STMTLST){
 
-				if(arg2Type!=IF && arg2Type!=WHILE && arg2Type!=ASSIGN && arg2Type!=CALL && arg2Type!=STMT && arg2Type!=PROG_LINE)
+				if(arg2Type!=IF && arg2Type!=WHILE && arg2Type!=ASSIGN && arg2Type!=CALL && arg2Type!=STMT && arg2Type!=PROG_LINE && arg2Type!=STRING_INT)
 					return false;
 
-			}else if(arg1Type==WHILE || arg1Type==IF || arg1Type==STMT || arg1Type==PROG_LINE){
+			}else if(arg1Type==WHILE || arg1Type==IF || arg1Type==STMT || arg1Type==PROG_LINE || arg1Type==STRING_INT){
 
 				if(arg2Type!=STMTLST && arg2Type!=VARIABLE)
 					return false;
