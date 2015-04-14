@@ -135,7 +135,7 @@ pork
 5000
 1019 - Valid Contains Assign RHS var
 assign a; variable v;
-Select BOOLEAN such that Contains(1, v) v.varName = "hamburger"
+Select BOOLEAN such that Contains(1, v) with v.varName = "hamburger"
 TRUE
 5000
 1020 - Valid Contains Assign minus
@@ -686,7 +686,7 @@ FALSE
 4003 - Invalid Contains* wildcard
 stmt s;
 Select BOOLEAN such that Contains*(_,_)
-FALSE
+none
 5000
 4004 - Invalid Contains* wildcard 
 stmt s;
@@ -705,7 +705,7 @@ FALSE
 5000
 4007 - Invalid Contains* Procedures var not in proc
 variable v; procedure p;
-Select BOOLEAN such that Contains*(p, v) with v.varName = "y" ith p.procName = "One"
+Select BOOLEAN such that Contains*(p, v) with v.varName = "y" with p.procName = "One"
 FALSE
 5000
 4008 - Invalid Contains* Procedure constant not in proc
