@@ -147,7 +147,7 @@ namespace QueryEvaluator
 	/**
 	* Processes the such that node in the query tree.
 	* @param clausesNode
-	* @eturn TRUE if the clauses are valid. FALSE if the clauses are not valid.
+	* @return TRUE if the clauses are valid. FALSE if the clauses are not valid.
 	*/
 	inline BOOLEAN_ processClausesNode(QNode* clausesNode) 
 	{
@@ -1138,34 +1138,36 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
-		vector<pair<int, VALUE_LIST>> containsPair;
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isParent(stoi(nameLHS), stoi(nameRHS), true);
 		} else if (typeLHS == STRING_INT && RHS.isSynonym()) {
-			containsPair = pkb.contains(stoi(nameLHS), typeRHS, isTrans);
+			VALUE_LIST containsRHS = pkb.contains(stoi(nameLHS), typeRHS, isTrans);
+			RHS.setValues(containsRHS);
+			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT && LHS.isSynonym()) {
-			containsPair = pkb.contains(typeLHS, stoi(nameRHS), isTrans);
+			VALUE_LIST containsLHS = pkb.contains(typeLHS, stoi(nameRHS), isTrans);
+			LHS.setValues(containsLHS);
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			containsPair = pkb.contains(typeLHS, typeRHS, isTrans);
-		}
+			vector<pair<int, VALUE_LIST>> containsPair = pkb.contains(typeLHS, typeRHS, isTrans);
+			VALUE_LIST acceptedLHS;
+			VALUE_LIST acceptedRHS;
 
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
+			for (unsigned int i = 0; i < containsPair.size(); i++) {
+				int valueLHS = containsPair[i].first;
+				VALUE_LIST valuesRHS = containsPair[i].second;
 
-		for (unsigned int i = 0; i < containsPair.size(); i++) {
-			int valueLHS = containsPair[i].first;
-			VALUE_LIST valuesRHS = containsPair[i].second;
-			
-			for (unsigned int j = 0; j < valuesRHS.size(); j++) {
-				int valueRHS = valuesRHS[j];
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
+				for (unsigned int j = 0; j < valuesRHS.size(); j++) {
+					int valueRHS = valuesRHS[j];
+					acceptedLHS.push_back(valueLHS);
+					acceptedRHS.push_back(valueRHS);
+				}
 			}
+			LHS.setValues(acceptedLHS);
+			RHS.setValues(acceptedRHS);
+			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		LHS.setValues(acceptedLHS);
-		RHS.setValues(acceptedRHS);
-		return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 	}
 
 	BOOLEAN_ processSiblingT(Synonym LHS, Synonym RHS, TRANS_CLOSURE isTrans)
@@ -1174,7 +1176,6 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
-		vector<pair<int, VALUE_LIST>> siblingsPair;
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			if (pkb.isFollows(stoi(nameLHS), stoi(nameRHS), true)) {
@@ -1183,33 +1184,36 @@ namespace QueryEvaluator
 				return pkb.isFollows(stoi(nameRHS), stoi(nameLHS), true);
 			}
 		} else if (typeLHS == STRING_INT && RHS.isSynonym()) {
-			siblingsPair = pkb.siblings(stoi(nameLHS), typeRHS);
+			VALUE_LIST siblingsRHS = pkb.siblings(stoi(nameLHS), typeRHS);
+			RHS.setValues(siblingsRHS);
+			return ValuesHandler::addAndProcessIntermediateSynonym(RHS);
 		} else if (typeRHS == STRING_INT && LHS.isSynonym()) {
-			siblingsPair = pkb.siblings(typeLHS, stoi(nameRHS));
+			VALUE_LIST siblingsLHS = pkb.siblings(typeLHS, stoi(nameRHS));
+			LHS.setValues(siblingsLHS);
+			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else {
-			siblingsPair = pkb.siblings(typeLHS, typeRHS);
-		}
+			vector<pair<int, VALUE_LIST>> siblingsPair = pkb.siblings(typeLHS, typeRHS);
+			VALUE_LIST acceptedLHS;
+			VALUE_LIST acceptedRHS;
 
-		VALUE_LIST acceptedLHS;
-		VALUE_LIST acceptedRHS;
+			for (unsigned int i = 0; i < siblingsPair.size(); i++) {
+				int valueLHS = siblingsPair[i].first;
+				VALUE_LIST valuesRHS = siblingsPair[i].second;
 
-		for (unsigned int i = 0; i < siblingsPair.size(); i++) {
-			int valueLHS = siblingsPair[i].first;
-			VALUE_LIST valuesRHS = siblingsPair[i].second;
-			
-			for (unsigned int j = 0; j < valuesRHS.size(); j++) {
-				int valueRHS = valuesRHS[j];
-				acceptedLHS.push_back(valueLHS);
-				acceptedRHS.push_back(valueRHS);
+				for (unsigned int j = 0; j < valuesRHS.size(); j++) {
+					int valueRHS = valuesRHS[j];
+					acceptedLHS.push_back(valueLHS);
+					acceptedRHS.push_back(valueRHS);
+				}
 			}
+			if (typeLHS == typeRHS) {
+				acceptedLHS.insert(acceptedLHS.end(), acceptedRHS.begin(), acceptedRHS.end());
+				acceptedRHS.insert(acceptedRHS.end(), acceptedLHS.begin(), acceptedLHS.end());
+			}
+			LHS.setValues(acceptedLHS);
+			RHS.setValues(acceptedRHS);
+			return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 		}
-		if (typeLHS == typeRHS) {
-			acceptedLHS.insert(acceptedLHS.end(), acceptedRHS.begin(), acceptedRHS.end());
-			acceptedRHS.insert(acceptedRHS.end(), acceptedLHS.begin(), acceptedLHS.end());
-		}
-		LHS.setValues(acceptedLHS);
-		RHS.setValues(acceptedRHS);
-		return ValuesHandler::addAndProcessIntermediateSynonyms(LHS, RHS);
 	}
 
 	/**
