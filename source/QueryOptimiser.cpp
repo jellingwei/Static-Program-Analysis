@@ -24,7 +24,7 @@ namespace QueryOptimiser
 	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot);
 	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
 	void scanAndRemoveRedundantSynonyms(vector<QNode*> &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
-	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
+	pair<bool, vector<QNode*>> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
 	QNode* optimiseClausesNode(QNode* clausesNode);
@@ -114,11 +114,23 @@ namespace QueryOptimiser
 						superset = RHS;
 						subset = LHS;
 					}
-					resultClauses = replaceSynonyms(resultClauses, superset, subset);
-					clauses = replaceSynonyms(clauses, superset, subset);
-					withClauses.erase(withClauses.begin() + i);
-					i--;
-					withClauses = replaceSynonyms(withClauses, superset, subset);
+					//Replace the clauses in the results subtree
+					pair<bool, vector<QNode*>> status_clauses_pair = replaceSynonyms(resultClauses, superset, subset);
+					resultClauses = status_clauses_pair.second;
+
+					//Replace the clauses in the clauses subtree
+					status_clauses_pair = replaceSynonyms(clauses, superset, subset);
+					bool isWithRemovable = status_clauses_pair.first;
+					clauses = status_clauses_pair.second;
+
+					if (isWithRemovable) {
+						//Only remove in the with subtree if it is removable
+						withClauses.erase(withClauses.begin() + i);
+						i--;
+						withClauses = replaceSynonyms(withClauses, superset, subset).second;
+					} else {
+						finalWithClauses.push_back(singleWithClause);
+					}
 				} else {
 					finalWithClauses.push_back(singleWithClause);
 				}
@@ -224,7 +236,6 @@ namespace QueryOptimiser
 		populateSelectSynonyms(resultNode);
 		unordered_map<string, int> name_index_map = indexSynonymsReferenced(clausesNode);
 		vector<vector<int>> adjacencyMatrix = createSynonymGraph(clausesNode, name_index_map);
-		//set<int> synonymIndexReachable = scanSynonymsReachable(adjacencyMatrix);
 
 		clausesNode = scanAndReplaceRedundantItems(clausesNode, adjacencyMatrix, name_index_map);
 		qTreeRoot->setResultNode(resultNode);
@@ -248,7 +259,7 @@ namespace QueryOptimiser
 		if (!isRedundantClausesValid) {
 			Synonym LHS(STRING_INT, 0);
 			Synonym RHS(STRING_CHAR, "0");
-			QNode* falseNode = new QNode(With, LHS, LHS, RHS, RHS);
+			QNode* falseNode = new QNode(With, LHS, LHS, RHS, RHS);  //Create a false node object that will be false
 			vector<QNode*> falseNodes;
 			falseNodes.push_back(falseNode);
 			return createSubtree(CLAUSES, falseNodes);  //Return an invalid clause
@@ -333,9 +344,10 @@ namespace QueryOptimiser
 		}
 	}
 
-	vector<QNode*> replaceSynonyms(vector<QNode*> clausesVector, Synonym toBeReplaced, Synonym replacement)
+	pair<bool, vector<QNode*>> replaceSynonyms(vector<QNode*> clausesVector, Synonym toBeReplaced, Synonym replacement)
 	{
 		vector<QNode*> finalClauses;
+		bool isRemovable = true;  //Denote that the with clause can be removed
 
 		for (unsigned int i = 0; i < clausesVector.size(); i++) {
 			QNode* singleClause = clausesVector[i];
@@ -344,7 +356,11 @@ namespace QueryOptimiser
 			Synonym RHS = synonymPair.second;
 
 			if (LHS == toBeReplaced) {
-				LHS = replacement;
+				if (singleClause->getNodeType() == Pattern) {
+					isRemovable = false;  //Cannot rewrite pattern clauses
+				} else {
+					LHS = replacement;
+				}
 			}
 			if (RHS == toBeReplaced) {
 				RHS = replacement;
@@ -352,7 +368,7 @@ namespace QueryOptimiser
 			setClauseArguments(singleClause, LHS, RHS);
 			finalClauses.push_back(singleClause);
 		}
-		return finalClauses;
+		return make_pair(isRemovable, finalClauses);
 	}
 
 	/**
