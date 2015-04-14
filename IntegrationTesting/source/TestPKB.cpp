@@ -53,18 +53,6 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 7, (int)pkb.getStmtNumForType(WHILE).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of call", 6, (int)pkb.getStmtNumForType(CALL).size());
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of plus", 10, (int)pkb.getStmtNumForType(PLUS).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of minus", 1, (int)pkb.getStmtNumForType(MINUS).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of times", 3, (int)pkb.getStmtNumForType(TIMES).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of STMTLST", 22, (int)pkb.getStmtNumForType(STMTLST).size());
-
-	vector<int> stmtList = pkb.getStmtNumForType(STMTLST);
-	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 1, start of proc", find(stmtList.begin(), stmtList.end(), 1) != stmtList.end());
-	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 8, first in while loop", find(stmtList.begin(), stmtList.end(), 8) != stmtList.end());
-	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 27, in if", find(stmtList.begin(), stmtList.end(), 27) != stmtList.end());
-	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 28, in else", find(stmtList.begin(), stmtList.end(), 28) != stmtList.end());
-
-
 	// Test Design Extractor
 
 	// Parent
@@ -590,16 +578,22 @@ void PKBTest::testPKB()
 	for(int i=0; i<testing2.size(); i++) {
 		cout << "stmtNo " << testing2.at(i) << endl;
 	}*/
+	/*vector<pair<int, int>> testing2 = pkb.patternMatchIf("_", ASSIGN, ASSIGN);
+	for(int i=0; i<testing2.size(); i++) {
+		cout << "First is " << testing2.at(i).first << endl;
+		cout << "Second is " << testing2.at(i).second << endl;
+	}*/
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', Plus)", 9, pkb.patternMatchWhile("b", PLUS).front());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern w('b', Plus)", 2, (int)pkb.patternMatchWhile("b", PLUS).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', Plus, _)", 2, (int)pkb.patternMatchIfThen("b", PLUS).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', _, Variable)", 4, (int)pkb.patternMatchIfElse("b", VARIABLE).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', Plus, Variable)", 36, pkb.patternMatchIf("b", PLUS, VARIABLE).front());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('b', Plus, Variable)", 5, (int)pkb.patternMatchIf("b", PLUS, VARIABLE).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("pattern ifstat('_', Assign, Assign)", 6, (int)pkb.patternMatchIf("_", ASSIGN, ASSIGN).size());
 
 	//Siblings
 	cout << "Siblings" << endl;
-	vector<pair<int, vector<int>>> testing3;
+	/*vector<pair<int, vector<int>>> testing3;
 	testing3 = pkb.siblings(VARIABLE, CONSTANT);
 	for(int i=0; i<testing3.size(); i++) {
 		pair <int, vector<int>> tester2 = testing3.at(i);
@@ -607,7 +601,7 @@ void PKBTest::testPKB()
 		for(int j=0; j<tester2.second.size(); j++) {
 			cout << "CONST StmtNo " << tester2.second.at(j) << endl;
 		}
-	}
+	}*/
 
 	/*vector<int> testing;
 	testing = pkb.siblings(ASSIGN, 6);
@@ -630,8 +624,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(VARIABLE, CONSTANT)", 14, (int)pkb.siblings(VARIABLE, CONSTANT).size());
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Assign, 6)", 4, (int)pkb.siblings(ASSIGN, 6).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(6, Assign)", 1, (int)pkb.siblings(6, ASSIGN).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(11, While)", 1, (int)pkb.siblings(11, WHILE).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(6, Assign)", 4, (int)pkb.siblings(6, ASSIGN).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(11, While)", 2, (int)pkb.siblings(11, WHILE).size());
 	
 
 	cout << "End TestPkb" << endl;
