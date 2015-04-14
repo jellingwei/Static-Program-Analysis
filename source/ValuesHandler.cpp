@@ -1278,18 +1278,27 @@ namespace ValuesHandler
 		} else if (definedSynonyms.size() == 2) {
 			return addAndProcessIntermediateSynonyms(definedSynonyms[0], definedSynonyms[1]);
 		} else {
-			bool isInMain = false;
+			unordered_map<IntegerPair, bool, Pair_Hasher> processedSynonyms;
+			bool isValid = true;
+
 			for (unsigned int i = 0; i < definedSynonyms.size(); i++) {
-				if (isExistInMainTable(definedSynonyms[i].getName())) {
-					isInMain = true;
-					break;
+				for (unsigned int j = i; j < definedSynonyms.size(); j++) {
+					IntegerPair integerPair1(i, j);
+					IntegerPair integerPair2(j, i);
+
+					if (processedSynonyms.count(integerPair1) == 0 && processedSynonyms.count(integerPair2) == 0) {
+						//These synonym pairs have yet to be processed
+						isValid = addAndProcessIntermediateSynonyms(definedSynonyms[i], definedSynonyms[j]);
+						if (!isValid) {
+							return isValid;
+						} else {
+							processedSynonyms[integerPair1] = true;
+							processedSynonyms[integerPair2] = true;
+						}
+					}
 				}
 			}
-			if (isInMain) {
-				return processWithMainTable(definedSynonyms);
-			} else {
-				return processWithSingletonTable(definedSynonyms);
-			}
+			return isValid;
 		}
 	}
 	
