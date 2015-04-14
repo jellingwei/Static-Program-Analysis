@@ -76,12 +76,12 @@ Select s such that Sibling(s, 9)
 1007 - Valid Sibling all that have siblings LHS
 stmt s1,s2;
 Select s1 such that Sibling(s1, s2)
-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40,18,26
 5000
 1008 - Valid Sibling all that have siblings RHS
 stmt s1,s2;
 Select s2 such that Sibling(s1, s2)
-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40,18,26
 5000
 1009 - Valid Sibling Redundant
 procedure p;
@@ -96,12 +96,12 @@ TRUE
 1011 - Valid Sibling Procedures
 procedure p,p2;
 Select BOOLEAN such that Sibling(p,p2) with p2.procName = "Two"
-One,Three
+TRUE
 5000
 1012 - Valid Sibling Procedures
 procedure p,p2;
 Select BOOLEAN such that Sibling(p,p2) with p2.procName = "Two"
-One,Three
+TRUE
 5000
 1013 - Valid Sibling expression tree var assign 1
 variable v1,v2;
@@ -151,12 +151,12 @@ Select thenAndElse such that Sibling(v, thenAndElse) with v.varName = "f"
 1022 - Valid Sibling stmtLst while 38
 stmtLst while; variable v;
 Select while such that Sibling(while, v) with v.varName = "chicken"
-39
+39,37,38
 5000
 1023 - Valid Sibling expression tree op plus
 assign a; plus add; minus oppositeOfAdd; times multiply; variable v;
 Select a such that Sibling(v, add) pattern a(_,_"coke"_) with v.varName = "coke"
-13
+13,30
 5000
 1024 - Valid Sibling expression tree op multiply
 assign a; plus add; minus oppositeOfAdd; times multiply; variable v;
@@ -166,7 +166,7 @@ Select a such that Sibling(multiply, v) pattern a(_,_"pork"_) with v.varName = "
 1025 - Valid Sibling expression tree op minus
 assign a; plus add; minus oppositeOfAdd; times multiply; variable v;
 Select a such that Sibling(minus, v) pattern a("d",_) with v.varName = "z"
-9
+none
 5000
 1026 - Valid Sibling expression tree constant
 assign a; constant c; times multi;
@@ -176,7 +176,7 @@ Select c such that Sibling(multi, c)
 1027 - Valid Sibling filter a LHS
 assign a; stmt s;
 Select a such that Sibling(a, s)
-1,12,13,14,16,17,2,21,23,24,3,31,35,39,40,5,6,8,9
+1,12,13,14,16,17,2,21,23,24,3,31,35,39,40,5,6,8,9,26
 5000
 1028 - Valid Sibling filter c LHS
 call c; stmt s;
@@ -191,7 +191,7 @@ Select i such that Sibling(i, s)
 1030 - Valid Sibling filter w LHS
 while w; stmt s;
 Select w such that Sibling(w, s)
-19,22,4
+19,22,4,18
 5000
 1031 - Valid Sibling filter l LHS
 prog_line l; stmt s;
@@ -201,7 +201,7 @@ Select l such that Sibling(l, s)
 1032 - Valid Sibling filter a RHS
 assign a; stmt s;
 Select a such that Sibling(s, a)
-1,12,13,14,16,17,2,21,23,24,3,31,35,39,40,5,6,8,9
+1,12,13,14,16,17,2,21,23,24,3,31,35,39,40,5,6,8,9,26
 5000
 1033 - Valid Sibling filter c RHS
 call c; stmt s;
@@ -216,7 +216,7 @@ Select i such that Sibling(s, i)
 1035 - Valid Sibling filter w RHS
 while w; stmt s;
 Select w such that Sibling(s, w)
-19,22,4
+19,22,4,18
 5000
 1036 - Valid Sibling filter l RHS
 prog_line l; stmt s;
