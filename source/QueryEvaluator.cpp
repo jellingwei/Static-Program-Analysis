@@ -1138,12 +1138,17 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
+		vector<pair<int, VALUE_LIST>> containsPair;
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isParent(stoi(nameLHS), stoi(nameRHS));
+		} else if (typeLHS == STRING_INT && RHS.isSynonym()) {
+			containsPair = pkb.contains(stoi(nameLHS), typeRHS, isTrans);
+		} else if (typeRHS == STRING_INT && LHS.isSynonym()) {
+			containsPair = pkb.contains(typeLHS, stoi(nameRHS), isTrans);
+		} else {
+			containsPair = pkb.contains(typeLHS, typeRHS, isTrans);
 		}
-
-		vector<pair<int, VALUE_LIST>> containsPair = pkb.contains(typeLHS, typeRHS, isTrans);
 
 		VALUE_LIST acceptedLHS;
 		VALUE_LIST acceptedRHS;
@@ -1169,19 +1174,24 @@ namespace QueryEvaluator
 		SYNONYM_TYPE typeRHS = RHS.getType();
 		string nameLHS = LHS.getName();
 		string nameRHS = RHS.getName();
+		vector<pair<int, VALUE_LIST>> siblingsPair;
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
 			return pkb.isFollows(stoi(nameLHS), stoi(nameRHS));
+		} else if (typeLHS == STRING_INT && RHS.isSynonym()) {
+			siblingsPair = pkb.siblings(stoi(nameLHS), typeRHS);
+		} else if (typeRHS == STRING_INT && LHS.isSynonym()) {
+			siblingsPair = pkb.siblings(typeLHS, stoi(nameRHS));
+		} else {
+			siblingsPair = pkb.siblings(typeLHS, typeRHS);
 		}
-
-		vector<pair<int, VALUE_LIST>> containsPair = pkb.siblings(typeLHS, typeRHS);
 
 		VALUE_LIST acceptedLHS;
 		VALUE_LIST acceptedRHS;
 
-		for (unsigned int i = 0; i < containsPair.size(); i++) {
-			int valueLHS = containsPair[i].first;
-			VALUE_LIST valuesRHS = containsPair[i].second;
+		for (unsigned int i = 0; i < siblingsPair.size(); i++) {
+			int valueLHS = siblingsPair[i].first;
+			VALUE_LIST valuesRHS = siblingsPair[i].second;
 			
 			for (unsigned int j = 0; j < valuesRHS.size(); j++) {
 				int valueRHS = valuesRHS[j];
