@@ -85,6 +85,7 @@ enum QNODE_TYPE
 
 enum SYNONYM_TYPE
 {
+	EMPTY,  // if not SYNONYM() would print out PROCEDURE as the synonym_type. 
 	PROCEDURE, STMT, ASSIGN, CALL, WHILE, IF, VARIABLE, CONSTANT, PROG_LINE, 
 	STRING_CHAR, STRING_INT, STRING_PATTERNS, //Used to represent IDENT, INTEGER and expression-spec respectively
 	BOOLEAN,   //Used for select boolean clauses
