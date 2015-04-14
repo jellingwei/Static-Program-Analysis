@@ -194,7 +194,7 @@ STATEMENT_LIST StmtTable::getStmtNumForType(STATEMENT_TYPE type) {
 		vector<TNode*> stmtListNodes = getStmtListNodes();
 		return firstLineContainedInNodes(stmtListNodes);
 	} else {
-
+		throw logic_error("StmtTable getStmtNumForType: invalid type passed in");
 	}
 
 }

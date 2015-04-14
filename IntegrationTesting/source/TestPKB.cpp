@@ -57,7 +57,13 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of minus", 1, (int)pkb.getStmtNumForType(MINUS).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of times", 3, (int)pkb.getStmtNumForType(TIMES).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of STMTLST", 22, (int)pkb.getStmtNumForType(STMTLST).size());
-	vector<int> stuff = pkb.getStmtNumForType(STMTLST);
+
+	vector<int> stmtList = pkb.getStmtNumForType(STMTLST);
+	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 1, start of proc", find(stmtList.begin(), stmtList.end(), 1) != stmtList.end());
+	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 8, first in while loop", find(stmtList.begin(), stmtList.end(), 8) != stmtList.end());
+	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 27, in if", find(stmtList.begin(), stmtList.end(), 27) != stmtList.end());
+	CPPUNIT_ASSERT_MESSAGE("STMTLST contains 28, in else", find(stmtList.begin(), stmtList.end(), 28) != stmtList.end());
+
 
 	// Test Design Extractor
 
