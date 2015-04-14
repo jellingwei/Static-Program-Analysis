@@ -245,7 +245,7 @@ namespace Parser {
 			bool res = true;
 			const int alreadyParsed = 2;
 			
-			vector<string>::const_iterator first = buffer.begin() + alreadyParsed;
+			vector<string>::const_iterator first = bufferIter;
 			vector<string>::const_iterator last = buffer.end();
 			vector<string> slicedBuffer(first, last);
 

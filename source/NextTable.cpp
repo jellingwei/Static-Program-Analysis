@@ -151,20 +151,6 @@ BOOLEAN_ NextTable::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLO
 		return false;
 	}
 
-	if (optimiseNext && isProgLineInWhile.test(progLine1) && transitiveClosure) {
-		vector<int> parents = pkb.getParent(progLine1);
-		if (parents.size() > 0){
-			int parent = parents[0];
-
-			int lastline = getLastProgLineInContainer(parent);
-
-			if (lastline >= progLine2) {
-				return true;
-			}
-		}
-
-	}
-
 	CNode* curNode = pkb.cfgNodeTable.at(progLine1);
 	
 	vector<int> result;
