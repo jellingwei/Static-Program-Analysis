@@ -163,29 +163,25 @@ VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum)
 }
 
 //@todo
-STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then) 
+vector<pair<int, vector<int>>> PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then) 
 {
 	return ast->patternMatchWhile(LHS, then);
 }
 
 //@todo
-STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then) 
+vector<pair<int, vector<int>>> PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then) 
 {
 	return ast->patternMatchIfThen(LHS, then);
 }
 
 //@todo
-STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then) 
+vector<pair<int, vector<int>>> PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then) 
 {
 	return ast->patternMatchIfElse(LHS, then);
 }
 
 //@todo
-//STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) 
-//{
-//	return ast->patternMatchIf(LHS, thenS, elseS);
-//}
-vector<pair<int, int>> PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
+vector<pair<int, vector<pair<int, int>>>> PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
 	return ast->patternMatchIf(LHS, thenS, elseS);
 }
 
