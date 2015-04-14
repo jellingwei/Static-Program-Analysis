@@ -89,18 +89,18 @@ Select p such that Sibling(1,2)
 One,Two,Three
 5000
 1010 - Valid Sibling Procedures
-procedure p;
-Select BOOLEAN such that Sibling(One,Two)
+procedure p1,p2;
+Select BOOLEAN such that Sibling(p1,p2) with p1.procName = "One" with p2.procName = "Two"
 TRUE
 5000
 1011 - Valid Sibling Procedures
-procedure p;
-Select BOOLEAN such that Sibling(p,Two)
+procedure p,p2;
+Select BOOLEAN such that Sibling(p,p2) with p2.procName = "Two"
 One,Three
 5000
 1012 - Valid Sibling Procedures
-procedure p;
-Select BOOLEAN such that Sibling(p,Two)
+procedure p,p2;
+Select BOOLEAN such that Sibling(p,p2) with p2.procName = "Two"
 One,Three
 5000
 1013 - Valid Sibling expression tree var assign 1
