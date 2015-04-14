@@ -120,9 +120,9 @@ vector<CNode*> getCallStatementsToProc(int procIndex) {
 /**
  * Get next nodes, accounting for nested consecutive EndProcs
  */
-vector<CNode*>* getAfterNode(CNode* node) {
+vector<CNode*> getAfterNode(CNode* node) {
 	vector<CNode*>* candidateList = node->getAfter();
-	vector<CNode*>* resultList = new vector<CNode*>();
+	vector<CNode*> resultList = vector<CNode*>();
 	for (unsigned int i = 0; i < candidateList->size(); i++) {
 		CNode* candidateNode = candidateList->at(i);
 		while (candidateNode->getNodeType() == EndIf_C) {
@@ -137,11 +137,11 @@ vector<CNode*>* getAfterNode(CNode* node) {
 
 		if (candidateNode->getNodeType() == EndProc_C) {
 			vector<CNode*> callStmts = getNextNodesOfNodes(getCallStatementsToProc(candidateNode->getASTref()->getNodeValueIdx()));
-			resultList->insert(resultList->end(), callStmts.begin(), callStmts.end());
+			resultList.insert(resultList.end(), callStmts.begin(), callStmts.end());
 
 		} else {
 			// default case: add to result
-			resultList->push_back(candidateNode);
+			resultList.push_back(candidateNode);
 		}
 	}
 
@@ -152,9 +152,9 @@ vector<CNode*> getNextNodesOfNodes(vector<CNode*> nodes) {
 	vector<CNode*> result;
 	for (auto iter = nodes.begin(); iter != nodes.end(); ++iter) {
 		
-		vector<CNode*>* nextNodes = getAfterNode(*iter);
+		vector<CNode*> nextNodes = getAfterNode(*iter);
 
-		result.insert(result.end(), nextNodes->begin(), nextNodes->end());
+		result.insert(result.end(), nextNodes.begin(), nextNodes.end());
 	}
 
 	return result;
@@ -266,6 +266,8 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 			break;
 		}
 	}
+
+	delete visited;
 
 	vector<int> resultAsVector;
 	resultAsVector.insert(resultAsVector.end(), result.begin(), result.end());
@@ -490,6 +492,8 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 			break;
 		}
 	}
+
+	delete visited;
 
 	vector<int> resultAsVector;
 	resultAsVector.insert(resultAsVector.end(), result.begin(), result.end());

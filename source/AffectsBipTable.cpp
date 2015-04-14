@@ -374,6 +374,7 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 		
 		
 	}
+	delete terminateNode;
 	
 	return result;
 }
@@ -412,6 +413,7 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipBefore(PROG_LINE_ progLine2
 		
 		NEXTBIP_STATE curState = frontier.top().first; variablesToMatch = frontier.top().second;
 		CNode* node = curState.first;
+
 		if (!isTestingFirstNode) {
 			if (variableTested.count(curState) != 0) {
 				if (variablesToMatch.is_subset_of(variableTested.at(curState) ) ) {
@@ -475,6 +477,7 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipBefore(PROG_LINE_ progLine2
 		
 		
 	}
+	delete terminateNode;
 
 	return result;
 }
@@ -509,11 +512,16 @@ PROGLINE_LIST AffectsBipTable::getRhs() {
 	vector<int> assignments = PKB::getInstance().getStmtNumForType(ASSIGN);
 	vector<int> results;
 
+	try {
 	for (auto stmt = assignments.begin(); stmt != assignments.end(); ++ stmt) {
 		vector<int> lhs = getProgLinesAffectsBipBefore(*stmt, false);
+		
 		if (lhs.size() > 0) {
 			results.push_back(*stmt);
 		}
+	}
+	} catch (exception e) {
+		cout << "AffectsBip getRhs: " << e.what() << endl;
 	}
 
 	return results;
