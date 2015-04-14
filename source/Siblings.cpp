@@ -407,3 +407,34 @@ vector<TNode*> getOperandNodes(TNode* currentNode, TNODE_TYPE operandType) {
 	}
 	return queue;
 }
+
+vector<pair<int, vector<int>>> Siblings::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
+	PKB pkb = PKB::getInstance();
+	string stmtType = pkb.getType(stmtNo);
+	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
+	vector<int> temp;
+	vector<pair<int, vector<int>>> results;
+
+	if(second_siblingType == ASSIGN || second_siblingType == IF || second_siblingType == WHILE || second_siblingType == CALL) {
+		temp = getAllPairs(currentNode, currentNode->getParent(), convertFromSynonym2(second_siblingType));
+		if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
+		temp.clear();
+	}
+	return results;
+}
+
+vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
+	PKB pkb = PKB::getInstance();
+	string stmtType = pkb.getType(stmtNo);
+	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
+	vector<int> temp;
+	vector<pair<int, vector<int>>> result;
+	vector<pair<int, vector<int>>> results;
+
+	if(first_siblingType == ASSIGN || first_siblingType == IF || first_siblingType == WHILE || first_siblingType == CALL) {
+		temp = getAllPairs(currentNode, currentNode->getParent(), convertFromSynonym2(first_siblingType));
+		if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
+		temp.clear();
+	}
+	return results;
+}

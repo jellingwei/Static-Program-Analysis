@@ -252,9 +252,13 @@ public:
 
 	// contains 
 	vector<pair<int, vector<int>>> contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, bool transitiveClosure);
+	vector<pair<int, vector<int>>> contains(int stmtNo, SYNONYM_TYPE childType, bool transitiveClosure);
+	vector<pair<int, vector<int>>> contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure);
 
 	// siblings
 	vector<pair<int, vector<int>>> siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);
+	vector<pair<int, vector<int>>> siblings(int stmtNo, SYNONYM_TYPE second_siblingType);
+	vector<pair<int, vector<int>>> siblings(SYNONYM_TYPE first_siblingType, int stmtNo);
 
 
 private:

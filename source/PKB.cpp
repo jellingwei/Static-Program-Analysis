@@ -1523,9 +1523,24 @@ vector<pair<int, vector<int>>> PKB::contains(SYNONYM_TYPE parentType, SYNONYM_TY
 	return contain->contains(parentType, childType, transitiveClosure);
 }
 
+vector<pair<int, vector<int>>> PKB::contains(int stmtNo, SYNONYM_TYPE childType, bool transitiveClosure) {
+	return contain->contains(stmtNo, childType, transitiveClosure);
+}
+
+vector<pair<int, vector<int>>> PKB::contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure) {
+	return contain->contains(predecessorType, stmtNo, transitiveClosure);
+}
+
 //siblings
 vector<pair<int, vector<int>>> PKB::siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType) {
 	return sibling->siblings(first_siblingType, second_siblingType);
+}
+
+vector<pair<int, vector<int>>> PKB::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
+	return sibling->siblings(stmtNo, second_siblingType);
+}
+vector<pair<int, vector<int>>> PKB::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
+	return sibling->siblings(first_siblingType, stmtNo);
 }
 
 /*
