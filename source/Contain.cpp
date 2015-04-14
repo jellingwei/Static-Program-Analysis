@@ -164,6 +164,7 @@ vector<pair<int, vector<int>>> Contain::contains(SYNONYM_TYPE predecessorType, S
 				if(LHS.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), LHS));
 				LHS.clear();
 			}
+
 			break;		   
 		}
 
@@ -662,4 +663,73 @@ TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type) {
 			break;
 	}
 	return returnType;
+}
+
+/*bool Contain::contains(int stmtNo, int stmtNo2, bool transitiveClosure) {
+	vector<pair<int, vector<int>>> toCompare;
+	toCompare = contains(STMT, STMT, true);
+
+	for(int i=0; i<(int)toCompare.size(); i++) {
+		pair <int, vector<int>> tester = toCompare.at(i);
+		if(tester.first == stmtNo) {
+			for(int j=0; j<(int)tester.second.size(); j++) {
+				if(tester.second.at(j) == stmtNo2) return true;
+			}
+		}
+	}
+
+	return false;
+}*/
+
+vector<pair<int, vector<int>>> Contain::contains(int stmtNo, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+	PKB pkb = PKB::getInstance();
+	string stmtType = pkb.getType(stmtNo);
+	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
+	vector<int> temp;
+	vector<pair<int, vector<int>>> results;
+
+	if(stmtType == "assign") {
+		temp = checkForAssignCase(currentNode, convertFromSynonym(descendentType), true);
+	} else if(stmtType == "while") {
+		temp = checkForWhileCase(currentNode, convertFromSynonym(descendentType), true);
+	} else if(stmtType == "if") {
+		temp = checkForIfCase(currentNode, convertFromSynonym(descendentType), true);
+	}
+
+	if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
+	
+	return results;
+}
+
+vector<pair<int, vector<int>>> Contain::contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure) {
+	PKB pkb = PKB::getInstance();
+	string stmtType = pkb.getType(stmtNo);
+	TNODE_TYPE descendentType;
+	//class Contain* contain;
+	vector<int> temp;
+	vector<pair<int, vector<int>>> result;
+	vector<pair<int, vector<int>>> results;
+
+	if(predecessorType == PROGRAM || predecessorType == PROCEDURE || predecessorType == STMTLST || predecessorType == STMT || predecessorType == WHILE || predecessorType == IF) {
+		if(stmtType == "assign") {
+			result = contains(predecessorType, ASSIGN, true);
+		} else if(stmtType == "while") {
+			result = contains(predecessorType, WHILE, true);
+		} else if(stmtType == "if") {
+			result = contains(predecessorType, IF, true);
+		} else if(stmtType == "call") {
+			result = contains(predecessorType, CALL, true);
+		}
+	}
+
+	for(int i=0; i<result.size(); i++) {
+		pair <int, vector<int>> tester = result.at(i);
+		for(int j=0; j<tester.second.size(); j++) {
+			if(tester.second.at(j) == stmtNo)	temp.push_back(stmtNo);
+		}
+		if(temp.size() != 0) results.push_back(make_pair(tester.first, temp));
+		temp.clear();
+	}
+
+	return results;
 }
