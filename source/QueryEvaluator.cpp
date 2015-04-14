@@ -1177,7 +1177,11 @@ namespace QueryEvaluator
 		vector<pair<int, VALUE_LIST>> siblingsPair;
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
-			return pkb.isFollows(stoi(nameLHS), stoi(nameRHS), true);
+			if (pkb.isFollows(stoi(nameLHS), stoi(nameRHS), true)) {
+				return true;
+			} else {
+				return pkb.isFollows(stoi(nameRHS), stoi(nameLHS), true);
+			}
 		} else if (typeLHS == STRING_INT && RHS.isSynonym()) {
 			siblingsPair = pkb.siblings(stoi(nameLHS), typeRHS);
 		} else if (typeRHS == STRING_INT && LHS.isSynonym()) {
@@ -1198,6 +1202,10 @@ namespace QueryEvaluator
 				acceptedLHS.push_back(valueLHS);
 				acceptedRHS.push_back(valueRHS);
 			}
+		}
+		if (typeLHS == typeRHS) {
+			acceptedLHS.insert(acceptedLHS.end(), acceptedRHS.begin(), acceptedRHS.end());
+			acceptedRHS.insert(acceptedRHS.end(), acceptedLHS.begin(), acceptedLHS.end());
 		}
 		LHS.setValues(acceptedLHS);
 		RHS.setValues(acceptedRHS);
