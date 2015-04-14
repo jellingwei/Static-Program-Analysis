@@ -118,11 +118,11 @@ namespace QueryEvaluator
 			Synonym wantedSynonym = resultChildNode->getArg1();
 
 			if (wantedSynonym.getType() == BOOLEAN && isValid) {
-				Synonym s(BOOLEAN, "TRUE");
+				Synonym s(BOOLEAN, "true");
 				result.push_back(s);
 				return result;
 			} else if (wantedSynonym.getType() == BOOLEAN && !isValid) {
-				Synonym s(BOOLEAN, "FALSE");
+				Synonym s(BOOLEAN, "false");
 				result.push_back(s);
 				return result;
 			} else if (!isValid) {
