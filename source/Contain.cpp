@@ -489,6 +489,21 @@ vector<int> Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descend
 	//return checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
 }
 
+vector<pair<int, int>> Contain::checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS) {
+	vector<int> result1, result2;
+	vector<pair<int, int>> finalResult;
+
+	result1 = checkForStmtLstCase(thenNode, convertFromSynonym(thenS), true);
+	result2 = checkForStmtLstCase(elseNode, convertFromSynonym(elseS), true);
+
+	for(int i=0; i<(int)result1.size(); i++) {
+		for(int j=0; j<(int)result2.size(); j++) {
+			finalResult.push_back(make_pair(result1.at(i), result2.at(j)));
+		}
+	}
+	return finalResult;
+}
+
 // Returns List of TNodes* instead of StmtNo/VarIdx
 
 vector<TNode*> checkForStmtLstCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
@@ -691,11 +706,6 @@ vector<int> Contain::contains(int stmtNo, SYNONYM_TYPE descendentType, bool tran
 
 	if(stmtType == "assign") {
 		temp = checkForAssignCase(currentNode, convertFromSynonym(descendentType), true);
-cout<<"inside temp " ;
-for(int i=0; i<temp.size(); i++) {
-	cout<<pkb.getVarName(temp.at(i))<< " ";
-}
-cout<<endl;
 	} else if(stmtType == "while") {
 		temp = checkForWhileCase(currentNode, convertFromSynonym(descendentType), true);
 	} else if(stmtType == "if") {

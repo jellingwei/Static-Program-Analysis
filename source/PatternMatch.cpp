@@ -336,6 +336,15 @@ STATEMENT_LIST PatternMatch::patternMatchParentStmt(EXPRESSION LHS, TNODE_TYPE t
 		return emptyVector;
 	}
 
+	string empty = "_";
+	if (strcmp(LHS.c_str(), empty.c_str()) == 0) {
+		if(type == While) {
+			return pkb.getStmtNumForType("while");
+		} else if(type == If) {
+			return pkb.getStmtNumForType("if");
+		}
+	}
+
 	int varIndex = pkb.getVarIndex(LHS);
 	if (varIndex <= 0) {
 		vector<int> emptyVector;

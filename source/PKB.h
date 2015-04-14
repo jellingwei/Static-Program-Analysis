@@ -59,10 +59,11 @@ public:
 	VAR_INDEX getControlVariable(STATEMENT stmtNum);
 	
 	// Extended Pattern Matching for While and If
-	STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
-	STATEMENT_LIST PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);
-	STATEMENT_LIST PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);
-	STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
+	STATEMENT_LIST patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
+	STATEMENT_LIST patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);
+	STATEMENT_LIST patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);
+	//STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
+	vector<pair<int, int>> patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
 
 
 	// VarTable methods

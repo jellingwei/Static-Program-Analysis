@@ -346,15 +346,22 @@ vector<int> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE thenS) {
 	return result;
 }
 
-vector<int> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
-	vector<int> finalResult, result1, result2;
-	result1 = patternMatchIfElse(LHS, thenS);
-	result2 = patternMatchIfElse(LHS, elseS);
+vector<pair<int, int>> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
+	vector<int> result1;
+	vector<pair<int, int>> finalResult, temp;
 
-	sort(result1.begin(), result1.end());
-    sort(result2.begin(), result2.end());
+	PatternMatch pattern;
+	result1 = pattern.patternMatchParentStmt(LHS, If);
 
-	set_intersection(result1.begin(),result1.end(),result2.begin(),result2.end(),back_inserter(finalResult));
-
+	Contain contain;
+	TNode* thenNode;
+	TNode* elseNode;
+	PKB pkb = PKB::getInstance();
+	for(int i=0; i<(int)result1.size(); i++) {
+		thenNode = pkb.getNodeForStmt(result1.at(i))->getChildren()->at(1);
+		elseNode = pkb.getNodeForStmt(result1.at(i))->getChildren()->at(2);
+		temp = contain.checkForIf(thenNode, thenS, elseNode, elseS);
+		if(temp.size()!=0)	finalResult.insert( finalResult.end(), temp.begin(), temp.end() );
+	}
 	return finalResult;
 }

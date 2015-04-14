@@ -34,8 +34,8 @@ class AST {
 		STATEMENT_LIST patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
 		STATEMENT_LIST patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE thenS);
 		STATEMENT_LIST patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE thenS);
-		STATEMENT_LIST patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
-
+		//STATEMENT_LIST patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
+		vector<pair<int, int>> patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
 
 		VAR_INDEX getControlVariable(STATEMENT stmtNum);
 
