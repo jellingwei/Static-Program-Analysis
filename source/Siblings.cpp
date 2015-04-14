@@ -319,7 +319,7 @@ TNODE_TYPE convertFromSynonym2(SYNONYM_TYPE type) {
 		case STMTLST:
 			returnType = StmtLst;
 			break;
-		case STMT:
+		case STMT: case PROG_LINE:
 			returnType= Stmt;
 			break;
 		case ASSIGN:

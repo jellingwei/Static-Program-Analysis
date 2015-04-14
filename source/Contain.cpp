@@ -405,7 +405,8 @@ vector<int> checkForAssignCase(TNode* currentNode, TNODE_TYPE descendentType, bo
 		//LHS
 		for(int i=1; i<(int)allToCheck->size(); i++) {
 			if(allToCheck->at(i)->getNodeType() == descendentType) {
-				LHS.push_back(allToCheck->at(i)->getStmtNumber());
+				if(descendentType == Variable || descendentType == Constant) LHS.push_back(allToCheck->at(i)->getNodeValueIdx()); //*Important eg a=2
+				else LHS.push_back(allToCheck->at(i)->getStmtNumber());
 			}
 			if(transitiveClosure) {
 				temp = checkForOtherCase(allToCheck->at(i), descendentType, transitiveClosure);
@@ -634,7 +635,7 @@ TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type) {
 		case STMTLST:
 			returnType = StmtLst;
 			break;
-		case STMT:
+		case STMT: case PROG_LINE:
 			returnType= Stmt;
 			break;
 		case ASSIGN:
@@ -690,6 +691,11 @@ vector<int> Contain::contains(int stmtNo, SYNONYM_TYPE descendentType, bool tran
 
 	if(stmtType == "assign") {
 		temp = checkForAssignCase(currentNode, convertFromSynonym(descendentType), true);
+cout<<"inside temp " ;
+for(int i=0; i<temp.size(); i++) {
+	cout<<pkb.getVarName(temp.at(i))<< " ";
+}
+cout<<endl;
 	} else if(stmtType == "while") {
 		temp = checkForWhileCase(currentNode, convertFromSynonym(descendentType), true);
 	} else if(stmtType == "if") {
