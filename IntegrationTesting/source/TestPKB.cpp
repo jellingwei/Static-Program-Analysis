@@ -53,6 +53,12 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of while", 7, (int)pkb.getStmtNumForType(WHILE).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of call", 6, (int)pkb.getStmtNumForType(CALL).size());
 
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of plus", 10, (int)pkb.getStmtNumForType(PLUS).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of minus", 1, (int)pkb.getStmtNumForType(MINUS).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of times", 3, (int)pkb.getStmtNumForType(TIMES).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Number of STMTLST", 22, (int)pkb.getStmtNumForType(STMTLST).size());
+	vector<int> stuff = pkb.getStmtNumForType(STMTLST);
+
 	// Test Design Extractor
 
 	// Parent
