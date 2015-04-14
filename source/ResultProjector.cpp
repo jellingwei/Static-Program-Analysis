@@ -54,6 +54,7 @@ namespace ResultProjector {
 		unsigned int lastSingletonIndex = 0;
 		unordered_map<string, int> individualFactor;
 		unordered_map<string, bool> isInMainTableMap;
+		unordered_map<string, bool> isProjectedMap;
 		unordered_map<string, vector<string>> stringValuesMap;
 		set<string> insertedNames;
 
@@ -88,23 +89,26 @@ namespace ResultProjector {
 			vector<int> valuesNumbers = synonym.getValues();
 			vector<string> valuesStrings;
 
-			for (unsigned int j = 0; j < valuesNumbers.size(); j++) {
-				valuesStrings.push_back(ResultProjector::convertValueToString(valuesNumbers[j], type, attribute));
-			}
+			if (isProjectedMap.count(name) == 0) {
+				for (unsigned int j = 0; j < valuesNumbers.size(); j++) {
+					valuesStrings.push_back(ResultProjector::convertValueToString(valuesNumbers[j], type, attribute));
+				}
 
-			if (isInMainTableMap[name] == true) {
-				valuesStrings = expandEachRow(valuesStrings, singletonFactor);
-				stringValuesMap[name] = valuesStrings;
-			} else {
-				if (i == lastSingletonIndex) {
-					valuesStrings = expandRange(valuesStrings, mainFactor);
+				if (isInMainTableMap[name] == true) {
+					valuesStrings = expandEachRow(valuesStrings, singletonFactor);
 					stringValuesMap[name] = valuesStrings;
 				} else {
-					valuesStrings = expandRange(valuesStrings, mainFactor);
-					mainFactor *= individualFactor[name];
-					valuesStrings = expandEachRow(valuesStrings, singletonFactor / mainFactor);
-					stringValuesMap[name] = valuesStrings;
+					if (i == lastSingletonIndex) {
+						valuesStrings = expandRange(valuesStrings, mainFactor);
+						stringValuesMap[name] = valuesStrings;
+					} else {
+						valuesStrings = expandRange(valuesStrings, mainFactor);
+						mainFactor *= individualFactor[name];
+						valuesStrings = expandEachRow(valuesStrings, singletonFactor / mainFactor);
+						stringValuesMap[name] = valuesStrings;
+					}
 				}
+				isProjectedMap[name] = true;
 			}
 		}
 		return stringValuesMap;
