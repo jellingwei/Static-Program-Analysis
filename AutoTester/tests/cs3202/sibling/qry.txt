@@ -46,22 +46,22 @@ Select c
 1001 - Valid Sibling direct
 stmt s;
 Select BOOLEAN such that Sibling(1,2)
-TRUE
+true
 5000
 1002 - Valid Sibling indirect
 stmt s;
 Select BOOLEAN such that Sibling(1, 16)
-TRUE
+true
 5000
 1003 - Valid Sibling reverse direct
 stmt s;
 Select BOOLEAN such that Sibling(3,2)
-TRUE
+true
 5000
 1004 - Valid Sibling reverse indirect
 stmt s;
 Select BOOLEAN such that Sibling(10, 2)
-TRUE
+true
 5000
 1005 - Valid Sibling of s on RHS
 stmt s;
@@ -91,57 +91,57 @@ One,Two,Three
 1010 - Valid Sibling Procedures
 procedure p1,p2;
 Select BOOLEAN such that Sibling(p1,p2) with p1.procName = "One" with p2.procName = "Two"
-TRUE
+true
 5000
 1011 - Valid Sibling Procedures
 procedure p,p2;
 Select BOOLEAN such that Sibling(p,p2) with p2.procName = "Two"
-TRUE
+true
 5000
 1012 - Valid Sibling Procedures
 procedure p,p2;
 Select BOOLEAN such that Sibling(p,p2) with p2.procName = "Two"
-TRUE
+true
 5000
 1013 - Valid Sibling expression tree var assign 1
 variable v1,v2;
 Select BOOLEAN such that Sibling(v1, v2) with v1.varName = "b" with v2.varName = "hamburger"
-TRUE
+true
 5000
 1014 - Valid Sibling expression tree var and constant assign 8
 variable v; constant c; 
 Select BOOLEAN such that Sibling(v, c) with v.varName = "a" with c.value = 0
-TRUE
+true
 5000
 1015 - Valid Sibling expression tree var and op assign 2
 variable v; plus add;
 Select BOOLEAN such that Sibling(v, add) with v.varName = "d"
-TRUE
+true
 5000
 1016 - Valid Sibling expression tree op and op assign 2
 times multi;
 Select BOOLEAN such that Sibling(multi, multi)
-TRUE
+true
 5000
 1017 - Valid Sibling expression tree var var assign 12
 variable v1,v2;
 Select BOOLEAN such that Sibling(v1, v2) with v1.varName = "salmon" with v2.varName = "c"
-TRUE
+true
 5000
 1018 - Valid Sibling stmtLst if 10
 stmtLst then, else; variable v;
 Select BOOLEAN such that Sibling(v, then) with v.varName = "f"
-TRUE
+true
 5000
 1019 - Valid Sibling stmtLst if 10
 stmtLst else; variable v;
 Select BOOLEAN such that Sibling(v, else) with v.varName = "f"
-TRUE
+true
 5000
 1020 - Valid Sibling stmtLst while 4
 stmtLst while; variable v;
 Select BOOLEAN such that Sibling(v, while) with v.varName = "salmon"
-TRUE
+true
 5000
 1021 - Valid Sibling stmtLst if 10
 stmtLst thenAndElse; variable v;
@@ -226,42 +226,42 @@ Select l such that Sibling(s, l)
 1037 - Valid Sibling op op assign 3
 times multi;
 Select BOOLEAN such that Sibling(multi, multi)
-TRUE
+true
 5000
 2001 - Invalid Sibling different procedure
 stmt s;
 Select BOOLEAN such that Sibling(16,17)
-FALSE
+false
 5000
 2002 - Invalid Sibling same entity
 stmt s;
 Select BOOLEAN such that Sibling(s,s)
-FALSE
+false
 5000
 2003 - Invalid Sibling different nesting level while
 stmt s;
 Select BOOLEAN such that Sibling(4,5)
-FALSE
+false
 5000
 2004 - Invalid Sibling different nesting level if
 stmt s;
 Select BOOLEAN such that Sibling(10,11)
-FALSE
+false
 5000
 2005 - Invalid Sibling different nesting level else
 stmt s;
 Select BOOLEAN such that Sibling(10,14)
-FALSE
+false
 5000
 2006 - Invalid Sibling same level different parent whileif
 stmt s;
 Select BOOLEAN such that Sibling(5,11)
-FALSE
+false
 5000
 2007 - Invalid Sibling same level different parent ifelse
 stmt s;
 Select BOOLEAN such that Sibling(12,15)
-FALSE
+false
 5000
 2008 - Invalid Sibling plus
 plus add; variable v;

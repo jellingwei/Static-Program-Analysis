@@ -46,92 +46,92 @@ Select c
 1001 - Valid AffectsBip no bip
 
 Select BOOLEAN such that AffectsBip(3, 4)
-TRUE
+true
 5000
 1002 - Valid AffectsBip no bip over some line
 
 Select BOOLEAN such that AffectsBip(13, 15)
-TRUE
+true
 5000
 1003 - Valid AffectsBip no bip into while
 
 Select BOOLEAN such that AffectsBip(18,20)
-TRUE
+true
 5000
 1004 - Valid AffectsBip no bip while loop back
 
 Select BOOLEAN such that AffectsBip(50,42)
-TRUE
+true
 5000
 1005 - Valid AffectsBip no bip while loop same line
 
 Select BOOLEAN such that AffectsBip(50,50)
-TRUE
+true
 5000
 1006 - Valid AffectsBip no bip out of while
 
 Select BOOLEAN such that AffectsBip(50,51)
-TRUE
+true
 5000
 1007 - Valid AffectsBip no bip over while
 
 Select BOOLEAN such that AffectsBip(42, 46)
-TRUE
+true
 5000
 1008 - Valid AffectsBip no bip into if
 
 Select BOOLEAN such that AffectsBip(32,34)
-TRUE
+true
 5000
 1009 - Valid AffectsBip no bip into else
 
 Select BOOLEAN such that AffectsBip(32,38)
-TRUE
+true
 5000
 1010 - Valid AffectsBip no bip out of else
 
 Select BOOLEAN such that AffectsBip(38,39)
-TRUE
+true
 5000
 1011 - Valid AffectsBip no bip out of if
 
 Select BOOLEAN such that AffectsBip(34,40)
-TRUE
+true
 5000
 1012 - Valid AffectsBip no bip if to else in while loop
 
 Select BOOLEAN such that AffectsBip(48, 49)
-TRUE
+true
 5000
 1013 - Valid AffectsBip no bip else to if in while loop
 
 Select BOOLEAN such that AffectsBip(49,48)
-TRUE
+true
 5000
 1014 - Valid AffectsBip have bip go into proc
 
 Select BOOLEAN such that AffectsBip(5,7)
-TRUE
+true
 5000
 1015 - Valid AffectsBip have bip go out of proc
 
 Select BOOLEAN such that AffectsBip(53, 7)
-TRUE
+true
 5000
 1016 - Valid AffectsBip have bip over proc
 
 Select BOOLEAN such that AffectsBip(5,7)
-TRUE
+true
 5000
 1017 - Valid AffectsBip have bip over a few proc
 
 Select BOOLEAN such that AffectsBip(1,48)
-TRUE
+true
 5000
 1018 - Valid AffectsBip have bip proc loop
 
 Select BOOLEAN such that AffectsBip(52,52)
-TRUE
+true
 5000
 1019 - Valid AffectsBip have bip 
 assign a;
@@ -166,32 +166,32 @@ Select l such that AffectsBip(l, 48)
 1025 - Valid AffectsBip have bip
 assign a;
 Select BOOLEAN such that AffectsBip(13, _)
-TRUE
+true
 5000
 1026 - Valid AffectsBip have bip
 assign a;
 Select BOOLEAN such that AffectsBip(_, 21)
-TRUE
+true
 5000
 1027 - Valid AffectsBip have bip
 
 Select BOOLEAN such that AffectsBip(_, _)
-TRUE
+true
 5000
 2001 - Invalid AffectsBip 
 
 Select BOOLEAN such that AffectsBip(4, 5)
-FALSE
+false
 5000
 2002 - Invalid AffectsBip blocked
 
 Select BOOLEAN such that AffectsBip(10,17)
-FALSE
+false
 5000
 2003 - Invalid AffectsBip call
 
 Select BOOLEAN such that AffectsBip(2, 18)
-FALSE
+false
 5000
 2004 - Invalid AffectsBip call
 call c; assign a;
@@ -206,7 +206,7 @@ none
 2006 - Invalid AffectsBip if
 
 Select BOOLEAN such that AffectsBip(27, 31)
-FALSE
+false
 5000
 2007 - Invalid AffectsBip if
 if i; assign a;
@@ -221,7 +221,7 @@ none
 2009 - Invalid AffectsBip while
 
 Select BOOLEAN such that AffectsBip(55, 56)
-FALSE
+false
 5000
 2010 - Invalid AffectsBip while
 while w; assign a;
@@ -236,7 +236,7 @@ none
 2012 - Invalid AffectsBip constant
 
 Select BOOLEAN such that AffectsBip("13", "15")
-FALSE
+false
 5000
 2013 - Invalid AffectsBip constant
 constant c;assign a;
@@ -251,7 +251,7 @@ none
 2015 - Invalid AffectsBip variable
 assign a;
 Select BOOLEAN such that AffectsBip("a", a)
-FALSE
+false
 5000
 2016 - Invalid AffectsBip variable
 assign a; variable v;
@@ -266,57 +266,57 @@ none
 3001 - Valid AffectsBip* no bip direct
 
 Select BOOLEAN such that AffectsBip*(13,15)
-TRUE
+true
 5000
 3002 - Valid AffectsBip* bip direct
 
 Select BOOLEAN such that AffectsBip*(1,18)
-TRUE
+true
 5000
 3003 - Valid AffectsBip* no bip indirect
 
 Select BOOLEAN such that AffectsBip*(13, 17)
-TRUE
+true
 5000
 3004 - Valid AffectsBip* bip indirect
 
 Select BOOLEAN such that AffectsBip*(5, 59)
-TRUE
+true
 5000
 3005 - Valid AffectsBip* no bip while direct
 
 Select BOOLEAN such that AffectsBip*(18, 20)
-TRUE
+true
 5000
 3006 - Valid AffectsBip* no bip while indirect
 
 Select BOOLEAN such that AffectsBip*(18,21)
-TRUE
+true
 5000
 3007 - Valid AffectsBip* no bip loop 
 
 Select BOOLEAN such that AffectsBip*(45, 44)
-TRUE
+true
 5000
 3008 - Valid AffectsBip* no bip loop 
 
 Select BOOLEAN such that AffectsBip*(45, 45)
-TRUE
+true
 5000
 3009 - Valid AffectsBip* no bip over loop
 
 Select BOOLEAN such that AffectsBip*(17, 23)
-TRUE
+true
 5000
 3010 - Valid AffectsBip* bip proc loop if else no skips
 
 Select BOOLEAN such that AffectsBip*(20, 20)
-TRUE
+true
 5000
 3011 - Valid AffectsBip* bip proc loop if else skips
 
 Select BOOLEAN such that AffectsBip*(49, 45)
-TRUE
+true
 5000
 3012 - Valid AffectsBip* bip proc loop if else skips
 assign a;
@@ -331,32 +331,32 @@ Select BOOLEAN such that AffectsBip*(a, 3)
 3014 - Valid AffectsBip* wild card
 
 Select BOOLEAN such that AffectsBip*(_, 4) 
-TRUE
+true
 5000
 3015 - Valid AffectsBip* wild card
 
 Select BOOLEAN such that AffectsBip*(4, _) 
-TRUE
+true
 5000
 3016 - Valid AffectsBip* wild card
 
 Select BOOLEAN such that AffectsBip*(_, _) 
-TRUE
+true
 5000
 4001 - Invalid AffectsBip* not affects
 
 Select BOOLEAN such that AffectsBip*(3, 5)
-FALSE
+false
 5000
 4002 - Invalid AffectsBip* bip blocked
 
 Select BOOLEAN such that AffectsBip*(40, 26)
-FALSE
+false
 5000
 4003 - Invalid AffectsBip* call
 
 Select BOOLEAN such that AffectsBip*(2, 18)
-FALSE
+false
 5000
 4004 - Invalid AffectsBip* call
 call c; assign a;
@@ -371,7 +371,7 @@ none
 4006 - Invalid AffectsBip* if
 
 Select BOOLEAN such that AffectsBip*(27, 31)
-FALSE
+false
 5000
 4007 - Invalid AffectsBip* if
 if i; assign a;
@@ -386,7 +386,7 @@ none
 4009 - Invalid AffectsBip* while
 
 Select BOOLEAN such that AffectsBip*(55, 56)
-FALSE
+false
 5000
 4010 - Invalid AffectsBip* while
 while w; assign a;
@@ -401,7 +401,7 @@ none
 4012 - Invalid AffectsBip* constant
 
 Select BOOLEAN such that AffectsBip*("13", "15")
-FALSE
+false
 5000
 4013 - Invalid AffectsBip* constant
 constant c;assign a;
@@ -416,7 +416,7 @@ none
 4015 - Invalid AffectsBip* variable
 assign a;
 Select BOOLEAN such that AffectsBip*("a", a)
-FALSE
+false
 5000
 4016 - Invalid AffectsBip* variable
 assign a; variable v;

@@ -46,7 +46,7 @@ Select c
 1001 - Valid Follows
 stmt s;
 Select BOOLEAN such that Follows(1,2)
-TRUE
+true
 5000
 1002 - Valid redundant
 procedure p;
@@ -76,22 +76,22 @@ Select s1 such that Follows(s,s1)
 1007 - Valid stmt before if
 stmt s;
 Select BOOLEAN such that Follows(9,10)
-TRUE
+true
 5000
 1008 - Valid stmt after if
 stmt s;
 Select BOOLEAN such that Follows(10, 16)
-TRUE
+true
 5000
 1009 - Valid stmt before while
 stmt s;
 Select BOOLEAN such that Follows(3,4)
-TRUE
+true
 5000
 1010 - Valid stmt after while
 stmt s;
 Select BOOLEAN such that Follows(4,8)
-TRUE
+true
 5000
 1011 - Valid v,_
 stmt s;
@@ -211,47 +211,47 @@ Select w such that Follows(s, w)
 2001 - Invalid not directly follows
 stmt s;
 Select BOOLEAN such that Follows(1,3)
-FALSE
+false
 5000
 2002 - Invalid reverse
 stmt s;
 Select BOOLEAN such that Follows(2,1)
-FALSE
+false
 5000
 2003 - Invalid if to in if
 stmt s;
 Select BOOLEAN such that Follows(10,11)
-FALSE
+false
 5000
 2004 - Invalid if to in else
 stmt s;
 Select BOOLEAN such that Follows(10,14)
-FALSE
+false
 5000
 2005 - Invalid end of if to outside if
 stmt s;
 Select BOOLEAN such that Follows(13,16)
-FALSE
+false
 5000
 2006 - Invalid end of else to outside if
 stmt s;
 Select BOOLEAN such that Follows(15,16)
-FALSE
+false
 5000
 2007 - Invalid end of if to start of else
 stmt s;
 Select BOOLEAN such that Follows(13,14)
-FALSE
+false
 5000
 2008 - Invalid while to inside while
 stmt s;
 Select BOOLEAN such that Follows(4,5)
-FALSE
+false
 5000
 2009 - Invalid end of while to outside while
 stmt s;
 Select BOOLEAN such that Follows(7,8)
-FALSE
+false
 5000
 2010 - Invalid Redundant
 stmt s;
@@ -271,7 +271,7 @@ none
 2013 - Invalid end of proc to start of another proc 
 stmt s;
 Select BOOLEAN such that Follows(16,17)
-FALSE
+false
 5000
 2014 - Invalid LHS synonym
 procedure p; stmt s;
@@ -306,7 +306,7 @@ none
 2020 - Invalid same stmt
 stmt s;
 Select BOOLEAN such that Follows(s,s)
-FALSE
+false
 5000
 2021 - Invalid same stmt
 stmt s;
@@ -316,22 +316,22 @@ none
 3001 - Valid direct Follows*
 stmt s;
 Select BOOLEAN such that Follows*(1,2)
-TRUE
+true
 5000
 3002 - Valid indirect Follows*
 stmt s;
 Select BOOLEAN such that Follows*(1,3)
-TRUE
+true
 5000
 3003 - Valid indirect Follows* over while
 stmt s;
 Select BOOLEAN such that Follows*(2,9)
-TRUE
+true
 5000
 3004 - Valid indirect Follows* over if
 stmt s;
 Select BOOLEAN such that Follows*(8,16)
-TRUE
+true
 5000
 3005 - Valid all stmts that follows n
 stmt s;
@@ -471,52 +471,52 @@ One,Two,Three
 4001 - Invalid reverse direct valid
 stmt s;
 Select BOOLEAN such that Follows*(2,1)
-FALSE
+false
 5000
 4002 - Invalid reverse indirect valid
 stmt s;
 Select BOOLEAN such that Follows*(16,1)
-FALSE
+false
 5000
 4003 - Invalid outside if to in if
 stmt s;
 Select BOOLEAN such that Follows*(8,11)
-FALSE
+false
 5000
 4004 - Invalid soutside if to in else
 stmt s;
 Select BOOLEAN such that Follows*(8,14)
-FALSE
+false
 5000
 4005 - Invalid if to outside if
 stmt s;
 Select BOOLEAN such that Follows*(11,16)
-FALSE
+false
 5000
 4006 - Invalid else to outside if
 stmt s;
 Select BOOLEAN such that Follows*(14,16)
-FALSE
+false
 5000
 4007 - Invalid in if to in else
 stmt s;
 Select BOOLEAN such that Follows*(11,15)
-FALSE
+false
 5000
 4008 - Invalid while to inside while
 stmt s;
 Select BOOLEAN such that Follows*(1,6)
-FALSE
+false
 5000
 4009 - Invalid in while to outside while
 stmt s;
 Select BOOLEAN such that Follows*(5,16)
-FALSE
+false
 5000
 4010 - Invalid in while to in if
 stmt s;
 Select BOOLEAN such that Follows*(5,12)
-FALSE
+false
 5000
 4011 - Invalid Redundant
 stmt s;
@@ -536,7 +536,7 @@ none
 4014 - Invalid end of proc to start of another proc 
 stmt s;
 Select BOOLEAN such that Follows*(17,27)
-FALSE
+false
 5000
 4015 - Invalid LHS synonym
 procedure p; stmt s;
@@ -571,7 +571,7 @@ none
 4021 - Invalid same stmt
 stmt s;
 Select BOOLEAN such that Follows*(s,s)
-FALSE
+false
 5000
 4022 - Invalid same stmt
 stmt s;

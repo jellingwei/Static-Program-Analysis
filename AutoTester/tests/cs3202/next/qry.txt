@@ -46,7 +46,7 @@ Select c
 1001 - 
 prog_line n;
 Select BOOLEAN such that Next(1,2)
-TRUE
+true
 5000
 1002 - 
 prog_line n;
@@ -71,42 +71,42 @@ Select n2 such that Next(n1,n2)
 1006 - if to first line in if
 prog_line n;
 Select BOOLEAN such that Next(10,11)
-TRUE
+true
 5000
 1007 - if to first line in else
 prog_line n;
 Select BOOLEAN such that Next(10,14)
-TRUE
+true
 5000
 1008 - end of if to line after else
 prog_line n;
 Select BOOLEAN such that Next(13,16)
-TRUE
+true
 5000
 1009 - end of else to line after else
 prog_line n;
 Select BOOLEAN such that Next(34,35)
-TRUE
+true
 5000
 1010 - while to first line in while
 prog_line n;
 Select BOOLEAN such that Next(4,5)
-TRUE
+true
 5000
 1011 - end of while to while
 prog_line n;
 Select BOOLEAN such that Next(7,4)
-TRUE
+true
 5000
 1012 - while to line after while
 prog_line n;
 Select BOOLEAN such that Next(4,8)
-TRUE
+true
 5000
 1013 - calls to line after calls
 prog_line n;
 Select BOOLEAN such that Next(15,16)
-TRUE
+true
 5000
 1014 - 
 prog_line n;
@@ -231,12 +231,12 @@ Select n such that Next(n, w)
 2001 - not directly next
 prog_line n;
 Select BOOLEAN such that Next(1, 3)
-FALSE
+false
 5000
 2002 - after then before
 prog_line n;
 Select BOOLEAN such that Next(5, 4)
-FALSE
+false
 5000
 2003 - not directly next
 variable v;
@@ -246,12 +246,12 @@ none
 2004 - end of proc to first line in proc
 prog_line n;
 Select BOOLEAN such that Next(16, 17)
-FALSE
+false
 5000
 2005 - calls to first line of calls proc
 prog_line n;
 Select BOOLEAN such that Next(7, 17)
-FALSE
+false
 5000
 2006 - line before first line of proc
 prog_line n;
@@ -301,7 +301,7 @@ none
 2015 - Invalid prog_line (big number)
 prog_line n;
 Select BOOLEAN such that Next(5000, 6000)
-FALSE
+false
 5000
 2016 - Invalid prog_line (string)
 prog_line n;
@@ -311,7 +311,7 @@ none
 3001 - 
 prog_line n;
 Select BOOLEAN such that Next*(1, 16)
-TRUE
+true
 5000
 3002 -
 prog_line n;
@@ -326,22 +326,22 @@ Select n such that Next*(27, n)
 3004 - outside loop to inside loop
 prog_line n;
 Select BOOLEAN such that Next*(2, 6)
-TRUE
+true
 5000
 3005 - outside if to inside if
 prog_line n;
 Select BOOLEAN such that Next*(8, 12)
-TRUE
+true
 5000
 3006 - outside if to inside else
 prog_line n;
 Select BOOLEAN such that Next*(8, 14)
-TRUE
+true
 5000
 3007 - n equals to n in loop
 prog_line n;
 Select BOOLEAN such that Next*(21, 21)
-TRUE
+true
 5000
 3008 - lines after end of loop
 prog_line n;
@@ -486,7 +486,7 @@ Select n such that Next*(n ,n)
 4001 - after then before
 prog_line n;
 Select BOOLEAN such that Next*(5, 3)
-FALSE
+false
 5000l
 4002 - redundant
 stmt s;
@@ -496,12 +496,12 @@ none
 4003 - end of proc to first line in proc
 prog_line n;
 Select BOOLEAN such that Next*(26,27)
-FALSE
+false
 5000
 4004 - calls to first line of calls proc
 prog_line n;
 Select BOOLEAN such that Next*(15, 17)
-FALSE
+false
 5000
 4005 - line before first line of proc
 prog_line n;

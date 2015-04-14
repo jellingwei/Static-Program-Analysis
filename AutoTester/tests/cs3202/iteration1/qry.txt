@@ -96,7 +96,7 @@ Select c such that Follows(a, c)
 20 - Q
 stmt s;
 Select BOOLEAN such that Calls*("A", "C")
-TRUE
+true
 5000
 21 - Q
 assign a;
@@ -111,7 +111,7 @@ none
 23 - Q
 procedure a, b;
 Select BOOLEAN such that Calls*(a, b)
-TRUE
+true
 5000
 24 - Q
 procedure a, b;
@@ -126,7 +126,7 @@ C
 26 - Q
 procedure a, b;
 Select BOOLEAN such that Calls*(a, b) with a.procName = "B"
-TRUE
+true
 5000
 27 - Q
 procedure p;

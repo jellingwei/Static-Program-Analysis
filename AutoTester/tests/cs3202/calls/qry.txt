@@ -46,7 +46,7 @@ Select c
 1001 - Valid Calls
 procedure p;
 Select BOOLEAN such that Calls("One", "Two")
-TRUE
+true
 5000
 1002 - Valid Calls redundant
 call c;
@@ -91,27 +91,27 @@ Select c such that Calls(_,_)
 1010 - Valid Calls redundant _,_
 stmt s;
 Select BOOLEAN such that Calls(_,_)
-TRUE
+true
 5000
 2001 - Invalid Calls 
 procedure p;
 Select BOOLEAN such that Calls("One", "Four")
-FALSE
+false
 5000
 2002 - Invalid Calls reverse valid
 procedure p;
 Select BOOLEAN such that Calls("Two", "One")
-FALSE
+false
 5000
 2003 - Invalid Calls chained procedure
 procedure p;
 Select BOOLEAN such that Calls("One", "Four")
-FALSE
+false
 5000
 2004 - Invalid Calls recursion
 procedure p;
 Select BOOLEAN such that Calls("One", "One")
-FALSE
+false
 5000
 2005 - Invalid Calls LHS assign
 procedure p; assign a;
@@ -186,12 +186,12 @@ none
 3001 - Valid Call*
 procedure p;
 Select BOOLEAN such that Calls*("One","Three")
-TRUE
+true
 5000
 3002 - Valid Calls* chained
 procedure p;
 Select BOOLEAN such that Calls*("Five","Two")
-TRUE
+true
 5000
 3003 - Valid Calls* redundant
 procedure p;
@@ -236,17 +236,17 @@ Select c such that Calls*(_,_)
 4001 - Invalid Calls*
 procedure p;
 Select BOOLEAN such that Calls*("Two", "Five")
-FALSE
+false
 5000
 4002 - Invalid Calls* reverse valid
 procedure p;
 Select BOOLEAN such that Calls*("Four","Three")
-FALSE
+false
 5000
 4003 - Invalid Calls* recurse
 procedure p;
 Select BOOLEAN such that Calls("Seven", "Seven")
-FALSE
+false
 5000
 4004 - Invalid Calls* LHS assign
 assign a; procedure p;

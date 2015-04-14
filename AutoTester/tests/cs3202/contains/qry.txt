@@ -46,17 +46,17 @@ Select c
 1001 - Valid Contains as Parents while
 stmt s;
 Select BOOLEAN such that Contains(4,7)
-TRUE
+true
 5000
 1002 - Valid Contains as Parents if
 stmt s;
 Select BOOLEAN such that Contains(10,12)
-TRUE
+true
 5000
 1003 - Valid Contains as Parents else
 stmt s;
 Select BOOLEAN such that Contains(10,14)
-TRUE
+true
 5000
 1004 - Valid Contains as Parents all stmts in while
 stmt s;
@@ -111,7 +111,7 @@ Select i such that Contains(i,14)
 1014 - Valid Contains Procedure
 procedure p; stmtLst sl;
 Select BOOLEAN such that Contains(p, sl)
-TRUE
+true
 5000
 1015 - Valid Contains Procedure
 procedure p; stmtLst sl;
@@ -126,7 +126,7 @@ One,Two,Three
 1017 - Valid Contains Assign LHS var 
 assign a; variable v;
 Select BOOLEAN such that Contains(1, v) with v.varName = "b"
-TRUE
+true
 5000
 1018 - Valid Contains Assign LHS var
 variable v;
@@ -136,12 +136,12 @@ pork,e,crab,buffet
 1019 - Valid Contains Assign RHS var
 assign a; variable v;
 Select BOOLEAN such that Contains(1, v) with v.varName = "hamburger"
-TRUE
+true
 5000
 1020 - Valid Contains Assign minus
 assign a; minus less;
 Select BOOLEAN such that Contains(6, less)
-TRUE
+true
 5000
 1021 - Valid Contains Assign minus
 assign a; minus less;
@@ -151,7 +151,7 @@ Select a such that Contains(a, less)
 1022 - Valid Contains Assign plus
 plus add;
 Select BOOLEAN such that Contains(23, add)
-TRUE
+true
 5000
 1023 - Valid Contains Assign plus
 plus add; assign a;
@@ -161,7 +161,7 @@ Select a such that Contains(a, add)
 1024 - Valid Contains Assign  times
 times multi; assign a;
 Select BOOLEAN such that Contains(9, multi)
-TRUE
+true
 5000
 1023 - Valid Contains Assign times
 times multi; assign a;
@@ -171,7 +171,7 @@ Select a such that Contains(a, multi)
 1025 - Valid Contains Assign constant
 assign a; constant c;
 Select BOOLEAN such that Contains(8, c) with c.value = 0
-TRUE
+true
 5000
 1026 - Valid Contains Assign constant
 assign a; constant c;
@@ -186,12 +186,12 @@ Select c such that Contains(a,c)
 1028 - Valid Contains Op plus constant
 plus add; constant c;
 Select BOOLEAN such that Contains(add, c) with c.value = 1
-TRUE
+true
 5000
 1029 - Valid Contains Op plus var
 plus add; variable v;
 Select BOOLEAN such that Contains(add, v) with v.varName = "beef"
-TRUE
+true
 5000
 1030 - Valid Contains Op plus constant
 plus add; constant c;
@@ -206,12 +206,12 @@ beef, chicken, crab, y, xiaolongbao, buffet, f, e
 1032 - Valid Contains Op minus constant
 minus less; constant c;
 Select BOOLEAN such that Contains(less, c) with c.value = 25
-TRUE
+true
 5000
 1033 - Valid Contains Op minus var
 minus less; variable v;
 Select BOOLEAN such that Contains(less, v) with v.varName = "salmon"
-TRUE
+true
 5000
 1034 - Valid Contains Op minus constant
 minus less; constant c;
@@ -226,42 +226,42 @@ pork, a, b, fries, crab, buffet, cheeseburger, beef
 1036 - Valid Contains plus minus assign 7
 minus less; plus add;
 Select BOOLEAN such that Contains(add, less)
-TRUE
+true
 5000
 1037 - Valid Contains plus minus assign 7
 minus less; plus add;
 Select BOOLEAN such that Contains(less, add)
-TRUE
+true
 5000
 1038 - Valid Contains multi minus assign 8
 minus less; times multi;
 Select BOOLEAN such that Contains(multi, less)
-TRUE
+true
 5000
 1039 - Valid Contains multi minus assign 5
 minus less; times multi;
 Select BOOLEAN such that Contains(less, multi)
-TRUE
+true
 5000
 1040 - Valid Contains multi plus assign 2
 times multi; plus add;
 Select BOOLEAN such that Contains(plus, multi)
-TRUE
+true
 5000
 1041 - Valid Contains multi plus assign 3
 times multi; plus add;
 Select BOOLEAN such that Contains(multi, add)
-TRUE
+true
 5000
 1042 - Valid Contains stmtLst 
 stmtLst sl; procedure p;
 Select BOOLEAN such that Contains(p, sl) with p.procName = "One"
-TRUE
+true
 5000
 1043 - Valid Contains stmtLst while
 stmtLst then; stmtLst else; stmtLst whilesl;
 Select BOOLEAN such that Contains(4, whilesl)
-TRUE
+true
 5000
 1044 - Valid Contains stmtLst while
 stmtLst whilesl; while w;
@@ -271,7 +271,7 @@ Select whilesl such that Contains(w, whilesl)
 1045 - Valid Contains stmtLst if then
 stmtLst then; stmtLst else;
 Select BOOLEAN such that Contains(10, then)
-TRUE
+true
 5000
 1046 - Valid Contains stmtLst if then
 stmtLst then; stmtLst else; if i;
@@ -281,7 +281,7 @@ Select then such that Contains(i, then)
 1047 - Valid Contains stmtLst if else
 stmtLst then; stmtLst else; if i;
 Select BOOLEAN such that Contains(10, else)
-TRUE
+true
 5000
 1048 - Valid Contains stmtLst if else
 stmtLst then; stmtLst else; if i;
@@ -291,7 +291,7 @@ Select else such that Contains(i, else)
 1049 - Valid Contains while control variable
 while w; variable v;
 Select BOOLEAN such that Contains(38, v) with v.varName = "chicken"
-TRUE
+true
 5000
 1050 - Valid Contains while control variable
 while w; variable v;
@@ -301,7 +301,7 @@ chicken, x, e, d, c, salmon
 1051 - Valid Contains if control variable
 if i; variable v;
 Select BOOLEAN such that Contains(20, v) with v.varName = "f"
-TRUE
+true
 5000
 1052 - Valid Contains if control variable
 if i; variable v;
@@ -321,22 +321,22 @@ Select sl such that Contains(sl, s)
 2001 - Invalid Contains not Parent while
 stmt s;
 Select BOOLEAN such that Contains(4, 8)
-FALSE
+false
 5000
 2002 - Invalid Contains not Parent if
 stmt s;
 Select BOOLEAN such that Contains(10, 16)
-FALSE
+false
 5000
 2003 - Invalid Contains nested Parent while
 stmt s;
 Select BOOLEAN such that Contains(18,20)
-FALSE
+false
 5000
 2004 - Invalid Contains nested Parent if
 stmt s;
 Select BOOLEAN such that Contains(27,29)
-FALSE
+false
 5000
 2005 - Invalid Contains wildcard
 stmt s;
@@ -356,97 +356,97 @@ none
 2008 - Invalid Contains Procedure indirect
 stmt s; procedure p;
 Select BOOLEAN such that Contains(p, 1) with p.procName = "One"
-FALSE
+false
 5000
 2009 - Invalid Contains Assign 
 assign a; variable v;
 Select BOOLEAN such that Contains(1, v) with v.varName = "a"
-FALSE
+false
 5000
 2010 - Invalid Contains Assign
 assign a;
 Select BOOLEAN such that Contains(13, 6)
-FALSE
+false
 5000
 2011 - Invalid Contains Assign op
 assign a; plus add;
 Select BOOLEAN such that Contains(6, add)
-FALSE
+false
 5000
 2012 - Invalid Contains Assign op
 assign a; minus reduce;
 Select BOOLEAN such that Contains(reduce, a)
-FALSE
+false
 5000
 2013 - Invalid Contains Assign stmtLst
 assign a; stmtLst sl;
 Select BOOLEAN such that Contains(a, sl)
-FALSE
+false
 5000
 2014 - Invalid Contains Assign indirect
 assign a; plus add;
 Select BOOLEAN such that Contains(3, add)
-FALSE
+false
 5000
 2015 - Invalid Contains Op and stmt
 stmt s; times multi;
 Select BOOLEAN such that Contains(multi, s)
-FALSE
+false
 5000
 2016 - Invalid Contains Op and stmtLst
 stmtLst sl; plus add;
 Select BOOLEAN such that Contains(add, sl)
-FALSE
+false
 5000
 2016 - Invalid Contains variable
 variable v;
 Select BOOLEAN such that Contains(v, 1)
-FALSE
+false
 5000
 2017 - Invalid Contains variable
 variable v; minus less;
 Select BOOLEAN such that Contains(v, less)
-FALSE
+false
 5000
 2018 - Invalid Contains constant
 constant c; variable v;
 Select BOOLEAN such that Contains(c, v)
-FALSE
+false
 5000
 2019 - Invalid Contains constant
 constant c; plus add;
 Select BOOLEAN such that Contains(c, add)
-FALSE
+false
 5000
 3001 - Valid Contains* as Parents while
 stmt s;
 Select BOOLEAN such that Contains*(4,7)
-TRUE
+true
 5000
 3002 - Valid Contains* as Parents* while
 stmt s;
 Select BOOLEAN such that Contains*(18,20)
-TRUE
+true
 5000
 3003 - Valid Contains* as Parents if
 stmt s;
 Select BOOLEAN such that Contains*(10,12)
-TRUE
+true
 5000
 3004 - Valid Contains* as Parents else
 stmts s;
 Select BOOLEAN such that Contains*(10,14)
-TRUE
+true
 5000
 3005 - Valid Contains* as Parents* if
 stmt s;
 Select BOOLEAN such that Contains*(27,29)
-TRUE
+true
 5000
 3006 - Valid Contains* as Parents* else
 stmts s;
 Select BOOLEAN such that Contains*(27,37)
-TRUE
+true
 5000
 3007 - Valid Contains* as Parents* all stmts in while
 stmt s;
@@ -476,17 +476,17 @@ Select i such that Contains*(i,39)
 3012 - Valid Contains* Procedure assign
 procedure p;
 Select BOOLEAN such that Contains*(p, 3) with p.procName = "One"
-TRUE
+true
 5000
 3013 - Valid Contains* Procedure while
 procedure p;
 Select BOOLEAN such that Contains*(p, 4) with p.procName = "One"
-TRUE
+true
 5000
 3014 - Valid Contains* Procedure if
 procedure p;
 Select BOOLEAN such that Contains*(p, 10) with p.procName = "One"
-TRUE
+true
 5000
 3015 - Valid Contains* Procedure all stmts
 stmt s; procedure p;
@@ -501,7 +501,7 @@ Select sl such that Contains*(p, sl) with p.procName = "One"
 3017 - Valid Contains* Procedure var
 procedure p; variable v;
 Select BOOLEAN such that Contains*(p, v) with v.varName = "coke" with p.procName = "One"
-TRUE
+true
 5000
 3018 - Valid Contains* Procedure all var
 variable v; procedure p;
@@ -511,7 +511,7 @@ b, hamburger, d, fries, chicken, a, pork, e, crab, buffet, cheeseburger, salmon,
 3019 - Valid Contains* Procedure constant
 constant c; procedure p;
 Select BOOLEAN such that Contains*(p, c) with p.procName = "One" with c.value = 25
-TRUE
+true
 5000
 3020 - Valid Contains* Procedure all constant
 constant c; procedure p;
@@ -521,22 +521,22 @@ Select c such that Contains*(p, c) with p.procName = "One"
 3021 - Valid Contains* Procedure op add
 plus add; procedure p;
 Select BOOLEAN such that Contains*(p, add) with p.procName = "One"
-TRUE
+true
 5000
 3022 - Valid Contains* Procedure op minus
 minus less; procedure p;
 Select BOOLEAN such that Contains*(p, less) with p.procName = "One"
-TRUE
+true
 5000
 3023 - Valid Contains* Procedure op times
 times multi; procedure p;
 Select BOOLEAN such that Contains*(p, multi) with p.procName = "One"
-TRUE
+true
 5000
 3024 - Valid Contains* Procedure call
 call c; procedure p;
 Select BOOLEAN such that Contains*(p,c) with c.procName = "Two" with p.procName = "One"
-TRUE
+true
 5000
 3025 - Valid Contains* Procedure get proc from assign
 procedure p;
@@ -566,12 +566,12 @@ One, Two
 3030 - Valid Contains* Assign LHS var
 assign a; variable v;
 Select BOOLEAN such that Contains*(2, v) with v.varName = "d"
-TRUE
+true
 5000
 3031 - Valid Contains* Assign RHS var
 assign a; variable v;
 Select BOOLEAN such that Contains*(2, v) with v.varName = "chicken"
-TRUE
+true
 5000
 3032 - Valid Contains* Assign all var
 variable v;
@@ -581,22 +581,22 @@ chicken, pork, cheeseburger
 3033 - Valid Contains* Assign op plus
 plus add;
 Select BOOLEAN such that Contains*(13, add)
-TRUE
+true
 5000
 3034 - Valid Contains* Assign op minus
 minus less;
 Select BOOLEAN such that Contains*(9, less)
-TRUE
+true
 5000
 3035 - Valid Contains* Assign op times 
 times multi;
 Select BOOLEAN such that Contains*(2, multi)
-TRUE
+true
 5000
 3036 - Valid Contains* Assign constant
 constant c;
 Select BOOLEAN such that Contains*(5, c) with c.value = 1
-TRUE
+true
 5000
 3037 - Valid Contains* Assign all constant
 constant c;
@@ -661,27 +661,27 @@ a, b, fries, chicken, cheeseburger, z, crab, coke, f, a, buffet, z
 3049 - Valid Contains* op to op assign 3
 times multi; plus add;
 Select BOOLEAN such that Contains*(multi, add)
-TRUE
+true
 5000
 3050 - Valid Contains* op to op assign 26
 minus less; plus add;
 Select BOOLEAN such that Contains*(add, less)
-TRUE
+true
 5000
 4001 - Invalid Contains* 
 stmt s;
 Select BOOLEAN such that Contains*(1,2)
-FALSE
+false
 5000
 4002 - Invalid Contains* not Parent* while
 stmt s;
 Select BOOLEAN such that Contains*(19, 26)
-FALSE
+false
 5000
 4002 - Invalid Contains* not Parent* if
 stmt s;
 Select BOOLEAN such that Contains*(10, 16)
-FALSE
+false
 5000
 4003 - Invalid Contains* wildcard
 stmt s;
@@ -701,22 +701,22 @@ none
 4006 - Invalid Contains* Procedures stmt not in proc
 stmt s; procedure p;
 Select BOOLEAN such that Contains*(p, s) with s.stmt# = 17 with p.procName = "One"
-FALSE
+false
 5000
 4007 - Invalid Contains* Procedures var not in proc
 variable v; procedure p;
 Select BOOLEAN such that Contains*(p, v) with v.varName = "y" with p.procName = "One"
-FALSE
+false
 5000
 4008 - Invalid Contains* Procedure constant not in proc
 constant c; procedure p;
 Select BOOLEAN such that Contains*(p, c) with c.value = 7 with p.procName = "One"
-FALSE
+false
 5000
 4009 - Invalid Contains* Assign 
 assign a;
 Select BOOLEAN such that Contains*(a, 6)
-FALSE
+false
 5000
 4010 - Invalid Contains* Assign 
 assign a;
@@ -726,32 +726,32 @@ none
 4011 - Invalid Contains* Assign no var
 assign a; variable v;
 Select BOOLEAN such that Contains*(2, v) with v.varName = "pork"
-FALSE
+false
 5000
 4012 - Invalid Contains* Assign no op minus
 assign a; minus less;
 Select BOOLEAN such that Contains*(2, less)
-FALSE
+false
 5000
 4013 - Invalid Contains* Assign no op plus
 assign a; plus add;
 Select BOOLEAN such that Contains*(5, add)
-FALSE
+false
 5000
 4014 - Invalid Contains* Assign no op times
 assign a; times multi;
 Select BOOLEAN such that Contains*(8, multi)
-FALSE
+false
 5000
 4015 - Invalid Contains* Op and stmt
 plus add; stmt s;
 Select BOOLEAN such that Contains*(add, s)
-FALSE
+false
 5000
 4016 - Invalid Contains* constant and var
 constant c; variable v;
 Select BOOLEAN such that Contains*(c, v)
-FALSE
+false
 5000
 5001 - Valid Contains if stmtLst stmts
 stmtLst thenAndElse; stmt s;
