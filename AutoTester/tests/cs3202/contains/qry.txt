@@ -250,7 +250,7 @@ TRUE
 5000
 1041 - Valid Contains multi plus assign 3
 times multi; plus add;
-Select BOOLEAN such that Contains(multi, plus)
+Select BOOLEAN such that Contains(multi, add)
 TRUE
 5000
 1042 - Valid Contains stmtLst 
@@ -341,17 +341,17 @@ FALSE
 2005 - Invalid Contains wildcard
 stmt s;
 Select BOOLEAN such that Contains(_,_)
-FALSE
+none
 5000
 2006 - Invalid Contians wildcard  LHS
 stmt s;
 Select BOOLEAN such that Contains(_,s)
-FALSE
+none
 5000
 2007 - Invalid Contains wildcard RHS
 stmt s;
 Select BOOLEAN such that Contains(s,_)
-FALSE
+none
 5000
 2008 - Invalid Contains Procedure indirect
 stmt s; procedure p;
