@@ -532,6 +532,12 @@ void PKBTest::testPKB()
 		}
 	}*/
 
+	/*vector<int> testing;
+	testing = pkb.contains(19, CALL, true);
+	for(int i=0; i<testing.size(); i++) {
+		cout << (i+1) << ". CALL at stmtNo " << testing.at(i) << endl;
+	}*/
+
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(While, StmtLst)", 7, (int)pkb.contains(WHILE, STMTLST, false).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(While, Assign)", 7, (int)pkb.contains(WHILE, ASSIGN, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains(Procedure, StmtLst)", 5, (int)pkb.contains(PROCEDURE, STMTLST, false).size());
@@ -559,8 +565,8 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Stmt, If)", 4, (int)pkb.contains(STMT, IF, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(Stmt, Stmt)", 12, (int)pkb.contains(STMT, STMT, true).size());
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(7, PLUS)", 1, (int)pkb.contains(7, PLUS, true).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(19, CALL)", 1, (int)pkb.contains(19, CALL, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(7, PLUS)", 2, (int)pkb.contains(7, PLUS, true).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(19, CALL)", 2, (int)pkb.contains(19, CALL, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(STMTLST, 7)", 1, (int)pkb.contains(STMTLST, 7, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(STMTLST, 29)", 4, (int)pkb.contains(STMTLST, 29, true).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Contains*(STMTLST, 16)", 3, (int)pkb.contains(STMTLST, 16, true).size());
@@ -581,14 +587,20 @@ void PKBTest::testPKB()
 
 	//Siblings
 	cout << "Siblings" << endl;
-	/*vector<pair<int, vector<int>>> testing3;
-	testing3 = pkb.siblings(WHILE, 2);
+	vector<pair<int, vector<int>>> testing3;
+	testing3 = pkb.siblings(VARIABLE, CONSTANT);
 	for(int i=0; i<testing3.size(); i++) {
 		pair <int, vector<int>> tester2 = testing3.at(i);
-		cout << (i+1) << ". 11 at stmtNo " << tester2.first << endl;
+		cout << (i+1) << ". VAR at stmtNo " << tester2.first << endl;
 		for(int j=0; j<tester2.second.size(); j++) {
-			cout << "While StmtNo " << tester2.second.at(j) << endl;
+			cout << "CONST StmtNo " << tester2.second.at(j) << endl;
 		}
+	}
+
+	/*vector<int> testing;
+	testing = pkb.siblings(ASSIGN, 6);
+	for(int i=0; i<testing.size(); i++) {
+		cout << (i+1) << ". CALL at stmtNo " << testing.at(i) << endl;
 	}*/
 
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Procedure, Procedure)", 5, (int)pkb.siblings(PROCEDURE, PROCEDURE).size());
@@ -599,12 +611,13 @@ void PKBTest::testPKB()
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(While, Assign)", 4, (int)pkb.siblings(WHILE, ASSIGN).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Constant, Variable)", 14, (int)pkb.siblings(CONSTANT, VARIABLE).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(StmtLst, StmtLst)", 10, (int)pkb.siblings(STMTLST, STMTLST).size());
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Stmt, Stmt)", 19, (int)pkb.siblings(STMT, STMT).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Stmt, Stmt)", 24, (int)pkb.siblings(STMT, STMT).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Stmt, Variable)", 0, (int)pkb.siblings(STMT, VARIABLE).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(StmtLst, Variable)", 17, (int)pkb.siblings(STMTLST, VARIABLE).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Variable, StmtLst)", 12, (int)pkb.siblings(VARIABLE, STMTLST).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(VARIABLE, CONSTANT)", 14, (int)pkb.siblings(VARIABLE, CONSTANT).size());
 
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Assign, 6)", 1, (int)pkb.siblings(ASSIGN, 6).size());
+	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(Assign, 6)", 4, (int)pkb.siblings(ASSIGN, 6).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(6, Assign)", 1, (int)pkb.siblings(6, ASSIGN).size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("Siblings(11, While)", 1, (int)pkb.siblings(11, WHILE).size());
 	

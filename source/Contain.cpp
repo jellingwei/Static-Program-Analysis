@@ -681,7 +681,7 @@ TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type) {
 	return false;
 }*/
 
-vector<pair<int, vector<int>>> Contain::contains(int stmtNo, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+vector<int> Contain::contains(int stmtNo, SYNONYM_TYPE descendentType, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
@@ -696,19 +696,19 @@ vector<pair<int, vector<int>>> Contain::contains(int stmtNo, SYNONYM_TYPE descen
 		temp = checkForIfCase(currentNode, convertFromSynonym(descendentType), true);
 	}
 
-	if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
+	//if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
 	
-	return results;
+	return temp;
 }
 
-vector<pair<int, vector<int>>> Contain::contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure) {
+vector<int> Contain::contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNODE_TYPE descendentType;
 	//class Contain* contain;
 	vector<int> temp;
 	vector<pair<int, vector<int>>> result;
-	vector<pair<int, vector<int>>> results;
+	//vector<pair<int, vector<int>>> results;
 
 	if(predecessorType == PROGRAM || predecessorType == PROCEDURE || predecessorType == STMTLST || predecessorType == STMT || predecessorType == WHILE || predecessorType == IF) {
 		if(stmtType == "assign") {
@@ -725,11 +725,11 @@ vector<pair<int, vector<int>>> Contain::contains(SYNONYM_TYPE predecessorType, i
 	for(int i=0; i<result.size(); i++) {
 		pair <int, vector<int>> tester = result.at(i);
 		for(int j=0; j<tester.second.size(); j++) {
-			if(tester.second.at(j) == stmtNo)	temp.push_back(stmtNo);
+			if(tester.second.at(j) == stmtNo)	temp.push_back(tester.first);
 		}
-		if(temp.size() != 0) results.push_back(make_pair(tester.first, temp));
-		temp.clear();
+		//if(temp.size() != 0) results.push_back(make_pair(tester.first, temp));
+		//temp.clear();
 	}
 
-	return results;
+	return temp;
 }

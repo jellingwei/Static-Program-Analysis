@@ -95,7 +95,7 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 
 		case While: {
 			allToCheckInt = pkb.getStmtNumForType("while");
-			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt) {
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt  || second_siblingType2 == Call) {
 				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 					parentNode = currentNode->getParent();
@@ -110,7 +110,7 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 
 		case If: {
 			allToCheckInt = pkb.getStmtNumForType("if");
-			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt) {
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt || second_siblingType2 == Call) {
 				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 					parentNode = currentNode->getParent();
@@ -125,7 +125,7 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 
 		case Assign: {
 			allToCheckInt = pkb.getStmtNumForType("assign");
-			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt) {
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt || second_siblingType2 == Call) {
 				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 					parentNode = currentNode->getParent();
@@ -141,7 +141,7 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 		case Stmt: {
 			//assign
 			allToCheckInt = pkb.getStmtNumForType("assign");
-			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt) {
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt || second_siblingType2 == Call) {
 				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 					parentNode = currentNode->getParent();
@@ -154,7 +154,7 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 
 			//if
 			allToCheckInt = pkb.getStmtNumForType("if");
-			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt) {
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt || second_siblingType2 == Call) {
 				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 					parentNode = currentNode->getParent();
@@ -167,7 +167,20 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 
 			//while
 			allToCheckInt = pkb.getStmtNumForType("while");
-			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt) {
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt || second_siblingType2 == Call) {
+				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
+					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
+					parentNode = currentNode->getParent();
+					temp = getAllPairs(currentNode, parentNode, second_siblingType2);
+
+					if(temp.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), temp));
+					temp.clear();
+				}		
+			}
+
+			//call
+			allToCheckInt = pkb.getStmtNumForType("call");
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt || second_siblingType2 == Call) {
 				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 					parentNode = currentNode->getParent();
@@ -208,7 +221,7 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 			for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
 				currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
 				if(second_siblingType2 == Plus || second_siblingType2 == Minus || second_siblingType2 == Times || second_siblingType2 == Constant || second_siblingType2 == Variable) {
-						if(first_siblingType == Variable) queue.push_back(currentNode->getChildren()->at(0));
+						if(first_siblingType2 == Variable) queue.push_back(currentNode->getChildren()->at(0));
 					//if(currentNode->getDescendent() > 2) {
 						tempQueue = getOperandNodes(currentNode->getChildren()->at(1), first_siblingType2);
 						queue.insert( queue.end(), tempQueue.begin(), tempQueue.end() );
@@ -261,8 +274,23 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 			break;
 		}
 
+		case Call: {
+			allToCheckInt = pkb.getStmtNumForType("call");
+			if(second_siblingType2 == Assign || second_siblingType2 == While || second_siblingType2 == If || second_siblingType2 == Stmt || second_siblingType2 == Call) {
+				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
+					currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
+					parentNode = currentNode->getParent();
+					temp = getAllPairs(currentNode, parentNode, second_siblingType2);
+
+					if(temp.size() != 0) results.push_back(make_pair(currentNode->getStmtNumber(), temp));
+					temp.clear();
+				}		
+			}
+			break;
+		}
+
 		//Invalid
-		case Program: case Call: {
+		case Program: {
 			break;
 		}
 
@@ -341,7 +369,7 @@ vector<int> getAllPairs(TNode* currentNode, TNode* parentNode, TNODE_TYPE target
 		}
 
 		if(test != currentNode && targetType == Stmt) {
-			if(test->getNodeType() == Assign || test->getNodeType() == While || test->getNodeType() == If) {
+			if(test->getNodeType() == Assign || test->getNodeType() == While || test->getNodeType() == If || test->getNodeType() == Call) {
 				result.push_back(test->getStmtNumber());
 			}
 		}
@@ -408,33 +436,33 @@ vector<TNode*> getOperandNodes(TNode* currentNode, TNODE_TYPE operandType) {
 	return queue;
 }
 
-vector<pair<int, vector<int>>> Siblings::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
+vector<int> Siblings::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
 	vector<int> temp;
-	vector<pair<int, vector<int>>> results;
+	//vector<pair<int, vector<int>>> results;
 
-	if(second_siblingType == ASSIGN || second_siblingType == IF || second_siblingType == WHILE || second_siblingType == CALL) {
+	if(second_siblingType == ASSIGN || second_siblingType == IF || second_siblingType == WHILE || second_siblingType == CALL || second_siblingType == STMT) {
 		temp = getAllPairs(currentNode, currentNode->getParent(), convertFromSynonym2(second_siblingType));
-		if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
-		temp.clear();
+		//if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
+		//temp.clear();
 	}
-	return results;
+	return temp;
 }
 
-vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
+vector<int> Siblings::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
 	vector<int> temp;
-	vector<pair<int, vector<int>>> result;
-	vector<pair<int, vector<int>>> results;
+	//vector<pair<int, vector<int>>> result;
+	//vector<pair<int, vector<int>>> results;
 
-	if(first_siblingType == ASSIGN || first_siblingType == IF || first_siblingType == WHILE || first_siblingType == CALL) {
+	if(first_siblingType == ASSIGN || first_siblingType == IF || first_siblingType == WHILE || first_siblingType == CALL || first_siblingType == STMT) {
 		temp = getAllPairs(currentNode, currentNode->getParent(), convertFromSynonym2(first_siblingType));
-		if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
-		temp.clear();
+		//if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
+		//temp.clear();
 	}
-	return results;
+	return temp;
 }
