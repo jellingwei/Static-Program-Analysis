@@ -171,7 +171,7 @@ none
 1026 - Valid Sibling expression tree constant
 assign a; constant c; times multi;
 Select c such that Sibling(multi, c)
-14
+8
 5000
 1027 - Valid Sibling filter a LHS
 assign a; stmt s;
