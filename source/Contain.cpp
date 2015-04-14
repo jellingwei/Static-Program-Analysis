@@ -345,7 +345,7 @@ vector<int> checkForStmtLstCase(TNode* currentNode, TNODE_TYPE descendentType, b
 			}
 
 			if(descendentType == Stmt) {
-				if(allToCheck->at(i)->getNodeType() == While || allToCheck->at(i)->getNodeType() == If || allToCheck->at(i)->getNodeType() == Assign)
+				if(allToCheck->at(i)->getNodeType() == While || allToCheck->at(i)->getNodeType() == If || allToCheck->at(i)->getNodeType() == Assign || allToCheck->at(i)->getNodeType() == Call)
 					LHS.push_back(allToCheck->at(i)->getStmtNumber());
 			}
 
