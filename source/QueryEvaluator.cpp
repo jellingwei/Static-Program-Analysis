@@ -1141,7 +1141,7 @@ namespace QueryEvaluator
 		vector<pair<int, VALUE_LIST>> containsPair;
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
-			return pkb.isParent(stoi(nameLHS), stoi(nameRHS));
+			return pkb.isParent(stoi(nameLHS), stoi(nameRHS), true);
 		} else if (typeLHS == STRING_INT && RHS.isSynonym()) {
 			containsPair = pkb.contains(stoi(nameLHS), typeRHS, isTrans);
 		} else if (typeRHS == STRING_INT && LHS.isSynonym()) {
@@ -1177,7 +1177,7 @@ namespace QueryEvaluator
 		vector<pair<int, VALUE_LIST>> siblingsPair;
 
 		if (typeLHS == STRING_INT && typeRHS == STRING_INT) {
-			return pkb.isFollows(stoi(nameLHS), stoi(nameRHS));
+			return pkb.isFollows(stoi(nameLHS), stoi(nameRHS), true);
 		} else if (typeLHS == STRING_INT && RHS.isSynonym()) {
 			siblingsPair = pkb.siblings(stoi(nameLHS), typeRHS);
 		} else if (typeRHS == STRING_INT && LHS.isSynonym()) {

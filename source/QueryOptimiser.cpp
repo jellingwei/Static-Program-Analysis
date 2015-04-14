@@ -277,8 +277,9 @@ namespace QueryOptimiser
 			QNode* clause = clauses[i];
 			QNODE_TYPE query_type = clause->getNodeType();
 
-			if (query_type == With) {
-				continue;  //Cannot replace synonyms in with clause
+			if (query_type == With || query_type == Sibling || 
+				query_type == Contains || query_type == ContainsT) {
+					continue;  //Cannot replace synonyms in these clauses
 			}
 
 			Synonym undefined(UNDEFINED, "_");
@@ -354,16 +355,23 @@ namespace QueryOptimiser
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(singleClause);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
+			QNODE_TYPE qnode_type = singleClause->getNodeType();
 
 			if (LHS == toBeReplaced) {
-				if (singleClause->getNodeType() == Pattern) {
-					isRemovable = false;  //Cannot rewrite pattern clauses
+				if (qnode_type == Pattern || qnode_type == Sibling ||
+					qnode_type == Contains || qnode_type == ContainsT) {
+					isRemovable = false;  //Cannot rewrite these clauses
 				} else {
 					LHS = replacement;
 				}
 			}
+
 			if (RHS == toBeReplaced) {
-				RHS = replacement;
+				if (qnode_type == Sibling || qnode_type == Contains || qnode_type == ContainsT) {
+					isRemovable = false;  //Cannot rewrite these clauses
+				} else {
+					RHS = replacement;
+				}
 			}
 			setClauseArguments(singleClause, LHS, RHS);
 			finalClauses.push_back(singleClause);
