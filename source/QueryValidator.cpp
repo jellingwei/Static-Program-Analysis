@@ -138,11 +138,11 @@ void QueryValidator::initTable()
 
 
 	/* Contains */
-	SYNONYM_TYPE list9array[] = { PROCEDURE, IF, WHILE, STMT, PROG_LINE, STMTLST, ASSIGN, PLUS, MINUS, TIMES, STRING_INT };
+	SYNONYM_TYPE list9array[] = { PROCEDURE, STRING_INT, STMTLST, STMT, ASSIGN, WHILE, IF, PLUS, MINUS, TIMES, PROG_LINE};
 	vector<SYNONYM_TYPE> list9; list9.insert(list9.begin(), list9array, list9array + 11);
 
-	SYNONYM_TYPE list10array[] = { ASSIGN, CALL, IF, WHILE, STMT, PROG_LINE, CONSTANT, VARIABLE, PLUS, MINUS, TIMES, STRING_INT }; 
-	vector<SYNONYM_TYPE> list10; list10.insert(list10.begin(), list10array, list10array + 12);
+	SYNONYM_TYPE list10array[] = { STRING_INT, STMTLST, STMT, ASSIGN, CALL, WHILE, IF, PLUS, MINUS, TIMES, VARIABLE, CONSTANT, PROG_LINE}; 
+	vector<SYNONYM_TYPE> list10; list10.insert(list10.begin(), list10array, list10array + 13);
 
 	//constant is valid for Contains
 	//Contains argument 1
@@ -257,17 +257,37 @@ BOOLEAN_ QueryValidator::validateSuchThatQueries(QNODE_TYPE type, Synonym arg1, 
 	/* Contains requires extra validation checks, checking for static semantic errors*/
 	if(type==Contains || type==ContainsT){
 
+		// for both Contains and Contains*
 		if(arg1Type==ASSIGN || arg1Type==PLUS || arg1Type==MINUS || arg1Type==TIMES){
 			
-			if(arg2Type==PROG_LINE || arg2Type==STMT || arg2Type==STRING_INT || arg2Type==ASSIGN || arg2Type==CALL || arg2Type==IF || arg2Type==WHILE){
+			if(arg2Type!=PLUS && arg2Type!=MINUS && arg2Type!=TIMES && arg2Type!=CONSTANT && arg2Type!=VARIABLE){
 				return false;
+			}
+		
+		}
+
+		if(type==Contains){
+
+			if(arg1Type==PROCEDURE){
+
+				if(arg2Type!=STMTLST)
+					return false;
+
+			}else if(arg1Type==STMTLST){
+
+				if(arg2Type!=IF && arg2Type!=WHILE && arg2Type!=ASSIGN && arg2Type!=CALL && arg2Type!=STMT && arg2Type!=PROG_LINE)
+					return false;
+
+			}else if(arg1Type==WHILE || arg1Type==IF || arg1Type==STMT || arg1Type==PROG_LINE){
+
+				if(arg2Type!=STMTLST && arg2Type!=VARIABLE)
+					return false;
+
 			}
 		}
 
 	}
-
-
-
+	
 
 	return true;
 }
