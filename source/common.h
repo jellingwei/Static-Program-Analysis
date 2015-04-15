@@ -41,6 +41,8 @@ typedef string EXPRESSION;
 typedef string SYNONYM_NAME;
 typedef string STATEMENT_TYPE;
 
+typedef std::pair<int, int> PAIR;
+
 typedef set<int> VALUE_SET;
 typedef vector<int> VALUE_LIST;
 typedef vector<int> CONSTANT_LIST;
