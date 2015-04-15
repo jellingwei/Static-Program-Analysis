@@ -50,7 +50,7 @@ namespace Parser {
 	 * The file specified by filename is opened for parsing. 
 	 * Return TRUE if the file can be successfully opened. Otherwise, return FALSE.
 	 */
-	STATUS initParser(string filename) {
+	STATUS initParser(FILENAME filename) {
 		using namespace Parser::var;
 		inputFile.open(filename);
 		stmtNum = 0;
@@ -590,27 +590,30 @@ namespace Parser {
 	
 	/**
 	 * Matches names
-	 * @return true if the given token follows the naming convention for NAME, as per the given grammar
+	 * @param token the token to match
+	 * @return token if it matches the name. Otherwise, return an empty string.
 	 */
-	string matchName(string token) {
+	TOKEN matchName(TOKEN token) {
 		regex nameRegex("[A-Za-z][\\w]*");
 		return regex_match(token, nameRegex) ? token : "";
 	}
 
 	/**
 	 * Matches integers
-	 *  @return true if the given token follows the naming convention for INTEGER, as per SIMPLE grammar
+	 * @param token the token to match 
+	 * @return token if it matches the integer. Otherwise, return an empty string.
 	 */
-	string matchInteger(string token) {
+	TOKEN matchInteger(TOKEN token) {
 		regex intRegex("\\d+");
 		return (regex_match(token,intRegex)) ? token : "";
 	}
 
 	/**
 	 * Matches operators
-	 * @return true if the given token is an operator
+	 * @param token the token to match
+	 * @return token if it matches the operator. Otherwise, return an empty string.
 	 */
-	string matchOperator(string token) {
+	TOKEN matchOperator(TOKEN token) {
 		regex operRegex("[;\\+-\\*=]");
 		return (regex_match(token, operRegex)) ? token: "";
 	}
@@ -619,7 +622,7 @@ namespace Parser {
 	 * Parses the program and populate data structures in the PKB. 
 	 * Return TRUE if the program can successfully be parsed according to the SIMPLE grammar. Otherwise, return FALSE. 
 	 */
-	bool parseProgram() {
+	BOOLEAN_ parseProgram() {
 		using util::isEof;
 
 		bool isParseSuccessful = true;

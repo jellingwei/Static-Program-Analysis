@@ -21,6 +21,7 @@ typedef int CONSTANT_;
 typedef int PROG_LINE_;
 typedef bool BOOLEAN_;
 
+typedef int ARGUMENT;
 typedef int VALUE;
 typedef int INTEGER;
 typedef int STATEMENT;
@@ -31,6 +32,8 @@ typedef int SYNONYM_INDEX;
 typedef bool STATUS;
 typedef bool TRANS_CLOSURE;
 
+typedef string TOKEN;
+typedef string QUERY;
 typedef string FILENAME;
 typedef string VARNAME;
 typedef string PROCNAME;

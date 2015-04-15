@@ -55,18 +55,19 @@ namespace QueryParser
 
 
 	/*Private functions to parse patterns */
-	bool parseExpressionSpec();
-	bool parseExpr();
-	bool parseTerm();
-	bool parseFactor();
+	BOOLEAN_ parseExpressionSpec();
+	BOOLEAN_ parseExpr();
+	BOOLEAN_ parseTerm();
+	BOOLEAN_ parseFactor();
 
 
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
+	 * @param query the input of a query
 	 * @return TRUE if the query parser have been initialized. 
-	 * @return FALSE if a query string given is empty, or the buffer\’s size is 0 after tokenizing.
+	 *		   FALSE if a query string given is empty, or the buffer\’s size is 0 after tokenizing.
 	 */
-	BOOLEAN_ initParser(string query)
+	BOOLEAN_ initParser(QUERY query)
 	{
 		buffer.clear();
 		if (query.size() == 0){
@@ -119,7 +120,7 @@ namespace QueryParser
 	/**
 	 * @return the next token in the buffer.
 	 */
-	string parseToken()
+	TOKEN parseToken()
 	{
 		if (buffer.size() && bufferIter != buffer.end()){
 
@@ -157,7 +158,7 @@ namespace QueryParser
 	 * @return the next token in the buffer, but does not 
 	 * take that token out of buffer.
 	 */
-	string peekInToTheNextToken()
+	TOKEN peekInToTheNextToken()
 	{
 		if(buffer.size()==0 || bufferIter == buffer.end()) // if there is no next token
 			return "";
@@ -169,7 +170,7 @@ namespace QueryParser
 	 * @return the next next token in the buffer, but does not
 	 * take that token out of buffer.
 	 */
-	string peekInToTheNextNextToken()
+	TOKEN peekInToTheNextNextToken()
 	{
 		if ((buffer.size()-1 != 0) && bufferIter+1 != buffer.end()){
 			return (*(bufferIter+1));
@@ -183,7 +184,7 @@ namespace QueryParser
 	 * If steps = 0 , it returns the currToken.
 	 * If steps = 1, it returns the previous token.
 	 */
-	string peekBackwards(int steps)
+	TOKEN peekBackwards(int steps)
 	{
 		bool maxStep = false; 
 
@@ -355,9 +356,10 @@ namespace QueryParser
 	/**
 	 * Matches if the given token follows the naming convention for NAME, 
 	 * as per the given grammar.
-	 * @return TRUE if it matches, FALSE otherwise.
+	 * @param token the token to match
+	 * @return TRUE if it matches the name, FALSE otherwise.
 	 */
-	bool matchName(string token)
+	BOOLEAN_ matchName(TOKEN token)
 	{
 		std::regex nameRegex("[A-Za-z][\\w]*");
 
@@ -369,7 +371,7 @@ namespace QueryParser
 	 * as per the given grammar.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchInteger(string token)
+	BOOLEAN_ matchInteger(TOKEN token)
 	{
 		std::regex intRegex("\\d+");
 		return (std::regex_match(token,intRegex)) ? true : false;
@@ -380,7 +382,7 @@ namespace QueryParser
 	 * as per the given grammar.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchFactor(string token)
+	BOOLEAN_ matchFactor(TOKEN token)
 	{
 		if(!(matchInteger(token) || matchName(token))){
 
@@ -394,7 +396,7 @@ namespace QueryParser
 	 * Checks if it's a factor 
 	 * @return TRUE if it's a factor, FALSE otherwise.
 	 **/
-	bool isFactor(string token)
+	BOOLEAN_ isFactor(TOKEN token)
 	{
 		return (matchInteger(token) || matchName(token));
 	}
@@ -403,7 +405,7 @@ namespace QueryParser
 	 * as per the given grammar.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchSynonymAndIdent(string token, bool comma)
+	BOOLEAN_ matchSynonymAndIdent(TOKEN token, bool comma)
 	{
 		std::regex synonymRegex("");
 
@@ -423,7 +425,7 @@ namespace QueryParser
 	 * Matches if the given token is an underscore.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchUnderscore(string token)
+	BOOLEAN_ matchUnderscore(TOKEN token)
 	{
 		return (token.compare("_") == 0);
 	}
@@ -433,7 +435,7 @@ namespace QueryParser
 	 * the given grammar.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchAttrName(string token)
+	BOOLEAN_ matchAttrName(TOKEN token)
 	{
 		for(int i=0; i<(sizeof(attrName)/sizeof(*attrName)); i++){
 			if(attrName[i].compare(token) == 0)
@@ -452,7 +454,7 @@ namespace QueryParser
 	 * given grammar. It checks if it has "synonym.attrName" syntax.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchAttrRef(string token)
+	BOOLEAN_ matchAttrRef(TOKEN token)
 	{
 
 		if(!matchSynonymAndIdent(peekBackwards(2), false)){
@@ -483,7 +485,7 @@ namespace QueryParser
 	 * of stmt reference or line reference. 
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchStmtOrLineRef(string token)
+	BOOLEAN_ matchStmtOrLineRef(TOKEN token)
 	{
 		if(matchSynonymAndIdent(token,false))
 			return true;
@@ -503,7 +505,7 @@ namespace QueryParser
 	 * an entity reference.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchEntRef(string token)
+	BOOLEAN_ matchEntRef(TOKEN token)
 	{
 		if(matchSynonymAndIdent(token, false))
 			return true;
@@ -526,7 +528,7 @@ namespace QueryParser
 	 * an variable reference.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchVarRef(string token)
+	BOOLEAN_ matchVarRef(TOKEN token)
 	{
 		if(matchSynonymAndIdent(token, false))
 			return true;
@@ -548,7 +550,7 @@ namespace QueryParser
 	 * of node reference. 
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchNodeRef(string token)
+	BOOLEAN_ matchNodeRef(TOKEN token)
 	{
 		if(matchSynonymAndIdent(token,false))
 			return true;
@@ -566,7 +568,7 @@ namespace QueryParser
 	 * of a stmtLst reference. 
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchStmtLstRef(string token)
+	BOOLEAN_ matchStmtLstRef(TOKEN token)
 	{
 		if(matchSynonymAndIdent(token,false))
 			return true;
@@ -584,7 +586,7 @@ namespace QueryParser
 	 * a reference.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	 bool matchRef(string token)
+	 BOOLEAN_ matchRef(TOKEN token)
 	 {
 		if(matchSynonymAndIdent(token, false))
 	 		return true;
@@ -607,7 +609,7 @@ namespace QueryParser
 	 * a design entity.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchDesignEntity(string token)
+	BOOLEAN_ matchDesignEntity(TOKEN token)
 	{
 		for(int i=0; i<(sizeof(designEntities)/sizeof(*designEntities)); i++){
 			if(designEntities[i].compare(token) == 0)
@@ -629,7 +631,7 @@ namespace QueryParser
 	 * Parses the next token and check if it is equal to the given target.
 	 * @return TRUE if it equals, FALSE otherwise.
 	 */
-	bool parse(string target)
+	BOOLEAN_ parse(string target)
 	{
 		string nextToken = parseToken();
 		return nextToken.compare(target) == 0;
@@ -639,7 +641,7 @@ namespace QueryParser
 	 * Parses the next token and check if it is equal to an apostrophe.
 	 * @return TRUE if it equals, FALSE otherwise.
 	 */
-	bool parseApostrophe()
+	BOOLEAN_ parseApostrophe()
 	{
 		string nextToken = parseToken();
 		std::regex synonymRegex("[\"]");
@@ -650,7 +652,7 @@ namespace QueryParser
 	 * Parses the next token and check if it is a design entity.
 	 * @return TRUE if it's a design entity, FALSE otherwise.
 	 */
-	bool parseDesignEntity()
+	BOOLEAN_ parseDesignEntity()
 	{
 		string nextToken = parseToken();
 		return matchDesignEntity(nextToken);
@@ -660,7 +662,7 @@ namespace QueryParser
 	 * Parses the next token and check if it is a synonym.
 	 * @return TRUE if it's a synonym, FALSE otherwise.
 	 */
-	bool parseSynonymns()
+	BOOLEAN_ parseSynonymns()
 	{
 		string nextToken = parseToken();
 		return matchSynonymAndIdent(nextToken, false);
@@ -774,7 +776,7 @@ namespace QueryParser
 	 * Parses tokens and checks if it is a factor.
 	 * @return TRUE if it is a factor, FALSE otherwise.
 	 */
-	bool parseFactor()
+	BOOLEAN_ parseFactor()
 	{
 		bool res;
 		string nextToken = parseToken();
@@ -798,7 +800,7 @@ namespace QueryParser
 	 * Parses tokens and check if it is a term.
 	 * @return TRUE if it is a term, FALSE otherwise.
 	 */
-	bool parseTerm()
+	BOOLEAN_ parseTerm()
 	{
 
 		bool res = parseFactor();
@@ -819,7 +821,7 @@ namespace QueryParser
 	 * Parses tokens and check if it is an expression.
 	 * @return TRUE if it is an expression, FALSE otherwise.
 	 */
-	bool parseExpr()
+	BOOLEAN_ parseExpr()
 	{
 		string peekToken;
 		bool res;
@@ -857,7 +859,7 @@ namespace QueryParser
 	 * Parses tokens and check if it is an expression-spec (for patterns).
 	 * @return TRUE if it is an expression-spec, FALSE otherwise.
 	 */
-	bool parseExpressionSpec()
+	BOOLEAN_ parseExpressionSpec()
 	{
 		bool res;
 		bool underscorePresent = false;
@@ -896,7 +898,7 @@ namespace QueryParser
 	 *  @return TRUE if a QNode is created and linked to Query Tree built, 
 	 *  and FALSE if query validation has failed in Query Validator. 
 	 */
-	bool buildQueryTree(QNODE_TYPE relRef, Synonym s1, Synonym s2)
+	BOOLEAN_ buildQueryTree(QNODE_TYPE relRef, Synonym s1, Synonym s2)
 	{				
 		bool res;
 
@@ -921,7 +923,7 @@ namespace QueryParser
 	 * Supporting function to create synonyms.
 	 * @return 'Synonym emptySynonym' if it is unable to create a Synonym.
 	 */
-	Synonym createSynonym(QNODE_TYPE relRef,string value, int arg)
+	Synonym createSynonym(QNODE_TYPE relRef,string value, ARGUMENT arg)
 	{
 		Synonym emptySynonym;
 		SYNONYM_TYPE DE_type;
@@ -1068,7 +1070,7 @@ namespace QueryParser
 	 *  Argument 2 can be an entRef, stmtRef, lineRef, varRef or nodeRef.
 	 *  @return an empty string if parsing fails.
 	 */
-	string parseArg(QNODE_TYPE relRef, int arg)
+	string parseArg(QNODE_TYPE relRef, ARGUMENT arg)
 	{
 		REF_TYPE node;
 		string entRef_value="";
@@ -1162,7 +1164,7 @@ namespace QueryParser
 	 * Creates QNode Such that and validates the such that clause.
 	 * @return FALSE if there are errors in the such that portion of query.
 	 */
-	bool parseSuchThatClause()
+	BOOLEAN_ parseSuchThatClause()
 	{
 		bool res;
 		QNODE_TYPE relRef_enum;
@@ -1237,7 +1239,7 @@ namespace QueryParser
 	 * Creates QNode Pattern and validates the pattern clause.
 	 * @return FALSE if there are errors in the pattern portion of query.
 	 */
-	bool parsePatternClause()
+	BOOLEAN_ parsePatternClause()
 	{
 		bool res;
 		//Patterns DE_type0(DE_type1, DE_type2, DE_type3)
@@ -1384,7 +1386,7 @@ namespace QueryParser
 	 * Creates QNode With and validates the with clause.
 	 * @return FALSE if there are errors in the with portion of query.
 	 */
-	bool parseAttrCompare()
+	BOOLEAN_ parseAttrCompare()
 	{
 		string ref1 = parseRef();
 		if(ref1.compare("")==0){
@@ -1433,7 +1435,7 @@ namespace QueryParser
 	 * Calls parseAttrCompare().
 	 * @return FALSE if there are errors in the with portion of query.
 	 */
-	bool parseWithClause()
+	BOOLEAN_ parseWithClause()
 	{
 		bool res = parseAttrCompare();
 		return res;
@@ -1442,7 +1444,7 @@ namespace QueryParser
 	/**
 	 * @return FALSE if there are errors in the optional clauses.
 	 */
-	bool parseOptionalClauses()
+	BOOLEAN_ parseOptionalClauses()
 	{
 
 		bool res;
@@ -1529,7 +1531,7 @@ namespace QueryParser
 	 * Supporting function to parse declarations.
 	 * @return FALSE if there are errors in the declarations.
 	 */
-	bool parseDeclarations()
+	BOOLEAN_ parseDeclarations()
 	{
 		bool res;
 		int i=0; //number of times in the while loop
@@ -1585,7 +1587,7 @@ namespace QueryParser
 	 * an element.
 	 * @return TRUE if it matches, FALSE otherwise.
 	 */
-	bool matchElem(string token)
+	BOOLEAN_ matchElem(TOKEN token)
 	{
 		if(matchSynonymAndIdent(token, false))
 		 	return true;
@@ -1618,7 +1620,7 @@ namespace QueryParser
 	 * Supporting function to create QNode for the select clause.
 	 * @return FALSE if there are errors in building. 
 	 */
-	bool buildSelectQueryTree(string value)
+	BOOLEAN_ buildSelectQueryTree(string value)
 	{
 		bool res;
 		QNode* childNode;
@@ -1693,7 +1695,7 @@ namespace QueryParser
 	 * Supporting function to parse tuple.
 	 * @return FALSE if there are errors in the tuple parsed.
 	 */
-	bool parseTuple()
+	BOOLEAN_ parseTuple()
 	{
 		bool res;
 		string elem;
@@ -1742,7 +1744,7 @@ namespace QueryParser
 	 * Supporting function to parse results.
 	 * @return FALSE if there are errors in the result clause parsed.
 	 */
-	bool parseResultClause()
+	BOOLEAN_ parseResultClause()
 	{
 		bool res;
 
@@ -1770,7 +1772,7 @@ namespace QueryParser
 	 * Creates QNode Selection and validates the select synonym.
 	 * @return FALSE if there are errors in the select synonym.
 	 */
-	bool parseSelect()
+	BOOLEAN_ parseSelect()
 	{
 
 		bool res = parse("Select");
@@ -1790,7 +1792,7 @@ namespace QueryParser
 	 * @return FALSE if there are errors in query declarations, select synonym 
 	 * or in optional clauses.
 	 */
-	bool parseQuerySelectClause()
+	BOOLEAN_ parseQuerySelectClause()
 	{
 		bool res; 
 
