@@ -639,31 +639,36 @@ namespace QueryOptimiser
 
 		if (typeLHS == STRING_CHAR) {
 			if (typeRHS == VARIABLE || typeRHS == PROCEDURE) {
-				return make_pair(true, RightToLeft);  //Do not accept call stmts as a superset
+				BOOLEAN_ isSubset = ValuesHandler::isValueSubset(typeRHS, LHS.getName());
+				return make_pair(isSubset, RightToLeft);  //Do not accept call stmts as a superset
 			} else {
 				return make_pair(false, RightToLeft);
 			}
 		} else if (typeLHS == STRING_INT) {
 			if (attributeRHS == stmtNo) {
-				return make_pair(true, RightToLeft);
+				//Only stmt, assign, call, while, if synonyms have attribute as stmtNo
+				BOOLEAN_ isSubset = ValuesHandler::isValueSubset(typeRHS, stoi(LHS.getName()));
+				return make_pair(isSubset, RightToLeft);
 			} else {
 				return make_pair(false, RightToLeft);
 			}
 		} else if (typeLHS == STMT || typeLHS == PROG_LINE) {
 			if (typeRHS == ASSIGN || typeRHS == CALL || typeRHS == WHILE || typeRHS == IF || typeRHS == STRING_INT) {
-				return make_pair(true, LeftToRight);  //If RHS is also STMT, does it count? 
+				return make_pair(true, LeftToRight);  //Cannot replace a stmt with another stmt
 			} else {
 				return make_pair(false, LeftToRight);
 			}
 		} else if (typeLHS == ASSIGN || typeLHS == CALL || typeLHS == WHILE || typeLHS == IF || typeLHS == CONSTANT) {
 			if (typeRHS == STRING_INT) {
-				return make_pair(true, LeftToRight);
+				BOOLEAN_ isSubset = ValuesHandler::isValueSubset(typeLHS, stoi(RHS.getName()));
+				return make_pair(isSubset, LeftToRight);
 			} else {
 				return make_pair(false, LeftToRight);
 			}
 		} else if (typeLHS == PROCEDURE || typeLHS == VARIABLE) {
 			if (typeRHS == STRING_CHAR) {
-				return make_pair(true, LeftToRight);
+				BOOLEAN_ isSubset = ValuesHandler::isValueSubset(typeLHS, RHS.getName());
+				return make_pair(isSubset, LeftToRight);
 			} else {
 				return make_pair(false, LeftToRight);
 			}

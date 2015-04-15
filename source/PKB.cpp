@@ -40,16 +40,14 @@ PKB::PKB() {
 * @return a TNode for the given design entity together with its statement number and value. 
 * @exception exception if stmtNum is negative or 0 or value is negative.
 */
-TNode* PKB::createTNode(TNODE_TYPE astNodeType, STATEMENT stmtNum, VAR_INDEX value) 
-{
+TNode* PKB::createTNode(TNODE_TYPE astNodeType, STATEMENT stmtNum, VAR_INDEX value) {
 	return ast->createTNode(astNodeType, stmtNum, value);
 }
 
 /**
 * @return the root node of the AST.
 */
-TNode* PKB::getRoot() 
-{
+TNode* PKB::getRoot() {
 	return ast->getRoot();
 }
 
@@ -61,8 +59,7 @@ TNode* PKB::getRoot()
 *		  FALSE if the link between the fromNode to toNode is not created successfully.
 * @exception exception if link is invalid, or fromNode and toNode is NULL.
 */
-STATUS PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) 
-{
+STATUS PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode) {
 	return ast->createLink(link, fromNode, toNode);
 }
 
@@ -71,8 +68,7 @@ STATUS PKB::createLink(LINK_TYPE link, TNode* fromNode, TNode* toNode)
 * @return the total number of children the parent TNode has. 
 * @exception exception if parent is NULL.
 */
-INTEGER PKB::getChildrenSize(TNode* parent) 
-{
+INTEGER PKB::getChildrenSize(TNode* parent) {
 	return ast->getChildrenSize(parent);
 }
 
@@ -82,8 +78,7 @@ INTEGER PKB::getChildrenSize(TNode* parent)
 * If there are no children nodes, return an empty list.
 * @exception exception if parent is NULL.
 */
-TNODE_LIST PKB::getChildrenNode(TNode* parent) 
-{
+TNODE_LIST PKB::getChildrenNode(TNode* parent) {
 	return ast->getChildrenNode(parent);
 }
 
@@ -94,8 +89,7 @@ TNODE_LIST PKB::getChildrenNode(TNode* parent)
 *		  FALSE if child TNode is not a child node of parent TNode.
 * @exception exception if parent or child is NULL.
 */
-BOOLEAN_ PKB::isChildNode(TNode* parent, TNode* child) 
-{
+BOOLEAN_ PKB::isChildNode(TNode* parent, TNode* child) {
 	return ast->isChildNode(parent, child);
 }
 
@@ -105,8 +99,7 @@ BOOLEAN_ PKB::isChildNode(TNode* parent, TNode* child)
 		  FALSE if node does not exist.
 * @exception exception if node is NULL.
 */
-BOOLEAN_ PKB::isExists(TNode* node) 
-{
+BOOLEAN_ PKB::isExists(TNode* node) {
 	return ast->isExists(node);
 }
 
@@ -123,8 +116,7 @@ INTEGER PKB::getASTSize()
  * @param RHS  the expression query with a suitable subtree
  * @return a vector of statement numbers which are assign stmts, and uses the input RHS as its right substree.
  */
-STATEMENT_LIST PKB::patternMatchAssign(EXPRESSION RHS) 
-{
+STATEMENT_LIST PKB::patternMatchAssign(EXPRESSION RHS) {
 	return ast->patternMatchAssign(RHS);
 }
 
@@ -133,8 +125,7 @@ STATEMENT_LIST PKB::patternMatchAssign(EXPRESSION RHS)
  * @param LHS  the name of the variable that acts as the control variable for the while statements we are interested in
  * @return a vector of statement numbers which are while statements, and uses the input LHS as its control variable.
  */
-STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS) 
-{
+STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS) {
 	return ast->patternMatchWhile(LHS);
 }
 
@@ -143,8 +134,7 @@ STATEMENT_LIST PKB::patternMatchWhile(VARNAME LHS)
  * @param LHS  the name of the variable that acts as the control variable for the if statements we are interested in
  * @return a vector of statement numbers which are in if statements, and uses the input LHS as its control variable.
  */
-STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS) 
-{
+STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS) {
 	return ast->patternMatchIf(LHS);
 }
 
@@ -157,26 +147,22 @@ STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS)
  *     3. the AST is poorly formed and the while loop's node is in an invalid state
  * Otherwise, return the index of the control variable.
  */
-VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum) 
-{
+VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum) {
 	return ast->getControlVariable(stmtNum);
 }
 
 //@todo
-vector<pair<int, vector<int>>> PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then) 
-{
+vector<pair<int, vector<int>>> PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then) {
 	return ast->patternMatchWhile(LHS, then);
 }
 
 //@todo
-vector<pair<int, vector<int>>> PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then) 
-{
+vector<pair<int, vector<int>>> PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then) {
 	return ast->patternMatchIfThen(LHS, then);
 }
 
 //@todo
-vector<pair<int, vector<int>>> PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then) 
-{
+vector<pair<int, vector<int>>> PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then) {
 	return ast->patternMatchIfElse(LHS, then);
 }
 
@@ -197,16 +183,14 @@ vector<pair<int, vector<pair<int, int>>>> PKB::patternMatchIf(VARNAME LHS, SYNON
  * @return index of variable.
  * @exception exception if varName is empty or stmtNum is negative or 0.
  */
-VAR_INDEX PKB::insertVar(VARNAME varName, STATEMENT stmtNum) 
-{
+VAR_INDEX PKB::insertVar(VARNAME varName, STATEMENT stmtNum) {
 	return varTable->insertVar(varName, stmtNum);
 }
 
 /**
  * @return the total number of variables in the the VarTable.
  */
-INTEGER PKB::getVarTableSize() 
-{
+INTEGER PKB::getVarTableSize() {
 	return varTable->getVarTableSize();
 }
 
@@ -215,8 +199,7 @@ INTEGER PKB::getVarTableSize()
  * @return the name of the variable in the VarTable with the given index.
  * If index is out of range, return an empty string.
  */
-VARNAME PKB::getVarName(VAR_INDEX index) 
-{
+VARNAME PKB::getVarName(VAR_INDEX index) {
 	return varTable->getVarName(index);
 }
 
@@ -229,8 +212,7 @@ VARNAME PKB::getVarName(VAR_INDEX index)
  *			2. there is no such variable in the the VarTable
  * @exception exception if varName is empty
  */
-VAR_INDEX PKB::getVarIndex(VARNAME varName) 
-{
+VAR_INDEX PKB::getVarIndex(VARNAME varName) {
 	return varTable->getVarIndex(varName);
 }
 
@@ -238,8 +220,7 @@ VAR_INDEX PKB::getVarIndex(VARNAME varName)
  * @return all the index of the variables in the the VarTable.
  * If there is no answer, return an empty list.
  */
-VARINDEX_LIST PKB::getAllVarIndex() 
-{
+VARINDEX_LIST PKB::getAllVarIndex() {
 	return varTable->getAllVarIndex();
 }
 
@@ -253,16 +234,14 @@ VARINDEX_LIST PKB::getAllVarIndex()
  * @return index of procedure
  * @exception exception if procName is empty.
  */
-PROC_INDEX PKB::insertProc(PROCNAME procName) 
-{
+PROC_INDEX PKB::insertProc(PROCNAME procName) {
 	return procTable->insertProc(procName);
 }
 
 /**
  * @return the total number of procedures in the the ProcTable.
  */
-INTEGER PKB::getProcTableSize() 
-{
+INTEGER PKB::getProcTableSize() {
 	return procTable->getProcTableSize();;
 }
 
@@ -271,8 +250,7 @@ INTEGER PKB::getProcTableSize()
  * @return the name of the procedure in the ProcTable with the given index.
  * If index is out of range, return an empty string.
  */
-PROCNAME PKB::getProcName(PROC_INDEX index) 
-{
+PROCNAME PKB::getProcName(PROC_INDEX index) {
 	return procTable->getProcName(index);
 }
 
@@ -284,8 +262,7 @@ PROCNAME PKB::getProcName(PROC_INDEX index)
  *			2. there is no such procedure in the the ProcTable
  * @exception exception if procName is empty
  */
-PROC_INDEX PKB::getProcIndex(PROCNAME procName) 
-{
+PROC_INDEX PKB::getProcIndex(PROCNAME procName) {
 	return procTable->getProcIndex(procName);
 }
 
@@ -293,8 +270,7 @@ PROC_INDEX PKB::getProcIndex(PROCNAME procName)
  * @return all the index of the variables in the the ProcTable.
  * If there is no answer, return an empty list.
  */
-PROCINDEX_LIST PKB::getAllProcIndex() 
-{
+PROCINDEX_LIST PKB::getAllProcIndex() {
 	return procTable->getAllProcIndex() ;
 }
 
@@ -309,16 +285,14 @@ PROCINDEX_LIST PKB::getAllProcIndex()
  *		   FALSE  if constantTable is not updated successfully.
  * @exception exception if constant is empty or stmtNum is negative or 0.
  */
-STATUS PKB::insertConstant(VALUE constant, STATEMENT stmtNum) 
-{
+STATUS PKB::insertConstant(VALUE constant, STATEMENT stmtNum) {
 	return constantTable->insertConstant(constant, stmtNum);
 }
 
 /**
  * @return the total number of constants in the the ConstantTable.
  */
-INTEGER PKB::getConstantTableSize() 
-{
+INTEGER PKB::getConstantTableSize() {
 	return constantTable->getSize();
 }
 
@@ -327,8 +301,7 @@ INTEGER PKB::getConstantTableSize()
 * @return the statement number the constant is in the ConstantTable.
 * @exception exception if constant is negative.
 */
-STATEMENT_LIST PKB::getStmtNum(VALUE constant) 
-{
+STATEMENT_LIST PKB::getStmtNum(VALUE constant) {
 	return constantTable->getStmtNum(constant);
 }
 
@@ -338,16 +311,14 @@ STATEMENT_LIST PKB::getStmtNum(VALUE constant)
 * @return TRUE if number is a constant in the ConstantTable.
 *		  FALSE if number is not a constant in the ConstantTable.
 */
-BOOLEAN_ PKB::isConstant(INTEGER number) 
-{
+BOOLEAN_ PKB::isConstant(INTEGER number) {
 	return constantTable->isConstant(number);
 }
 
 /**
 * @return the list of all the constant in the ConstantTable.
 */
-CONSTANT_LIST PKB::getAllConstant() 
-{
+CONSTANT_LIST PKB::getAllConstant() {
 	return constantTable->getAllConstant();
 }
 
@@ -364,8 +335,7 @@ CONSTANT_LIST PKB::getAllConstant()
 		   FALSE if StmtTable is not updated successfully.
  * @exception exception if stmtNum is negative or 0, or type is not while/assign/if/call.
  */
-STATUS PKB::insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC_INDEX procIndex) 
-{
+STATUS PKB::insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC_INDEX procIndex) {
 	return stmtTable->insertStmt(stmtNum, type, node, procIndex);
 }
 
@@ -376,20 +346,21 @@ STATUS PKB::insertStmt(STATEMENT stmtNum, STATEMENT_TYPE type, TNode* node, PROC
  * If stmtNum is out of range, return an empty string.
  * @exception exception if stmtNum is negative or 0.
  */
-STATEMENT_TYPE PKB::getType(STATEMENT stmtNum) 
-{
+STATEMENT_TYPE PKB::getType(STATEMENT stmtNum) {
 	return stmtTable->getType(stmtNum);
 }
 
 /**
  * Get all the statement numbers with the corresponding valid STATEMENT_TYPE which are while/assign/if/call.
- * @param type  the type of statement which is while/assign/if/call
- * @return all the statement number of the statement type in the the StmtTable. 
+ * @param type  the type of statement which is while/assign/if/call, or plus/minus/times/stmtlst
+ * @return If type is while/assign/if/call, all the statement number of the statement type in the the StmtTable. 
+ *		If type is plus, minus or times, the assignment statements which contain a plus/minus/times 
+ *		If type if stmtlst, the first stmt in every stmtlist. Note that for 'if' statements, both the first line 
+ *		in the 'then' stmtlist, and in the 'else' stmtlist are returned.
  * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
  * @exception exception if type is not while/assign/if/call.
 */
-STATEMENT_LIST PKB::getStmtNumForType(STATEMENT_TYPE type) 
-{
+STATEMENT_LIST PKB::getStmtNumForType(STATEMENT_TYPE type) {
 	 // @todo remove the whole function
 	return stmtTable->getStmtNumForType(type);
 }
@@ -405,13 +376,15 @@ PROC_INDEX PKB::getProcIndexForStmt(STATEMENT stmtNum) {
 
 /**
  * Get all the statement numbers with the corresponding valid STATEMENT_TYPE which are while/assign/if/call.
- * @param type  the type of statement which is while/assign/if/call
+ * @param type  the type of statement which is while/assign/if/call, or plus/minus/times/stmtlst
  * @return all the statement number of the statement type in the the StmtTable. 
- * If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+ *		If there is no answer or if type is an invalid STATEMENT_TYPE, return an empty list.
+ *		If type is plus, minus or times, the assignment statements which contain a plus/minus/times 
+ *		If type if stmtlst, the first stmt in every stmtlist. Note that for 'if' statements, both the first line 
+ *		in the 'then' stmtlist, and in the 'else' stmtlist are returned.
  * @exception exception if type is not while/assign/if/call.
 */
-STATEMENT_LIST PKB::getStmtNumForType(SYNONYM_TYPE type) 
-{
+STATEMENT_LIST PKB::getStmtNumForType(SYNONYM_TYPE type) {
 	return stmtTable->getStmtNumForType(Synonym::convertToString(type));
 }
 
@@ -421,8 +394,7 @@ STATEMENT_LIST PKB::getStmtNumForType(SYNONYM_TYPE type)
 * @return TRUE if stmtNum is of Assignment Type. 
 *		  FALSE if stmtNum is not of Assignment Type or stmtNum is out of range.
 */
-BOOLEAN_ PKB::isAssign(STATEMENT stmtNum) 
-{
+BOOLEAN_ PKB::isAssign(STATEMENT stmtNum) {
 	return stmtTable->isAssign(stmtNum);
 }
 
@@ -1547,8 +1519,7 @@ vector<int> PKB::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
 /*
 ** Singleton implementation: for Query Evaluator to get an instance of PKB
 */
-PKB& PKB::getInstance() 
-{
+PKB& PKB::getInstance() {
 	static PKB instance;
 	return instance;
 }
