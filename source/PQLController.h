@@ -3,7 +3,7 @@
 #include <list>
 
 #include "QueryParser.h"
-#include "QueryOptimiser.h"
+#include "QueryOptimizer.h"
 #include "QueryEvaluator.h"
 #include "ResultProjector.h"
 #include "QueryTree.h"

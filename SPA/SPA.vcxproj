@@ -34,7 +34,7 @@
     <ClCompile Include="..\source\PQLController.cpp" />
     <ClCompile Include="..\source\QNode.cpp" />
     <ClCompile Include="..\source\QueryEvaluator.cpp" />
-    <ClCompile Include="..\source\QueryOptimiser.cpp" />
+    <ClCompile Include="..\source\QueryOptimizer.cpp" />
     <ClCompile Include="..\source\QueryParser.cpp" />
     <ClCompile Include="..\source\QueryTree.cpp" />
     <ClCompile Include="..\source\QueryValidator.cpp" />
@@ -73,7 +73,7 @@
     <ClInclude Include="..\source\PQLController.h" />
     <ClInclude Include="..\source\QNode.h" />
     <ClInclude Include="..\source\QueryEvaluator.h" />
-    <ClInclude Include="..\source\QueryOptimiser.h" />
+    <ClInclude Include="..\source\QueryOptimizer.h" />
     <ClInclude Include="..\source\QueryParser.h" />
     <ClInclude Include="..\source\QueryTree.h" />
     <ClInclude Include="..\source\QueryValidator.h" />

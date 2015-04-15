@@ -4,7 +4,7 @@
 #include <list>
 #include "TestPQL.h"
 #include "SourceParser.h"
-#include "QueryOptimiser.h"
+#include "QueryOptimizer.h"
 #include "QueryEvaluator.h"
 #include "QueryParser.h"
 #include "QueryTree.h"

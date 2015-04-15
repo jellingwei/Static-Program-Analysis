@@ -1,4 +1,4 @@
-#include "QueryOptimiser.h"
+#include "QueryOptimizer.h"
 
 /**
 @brief Namespace containing functions for the query optimisation

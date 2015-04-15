@@ -93,9 +93,6 @@
     <ClCompile Include="..\source\ValuesHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\QueryOptimiser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\StatisticsTable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -121,6 +118,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\NextSolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryOptimizer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -209,9 +209,6 @@
     <ClInclude Include="..\source\common_list.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\QueryOptimiser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\StatisticsTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -237,6 +234,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ParentSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryOptimizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
