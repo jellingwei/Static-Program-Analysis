@@ -9,8 +9,10 @@ namespace ResultProjector {
 	unordered_map<string, vector<string>> convertTuplesToString(vector<Synonym> resultVector);
 
 	/**
-	* Given a list, inserts all the values into the list from the vector of Synonyms.
-	* @todo Also performs the cartesian product if there is a tuple specified
+	* Given a list, inserts all the results into the list
+	* @param resultVector a vector of query evaluation results
+	* @param resultList the list to project the values into
+	* @return the resultList will be changed
 	*/
 	void projectResultToList(vector<Synonym> resultVector, list<string>& resultList) { 
 		if (resultVector.size() == 1) {
@@ -47,6 +49,11 @@ namespace ResultProjector {
 		}
 	}
 
+	/**
+	* Converts values to strings and expands the values into tuple form
+	* @param resultVector a vector of query evaluation results
+	* @return a map from the synonym name to its values in strings
+	*/
 	unordered_map<string, vector<string>> convertTuplesToString(vector<Synonym> resultVector)
 	{
 		unsigned int mainFactor = 1;
@@ -115,6 +122,12 @@ namespace ResultProjector {
 		return stringValuesMap;
 	}
 
+	/**
+	* Helper function to expand each row by a certain factor
+	* @param values a vector of strings
+	* @param factor the multiple to expand each row by
+	* @return a vector of strings that has been expanded
+	*/
 	vector<string> expandEachRow(vector<string> values, int factor)
 	{
 		vector<string> returnStrings;
@@ -127,6 +140,12 @@ namespace ResultProjector {
 		return returnStrings;
 	}
 
+	/**
+	* Helper function to multiply the whole vector by a certain factor
+	* @param values a vector of strings
+	* @param factor the multiple to expand
+	* @return a vector of strings that has been expanded
+	*/
 	vector<string> expandRange(vector<string> values, int factor)
 	{
 		vector<string> returnStrings;
