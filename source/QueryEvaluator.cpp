@@ -1401,7 +1401,7 @@ namespace QueryEvaluator
 			}
 		} else {
 			//arg2 and arg 3 are synonyms
-			vector<pair<int, vector<pair<int, int>>>> if_var_pairs;
+			vector<pair<int, pair<int, int>>> if_var_pairs;
 			if (arg1.isConstant() || arg1.isUndefined()) {
 				if_var_pairs = pkb.patternMatchIf(arg1.getName(), arg2.getType(), arg3.getType());
 			} else {
@@ -1409,15 +1409,13 @@ namespace QueryEvaluator
 			}
 
 			for (unsigned int i = 0 ; i < if_var_pairs.size(); i++) {
-				pair<int, vector<pair<int, int>>> onePair = if_var_pairs[i];
+				pair<int, pair<int, int>> onePair = if_var_pairs[i];
 				int arg0Value = onePair.first;
-				vector<pair<int, int>> arg2AndArg3Pair = onePair.second;
+				pair<int, int> arg2AndArg3Pair = onePair.second;
 
-				for (unsigned int j = 0; j < arg2AndArg3Pair.size(); j++) {
-					acceptedArg0.push_back(arg0Value);
-					acceptedArg2.push_back(arg2AndArg3Pair[j].first);
-					acceptedArg3.push_back(arg2AndArg3Pair[j].second);
-				}
+				acceptedArg0.push_back(arg0Value);
+				acceptedArg2.push_back(arg2AndArg3Pair.first);
+				acceptedArg3.push_back(arg2AndArg3Pair.second);
 			}
 			arg0.setValues(acceptedArg0);
 			arg2.setValues(acceptedArg2);
