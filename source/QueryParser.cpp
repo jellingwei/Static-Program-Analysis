@@ -54,8 +54,7 @@ namespace QueryParser
 	QueryValidator* myQueryV;
 
 
-	/*@siling temporary declare here.
-	  Private functions to parse patterns */
+	/*Private functions to parse patterns */
 	bool parseExpressionSpec();
 	bool parseExpr();
 	bool parseTerm();
@@ -64,8 +63,8 @@ namespace QueryParser
 
 	/**
 	 * Initialises and prepares the parser for parsing with a query.
-	 * @return TRUE if the query parser have been initialized. Otherwise, return FALSE.
-	 * If a query string given is empty, or the buffer\’s size is 0 after tokenizing return FALSE. 
+	 * @return TRUE if the query parser have been initialized. 
+	 * @return FALSE if a query string given is empty, or the buffer\’s size is 0 after tokenizing.
 	 */
 	BOOLEAN_ initParser(string query)
 	{
@@ -167,7 +166,6 @@ namespace QueryParser
 	}
 
 	/**
-	 * @To-do merge with peekInToTheNextToken
 	 * @return the next next token in the buffer, but does not
 	 * take that token out of buffer.
 	 */
@@ -774,7 +772,7 @@ namespace QueryParser
 
 	/**
 	 * Parses tokens and checks if it is a factor.
-	 * @return FALSE if parsing fails.
+	 * @return TRUE if it is a factor, FALSE otherwise.
 	 */
 	bool parseFactor()
 	{
@@ -798,7 +796,7 @@ namespace QueryParser
 
 	/**
 	 * Parses tokens and check if it is a term.
-	 * @return FALSE if parsing fails.
+	 * @return TRUE if it is a term, FALSE otherwise.
 	 */
 	bool parseTerm()
 	{
@@ -819,7 +817,7 @@ namespace QueryParser
 
 	/**
 	 * Parses tokens and check if it is an expression.
-	 * @return FALSE if parsing fails.
+	 * @return TRUE if it is an expression, FALSE otherwise.
 	 */
 	bool parseExpr()
 	{
@@ -857,7 +855,7 @@ namespace QueryParser
 
 	/**
 	 * Parses tokens and check if it is an expression-spec (for patterns).
-	 * @return FALSE if parsing fails.
+	 * @return TRUE if it is an expression-spec, FALSE otherwise.
 	 */
 	bool parseExpressionSpec()
 	{
@@ -895,9 +893,8 @@ namespace QueryParser
 	/**
 	 *	Helper function for parse such that clause
 	 *  After parsing the relRef, build a tree.
-	 *  @To-do Temporarily it's for such-that. Extend it for patterns, select, with
 	 *  @return TRUE if a QNode is created and linked to Query Tree built, 
-	 *  and FALSE if query validation failed in Query Validator. 
+	 *  and FALSE if query validation has failed in Query Validator. 
 	 */
 	bool buildQueryTree(QNODE_TYPE relRef, Synonym s1, Synonym s2)
 	{				
@@ -1070,7 +1067,6 @@ namespace QueryParser
 	 *  Argument 1 can be an entRef, stmtRef, lineRef or nodeRef.
 	 *  Argument 2 can be an entRef, stmtRef, lineRef, varRef or nodeRef.
 	 *  @return an empty string if parsing fails.
-	 *  @To-do return synonym  
 	 */
 	string parseArg(QNODE_TYPE relRef, int arg)
 	{
@@ -1584,6 +1580,11 @@ namespace QueryParser
 		return res;
 	}
 
+	/**
+	 * Matches if the given token follows the naming convention of 
+	 * an element.
+	 * @return TRUE if it matches, FALSE otherwise.
+	 */
 	bool matchElem(string token)
 	{
 		if(matchSynonymAndIdent(token, false))
@@ -1594,6 +1595,10 @@ namespace QueryParser
 		return false;
 	}
 
+	/**
+	 * Supporting function to parse element.
+	 * @return FALSE if there are errors in the element parsed.
+	 */
 	string parseElem()
 	{
 		string nextToken = "";
@@ -1609,6 +1614,10 @@ namespace QueryParser
 	 	return matchElem(nextToken) ? returnToken: "";
 	}
 
+	/**
+	 * Supporting function to create QNode for the select clause.
+	 * @return FALSE if there are errors in building. 
+	 */
 	bool buildSelectQueryTree(string value)
 	{
 		bool res;
@@ -1680,6 +1689,10 @@ namespace QueryParser
 
 	}
 
+	/**
+	 * Supporting function to parse tuple.
+	 * @return FALSE if there are errors in the tuple parsed.
+	 */
 	bool parseTuple()
 	{
 		bool res;
@@ -1725,6 +1738,10 @@ namespace QueryParser
 		return true; //everything is successful
 	}
 
+	/**
+	 * Supporting function to parse results.
+	 * @return FALSE if there are errors in the result clause parsed.
+	 */
 	bool parseResultClause()
 	{
 		bool res;
@@ -1770,7 +1787,8 @@ namespace QueryParser
 	}
 
 	/**
-	 * @return FALSE if there are errors in query declarations and select synonym.
+	 * @return FALSE if there are errors in query declarations, select synonym 
+	 * or in optional clauses.
 	 */
 	bool parseQuerySelectClause()
 	{
