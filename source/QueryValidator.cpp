@@ -126,8 +126,8 @@ void QueryValidator::initTable()
 
 
 	//Calls argument 1
-	SYNONYM_TYPE list8array[] = { PROCEDURE, STRING_CHAR, STRING_INT, UNDEFINED }; 
-	vector<SYNONYM_TYPE> list8; list8.insert(list8.begin(), list8array, list8array + 4);
+	SYNONYM_TYPE list8array[] = { PROCEDURE, STRING_CHAR, UNDEFINED }; 
+	vector<SYNONYM_TYPE> list8; list8.insert(list8.begin(), list8array, list8array + 3);
 	relationshipArg1Map.insert(make_pair(QNODE_TYPE(Calls), list8));
 	//Calls argument 2
 	relationshipArg2Map.insert(make_pair(QNODE_TYPE(Calls), list8));
