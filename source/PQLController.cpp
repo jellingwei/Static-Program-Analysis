@@ -8,9 +8,8 @@ void PQLController::evaluate(std::string query, std::list<std::string> &results)
 
 		QueryTree* qT = QueryParser::getQueryTree();
 		qT = QueryOptimiser::optimiseQueryTree(qT);
-		vector<Synonym> queryResults;
 
-		queryResults = QueryEvaluator::processQueryTree(qT);
+		vector<Synonym> queryResults = QueryEvaluator::processQueryTree(qT);
 		ResultProjector::projectResultToList(queryResults, results);
 	} catch (exception e) {
 		#ifdef DEBUG
