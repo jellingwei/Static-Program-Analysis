@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>My Project: QueryOptimiser Namespace Reference</title>
+<title>CS3202 Minions SPA: QueryOptimiser Namespace Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td id="projectlogo"><img alt="Logo" src="minion.jpg"/></td>
   <td style="padding-left: 0.5em;">
-   <div id="projectname">My Project
+   <div id="projectname">CS3202 Minions SPA
    </div>
   </td>
  </tr>
@@ -90,7 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
-<p>Namespace containing functions for the query optimisation.  
+<p>Namespace containing functions for the query optimization.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -99,77 +99,60 @@ Functions</h2></td></tr>
 <tr class="separator:a5b4ed5d55db766524c74d80c2dbfed79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e226e8c92890ee13e11576af50c55d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a23e226e8c92890ee13e11576af50c55d">flattenQuery</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a23e226e8c92890ee13e11576af50c55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a612be54ac8b59918f4b534c1b44206fa"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a612be54ac8b59918f4b534c1b44206fa"></a>
-<a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>rewriteWithClauses</b> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
+<tr class="memitem:a612be54ac8b59918f4b534c1b44206fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a612be54ac8b59918f4b534c1b44206fa">rewriteWithClauses</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a612be54ac8b59918f4b534c1b44206fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79d9b22bb0ac9cea7f8a8445fe1f60ed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a79d9b22bb0ac9cea7f8a8445fe1f60ed"></a>
-vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>populateSelectSynonyms</b> (<a class="el" href="class_q_node.html">QNode</a> *resultNode)</td></tr>
-<tr class="separator:a79d9b22bb0ac9cea7f8a8445fe1f60ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a8fc3f8eb68df89c8c5ada9e0e2ff77"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7a8fc3f8eb68df89c8c5ada9e0e2ff77"></a>
-pair&lt; vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>splitWithClauses</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
-<tr class="separator:a7a8fc3f8eb68df89c8c5ada9e0e2ff77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fd8b4efd2dc4aec44752faf4f1ddf52"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8fd8b4efd2dc4aec44752faf4f1ddf52"></a>
-pair&lt; bool, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>isWithClauseRewritable</b> (<a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
-<tr class="separator:a8fd8b4efd2dc4aec44752faf4f1ddf52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a636915927e4e13b0b43a88ecb4923222"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a636915927e4e13b0b43a88ecb4923222"></a>
-<a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>removeReduantClausesAndSynonyms</b> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
+<tr class="memitem:a00949dbee1df00d4da918ffff0ce3f8e"><td class="memItemLeft" align="right" valign="top">QNODE_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a00949dbee1df00d4da918ffff0ce3f8e">populateSelectSynonyms</a> (<a class="el" href="class_q_node.html">QNode</a> *resultNode)</td></tr>
+<tr class="separator:a00949dbee1df00d4da918ffff0ce3f8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6738ea5fbf46575ea1d3b4ee2a385e9b"><td class="memItemLeft" align="right" valign="top">pair&lt; QNODE_LIST, QNODE_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a6738ea5fbf46575ea1d3b4ee2a385e9b">splitWithClauses</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
+<tr class="separator:a6738ea5fbf46575ea1d3b4ee2a385e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8344c14409ce073e555aa86196247435"><td class="memItemLeft" align="right" valign="top">pair&lt; BOOLEAN_, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a8344c14409ce073e555aa86196247435">isWithClauseRewritable</a> (<a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
+<tr class="separator:a8344c14409ce073e555aa86196247435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a636915927e4e13b0b43a88ecb4923222"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a636915927e4e13b0b43a88ecb4923222">removeReduantClausesAndSynonyms</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a636915927e4e13b0b43a88ecb4923222"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7340776012d92fd7ba28e5810c11019"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af7340776012d92fd7ba28e5810c11019"></a>
-<a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>scanAndReplaceRedundantItems</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="memitem:af7340776012d92fd7ba28e5810c11019"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#af7340776012d92fd7ba28e5810c11019">scanAndReplaceRedundantItems</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
 <tr class="separator:af7340776012d92fd7ba28e5810c11019"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16f80b4a4e2af7420ff3b9650372bfed"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a16f80b4a4e2af7420ff3b9650372bfed"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>scanAndRemoveRedundantSynonyms</b> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &amp;clauses, vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
-<tr class="separator:a16f80b4a4e2af7420ff3b9650372bfed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad00fab730dc38da2278155682437a3b1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad00fab730dc38da2278155682437a3b1"></a>
-vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>replaceSynonyms</b> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector, <a class="el" href="class_synonym.html">Synonym</a> original, <a class="el" href="class_synonym.html">Synonym</a> replacement)</td></tr>
-<tr class="separator:ad00fab730dc38da2278155682437a3b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3e0a2c983c304c9deacfb78db84d53f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ab3e0a2c983c304c9deacfb78db84d53f">scanAndRemoveRedundantSynonyms</a> (QNODE_LIST &amp;clauses, vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="separator:ab3e0a2c983c304c9deacfb78db84d53f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e3fb018b721137de2a4117ca6e09950"><td class="memItemLeft" align="right" valign="top">pair&lt; QNODE_LIST, QNODE_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a5e3fb018b721137de2a4117ca6e09950">splitRedundantClauses</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, set&lt; int &gt; synonymsReachable, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="separator:a5e3fb018b721137de2a4117ca6e09950"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3c9ff7d4e3afcbe8ef0066a6b4d5d7f"><td class="memItemLeft" align="right" valign="top">pair&lt; BOOLEAN_, QNODE_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#aa3c9ff7d4e3afcbe8ef0066a6b4d5d7f">replaceSynonyms</a> (QNODE_LIST clausesVector, <a class="el" href="class_synonym.html">Synonym</a> original, <a class="el" href="class_synonym.html">Synonym</a> replacement)</td></tr>
+<tr class="separator:aa3c9ff7d4e3afcbe8ef0066a6b4d5d7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a403b8fc81e593cc84e7931d1e2f8e0b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a403b8fc81e593cc84e7931d1e2f8e0b1">optimiseClauses</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a403b8fc81e593cc84e7931d1e2f8e0b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac0f70297abac43b8d62c1068c9779a6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ac0f70297abac43b8d62c1068c9779a6c">optimiseClausesNode</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
 <tr class="separator:ac0f70297abac43b8d62c1068c9779a6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d443f7f59455230d72a639b5e876a04"><td class="memItemLeft" align="right" valign="top">pair&lt; vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a5d443f7f59455230d72a639b5e876a04">splitConstantClauses</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
-<tr class="separator:a5d443f7f59455230d72a639b5e876a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a93cf8061c9f02f37a48f8fb84c6b27b5"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a93cf8061c9f02f37a48f8fb84c6b27b5"></a>
-vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>reorderConstantClauses</b> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; constantClauses)</td></tr>
-<tr class="separator:a93cf8061c9f02f37a48f8fb84c6b27b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af864eec4ea5ea596160ab6e0d1aaddf4"><td class="memItemLeft" align="right" valign="top">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#af864eec4ea5ea596160ab6e0d1aaddf4">reorderNonConstantClauses</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clauses)</td></tr>
-<tr class="separator:af864eec4ea5ea596160ab6e0d1aaddf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac58cd85c1661026bda3151a09037a34d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ac58cd85c1661026bda3151a09037a34d">getNextSmallestAndUpdate</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &amp;clauses)</td></tr>
-<tr class="separator:ac58cd85c1661026bda3151a09037a34d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad479835607c036661265ac84100099ae"><td class="memItemLeft" align="right" valign="top">pair&lt; int, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ad479835607c036661265ac84100099ae">findIndexAndDirectionWithSmallestCost</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clauses)</td></tr>
-<tr class="separator:ad479835607c036661265ac84100099ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa03eb5380c87e9c4128e306c124cc4ca"><td class="memItemLeft" align="right" valign="top">pair&lt; QNODE_LIST, QNODE_LIST &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#aa03eb5380c87e9c4128e306c124cc4ca">splitConstantClauses</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
+<tr class="separator:aa03eb5380c87e9c4128e306c124cc4ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b9a6abffb2bdd61030d313c4509bad1"><td class="memItemLeft" align="right" valign="top">QNODE_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a1b9a6abffb2bdd61030d313c4509bad1">reorderConstantClauses</a> (QNODE_LIST constantClauses)</td></tr>
+<tr class="separator:a1b9a6abffb2bdd61030d313c4509bad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2efcdc2a5dc622f2358c72dbe74fba50"><td class="memItemLeft" align="right" valign="top">QNODE_LIST&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a2efcdc2a5dc622f2358c72dbe74fba50">reorderNonConstantClauses</a> (QNODE_LIST clauses)</td></tr>
+<tr class="separator:a2efcdc2a5dc622f2358c72dbe74fba50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade70cfabe7e837e3fc1e403c55709c00"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ade70cfabe7e837e3fc1e403c55709c00">getNextSmallestAndUpdate</a> (QNODE_LIST &amp;clauses)</td></tr>
+<tr class="separator:ade70cfabe7e837e3fc1e403c55709c00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a466e86658c9eec01ba4c6a32107d9fe7"><td class="memItemLeft" align="right" valign="top">pair&lt; int, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a466e86658c9eec01ba4c6a32107d9fe7">findIndexAndDirectionWithSmallestCost</a> (QNODE_LIST clauses)</td></tr>
+<tr class="separator:a466e86658c9eec01ba4c6a32107d9fe7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4477669a327e72a70888e6f7d2b38b20"><td class="memItemLeft" align="right" valign="top">pair&lt; <a class="el" href="class_synonym.html">Synonym</a>, <a class="el" href="class_synonym.html">Synonym</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a4477669a327e72a70888e6f7d2b38b20">getClauseArguments</a> (<a class="el" href="class_q_node.html">QNode</a> *clause)</td></tr>
 <tr class="separator:a4477669a327e72a70888e6f7d2b38b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae817744e6813b7da84dcd4bd9cb902cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ae817744e6813b7da84dcd4bd9cb902cf">setClauseArguments</a> (<a class="el" href="class_q_node.html">QNode</a> *&amp;clause, <a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
 <tr class="separator:ae817744e6813b7da84dcd4bd9cb902cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a587079200d91746d0abd1ab68ab5d36c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a587079200d91746d0abd1ab68ab5d36c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isContainedInMain</b> (string wantedName)</td></tr>
-<tr class="separator:a587079200d91746d0abd1ab68ab5d36c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae1729d0f56505d29f7ac133fa26ccd30"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae1729d0f56505d29f7ac133fa26ccd30"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSelectSynonym</b> (string wantedName)</td></tr>
-<tr class="separator:ae1729d0f56505d29f7ac133fa26ccd30"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0faeccbb19001ea43040da3cfcd8048d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0faeccbb19001ea43040da3cfcd8048d"></a>
-<a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>createSubtree</b> (QNODE_TYPE type, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector)</td></tr>
-<tr class="separator:a0faeccbb19001ea43040da3cfcd8048d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b5b1c06e60df62977a49d8f43386b86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a2b5b1c06e60df62977a49d8f43386b86">combineClausesVectors</a> (vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector1, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; clausesVector2)</td></tr>
-<tr class="separator:a2b5b1c06e60df62977a49d8f43386b86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a859ed3cb29b9435b8bd7691cf74e2862"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a859ed3cb29b9435b8bd7691cf74e2862"></a>
-pair&lt; bool, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>determineSupersetSubset</b> (<a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
-<tr class="separator:a859ed3cb29b9435b8bd7691cf74e2862"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa82a36b3e636941864ac3a899903482a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa82a36b3e636941864ac3a899903482a"></a>
-unordered_map&lt; string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>indexSynonymsReferenced</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
+<tr class="memitem:a13a4ab419c7071e15dc80e04c68f2fe6"><td class="memItemLeft" align="right" valign="top">BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a13a4ab419c7071e15dc80e04c68f2fe6">isContainedInMain</a> (string wantedName)</td></tr>
+<tr class="separator:a13a4ab419c7071e15dc80e04c68f2fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae109fccdeafbc5bbdaf6bd3871e4fefb"><td class="memItemLeft" align="right" valign="top">BOOLEAN_&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#ae109fccdeafbc5bbdaf6bd3871e4fefb">isSelectSynonym</a> (string wantedName)</td></tr>
+<tr class="separator:ae109fccdeafbc5bbdaf6bd3871e4fefb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8843bd6d614d5c5a8540d4dd18488b5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a8843bd6d614d5c5a8540d4dd18488b5d">createSubtree</a> (QNODE_TYPE type, QNODE_LIST clausesVector)</td></tr>
+<tr class="separator:a8843bd6d614d5c5a8540d4dd18488b5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3161390a5d793a3d1398f47c0d5e959b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a3161390a5d793a3d1398f47c0d5e959b">combineClausesVectors</a> (QNODE_LIST clausesVector1, QNODE_LIST clausesVector2)</td></tr>
+<tr class="separator:a3161390a5d793a3d1398f47c0d5e959b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81db7dd532e4de0afc7f0335b864dd2a"><td class="memItemLeft" align="right" valign="top">pair&lt; BOOLEAN_, DIRECTION &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a81db7dd532e4de0afc7f0335b864dd2a">determineSupersetSubset</a> (<a class="el" href="class_synonym.html">Synonym</a> LHS, <a class="el" href="class_synonym.html">Synonym</a> RHS)</td></tr>
+<tr class="separator:a81db7dd532e4de0afc7f0335b864dd2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa82a36b3e636941864ac3a899903482a"><td class="memItemLeft" align="right" valign="top">unordered_map&lt; string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#aa82a36b3e636941864ac3a899903482a">indexSynonymsReferenced</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode)</td></tr>
 <tr class="separator:aa82a36b3e636941864ac3a899903482a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6963c3f5bea7bae726f757edcb013c7b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6963c3f5bea7bae726f757edcb013c7b"></a>
-vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createSynonymGraph</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
+<tr class="memitem:a6963c3f5bea7bae726f757edcb013c7b"><td class="memItemLeft" align="right" valign="top">vector&lt; vector&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a6963c3f5bea7bae726f757edcb013c7b">createSynonymGraph</a> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
 <tr class="separator:a6963c3f5bea7bae726f757edcb013c7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89dd6d7ff281287d110d620f47ce7b56"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a89dd6d7ff281287d110d620f47ce7b56"></a>
-set&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>scanSynonymsReachable</b> (vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix)</td></tr>
+<tr class="memitem:a89dd6d7ff281287d110d620f47ce7b56"><td class="memItemLeft" align="right" valign="top">set&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a89dd6d7ff281287d110d620f47ce7b56">scanSynonymsReachable</a> (vector&lt; vector&lt; int &gt;&gt; adjacencyMatrix)</td></tr>
 <tr class="separator:a89dd6d7ff281287d110d620f47ce7b56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a850d40db88447e119dabee1f525f6fee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_query_optimiser.html#a850d40db88447e119dabee1f525f6fee">optimiseQueryTree</a> (<a class="el" href="class_query_tree.html">QueryTree</a> *qTreeRoot)</td></tr>
 <tr class="separator:a850d40db88447e119dabee1f525f6fee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e3f5aa9c78457813c84379c3b362cfc"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e3f5aa9c78457813c84379c3b362cfc"></a>
-pair&lt; vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>splitRedundantClauses</b> (<a class="el" href="class_q_node.html">QNode</a> *clausesNode, set&lt; int &gt; synonymsReachable, unordered_map&lt; string, int &gt; name_index_map)</td></tr>
-<tr class="separator:a5e3f5aa9c78457813c84379c3b362cfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -190,22 +173,22 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 <tr class="separator:ac0251318673ebd4fda093a5859f320c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Namespace containing functions for the query optimisation. </p>
+<div class="textblock"><p>Namespace containing functions for the query optimization. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="a2b5b1c06e60df62977a49d8f43386b86"></a>
+<a class="anchor" id="a3161390a5d793a3d1398f47c0d5e959b"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_q_node.html">QNode</a> * QueryOptimiser::combineClausesVectors </td>
           <td>(</td>
-          <td class="paramtype">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td>
+          <td class="paramtype">QNODE_LIST&#160;</td>
           <td class="paramname"><em>clausesVector1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td>
+          <td class="paramtype">QNODE_LIST&#160;</td>
           <td class="paramname"><em>clausesVector2</em>&#160;</td>
         </tr>
         <tr>
@@ -226,14 +209,115 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 
 </div>
 </div>
-<a class="anchor" id="ad479835607c036661265ac84100099ae"></a>
+<a class="anchor" id="a8843bd6d614d5c5a8540d4dd18488b5d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_node.html">QNode</a> * QueryOptimiser::createSubtree </td>
+          <td>(</td>
+          <td class="paramtype">QNODE_TYPE&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">QNODE_LIST&#160;</td>
+          <td class="paramname"><em>clausesVector</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper function that creates a subtree given a vector </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>the type of subtree to create (i.e. RESULT or CLAUSES) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the root of the subtree </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6963c3f5bea7bae726f757edcb013c7b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; vector&lt; int &gt; &gt; QueryOptimiser::createSynonymGraph </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
+          <td class="paramname"><em>clausesNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unordered_map&lt; string, int &gt;&#160;</td>
+          <td class="paramname"><em>name_index_map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper function that creates the synonym reference graph </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clausesNode</td><td>the root of the clauses subtree </td></tr>
+    <tr><td class="paramname">name_index_map</td><td>a mapping of the synonym name to its index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an adjacency matrix that represents the graph </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a81db7dd532e4de0afc7f0335b864dd2a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; BOOLEAN_, DIRECTION &gt; QueryOptimiser::determineSupersetSubset </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>LHS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>RHS</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper function that determines which is a superset and which is a subset </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">LHS</td><td>a synonym </td></tr>
+    <tr><td class="paramname">RHS</td><td>a synonym </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pair of subset status and the direction of which one is the superset </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a466e86658c9eec01ba4c6a32107d9fe7"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">pair&lt; int, DIRECTION &gt; QueryOptimiser::findIndexAndDirectionWithSmallestCost </td>
           <td>(</td>
-          <td class="paramtype">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td>
+          <td class="paramtype">QNODE_LIST&#160;</td>
           <td class="paramname"><em>clauses</em></td><td>)</td>
           <td></td>
         </tr>
@@ -262,7 +346,7 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Method to remove redundant clause and to rewrite the clauses </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Method to rewrite the clauses and to remove redundant clauses </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">qTreeRoot</td><td>the root of the query tree </td></tr>
   </table>
@@ -295,14 +379,14 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 
 </div>
 </div>
-<a class="anchor" id="ac58cd85c1661026bda3151a09037a34d"></a>
+<a class="anchor" id="ade70cfabe7e837e3fc1e403c55709c00"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="class_q_node.html">QNode</a> * QueryOptimiser::getNextSmallestAndUpdate </td>
           <td>(</td>
-          <td class="paramtype">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">QNODE_LIST &amp;&#160;</td>
           <td class="paramname"><em>clauses</em></td><td>)</td>
           <td></td>
         </tr>
@@ -315,6 +399,29 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="class_q_node.html">QNode</a> object that is suitably small </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa82a36b3e636941864ac3a899903482a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unordered_map&lt; string, int &gt; QueryOptimiser::indexSynonymsReferenced </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
+          <td class="paramname"><em>clausesNode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper function that assigns an index to the various synonyms </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clausesNode</td><td>the root of the clauses subtree </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a map from the synonym name to its index </dd></dl>
 
 </div>
 </div>
@@ -337,6 +444,102 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a class="anchor" id="a13a4ab419c7071e15dc80e04c68f2fe6"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOLEAN_ QueryOptimiser::isContainedInMain </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>wantedName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A helper function that determines if this synonym is in the main table of the values handler </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>of the synonym </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TRUE if it is projected in the main table FALSE otherwise </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae109fccdeafbc5bbdaf6bd3871e4fefb"></a>
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOLEAN_ QueryOptimiser::isSelectSynonym </td>
+          <td>(</td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>wantedName</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A helper function that determines if this synonym is a selected synonym </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>of the synonym </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>TRUE if this synonym is a selected synonym FALSE otherwise </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a8344c14409ce073e555aa86196247435"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; BOOLEAN_, DIRECTION &gt; QueryOptimiser::isWithClauseRewritable </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>LHS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>RHS</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper function that determines if a with clauses is rewritable </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">LHS</td><td>one side of the with clause </td></tr>
+    <tr><td class="paramname">RHS</td><td>the other side of the with clause </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pair of status and which side is the superset </dd></dl>
 
 </div>
 </div>
@@ -409,14 +612,83 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 
 </div>
 </div>
-<a class="anchor" id="af864eec4ea5ea596160ab6e0d1aaddf4"></a>
+<a class="anchor" id="a00949dbee1df00d4da918ffff0ce3f8e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; QueryOptimiser::reorderNonConstantClauses </td>
+          <td class="memname">QNODE_LIST QueryOptimiser::populateSelectSynonyms </td>
           <td>(</td>
-          <td class="paramtype">vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
+          <td class="paramname"><em>resultNode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper function that populates synonyms selected into a vector </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">resultNode</td><td>the root of the result subtree </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector containing the synonyms selected </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a636915927e4e13b0b43a88ecb4923222"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_query_tree.html">QueryTree</a> * QueryOptimiser::removeReduantClausesAndSynonyms </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td>
+          <td class="paramname"><em>qTreeRoot</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to remove redundant clauses and synonyms </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">qTreeRoot</td><td>the root of the query tree </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="class_query_tree.html">QueryTree</a> object that has redundant items removed </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a1b9a6abffb2bdd61030d313c4509bad1"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QNODE_LIST QueryOptimiser::reorderConstantClauses </td>
+          <td>(</td>
+          <td class="paramtype">QNODE_LIST&#160;</td>
+          <td class="paramname"><em>clauses</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to reorder the constant clauses </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">A</td><td>vector of clauses that is to be reordered </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a vector of <a class="el" href="class_q_node.html">QNode</a> objects that are re-ordered </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a2efcdc2a5dc622f2358c72dbe74fba50"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QNODE_LIST QueryOptimiser::reorderNonConstantClauses </td>
+          <td>(</td>
+          <td class="paramtype">QNODE_LIST&#160;</td>
           <td class="paramname"><em>clauses</em></td><td>)</td>
           <td></td>
         </tr>
@@ -429,6 +701,175 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a vector of <a class="el" href="class_q_node.html">QNode</a> objects that are re-ordered </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa3c9ff7d4e3afcbe8ef0066a6b4d5d7f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; bool, QNODE_LIST &gt; QueryOptimiser::replaceSynonyms </td>
+          <td>(</td>
+          <td class="paramtype">QNODE_LIST&#160;</td>
+          <td class="paramname"><em>clausesVector</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>toBeReplaced</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_synonym.html">Synonym</a>&#160;</td>
+          <td class="paramname"><em>replacement</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper method to replace synonyms </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clausesVector</td><td>a vector of clauses </td></tr>
+    <tr><td class="paramname">toBeReplaced</td><td>the synonym to be replaced </td></tr>
+    <tr><td class="paramname">replacement</td><td>the replacement synonym </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pair of replacement status and clauses vector with synonyms replaced </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a612be54ac8b59918f4b534c1b44206fa"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_query_tree.html">QueryTree</a> * QueryOptimiser::rewriteWithClauses </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_query_tree.html">QueryTree</a> *&#160;</td>
+          <td class="paramname"><em>qTreeRoot</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to rewrite with clauses </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">qTreeRoot</td><td>the root of the query tree </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="class_query_tree.html">QueryTree</a> object that has with clauses rewritten </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ab3e0a2c983c304c9deacfb78db84d53f"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void QueryOptimiser::scanAndRemoveRedundantSynonyms </td>
+          <td>(</td>
+          <td class="paramtype">QNODE_LIST &amp;&#160;</td>
+          <td class="paramname"><em>clauses</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; vector&lt; int &gt;&gt;&#160;</td>
+          <td class="paramname"><em>adjacencyMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unordered_map&lt; string, int &gt;&#160;</td>
+          <td class="paramname"><em>name_index_map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to remove redundant synonyms </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clauses</td><td>the root of the clauses subtree </td></tr>
+    <tr><td class="paramname">adjacencyMatrix</td><td>the synonym reference graph </td></tr>
+    <tr><td class="paramname">name_index_map</td><td>a map that maps from synonym name to an index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the clauses object will be changed </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="af7340776012d92fd7ba28e5810c11019"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_q_node.html">QNode</a> * QueryOptimiser::scanAndReplaceRedundantItems </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
+          <td class="paramname"><em>clausesNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">vector&lt; vector&lt; int &gt;&gt;&#160;</td>
+          <td class="paramname"><em>adjacencyMatrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unordered_map&lt; string, int &gt;&#160;</td>
+          <td class="paramname"><em>name_index_map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to remove redundant clauses and synonyms </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clausesNode</td><td>the root of the clauses subtree </td></tr>
+    <tr><td class="paramname">adjacencyMatrix</td><td>the synonym reference graph </td></tr>
+    <tr><td class="paramname">name_index_map</td><td>a map that maps from synonym name to an index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a <a class="el" href="class_q_node.html">QNode</a> object that has redundant items removed </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a89dd6d7ff281287d110d620f47ce7b56"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">set&lt; int &gt; QueryOptimiser::scanSynonymsReachable </td>
+          <td>(</td>
+          <td class="paramtype">vector&lt; vector&lt; int &gt;&gt;&#160;</td>
+          <td class="paramname"><em>adjacencyMatrix</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A helper function that traverses the synonym reference graph to find synonyms that are reachable </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">adjacencyMatrix</td><td>the synonym reference graph in an adjacency matrix form </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a set of synonym indexes reachable </dd></dl>
 
 </div>
 </div>
@@ -470,12 +911,12 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 
 </div>
 </div>
-<a class="anchor" id="a5d443f7f59455230d72a639b5e876a04"></a>
+<a class="anchor" id="aa03eb5380c87e9c4128e306c124cc4ca"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">pair&lt; vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt;, vector&lt; <a class="el" href="class_q_node.html">QNode</a> * &gt; &gt; QueryOptimiser::splitConstantClauses </td>
+          <td class="memname">pair&lt; QNODE_LIST, QNODE_LIST &gt; QueryOptimiser::splitConstantClauses </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
           <td class="paramname"><em>clausesNode</em></td><td>)</td>
@@ -493,10 +934,74 @@ set&lt; string &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mainTa
 
 </div>
 </div>
+<a class="anchor" id="a5e3fb018b721137de2a4117ca6e09950"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; QNODE_LIST, QNODE_LIST &gt; QueryOptimiser::splitRedundantClauses </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
+          <td class="paramname"><em>clausesNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">set&lt; int &gt;&#160;</td>
+          <td class="paramname"><em>synonymsReachable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unordered_map&lt; string, int &gt;&#160;</td>
+          <td class="paramname"><em>name_index_map</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to split clauses into redundant and non-redundant clauses </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clausesNode</td><td>the root of the clauses subtree tree </td></tr>
+    <tr><td class="paramname">synonymsReachable</td><td>a set of synonym indexes that can be reached from the select synonyms </td></tr>
+    <tr><td class="paramname">name_index_map</td><td>a map that maps from synonym name to an index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pair of QNODE_LIST that contains the non-redundant and redundant clauses respectively </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a6738ea5fbf46575ea1d3b4ee2a385e9b"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">pair&lt; QNODE_LIST, QNODE_LIST &gt; QueryOptimiser::splitWithClauses </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_q_node.html">QNode</a> *&#160;</td>
+          <td class="paramname"><em>clausesNode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Method to split clauses into "with" and "non-with" clauses </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clausesNode</td><td>the root of the clauses subtree tree </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pair of QNODE_LIST that contains the "non-with" and "with" clauses respectively </dd></dl>
+
+</div>
+</div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Apr 12 2015 21:12:40 for My Project by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 16 2015 01:30:34 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

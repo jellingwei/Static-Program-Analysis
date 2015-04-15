@@ -1,7 +1,20 @@
 var searchData=
 [
-  ['operator_28_29',['operator()',['../class_call_comparator.html#ad0b5fbe21429a5f8aa434eb074af66fd',1,'CallComparator']]],
-  ['optimiseclauses',['optimiseClauses',['../namespace_query_optimiser.html#a403b8fc81e593cc84e7931d1e2f8e0b1',1,'QueryOptimiser']]],
-  ['optimiseclausesnode',['optimiseClausesNode',['../namespace_query_optimiser.html#ac0f70297abac43b8d62c1068c9779a6c',1,'QueryOptimiser']]],
-  ['optimisequerytree',['optimiseQueryTree',['../namespace_query_optimiser.html#a850d40db88447e119dabee1f525f6fee',1,'QueryOptimiser']]]
+  ['matchattrname',['matchAttrName',['../namespace_query_parser.html#a7ce32b4bd0d5d13e6b7c6d4bafaf66b9',1,'QueryParser']]],
+  ['matchattrref',['matchAttrRef',['../namespace_query_parser.html#a76bbe848d91875f8d6c2c3b3acfeb430',1,'QueryParser']]],
+  ['matchdesignentity',['matchDesignEntity',['../namespace_query_parser.html#a9b1833b1292e9b390220f61af209be73',1,'QueryParser']]],
+  ['matchelem',['matchElem',['../namespace_query_parser.html#adee93ea030a8700ad07d31e3e8ca276c',1,'QueryParser']]],
+  ['matchentref',['matchEntRef',['../namespace_query_parser.html#ae7cff51a5de1f7472b6cac8c7573e941',1,'QueryParser']]],
+  ['matchfactor',['matchFactor',['../namespace_query_parser.html#a0ab04cd8c704d395c84948513a5c99c3',1,'QueryParser']]],
+  ['matchinteger',['matchInteger',['../namespace_parser.html#a85644bd271cce16688e0ac1045dcad2e',1,'Parser::matchInteger()'],['../namespace_query_parser.html#a2556125b7a639861c3670892ce86bb4e',1,'QueryParser::matchInteger()']]],
+  ['matchname',['matchName',['../namespace_parser.html#a04b69b1684dcbfe65f365f4d33ab3c79',1,'Parser::matchName()'],['../namespace_query_parser.html#ae255511cf8a8e549d13bfbb48ce535dd',1,'QueryParser::matchName()']]],
+  ['matchnoderef',['matchNodeRef',['../namespace_query_parser.html#ab282d94b418e92069030bd5bfc6892be',1,'QueryParser']]],
+  ['matchoperator',['matchOperator',['../namespace_parser.html#a8cf1514a06cf6f4d24b3b450adf0f4b2',1,'Parser']]],
+  ['matchref',['matchRef',['../namespace_query_parser.html#acb7453247e2ef8259edc5f18c1cf612d',1,'QueryParser']]],
+  ['matchstmtlstref',['matchStmtLstRef',['../namespace_query_parser.html#a2385d923da0b5867e8f9b73d4c06e456',1,'QueryParser']]],
+  ['matchstmtorlineref',['matchStmtOrLineRef',['../namespace_query_parser.html#a98694ac66e8657f308713e0308100e51',1,'QueryParser']]],
+  ['matchsynonymandident',['matchSynonymAndIdent',['../namespace_query_parser.html#a9c087c26456e8830ac358dcc8b07e79c',1,'QueryParser']]],
+  ['matchunderscore',['matchUnderscore',['../namespace_query_parser.html#ab5abd4ae8d6f3c165996f5e2e42c914f',1,'QueryParser']]],
+  ['matchvarref',['matchVarRef',['../namespace_query_parser.html#aff150238b41570cbbed6b889162d692e',1,'QueryParser']]],
+  ['mergesingletontomain',['mergeSingletonToMain',['../namespace_values_handler.html#aa9be600163b0132b8f6f02edb182c150',1,'ValuesHandler']]]
 ];

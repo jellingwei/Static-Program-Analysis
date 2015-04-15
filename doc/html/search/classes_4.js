@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['followstable',['FollowsTable',['../class_follows_table.html',1,'']]],
+  ['followssolver',['FollowsSolver',['../class_follows_solver.html',1,'']]],
   ['frontendcontroller',['FrontEndController',['../class_front_end_controller.html',1,'']]]
 ];

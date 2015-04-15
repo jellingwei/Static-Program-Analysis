@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['nextbiptable',['NextBipTable',['../class_next_bip_table.html',1,'']]],
-  ['nexttable',['NextTable',['../class_next_table.html',1,'']]]
+  ['nextbipsolver',['NextBipSolver',['../class_next_bip_solver.html',1,'']]],
+  ['nextsolver',['NextSolver',['../class_next_solver.html',1,'']]]
 ];
