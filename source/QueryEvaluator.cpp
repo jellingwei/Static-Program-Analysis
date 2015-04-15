@@ -1327,19 +1327,14 @@ namespace QueryEvaluator
 				return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 			}
 		} else if (arg2.isSynonym() && arg3.isUndefined()) {
-			ifStmts = pkb.patternMatchIfElse(arg1.getName(), arg2.getType());
+			vector<pair<int, vector<int>>> if_var_pairs = pkb.patternMatchIfElse(arg1.getName(), arg2.getType());
 		} else if (arg2.isUndefined() && arg3.isSynonym()) {
-			ifStmts = pkb.patternMatchIfThen(arg1.getName(), arg3.getType());
+			vector<pair<int, vector<int>>> if_var_pairs = pkb.patternMatchIfThen(arg1.getName(), arg3.getType());
 		} else {
-			vector<pair<int, int>> if_var_pairs = pkb.patternMatchIf(arg1.getName(), arg2.getType(), arg3.getType());
+			vector<pair<int, vector<pair<int, int>>>> if_var_pairs = pkb.patternMatchIf(arg1.getName(), arg2.getType(), arg3.getType());
 			VALUE_LIST acceptedIfStmts;
 			VALUE_LIST acceptedVars;
 
-			for (unsigned int i = 0; i < if_var_pairs.size(); i++) {
-				pair<int, int> onePair = if_var_pairs[i];
-				acceptedIfStmts.push_back(onePair.first);
-				acceptedVars.push_back(onePair.second);
-			}
 		}
 		return false;  //To be replaced
 	}

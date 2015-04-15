@@ -296,9 +296,10 @@ INTEGER AST::getDescendent(TNode* curr) {
 }
 
 //@todo
-vector<int> AST::patternMatchWhile(string LHS, SYNONYM_TYPE then) {
+vector<pair<int, vector<int>>> AST::patternMatchWhile(string LHS, SYNONYM_TYPE then) {
 	PatternMatch pattern;
-	vector<int> whileStmts, result, temp;
+	vector<int> whileStmts, temp;
+	vector<pair<int, vector<int>>> result;
 	whileStmts = pattern.patternMatchParentStmt(LHS, While);
 	TNode* currentNode;
 	Contain contain;
@@ -306,15 +307,18 @@ vector<int> AST::patternMatchWhile(string LHS, SYNONYM_TYPE then) {
 	for(int i=0; i<(int)whileStmts.size(); i++) {
 		currentNode = pkb.getNodeForStmt(whileStmts.at(i))->getChildren()->at(1);
 		temp = contain.checkForWhileThen(currentNode, then, true);
-		result.insert( result.end(), temp.begin(), temp.end() );
+		//result.insert( result.end(), temp.begin(), temp.end() );
+		if(temp.size()!=0) result.push_back(make_pair(whileStmts.at(i), temp));
+		temp.clear();
 	}
 
 	return result;
 }
 
-vector<int> AST::patternMatchIfThen(string LHS, SYNONYM_TYPE thenS) {
+vector<pair<int, vector<int>>> AST::patternMatchIfThen(string LHS, SYNONYM_TYPE thenS) {
 	PatternMatch pattern;
-	vector<int> IfStmts, result, temp;
+	vector<int> IfStmts, temp;
+	vector<pair<int, vector<int>>> result;
 	IfStmts = pattern.patternMatchParentStmt(LHS, If);
 	TNode* currentNode;
 	Contain contain;
@@ -323,15 +327,18 @@ vector<int> AST::patternMatchIfThen(string LHS, SYNONYM_TYPE thenS) {
 		//Then is Child 1
 		currentNode = pkb.getNodeForStmt(IfStmts.at(i))->getChildren()->at(1);
 		temp = contain.checkForIfThenElse(currentNode, thenS, true);
-		result.insert( result.end(), temp.begin(), temp.end() );
+		//result.insert( result.end(), temp.begin(), temp.end() );
+		if(temp.size()!=0) result.push_back(make_pair(IfStmts.at(i), temp));
+		temp.clear();
 	}
 
 	return result;
 }
 
-vector<int> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE thenS) {
+vector<pair<int, vector<int>>> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE elseS) {
 	PatternMatch pattern;
-	vector<int> IfStmts, result, temp;
+	vector<int> IfStmts, temp;
+	vector<pair<int, vector<int>>> result;
 	IfStmts = pattern.patternMatchParentStmt(LHS, If);
 	TNode* currentNode;
 	Contain contain;
@@ -339,17 +346,19 @@ vector<int> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE thenS) {
 	for(int i=0; i<(int)IfStmts.size(); i++) {
 		//Else is Child 2
 		currentNode = pkb.getNodeForStmt(IfStmts.at(i))->getChildren()->at(2);
-		temp = contain.checkForIfThenElse(currentNode, thenS, true);
-		result.insert( result.end(), temp.begin(), temp.end() );
+		temp = contain.checkForIfThenElse(currentNode, elseS, true);
+		//result.insert( result.end(), temp.begin(), temp.end() );
+		if(temp.size()!=0) result.push_back(make_pair(IfStmts.at(i), temp));
+		temp.clear();
 	}
 
 	return result;
 }
 
-vector<pair<int, int>> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
+vector<pair<int, vector<pair<int, int>>>> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
 	vector<int> result1;
-	vector<pair<int, int>> finalResult, temp;
-
+	vector<pair<int, int>> temp;
+	vector<pair<int, vector<pair<int, int>>>> finalResult;
 	PatternMatch pattern;
 	result1 = pattern.patternMatchParentStmt(LHS, If);
 
@@ -361,7 +370,9 @@ vector<pair<int, int>> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNON
 		thenNode = pkb.getNodeForStmt(result1.at(i))->getChildren()->at(1);
 		elseNode = pkb.getNodeForStmt(result1.at(i))->getChildren()->at(2);
 		temp = contain.checkForIf(thenNode, thenS, elseNode, elseS);
-		if(temp.size()!=0)	finalResult.insert( finalResult.end(), temp.begin(), temp.end() );
+		
+		if(temp.size()!=0)	finalResult.push_back(make_pair(result1.at(i), temp));
+		temp.clear();
 	}
 	return finalResult;
 }

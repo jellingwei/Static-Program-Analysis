@@ -251,7 +251,7 @@ void StatisticsTable::reduceCountModifies(Synonym LHS, Synonym RHS, DIRECTION di
 		_synonymsCount[LHS.getName()] = min(original, estimated);
 	} else {
 		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
+			return;  //All statements will modify something
 		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
@@ -280,10 +280,11 @@ void StatisticsTable::reduceCountUses(Synonym LHS, Synonym RHS, DIRECTION direct
 		_synonymsCount[RHS.getName()] = min(original, estimated);
 	} else if (RHS.isConstant() && LHS.isSynonym()) {
 		_synonymsCount[LHS.getName()] = ceil(_synonymsCount[LHS.getName()] / 5);  //Arbitrary
+	} else if (LHS.isUndefined()) {
+		return;  //LHS cannot be undefined for Uses
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -305,10 +306,11 @@ void StatisticsTable::reduceCountParent(Synonym LHS, Synonym RHS, DIRECTION dire
 		_synonymsCount[RHS.getName()] = 1;
 	} else if (RHS.isConstant() && LHS.isSynonym()) {
 		_synonymsCount[LHS.getName()] = 1;
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -334,10 +336,11 @@ void StatisticsTable::reduceCountParentS(Synonym LHS, Synonym RHS, DIRECTION dir
 		double original = _synonymsCount[LHS.getName()];
 		double estimated = _averageContainersPerProc;
 		_synonymsCount[LHS.getName()] = min(original, estimated);
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -359,10 +362,11 @@ void StatisticsTable::reduceCountFollows(Synonym LHS, Synonym RHS, DIRECTION dir
 		_synonymsCount[RHS.getName()] = 1;
 	} else if (RHS.isConstant() && LHS.isSynonym()) {
 		_synonymsCount[LHS.getName()] = 1;
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -388,10 +392,11 @@ void StatisticsTable::reduceCountFollowsS(Synonym LHS, Synonym RHS, DIRECTION di
 		double original = _synonymsCount[LHS.getName()];
 		double estimated = _averageLinesPerProc - _averageContainersPerProc;
 		_synonymsCount[LHS.getName()] = min(original, estimated);
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -413,10 +418,11 @@ void StatisticsTable::reduceCountCalls(Synonym LHS, Synonym RHS, DIRECTION direc
 		_synonymsCount[RHS.getName()] = _averageCallsPerProc;
 	} else if (RHS.isConstant() && LHS.isSynonym()) {
 		_synonymsCount[LHS.getName()] = _averageCallsPerProc;
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -442,10 +448,11 @@ void StatisticsTable::reduceCountCallsS(Synonym LHS, Synonym RHS, DIRECTION dire
 		double original = _synonymsCount[LHS.getName()];
 		double estimated = max(_averageCallsPerProc, _callSize / 2);
 		_synonymsCount[LHS.getName()] = min(original, estimated);
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -467,10 +474,11 @@ void StatisticsTable::reduceCountNext(Synonym LHS, Synonym RHS, DIRECTION direct
 		_synonymsCount[RHS.getName()] = 1;
 	} else if (RHS.isConstant() && LHS.isSynonym()) {
 		_synonymsCount[LHS.getName()] = 1;
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -496,10 +504,11 @@ void StatisticsTable::reduceCountNextS(Synonym LHS, Synonym RHS, DIRECTION direc
 		double original = _synonymsCount[LHS.getName()];
 		double estimated = _averageLinesPerProc;
 		_synonymsCount[LHS.getName()] = min(original, estimated);
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];
@@ -521,10 +530,11 @@ void StatisticsTable::reduceCountAffects(Synonym LHS, Synonym RHS, DIRECTION dir
 		_synonymsCount[RHS.getName()] = 1;
 	} else if (RHS.isConstant() && LHS.isSynonym()) {
 		_synonymsCount[LHS.getName()] = 1;
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		//Assume that each statement affects another
 		if (direction == LeftToRight) {
@@ -551,10 +561,11 @@ void StatisticsTable::reduceCountAffectsS(Synonym LHS, Synonym RHS, DIRECTION di
 		double original = _synonymsCount[LHS.getName()];
 		double estimated = _averageAssignPerProc / 2;
 		_synonymsCount[LHS.getName()] = min(original, estimated);
+	} else if (LHS.isUndefined()) {
+		_synonymsCount[RHS.getName()] = ceil(0.9 * _synonymsCount[RHS.getName()]);
+	} else if (RHS.isUndefined()) {
+		_synonymsCount[LHS.getName()] = ceil(0.9 * _synonymsCount[LHS.getName()]);
 	} else {
-		if (LHS.isUndefined() || RHS.isUndefined()) {
-			return;
-		}
 		//Both are synonyms
 		if (direction == LeftToRight) {
 			double original = _synonymsCount[RHS.getName()];

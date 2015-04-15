@@ -851,17 +851,23 @@ namespace ValuesHandler
 		} else {
 			//This synonym does not exist in both tables
 			VALUE_LIST values = getDefaultValues(type);
+			VALUE_LIST finalValue;
+			bool isFound = false;
+
 			for (unsigned int i = 0; i < values.size(); i++) {
 				int valueIndex = values[i];
 				string valueString = convertIndexToString(valueIndex, type);
 				if (valueString == wantedValue) {
-					VALUE_LIST finalValue;
+					isFound = true;
 					finalValue.push_back(valueIndex);
-					singletonTable[synonymName] = finalValue;  //Insert into singleton table
-					return true;
 				}
 			}
-			return false;
+			if (isFound) {
+				singletonTable[synonymName] = finalValue;  //Insert into singleton table
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -972,19 +978,24 @@ namespace ValuesHandler
 	BOOLEAN_ filterSingletonTableByString(SYNONYM_NAME synonymName, string wantedValue)
 	{
 		VALUE_LIST singletonValues = singletonTable[synonymName];
-		VALUE_LIST acceptedValue;
+		VALUE_LIST acceptedValues;
 		SYNONYM_TYPE type = mapSynonymNameToType[synonymName];
+		bool isFound = false;
 
 		for (unsigned int i = 0; i < singletonValues.size(); i++) {
 			int valueIndex = singletonValues[i];
 			string valueString = convertIndexToString(valueIndex, type);
 			if (valueString == wantedValue) {
-				acceptedValue.push_back(valueIndex);
-				singletonTable[synonymName] = acceptedValue;
-				return true;
+				isFound = true;
+				acceptedValues.push_back(valueIndex);
 			}
 		}
-		return false;
+		if (isFound) {
+			singletonTable[synonymName] = acceptedValues;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
