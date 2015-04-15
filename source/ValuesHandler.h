@@ -30,6 +30,8 @@ namespace ValuesHandler
 	BOOLEAN_ filterEqualPair(Synonym LHS, Synonym RHS);
 	BOOLEAN_ isValueExistInSet(VALUE_SET setToSearch, VALUE value);
 	VALUE_LIST getDefaultValues(SYNONYM_TYPE type);
+	BOOLEAN_ isValueSubset(SYNONYM_TYPE type, VALUE value);
+	BOOLEAN_ isValueSubset(SYNONYM_TYPE type, string value);
 
 	//Functions made public for testing purposes
 	void clearAll();

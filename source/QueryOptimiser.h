@@ -10,6 +10,7 @@
 #include "common.h"
 #include "QNode.h"
 #include "QueryEvaluator.h"
+#include "ValuesHandler.h"
 
 using std::stack;
 

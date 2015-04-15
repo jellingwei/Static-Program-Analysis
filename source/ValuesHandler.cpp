@@ -146,6 +146,35 @@ namespace ValuesHandler
 		return false;
 	}
 
+	BOOLEAN_ isValueSubset(SYNONYM_TYPE type, VALUE value)
+	{
+		VALUE_LIST values = getDefaultValues(type);
+		if (values.size() == 0) {
+			return false;
+		}
+		for (unsigned int i = 0; i < values.size(); i++) {
+			if (values[i] == value) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	BOOLEAN_ isValueSubset(SYNONYM_TYPE type, string value)
+	{
+		VALUE_LIST values = getDefaultValues(type);
+		if (values.size() == 0) {
+			return false;
+		}
+		for (unsigned int i = 0; i < values.size(); i++) {
+			string converted = convertIndexToString(values[i], type);
+			if (converted == value) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	* Helper method to convert an index to it's actual name
 	* Only used for joins using strings instead of numbers
