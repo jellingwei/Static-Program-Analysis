@@ -196,7 +196,7 @@ Select w such that Sibling(w, s)
 1031 - Valid Sibling filter l LHS
 prog_line l; stmt s;
 Select l such that Sibling(l, s)
-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40,18,26
 5000
 1032 - Valid Sibling filter a RHS
 assign a; stmt s;
@@ -221,7 +221,7 @@ Select w such that Sibling(s, w)
 1036 - Valid Sibling filter l RHS
 prog_line l; stmt s;
 Select l such that Sibling(s, l)
-1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,19,21,22,23,24,31,32,35,39,40,18,26
 5000
 1037 - Valid Sibling op op assign 3
 times multi;
