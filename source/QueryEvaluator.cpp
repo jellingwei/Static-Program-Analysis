@@ -1330,9 +1330,9 @@ namespace QueryEvaluator
 			vector<pair<int, vector<int>>> if_var_pairs;
 
 			if (arg1.isConstant() || arg1.isUndefined()) {
-				if_var_pairs = pkb.patternMatchIfElse(arg1.getName(), arg2.getType());
+				if_var_pairs = pkb.patternMatchIfThen(arg1.getName(), arg2.getType());
 			} else {
-				if_var_pairs = pkb.patternMatchIfElse("_", arg2.getType());
+				if_var_pairs = pkb.patternMatchIfThen("_", arg2.getType());
 			}
 
 			for (unsigned int i = 0 ; i < if_var_pairs.size(); i++) {
@@ -1366,9 +1366,9 @@ namespace QueryEvaluator
 			vector<pair<int, vector<int>>> if_var_pairs;
 
 			if (arg1.isConstant() || arg1.isUndefined()) {
-				if_var_pairs = pkb.patternMatchIfThen(arg1.getName(), arg3.getType());
+				if_var_pairs = pkb.patternMatchIfElse(arg1.getName(), arg3.getType());
 			} else {
-				if_var_pairs = pkb.patternMatchIfThen("_", arg3.getType());
+				if_var_pairs = pkb.patternMatchIfElse("_", arg3.getType());
 			}
 
 			for (unsigned int i = 0 ; i < if_var_pairs.size(); i++) {
