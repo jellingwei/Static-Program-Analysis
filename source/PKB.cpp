@@ -151,23 +151,39 @@ VAR_INDEX PKB::getControlVariable(STATEMENT stmtNum) {
 	return ast->getControlVariable(stmtNum);
 }
 
-//@todo
-vector<pair<int, vector<int>>> PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then) {
+/**
+ * Pattern matching for while statements.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements, and Synonynm type in the then statement list
+ * @return a vector pair of statement numbers which are while statements, and the first statement in the then statement list
+ */
+PAIR_LIST PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then) {
 	return ast->patternMatchWhile(LHS, then);
 }
 
-//@todo
-vector<pair<int, vector<int>>> PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then) {
+/**
+ * Pattern matching for if statements.
+ * @param LHS  the name of the variable that acts as the control variable for the if statements, and Synonynm type in the then statement list
+ * @return a vector pair of statement numbers which are if statements, and the first statement in the then statement list
+ */
+PAIR_LIST PKB::patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then) {
 	return ast->patternMatchIfThen(LHS, then);
 }
 
-//@todo
-vector<pair<int, vector<int>>> PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then) {
+/**
+ * Pattern matching for if statements.
+ * @param LHS  the name of the variable that acts as the control variable for the if statements, and Synonynm type in the else statement list
+ * @return a vector pair of statement numbers which are if statements, and the first statement in the else statement list
+ */
+PAIR_LIST PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then) {
 	return ast->patternMatchIfElse(LHS, then);
 }
 
-//@todo
-vector<pair<int, pair<int, int>>> PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
+/**
+ * Pattern matching for while statements.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements, Synonynm type in the then statement list, and Synonynm type in the else statement list
+ * @return a vector pair of statement numbers which are while statements, pair of first statement in the then statement list, and first statement in the else statement list
+ */
+PAIR_OF_PAIR_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
 	return ast->patternMatchIf(LHS, thenS, elseS);
 }
 
@@ -1491,28 +1507,60 @@ PROGLINE_LIST PKB::getAffectsBipRhs() {
 }
 
 //contains
-vector<pair<int, vector<int>>> PKB::contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, bool transitiveClosure) {
-	return contain->contains(parentType, childType, transitiveClosure);
+
+/**
+ * Checks Contains relationship between any pair of Predecessor & Descendent nodes in AST
+ * @param Synonym type for a predecessorType, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @return a vector pair of statement numbers/variable index that matches the 2 Synonym types
+ */
+PAIR_LIST PKB::contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+	return contain->contains(predecessorType, descendentType, transitiveClosure);
 }
 
-vector<int> PKB::contains(int stmtNo, SYNONYM_TYPE childType, bool transitiveClosure) {
-	return contain->contains(stmtNo, childType, transitiveClosure);
+/**
+ * Checks Contains relationship of a statment & Descendent nodes in AST
+ * @param proc_line/statement no, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @return a vector pair of proc_line/statement no (provided) and the statement numbers/variable index that matches the Synonym type
+ */
+VALUE_LIST PKB::contains(int stmtNo, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+	return contain->contains(stmtNo, descendentType, transitiveClosure);
 }
 
-vector<int> PKB::contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure) {
+/**
+ * Checks Contains relationship of a statment & Predecessor nodes in AST
+ * @param Synonym type for a predecessorType, proc_line/statement no, false if Contains() & true if Contains*()
+ * @return a vector pair of statement numbers/variable index that matches the Synonym type and proc_line/statement no (provided)
+ */
+VALUE_LIST PKB::contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure) {
 	return contain->contains(predecessorType, stmtNo, transitiveClosure);
 }
 
 //siblings
-vector<pair<int, vector<int>>> PKB::siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType) {
+
+/**
+ * Checks Sibling relationship between any pair of sibling nodes (share same parent) in AST
+ * @param Synonym type for the first sibling, Synonym type for second sibling
+ * @return a vector pair of statement numbers/variable index that matches the 2 Synonym types
+ */
+PAIR_LIST PKB::siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType) {
 	return sibling->siblings(first_siblingType, second_siblingType);
 }
 
-vector<int> PKB::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
+/**
+ * Checks Sibling relationship between a statement and sibling nodes in AST
+ * @param proc_line/statement no, Synonym type for sibling
+ * @return a vector of statement numbers/variable index of siblings
+ */
+VALUE_LIST PKB::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
 	return sibling->siblings(stmtNo, second_siblingType);
 }
 
-vector<int> PKB::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
+/**
+ * Checks Sibling relationship between a statement and sibling nodes in AST
+ * @param Synonym type for sibling, proc_line/statement no,
+ * @return a vector of statement numbers/variable index of siblings
+ */
+VALUE_LIST PKB::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
 	return sibling->siblings(first_siblingType, stmtNo);
 }
 

@@ -59,11 +59,11 @@ public:
 	VAR_INDEX getControlVariable(STATEMENT stmtNum);
 	
 	// Extended Pattern Matching for While and If
-	vector<pair<int, vector<int>>> patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
-	vector<pair<int, vector<int>>> patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);
-	vector<pair<int, vector<int>>> patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);
+	PAIR_LIST patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
+	PAIR_LIST patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);
+	PAIR_LIST patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);
 	//STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
-	vector<pair<int, pair<int, int>>> patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
+	PAIR_OF_PAIR_LIST patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
 
 
 	// VarTable methods
@@ -252,14 +252,14 @@ public:
 	// @endcond
 
 	// contains 
-	vector<pair<int, vector<int>>> contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, bool transitiveClosure);
-	vector<int> contains(int stmtNo, SYNONYM_TYPE childType, bool transitiveClosure);
-	vector<int> contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure);
+	PAIR_LIST contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, bool transitiveClosure);
+	VALUE_LIST contains(int stmtNo, SYNONYM_TYPE childType, bool transitiveClosure);
+	VALUE_LIST contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure);
 
 	// siblings
-	vector<pair<int, vector<int>>> siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);
-	vector<int> siblings(int stmtNo, SYNONYM_TYPE second_siblingType);
-	vector<int> siblings(SYNONYM_TYPE first_siblingType, int stmtNo);
+	PAIR_LIST siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);
+	VALUE_LIST siblings(int stmtNo, SYNONYM_TYPE second_siblingType);
+	VALUE_LIST siblings(SYNONYM_TYPE first_siblingType, int stmtNo);
 
 
 private:

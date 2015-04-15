@@ -12,7 +12,12 @@ vector<TNode*> getOperatorNodes(TNode* currentNode, TNODE_TYPE operatorType);
 vector<TNode*> getOperandNodes(TNode* currentNode, TNODE_TYPE operatorType);
 TNODE_TYPE convertFromSynonym2(SYNONYM_TYPE type);
 
-vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType) {
+/**
+ * Checks Sibling relationship between any pair of sibling nodes (share same parent) in AST
+ * @param Synonym type for the first sibling, Synonym type for second sibling
+ * @return a vector pair of statement numbers/variable index that matches the 2 Synonym types
+ */
+PAIR_LIST Siblings::siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType) {
 	PKB pkb = PKB::getInstance();
 	vector<pair<int, vector<int>>> results;
 	vector<int> LHS;
@@ -49,18 +54,6 @@ vector<pair<int, vector<int>>> Siblings::siblings(SYNONYM_TYPE first_siblingType
 		
 		// If - then & else StmtLst
 		case StmtLst: {
-			/*if(second_siblingType2 == StmtLst) {
-				allToCheckInt = pkb.getStmtNumForType("if");
-				//if(second_siblingType == Assign || second_siblingType == While || second_siblingType == If) {
-					for(int i=0 ; i<(int)allToCheckInt.size(); i++) {		
-						currentNode = pkb.getNodeForStmt(allToCheckInt.at(i));
-					
-						RHS.push_back(currentNode->getChildren()->at(2)->getChildren()->at(0)->getStmtNumber());
-						results.push_back(make_pair(currentNode->getChildren()->at(1)->getChildren()->at(0)->getStmtNumber(), RHS));
-						RHS.clear();
-					}		
-				//}
-			}*/
 			if(second_siblingType2 == StmtLst || second_siblingType2 == Variable) {
 				allToCheckInt = pkb.getStmtNumForType("if");
 				for(int i=0 ; i<(int)allToCheckInt.size(); i++) {
@@ -436,7 +429,12 @@ vector<TNode*> getOperandNodes(TNode* currentNode, TNODE_TYPE operandType) {
 	return queue;
 }
 
-vector<int> Siblings::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
+/**
+ * Checks Sibling relationship between a statement and sibling nodes in AST
+ * @param proc_line/statement no, Synonym type for sibling
+ * @return a vector of statement numbers/variable index of siblings
+ */
+VALUE_LIST Siblings::siblings(STATEMENT stmtNo, SYNONYM_TYPE second_siblingType) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
@@ -451,7 +449,12 @@ vector<int> Siblings::siblings(int stmtNo, SYNONYM_TYPE second_siblingType) {
 	return temp;
 }
 
-vector<int> Siblings::siblings(SYNONYM_TYPE first_siblingType, int stmtNo) {
+/**
+ * Checks Sibling relationship between a statement and sibling nodes in AST
+ * @param Synonym type for sibling, proc_line/statement no,
+ * @return a vector of statement numbers/variable index of siblings
+ */
+VALUE_LIST Siblings::siblings(SYNONYM_TYPE first_siblingType, STATEMENT stmtNo) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNode* currentNode = pkb.getNodeForStmt(stmtNo);

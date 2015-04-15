@@ -154,6 +154,15 @@ bool is_number(const std::string& s)
 }
 
 /**
+ * Obtain the number of descendents from a TNode. 
+ * @param reference to a TNode
+ * @return number of descendent TNodes
+ */
+INTEGER AST::getDescendent(TNode* curr) {
+	return curr->getDescendent();
+}
+
+/**
  * Pattern matching for assign statements.
  * @return a vector of statement numbers which are assign stmts, and uses the input RHS as its right substree.
  * @param RHS to match the expression query with a suitable subtree.
@@ -276,6 +285,7 @@ STATEMENT_LIST AST::patternMatchWhile(VARNAME LHS) {
 
 	return result;
 }
+
 /**
  * Pattern matching for if statements.
  * @return a vector of statement numbers which are if statements, and uses the input LHS as its control variable.
@@ -290,13 +300,12 @@ STATEMENT_LIST AST::patternMatchIf(VARNAME LHS) {
 	return result;
 }
 
-//@todo
-INTEGER AST::getDescendent(TNode* curr) {
-	return curr->getDescendent();
-}
-
-//@todo
-vector<pair<int, vector<int>>> AST::patternMatchWhile(string LHS, SYNONYM_TYPE then) {
+/**
+ * Pattern matching for while statements.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements, and Synonynm type in the then statement list
+ * @return a vector pair of statement numbers which are while statements, and the first statement in the then statement list
+ */
+PAIR_LIST AST::patternMatchWhile(string LHS, SYNONYM_TYPE then) {
 	PatternMatch pattern;
 	vector<int> whileStmts, temp;
 	vector<pair<int, vector<int>>> result;
@@ -316,7 +325,12 @@ vector<pair<int, vector<int>>> AST::patternMatchWhile(string LHS, SYNONYM_TYPE t
 	return result;
 }
 
-vector<pair<int, vector<int>>> AST::patternMatchIfThen(string LHS, SYNONYM_TYPE thenS) {
+/**
+ * Pattern matching for if statements.
+ * @param LHS  the name of the variable that acts as the control variable for the if statements, and Synonynm type in the then statement list
+ * @return a vector pair of statement numbers which are if statements, and the first statement in the then statement list
+ */
+PAIR_LIST AST::patternMatchIfThen(string LHS, SYNONYM_TYPE thenS) {
 	PatternMatch pattern;
 	vector<int> IfStmts, temp;
 	vector<pair<int, vector<int>>> result;
@@ -336,7 +350,12 @@ vector<pair<int, vector<int>>> AST::patternMatchIfThen(string LHS, SYNONYM_TYPE 
 	return result;
 }
 
-vector<pair<int, vector<int>>> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE elseS) {
+/**
+ * Pattern matching for if statements.
+ * @param LHS  the name of the variable that acts as the control variable for the if statements, and Synonynm type in the else statement list
+ * @return a vector pair of statement numbers which are if statements, and the first statement in the else statement list
+ */
+PAIR_LIST AST::patternMatchIfElse(string LHS, SYNONYM_TYPE elseS) {
 	PatternMatch pattern;
 	vector<int> IfStmts, temp;
 	vector<pair<int, vector<int>>> result;
@@ -356,7 +375,12 @@ vector<pair<int, vector<int>>> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE 
 	return result;
 }
 
-vector<pair<int, pair<int, int>>> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
+/**
+ * Pattern matching for while statements.
+ * @param LHS  the name of the variable that acts as the control variable for the while statements, Synonynm type in the then statement list, and Synonynm type in the else statement list
+ * @return a vector pair of statement numbers which are while statements, pair of first statement in the then statement list, and first statement in the else statement list
+ */
+PAIR_OF_PAIR_LIST AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
 	vector<int> result1;
 	pair<int, int> temp;
 	vector<pair<int, pair<int, int>>> finalResult;

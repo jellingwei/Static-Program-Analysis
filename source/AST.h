@@ -31,11 +31,10 @@ class AST {
 		STATEMENT_LIST patternMatchWhile(VARNAME LHS);
 		STATEMENT_LIST patternMatchIf(VARNAME LHS);
 
-		vector<pair<int, vector<int>>> patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
-		vector<pair<int, vector<int>>> patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE thenS);
-		vector<pair<int, vector<int>>> patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE thenS);
-		//STATEMENT_LIST patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
-		vector<pair<int, pair<int, int>>> patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
+		PAIR_LIST patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);
+		PAIR_LIST patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE thenS);
+		PAIR_LIST patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE thenS);
+		PAIR_OF_PAIR_LIST patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
 
 		VAR_INDEX getControlVariable(STATEMENT stmtNum);
 

@@ -22,7 +22,12 @@ vector<TNode*> checkForAssignCase2(TNode* currentNode, TNODE_TYPE descendentType
 vector<TNode*> checkForOtherCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure);
 TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type);
 
-vector<pair<int, vector<int>>> Contain::contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+/**
+ * Checks Contains relationship between any pair of Predecessor & Descendent nodes in AST
+ * @param Synonym type for a predecessorType, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @return a vector pair of statement numbers/variable index that matches the 2 Synonym types
+ */
+PAIR_LIST Contain::contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	vector<pair<int, vector<int>>> results;
 	vector<int> LHS;
@@ -454,8 +459,12 @@ vector<int> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, boo
 }
 
 // For Pattern Match Extension
-
-vector<int> Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+/**
+ * Auxillary method for Pattern While Then statement list
+ * @param TNode reference of the statement list, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @return a vector statement numbers/variable index that matches the Synonym type
+ */
+VALUE_LIST Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
 	TNODE_TYPE descendentType2;
 	descendentType2 = convertFromSynonym(descendentType);
 
@@ -469,7 +478,12 @@ vector<int> Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descende
 	return result;
 }
 
-vector<int> Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+/**
+ * Auxillary method for Pattern If Then or Else statement list
+ * @param TNode reference of the statement list, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @return a vector statement numbers/variable index that matches the Synonym type
+ */
+VALUE_LIST Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
 	TNODE_TYPE descendentType2;
 	descendentType2 = convertFromSynonym(descendentType);
 
@@ -483,7 +497,12 @@ vector<int> Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descend
 	return result;
 }
 
-pair<int, int> Contain::checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS) {
+/**
+ * Auxillary method for Pattern If Then & Else (Both) statement lists
+ * @param TNode reference of Then statement list, Synonym type for a thenType, TNode reference of Else statement list, Synonym type for a elseType, false if Contains() & true if Contains*()
+ * @return a vector of pair of statement numbers/variable index that matches the 2 Synonym types
+ */
+PAIR Contain::checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS) {
 	//vector<int> result1, result2;
 	int result1, result2;
 	//vector<pair<int, int>> finalResult;
@@ -553,23 +572,12 @@ TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type) {
 	return returnType;
 }
 
-/*bool Contain::contains(int stmtNo, int stmtNo2, bool transitiveClosure) {
-	vector<pair<int, vector<int>>> toCompare;
-	toCompare = contains(STMT, STMT, true);
-
-	for(int i=0; i<(int)toCompare.size(); i++) {
-		pair <int, vector<int>> tester = toCompare.at(i);
-		if(tester.first == stmtNo) {
-			for(int j=0; j<(int)tester.second.size(); j++) {
-				if(tester.second.at(j) == stmtNo2) return true;
-			}
-		}
-	}
-
-	return false;
-}*/
-
-vector<int> Contain::contains(int stmtNo, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+/**
+ * Checks Contains relationship of a statment & Descendent nodes in AST
+ * @param proc_line/statement no, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @return a vector pair of proc_line/statement no (provided) and the statement numbers/variable index that matches the Synonym type
+ */
+VALUE_LIST Contain::contains(STATEMENT stmtNo, SYNONYM_TYPE descendentType, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
@@ -589,7 +597,12 @@ vector<int> Contain::contains(int stmtNo, SYNONYM_TYPE descendentType, bool tran
 	return temp;
 }
 
-vector<int> Contain::contains(SYNONYM_TYPE predecessorType, int stmtNo, bool transitiveClosure) {
+/**
+ * Checks Contains relationship of a statment & Predecessor nodes in AST
+ * @param Synonym type for a predecessorType, proc_line/statement no, false if Contains() & true if Contains*()
+ * @return a vector pair of statement numbers/variable index that matches the Synonym type and proc_line/statement no (provided)
+ */
+VALUE_LIST Contain::contains(SYNONYM_TYPE predecessorType, STATEMENT stmtNo, bool transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	string stmtType = pkb.getType(stmtNo);
 	TNODE_TYPE descendentType;
