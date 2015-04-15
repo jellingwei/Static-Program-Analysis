@@ -677,7 +677,7 @@ void StatisticsTable::reduceCountWith(Synonym LHS, Synonym RHS, DIRECTION direct
 		//Both are synonyms
 		double originalLHS = _synonymsCount[LHS.getName()];
 		double originalRHS = _synonymsCount[RHS.getName()];
-		double estimated = min(originalLHS, originalLHS);
+		double estimated = min(originalLHS, originalRHS);
 		_synonymsCount[LHS.getName()] = min(originalLHS, estimated);
 		_synonymsCount[RHS.getName()] = min(originalRHS, estimated);
 	}
