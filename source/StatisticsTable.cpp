@@ -2,6 +2,10 @@
 
 #include "StatisticsTable.h"
 
+/**
+@brief Class containing functions for the statistics table
+*/
+
 StatisticsTable::StatisticsTable(unordered_map<string, SYNONYM_TYPE> synonymNameToTypeMap)
 {
 	PKB pkb = PKB::getInstance();
@@ -45,6 +49,11 @@ StatisticsTable::~StatisticsTable()
 {
 }
 
+/**
+* Get the initial number of values for a given type
+* @param type the synonym type
+* @return the number of initial values for the given type
+*/
 double StatisticsTable::getCountForType(SYNONYM_TYPE type)
 {
 	switch (type) {
@@ -71,6 +80,14 @@ double StatisticsTable::getCountForType(SYNONYM_TYPE type)
 	}
 }
 
+/**
+* Given a relation, arguments and direction, calculate the estimated cost
+* @param rel_type the type of relation of the clause
+* @param LHS the LHS argument
+* @param RHS the RHS argument
+* @param direction the direction of evaluation
+* @return the estimated cost of the relation
+*/
 double StatisticsTable::calculateCost(QNODE_TYPE rel_type, Synonym LHS, Synonym RHS, DIRECTION direction)
 {
 	double numberOfValues;
@@ -191,6 +208,13 @@ double StatisticsTable::getPatternCost(Synonym synonym)
 	}
 }
 
+/**
+* Given a relation, arguments and direction, reduce the synonym count
+* @param rel_type the type of relation of the clause
+* @param LHS the LHS argument
+* @param RHS the RHS argument
+* @param direction the direction of evaluation
+*/
 void StatisticsTable::reduceCount(QNODE_TYPE rel_type, Synonym LHS, Synonym RHS, DIRECTION direction)
 {
 	switch (rel_type) {
