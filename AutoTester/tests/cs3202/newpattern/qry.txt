@@ -30,7 +30,7 @@ Select sl pattern w(v,sl) with v.varName = "c"
 5000
 1007 - pattern while stmtLst
 while w1,w2; stmtLst sl1,sl2;
-Select sl2 pattern w1(_,sl1) pattern w2(_,sl2) w1.stmt# = w2.stmt#
+Select sl2 pattern w1(_,sl1) pattern w2(_,sl2) with w1.stmt# = w2.stmt#
 114,120,20,21,24,32,46,6,56,72,78,84,92,97
 5000
 1008 - pattern while stmtLst

@@ -1,5 +1,8 @@
 var searchData=
 [
+  ['scanandremoveredundantsynonyms',['scanAndRemoveRedundantSynonyms',['../namespace_query_optimiser.html#ab3e0a2c983c304c9deacfb78db84d53f',1,'QueryOptimiser']]],
+  ['scanandreplaceredundantitems',['scanAndReplaceRedundantItems',['../namespace_query_optimiser.html#af7340776012d92fd7ba28e5810c11019',1,'QueryOptimiser']]],
+  ['scansynonymsreachable',['scanSynonymsReachable',['../namespace_query_optimiser.html#a89dd6d7ff281287d110d620f47ce7b56',1,'QueryOptimiser']]],
   ['setarg0',['setArg0',['../class_q_node.html#a2fa7a0285fc1a72f1d4c769d610f5627',1,'QNode']]],
   ['setarg1',['setArg1',['../class_q_node.html#aec209e1ed028344e741ea73440441962',1,'QNode']]],
   ['setarg2',['setArg2',['../class_q_node.html#a20fc418b707d532a4b348cd181198444',1,'QNode']]],
@@ -30,8 +33,10 @@ var searchData=
   ['setusesforcontainerstatements',['setUsesForContainerStatements',['../class_design_extractor.html#a8a218606e1a8256fe3b76e4a9bb87620',1,'DesignExtractor']]],
   ['setusesproc',['setUsesProc',['../class_p_k_b.html#af57d27e2ab03eedb2262e9c40198a439',1,'PKB']]],
   ['siblings',['Siblings',['../class_siblings.html',1,'']]],
-  ['splitconstantclauses',['splitConstantClauses',['../namespace_query_optimiser.html#a5d443f7f59455230d72a639b5e876a04',1,'QueryOptimiser']]],
-  ['statisticstable',['StatisticsTable',['../class_statistics_table.html',1,'']]],
+  ['splitconstantclauses',['splitConstantClauses',['../namespace_query_optimiser.html#aa03eb5380c87e9c4128e306c124cc4ca',1,'QueryOptimiser']]],
+  ['splitredundantclauses',['splitRedundantClauses',['../namespace_query_optimiser.html#a5e3fb018b721137de2a4117ca6e09950',1,'QueryOptimiser']]],
+  ['splitwithclauses',['splitWithClauses',['../namespace_query_optimiser.html#a6738ea5fbf46575ea1d3b4ee2a385e9b',1,'QueryOptimiser']]],
+  ['statisticstable',['StatisticsTable',['../class_statistics_table.html',1,'StatisticsTable'],['../class_statistics_table.html#acaa0e40ebebaf10bbbe0f0e00c9b51a2',1,'StatisticsTable::StatisticsTable()']]],
   ['stmttable',['StmtTable',['../class_stmt_table.html',1,'']]],
   ['synonym',['Synonym',['../class_synonym.html',1,'Synonym'],['../class_synonym.html#aaad455aa680dec09937a523aae2cafc8',1,'Synonym::Synonym(SYNONYM_TYPE type, string name)'],['../class_synonym.html#a25a2a39790cb836cb4b85a6786e6292b',1,'Synonym::Synonym(SYNONYM_TYPE type, int name)'],['../class_synonym.html#a4d15dc1279161f195608b12c2d17b616',1,'Synonym::Synonym(SYNONYM_TYPE type, string name, SYNONYM_ATTRIBUTE attribute)'],['../class_synonym.html#a1b301ad426f84b6ba89674e4617c7c62',1,'Synonym::Synonym(SYNONYM_TYPE type, string name, vector&lt; int &gt; values)'],['../class_synonym.html#a9cd9d295f26955628f6a01c684fad1f6',1,'Synonym::Synonym(SYNONYM_TYPE type, string name, VALUE_SET values)']]]
 ];
