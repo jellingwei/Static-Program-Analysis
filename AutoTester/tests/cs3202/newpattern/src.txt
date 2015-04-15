@@ -1,0 +1,208 @@
+procedure One {
+  b = l;   \\1
+  d = l * h + a * b;    \\2
+  e = x + t;   \\3
+  m = (e + e) * t;  \\4
+  while h {  \\5
+    h = m - w * 1; \\6
+    r = a - (b + c) * ((x + y) * z); \\7
+    call Two; \\8
+  }
+  a = 0;   \\9
+  call Eight; \\10
+  if f then { \\11
+    h = h - c;  \\12
+    d = 11 * l - (f + 11) * 9; \\13
+  }
+  else {
+    w = h * 0 - t - w; \\14
+    h = 5 + a * (a * a) + 2;     \\15
+    z = (3 + ((5 - 9 * l) - 3)) + 11;   \\16
+  }
+  b = l;   \\17
+  call Eight;   \18
+}
+
+procedure Two {
+  while c {       \\19
+    while d {     \\20
+      if f then {     \\21
+        f = 3;       \\22
+        while e {       \\23
+          m = (x + t) * 2 - (e + t) * 2; \\24
+          a = (a + b - c) * d + f - x;      \\25
+          x = y + z * w;        \\26
+        }
+      }
+      else {
+        call Three;       \\27
+      }
+    }
+    c = x + e - a + 7;       \\28
+  }
+}
+
+procedure Three {
+  if h then {      \\29
+    if h then{       \\30
+      while x {           \\31
+        l = 9;          \\32
+        l = l - w;       \\3
+        x = l * 5 - (h + (x * y) + m);        \\34
+      }
+    }
+    else {
+      b = 1 + 2 + 3 + 5 + 11;       \\35
+      z = h * h * w + a * c * z;     \\36
+      if x then {       \\37
+        t = x;       \\38
+      } else {
+        t = e;        \\39
+      }
+      m = w + h;      \\40
+    }
+  }
+  else {
+    if h then {       \\41
+      d = 1 + (e * (l - w - e)) * z;     \\42
+      d = (1 + e * l) - (w - e) * z;       \\43
+      d = (1 + e * (l - w - e) * z);      \\44
+    }
+    else {
+      while h {            \\45
+        f = r;       \\46
+        r = 1 + 2;     \\47
+      }
+    }
+  }
+}
+
+procedure Four {
+  y = y + n;   \\48
+  n = y * 0;       \\49
+  call Three;       \\50
+  if y then {       \\51
+    call Five;        \\52
+    a = b * (m + w * z - z);    \\53
+    h = h + h + m;     \\54
+  }
+  else {
+    while p {      \\55
+      g = 7;       \\56
+      p = g - 7 - 2 + 9 * 11;     \\57
+      z = 2;        \\58
+    }
+  }
+  if n then {        \\59
+    l = 7 + (9 + r) + w;        \\60
+    b = x + (f - (z * n + (g + 3)) - h);      \\61
+  }
+  else { 
+    y = y * y - y + y * y - y;        \\62
+    t = e + x;          \\63
+    t = t - l;             \\64
+  }
+  y = 1 + n * n * n;             \\65
+}
+
+procedure Five {
+  z = z * z * z * z;      \\66
+  w = 3 * c - 11 + z * l - h;     \\67
+  if w then {     \\68
+    h = m;     \\69
+  } else {
+    x = 2 + h - 2;      \\70
+    while z {       \\71
+      g = (3 * (7 - p));      \\72
+      x = 0 + (1 + 2) - (3 * 5 * 11 - 2 * 3 - 9) * 7;    \\73
+    }
+  }
+  n = y * 0;     \\74
+  a = (x + a - b) * z;    \\75
+}
+
+procedure Six { 
+  call Four;       \\76
+  while x {         \\77
+    b = g;       \\78
+    z = a * b - (c + x - w);    \\79
+  }
+  f = y * (z * c);    \\80
+  if r then {      \\81
+    m = (x + t) * (e + t);   \\82
+    while f {     \\83
+      a = (7 - 1 * 9) * 0 - 0;      \\84
+      f = f + 1;      \\85
+    }
+  } 
+  else {
+    if g then {    \\86
+      l = h - h * m * f - 1 * l;    \\87
+    } 
+    else {
+      h = h * (m * f - 1 * l) + l;    \\88
+    }
+  }
+  f = (y - z) * c;    \\89
+}
+
+procedure Seven {      
+  if y then {   \\90
+    while y {   \\91
+      call Eight;       \\92
+      y = y - 1 + (0 * (0 - 0) * 0 + 0);      \\93
+    }
+    a = b * ((m + (w * z)) - z);    \\94
+ 
+  } else {
+    w = 9;   \\95
+  }
+  while a {           \\96
+    x = x - 1;          \\97
+    if y then {       \\98
+      x = 0;          \\99
+      if x then {         \\100
+        h = a + 2 - n * l - 1;       \\101
+      } else {    
+        r = t * n;     \\102
+        t = t + t;     \\103
+      }
+    } 
+    else {
+      x = 1 * (l * a + (l - r + y) - x);     \\104
+      n = l - x + f * w;      \\105
+    }
+  }
+  call Two;     \\106
+}
+
+procedure Eight {
+  e = 0;   \\107
+  if e then {   \\108
+    a = 1 * l * (7 - 9 + 0) - 11;   \\109
+    w = h + l + h + m;  \\110
+  } 
+  else {
+    e = e + t - t;      \\111
+  }
+  call Six;     \\112
+  while h {    \\113
+    h = m - w * 1;     \\114
+    z = a * b - (c + x);      \\115
+    if z then {         \\116
+      a = y - (((w * (a - 5)) + 3) + w) * w;      \\117
+      y = n;   \\118
+      while h {      \\119
+        h = 0;       \\120
+      }
+    } else {
+      if z then {     \\121
+        z = x + y + z;      \\122
+      } else {
+        z = a * b * c;      \\123
+      }
+    }
+  }
+  z = 1 - l - 2 - 3;     \\124
+  f = ((9 - 1 * 0) + (11 - 5)) * (3 - 9 * 7);   \\125
+}

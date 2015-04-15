@@ -1,0 +1,115 @@
+1001 - pattern while
+while w;
+Select w pattern w(_,_)
+113,119,19,20,23,31,45,5,55,71,77,83,91,96
+5000
+1002 - pattern while var
+while w; variable v;
+Select v pattern w(v,_) with w.stmt# = 5
+h
+5000
+1003 - pattern while var
+while w; variable v;
+Select w pattern w("h",_)
+5, 45, 119, 113
+5000
+1004 - pattern while var
+while w; variable v;
+Select w pattern w(v,_) with v.varName = "h"
+5, 45, 119,113
+5000
+1005 - pattern while stmtLst
+while w; stmtLst sl;
+Select sl pattern w(_,sl)
+114,120,20,21,24,32,46,6,56,72,78,84,92,97
+5000
+1006 - pattern while stmtLst
+while w; stmtLst sl; variable v;
+Select sl pattern w(v,sl) with v.varName = "c"
+20
+5000
+1007 - pattern while stmtLst
+while w1,w2; stmtLst sl1,sl2;
+Select sl2 pattern w1(_,sl1) pattern w2(_,sl2) w1.stmt# = w2.stmt#
+114,120,20,21,24,32,46,6,56,72,78,84,92,97
+5000
+1008 - pattern while stmtLst
+while w1,w2; stmtLst sl1,sl2; variable v1,v2;
+Select sl2 pattern w1(v1,sl1) pattern w2(v2,sl2) such that Modifies(w1,v2) with v1.varName = v2.varName
+6, 20, 21, 31, 84, 92, 114, 120
+5000
+1009 - pattern while BOOLEAN stmtLst
+while w; stmtLst sl;
+Select BOOLEAN pattern w(_,sl)
+true
+5000
+1010 - pattern while BOOLEAN stmtLst
+while w; stmtLst sl;
+Select BOOLEAN pattern w("c", sl)
+true
+5000
+2001 - pattern if
+if i;
+Select i pattern i(_,_,_)
+100,108,11,116,121,21,29,30,37,41,51,59,68,81,86,90,98
+5000
+2002- pattern if var
+if i; variable v;
+Select v pattern i(v,_,_) with i.stmt# = 121
+z
+5000
+2003 - pattern if var
+if i; variable v;
+Select i pattern i("z",_,_)
+121, 116
+5000
+2004 - pattern if stmtLst
+if i; stmtLst sl;
+Select sl pattern i(_,sl,_)
+101,109,12,117,122,22,30,31,38,42,52,60,69,82,87,91,99
+5000
+2005 - pattern if stmtLst
+if i; stmtLst sl;
+Select sl pattern i(_,_,sl)
+14, 27, 35,39,41,45, 55,62,70,86,88,95,102,104,111,121,123
+5000
+2006 - pattern if stmtLst
+if i; stmtLst then,else;
+Select then pattern i(_,then,else)
+101,109,12,117,122,22,30,31,38,42,52,60,69,82,87,91,99
+5000
+2007 - pattern if stmtLst
+if i; stmtLst then,else;
+Select else pattern i(_,then,else)
+14,27,35,39,41,45,55,62,70,86,88,95,102,104,111,121,123
+5000
+2008 - pattern if stmtLst
+if i; stmtLst then,else; variable v;
+Select else pattern i(v,then,else) with v.varName = "e"
+111
+5000
+2008 - pattern if stmtLst
+if i; stmtLst then,else;
+Select then pattern i("y",then,else)
+52,91,99
+5000
+2009 - pattern if stmtLst
+if i1,i2; stmtLst t1,t2,e1,e2;
+Select t1 pattern i1(_,t1,e1) pattern i2(_,t2,e2) with i1.stmt# = i2.stmt#
+101,109,12,117,122,22,30,31,38,42,52,60,69,82,87,91,99
+5000
+2010 - pattern if stmtLst
+if i1,i2; stmtLst t1,t2,e1,e2;
+Select e2 pattern i1(_,t1,e1) pattern i2(_,t2,e2) such that Parent(i1,i2)
+35,39,45,88,102,123
+5000
+2011 - pattern if boolean
+if i; stmtLst t,e;
+Select BOOLEAN pattern i("z",t,e) 
+true
+5000
+2012 - pattern if boolean
+if i; stmtLst e;
+Select BOOLEAN pattern i(_,_,e)
+true
+5000
