@@ -1,7 +1,7 @@
 #include "QueryOptimizer.h"
 
 /**
-@brief Namespace containing functions for the query optimisation
+@brief Namespace containing functions for the query optimization
 
 */
 
@@ -76,7 +76,7 @@ namespace QueryOptimiser
 	}
 
 	/**
-	* Method to remove redundant clause and to rewrite the clauses
+	* Method to rewrite the clauses and to remove redundant clauses
 	* @param qTreeRoot the root of the query tree
 	* @return a QueryTree object that contains the flattened query tree
 	*/
@@ -87,6 +87,11 @@ namespace QueryOptimiser
 		return qTreeRoot;
 	}
 
+	/**
+	* Method to rewrite with clauses
+	* @param qTreeRoot the root of the query tree
+	* @return a QueryTree object that has with clauses rewritten
+	*/
 	QueryTree* rewriteWithClauses(QueryTree* qTreeRoot)
 	{
 		QNODE_LIST resultClauses = populateSelectSynonyms(qTreeRoot->getResultNode());
@@ -146,6 +151,11 @@ namespace QueryOptimiser
 		return qTreeRoot;
 	}
 
+	/**
+	* Method to split clauses into "with" and "non-with" clauses
+	* @param clausesNode the root of the clauses subtree tree
+	* @return a pair of QNODE_LIST that contains the "non-with" and "with" clauses respectively
+	*/
 	pair<QNODE_LIST, QNODE_LIST> splitWithClauses(QNode* clausesNode)
 	{
 		QNODE_LIST clauses;
@@ -165,6 +175,13 @@ namespace QueryOptimiser
 		return make_pair(clauses, withClauses);
 	}
 
+	/**
+	* Method to split clauses into redundant and non-redundant clauses
+	* @param clausesNode the root of the clauses subtree tree
+	* @param synonymsReachable a set of synonym indexes that can be reached from the select synonyms
+	* @param name_index_map a map that maps from synonym name to an index
+	* @return a pair of QNODE_LIST that contains the non-redundant and redundant clauses respectively
+	*/
 	pair<QNODE_LIST, QNODE_LIST> splitRedundantClauses(QNode* clausesNode, set<int> synonymsReachable, unordered_map<string, int> name_index_map)
 	{
 		QNODE_LIST redundantVector;
@@ -229,6 +246,11 @@ namespace QueryOptimiser
 		return make_pair(clausesVector, redundantVector);
 	}
 
+	/**
+	* Method to remove redundant clauses and synonyms
+	* @param qTreeRoot the root of the query tree
+	* @return a QueryTree object that has redundant items removed
+	*/
 	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot)
 	{
 		QNode* resultNode = qTreeRoot->getResultNode();
@@ -243,6 +265,13 @@ namespace QueryOptimiser
 		return qTreeRoot;
 	}
 
+	/**
+	* Method to remove redundant clauses and synonyms
+	* @param clausesNode the root of the clauses subtree
+	* @param adjacencyMatrix the synonym reference graph
+	* @param name_index_map a map that maps from synonym name to an index
+	* @return a QNode object that has redundant items removed
+	*/
 	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
 		set<int> synonymsReachable = scanSynonymsReachable(adjacencyMatrix);
@@ -269,6 +298,13 @@ namespace QueryOptimiser
 		}
 	}
 
+	/**
+	* Method to remove redundant synonyms
+	* @param clauses the root of the clauses subtree
+	* @param adjacencyMatrix the synonym reference graph
+	* @param name_index_map a map that maps from synonym name to an index
+	* @return the clauses object will be changed
+	*/
 	void scanAndRemoveRedundantSynonyms(QNODE_LIST &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
 		unordered_map<string, int> synonymOccurrence;
@@ -345,6 +381,13 @@ namespace QueryOptimiser
 		}
 	}
 
+	/**
+	* A helper method to replace synonyms
+	* @param clausesVector a vector of clauses
+	* @param toBeReplaced the synonym to be replaced
+	* @param replacement the replacement synonym
+	* @return a pair of replacement status and clauses vector with synonyms replaced
+	*/
 	pair<bool, QNODE_LIST> replaceSynonyms(QNODE_LIST clausesVector, Synonym toBeReplaced, Synonym replacement)
 	{
 		QNODE_LIST finalClauses;
@@ -360,7 +403,7 @@ namespace QueryOptimiser
 			if (LHS == toBeReplaced) {
 				if (qnode_type == Pattern || qnode_type == Sibling ||
 					qnode_type == Contains || qnode_type == ContainsT) {
-					isRemovable = false;  //Cannot rewrite these clauses
+						isRemovable = false;  //Cannot rewrite these clauses
 				} else {
 					LHS = replacement;
 				}
@@ -448,6 +491,11 @@ namespace QueryOptimiser
 		return make_pair(constantClauses, nonConstantClauses);
 	}
 
+	/**
+	* Method to reorder the constant clauses
+	* @param A vector of clauses that is to be reordered
+	* @return a vector of QNode objects that are re-ordered
+	*/
 	QNODE_LIST reorderConstantClauses(QNODE_LIST clauses)
 	{
 		//TODO: Check that the vector is not of size zero
@@ -630,6 +678,12 @@ namespace QueryOptimiser
 		return make_pair(LHS, RHS);
 	}
 
+	/**
+	* A helper function that determines which is a superset and which is a subset
+	* @param LHS a synonym
+	* @param RHS a synonym
+	* @return a pair of subset status and the direction of which one is the superset
+	*/
 	pair<BOOLEAN_, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
@@ -677,6 +731,11 @@ namespace QueryOptimiser
 		}
 	}
 
+	/**
+	* A helper function that populates synonyms selected into a vector
+	* @param resultNode the root of the result subtree
+	* @return a vector containing the synonyms selected
+	*/
 	QNODE_LIST populateSelectSynonyms(QNode* resultNode)
 	{
 		QNODE_LIST resultSynonyms;
@@ -697,6 +756,12 @@ namespace QueryOptimiser
 		return resultSynonyms;
 	}
 
+	/**
+	* A helper function that determines if a with clauses is rewritable
+	* @param LHS one side of the with clause
+	* @param RHS the other side of the with clause
+	* @return a pair of status and which side is the superset
+	*/
 	pair<BOOLEAN_, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS)
 	{
 		pair<bool, DIRECTION> superset_subset_pair = determineSupersetSubset(LHS, RHS);
@@ -723,6 +788,12 @@ namespace QueryOptimiser
 		return superset_subset_pair;
 	}
 
+	/**
+	* A helper function that determines if this synonym is in the main table of the values handler
+	* @param name of the synonym
+	* @return TRUE if it is projected in the main table
+	*         FALSE otherwise
+	*/
 	inline BOOLEAN_ isContainedInMain(string wantedName)
 	{
 		if (mainTableSynonyms.count(wantedName) == 1) {
@@ -732,6 +803,12 @@ namespace QueryOptimiser
 		}
 	}
 
+	/**
+	* A helper function that determines if this synonym is a selected synonym
+	* @param name of the synonym
+	* @return TRUE if this synonym is a selected synonym
+	*         FALSE otherwise
+	*/
 	inline BOOLEAN_ isSelectSynonym(string wantedName)
 	{
 		if (selectSynonyms.count(wantedName) == 1) {
@@ -741,6 +818,11 @@ namespace QueryOptimiser
 		}
 	}
 
+	/**
+	* A helper function that assigns an index to the various synonyms
+	* @param clausesNode the root of the clauses subtree
+	* @return a map from the synonym name to its index
+	*/
 	unordered_map<string, int> indexSynonymsReferenced(QNode* clausesNode)
 	{
 		unordered_map<string, int> name_index_map = selectSynonyms;  //Index the selected synonyms first
@@ -773,6 +855,12 @@ namespace QueryOptimiser
 		return name_index_map;
 	}
 
+	/**
+	* A helper function that creates the synonym reference graph
+	* @param clausesNode the root of the clauses subtree
+	* @param name_index_map a mapping of the synonym name to its index
+	* @return an adjacency matrix that represents the graph
+	*/
 	vector<vector<int>> createSynonymGraph(QNode* clausesNode, unordered_map<string, int> name_index_map)
 	{
 		vector<vector<int>> adjacencyMatrix;
@@ -810,6 +898,11 @@ namespace QueryOptimiser
 		return adjacencyMatrix;
 	}
 
+	/**
+	* A helper function that traverses the synonym reference graph to find synonyms that are reachable
+	* @param adjacencyMatrix the synonym reference graph in an adjacency matrix form
+	* @return a set of synonym indexes reachable
+	*/
 	set<int> scanSynonymsReachable(vector<vector<int>> adjacencyMatrix)
 	{
 		int numberOfSynonyms = adjacencyMatrix.size();
@@ -844,6 +937,11 @@ namespace QueryOptimiser
 		return synonymsReachable;
 	}
 
+	/**
+	* A helper function that creates a subtree given a vector
+	* @param type the type of subtree to create (i.e. RESULT or CLAUSES)
+	* @return the root of the subtree
+	*/
 	QNode* createSubtree(QNODE_TYPE type, QNODE_LIST clausesVector)
 	{
 		Synonym empty;
