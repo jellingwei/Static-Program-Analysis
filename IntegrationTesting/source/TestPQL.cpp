@@ -11,6 +11,7 @@
 #include "PKB.h"
 #include "Synonym.h"
 #include "ResultProjector.h"
+#include "PQLController.h"
 
 using namespace std;
 
@@ -273,14 +274,6 @@ void PQLTest::testPQL()
 list<string> evaluate(string query)
 {
 	list<string> results;
-	QueryParser::initParser(query);
-	QueryParser::parseQuery();
-	QueryTree* qT = QueryParser::getQueryTree();
-
-	qT = QueryOptimiser::optimiseQueryTree(qT);
-	vector<Synonym> queryResults = QueryEvaluator::processQueryTree(qT);
-
-	ResultProjector::projectResultToList(queryResults, results);
+	PQLController::evaluate(query, results);
 	return results;
 }
-

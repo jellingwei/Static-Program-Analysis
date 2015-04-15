@@ -81,6 +81,7 @@ namespace ResultProjector {
 			}
 		}
 
+		//Convert the values into strings and expand them
 		for (unsigned int i = 0; i < resultVector.size(); i++) {
 			Synonym synonym = resultVector[i];
 			string name = synonym.getName();
