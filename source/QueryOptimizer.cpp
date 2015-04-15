@@ -24,6 +24,7 @@ namespace QueryOptimiser
 	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot);
 	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
 	void scanAndRemoveRedundantSynonyms(QNODE_LIST &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
+	pair<QNODE_LIST, QNODE_LIST> splitRedundantClauses(QNode* clausesNode, set<int> synonymsReachable, unordered_map<string, int> name_index_map);
 	pair<BOOLEAN_, QNODE_LIST> replaceSynonyms(QNODE_LIST clausesVector, Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
@@ -190,6 +191,22 @@ namespace QueryOptimiser
 		QNode* childNode = clausesNode->getChild();
 
 		for (int i = 0; i < numberOfClauses; i++) {
+			//This is to account for the pattern in the bonus features
+			if (childNode->getNodeType() == Pattern) {
+				SYNONYM_TYPE patternType = childNode->getArg0().getType();
+				if (patternType == If) {
+					if (!childNode->getArg2().isUndefined() || !childNode->getArg3().isUndefined()) {
+						clausesVector.push_back(childNode);
+						continue;
+					}
+				} else if (patternType == While) {
+					if (!childNode->getArg2().isUndefined()) {
+						clausesVector.push_back(childNode);
+						continue;
+					}
+				}
+			}
+
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(childNode);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;

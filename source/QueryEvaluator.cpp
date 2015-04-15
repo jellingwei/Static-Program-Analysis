@@ -1300,7 +1300,6 @@ namespace QueryEvaluator
 	*/
 	BOOLEAN_ processIfPattern(Synonym arg0, Synonym arg1, Synonym arg2, Synonym arg3) 
 	{
-		//TODO: If arg1 is v
 		VALUE_LIST ifStmts = ValuesHandler::getSynonym(arg0.getName()).getValues();
 		VALUE_LIST acceptedArg0;
 		VALUE_LIST acceptedArg1;
@@ -1416,8 +1415,8 @@ namespace QueryEvaluator
 
 				for (unsigned int j = 0; j < arg2AndArg3Pair.size(); j++) {
 					acceptedArg0.push_back(arg0Value);
-					acceptedArg2.push_back(arg2AndArg3Pair[i].first);
-					acceptedArg3.push_back(arg2AndArg3Pair[i].second);
+					acceptedArg2.push_back(arg2AndArg3Pair[j].first);
+					acceptedArg3.push_back(arg2AndArg3Pair[j].second);
 				}
 			}
 			arg0.setValues(acceptedArg0);
