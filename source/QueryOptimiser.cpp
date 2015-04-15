@@ -17,32 +17,32 @@ namespace QueryOptimiser
 
 	QueryTree* flattenQuery(QueryTree* qTreeRoot);
 	QueryTree* rewriteWithClauses(QueryTree* qTreeRoot);
-	vector<QNode*> populateSelectSynonyms(QNode* resultNode);
-	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode);
-	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS);
+	QNODE_LIST populateSelectSynonyms(QNode* resultNode);
+	pair<QNODE_LIST, QNODE_LIST> splitWithClauses(QNode* clausesNode);
+	pair<BOOLEAN_, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS);
 
 	QueryTree* removeReduantClausesAndSynonyms(QueryTree* qTreeRoot);
 	QNode* scanAndReplaceRedundantItems(QNode* clausesNode, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
-	void scanAndRemoveRedundantSynonyms(vector<QNode*> &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
-	pair<bool, vector<QNode*>> replaceSynonyms(vector<QNode*> clausesVector, Synonym original, Synonym replacement);
+	void scanAndRemoveRedundantSynonyms(QNODE_LIST &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map);
+	QNODE_LIST replaceSynonyms(QNODE_LIST clausesVector, Synonym original, Synonym replacement);
 
 	QueryTree* optimiseClauses(QueryTree* qTreeRoot);
 	QNode* optimiseClausesNode(QNode* clausesNode);
-	pair<vector<QNode*>, vector<QNode*>> splitConstantClauses(QNode* clausesNode);
-	vector<QNode*> reorderConstantClauses(vector<QNode*> constantClauses);
-	vector<QNode*> reorderNonConstantClauses(vector<QNode*> clauses);
+	pair<QNODE_LIST, QNODE_LIST> splitConstantClauses(QNode* clausesNode);
+	QNODE_LIST reorderConstantClauses(QNODE_LIST constantClauses);
+	QNODE_LIST reorderNonConstantClauses(QNODE_LIST clauses);
 
-	QNode* getNextSmallestAndUpdate(vector<QNode*> &clauses);
-	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(vector<QNode*> clauses);
+	QNode* getNextSmallestAndUpdate(QNODE_LIST &clauses);
+	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(QNODE_LIST clauses);
 	pair<Synonym, Synonym> getClauseArguments(QNode* clause);
 	void setClauseArguments(QNode* &clause, Synonym LHS, Synonym RHS);
 
-	inline bool isContainedInMain(string wantedName);
-	inline bool isSelectSynonym(string wantedName);
+	inline BOOLEAN_ isContainedInMain(string wantedName);
+	inline BOOLEAN_ isSelectSynonym(string wantedName);
 
-	QNode* createSubtree(QNODE_TYPE type, vector<QNode*> clausesVector);
-	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2);
-	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS);
+	QNode* createSubtree(QNODE_TYPE type, QNODE_LIST clausesVector);
+	QNode* combineClausesVectors(QNODE_LIST clausesVector1, QNODE_LIST clausesVector2);
+	pair<BOOLEAN_, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS);
 	unordered_map<string, int> indexSynonymsReferenced(QNode* clausesNode);
 	vector<vector<int>> createSynonymGraph(QNode* clausesNode, unordered_map<string, int> name_index_map);
 	set<int> scanSynonymsReachable(vector<vector<int>> adjacencyMatrix);
@@ -114,23 +114,11 @@ namespace QueryOptimiser
 						superset = RHS;
 						subset = LHS;
 					}
-					//Replace the clauses in the results subtree
-					pair<bool, vector<QNode*>> status_clauses_pair = replaceSynonyms(resultClauses, superset, subset);
-					resultClauses = status_clauses_pair.second;
-
-					//Replace the clauses in the clauses subtree
-					status_clauses_pair = replaceSynonyms(clauses, superset, subset);
-					bool isWithRemovable = status_clauses_pair.first;
-					clauses = status_clauses_pair.second;
-
-					if (isWithRemovable) {
-						//Only remove in the with subtree if it is removable
-						withClauses.erase(withClauses.begin() + i);
-						i--;
-						withClauses = replaceSynonyms(withClauses, superset, subset).second;
-					} else {
-						finalWithClauses.push_back(singleWithClause);
-					}
+					resultClauses = replaceSynonyms(resultClauses, superset, subset);
+					clauses = replaceSynonyms(clauses, superset, subset);
+					withClauses.erase(withClauses.begin() + i);
+					i--;
+					withClauses = replaceSynonyms(withClauses, superset, subset);
 				} else {
 					finalWithClauses.push_back(singleWithClause);
 				}
@@ -146,7 +134,7 @@ namespace QueryOptimiser
 		return qTreeRoot;
 	}
 
-	pair<vector<QNode*>, vector<QNode*>> splitWithClauses(QNode* clausesNode)
+	pair<QNODE_LIST, QNODE_LIST> splitWithClauses(QNode* clausesNode)
 	{
 		vector<QNode*> clauses;
 		vector<QNode*> withClauses;
@@ -165,7 +153,7 @@ namespace QueryOptimiser
 		return make_pair(clauses, withClauses);
 	}
 
-	pair<vector<QNode*>, vector<QNode*>> splitRedundantClauses(QNode* clausesNode, set<int> synonymsReachable, unordered_map<string, int> name_index_map)
+	pair<QNODE_LIST, QNODE_LIST> splitRedundantClauses(QNode* clausesNode, set<int> synonymsReachable, unordered_map<string, int> name_index_map)
 	{
 		vector<QNode*> redundantVector;
 		vector<QNode*> clausesVector;
@@ -236,6 +224,7 @@ namespace QueryOptimiser
 		populateSelectSynonyms(resultNode);
 		unordered_map<string, int> name_index_map = indexSynonymsReferenced(clausesNode);
 		vector<vector<int>> adjacencyMatrix = createSynonymGraph(clausesNode, name_index_map);
+		//set<int> synonymIndexReachable = scanSynonymsReachable(adjacencyMatrix);
 
 		clausesNode = scanAndReplaceRedundantItems(clausesNode, adjacencyMatrix, name_index_map);
 		qTreeRoot->setResultNode(resultNode);
@@ -259,7 +248,7 @@ namespace QueryOptimiser
 		if (!isRedundantClausesValid) {
 			Synonym LHS(STRING_INT, 0);
 			Synonym RHS(STRING_CHAR, "0");
-			QNode* falseNode = new QNode(With, LHS, LHS, RHS, RHS);  //Create a false node object that will be false
+			QNode* falseNode = new QNode(With, LHS, LHS, RHS, RHS);
 			vector<QNode*> falseNodes;
 			falseNodes.push_back(falseNode);
 			return createSubtree(CLAUSES, falseNodes);  //Return an invalid clause
@@ -269,7 +258,7 @@ namespace QueryOptimiser
 		}
 	}
 
-	void scanAndRemoveRedundantSynonyms(vector<QNode*> &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
+	void scanAndRemoveRedundantSynonyms(QNODE_LIST &clauses, vector<vector<int>> adjacencyMatrix, unordered_map<string, int> name_index_map)
 	{
 		unordered_map<string, int> synonymOccurrence;
 
@@ -277,9 +266,8 @@ namespace QueryOptimiser
 			QNode* clause = clauses[i];
 			QNODE_TYPE query_type = clause->getNodeType();
 
-			if (query_type == With || query_type == Sibling || 
-				query_type == Contains || query_type == ContainsT) {
-					continue;  //Cannot replace synonyms in these clauses
+			if (query_type == With) {
+				continue;  //Cannot replace synonyms in with clause
 			}
 
 			Synonym undefined(UNDEFINED, "_");
@@ -345,38 +333,26 @@ namespace QueryOptimiser
 		}
 	}
 
-	pair<bool, vector<QNode*>> replaceSynonyms(vector<QNode*> clausesVector, Synonym toBeReplaced, Synonym replacement)
+	QNODE_LIST replaceSynonyms(QNODE_LIST clausesVector, Synonym toBeReplaced, Synonym replacement)
 	{
 		vector<QNode*> finalClauses;
-		bool isRemovable = true;  //Denote that the with clause can be removed
 
 		for (unsigned int i = 0; i < clausesVector.size(); i++) {
 			QNode* singleClause = clausesVector[i];
 			pair<Synonym, Synonym> synonymPair = getClauseArguments(singleClause);
 			Synonym LHS = synonymPair.first;
 			Synonym RHS = synonymPair.second;
-			QNODE_TYPE qnode_type = singleClause->getNodeType();
 
 			if (LHS == toBeReplaced) {
-				if (qnode_type == Pattern || qnode_type == Sibling ||
-					qnode_type == Contains || qnode_type == ContainsT) {
-					isRemovable = false;  //Cannot rewrite these clauses
-				} else {
-					LHS = replacement;
-				}
+				LHS = replacement;
 			}
-
 			if (RHS == toBeReplaced) {
-				if (qnode_type == Sibling || qnode_type == Contains || qnode_type == ContainsT) {
-					isRemovable = false;  //Cannot rewrite these clauses
-				} else {
-					RHS = replacement;
-				}
+				RHS = replacement;
 			}
 			setClauseArguments(singleClause, LHS, RHS);
 			finalClauses.push_back(singleClause);
 		}
-		return make_pair(isRemovable, finalClauses);
+		return finalClauses;
 	}
 
 	/**
@@ -415,7 +391,7 @@ namespace QueryOptimiser
 	* @param clausesNode the start of the CLAUSES subtree
 	* @return a pair of QNode objects that represent the clauses
 	*/
-	pair<vector<QNode*>, vector<QNode*>> splitConstantClauses(QNode* clausesNode)
+	pair<QNODE_LIST, QNODE_LIST> splitConstantClauses(QNode* clausesNode)
 	{
 		vector<QNode*> constantClauses;
 		vector<QNode*> nonConstantClauses;
@@ -448,7 +424,7 @@ namespace QueryOptimiser
 		return make_pair(constantClauses, nonConstantClauses);
 	}
 
-	vector<QNode*> reorderConstantClauses(vector<QNode*> clauses)
+	QNODE_LIST reorderConstantClauses(QNODE_LIST clauses)
 	{
 		//TODO: Check that the vector is not of size zero
 		vector<QNode*> bothConstants;
@@ -486,7 +462,7 @@ namespace QueryOptimiser
 	* @param A vector of clauses that is to be reordered
 	* @return a vector of QNode objects that are re-ordered
 	*/
-	vector<QNode*> reorderNonConstantClauses(vector<QNode*> clauses)
+	QNODE_LIST reorderNonConstantClauses(QNODE_LIST clauses)
 	{
 		//TODO: Check that the vector is not of size zero
 		vector<QNode*> reorderedClauses;
@@ -504,7 +480,7 @@ namespace QueryOptimiser
 	* @param A vector of clauses that is to be reordered
 	* @return a QNode object that is suitably small
 	*/
-	QNode* getNextSmallestAndUpdate(vector<QNode*> &clauses)
+	QNode* getNextSmallestAndUpdate(QNODE_LIST &clauses)
 	{
 		pair<int, DIRECTION> indexDirectionPair = findIndexAndDirectionWithSmallestCost(clauses);
 		int smallestIndex = indexDirectionPair.first;  //Set index 0 as the smallest cost clause temporarily
@@ -534,7 +510,7 @@ namespace QueryOptimiser
 	* @param A vector of clauses that is to be reordered
 	* @return The index of the clause in the vector and the direction
 	*/
-	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(vector<QNode*> clauses)
+	pair<int, DIRECTION> findIndexAndDirectionWithSmallestCost(QNODE_LIST clauses)
 	{
 		int smallestIndex = 0;  //Set index 0 as the smallest cost clause temporarily
 		double smallestCost = UINT_MAX;  //Set the maximum for smallest cost
@@ -630,7 +606,7 @@ namespace QueryOptimiser
 		return make_pair(LHS, RHS);
 	}
 
-	pair<bool, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS)
+	pair<BOOLEAN_, DIRECTION> determineSupersetSubset(Synonym LHS, Synonym RHS)
 	{
 		SYNONYM_TYPE typeLHS = LHS.getType();
 		SYNONYM_TYPE typeRHS = RHS.getType();
@@ -677,7 +653,7 @@ namespace QueryOptimiser
 		}
 	}
 
-	vector<QNode*> populateSelectSynonyms(QNode* resultNode)
+	QNODE_LIST populateSelectSynonyms(QNode* resultNode)
 	{
 		vector<QNode*> resultSynonyms;
 		QNode* resultChildNode = resultNode->getChild();
@@ -697,7 +673,7 @@ namespace QueryOptimiser
 		return resultSynonyms;
 	}
 
-	pair<bool, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS)
+	pair<BOOLEAN_, DIRECTION> isWithClauseRewritable(Synonym LHS, Synonym RHS)
 	{
 		pair<bool, DIRECTION> superset_subset_pair = determineSupersetSubset(LHS, RHS);
 		bool isSupersetSubset = superset_subset_pair.first;
@@ -723,7 +699,7 @@ namespace QueryOptimiser
 		return superset_subset_pair;
 	}
 
-	inline bool isContainedInMain(string wantedName)
+	inline BOOLEAN_ isContainedInMain(string wantedName)
 	{
 		if (mainTableSynonyms.count(wantedName) == 1) {
 			return true;
@@ -732,7 +708,7 @@ namespace QueryOptimiser
 		}
 	}
 
-	inline bool isSelectSynonym(string wantedName)
+	inline BOOLEAN_ isSelectSynonym(string wantedName)
 	{
 		if (selectSynonyms.count(wantedName) == 1) {
 			return true;
@@ -844,7 +820,7 @@ namespace QueryOptimiser
 		return synonymsReachable;
 	}
 
-	QNode* createSubtree(QNODE_TYPE type, vector<QNode*> clausesVector)
+	QNode* createSubtree(QNODE_TYPE type, QNODE_LIST clausesVector)
 	{
 		Synonym empty;
 		QNode* clausesNode = new QNode(type, empty, empty, empty, empty);
@@ -862,7 +838,7 @@ namespace QueryOptimiser
 	* @param a vector of non-constant clauses
 	* @return A QNode object representing the subtree
 	*/
-	QNode* combineClausesVectors(vector<QNode*> clausesVector1, vector<QNode*> clausesVector2)
+	QNode* combineClausesVectors(QNODE_LIST clausesVector1, QNODE_LIST clausesVector2)
 	{
 		Synonym empty;
 		QNode* clausesNode = new QNode(CLAUSES, empty, empty, empty, empty);

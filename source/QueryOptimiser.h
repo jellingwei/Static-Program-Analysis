@@ -8,6 +8,7 @@
 #include "Synonym.h"
 #include "QueryTree.h" 
 #include "common.h"
+#include "common_list.h"
 #include "QNode.h"
 #include "QueryEvaluator.h"
 #include "ValuesHandler.h"
