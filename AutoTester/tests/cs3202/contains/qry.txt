@@ -60,52 +60,52 @@ true
 5000
 1004 - Valid Contains as Parents all stmts in while
 stmt s;
-Select s such that Contains(4, s)
+Select s such that Contains*(4, s)
 5,6,7
 5000
 1005 - Valid Contains as Parents all stmts in if
 stmt s;
-Select s such that Contains(10, s)
+Select s such that Contains*(10, s)
 11,12,13,14,15
 5000
 1006 - Valid Contains as Parents filter assign
 assign a;
-Select a such that Contains(4, a)
+Select a such that Contains*(4, a)
 5, 6
 5000
 1007 - Valid Contains as Parents filter call
 call c;
-Select c such that Contains(10, c)
+Select c such that Contains*(10, c)
 11,15
 5000
 1008 - Valid Contains as Parents filter if
 if i;
-Select i such that Contains(27,i)
-28
+Select i such that Contains*(27,i)
+28, 32, 36
 5000
 1009 - Valid Contains as Parents filter while
 while w;
-Select w such that Contains(18,w)
-19
+Select w such that Contains*(18,w)
+19, 22
 5000
 1010 - Valid Contains as Parents filter prog_line
 prog_line l;
-Select l such that Contains(18, l)
-19
+Select l such that Contains*(18, l)
+19, 20, 21, 22, 23, 24, 25, 26
 5000
 1011 - Valid Contains as Parents get parent while
 while w;
-Select w such that Contains(w,5)
+Select w such that Contains*(w,5)
 4
 5000
 1012 - Valid Contains as Parents get parent if
 if i;
-Select i such that Contains(i,12)
+Select i such that Contains*(i,12)
 10
 5000
 1013 - Valid Contains as Parents get parent if in else
 if i;
-Select i such that Contains(i,14)
+Select i such that Contains*(i,14)
 10
 5000
 1014 - Valid Contains Procedure
@@ -314,7 +314,7 @@ Select s such that Contains(sl, s)
 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40
 5000
 1054 - Valid Contains stmtLst LHS
-stmtLst sl; s;
+stmtLst sl; stmt s;
 Select sl such that Contains(sl, s)
 1,5, 11,14,17,19,20,21,23,25,27,28,29,30,31,33,34,36,37,38,39
 5000
