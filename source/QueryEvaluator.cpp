@@ -1326,17 +1326,120 @@ namespace QueryEvaluator
 				arg0.setValues(ifStmts);
 				return ValuesHandler::addAndProcessIntermediateSynonym(arg0);
 			}
-		} else if (arg2.isSynonym() && arg3.isUndefined()) {
-			vector<pair<int, vector<int>>> if_var_pairs = pkb.patternMatchIfElse(arg1.getName(), arg2.getType());
-		} else if (arg2.isUndefined() && arg3.isSynonym()) {
-			vector<pair<int, vector<int>>> if_var_pairs = pkb.patternMatchIfThen(arg1.getName(), arg3.getType());
-		} else {
-			vector<pair<int, vector<pair<int, int>>>> if_var_pairs = pkb.patternMatchIf(arg1.getName(), arg2.getType(), arg3.getType());
-			VALUE_LIST acceptedIfStmts;
-			VALUE_LIST acceptedVars;
+		} //The below are all bonus features
+		else if (arg2.isSynonym() && arg3.isUndefined()) {
+			vector<pair<int, vector<int>>> if_var_pairs;
 
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				if_var_pairs = pkb.patternMatchIfElse(arg1.getName(), arg2.getType());
+			} else {
+				if_var_pairs = pkb.patternMatchIfElse("_", arg2.getType());
+			}
+
+			for (unsigned int i = 0 ; i < if_var_pairs.size(); i++) {
+				pair<int, vector<int>> onePair = if_var_pairs[i];
+				int arg0Value = onePair.first;
+				VALUE_LIST arg2Values = onePair.second;
+
+				for (unsigned int j = 0; j < arg2Values.size(); j++) {
+					acceptedArg0.push_back(arg0Value);
+					acceptedArg2.push_back(arg2Values[j]);
+				}
+			}
+			arg0.setValues(acceptedArg0);
+			arg2.setValues(acceptedArg2);
+
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, arg2);
+			} else {
+				for (unsigned int i = 0; i < acceptedArg0.size(); i++) {
+					int var = pkb.getControlVariable(acceptedArg0[i]);
+					acceptedArg1.push_back(var);
+				}
+				arg1.setValues(acceptedArg1);
+				vector<Synonym> synonyms;
+				synonyms.push_back(arg0);
+				synonyms.push_back(arg1);
+				synonyms.push_back(arg2);
+				return ValuesHandler::addAndProcessIntermediateSynonyms(synonyms);
+			}
+		} else if (arg2.isUndefined() && arg3.isSynonym()) {
+			vector<pair<int, vector<int>>> if_var_pairs;
+
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				if_var_pairs = pkb.patternMatchIfThen(arg1.getName(), arg3.getType());
+			} else {
+				if_var_pairs = pkb.patternMatchIfThen("_", arg3.getType());
+			}
+
+			for (unsigned int i = 0 ; i < if_var_pairs.size(); i++) {
+				pair<int, vector<int>> onePair = if_var_pairs[i];
+				int arg0Value = onePair.first;
+				VALUE_LIST arg3Values = onePair.second;
+
+				for (unsigned int j = 0; j < arg3Values.size(); j++) {
+					acceptedArg0.push_back(arg0Value);
+					acceptedArg3.push_back(arg3Values[j]);
+				}
+			}
+			arg0.setValues(acceptedArg0);
+			arg3.setValues(acceptedArg3);
+
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, arg3);
+			} else {
+				for (unsigned int i = 0; i < acceptedArg0.size(); i++) {
+					int var = pkb.getControlVariable(acceptedArg0[i]);
+					acceptedArg1.push_back(var);
+				}
+
+				arg1.setValues(acceptedArg1);
+				vector<Synonym> synonyms;
+				synonyms.push_back(arg0);
+				synonyms.push_back(arg1);
+				synonyms.push_back(arg3);
+				return ValuesHandler::addAndProcessIntermediateSynonyms(synonyms);
+			}
+		} else {
+			//arg2 and arg 3 are synonyms
+			vector<pair<int, vector<pair<int, int>>>> if_var_pairs;
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				if_var_pairs = pkb.patternMatchIf(arg1.getName(), arg2.getType(), arg3.getType());
+			} else {
+				if_var_pairs = pkb.patternMatchIf("_", arg2.getType(), arg3.getType());
+			}
+
+			for (unsigned int i = 0 ; i < if_var_pairs.size(); i++) {
+				pair<int, vector<pair<int, int>>> onePair = if_var_pairs[i];
+				int arg0Value = onePair.first;
+				vector<pair<int, int>> arg2AndArg3Pair = onePair.second;
+
+				for (unsigned int j = 0; j < arg2AndArg3Pair.size(); j++) {
+					acceptedArg0.push_back(arg0Value);
+					acceptedArg2.push_back(arg2AndArg3Pair[i].first);
+					acceptedArg3.push_back(arg2AndArg3Pair[i].second);
+				}
+			}
+			arg0.setValues(acceptedArg0);
+			arg2.setValues(acceptedArg2);
+			arg3.setValues(acceptedArg3);
+			vector<Synonym> synonyms;
+			synonyms.push_back(arg0);
+			synonyms.push_back(arg2);
+			synonyms.push_back(arg3);
+
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				return ValuesHandler::addAndProcessIntermediateSynonyms(synonyms);
+			} else {
+				for (unsigned int i = 0; i < acceptedArg0.size(); i++) {
+					int var = pkb.getControlVariable(acceptedArg0[i]);
+					acceptedArg1.push_back(var);
+				}
+				arg1.setValues(acceptedArg1);
+				synonyms.push_back(arg1);
+				return ValuesHandler::addAndProcessIntermediateSynonyms(synonyms);
+			}
 		}
-		return false;  //To be replaced
 	}
 
 	/**
@@ -1373,8 +1476,47 @@ namespace QueryEvaluator
 				arg1.setValues(vars);
 				return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, arg1);
 			}
+		} //The below is the bonus feature
+		else {
+			vector<pair<int, vector<int>>> while_stmt_pairs;
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				while_stmt_pairs = pkb.patternMatchWhile(arg1.getName(), arg2.getType());
+			} else {
+				while_stmt_pairs = pkb.patternMatchWhile("_", arg2.getType());
+			}
+
+			VALUE_LIST acceptedArg0;
+			VALUE_LIST acceptedArg1;
+			VALUE_LIST acceptedArg2;
+
+			for (unsigned int i = 0; i < while_stmt_pairs.size(); i++) {
+				pair<int, vector<int>> onePair = while_stmt_pairs[i];
+				int arg0Value = onePair.first;
+				VALUE_LIST arg2Values = onePair.second;
+
+				for (unsigned int j = 0; j < arg2Values.size(); j++) {
+					acceptedArg0.push_back(arg0Value);
+					acceptedArg2.push_back(arg2Values[j]);
+				}
+			}
+			arg0.setValues(acceptedArg0);
+			arg2.setValues(acceptedArg2);
+
+			if (arg1.isConstant() || arg1.isUndefined()) {
+				return ValuesHandler::addAndProcessIntermediateSynonyms(arg0, arg2);
+			} else {
+				for (unsigned int i = 0; i < acceptedArg0.size(); i++) {
+					int var = pkb.getControlVariable(acceptedArg0[i]);
+					acceptedArg1.push_back(var);
+				}
+				arg1.setValues(acceptedArg1);
+				vector<Synonym> synonyms;
+				synonyms.push_back(arg0);
+				synonyms.push_back(arg1);
+				synonyms.push_back(arg2);
+				return ValuesHandler::addAndProcessIntermediateSynonyms(synonyms);
+			}
 		}
-		return false;  //To be replaced
 	}
 
 	/**

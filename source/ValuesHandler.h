@@ -56,4 +56,10 @@ namespace ValuesHandler
 	BOOLEAN_ processPairWithMainTable(Synonym LHS, Synonym RHS);
 	BOOLEAN_ processPairWithSingletonTable(Synonym LHS, Synonym RHS);
 	BOOLEAN_ mergeSingletonToMain(Synonym mainSynonym, Synonym singleton);
+
+	//------------------------------------------------------------------------------
+	// New functions for the bonus features
+	// These functions are for inserting 3 or more synonyms at once
+	//------------------------------------------------------------------------------
+	BOOLEAN_ addAndProcessIntermediateSynonyms(vector<Synonym> synonyms);
 }

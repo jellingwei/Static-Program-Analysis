@@ -1289,7 +1289,6 @@ namespace ValuesHandler
 	// New functions for the bonus features
 	// These functions are for inserting 3 or more synonyms at once
 	//------------------------------------------------------------------------------
-	BOOLEAN_ addAndProcessIntermediateSynonyms(vector<Synonym> synonyms);
 	BOOLEAN_ processWithMainTable(vector<Synonym> synonyms);
 	BOOLEAN_ processWithSingletonTable(vector<Synonym> synonyms);
 	vector<Synonym> intersectWithSingleton(unsigned int singletonIndex, vector<Synonym> synonyms);
