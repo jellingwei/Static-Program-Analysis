@@ -45,8 +45,8 @@ Select a1 such that Affects(250,a1)
 350000
 1010 - 
 assign a1;
-Select a1 such that Affects*(400,a1)
-
+Select a1 such that Affects*(401,a1)
+351,352,353,355,357,358,361,362,364,366,367,369,371,372,373,375,376,377,378,380,381,383,384,386,388,391,392,393,395,397,398,399,401,402,403,404,405,406,407,409,410,411,412,413,414,415,416,418,420,421,422,423,424,425,426,427,428,429,430,431,433
 350000
 1011 - 
 assign a1;
@@ -55,18 +55,18 @@ Select a1 such that Affects(a1, 250)
 350000
 1012 - 
 assign a1;
-Select a1 such that Affects*(350,a1)
-
+Select a1 such that Affects*(351,a1)
+351,352,353,355,357,358,361,362,364,366,367,369,371,372,373,375,376,377,378,380,381,383,384,386,388,391,392,393,395,397,398,399,401,402,403,404,405,406,407,409,410,411,412,413,414,415,416,418,420,421,422,423,424,425,426,427,428,429,430,431,433
 350000
 1013 - 
 assign a1;
-Select a1 such that Affects(a1, 350)
-
+Select a1 such that Affects(a1, 351)
+275,294,321,343,403
 350000
 1014 - 
 assign a1;
-Select a1 such that Affects(a1, 400)
-
+Select a1 such that Affects(a1, 401)
+307,309,313,314,318,320,327,332,337,346,348,369,371,375,378,398,402,404
 350000
 1015 - 
 assign a1;
@@ -80,12 +80,12 @@ Select a1 such that Affects*(a1, 8)
 350000
 1017 - 
 assign a1;
-Select a1 such that Affects(a1, 450)
+Select a1 such that Affects(a1, 451)
 
 350000
 1018 - 
 assign a1;
-Select a1 such that Affects(450, a1)
+Select a1 such that Affects(451, a1)
 
 350000
 1019 - 
@@ -115,11 +115,11 @@ false
 350000
 1024 - 
 
-Select BOOLEAN such that Affects(400, 420)
-false
+Select BOOLEAN such that Affects*(401, 421)
+true
 350000
 1025 - 
 
-Select BOOLEAN such that Affects(50, 80)
-false
+Select BOOLEAN such that Affects*(50, 80)
+true
 350000
