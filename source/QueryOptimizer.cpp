@@ -197,11 +197,13 @@ namespace QueryOptimiser
 				if (patternType == If) {
 					if (!childNode->getArg2().isUndefined() || !childNode->getArg3().isUndefined()) {
 						clausesVector.push_back(childNode);
+						childNode = clausesNode->getNextChild();
 						continue;
 					}
 				} else if (patternType == While) {
 					if (!childNode->getArg2().isUndefined()) {
 						clausesVector.push_back(childNode);
+						childNode = clausesNode->getNextChild();
 						continue;
 					}
 				}
