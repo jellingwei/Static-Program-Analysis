@@ -24,7 +24,7 @@ public:
 
 	vector<int> checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure);
 	vector<int> checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure);
-	vector<pair<int, int>> checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS);
+	pair<int, int> checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS);
 
 private:
 };

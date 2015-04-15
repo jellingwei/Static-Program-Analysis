@@ -301,6 +301,7 @@ vector<pair<int, vector<int>>> AST::patternMatchWhile(string LHS, SYNONYM_TYPE t
 	vector<int> whileStmts, temp;
 	vector<pair<int, vector<int>>> result;
 	whileStmts = pattern.patternMatchParentStmt(LHS, While);
+
 	TNode* currentNode;
 	Contain contain;
 	PKB pkb = PKB::getInstance();
@@ -355,10 +356,10 @@ vector<pair<int, vector<int>>> AST::patternMatchIfElse(string LHS, SYNONYM_TYPE 
 	return result;
 }
 
-vector<pair<int, vector<pair<int, int>>>> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
+vector<pair<int, pair<int, int>>> AST::patternMatchIf(string LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
 	vector<int> result1;
-	vector<pair<int, int>> temp;
-	vector<pair<int, vector<pair<int, int>>>> finalResult;
+	pair<int, int> temp;
+	vector<pair<int, pair<int, int>>> finalResult;
 	PatternMatch pattern;
 	result1 = pattern.patternMatchParentStmt(LHS, If);
 
@@ -371,8 +372,7 @@ vector<pair<int, vector<pair<int, int>>>> AST::patternMatchIf(string LHS, SYNONY
 		elseNode = pkb.getNodeForStmt(result1.at(i))->getChildren()->at(2);
 		temp = contain.checkForIf(thenNode, thenS, elseNode, elseS);
 		
-		if(temp.size()!=0)	finalResult.push_back(make_pair(result1.at(i), temp));
-		temp.clear();
+		finalResult.push_back(make_pair(result1.at(i), temp));
 	}
 	return finalResult;
 }

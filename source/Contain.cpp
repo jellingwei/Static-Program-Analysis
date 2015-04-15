@@ -208,17 +208,19 @@ vector<TNode*> getOperatorNodes(TNode* currentNode, TNODE_TYPE operatorType, boo
 			queue.push_back(currentNode);
 		}
 
-		testNode = currentNode->getChildren()->at(0);
-		if(testNode->getNodeType() != Constant && testNode->getNodeType() != Variable) {
-			temp = getOperatorNodes(testNode, operatorType, transitiveClosure);
-			queue.insert( queue.end(), temp.begin(), temp.end() );
-		}
+		//if(transitiveClosure) {
+			testNode = currentNode->getChildren()->at(0);
+			if(testNode->getNodeType() != Constant && testNode->getNodeType() != Variable) {
+				temp = getOperatorNodes(testNode, operatorType, transitiveClosure);
+				queue.insert( queue.end(), temp.begin(), temp.end() );
+			}
 
-		testNode2 = currentNode->getChildren()->at(1);
-		if(testNode2->getNodeType() != Constant && testNode2->getNodeType() != Variable) {
-			temp = getOperatorNodes(testNode2, operatorType, transitiveClosure);
-			queue.insert( queue.end(), temp.begin(), temp.end() );
-		}
+			testNode2 = currentNode->getChildren()->at(1);
+			if(testNode2->getNodeType() != Constant && testNode2->getNodeType() != Variable) {
+				temp = getOperatorNodes(testNode2, operatorType, transitiveClosure);
+				queue.insert( queue.end(), temp.begin(), temp.end() );
+			}
+		//}
 	}
 	return queue;
 }
@@ -389,8 +391,6 @@ vector<int> checkForStmtLstCase(TNode* currentNode, TNODE_TYPE descendentType, b
 	return LHS;
 }
 
-
-
 vector<int> checkForAssignCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
@@ -459,177 +459,49 @@ vector<int> Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descende
 	TNODE_TYPE descendentType2;
 	descendentType2 = convertFromSynonym(descendentType);
 
-	vector<TNode*> test = checkForStmtLstCase2(currentNode, descendentType2, transitiveClosure);
+	vector<int> test, result;
+	if(descendentType==STMTLST) result.push_back(currentNode->getChildren()->at(0)->getStmtNumber());
 
-	vector<int> result;
-	for(int i=0; i<test.size(); i++) {
-		//to avoid duplicate entry of stmtNo, remove this condition if not needed
-		if(find(result.begin(), result.end(), test.at(i)->getStmtNumber()) == result.end())  
-			result.push_back(test.at(i)->getStmtNumber());
-	}
+	//Currently only StmtLst synonym - uncomment this if other synonyms are allowed
+	/*test = checkForStmtLstCase(currentNode, descendentType2, transitiveClosure);
+	if(test.size()!=0)  result.insert( result.end(), test.begin(), test.end() );*/
 
 	return result;
-	//return checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
 }
 
 vector<int> Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
 	TNODE_TYPE descendentType2;
 	descendentType2 = convertFromSynonym(descendentType);
 
-	vector<TNode*> test = checkForStmtLstCase2(currentNode, descendentType2, transitiveClosure);
+	vector<int> test, result;
+	if(descendentType==STMTLST) result.push_back(currentNode->getChildren()->at(0)->getStmtNumber());
 
-	vector<int> result;
-	for(int i=0; i<test.size(); i++) {
-		//to avoid duplicate entry of stmtNo, remove this condition if not needed
-		if(find(result.begin(), result.end(), test.at(i)->getStmtNumber()) == result.end())  
-			result.push_back(test.at(i)->getStmtNumber());
-	}
+	//Currently only StmtLst synonym - uncomment this if other synonyms are allowed
+	/*test = checkForStmtLstCase(currentNode, descendentType2, transitiveClosure);
+	if(test.size()!=0)  result.insert( result.end(), test.begin(), test.end() );*/
 
 	return result;
-	//return checkForStmtLstCase(currentNode, descendentType, transitiveClosure);
 }
 
-vector<pair<int, int>> Contain::checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS) {
-	vector<int> result1, result2;
-	vector<pair<int, int>> finalResult;
+pair<int, int> Contain::checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS) {
+	//vector<int> result1, result2;
+	int result1, result2;
+	//vector<pair<int, int>> finalResult;
+	pair<int, int> finalResult;
 
-	result1 = checkForStmtLstCase(thenNode, convertFromSynonym(thenS), true);
+	/*result1 = checkForStmtLstCase(thenNode, convertFromSynonym(thenS), true);
 	result2 = checkForStmtLstCase(elseNode, convertFromSynonym(elseS), true);
 
 	for(int i=0; i<(int)result1.size(); i++) {
 		for(int j=0; j<(int)result2.size(); j++) {
 			finalResult.push_back(make_pair(result1.at(i), result2.at(j)));
 		}
-	}
+	}*/
+	if(thenS==STMTLST) result1 = thenNode->getChildren()->at(0)->getStmtNumber();
+	if(elseS==STMTLST) result2 = elseNode->getChildren()->at(0)->getStmtNumber();
+	finalResult = make_pair(result1, result2);
+
 	return finalResult;
-}
-
-// Returns List of TNodes* instead of StmtNo/VarIdx
-
-vector<TNode*> checkForStmtLstCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
-	vector<TNode*>* allToCheck;
-	vector<TNode*> LHS;
-	vector<TNode*> temp;
-
-	allToCheck = currentNode->getChildren();
-	if(descendentType!= Procedure && descendentType!= Program) {
-		for(int i=0; i<(int)allToCheck->size(); i++) {
-			if(allToCheck->at(i)->getNodeType() == descendentType) {
-				LHS.push_back(allToCheck->at(i));
-			}
-			if(transitiveClosure) {
-				if(allToCheck->at(i)->getNodeType() == While) {
-					temp = checkForWhileCase2(allToCheck->at(i), descendentType, transitiveClosure);
-					LHS.insert( LHS.end(), temp.begin(), temp.end() );
-				} else if(allToCheck->at(i)->getNodeType() == If) {
-					temp = checkForIfCase2(allToCheck->at(i), descendentType, transitiveClosure);
-					LHS.insert( LHS.end(), temp.begin(), temp.end() );
-				} else if(allToCheck->at(i)->getNodeType() == Assign) {
-					temp = checkForAssignCase2(allToCheck->at(i), descendentType, transitiveClosure);
-					LHS.insert( LHS.end(), temp.begin(), temp.end() );
-				} else {
-					temp = checkForOtherCase2(allToCheck->at(i), descendentType, transitiveClosure);
-					LHS.insert( LHS.end(), temp.begin(), temp.end() );
-				}
-			}
-		}
-	}
-	return LHS;
-}
-
-vector<TNode*> checkForWhileCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
-	vector<TNode*>* allToCheck;
-	vector<TNode*> LHS;
-	vector<TNode*> temp;
-
-	allToCheck = currentNode->getChildren();
-	if(descendentType!= Procedure && descendentType!= Program) {
-		//Control Variable
-		if(allToCheck->at(0)->getNodeType() == descendentType) {
-			LHS.push_back(allToCheck->at(0));
-		}
-		//StmtLst
-		for(int i=1; i<(int)allToCheck->size(); i++) {
-			if(allToCheck->at(i)->getNodeType() == descendentType) {
-				LHS.push_back(allToCheck->at(i));
-			}
-			if(transitiveClosure) {
-				temp = checkForStmtLstCase2(allToCheck->at(i), descendentType, transitiveClosure);
-				LHS.insert( LHS.end(), temp.begin(), temp.end() );
-			} 
-		}	
-	}
-	return LHS;
-}
-
-vector<TNode*> checkForIfCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
-	vector<TNode*>* allToCheck;
-	vector<TNode*> LHS;
-	vector<TNode*> temp;
-
-	allToCheck = currentNode->getChildren();
-	if(descendentType!= Procedure && descendentType!= Program) {
-		//Control Variable
-		if(allToCheck->at(0)->getNodeType() == descendentType) {
-			LHS.push_back(allToCheck->at(0));
-		}
-		//StmtLst x2
-		for(int i=1; i<(int)allToCheck->size(); i++) {
-			if(allToCheck->at(i)->getNodeType() == descendentType) {
-				LHS.push_back(allToCheck->at(i));
-			}
-			if(transitiveClosure) {
-				temp = checkForStmtLstCase2(allToCheck->at(i), descendentType, transitiveClosure);
-				LHS.insert( LHS.end(), temp.begin(), temp.end() );
-			}
-		}
-	}
-	return LHS;
-}
-
-vector<TNode*> checkForAssignCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
-	vector<TNode*>* allToCheck;
-	vector<TNode*> LHS;
-	vector<TNode*> temp;
-
-	allToCheck = currentNode->getChildren();
-	if(descendentType!= Procedure && descendentType!= Program && descendentType!=While && descendentType!=If && descendentType!=StmtLst) {
-		//RHS
-		if(allToCheck->at(0)->getNodeType() == descendentType) {
-			LHS.push_back(allToCheck->at(0));
-		}
-		//LHS
-		for(int i=1; i<(int)allToCheck->size(); i++) {
-			if(allToCheck->at(i)->getNodeType() == descendentType) {
-				LHS.push_back(allToCheck->at(i));
-			}
-			if(transitiveClosure) {
-				temp = checkForOtherCase2(allToCheck->at(i), descendentType, transitiveClosure);
-				LHS.insert( LHS.end(), temp.begin(), temp.end() );
-			}
-		}
-	}
-	return LHS;
-}
-	
-vector<TNode*> checkForOtherCase2(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
-	vector<TNode*>* allToCheck;
-	vector<TNode*> LHS;
-	vector<TNode*> temp;
-
-	allToCheck = currentNode->getChildren();
-	if(descendentType!= Procedure && descendentType!= Program && descendentType!=While && descendentType!=If && descendentType!=StmtLst && descendentType!=Assign) {
-		for(int i=0; i<(int)allToCheck->size(); i++) {
-			if(allToCheck->at(i)->getNodeType() == descendentType) {
-				LHS.push_back(allToCheck->at(i));
-			}
-			if(transitiveClosure) {
-				temp = checkForOtherCase2(allToCheck->at(i), descendentType, transitiveClosure);
-				LHS.insert( LHS.end(), temp.begin(), temp.end() );
-			}
-		}
-	}
-	return LHS;
 }
 
 TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type) {

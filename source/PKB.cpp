@@ -167,7 +167,7 @@ vector<pair<int, vector<int>>> PKB::patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE
 }
 
 //@todo
-vector<pair<int, vector<pair<int, int>>>> PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
+vector<pair<int, pair<int, int>>> PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS) {
 	return ast->patternMatchIf(LHS, thenS, elseS);
 }
 

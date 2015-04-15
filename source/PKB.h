@@ -63,7 +63,7 @@ public:
 	vector<pair<int, vector<int>>> patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);
 	vector<pair<int, vector<int>>> patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);
 	//STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
-	vector<pair<int, vector<pair<int, int>>>> patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
+	vector<pair<int, pair<int, int>>> patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);
 
 
 	// VarTable methods
