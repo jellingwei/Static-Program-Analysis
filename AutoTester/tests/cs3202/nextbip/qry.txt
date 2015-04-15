@@ -206,32 +206,32 @@ none
 2007 - Invalid NextBip constant
 constant c; prog_line l;
 Select BOOLEAN such that NextBip(c,l)
-false
+none
 5000
 2008 - Invalid NextBip constant
 constant c; prog_line l;
 Select BOOLEAN such that NextBip(l,c)
-false
+none
 5000
 2009 - Invalid NextBip procedure
 procedure p; prog_line l;
 Select BOOLEAN such that NextBip(l,p)
-false
+none
 5000
 2010 - Invalid NextBip procedure
 procedure p; prog_line l;
 Select BOOLEAN such that NextBip(p,l)
-false
+none
 5000
 2011 - Invalid NextBip variable
 variable v; prog_line l;
 Select BOOLEAN such that NextBip(v,l)
-false
+none
 5000
 2012 - Invalid NextBip variable
 variable v; prog_line l;
 Select BOOLEAN such that NextBip(l,v)
-false
+none
 5000
 2013 - Invalid NextBip end of while skip while
 prog_line l;
