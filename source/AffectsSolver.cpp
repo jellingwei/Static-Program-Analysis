@@ -168,12 +168,12 @@ class CompareAffectsReverse {
 		}
 };
 
-BOOLEAN_ AffectsTable::canSkipNodesForwards(CNode* node) {
+BOOLEAN_ AffectsSolver::canSkipNodesForwards(CNode* node) {
 	int lineNum = node->getProcLineNumber();
 	return (lineNum % 4 == 0 || node->getNodeType() == If_C || node->getNodeType() == While_C);
 }
 
-PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure, bool terminateOnOneResult) {
+PROGLINE_LIST AffectsSolver::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine1 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine1) == 0) {
@@ -307,13 +307,13 @@ PROGLINE_LIST AffectsTable::getProgLinesAffectedBy(PROG_LINE_ progLine1, TRANS_C
 	return result;
 }
 
-BOOLEAN_ AffectsTable::canSkipNodesBackwards(CNode* node) {
+BOOLEAN_ AffectsSolver::canSkipNodesBackwards(CNode* node) {
 	int lineNum = node->getProcLineNumber();
 
 	return (lineNum % 4 == 0 || node->getNodeType() == EndIf_C || node->getNodeType() == While_C );
 }
 
-PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool transitiveClosure, bool terminateOnOneResult) {
+PROGLINE_LIST AffectsSolver::getProgLinesAffecting(PROG_LINE_ progLine2, bool transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine2 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine2) == 0) {
@@ -444,7 +444,7 @@ PROGLINE_LIST AffectsTable::getProgLinesAffecting(PROG_LINE_ progLine2, bool tra
 
 
 
-pair<PROGLINE_LIST, PROGLINE_LIST> AffectsTable::getAllAffectsPairs(TRANS_CLOSURE transitiveClosure) {
+pair<PROGLINE_LIST, PROGLINE_LIST> AffectsSolver::getAllAffectsPairs(TRANS_CLOSURE transitiveClosure) {
 	
 	pair<vector<int>, vector<int>> results;
 
@@ -453,7 +453,7 @@ pair<PROGLINE_LIST, PROGLINE_LIST> AffectsTable::getAllAffectsPairs(TRANS_CLOSUR
 
 
 
-PROGLINE_LIST AffectsTable::getLhs() {
+PROGLINE_LIST AffectsSolver::getLhs() {
 	PKB pkb = PKB::getInstance();
 	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
 	vector<int> results;
@@ -468,7 +468,7 @@ PROGLINE_LIST AffectsTable::getLhs() {
 	return results;
 }
 
-PROGLINE_LIST AffectsTable::getRhs() {
+PROGLINE_LIST AffectsSolver::getRhs() {
 
 	PKB pkb = PKB::getInstance();
 	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
@@ -486,7 +486,7 @@ PROGLINE_LIST AffectsTable::getRhs() {
 
 
 
-BOOLEAN_ AffectsTable::isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+BOOLEAN_ AffectsSolver::isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	if (PKB::getInstance().stmtToProcMap[progLine1] != PKB::getInstance().stmtToProcMap[progLine2]) {
 		return false;
 	}
@@ -618,7 +618,7 @@ BOOLEAN_ AffectsTable::isAffects(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRA
 	return false;
 }
 
-BOOLEAN_ AffectsTable::isValid() {
+BOOLEAN_ AffectsSolver::isValid() {
 	PKB pkb = PKB::getInstance();
 	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
 	
@@ -634,7 +634,7 @@ BOOLEAN_ AffectsTable::isValid() {
 	return false;
 }
 
-BOOLEAN_ AffectsTable::isLhsValid(PROG_LINE_ lhs) {
+BOOLEAN_ AffectsSolver::isLhsValid(PROG_LINE_ lhs) {
 	if (PKB::getInstance().cfgNodeTable.count(lhs) == 0) {
 		return false;
 	}
@@ -646,7 +646,7 @@ BOOLEAN_ AffectsTable::isLhsValid(PROG_LINE_ lhs) {
 	return !ans.empty();
 }
 
-BOOLEAN_ AffectsTable::isRhsValid(PROG_LINE_ rhs) {
+BOOLEAN_ AffectsSolver::isRhsValid(PROG_LINE_ rhs) {
 	if (PKB::getInstance().cfgNodeTable.count(rhs) == 0) {
 		return false;
 	}

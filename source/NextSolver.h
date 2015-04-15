@@ -9,10 +9,10 @@
 #include "CNode.h"
 #include "common.h"
 
-class NextTable 
+class NextSolver 
 {
 public:
-	NextTable();
+	NextSolver();
 	PROGLINE_LIST getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);
 	PROGLINE_LIST getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure = false);
 

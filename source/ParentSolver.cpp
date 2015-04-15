@@ -16,11 +16,11 @@ using namespace std;
 using namespace stdext;
 
 
-STATUS ParentTable::setParent(TNode* stmt1, TNode* stmt2) 
+STATUS ParentSolver::setParent(TNode* stmt1, TNode* stmt2) 
 {
 	if (stmt1 == NULL || stmt2 == NULL) 
 	{
-		throw exception("ParentTable invalid parameters provided");
+		throw exception("ParentSolver invalid parameters provided");
 	}
 
 	
@@ -30,7 +30,7 @@ STATUS ParentTable::setParent(TNode* stmt1, TNode* stmt2)
 }
 
 
-STATEMENT_LIST ParentTable::getParent(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
+STATEMENT_LIST ParentSolver::getParent(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
 {
 	vector<int> result;
 
@@ -138,7 +138,7 @@ vector<int> getChildDfs(TNode* node1, TNode* node2)
 }
 
 
-STATEMENT_LIST ParentTable::getChild(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure) 
+STATEMENT_LIST ParentSolver::getChild(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure) 
 {
 	vector<int> result;
 
@@ -214,7 +214,7 @@ STATEMENT_LIST ParentTable::getChild(STATEMENT stmtNum1, TRANS_CLOSURE transitiv
 }
 
 
-BOOLEAN_ ParentTable::isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
+BOOLEAN_ ParentSolver::isParent(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
 {
 	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) 
 	{
@@ -306,7 +306,7 @@ void generateTransitiveParentPairs(vector<int> parentList, TNode* curNode, vecto
 }
 
 
-pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(TRANS_CLOSURE transitiveClosure) 
+pair<vector<int>, vector<int>> ParentSolver::getAllParentPairs(TRANS_CLOSURE transitiveClosure) 
 {
 	pair<vector<int>, vector<int> > result;
 
@@ -373,7 +373,7 @@ pair<vector<int>, vector<int>> ParentTable::getAllParentPairs(TRANS_CLOSURE tran
 	return result;
 }
 
-STATEMENT_LIST ParentTable::getAllParents() {
+STATEMENT_LIST ParentSolver::getAllParents() {
 	// obtain all while and if stmts
 	PKB pkb = PKB::getInstance();
 	vector<int> stmts = pkb.getStmtNumForType("if");
@@ -385,7 +385,7 @@ STATEMENT_LIST ParentTable::getAllParents() {
 	return stmts;
 }
 
-STATEMENT_LIST ParentTable::getAllChildren() {  // can be optimised further if needed, 
+STATEMENT_LIST ParentSolver::getAllChildren() {  // can be optimised further if needed, 
 	// obtain all while and if stmts... 
 	PKB pkb = PKB::getInstance();
 	vector<int> ifStmts = pkb.getStmtNumForType("if");
@@ -407,7 +407,7 @@ STATEMENT_LIST ParentTable::getAllChildren() {  // can be optimised further if n
 	return stmts;
 }
 
-BOOLEAN_ ParentTable::isValid() {
+BOOLEAN_ ParentSolver::isValid() {
 	PKB pkb = PKB::getInstance();
 	vector<int> ifStmts = pkb.getStmtNumForType("if");
 	vector<int> whileStmts = pkb.getStmtNumForType("while");

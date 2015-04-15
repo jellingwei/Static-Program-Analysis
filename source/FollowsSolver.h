@@ -12,7 +12,7 @@ using namespace std;
 using namespace stdext;
 
 
-class FollowsTable {
+class FollowsSolver {
 private:
 	vector<int> lhs;
 	vector<int> rhs;

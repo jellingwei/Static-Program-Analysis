@@ -13,7 +13,7 @@ using namespace std;
 
 bool optimiseNext = true;
 
-NextTable::NextTable() {
+NextSolver::NextSolver() {
 }
 
 void updateStateOfBfs(set<int>& visited, CNode* nextNode, deque<CNode*>& frontier, vector<int>& result) {
@@ -29,7 +29,7 @@ void updateStateOfBfs(set<int>& visited, CNode* nextNode, deque<CNode*>& frontie
 	}
 }
 
-PROGLINE_LIST NextTable::getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
+PROGLINE_LIST NextSolver::getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
 		return vector<int>();
@@ -73,7 +73,7 @@ PROGLINE_LIST NextTable::getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transi
 	return result;
 }
 
-PROGLINE_LIST NextTable::getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+PROGLINE_LIST NextSolver::getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	if (pkb.cfgNodeTable.count(progLine2) == 0) { // progline does not have a cfg node
 		return vector<int>();
@@ -139,7 +139,7 @@ PROGLINE_LIST NextTable::getNextBefore(PROG_LINE_ progLine2, TRANS_CLOSURE trans
 
 
 
-BOOLEAN_ NextTable::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+BOOLEAN_ NextSolver::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
@@ -195,16 +195,16 @@ BOOLEAN_ NextTable::isNext(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLO
 }
 
 
-PROGLINE_LIST NextTable::getLhs() {
+PROGLINE_LIST NextSolver::getLhs() {
 	return lhs;
 }
 
-PROGLINE_LIST NextTable::getRhs() {
+PROGLINE_LIST NextSolver::getRhs() {
 	return rhs;
 }
 
 
-PROG_LINE_ NextTable::getFirstProgLineInContainer(CONTAINER_STATEMENT container) {
+PROG_LINE_ NextSolver::getFirstProgLineInContainer(CONTAINER_STATEMENT container) {
 	if (firstProgLineInElse.count(container) != 0) {
 		return firstProgLineInElse[container];
 	} else {
@@ -212,7 +212,7 @@ PROG_LINE_ NextTable::getFirstProgLineInContainer(CONTAINER_STATEMENT container)
 	}
 }
 
-PROG_LINE_ NextTable::getLastProgLineInContainer(CONTAINER_STATEMENT container) {
+PROG_LINE_ NextSolver::getLastProgLineInContainer(CONTAINER_STATEMENT container) {
 	if (lastProgLineInContainer.count(container) != 0) {
 		return lastProgLineInContainer[container];
 	} else {
@@ -220,35 +220,35 @@ PROG_LINE_ NextTable::getLastProgLineInContainer(CONTAINER_STATEMENT container) 
 	}
 }
 
-void NextTable::setFirstProgLineInElse(CONTAINER_STATEMENT container, PROG_LINE_ firstline) {
+void NextSolver::setFirstProgLineInElse(CONTAINER_STATEMENT container, PROG_LINE_ firstline) {
 	firstProgLineInElse.insert(pair<int, int>(container, firstline));
 }
-void NextTable::setLastProgLineInContainer(CONTAINER_STATEMENT container, PROG_LINE_ lastline) {
+void NextSolver::setLastProgLineInContainer(CONTAINER_STATEMENT container, PROG_LINE_ lastline) {
 	lastProgLineInContainer.insert(pair<int, int>(container, lastline));
 }
 
-PROG_LINE_ NextTable::getFirstProgLineInProc(PROC_INDEX procIndex) {
+PROG_LINE_ NextSolver::getFirstProgLineInProc(PROC_INDEX procIndex) {
 	return firstProgLineInProc[procIndex];
 }
-PROG_LINE_ NextTable::getLastProgLineInProc(PROC_INDEX procIndex) {
+PROG_LINE_ NextSolver::getLastProgLineInProc(PROC_INDEX procIndex) {
 	return lastProgLineInProc[procIndex];
 }
 
-void NextTable::setFirstProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ firstlines) {
+void NextSolver::setFirstProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ firstlines) {
 	firstProgLineInProc.push_back(firstlines);
 }
-void NextTable::setLastProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ lastlines) {
+void NextSolver::setLastProgLineInProc(PROC_INDEX procIndex, PROG_LINE_ lastlines) {
 	lastProgLineInProc.push_back(lastlines);
 
 }
 
-BOOLEAN_ NextTable::setProgLineInWhile(PROG_LINE_ progline) {
+BOOLEAN_ NextSolver::setProgLineInWhile(PROG_LINE_ progline) {
 	isProgLineInWhile = boost::dynamic_bitset<>(PKB::getInstance().getStmtTableSize() + 1);
 	isProgLineInWhile.set(progline);
 	return true;
 }
 
-BOOLEAN_ NextTable::isValid() {
+BOOLEAN_ NextSolver::isValid() {
 	vector<int> procIndexes = PKB::getInstance().getAllProcIndex();
 
 	for (auto iter = procIndexes.begin(); iter != procIndexes.end(); ++iter) {
@@ -262,20 +262,20 @@ BOOLEAN_ NextTable::isValid() {
 	return false;
 }
 
-BOOLEAN_ NextTable::setLhs(PROG_LINE_ newLine) {
+BOOLEAN_ NextSolver::setLhs(PROG_LINE_ newLine) {
 	lhs.push_back(newLine);
 	return true;
 }
-BOOLEAN_ NextTable::setRhs(PROG_LINE_ newLine) {
+BOOLEAN_ NextSolver::setRhs(PROG_LINE_ newLine) {
 	rhs.push_back(newLine);
 	return true;
 }
 
 
-BOOLEAN_ NextTable::isLhsValid(PROG_LINE_ lhs) {
+BOOLEAN_ NextSolver::isLhsValid(PROG_LINE_ lhs) {
 	return find(this->lhs.begin(), this->lhs.end(), lhs) != this->lhs.end();
 }
 
-BOOLEAN_ NextTable::isRhsValid(PROG_LINE_ rhs) {
+BOOLEAN_ NextSolver::isRhsValid(PROG_LINE_ rhs) {
 	return find(this->rhs.begin(), this->rhs.end(), rhs) != this->rhs.end();
 }	

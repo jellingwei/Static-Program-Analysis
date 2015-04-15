@@ -20,15 +20,15 @@ PKB::PKB() {
 	callsTable = new CallsTable();
 	modifiesTable = new ModifiesTable();
 	usesTable = new UsesTable();
-	followsTable = new FollowsTable();
-	parentTable = new ParentTable();
+	followsTable = new FollowsSolver();
+	parentTable = new ParentSolver();
 
 	ast = new AST();
-	nextTable = new NextTable();
-	affectsTable = new AffectsTable();
+	nextTable = new NextSolver();
+	affectsTable = new AffectsSolver();
 
-	nextBipTable = new NextBipTable();
-	affectsBipTable = new AffectsBipTable();
+	nextBipTable = new NextBipSolver();
+	affectsBipTable = new AffectsBipSolver();
 }
 
 //AST
@@ -1365,7 +1365,7 @@ BOOLEAN_ PKB::isAffectsRhsValid(PROG_LINE_ rhs) {
 *		  FALSE if the node does not contain the neccessary information to skip backwards.
 */
 BOOLEAN_ PKB::canSkipNodesBackwards(CNode* node) {
-	return AffectsTable::canSkipNodesBackwards(node);
+	return AffectsSolver::canSkipNodesBackwards(node);
 }
 
 /**
@@ -1375,7 +1375,7 @@ BOOLEAN_ PKB::canSkipNodesBackwards(CNode* node) {
 *		  FALSE if the node does not contain the neccessary information to skip ahead.
 */
 BOOLEAN_ PKB::canSkipNodesForwards(CNode* node) {
-	return AffectsTable::canSkipNodesForwards(node);
+	return AffectsSolver::canSkipNodesForwards(node);
 }
 
 

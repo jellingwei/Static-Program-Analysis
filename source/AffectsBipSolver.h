@@ -13,7 +13,7 @@ using namespace std;
 using namespace stdext;
 
 
-class AffectsBipTable {
+class AffectsBipSolver {
 public:
 
 	BOOLEAN_ isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure);

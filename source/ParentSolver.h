@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class ParentTable {
+class ParentSolver {
 public:
 	STATUS setParent(TNode* stmtNum1, TNode* stmtNum2);
 	

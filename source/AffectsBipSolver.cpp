@@ -276,7 +276,7 @@ void handleFirstLine(CNode* node, priority_queue<pair<NEXTBIP_STATE, boost::dyna
 	}
 }
 
-PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure, bool terminateOnOneResult) {
+PROGLINE_LIST AffectsBipSolver::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine1 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine1) == 0) {
@@ -380,7 +380,7 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipAfter(PROG_LINE_ progLine1,
 }
 
 
-PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipBefore(PROG_LINE_ progLine2, bool transitiveClosure, bool terminateOnOneResult) {
+PROGLINE_LIST AffectsBipSolver::getProgLinesAffectsBipBefore(PROG_LINE_ progLine2, bool transitiveClosure, bool terminateOnOneResult) {
 	PKB pkb = PKB::getInstance();
 	// verify that progLine2 is a program line and is an assignment statement
 	if (pkb.cfgNodeTable.count(progLine2) == 0) {
@@ -484,7 +484,7 @@ PROGLINE_LIST AffectsBipTable::getProgLinesAffectsBipBefore(PROG_LINE_ progLine2
 
 
 
-pair<PROGLINE_LIST, PROGLINE_LIST> AffectsBipTable::getAllAffectsBipPairs(TRANS_CLOSURE transitiveClosure) {
+pair<PROGLINE_LIST, PROGLINE_LIST> AffectsBipSolver::getAllAffectsBipPairs(TRANS_CLOSURE transitiveClosure) {
 	
 	pair<vector<int>, vector<int>> results;
 
@@ -493,7 +493,7 @@ pair<PROGLINE_LIST, PROGLINE_LIST> AffectsBipTable::getAllAffectsBipPairs(TRANS_
 
 
 
-PROGLINE_LIST AffectsBipTable::getLhs() {
+PROGLINE_LIST AffectsBipSolver::getLhs() {
 	PKB pkb = PKB::getInstance();
 	vector<int> assignments = pkb.getStmtNumForType(ASSIGN);
 	vector<int> results;
@@ -508,7 +508,7 @@ PROGLINE_LIST AffectsBipTable::getLhs() {
 	return results;
 }
 
-PROGLINE_LIST AffectsBipTable::getRhs() {
+PROGLINE_LIST AffectsBipSolver::getRhs() {
 	vector<int> assignments = PKB::getInstance().getStmtNumForType(ASSIGN);
 	vector<int> results;
 
@@ -529,7 +529,7 @@ PROGLINE_LIST AffectsBipTable::getRhs() {
 
 
 
-BOOLEAN_ AffectsBipTable::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+BOOLEAN_ AffectsBipSolver::isAffectsBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	PROGLINE_LIST rhs = getProgLinesAffectsBipAfter(progLine1, transitiveClosure);
 
 	return find(rhs.begin(), rhs.end(), progLine2) != rhs.end();

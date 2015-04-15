@@ -15,9 +15,9 @@ using namespace std;
 using namespace stdext;
 
 
-STATUS FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
+STATUS FollowsSolver::setFollows(TNode* stmt1, TNode* stmt2) {
 	if (stmt1 == NULL || stmt2 == NULL) {
-		throw logic_error("FollowsTable: invalid parameters provided");
+		throw logic_error("FollowsSolver: invalid parameters provided");
 	}
 
 	lhs.push_back(stmt1->getStmtNumber());
@@ -25,7 +25,7 @@ STATUS FollowsTable::setFollows(TNode* stmt1, TNode* stmt2) {
 	return PKB::getInstance().createLink(Right_Sibling, stmt1, stmt2);
 }
 
-STATEMENT_LIST FollowsTable::getStmtFollowedTo(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) {
+STATEMENT_LIST FollowsSolver::getStmtFollowedTo(STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) {
 	vector<int> result;
 
 	if (PKB::getInstance().getNodeForStmt(stmtNum2) == NULL) {
@@ -51,7 +51,7 @@ STATEMENT_LIST FollowsTable::getStmtFollowedTo(STATEMENT stmtNum2, TRANS_CLOSURE
 	return result;
 }
 
-STATEMENT_LIST FollowsTable::getStmtFollowedFrom(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure) {
+STATEMENT_LIST FollowsSolver::getStmtFollowedFrom(STATEMENT stmtNum1, TRANS_CLOSURE transitiveClosure) {
 	vector<int> result;
 	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) {
 		return vector<int>();
@@ -59,7 +59,7 @@ STATEMENT_LIST FollowsTable::getStmtFollowedFrom(STATEMENT stmtNum1, TRANS_CLOSU
 	TNode* node1 = PKB::getInstance().getNodeForStmt(stmtNum1);
 
 	if (!node1) {
-		//throw exception("FollowsTable exception: invalid stmtNum provided");
+		//throw exception("FollowsSolver exception: invalid stmtNum provided");
 		return vector<int>();
 	}
 	
@@ -77,7 +77,7 @@ STATEMENT_LIST FollowsTable::getStmtFollowedFrom(STATEMENT stmtNum1, TRANS_CLOSU
 	return result;
 }
 
-BOOLEAN_ FollowsTable::isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
+BOOLEAN_ FollowsSolver::isFollows(STATEMENT stmtNum1, STATEMENT stmtNum2, TRANS_CLOSURE transitiveClosure) 
 {
 	if (PKB::getInstance().getNodeForStmt(stmtNum1) == NULL) 
 	{
@@ -168,7 +168,7 @@ void generateAllPairs(vector<TNode*>* inputNodes, TRANS_CLOSURE transitiveClosur
 	return ;
 }
 
-pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(TRANS_CLOSURE transitiveClosure) {
+pair<vector<int>, vector<int>> FollowsSolver::getAllFollowsPairs(TRANS_CLOSURE transitiveClosure) {
 	pair<vector<int>, vector<int>> results;
 	TNode* root = PKB::getInstance().getRoot(); 
 	vector<TNode*>* procNodes = root->getChildren();
@@ -181,14 +181,14 @@ pair<vector<int>, vector<int>> FollowsTable::getAllFollowsPairs(TRANS_CLOSURE tr
 	return results;
 }
 
-STATEMENT_LIST FollowsTable::getLhs() {
+STATEMENT_LIST FollowsSolver::getLhs() {
 	return lhs;
 }
 
-STATEMENT_LIST FollowsTable::getRhs() {
+STATEMENT_LIST FollowsSolver::getRhs() {
 	return rhs;
 }
 
-BOOLEAN_ FollowsTable::isValid() {
+BOOLEAN_ FollowsSolver::isValid() {
 	return lhs.size() != 0;
 }

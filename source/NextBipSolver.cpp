@@ -13,7 +13,7 @@ using namespace std;
 
 
 
-NextBipTable::NextBipTable() {
+NextBipSolver::NextBipSolver() {
 }
 
 vector<CNode*> getNextNodesOfNodes(vector<CNode*> nodes);
@@ -171,7 +171,7 @@ vector<CNode*> getPrevNodesOfNodes(vector<CNode*> nodes) {
 	return result;
 }
 
-PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
+PROGLINE_LIST NextBipSolver::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	if (pkb.cfgNodeTable.count(progLine1) == 0) { // progline does not have a cfg node
 		return vector<int>();
@@ -274,7 +274,7 @@ PROGLINE_LIST NextBipTable::getNextBipAfter(PROG_LINE_ progLine1, TRANS_CLOSURE 
 	return resultAsVector;
 }
 
-set<NEXTBIP_STATE> NextBipTable::getNextBipAfterWithState(CNode* progLine1, std::stack<CNode*> afterCall) {
+set<NEXTBIP_STATE> NextBipSolver::getNextBipAfterWithState(CNode* progLine1, std::stack<CNode*> afterCall) {
 	PKB pkb = PKB::getInstance();
 	
 	CNode* curNode = progLine1;
@@ -404,7 +404,7 @@ void expandProcWithState(CNode* curNode, stack<CNode*> afterCall, set<NEXTBIP_ST
 	}
 }
 
-PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+PROGLINE_LIST NextBipSolver::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	if (pkb.cfgNodeTable.count(progLine2) == 0) { // progline does not have a cfg node
 		return vector<int>();
@@ -503,7 +503,7 @@ PROGLINE_LIST NextBipTable::getNextBipBefore(PROG_LINE_ progLine2, TRANS_CLOSURE
 
 
 
-set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std::stack<CNode*> afterCall) {
+set<NEXTBIP_STATE> NextBipSolver::getNextBipBeforeWithState(CNode* progLine2, std::stack<CNode*> afterCall) {
 	PKB pkb = PKB::getInstance();
 	
 	CNode* curNode = progLine2;
@@ -591,7 +591,7 @@ set<NEXTBIP_STATE> NextBipTable::getNextBipBeforeWithState(CNode* progLine2, std
 
 
 
-BOOLEAN_ NextBipTable::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
+BOOLEAN_ NextBipSolver::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRANS_CLOSURE transitiveClosure) {
 	// unoptimised
 	vector<int> afterProgLine1 = getNextBipAfter(progLine1, transitiveClosure);
 
@@ -599,7 +599,7 @@ BOOLEAN_ NextBipTable::isNextBip(PROG_LINE_ progLine1, PROG_LINE_ progLine2, TRA
 }
 
 
-PROGLINE_LIST NextBipTable::getLhs() {	
+PROGLINE_LIST NextBipSolver::getLhs() {	
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 
@@ -613,7 +613,7 @@ PROGLINE_LIST NextBipTable::getLhs() {
 	return result;
 }
 
-PROGLINE_LIST NextBipTable::getRhs() {
+PROGLINE_LIST NextBipSolver::getRhs() {
 	PKB pkb = PKB::getInstance();
 	vector<int> result;
 
