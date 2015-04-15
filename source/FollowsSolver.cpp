@@ -6,7 +6,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "FollowsTable.h"
+#include "FollowsSolver.h"
 #include "AST.h"
 #include "PKB.h"
 

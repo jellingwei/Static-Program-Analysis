@@ -14,7 +14,7 @@
 #include "AST.h"
 #include "VarTable.h"
 #include "StmtTable.h"
-#include "FollowsTable.h"
+#include "FollowsSolver.h"
 #include "ConstantTable.h"
 #include "TNode.h"
 #include "SourceParser.h"

@@ -6,7 +6,7 @@
 #include <deque>
 
 #include "PKB.h"
-#include "NextTable.h"
+#include "NextSolver.h"
 
 using namespace std;
 

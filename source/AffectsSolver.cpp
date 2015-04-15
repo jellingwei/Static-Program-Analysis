@@ -11,7 +11,7 @@
 
 #include "boost/dynamic_bitset.hpp"
 
-#include "AffectsTable.h"
+#include "AffectsSolver.h"
 #include "PKB.h"
 
 

@@ -7,7 +7,7 @@
 #include <stack>
 
 #include "PKB.h"
-#include "NextBipTable.h"
+#include "NextBipSolver.h"
 
 using namespace std;
 

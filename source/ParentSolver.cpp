@@ -10,7 +10,7 @@
 
 #include "PKB.h"
 #include "AST.h"
-#include "ParentTable.h"
+#include "ParentSolver.h"
 
 using namespace std;
 using namespace stdext;

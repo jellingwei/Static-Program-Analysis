@@ -12,7 +12,7 @@
 
 #include "boost/dynamic_bitset.hpp"
 
-#include "AffectsBipTable.h"
+#include "AffectsBipSolver.h"
 #include "PKB.h"
 
 

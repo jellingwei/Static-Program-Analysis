@@ -8,7 +8,7 @@
 #include <algorithm>
 
 #include "UsesTable.h"
-#include "ParentTable.h"
+#include "ParentSolver.h"
 #include "PKB.h"
 
 using namespace std;
