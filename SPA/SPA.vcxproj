@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\AffectsBipTable.cpp" />
-    <ClCompile Include="..\source\AffectsTable.cpp" />
+    <ClCompile Include="..\source\AffectsBipSolver.cpp" />
+    <ClCompile Include="..\source\AffectsSolver.cpp" />
     <ClCompile Include="..\source\AST.cpp" />
     <ClCompile Include="..\source\CallsTable.cpp" />
     <ClCompile Include="..\source\CFG.cpp" />
@@ -21,12 +21,12 @@
     <ClCompile Include="..\source\Contain.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\ExpressionParser.cpp" />
-    <ClCompile Include="..\source\FollowsTable.cpp" />
+    <ClCompile Include="..\source\FollowsSolver.cpp" />
     <ClCompile Include="..\source\FrontEndController.cpp" />
     <ClCompile Include="..\source\ModifiesTable.cpp" />
-    <ClCompile Include="..\source\NextBipTable.cpp" />
-    <ClCompile Include="..\source\NextTable.cpp" />
-    <ClCompile Include="..\source\ParentTable.cpp" />
+    <ClCompile Include="..\source\NextBipSolver.cpp" />
+    <ClCompile Include="..\source\NextSolver.cpp" />
+    <ClCompile Include="..\source\ParentSolver.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\PatternMatch.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
@@ -49,8 +49,8 @@
     <ClCompile Include="..\source\VarTable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\AffectsBipTable.h" />
-    <ClInclude Include="..\source\AffectsTable.h" />
+    <ClInclude Include="..\source\AffectsBipSolver.h" />
+    <ClInclude Include="..\source\AffectsSolver.h" />
     <ClInclude Include="..\source\AST.h" />
     <ClInclude Include="..\source\CallsTable.h" />
     <ClInclude Include="..\source\CFG.h" />
@@ -61,12 +61,12 @@
     <ClInclude Include="..\source\Contain.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExpressionParser.h" />
-    <ClInclude Include="..\source\FollowsTable.h" />
+    <ClInclude Include="..\source\FollowsSolver.h" />
     <ClInclude Include="..\source\FrontEndController.h" />
     <ClInclude Include="..\source\ModifiesTable.h" />
-    <ClInclude Include="..\source\NextBipTable.h" />
-    <ClInclude Include="..\source\NextTable.h" />
-    <ClInclude Include="..\source\ParentTable.h" />
+    <ClInclude Include="..\source\NextBipSolver.h" />
+    <ClInclude Include="..\source\NextSolver.h" />
+    <ClInclude Include="..\source\ParentSolver.h" />
     <ClInclude Include="..\source\PatternMatch.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\ProcTable.h" />
