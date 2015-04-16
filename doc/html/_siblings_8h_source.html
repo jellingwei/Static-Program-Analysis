@@ -98,27 +98,27 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;utility&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &quot;common.h&quot;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;TNode.h&quot;</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;PKB.h&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;</div>
-<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="class_siblings.html">   15</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_siblings.html">Siblings</a></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;{</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    vector&lt;pair&lt;int, vector&lt;int&gt;&gt;&gt; siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="comment">//bool siblings(int stmtNo, int stmtNo2);</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    vector&lt;int&gt; siblings(<span class="keywordtype">int</span> stmtNo, SYNONYM_TYPE second_siblingType);</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    vector&lt;int&gt; siblings(SYNONYM_TYPE first_siblingType, <span class="keywordtype">int</span> stmtNo);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;};</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;common_list.h&quot;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;TNode.h&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;PKB.h&quot;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacestd.html">std</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="class_siblings.html">   20</a></span>&#160;<span class="keyword">class </span><a class="code" href="class_siblings.html">Siblings</a></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    PAIR_LIST siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    VALUE_LIST siblings(STATEMENT stmtNo, SYNONYM_TYPE second_siblingType);</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    VALUE_LIST siblings(SYNONYM_TYPE first_siblingType, STATEMENT stmtNo);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;};</div>
 <div class="ttc" id="namespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div></div>
-<div class="ttc" id="class_siblings_html"><div class="ttname"><a href="class_siblings.html">Siblings</a></div><div class="ttdef"><b>Definition:</b> Siblings.h:15</div></div>
+<div class="ttc" id="class_siblings_html"><div class="ttname"><a href="class_siblings.html">Siblings</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> Siblings.h:20</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 16 2015 01:30:33 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 16 2015 10:46:06 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

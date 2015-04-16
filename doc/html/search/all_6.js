@@ -47,6 +47,7 @@ var searchData=
   ['getcontrolvariable',['getControlVariable',['../class_a_s_t.html#a1867cb8e0e8aed64068b4a573e5833d2',1,'AST::getControlVariable()'],['../class_p_k_b.html#a7adcd7c3c7a2c4b0344c29cf1ee97e73',1,'PKB::getControlVariable()']]],
   ['getcountfortype',['getCountForType',['../class_statistics_table.html#affd48e429172aac3e3c4ff52c5cd6e4d',1,'StatisticsTable']]],
   ['getdefaultvalues',['getDefaultValues',['../namespace_values_handler.html#aa47daaa4f93780900ce86e5b364cfc5e',1,'ValuesHandler']]],
+  ['getdescendent',['getDescendent',['../class_a_s_t.html#a16e3ad9736643aa1e774ef4552b4099d',1,'AST']]],
   ['getend',['getEnd',['../class_c_node.html#af749900d098ee3643f3876e5297521c3',1,'CNode']]],
   ['getfirstproglineincontainer',['getFirstProgLineInContainer',['../class_p_k_b.html#a95806da2a9b0476c8dbe52087105e92e',1,'PKB']]],
   ['getfirstproglineinproc',['getFirstProgLineInProc',['../class_p_k_b.html#aa60c695e607b62cc1b288d74c79f9152',1,'PKB']]],

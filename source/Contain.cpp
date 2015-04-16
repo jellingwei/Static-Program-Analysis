@@ -24,10 +24,12 @@ TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type);
 
 /**
  * Checks Contains relationship between any pair of Predecessor & Descendent nodes in AST
- * @param Synonym type for a predecessorType, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @param predecessorType the synonym type of the predecessor
+ * @param descendentType the synonym type of the descendent
+ * @param transitiveClosure a flag to indicate the computation of Contains or Contains* relation
  * @return a vector pair of statement numbers/variable index that matches the 2 Synonym types
  */
-PAIR_LIST Contain::contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+PAIR_LIST Contain::contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
 	vector<pair<int, vector<int>>> results;
 	vector<int> LHS;
@@ -203,7 +205,7 @@ PAIR_LIST Contain::contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descenden
 	return results;
 }
 
-vector<TNode*> getOperatorNodes(TNode* currentNode, TNODE_TYPE operatorType, bool transitiveClosure) {
+vector<TNode*> getOperatorNodes(TNode* currentNode, TNODE_TYPE operatorType, TRANS_CLOSURE transitiveClosure) {
 	TNode* testNode;
 	TNode* testNode2;
 	vector<TNode*> queue;
@@ -230,7 +232,7 @@ vector<TNode*> getOperatorNodes(TNode* currentNode, TNODE_TYPE operatorType, boo
 	return queue;
 }
 
-vector<int> checkForProgCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<int> checkForProgCase(TNode* currentNode, TNODE_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
 	vector<int> temp;
@@ -255,7 +257,7 @@ vector<int> checkForProgCase(TNode* currentNode, TNODE_TYPE descendentType, bool
 }
 
 // Return Procedure Index
-vector<int> checkForProcCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<int> checkForProcCase(TNode* currentNode, TNODE_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
 	vector<int> temp;
@@ -279,7 +281,7 @@ vector<int> checkForProcCase(TNode* currentNode, TNODE_TYPE descendentType, bool
 	return LHS;
 }
 
-vector<int> checkForWhileCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<int> checkForWhileCase(TNode* currentNode, TNODE_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
 	vector<int> temp;
@@ -309,7 +311,7 @@ vector<int> checkForWhileCase(TNode* currentNode, TNODE_TYPE descendentType, boo
 	return LHS;
 }
 
-vector<int> checkForIfCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<int> checkForIfCase(TNode* currentNode, TNODE_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
 	vector<int> temp;
@@ -339,7 +341,7 @@ vector<int> checkForIfCase(TNode* currentNode, TNODE_TYPE descendentType, bool t
 	return LHS;
 }
 
-vector<int> checkForStmtLstCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<int> checkForStmtLstCase(TNode* currentNode, TNODE_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
 	vector<int> temp;
@@ -396,7 +398,7 @@ vector<int> checkForStmtLstCase(TNode* currentNode, TNODE_TYPE descendentType, b
 	return LHS;
 }
 
-vector<int> checkForAssignCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<int> checkForAssignCase(TNode* currentNode, TNODE_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
 	vector<int> temp;
@@ -428,7 +430,7 @@ vector<int> checkForAssignCase(TNode* currentNode, TNODE_TYPE descendentType, bo
 }
 
 // Return Variable or Constant Index
-vector<int> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, bool transitiveClosure) {
+vector<int> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	vector<TNode*>* allToCheck;
 	vector<int> LHS;
 	vector<int> temp;
@@ -461,10 +463,12 @@ vector<int> checkForOtherCase(TNode* currentNode, TNODE_TYPE descendentType, boo
 // For Pattern Match Extension
 /**
  * Auxillary method for Pattern While Then statement list
- * @param TNode reference of the statement list, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @param currentNode a TNode
+ * @param descendentType the synonym type of the descendent
+ * @param transitiveClosure a flag to indicate the computation of Contains or Contains* relation
  * @return a vector statement numbers/variable index that matches the Synonym type
  */
-VALUE_LIST Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+VALUE_LIST Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	TNODE_TYPE descendentType2;
 	descendentType2 = convertFromSynonym(descendentType);
 
@@ -480,10 +484,11 @@ VALUE_LIST Contain::checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descenden
 
 /**
  * Auxillary method for Pattern If Then or Else statement list
- * @param TNode reference of the statement list, Synonym type for a descendentType, false if Contains() & true if Contains*()
+ * @param descendentType the synonym type of the descendent
+ * @param transitiveClosure a flag to indicate the computation of Contains or Contains* relation
  * @return a vector statement numbers/variable index that matches the Synonym type
  */
-VALUE_LIST Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+VALUE_LIST Contain::checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	TNODE_TYPE descendentType2;
 	descendentType2 = convertFromSynonym(descendentType);
 
@@ -577,10 +582,10 @@ TNODE_TYPE convertFromSynonym(SYNONYM_TYPE type) {
  * @param proc_line/statement no, Synonym type for a descendentType, false if Contains() & true if Contains*()
  * @return a vector pair of proc_line/statement no (provided) and the statement numbers/variable index that matches the Synonym type
  */
-VALUE_LIST Contain::contains(STATEMENT stmtNo, SYNONYM_TYPE descendentType, bool transitiveClosure) {
+VALUE_LIST Contain::contains(STATEMENT stmtNum, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
-	string stmtType = pkb.getType(stmtNo);
-	TNode* currentNode = pkb.getNodeForStmt(stmtNo);
+	string stmtType = pkb.getType(stmtNum);
+	TNode* currentNode = pkb.getNodeForStmt(stmtNum);
 	vector<int> temp;
 	vector<pair<int, vector<int>>> results;
 
@@ -602,9 +607,9 @@ VALUE_LIST Contain::contains(STATEMENT stmtNo, SYNONYM_TYPE descendentType, bool
  * @param Synonym type for a predecessorType, proc_line/statement no, false if Contains() & true if Contains*()
  * @return a vector pair of statement numbers/variable index that matches the Synonym type and proc_line/statement no (provided)
  */
-VALUE_LIST Contain::contains(SYNONYM_TYPE predecessorType, STATEMENT stmtNo, bool transitiveClosure) {
+VALUE_LIST Contain::contains(SYNONYM_TYPE predecessorType, STATEMENT stmtNum, TRANS_CLOSURE transitiveClosure) {
 	PKB pkb = PKB::getInstance();
-	string stmtType = pkb.getType(stmtNo);
+	string stmtType = pkb.getType(stmtNum);
 	TNODE_TYPE descendentType;
 	//class Contain* contain;
 	vector<int> temp;
@@ -626,7 +631,7 @@ VALUE_LIST Contain::contains(SYNONYM_TYPE predecessorType, STATEMENT stmtNo, boo
 	for(int i=0; i<result.size(); i++) {
 		pair <int, vector<int>> tester = result.at(i);
 		for(int j=0; j<tester.second.size(); j++) {
-			if(tester.second.at(j) == stmtNo)	temp.push_back(tester.first);
+			if(tester.second.at(j) == stmtNum)	temp.push_back(tester.first);
 		}
 		//if(temp.size() != 0) results.push_back(make_pair(tester.first, temp));
 		//temp.clear();

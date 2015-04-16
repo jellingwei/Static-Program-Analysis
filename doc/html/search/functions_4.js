@@ -18,5 +18,7 @@ var searchData=
   ['evaluateparentbyrhs',['evaluateParentByRHS',['../namespace_query_evaluator.html#acdbd0e20c8f458f94940f46588e109e1',1,'QueryEvaluator']]],
   ['evaluateusesbylhs',['evaluateUsesByLHS',['../namespace_query_evaluator.html#af2b2cac324422448a5faf4c401594909',1,'QueryEvaluator']]],
   ['evaluateusesbyrhs',['evaluateUsesByRHS',['../namespace_query_evaluator.html#abde2acf78131a95e005be0cb82a787aa',1,'QueryEvaluator']]],
+  ['expandeachrow',['expandEachRow',['../namespace_result_projector.html#a60e9d7d6d1af2545ebaf49e553035752',1,'ResultProjector']]],
+  ['expandrange',['expandRange',['../namespace_result_projector.html#af0ad05355e7bfbfcf47e073d5b16ceb8',1,'ResultProjector']]],
   ['expressionparser',['ExpressionParser',['../class_expression_parser.html#a70117d42814cea52435d25644246aaf0',1,'ExpressionParser']]]
 ];

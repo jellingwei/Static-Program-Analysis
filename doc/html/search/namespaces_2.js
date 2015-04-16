@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['valueshandler',['ValuesHandler',['../namespace_values_handler.html',1,'']]]
+  ['resultprojector',['ResultProjector',['../namespace_result_projector.html',1,'']]]
 ];

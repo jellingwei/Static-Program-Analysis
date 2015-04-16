@@ -150,11 +150,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    VAR_INDEX getControlVariable(STATEMENT stmtNum);</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    </div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="comment">// Extended Pattern Matching for While and If</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    vector&lt;pair&lt;int, vector&lt;int&gt;&gt;&gt; patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    vector&lt;pair&lt;int, vector&lt;int&gt;&gt;&gt; patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    vector&lt;pair&lt;int, vector&lt;int&gt;&gt;&gt; patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    PAIR_LIST patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    PAIR_LIST patternMatchIfThen(VARNAME LHS, SYNONYM_TYPE then);</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    PAIR_LIST patternMatchIfElse(VARNAME LHS, SYNONYM_TYPE then);</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">//STATEMENT_LIST PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    vector&lt;pair&lt;int, pair&lt;int, int&gt;&gt;&gt; patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    PAIR_OF_PAIR_LIST patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS);</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// VarTable methods</span></div>
@@ -343,14 +343,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="comment">// @endcond</span></div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="comment">// contains </span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    vector&lt;pair&lt;int, vector&lt;int&gt;&gt;&gt; contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, <span class="keywordtype">bool</span> transitiveClosure);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    vector&lt;int&gt; contains(<span class="keywordtype">int</span> stmtNo, SYNONYM_TYPE childType, <span class="keywordtype">bool</span> transitiveClosure);</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    vector&lt;int&gt; contains(SYNONYM_TYPE predecessorType, <span class="keywordtype">int</span> stmtNo, <span class="keywordtype">bool</span> transitiveClosure);</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    PAIR_LIST contains(SYNONYM_TYPE parentType, SYNONYM_TYPE childType, <span class="keywordtype">bool</span> transitiveClosure);</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    VALUE_LIST contains(<span class="keywordtype">int</span> stmtNo, SYNONYM_TYPE childType, <span class="keywordtype">bool</span> transitiveClosure);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    VALUE_LIST contains(SYNONYM_TYPE predecessorType, <span class="keywordtype">int</span> stmtNo, <span class="keywordtype">bool</span> transitiveClosure);</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;</div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="comment">// siblings</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    vector&lt;pair&lt;int, vector&lt;int&gt;&gt;&gt; siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    vector&lt;int&gt; siblings(<span class="keywordtype">int</span> stmtNo, SYNONYM_TYPE second_siblingType);</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    vector&lt;int&gt; siblings(SYNONYM_TYPE first_siblingType, <span class="keywordtype">int</span> stmtNo);</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    PAIR_LIST siblings(SYNONYM_TYPE first_siblingType, SYNONYM_TYPE second_siblingType);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    VALUE_LIST siblings(<span class="keywordtype">int</span> stmtNo, SYNONYM_TYPE second_siblingType);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    VALUE_LIST siblings(SYNONYM_TYPE first_siblingType, <span class="keywordtype">int</span> stmtNo);</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;</div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;</div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="keyword">private</span>:</div>
@@ -375,30 +375,30 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    </div>
 <div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;};</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;</div>
-<div class="ttc" id="class_modifies_table_html"><div class="ttname"><a href="class_modifies_table.html">ModifiesTable</a></div><div class="ttdef"><b>Definition:</b> ModifiesTable.h:15</div></div>
+<div class="ttc" id="class_modifies_table_html"><div class="ttname"><a href="class_modifies_table.html">ModifiesTable</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> ModifiesTable.h:19</div></div>
 <div class="ttc" id="namespacestd_html"><div class="ttname"><a href="namespacestd.html">std</a></div></div>
-<div class="ttc" id="class_siblings_html"><div class="ttname"><a href="class_siblings.html">Siblings</a></div><div class="ttdef"><b>Definition:</b> Siblings.h:15</div></div>
-<div class="ttc" id="class_stmt_table_html"><div class="ttname"><a href="class_stmt_table.html">StmtTable</a></div><div class="ttdef"><b>Definition:</b> StmtTable.h:13</div></div>
+<div class="ttc" id="class_siblings_html"><div class="ttname"><a href="class_siblings.html">Siblings</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> Siblings.h:20</div></div>
+<div class="ttc" id="class_stmt_table_html"><div class="ttname"><a href="class_stmt_table.html">StmtTable</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> StmtTable.h:17</div></div>
 <div class="ttc" id="class_p_k_b_html"><div class="ttname"><a href="class_p_k_b.html">PKB</a></div><div class="ttdef"><b>Definition:</b> PKB.h:41</div></div>
-<div class="ttc" id="class_affects_solver_html"><div class="ttname"><a href="class_affects_solver.html">AffectsSolver</a></div><div class="ttdef"><b>Definition:</b> AffectsSolver.h:16</div></div>
-<div class="ttc" id="class_proc_table_html"><div class="ttname"><a href="class_proc_table.html">ProcTable</a></div><div class="ttdef"><b>Definition:</b> ProcTable.h:14</div></div>
-<div class="ttc" id="class_contain_html"><div class="ttname"><a href="class_contain.html">Contain</a></div><div class="ttdef"><b>Definition:</b> Contain.h:15</div></div>
-<div class="ttc" id="class_next_bip_solver_html"><div class="ttname"><a href="class_next_bip_solver.html">NextBipSolver</a></div><div class="ttdef"><b>Definition:</b> NextBipSolver.h:12</div></div>
-<div class="ttc" id="class_follows_solver_html"><div class="ttname"><a href="class_follows_solver.html">FollowsSolver</a></div><div class="ttdef"><b>Definition:</b> FollowsSolver.h:15</div></div>
-<div class="ttc" id="class_var_table_html"><div class="ttname"><a href="class_var_table.html">VarTable</a></div><div class="ttdef"><b>Definition:</b> VarTable.h:14</div></div>
-<div class="ttc" id="class_parent_solver_html"><div class="ttname"><a href="class_parent_solver.html">ParentSolver</a></div><div class="ttdef"><b>Definition:</b> ParentSolver.h:12</div></div>
-<div class="ttc" id="class_constant_table_html"><div class="ttname"><a href="class_constant_table.html">ConstantTable</a></div><div class="ttdef"><b>Definition:</b> ConstantTable.h:13</div></div>
+<div class="ttc" id="class_affects_solver_html"><div class="ttname"><a href="class_affects_solver.html">AffectsSolver</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> AffectsSolver.h:19</div></div>
+<div class="ttc" id="class_proc_table_html"><div class="ttname"><a href="class_proc_table.html">ProcTable</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> ProcTable.h:17</div></div>
+<div class="ttc" id="class_contain_html"><div class="ttname"><a href="class_contain.html">Contain</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> Contain.h:20</div></div>
+<div class="ttc" id="class_next_bip_solver_html"><div class="ttname"><a href="class_next_bip_solver.html">NextBipSolver</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> NextBipSolver.h:16</div></div>
+<div class="ttc" id="class_follows_solver_html"><div class="ttname"><a href="class_follows_solver.html">FollowsSolver</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> FollowsSolver.h:18</div></div>
+<div class="ttc" id="class_var_table_html"><div class="ttname"><a href="class_var_table.html">VarTable</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> VarTable.h:18</div></div>
+<div class="ttc" id="class_parent_solver_html"><div class="ttname"><a href="class_parent_solver.html">ParentSolver</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> ParentSolver.h:16</div></div>
+<div class="ttc" id="class_constant_table_html"><div class="ttname"><a href="class_constant_table.html">ConstantTable</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> ConstantTable.h:17</div></div>
 <div class="ttc" id="class_a_s_t_html"><div class="ttname"><a href="class_a_s_t.html">AST</a></div><div class="ttdef"><b>Definition:</b> AST.h:12</div></div>
-<div class="ttc" id="class_calls_table_html"><div class="ttname"><a href="class_calls_table.html">CallsTable</a></div><div class="ttdef"><b>Definition:</b> CallsTable.h:15</div></div>
+<div class="ttc" id="class_calls_table_html"><div class="ttname"><a href="class_calls_table.html">CallsTable</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> CallsTable.h:18</div></div>
 <div class="ttc" id="class_c_node_html"><div class="ttname"><a href="class_c_node.html">CNode</a></div><div class="ttdef"><b>Definition:</b> CNode.h:22</div></div>
 <div class="ttc" id="class_t_node_html"><div class="ttname"><a href="class_t_node.html">TNode</a></div><div class="ttdef"><b>Definition:</b> TNode.h:14</div></div>
-<div class="ttc" id="class_next_solver_html"><div class="ttname"><a href="class_next_solver.html">NextSolver</a></div><div class="ttdef"><b>Definition:</b> NextSolver.h:12</div></div>
-<div class="ttc" id="class_affects_bip_solver_html"><div class="ttname"><a href="class_affects_bip_solver.html">AffectsBipSolver</a></div><div class="ttdef"><b>Definition:</b> AffectsBipSolver.h:16</div></div>
-<div class="ttc" id="class_uses_table_html"><div class="ttname"><a href="class_uses_table.html">UsesTable</a></div><div class="ttdef"><b>Definition:</b> UsesTable.h:15</div></div>
+<div class="ttc" id="class_next_solver_html"><div class="ttname"><a href="class_next_solver.html">NextSolver</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> NextSolver.h:16</div></div>
+<div class="ttc" id="class_affects_bip_solver_html"><div class="ttname"><a href="class_affects_bip_solver.html">AffectsBipSolver</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> AffectsBipSolver.h:19</div></div>
+<div class="ttc" id="class_uses_table_html"><div class="ttname"><a href="class_uses_table.html">UsesTable</a></div><div class="ttdoc">Refer to the PKB for the documentation. </div><div class="ttdef"><b>Definition:</b> UsesTable.h:18</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Apr 16 2015 01:30:33 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Apr 16 2015 10:46:06 for CS3202 Minions SPA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

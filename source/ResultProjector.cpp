@@ -2,6 +2,11 @@
 #include "ResultProjector.h"
 #include "PKB.h"  //To use varTable for conversion from index to variable
 
+/**
+@brief Namespace containing functions for projecting the results into a list of strings
+
+*/
+
 namespace ResultProjector {
 
 	PKB pkb = PKB::getInstance();  //Declare the PKB instance here to avoid repeated calls
@@ -18,7 +23,7 @@ namespace ResultProjector {
 		if (resultVector.size() == 1) {
 			SYNONYM_TYPE synonymType = resultVector[0].getType();
 			SYNONYM_ATTRIBUTE synonymAttribute = resultVector[0].getAttribute();
-			
+
 			if (synonymType == BOOLEAN) {
 				resultList.push_back(resultVector[0].getName());
 			} else {

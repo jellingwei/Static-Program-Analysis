@@ -271,7 +271,7 @@ false
 0904 - Next
 prog_line l;
 Select l such that Next(l,133)
-150,148,144,143
+134
 5000
 1001 - Next*
 
@@ -336,7 +336,7 @@ true
 1203 - Affects*
 assign a;
 Select a such that Affects*(185,a)
-192,198,199,195,197,198
+192,198,199,195,201
 5000
 1204 - Affects*
 assign a;
@@ -351,7 +351,7 @@ Select a pattern a(_,"(p - a) * (b - a) * (c - a)")
 1302 - pattern
 assign a;
 Select a pattern a(_,_"a - 1"_)
-*
+174,186
 5000
 1303 - pattern
 assign a; variable v;
@@ -361,7 +361,7 @@ e
 1304 - pattern
 assign a;
 Select a pattern a("c",_)
-*
+148,155,165,197,198,65
 5000
 1305 - pattern
 if i;
@@ -375,7 +375,7 @@ Select i pattern i("x",_,_)
 5000
 1307 - pattern
 while w;
-Selet w pattern w(_,_)
+Select w pattern w(_,_)
 103,111,116,130,133,134,135,136,137,138,139,140,168,171,176,179,188,194,200,23,37,51,55,56,59,6,71,77,83,97
 5000
 1308 - pattern
@@ -406,10 +406,160 @@ Select c.stmt#
 1405 - 
 call c;
 Select c.procName
-a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p
+b,c,d,e,f,g,h,i,j,k,l,m,n,o,p
 5000
 1406 -
 variable v;
 Select v.varName
 a,b,c,d,e,f,g,h,i,k,l,m,n,o,p,r,t,w,x,y,z
+5000
+10101 - multiple query
+assign a; variable v;
+Select a such that Modifies(a,v) with v.varName = "y"
+196,172,170,169,167,164,150,112,102,30,17,185,33
+5000
+10102 - mulitple query
+assign a; variable v;
+Select a such that Modifies(a,v) and Uses(a,v) with v.varName = "y"
+172,169,112,30,17
+5000
+10201 - multiple query
+stmt s1,s2;
+Select s1 such that Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s2)
+1,2,3,4,5,6,7,9,10,11,13,14,17,18,19,20,21,24,25,27,28,30,31,34,38,39,41,42,43,48,49,52,53,56,58,60,61,63,66,67,68,70,72,74,76,77,78,80,81,82,84,89,91,92,93,96,97,98,99,101,102,108,110,111,113,117,119,121,123,125,146,147,149,152,153,154,155,157,158,161,165,167,170,172,174,175,176,177,178,183,185,186,187,188,189,192,196,198,199
+5000
+10202 - multiple query
+stmt s1,s2,s3,s4;
+Select s1 such that Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s3)
+1,2,3,4,5,6,7,9,10,11,13,14,17,18,19,20,21,24,25,27,28,30,31,34,38,39,41,42,43,48,49,52,53,56,58,60,61,63,66,67,68,70,72,74,76,77,78,80,81,82,84,89,91,92,93,96,97,98,99,101,102,108,110,111,113,117,119,121,123,125,146,147,149,152,153,154,155,157,158,161,165,167,170,172,174,175,176,177,178,183,185,186,187,188,189,192,196,198,199
+5000
+10203 - multiple query
+stmt s1,s2,s3,s4;
+Select s1 such that Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s3) and Follows(s2,s4)
+1,101,111,13,146,152,153,154,157,17,174,175,176,177,18,185,186,187,19,198,2,20,24,3,30,38,4,41,42,48,5,52,6,60,66,67,68,76,77,80,81,9,91,92,96,97,98
+5000
+10203 - multiple query
+stmt s1,s2,s3,s4;
+Select s4 such that Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s2) and Follows(s1,s3) and Follows(s2,s4) with s1.stmt# = 5
+9
+5000
+10301 - multiple query
+assign a1,a2,a3; stmt s; variable v; while w1,w2; if i;
+Select a1 such that Parent*(w1,a1) and Parent*(w2,a2) and Parent*(i,a3)
+7,8,24,25,26,38,39,40,52,53,58,60,61,62,65,72,73,78,79,84,85,98,99,101,102,104,106,107,112,117,119,122,123,124,125,126,144,146,147,148,149,150,169,172,177,178,181,182,189,190,195,201
+5000
+10302 - multiple query
+assign a1,a2,a3; stmt s; variable v; while w1,w2; if i;
+Select a3 such that Parent*(w1,a1) and Parent*(w2,a2) and Parent*(i,a3)
+101,102,104,106,107,11,112,113,115,119,12,122,123,124,125,126,13,14,144,146,147,148,149,150,153,154,155,156,157,158,159,161,163,164,165,167,169,170,172,181,182,189,190,191,192,195,196,197,21,22,24,25,26,28,29,30,31,32,38,39,40,41,42,44,45,46,48,49,50,52,53,58,60,61,62,69,70,72,73,82,84,85,87,88,93,94,95
+5000
+10303 - multiple query
+assign a1,a2,a3; stmt s; variable v1,v2,v3; while w1,w2; if i;
+Select a1 such that Parent*(w1,a1) and Parent*(w2,a2) and Parent*(i,a3) and Modifies(a1,v1) and Modifies(a2,v2) and Modifies(a3,v3) with v1.varName = "a"
+61,84,101,144,146,149,190
+5000
+10304 - multiple query
+assign a1,a2,a3; stmt s; variable v1,v2,v3; while w1,w2; if i;
+Select a1 such that Parent*(w1,a1) and Parent*(w2,a2) and Parent*(i,a3) and Modifies(a1,v1) and Modifies(a2,v2) and Modifies(a3,v3) with v1.varName = "a" with v3.varName = "c"
+61,84,101,144,146,149,190
+5000
+10304 - multiple query
+assign a1,a2,a3; stmt s; variable v1,v2,v3; while w1,w2; if i;
+Select v3 such that Parent*(w1,a1) and Parent*(w2,a2) and Parent*(i,a3) and Modifies(a1,v1) and Modifies(a2,v2) and Modifies(a3,v3) with v1.varName = "a" with a3.stmt# = a1.stmt#
+a
+5000
+10401 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l;
+Select p2 such that Calls*(p1,p2) and Next*(s1,s2) and Follows*(s3,l) with p1.procName = "a"
+b,c,d,e,f,g,h,i,j,k,l,m,n,o,p
+5000
+10402 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l;
+Select a1 such that Calls*(p1,p2) and Next*(s1,s2) and Follows*(s3,l) with p1.procName = "a" such that Modifies(a1,v1) with s1.stmt# = a1.stmt# with v1.varName = p1.procName
+101,144,146,149,190,21,61,84,9,93,113,153,183
+5000
+10501 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select s1 such that Next*(s1,s2) with c.value = s1.stmt#
+1,11,2,3,5,7,9
+5000
+10502 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select s1 such that Next*(s1,s2) with c.value = s1.stmt# such that Uses(s1, v1) pattern a1(v1,_) with a1.stmt# = s1.stmt#
+11
+5000
+10601 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select a2 such that Affects*(a1,a2) with a1.stmt# = 1
+2
+5000
+10701 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select v1 such that Uses(p1,v1) with p1.procName = "h"
+y,b,n,w,z,x,a,l,r,c,d,e,f,g,h,m,k,p,o,i,t
+5000
+10702 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select v2 such that Uses(p1,v1) with p1.procName = "h" with v1.varName = v2.varName
+y,b,n,w,z,x,a,l,r,c,d,e,f,g,h,m,k,p,o,i,t
+5000
+10703 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select v2 such that Uses(p1,v1) with p1.procName = "h" with v1.varName = v2.varName with p2.procName = v2.varName
+b,a,l,c,d,e,f,g,h,m,k,p,o,i,n
+5000
+10704 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select p3 such that Uses(p1,v1) with p1.procName = "h" with v1.varName = v2.varName with p2.procName = v2.varName such that Calls*(p3,p2) 
+a,b,c,d,f,g,h,i,j,k,l,m,n
+5000
+10704 - multiple query
+assign a1,a2,a3; stmt s1,s2,s3; variable v1,v2,v3; while w1,w2; if i1,i2; procedure p1,p2,p3; prog_line l1,l2,l3; constant c;
+Select v3 such that Uses(p1,v1) with p1.procName = "h" with v1.varName = v2.varName with p2.procName = v2.varName such that Calls*(p3,p2) with p3.procName = "n" such that Uses(p3,v3) 
+a,b,c,e,p,z,k,y,x
+5000
+10801 - multiple query
+stmt s1,s2,s3,s4,s5,s6,s7,s8,s9,s10; constant c;
+Select c such that Next*(s1,s2) and Next*(s3,s4) and Next*(s5,s6) and Next*(s7,s8) and Next*(s9,s10)
+0,1,11,2,3,5,7,9
+5000
+10802 - multiple query
+stmt s1,s2,s3,s4,s5,s6,s7,s8,s9,s10; constant c;
+Select s1 such that Next*(s1,s2) and Next*(s3,s4) and Next*(s5,s6) and Next*(s7,s8) and Next*(s9,s10)
+1,2,3,5,6,7,9,10,11,21,22,23,24,25,26,27,28,29,30,31,32,34,35,36,37,38,39,4,40,41,42,43,44,45,47,48,49,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,76,77,78,79,8,80,81,82,83,84,85,86,87,88,89,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,110,111,112,113,114,115,116,117,118,119,12,120,121,122,123,124,125,126,127,13,130,131,133,134,135,136,137,138,139,14,140,141,142,143,144,145,146,147,148,149,15,150,151,152,153,154,155,157,158,160,161,162,165,166,167,168,169,17,170,171,172,173,174,175,176,177,178,179,18,180,181,182,183,185,186,187,188,189,19,190,191,192,193,194,195,196,197,198,199,20,200,201
+5000
+10803 - multiple query
+stmt s1,s2,s3,s4,s5,s6,s7,s8,s9,s10; constant c; assign a; prog_line l; while w; if i;
+Select i such that Next*(s1,s2) and Next*(s3,a) and Next*(s5,l) and Next*(s7,w) and Next*(i,s9)
+10,100,105,110,118,120,127,141,142,145,151,160,162,166,180,187,19,193,27,35,36,43,47,57,68,81,86,92
+5000
+10804 - multiple query
+stmt s1,s2,s3,s4,s5,s6,s7,s8,s9,s10; constant c; assign a; prog_line l; while w; if i;
+Select i such that Next*(s1,s2) and Next*(s3,a) and Next*(s5,l) and Next*(s7,w) and Next*(i,s9) with s1.stmt# = s3.stmt# with s3.stmt# = l
+10,100,105,110,118,120,127,141,142,145,151,160,162,166,180,187,19,193,27,35,36,43,47,57,68,81,86,92
+5000
+10805 - multiple query
+stmt s1,s2,s3,s4,s5,s6,s7,s8,s9,s10; constant c; assign a; prog_line l; while w; if i;
+Select i such that Next*(s1,s2) and Next*(s3,a) and Next*(s5,l) and Next*(s7,w) and Next*(i,s9) with s1.stmt# = s3.stmt# with s3.stmt# = l with l = s9.stmt#
+10,100,105,110,118,120,141,142,145,151,160,166,180,187,19,193,27,35,36,43,47,57,68,81,86,92
+5000
+10806 - multiple query
+stmt s1,s2,s3,s4,s5,s6,s7,s8,s9,s10; constant c; assign a; prog_line l; while w; if i; variable v; procedure p;
+Select v such that Next*(s1,s2) and Next*(s3,a) and Next*(s5,l) and Next*(s7,w) and Next*(i,s9) with s1.stmt# = s3.stmt# with s3.stmt# = l with l = s9.stmt# pattern i(v,_,_) with p.procName = v.varName
+a,b,c,e,f,g,h,k,n,p
+5000
+10901 - multiple query
+assign a1,a2,a3,a4;
+Select a1 such that Affects(a1,a2) and Affects(a2,a3) and Affects*(a1,a4) with a3.stmt# = 101
+101,102
+5000
+10902 - multiple query
+assign a1,a2,a3,a4;
+Select a4 such that Affects(a1,a2) and Affects(a2,a3) and Affects*(a1,a4) with a3.stmt# = 101 with a3.stmt# = a4.stmt#
+101
+5000
+11001 - multiple query
+stmt s1,s2,s3,s4,s5,s6;
+Select s5 such that Affects*(s1,s2) and Next*(s3,s4) and Parent*(s5,s6) with s1.stmt# = 66 with s2.stmt# = 75 with s3.stmt# = s1.stmt# with s6.stmt# = s4.stmt#
+68,71
 5000

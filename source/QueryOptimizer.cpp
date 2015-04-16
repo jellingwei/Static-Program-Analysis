@@ -869,6 +869,26 @@ namespace QueryOptimiser
 					index++;
 				}
 			}
+
+			//To account for the new bonus pattern
+			if (childNode->getNodeType() == Pattern) {
+				Synonym arg2 = childNode->getArg2();
+				Synonym arg3 = childNode->getArg3();
+				if (arg2.isSynonym()) {
+					string name = arg2.getName();
+					if (name_index_map.count(name) == 0) {
+						name_index_map[name] = index;
+						index++;
+					}
+				}
+				if (arg3.isSynonym()) {
+					string name = arg3.getName();
+					if (name_index_map.count(name) == 0) {
+						name_index_map[name] = index;
+						index++;
+					}
+				}
+			}
 			childNode = clausesNode->getNextChild();
 		}
 		return name_index_map;
@@ -911,6 +931,49 @@ namespace QueryOptimiser
 			} else if (RHS.isSynonym()) {
 				indexRHS = name_index_map[RHS.getName()];
 				adjacencyMatrix[indexRHS][indexRHS]++;
+			}
+
+			//To account for the new bonus pattern
+			if (childNode->getNodeType() == Pattern) {
+				Synonym arg2 = childNode->getArg2();
+				Synonym arg3 = childNode->getArg3();
+
+				if (arg2.isSynonym()) {
+					int indexArg2 = name_index_map[arg2.getName()];
+
+					if (LHS.isSynonym() && RHS.isSynonym()) {
+						adjacencyMatrix[indexLHS][indexArg2]++;
+						adjacencyMatrix[indexRHS][indexArg2]++;
+						adjacencyMatrix[indexArg2][indexLHS]++;
+						adjacencyMatrix[indexArg2][indexRHS]++;
+					} else if (LHS.isSynonym()) {
+						adjacencyMatrix[indexLHS][indexArg2]++;
+						adjacencyMatrix[indexArg2][indexLHS]++;
+					} else if (RHS.isSynonym()) {
+						adjacencyMatrix[indexRHS][indexArg2]++;
+						adjacencyMatrix[indexArg2][indexRHS]++;
+					} else {
+						adjacencyMatrix[indexArg2][indexArg2]++;
+					}
+				}
+				if (arg3.isSynonym()) {
+					int indexArg3 = name_index_map[arg3.getName()];
+
+					if (LHS.isSynonym() && RHS.isSynonym()) {
+						adjacencyMatrix[indexLHS][indexArg3]++;
+						adjacencyMatrix[indexRHS][indexArg3]++;
+						adjacencyMatrix[indexArg3][indexLHS]++;
+						adjacencyMatrix[indexArg3][indexRHS]++;
+					} else if (LHS.isSynonym()) {
+						adjacencyMatrix[indexLHS][indexArg3]++;
+						adjacencyMatrix[indexArg3][indexLHS]++;
+					} else if (RHS.isSynonym()) {
+						adjacencyMatrix[indexRHS][indexArg3]++;
+						adjacencyMatrix[indexArg3][indexRHS]++;
+					} else {
+						adjacencyMatrix[indexArg3][indexArg3]++;
+					}
+				}
 			}
 			childNode = clausesNode->getNextChild();
 		}
