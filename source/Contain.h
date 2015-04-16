@@ -13,6 +13,10 @@
 //using std::string;
 using namespace std;
 
+/**
+	@brief Refer to the PKB for the documentation.
+
+*/
 class Contain
 {
 public:

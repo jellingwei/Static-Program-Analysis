@@ -13,6 +13,10 @@
 
 using namespace std;
 
+/**
+	@brief Refer to the PKB for the documentation.
+
+*/
 class Siblings
 {
 public:

@@ -11,6 +11,10 @@
 
 using namespace std;
 
+/**
+	@brief Refer to the PKB for the documentation.
+*/
+
 class VarTable {
 public:
 	VAR_INDEX insertVar(VARNAME varName, STATEMENT stmtNum);

@@ -11,6 +11,9 @@
 
 using namespace std;
 
+/**
+	@brief Refer to the PKB for the documentation.
+*/
 class ProcTable {
 public:
 	PROC_INDEX insertProc(PROCNAME procName);
