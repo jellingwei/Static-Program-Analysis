@@ -7,6 +7,7 @@ var searchData=
   ['reordernonconstantclauses',['reorderNonConstantClauses',['../namespace_query_optimiser.html#a2efcdc2a5dc622f2358c72dbe74fba50',1,'QueryOptimiser']]],
   ['replacesynonyms',['replaceSynonyms',['../namespace_query_optimiser.html#aa3c9ff7d4e3afcbe8ef0066a6b4d5d7f',1,'QueryOptimiser']]],
   ['resetvalues',['resetValues',['../namespace_query_evaluator.html#a8bea0cf8be8cc915cf031e9ac4db5d77',1,'QueryEvaluator']]],
+  ['resultprojector',['ResultProjector',['../namespace_result_projector.html',1,'']]],
   ['reversecompareproglines',['ReverseCompareProglines',['../class_reverse_compare_proglines.html',1,'']]],
   ['rewritewithclauses',['rewriteWithClauses',['../namespace_query_optimiser.html#a612be54ac8b59918f4b534c1b44206fa',1,'QueryOptimiser']]]
 ];

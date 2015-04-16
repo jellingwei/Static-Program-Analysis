@@ -36,9 +36,11 @@ var searchData=
   ['parsewithclause',['parseWithClause',['../namespace_query_parser.html#a7b2219a9ce068cebb7f36838943d7b90',1,'QueryParser']]],
   ['patternmatch',['PatternMatch',['../class_pattern_match.html',1,'']]],
   ['patternmatchassign',['patternMatchAssign',['../class_a_s_t.html#a951cd1cdddb7cb17b3e835b040b261da',1,'AST::patternMatchAssign()'],['../class_pattern_match.html#ac0b478a16f767bf9c47e2d423a53338e',1,'PatternMatch::patternMatchAssign()'],['../class_p_k_b.html#a6f6eaf741911f7d5a4d7a3a44e774147',1,'PKB::patternMatchAssign()']]],
-  ['patternmatchif',['patternMatchIf',['../class_a_s_t.html#aa02d2a179e742d226738f32816b53d7f',1,'AST::patternMatchIf()'],['../class_p_k_b.html#a00340a13f8b2d7b6dce03a830f916205',1,'PKB::patternMatchIf()']]],
+  ['patternmatchif',['patternMatchIf',['../class_a_s_t.html#aa02d2a179e742d226738f32816b53d7f',1,'AST::patternMatchIf(VARNAME LHS)'],['../class_a_s_t.html#ae334a0da838c7a87deeee1b42830e088',1,'AST::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS)'],['../class_p_k_b.html#a00340a13f8b2d7b6dce03a830f916205',1,'PKB::patternMatchIf(VARNAME LHS)'],['../class_p_k_b.html#a6f0e7932641b0cbe1e6789cd2486090a',1,'PKB::patternMatchIf(VARNAME LHS, SYNONYM_TYPE thenS, SYNONYM_TYPE elseS)']]],
+  ['patternmatchifelse',['patternMatchIfElse',['../class_a_s_t.html#a3033dcbfc5e7d580f0492fce5c860134',1,'AST::patternMatchIfElse()'],['../class_p_k_b.html#a1ae25d9be240fc4bc55dbbdfaa084afa',1,'PKB::patternMatchIfElse()']]],
+  ['patternmatchifthen',['patternMatchIfThen',['../class_a_s_t.html#a794ad8dc2c616257236c429e1083c5a9',1,'AST::patternMatchIfThen()'],['../class_p_k_b.html#a0de204956d9375dd0188d589c1ebb091',1,'PKB::patternMatchIfThen()']]],
   ['patternmatchparentstmt',['patternMatchParentStmt',['../class_pattern_match.html#af962872e156e3a6690c013574c6c2f00',1,'PatternMatch']]],
-  ['patternmatchwhile',['patternMatchWhile',['../class_a_s_t.html#a9e135026ef7e6e65a639b2bfe56aee86',1,'AST::patternMatchWhile()'],['../class_p_k_b.html#a36891d5f14b47c25d213e396f5f9dba4',1,'PKB::patternMatchWhile()']]],
+  ['patternmatchwhile',['patternMatchWhile',['../class_a_s_t.html#a9e135026ef7e6e65a639b2bfe56aee86',1,'AST::patternMatchWhile(VARNAME LHS)'],['../class_a_s_t.html#ab0981e7cf474e6b86edb08688545d7d3',1,'AST::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then)'],['../class_p_k_b.html#a36891d5f14b47c25d213e396f5f9dba4',1,'PKB::patternMatchWhile(VARNAME LHS)'],['../class_p_k_b.html#af03f3bb4c987442341ddf46e4eb3834b',1,'PKB::patternMatchWhile(VARNAME LHS, SYNONYM_TYPE then)']]],
   ['peekbackwards',['peekBackwards',['../namespace_query_parser.html#a36f6e266c2452c3165cd8fba21f75fdf',1,'QueryParser']]],
   ['peekintothenextnexttoken',['peekInToTheNextNextToken',['../namespace_query_parser.html#aa6e5c821cfbdf777ee3dec5ad7fb9f7f',1,'QueryParser']]],
   ['peekintothenexttoken',['peekInToTheNextToken',['../namespace_query_parser.html#ab7f235f1cbd4a68cb42f2361adb4b5c0',1,'QueryParser']]],
@@ -66,5 +68,6 @@ var searchData=
   ['processuses',['processUses',['../namespace_query_evaluator.html#a2c7b14fdbb4ce0e53194a0df11051ad2',1,'QueryEvaluator']]],
   ['processwhilepattern',['processWhilePattern',['../namespace_query_evaluator.html#a54cfcde2c59c71a931a8cd38e1b933a2',1,'QueryEvaluator']]],
   ['processwithclause',['processWithClause',['../namespace_query_evaluator.html#aaf691bd15e007df09536565f1e05d22a',1,'QueryEvaluator']]],
-  ['proctable',['ProcTable',['../class_proc_table.html',1,'']]]
+  ['proctable',['ProcTable',['../class_proc_table.html',1,'']]],
+  ['projectresulttolist',['projectResultToList',['../namespace_result_projector.html#a9f6b201ce1c373a4d35aab0f1f006268',1,'ResultProjector']]]
 ];
