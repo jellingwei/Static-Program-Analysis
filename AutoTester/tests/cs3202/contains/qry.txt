@@ -44,13 +44,13 @@ Select c
 11,15,25,7
 5000
 1001 - Valid Contains while control var
-stmt s;
-Select BOOLEAN such that Contains(4,"salmon")
-false
+stmt s; variable v;
+Select BOOLEAN such that Contains(4,v) with v.varName = "salmon"
+true
 5000
 1002 - Valid Contains if control var
-stmt s;
-Select BOOLEAN such that Contains(10,"f")
+stmt s; variable v;
+Select BOOLEAN such that Contains(10,v) with v.varName = "f"
 true
 5000
 1003 - Valid Contains while stmtLst
@@ -283,25 +283,25 @@ stmtLst sl; stmt s;
 Select sl such that Contains(sl, s)
 1,5, 11,14,17,19,20,21,23,25,27,28,29,30,31,33,34,36,37,38,39
 5000
-2001 - Invalid Contains not Parent while
+2001 - Invalid Contains not valid
 stmt s;
 Select BOOLEAN such that Contains(4, 8)
-false
+none
 5000
-2002 - Invalid Contains not Parent if
+2002 - Invalid Contains not valid
 stmt s;
 Select BOOLEAN such that Contains(10, 16)
-false
+none
 5000
-2003 - Invalid Contains nested Parent while
+2003 - Invalid Contains nested not valid
 stmt s;
 Select BOOLEAN such that Contains(18,20)
-false
+none
 5000
-2004 - Invalid Contains nested Parent if
+2004 - Invalid Contains not valid
 stmt s;
 Select BOOLEAN such that Contains(27,29)
-false
+none
 5000
 2005 - Invalid Contains wildcard
 stmt s;
@@ -318,70 +318,70 @@ stmt s;
 Select BOOLEAN such that Contains(s,_)
 none
 5000
-2008 - Invalid Contains Procedure indirect
+2008 - Invalid Contains Procedure indirect invalid
 stmt s; procedure p;
 Select BOOLEAN such that Contains(p, 1) with p.procName = "One"
-false
+none
 5000
 2009 - Invalid Contains Assign 
 assign a; variable v;
 Select BOOLEAN such that Contains(1, v) with v.varName = "a"
 false
 5000
-2010 - Invalid Contains Assign
+2010 - Invalid Contains Assign invalid
 assign a;
 Select BOOLEAN such that Contains(13, 6)
-false
+none
 5000
 2011 - Invalid Contains Assign op
 assign a; plus add;
 Select BOOLEAN such that Contains(6, add)
 false
 5000
-2012 - Invalid Contains Assign op
+2012 - Invalid Contains Assign op invalid
 assign a; minus reduce;
 Select BOOLEAN such that Contains(reduce, a)
-false
+none
 5000
 2013 - Invalid Contains Assign stmtLst
 assign a; stmtLst sl;
 Select BOOLEAN such that Contains(a, sl)
-false
+none
 5000
 2014 - Invalid Contains Assign indirect
 assign a; plus add;
 Select BOOLEAN such that Contains(3, add)
 false
 5000
-2015 - Invalid Contains Op and stmt
+2015 - Invalid Contains Op and stmt invalid
 stmt s; times multi;
 Select BOOLEAN such that Contains(multi, s)
-false
+none
 5000
-2016 - Invalid Contains Op and stmtLst
+2016 - Invalid Contains Op and stmtLst invalid
 stmtLst sl; plus add;
 Select BOOLEAN such that Contains(add, sl)
-false
+none
 5000
-2016 - Invalid Contains variable
+2017 - Invalid Contains variable invalid
 variable v;
 Select BOOLEAN such that Contains(v, 1)
-false
+none
 5000
-2017 - Invalid Contains variable
+2018 - Invalid Contains variable invalid
 variable v; minus less;
 Select BOOLEAN such that Contains(v, less)
-false
+none
 5000
 2018 - Invalid Contains constant
 constant c; variable v;
 Select BOOLEAN such that Contains(c, v)
-false
+none
 5000
 2019 - Invalid Contains constant
 constant c; plus add;
 Select BOOLEAN such that Contains(c, add)
-false
+none
 5000
 3001 - Valid Contains* as Parents while
 stmt s;
@@ -399,7 +399,7 @@ Select BOOLEAN such that Contains*(10,12)
 true
 5000
 3004 - Valid Contains* as Parents else
-stmts s;
+stmt s;
 Select BOOLEAN such that Contains*(10,14)
 true
 5000
@@ -409,7 +409,7 @@ Select BOOLEAN such that Contains*(27,29)
 true
 5000
 3006 - Valid Contains* as Parents* else
-stmts s;
+stmt s;
 Select BOOLEAN such that Contains*(27,37)
 true
 5000
@@ -681,7 +681,7 @@ false
 4009 - Invalid Contains* Assign 
 assign a;
 Select BOOLEAN such that Contains*(a, 6)
-false
+none
 5000
 4010 - Invalid Contains* Assign 
 assign a;
@@ -711,12 +711,12 @@ false
 4015 - Invalid Contains* Op and stmt
 plus add; stmt s;
 Select BOOLEAN such that Contains*(add, s)
-false
+none
 5000
 4016 - Invalid Contains* constant and var
 constant c; variable v;
 Select BOOLEAN such that Contains*(c, v)
-false
+none
 5000
 5001 - Valid Contains if stmtLst stmts
 stmtLst thenAndElse; stmt s;
