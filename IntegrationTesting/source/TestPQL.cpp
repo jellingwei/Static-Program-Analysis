@@ -39,7 +39,6 @@ void PQLTest::tearDown()
 void PQLTest::testPQL()
 {
 	
-	CPPUNIT_ASSERT_EQUAL_MESSAGE("procedure a, b; Call(a, PQLTest2)", 3, (int)evaluate("procedure a; Select a").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("procedure a, b; Call(a, PQLTest2)", 1, (int)evaluate("procedure a, b; Select a such that Calls(a, \"PQLTest2\")").size());
 	CPPUNIT_ASSERT_EQUAL_MESSAGE("procedure a, b; Call(a, PQLTest2)", 1, (int)evaluate("procedure a, b; Select a such that Calls(\"PQLTest2\", a)").size());
 	// Values that are not suppose to be in queries
