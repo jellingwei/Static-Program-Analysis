@@ -585,11 +585,11 @@ VALUE_LIST Contain::contains(STATEMENT stmtNo, SYNONYM_TYPE descendentType, bool
 	vector<pair<int, vector<int>>> results;
 
 	if(stmtType == "assign") {
-		temp = checkForAssignCase(currentNode, convertFromSynonym(descendentType), true);
+		temp = checkForAssignCase(currentNode, convertFromSynonym(descendentType), transitiveClosure);
 	} else if(stmtType == "while") {
-		temp = checkForWhileCase(currentNode, convertFromSynonym(descendentType), true);
+		temp = checkForWhileCase(currentNode, convertFromSynonym(descendentType), transitiveClosure);
 	} else if(stmtType == "if") {
-		temp = checkForIfCase(currentNode, convertFromSynonym(descendentType), true);
+		temp = checkForIfCase(currentNode, convertFromSynonym(descendentType), transitiveClosure);
 	}
 
 	//if(temp.size() != 0) results.push_back(make_pair(stmtNo, temp));
@@ -613,13 +613,13 @@ VALUE_LIST Contain::contains(SYNONYM_TYPE predecessorType, STATEMENT stmtNo, boo
 
 	if(predecessorType == PROGRAM || predecessorType == PROCEDURE || predecessorType == STMTLST || predecessorType == STMT || predecessorType == WHILE || predecessorType == IF) {
 		if(stmtType == "assign") {
-			result = contains(predecessorType, ASSIGN, true);
+			result = contains(predecessorType, ASSIGN, transitiveClosure);
 		} else if(stmtType == "while") {
-			result = contains(predecessorType, WHILE, true);
+			result = contains(predecessorType, WHILE, transitiveClosure);
 		} else if(stmtType == "if") {
-			result = contains(predecessorType, IF, true);
+			result = contains(predecessorType, IF, transitiveClosure);
 		} else if(stmtType == "call") {
-			result = contains(predecessorType, CALL, true);
+			result = contains(predecessorType, CALL, transitiveClosure);
 		}
 	}
 
