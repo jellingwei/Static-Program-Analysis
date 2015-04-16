@@ -36,7 +36,7 @@ Select sl2 pattern w1(_,sl1) pattern w2(_,sl2) with w1.stmt# = w2.stmt#
 1008 - pattern while stmtLst
 while w1,w2; stmtLst sl1,sl2; variable v1,v2;
 Select sl2 pattern w1(v1,sl1) pattern w2(v2,sl2) such that Modifies(w1,v2) with v1.varName = v2.varName
-6, 20, 21, 31, 84, 92, 114, 120
+6, 20, 21, 32, 46, 56, 78, 84, 92, 114, 120
 5000
 1009 - pattern while BOOLEAN stmtLst
 while w; stmtLst sl;
