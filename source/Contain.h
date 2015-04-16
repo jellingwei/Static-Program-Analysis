@@ -20,13 +20,13 @@ using namespace std;
 class Contain
 {
 public:
-	PAIR_LIST contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, bool transitiveClosure);
+	PAIR_LIST contains(SYNONYM_TYPE predecessorType, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure);
 
-	VALUE_LIST contains(STATEMENT stmtNO, SYNONYM_TYPE descendentType, bool transitiveClosure);
-	VALUE_LIST contains(SYNONYM_TYPE predecessorType, STATEMENT stmtNo, bool transitiveClosure);
+	VALUE_LIST contains(STATEMENT stmtNO, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure);
+	VALUE_LIST contains(SYNONYM_TYPE predecessorType, STATEMENT stmtNo, TRANS_CLOSURE transitiveClosure);
 
-	VALUE_LIST checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure);
-	VALUE_LIST checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, bool transitiveClosure);
+	VALUE_LIST checkForWhileThen(TNode* currentNode, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure);
+	VALUE_LIST checkForIfThenElse(TNode* currentNode, SYNONYM_TYPE descendentType, TRANS_CLOSURE transitiveClosure);
 	PAIR checkForIf(TNode* thenNode, SYNONYM_TYPE thenS, TNode* elseNode, SYNONYM_TYPE elseS);
 
 private:
