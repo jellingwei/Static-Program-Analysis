@@ -96,7 +96,7 @@ true
 1011 - Valid Contains Assign LHS var
 variable v;
 Select v such that Contains(3, v)
-pork,e,crab,buffet
+pork
 5000
 1012 - Valid Contains Assign RHS var
 assign a; variable v;
