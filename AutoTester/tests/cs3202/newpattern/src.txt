@@ -47,7 +47,7 @@ procedure Three {
     if h then{       \\30
       while x {           \\31
         l = 9;          \\32
-        l = l - w;       \\3
+        l = l - w;       \\33
         x = l * 5 - (h + (x * y) + m);        \\34
       }
     }
