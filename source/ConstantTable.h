@@ -10,6 +10,10 @@
 
 using namespace std;
 
+/**
+	@brief Refer to the PKB for the documentation.
+*/
+
 class ConstantTable {
 public:
 	STATUS insertConstant(VALUE constant, STATEMENT stmtNum);

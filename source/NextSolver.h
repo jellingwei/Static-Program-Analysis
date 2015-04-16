@@ -9,6 +9,10 @@
 #include "CNode.h"
 #include "common.h"
 
+/**
+	@brief Refer to the PKB for the documentation.
+
+*/
 class NextSolver 
 {
 public:

@@ -9,6 +9,10 @@
 
 using namespace std;
 
+/**
+	@brief Refer to the PKB for the documentation.
+*/
+
 class ParentSolver {
 public:
 	STATUS setParent(TNode* stmtNum1, TNode* stmtNum2);

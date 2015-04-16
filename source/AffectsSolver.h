@@ -12,6 +12,9 @@
 using namespace std;
 using namespace stdext;
 
+/**
+	@brief Refer to the PKB for the documentation.
+*/
 
 class AffectsSolver {
 public:
