@@ -69,6 +69,8 @@ namespace ResultProjector {
 		unordered_map<string, bool> isProjectedMap;
 		unordered_map<string, vector<string>> stringValuesMap;
 		set<string> insertedNames;
+		bool isSingleMain = true;
+		bool isReferencedAlready = false;
 
 		//Calculate the factors to replicate the rows
 		for (unsigned int i = 0; i < resultVector.size(); i++) {
@@ -77,7 +79,15 @@ namespace ResultProjector {
 
 			if (insertedNames.count(name) == 0) {
 				if (ValuesHandler::isExistInMainTable(name)) {
-					mainFactor = synonym.getValues().size();
+					if (mainFactor == 1) {
+						mainFactor = synonym.getValuesSet().size();
+						isReferencedAlready = true;
+					} 
+					
+					if (isReferencedAlready) {
+						isSingleMain = false;
+						mainFactor = synonym.getValues().size();
+					}
 					insertedNames.insert(name);
 					isInMainTableMap[name] = true;
 				} else {
@@ -93,31 +103,46 @@ namespace ResultProjector {
 			}
 		}
 
+		unsigned int totalRows = mainFactor * singletonFactor;
+
 		//Convert the values into strings and expand them
 		for (unsigned int i = 0; i < resultVector.size(); i++) {
 			Synonym synonym = resultVector[i];
 			string name = synonym.getName();
 			SYNONYM_TYPE type = synonym.getType();
 			SYNONYM_ATTRIBUTE attribute = synonym.getAttribute();
-			vector<int> valuesNumbers = synonym.getValues();
 			vector<string> valuesStrings;
 
 			if (isProjectedMap.count(name) == 0) {
-				for (unsigned int j = 0; j < valuesNumbers.size(); j++) {
-					valuesStrings.push_back(ResultProjector::convertValueToString(valuesNumbers[j], type, attribute));
-				}
-
 				if (isInMainTableMap[name] == true) {
+					if (isSingleMain) {
+						set<int> valuesNumbers = synonym.getValuesSet();
+						for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
+							string value = convertValueToString(*itr, type, attribute);
+							valuesStrings.push_back(value);
+						}
+					} else {
+						vector<int> valuesNumbers = synonym.getValues();
+						for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
+							string value = convertValueToString(*itr, type, attribute);
+							valuesStrings.push_back(value);
+						}
+					}
 					valuesStrings = expandEachRow(valuesStrings, singletonFactor);
 					stringValuesMap[name] = valuesStrings;
 				} else {
+					vector<int> valuesNumbers = synonym.getValues();
+					for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
+						string value = convertValueToString(*itr, type, attribute);
+						valuesStrings.push_back(value);
+					}
 					if (i == lastSingletonIndex) {
 						valuesStrings = expandRange(valuesStrings, mainFactor);
 						stringValuesMap[name] = valuesStrings;
 					} else {
 						valuesStrings = expandRange(valuesStrings, mainFactor);
 						mainFactor *= individualFactor[name];
-						valuesStrings = expandEachRow(valuesStrings, singletonFactor / mainFactor);
+						valuesStrings = expandEachRow(valuesStrings, totalRows / mainFactor);
 						stringValuesMap[name] = valuesStrings;
 					}
 				}
@@ -133,12 +158,12 @@ namespace ResultProjector {
 	* @param factor the multiple to expand each row by
 	* @return a vector of strings that has been expanded
 	*/
-	vector<string> expandEachRow(vector<string> values, int factor)
+	vector<string> expandEachRow(vector<string> values, unsigned int factor)
 	{
 		vector<string> returnStrings;
 
 		for (unsigned int i = 0; i < values.size(); i++) {
-			for (int j = 0; j < factor; j++) {
+			for (unsigned int j = 0; j < factor; j++) {
 				returnStrings.push_back(values[i]);
 			}
 		}
@@ -151,11 +176,11 @@ namespace ResultProjector {
 	* @param factor the multiple to expand
 	* @return a vector of strings that has been expanded
 	*/
-	vector<string> expandRange(vector<string> values, int factor)
+	vector<string> expandRange(vector<string> values, unsigned int factor)
 	{
 		vector<string> returnStrings;
 
-		for (int i = 0; i < factor; i++) {
+		for (unsigned int i = 0; i < factor; i++) {
 			returnStrings.insert(returnStrings.end(), values.begin(), values.end());
 		}
 		return returnStrings;

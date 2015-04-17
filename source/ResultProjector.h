@@ -14,6 +14,6 @@ using std::to_string;
 namespace ResultProjector {
 	void projectResultToList(vector<Synonym> resultVector, list<string> & outputList);
 	string convertValueToString(int value, SYNONYM_TYPE type, SYNONYM_ATTRIBUTE attribute);
-	vector<string> expandEachRow(vector<string> values, int factor);
-	vector<string> expandRange(vector<string> values, int factor);
+	vector<string> expandEachRow(vector<string> values, unsigned int factor);
+	vector<string> expandRange(vector<string> values, unsigned int factor);
 }
