@@ -69,7 +69,6 @@ PROCINDEX_LIST dfsForProcedures(int startProc, vector<int>* allProcs, set<int>& 
 	
 	dfs(startProc, result, visited, allProcs);
 
-	reverse(result.begin(), result.end());
 	return result;
 }
 
@@ -91,8 +90,11 @@ STATEMENT_LIST getCallsInTopologicalOrder() {
 	if (!allProcs.empty()) {
 		startProc = allProcs.front();
 		vector<int> newResult = dfsForProcedures(startProc, &allProcs, visited);
+
 		result.insert(result.end(), newResult.begin(), newResult.end()); // append newResult behind result
 	}
+
+	reverse(result.begin(), result.end());
 
 	return result;
 }
@@ -134,7 +136,6 @@ private:
  */
 vector<TNode*> obtainCallStatementsInTopologicalOrder() {
 	vector<int> topologicalOrder = getCallsInTopologicalOrder();
-
 
 	PKB pkb = PKB::getInstance();
 
