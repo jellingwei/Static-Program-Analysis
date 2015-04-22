@@ -11,7 +11,7 @@ namespace ResultProjector {
 
 	PKB pkb = PKB::getInstance();  //Declare the PKB instance here to avoid repeated calls
 
-	unordered_map<string, vector<string>> convertTuplesToString(vector<Synonym> resultVector);
+	vector<vector<string>> convertTuplesToString(vector<Synonym> resultVector);
 
 	/**
 	* Given a list, inserts all the results into the list
@@ -34,21 +34,20 @@ namespace ResultProjector {
 				}
 			}
 		} else if (resultVector.size() > 1) {
-			unordered_map<string, vector<string>> valuesMap = convertTuplesToString(resultVector);
+			vector<vector<string>> stringValues = convertTuplesToString(resultVector);
 			set<string> stringSet;
-			int size = valuesMap.begin()->second.size();
+			unsigned int tableSize = stringValues[0].size();
+			unsigned int synonymsSize = stringValues.size();
 
-			for (int i = 0; i < size; i++) {
+			for (unsigned int i = 0; i < tableSize; i++) {
 				string oneRow;
 
-				for (unsigned int j = 0; j < resultVector.size(); j++) {
-					string name = resultVector[j].getName();
-					vector<string> values = valuesMap[name];
+				for (unsigned int j = 0; j < synonymsSize; j++) {
+					oneRow += stringValues[j][i];
 
-					if (j != 0) {
+					if (j != synonymsSize - 1) {
 						oneRow += " ";
 					}
-					oneRow += values[i];
 				}
 				stringSet.insert(oneRow);
 			}
@@ -59,9 +58,9 @@ namespace ResultProjector {
 	/**
 	* Converts values to strings and expands the values into tuple form
 	* @param resultVector a vector of query evaluation results
-	* @return a map from the synonym name to its values in strings
+	* @return a table of the strings
 	*/
-	unordered_map<string, vector<string>> convertTuplesToString(vector<Synonym> resultVector)
+	vector<vector<string>> convertTuplesToString(vector<Synonym> resultVector)
 	{
 		unsigned int mainFactor = 1;
 		unsigned int singletonFactor = 1;
@@ -69,7 +68,8 @@ namespace ResultProjector {
 		unordered_map<string, unsigned int> individualFactor;
 		unordered_map<string, bool> isInMainTableMap;
 		unordered_map<string, bool> isProjectedMap;
-		unordered_map<string, vector<string>> stringValuesMap;
+		vector<vector<string>> returnValues;
+
 		set<string> insertedNames;
 		bool isSingleMain = true;
 		bool isReferencedAlready = false;
@@ -115,43 +115,40 @@ namespace ResultProjector {
 			SYNONYM_ATTRIBUTE attribute = synonym.getAttribute();
 			vector<string> valuesStrings;
 
-			if (isProjectedMap.count(name) == 0) {
-				if (isInMainTableMap[name] == true) {
-					if (isSingleMain) {
-						set<int> valuesNumbers = synonym.getValuesSet();
-						for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
-							string value = convertValueToString(*itr, type, attribute);
-							valuesStrings.push_back(value);
-						}
-					} else {
-						vector<int> valuesNumbers = synonym.getValues();
-						for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
-							string value = convertValueToString(*itr, type, attribute);
-							valuesStrings.push_back(value);
-						}
+			if (isInMainTableMap[name] == true) {
+				if (isSingleMain) {
+					set<int> valuesNumbers = synonym.getValuesSet();
+					for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
+						string value = convertValueToString(*itr, type, attribute);
+						valuesStrings.push_back(value);
 					}
-					valuesStrings = expandEachRow(valuesStrings, singletonFactor);
-					stringValuesMap[name] = valuesStrings;
 				} else {
 					vector<int> valuesNumbers = synonym.getValues();
 					for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
 						string value = convertValueToString(*itr, type, attribute);
 						valuesStrings.push_back(value);
 					}
-					if (i == lastSingletonIndex) {
-						valuesStrings = expandRange(valuesStrings, mainFactor);
-						stringValuesMap[name] = valuesStrings;
-					} else {
-						valuesStrings = expandRange(valuesStrings, mainFactor);
-						mainFactor *= individualFactor[name];
-						valuesStrings = expandEachRow(valuesStrings, totalRows / mainFactor);
-						stringValuesMap[name] = valuesStrings;
-					}
 				}
-				isProjectedMap[name] = true;
+				valuesStrings = expandEachRow(valuesStrings, singletonFactor);
+				returnValues.push_back(valuesStrings);
+			} else {
+				vector<int> valuesNumbers = synonym.getValues();
+				for (auto itr = valuesNumbers.begin(); itr != valuesNumbers.end(); ++itr) {
+					string value = convertValueToString(*itr, type, attribute);
+					valuesStrings.push_back(value);
+				}
+				if (i == lastSingletonIndex) {
+					valuesStrings = expandRange(valuesStrings, mainFactor);
+					returnValues.push_back(valuesStrings);
+				} else {
+					valuesStrings = expandRange(valuesStrings, mainFactor);
+					mainFactor *= individualFactor[name];
+					valuesStrings = expandEachRow(valuesStrings, totalRows / mainFactor);
+					returnValues.push_back(valuesStrings);
+				}
 			}
 		}
-		return stringValuesMap;
+		return returnValues;
 	}
 
 	/**

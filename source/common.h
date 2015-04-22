@@ -49,6 +49,7 @@ typedef vector<int> CONSTANT_LIST;
 typedef vector<int> STATEMENT_LIST;
 typedef vector<int> PROGLINE_LIST;
 typedef vector<int> ASSIGNMENT_LIST;
+typedef vector<string> STRING_LIST;
 
 typedef vector<VAR_INDEX> VARINDEX_LIST;
 typedef vector<PROC_INDEX> PROCINDEX_LIST;
