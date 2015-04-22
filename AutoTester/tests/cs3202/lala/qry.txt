@@ -1,0 +1,80 @@
+1 - 
+variable v;
+Select v such that Modifies("a", v)
+none
+5000
+2 - 
+variable v;
+Select v such that Modifies("b", v)
+none
+5000
+3 - 
+variable v;
+Select v such that Modifies("c", v)
+none
+5000
+4 - 
+variable v;
+Select v such that Modifies("d", v)
+none
+5000
+5 - 
+variable v;
+Select v such that Modifies("e", v)
+none
+5000
+6 - 
+variable v;
+Select v such that Modifies("f", v)
+none
+5000
+7 - 
+variable v;
+Select v such that Modifies("g", v)
+none
+5000
+8 - 
+variable v;
+Select v such that Modifies("h", v)
+none
+5000
+9 - 
+variable v;
+Select v such that Modifies("i", v)
+none
+5000
+10 - 
+variable v;
+Select v such that Modifies("j", v)
+none
+5000
+11 - 
+variable v;
+Select v such that Modifies("k", v)
+none
+5000
+12 - 
+variable v;
+Select v such that Modifies("l", v)
+none
+5000
+13 - 
+variable v;
+Select v such that Modifies("m", v)
+none
+5000
+14 - 
+variable v;
+Select v such that Modifies("n", v)
+none
+5000
+15 - 
+variable v;
+Select v such that Modifies("o", v)
+none
+5000
+16 - 
+variable v;
+Select v such that Modifies("p", v)
+none
+5000
