@@ -381,7 +381,7 @@ namespace QueryEvaluator
 			return ValuesHandler::addAndProcessIntermediateSynonym(LHS);
 		} else if (typeRHS == UNDEFINED) {
 			if (typeLHS == PROCEDURE) {
-				LHS.setValues(pkb.getAllProcIndex());
+				LHS.setValues(pkb.getUsesProcLhs());
 			} else {
 				LHS.setValues(pkb.getUsesLhs());
 			}
