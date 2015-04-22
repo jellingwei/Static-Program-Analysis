@@ -133,7 +133,7 @@ VARINDEX_LIST ModifiesTable::getModVarForStmt(STATEMENT stmtNum) {
 boost::dynamic_bitset<> ModifiesTable::getModVarInBitvectorForStmt(STATEMENT stmtNum) {
 
 	if (varIndexMap.count(stmtNum) == 0) {
-		throw logic_error("ModifiesTable: stmt is not a key in ModifiesTable");
+		return boost::dynamic_bitset<>(numVariables);
 	}
 
 	return varIndexMap.at(stmtNum);
@@ -242,6 +242,7 @@ PROCINDEX_LIST ModifiesTable::getModProcIndex(VAR_INDEX varIndex)
 
 VARINDEX_LIST ModifiesTable::getModVarForProc(PROC_INDEX procIndex) 
 {
+	
 	if (procIndex < 0) {
 		return vector<int>();
 	}
