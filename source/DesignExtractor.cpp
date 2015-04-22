@@ -29,41 +29,45 @@ DesignExtractor::DesignExtractor() {
 	pkb.initModifiesTable(pkb.getAllVarIndex().size() + 1);
 }
 
+
+void dfs(int startProc, vector<int>& results, set<int>& visited, vector<int>* allProcs) {
+	PKB pkb = PKB::getInstance();
+
+	visited.insert(startProc);
+
+	vector<int> intermediateProcs = pkb.getProcsCalledBy(startProc, false);
+
+	for (auto iter = intermediateProcs.begin(); iter != intermediateProcs.end(); ++iter) {
+		if (visited.count(*iter) == 0 ) {
+			dfs(*iter, results, visited, allProcs);
+		}
+	}
+
+	results.push_back(startProc);
+
+	// update list of procedures to only contain unvisited procs
+	auto position = find(allProcs->begin(), allProcs->end(), startProc);
+	if (position != allProcs->end()) {
+		allProcs->erase(position);
+	}
+}
+
+
 /**
 * @param startProc the procedure index of a procedure calling other procedures
 * @param allProcs a list of all unvisited procedures
 * @param visited a list of all procedures visited
 * @return a list of all procedures being called by startProc.
 */
-PROCINDEX_LIST dfsForProcedures(int startProc, vector<int>* allProcs, unordered_set<int>* visited) {
+PROCINDEX_LIST dfsForProcedures(int startProc, vector<int>* allProcs, set<int>& visited) {
 	PKB pkb = PKB::getInstance();
 
 	vector<int> result;
 	
 	deque<int> frontier;
 	frontier.push_back(startProc);
-
-	while (!frontier.empty()) {
-		int curProc = frontier.back(); frontier.pop_back();
-		visited->insert(curProc);
-		result.push_back(curProc);
-
-		// update list of procedures to only contain unvisited procs
-		auto position = find(allProcs->begin(), allProcs->end(), curProc);
-		if (position != allProcs->end()) {
-			allProcs->erase(position);
-		}
-
-		// add new procs to frontier
-		vector<int> intermediateProcs = pkb.getProcsCalledBy(curProc, false);
-		for (auto iter = intermediateProcs.begin(); iter != intermediateProcs.end(); ++iter) {
-			if (visited->count(*iter) != 0 || find(frontier.begin(), frontier.end(), *iter) != frontier.end()) {
-				// skip if already visited, or if already in the frontier
-				continue;
-			}
-			frontier.push_back(*iter);
-		}
-	}
+	
+	dfs(startProc, result, visited, allProcs);
 
 	reverse(result.begin(), result.end());
 	return result;
@@ -75,18 +79,18 @@ PROCINDEX_LIST dfsForProcedures(int startProc, vector<int>* allProcs, unordered_
  */
 STATEMENT_LIST getCallsInTopologicalOrder() {
 	PKB pkb = PKB::getInstance();
-	vector<int> result;
+	
 	
 	int startProc = 0;
 
-	vector<int> allProcs = pkb.getAllProcIndex();; // used to check which procs hasn't been included
-	unordered_set<int> visited;
+	vector<int> allProcs = pkb.getAllProcIndex(); // used to check which procs hasn't been included
+	set<int> visited;
 
-	result = dfsForProcedures(startProc, &allProcs, &visited);
+	vector<int> result = dfsForProcedures(startProc, &allProcs, visited);
 	
 	if (!allProcs.empty()) {
 		startProc = allProcs.front();
-		vector<int> newResult = dfsForProcedures(startProc, &allProcs, &visited);
+		vector<int> newResult = dfsForProcedures(startProc, &allProcs, visited);
 		result.insert(result.end(), newResult.begin(), newResult.end()); // append newResult behind result
 	}
 
@@ -117,7 +121,7 @@ public:
 
 		int iPosition = find(topoOrder.begin(), topoOrder.end(), iProc) - topoOrder.begin();
 		int jPosition = find(topoOrder.begin(), topoOrder.end(), jProc) - topoOrder.begin();
-		return iPosition < jPosition;
+		return iPosition > jPosition;
 	}
 private:
 	vector<int> topoOrder;
@@ -130,6 +134,7 @@ private:
  */
 vector<TNode*> obtainCallStatementsInTopologicalOrder() {
 	vector<int> topologicalOrder = getCallsInTopologicalOrder();
+
 
 	PKB pkb = PKB::getInstance();
 
@@ -145,7 +150,7 @@ vector<TNode*> obtainCallStatementsInTopologicalOrder() {
 	// sort all call statements 
 	CallComparator compare(topologicalOrder);
 	sort(callStatementNodes.begin(), callStatementNodes.end(), compare);
-	
+
 	return callStatementNodes;
 }
 
@@ -184,6 +189,7 @@ void DesignExtractor::setModifiesForCallStatements() {
 			}			
 		}
 	}
+
 }
 
 
@@ -220,6 +226,7 @@ void DesignExtractor::setUsesForCallStatements() {
 			}			
 		}
 	}
+
 }
 
 /**
