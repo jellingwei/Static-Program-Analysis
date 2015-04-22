@@ -291,3 +291,13 @@ STATEMENT_LIST UsesTable::getRhs() {
 BOOLEAN_ UsesTable::isValid() {
 	return !varIndexMap.empty();
 }
+
+PROCINDEX_LIST UsesTable::getProcLhs() {
+	vector<int> procIndexes;
+	for (auto iter = procVarIndexMap.begin(); iter != procVarIndexMap.end(); ++iter) {
+		procIndexes.push_back(iter->first);
+	}
+
+	return procIndexes;
+}
+

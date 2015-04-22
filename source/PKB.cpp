@@ -1095,6 +1095,10 @@ pair<PROCINDEX_LIST, VARINDEX_LIST> PKB::getAllUsesProcPair() {
 	return usesTable->getAllUsesProcPair();
 }
 
+PROCINDEX_LIST PKB::getUsesProcLhs() {
+	return usesTable->getProcLhs();
+}
+
 
 // NextTable methods
 

@@ -182,6 +182,7 @@ public:
 	PROCINDEX_LIST getUsesProcIndex(VAR_INDEX varIndex);
 	VARINDEX_LIST getUsesVarForProc(PROC_INDEX procIndex);
 	pair<PROCINDEX_LIST, VARINDEX_LIST> getAllUsesProcPair();
+	PROCINDEX_LIST getUsesProcLhs();
 
 	// cfg
 	PROGLINE_LIST getNextAfter(PROG_LINE_ progLine1, TRANS_CLOSURE transitiveClosure = false);

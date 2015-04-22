@@ -38,6 +38,8 @@ public:
 	VARINDEX_LIST getUsesVarForProc(PROC_INDEX procIndex);
 	pair<PROCINDEX_LIST, VARINDEX_LIST> getAllUsesProcPair();
 
+	PROCINDEX_LIST getProcLhs();
+
 private:  
 	unordered_map<int, boost::dynamic_bitset<>> varIndexMap; // key is stmtNum 
 	unordered_map<int, vector<int>> stmtNumMap; // key is variable index
