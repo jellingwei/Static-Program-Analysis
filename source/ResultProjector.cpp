@@ -35,6 +35,7 @@ namespace ResultProjector {
 			}
 		} else if (resultVector.size() > 1) {
 			unordered_map<string, vector<string>> valuesMap = convertTuplesToString(resultVector);
+			set<string> stringSet;
 			int size = valuesMap.begin()->second.size();
 
 			for (int i = 0; i < size; i++) {
@@ -49,8 +50,9 @@ namespace ResultProjector {
 					}
 					oneRow += values[i];
 				}
-				resultList.push_back(oneRow);
+				stringSet.insert(oneRow);
 			}
+			resultList.insert(resultList.end(), stringSet.begin(), stringSet.end());
 		}
 	}
 
