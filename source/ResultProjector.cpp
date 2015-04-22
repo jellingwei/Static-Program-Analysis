@@ -35,6 +35,7 @@ namespace ResultProjector {
 			}
 		} else if (resultVector.size() > 1) {
 			unordered_map<string, vector<string>> valuesMap = convertTuplesToString(resultVector);
+			set<string> stringSet;
 			int size = valuesMap.begin()->second.size();
 
 			for (int i = 0; i < size; i++) {
@@ -49,8 +50,9 @@ namespace ResultProjector {
 					}
 					oneRow += values[i];
 				}
-				resultList.push_back(oneRow);
+				stringSet.insert(oneRow);
 			}
+			resultList.insert(resultList.end(), stringSet.begin(), stringSet.end());
 		}
 	}
 
@@ -64,7 +66,7 @@ namespace ResultProjector {
 		unsigned int mainFactor = 1;
 		unsigned int singletonFactor = 1;
 		unsigned int lastSingletonIndex = 0;
-		unordered_map<string, int> individualFactor;
+		unordered_map<string, unsigned int> individualFactor;
 		unordered_map<string, bool> isInMainTableMap;
 		unordered_map<string, bool> isProjectedMap;
 		unordered_map<string, vector<string>> stringValuesMap;
@@ -91,7 +93,7 @@ namespace ResultProjector {
 					insertedNames.insert(name);
 					isInMainTableMap[name] = true;
 				} else {
-					int size = synonym.getValues().size();
+					unsigned int size = synonym.getValues().size();
 					individualFactor[name] = size;
 					singletonFactor *= size;
 					insertedNames.insert(name);
@@ -163,9 +165,8 @@ namespace ResultProjector {
 		vector<string> returnStrings;
 
 		for (unsigned int i = 0; i < values.size(); i++) {
-			for (unsigned int j = 0; j < factor; j++) {
-				returnStrings.push_back(values[i]);
-			}
+			string value = values[i];
+			returnStrings.insert(returnStrings.end(), factor, value );
 		}
 		return returnStrings;
 	}
