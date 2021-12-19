@@ -1,3 +1,13 @@
+# Read Me #
+
+### Description ###
+
+CS3201/2 8 Module Credits Project
+
+A Static Program Analyzer (SPA) tool that automatically answers queries about programs.
+
+### More details ###
+
 This file is to detail the steps to build and run AutoTester. Choose either method 1 or 2 to test SPA. 
 To test our bonus features, you can view the files in the test case path 
 where there are sample test case files for the bonus features. 
